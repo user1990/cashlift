@@ -5,14 +5,14 @@ description: Tailwind CSS v4, `cn()` usage, class composition patterns, and them
 
 # Styling
 
-Tailwind-first styling conventions for this app (`cashlift`).
+Tailwind-first styling conventions for this app (`CashLift`).
 
 ## Toolchain
 
 | Tool | Location | Purpose |
 | --- | --- | --- |
 | Tailwind CSS v4 | `src/app/globals.css` + `postcss.config.mjs` | Primary styling system |
-| `cn()` helper | `src/lib/utils.ts` | Class merging (`clsx` + `tailwind-merge`) |
+| `cn()` helper | `src/modules/ui/utils/cn.ts` | Class merging (`clsx` + `tailwind-merge`) |
 | `cva` | `class-variance-authority` | Optional variant composition for reusable components |
 
 Tailwind is configured through:
@@ -51,7 +51,7 @@ Use default Tailwind v4 scales unless a product requirement mandates a custom to
 ## Class Merging with cn()
 
 ```tsx
-import { cn } from "@/lib/utils";
+import { cn } from "@/modules/ui/utils/cn";
 
 <div
   className={cn(
@@ -106,13 +106,13 @@ const buttonVariants = cva("inline-flex items-center rounded-md text-sm", {
 
 ## UI Structure In This Repo
 
-This app uses local UI primitives in `src/components/ui/*` (for example `button.tsx`, `panel.tsx`, `text-field.tsx`).
+This app uses local UI primitives in `src/modules/ui/components/*` (for example `AppButton.tsx`, `Panel.tsx`, `AppTextField.tsx`).
 
 Before adding a new primitive:
 
-1. Check existing components in `src/components/ui`.
+1. Check existing components in `src/modules/ui/components`.
 2. Reuse the same patterns:
-   - imports via `@/*` alias (`@/lib/utils`, `@/components/ui/...`)
+   - imports via `@/*` alias (`@/modules/ui/utils/cn`, `@/modules/ui/components/...`)
    - `cn("base", condition && "modifier")`
    - prop type alias pattern (`type Props = { children: React.ReactNode }` when children are used)
 3. Prefer extending an existing primitive over creating a near-duplicate.

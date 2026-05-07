@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import messages from "@/messages/en.json";
-import { AppAuthProvider } from "@/providers/app-auth-provider";
-import { QueryProvider } from "@/providers/query-provider";
+import { AppAuthProvider } from "@/services/clerk/provider";
+import messages from "@/services/i18n/messages/en.json";
+import { QueryProvider } from "@/services/query/provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-	title: "Cashlift",
+	title: "CashLift",
 	description: "A cashflow command center for better daily money decisions.",
 };
 

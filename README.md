@@ -1,6 +1,6 @@
-# Cashlift
+# CashLift
 
-Cashlift is a personal finance command center focused on increasing cash,
+CashLift is a personal finance command center focused on increasing cash,
 finding financial leaks, and making better daily money decisions.
 
 The scaffold uses mocked financial data behind repository interfaces so the UI,
