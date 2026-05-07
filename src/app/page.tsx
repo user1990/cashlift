@@ -1,10 +1,10 @@
-import { CashliftDashboard } from "@/components/dashboard/cashlift-dashboard";
-import { getCurrentUser } from "@/lib/auth/current-user";
-import { mockFinanceRepository } from "@/lib/repositories/mock-finance-repository";
+import { mockFinanceRepository } from "@/modules/base/finance/repositories/mock";
+import { getCurrentUser } from "@/modules/base/user/api";
+import { Dashboard } from "@/modules/features/dashboard/components/Dashboard";
 
 export default async function Home() {
 	const user = await getCurrentUser();
 	const dataset = await mockFinanceRepository.getDashboardDataset(user.id);
 
-	return <CashliftDashboard dataset={dataset} />;
+	return <Dashboard dataset={dataset} />;
 }
