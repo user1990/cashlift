@@ -1,0 +1,357 @@
+---
+name: guide
+description: Coding conventions, file structure, Git/PR/commit rules, React/Zod/React Query patterns, and i18n rules. Trigger when writing TS/React code, naming things, structuring files, creating branches/commits/PRs, or looking up team conventions.
+---
+
+# Frontend Guide
+
+Coding style, conventions, and workflow for frontend development.
+
+## Technology Stack
+
+| Category   | Tools                                                  |
+| ---------- | ------------------------------------------------------ |
+| Runtime    | Node.js + pnpm                                         |
+| Language   | TypeScript                                             |
+| Frameworks | React, Next.js                                          |
+| Auth/Data  | Clerk, Supabase JS                                      |
+| State      | Zustand, TanStack Query (React Query), React Hook Form |
+| Styling    | Tailwind CSS                                           |
+| i18n       | next-intl                                              |
+| Testing    | Vitest                                                 |
+| Linting    | Biome (lint + format)                                  |
+| Utilities  | Zod, date-fns, Recharts, react-aria-components, lucide-react, class-variance-authority, clsx, tailwind-merge |
+
+## Security Guidelines
+
+Security is a shared responsibility. Keep these baseline rules in mind for all feature work:
+
+- Follow OWASP Top Ten guidance and common web security practices.
+- Validate and sanitize all external input at boundaries (API, forms, URL params, storage).
+- Raise security concerns early during implementation and code review.
+
+## Feature Delivery Workflow
+
+1. Create a feature branch off `master`
+2. Implement the feature
+3. Create a pull request from the feature branch to `master`
+4. Assign and ping code reviewers
+5. Share the link to preview deployment in the domain's Slack channel
+6. Address feedback and receive approval
+7. Merge the pull request via **"Squash and merge"**
+8. Validate the feature on production
+
+## Source Control (Git)
+
+### Trunk-Based Development
+
+The team collaborates on a single `master` branch kept deployable at all times. Feature branches are short-lived.
+
+### Branch Naming
+
+```
+feat/add-sample-report-page
+^--^ ^-------------------^
+ |          |
+ |          +-> short description (kebab-case)
+ +-------------> type
+```
+
+Types: `feat/`, `fix/`, `refactor/`, `test/`, `docs/`, `chore/`, `release/`, `hotfix/`
+
+### PR Titles
+
+```
+project(s): Description
+```
+
+Examples:
+
+- `web-app: Update homepage hero`
+- `web-app/report-viewer/tailwind-config: Update design system colors`
+
+### Commit Messages
+
+1. Capitalize the first word
+2. Use imperative mood ("Add feature" not "Added feature")
+3. Limit to 72 characters
+4. No trailing period
+
+A properly formed message completes: _"If applied, this commit will **your message**"_
+
+## File Structure
+
+### Module-Based Organization
+
+Each module encapsulates a specific domain or feature:
+
+```
+└── src/modules/
+    └── payments/
+        ├── components/
+        ├── hooks/
+        │   ├── index.ts
+        │   ├── useOrderStatusQuery.ts
+        │   └── useCheckout.ts
+        ├── constants.ts
+        ├── utils.ts
+        ├── api.ts
+        ├── schemas.ts
+        ├── types.ts
+        └── assets/
+```
+
+### No File Prefixing
+
+Don't repeat the module name in filenames — both IDE search and imports already provide context:
+
+```
+├── payments/
+│   ├── api.ts            # ✅
+│   ├── payments.api.ts   # ❌
+```
+
+### Hook Files with Suffixes
+
+```
+├── hooks/
+│   ├── useOrderStatusQuery.ts    # data fetching
+│   ├── useRevokeOrderMutation.ts # mutation
+│   ├── usePaymentDetailsStore.ts # store
+│   └── useCheckout.ts            # general hook
+```
+
+### Separate Zod Schemas from Types
+
+Keep schemas in `schemas.ts` and types in `types.ts`. Don't mix them — but models and types belong together in `types.ts`.
+
+## JavaScript Conventions
+
+### No Single-Letter Variables
+
+```js
+// ❌
+const expand = (e) => {
+  e.preventDefault();
+};
+
+// ✅
+const expand = (event) => {
+  event.preventDefault();
+};
+```
+
+### Boolean Naming: Prefer Adjective Form
+
+Prefixing with "is" or "has" adds noise when a clean adjective exists. The name already implies a boolean:
+
+```js
+// ❌
+const isActive = true;
+const isSelected = false;
+
+// ✅
+const active = true;
+const selected = false;
+const hasFooter = true; // OK when no good adjective form exists
+```
+
+When a noun is involved, put it first:
+
+```js
+// ❌
+if (visibleModal) { ... }
+
+// ✅
+if (modalVisible) { ... }
+```
+
+Prefixing _functions_ with "is" or "has" is fine — functions ask questions:
+
+```js
+const disabled = isDisabled();
+```
+
+### Descriptive Function Names
+
+```js
+// ❌
+const onClick = () => { ... };
+const handleClick = () => { ... };
+
+// ✅
+const submitForm = () => { ... };
+const handleScroll = (event) => { ... };  // OK when receiving event object directly
+```
+
+## React Conventions
+
+### Component Naming
+
+Use the shortest name that gives enough context. Avoid names that collide with design system primitives (`Icon`, `Dropdown`), but don't over-prefix either:
+
+```
+├── Button/
+│   ├── ButtonIcon.js    # ✅ Prefix avoids collision with global Icon
+├── CarAdPage/
+│   ├── AboutCarSection.js   # ✅ Specific enough
+│   ├── CarAdPageAboutSection.js  # ❌ Over-prefixed
+```
+
+### Newlines Between JSX Blocks
+
+```jsx
+// ✅
+<Heading as="h1" variant="s">
+  {spec?.vehicleName}
+</Heading>
+
+<dl className={styles.specs}>
+```
+
+### Export Query Keys
+
+Extract and export `queryKey` from query hooks so they can be reused for invalidation:
+
+```ts
+const reportsQueryKey = ['reports'];
+
+const useReportsDataQuery = () => useQuery({ queryKey: reportsQueryKey, queryFn: fetchReports });
+
+export { reportsQueryKey, useReportsDataQuery };
+```
+
+### Use React Query Instead of Async Effects
+
+```ts
+// ❌ Manual async in useEffect
+useEffect(() => {
+  const fetch = async () => { ... };
+  fetch();
+}, []);
+
+// ✅ React Query
+const { mutate, isLoading } = useMutation({
+  queryFn: validateReceipt,
+  onSuccess: setPurchaseId,
+  onError: Sentry.Native.captureException,
+});
+```
+
+### Zod Schema Patterns
+
+**Static data** — use constants:
+
+```ts
+const schema = z.object({
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+});
+```
+
+**Dynamic data** — use functions:
+
+```ts
+const getSchema = (userType: 'individual' | 'company') =>
+  z.object({
+    email: z.string(),
+    ...(userType === 'company' && { companyName: z.string() }),
+  });
+```
+
+**Needs hooks** — use a custom hook:
+
+```ts
+const useGetSchema = ({ lastOdometerRecord }: Props) => {
+  const { t } = useTranslation('maintenanceSection');
+  const { formatMileage } = useMeasurementFormat();
+
+  return z.object({
+    mileage: z.number().min(lastOdometerRecord.value + 1, {
+      message: t('formError.minMileage', { mileage: formatMileage(minMileage) }),
+    }),
+  });
+};
+```
+
+### Use Logical Expressions for cn() Conditions
+
+```jsx
+// ❌
+className={cn('w-full', { 'bg-dark': darkMode })}
+
+// ✅
+className={cn('w-full', darkMode && 'bg-dark')}
+```
+
+### Explicit Children Prop
+
+```ts
+// ❌
+type Props = React.PropsWithChildren & { title: string };
+
+// ✅
+type Props = { children: React.ReactNode; title: string };
+```
+
+### Avoid returnObjects: true (Unless Translating Arrays)
+
+```ts
+// ❌ Object shape
+const { title, description } = t('activity.export', { returnObjects: true });
+
+// ✅ Array shape
+const activities = t('activities', { returnObjects: true });
+```
+
+## CSS Conventions
+
+### Nest Modifiers Inside Elements
+
+```scss
+// ❌
+.m { .subtitle { ... } }
+
+// ✅
+.subtitle {
+  .m & { ... }
+  .l & { ... }
+}
+```
+
+### Avoid Nesting Modifier Classes for Self-Modification
+
+```scss
+// ❌ Higher specificity, harder to override
+.root { &.highlighted { ... } }
+
+// ✅
+.root { ... }
+.highlighted { ... }
+```
+
+### Use Design Tokens, Not Fixed Pixels
+
+```css
+// ❌
+.popup {
+  width: 420px;
+}
+
+// ✅
+.popup {
+  width: theme.size(52.5);
+}
+```
+
+## Testing
+
+For comprehensive testing guidelines, read the **TESTING** skill. Key principles:
+
+- Test user behavior, not implementation details
+- Prefer testing top-level components (pages/screens)
+- Group related assertions in a single `it` block
+- Use accessible queries (`getByRole` first)
+- Use real services over mocks
+- Use `it.each` for repetitive test cases
+- Test actual translated content, not translation keys
