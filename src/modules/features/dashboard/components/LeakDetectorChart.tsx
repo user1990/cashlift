@@ -19,23 +19,23 @@ const LeakDetectorRecharts = lazy(() =>
 			XAxis,
 			YAxis,
 		}) => {
-			function LeakDetectorChartInner({ chartData }: LeakDetectorChartProps) {
-				return (
-					<ResponsiveContainer height={224} minWidth={0} width="100%">
-						<BarChart data={chartData}>
-							<CartesianGrid stroke="#E8E8EC" vertical={false} />
+			const LeakDetectorChartInner = ({
+				chartData,
+			}: LeakDetectorChartProps) => (
+				<ResponsiveContainer height={224} minWidth={0} width="100%">
+					<BarChart data={chartData}>
+						<CartesianGrid stroke="#E8E8EC" vertical={false} />
 
-							<XAxis axisLine={false} dataKey="merchant" tickLine={false} />
+						<XAxis axisLine={false} dataKey="merchant" tickLine={false} />
 
-							<YAxis axisLine={false} tickLine={false} />
+						<YAxis axisLine={false} tickLine={false} />
 
-							<Tooltip formatter={(value) => [`$${value}`, "Monthly leak"]} />
+						<Tooltip formatter={(value) => [`$${value}`, "Monthly leak"]} />
 
-							<Bar dataKey="leak" fill="#6366F1" radius={[6, 6, 0, 0]} />
-						</BarChart>
-					</ResponsiveContainer>
-				);
-			}
+						<Bar dataKey="leak" fill="#6366F1" radius={[6, 6, 0, 0]} />
+					</BarChart>
+				</ResponsiveContainer>
+			);
 
 			return { default: LeakDetectorChartInner };
 		},

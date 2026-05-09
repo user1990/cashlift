@@ -19,34 +19,32 @@ const NetWorthRecharts = lazy(() =>
 			XAxis,
 			YAxis,
 		}) => {
-			function NetWorthChartInner({ chartData }: NetWorthChartProps) {
-				return (
-					<ResponsiveContainer height={256} minWidth={0} width="100%">
-						<AreaChart data={chartData}>
-							<CartesianGrid stroke="#E8E8EC" vertical={false} />
+			const NetWorthChartInner = ({ chartData }: NetWorthChartProps) => (
+				<ResponsiveContainer height={256} minWidth={0} width="100%">
+					<AreaChart data={chartData}>
+						<CartesianGrid stroke="#E8E8EC" vertical={false} />
 
-							<XAxis axisLine={false} dataKey="week" tickLine={false} />
+						<XAxis axisLine={false} dataKey="week" tickLine={false} />
 
-							<YAxis
-								axisLine={false}
-								tickFormatter={(value) => `$${value}k`}
-								tickLine={false}
-							/>
+						<YAxis
+							axisLine={false}
+							tickFormatter={(value) => `$${value}k`}
+							tickLine={false}
+						/>
 
-							<Tooltip formatter={(value) => [`$${value}`, "Net worth"]} />
+						<Tooltip formatter={(value) => [`$${value}`, "Net worth"]} />
 
-							<Area
-								dataKey="netWorth"
-								fill="#6366F1"
-								fillOpacity={0.12}
-								stroke="#6366F1"
-								strokeWidth={2}
-								type="monotone"
-							/>
-						</AreaChart>
-					</ResponsiveContainer>
-				);
-			}
+						<Area
+							dataKey="netWorth"
+							fill="#6366F1"
+							fillOpacity={0.12}
+							stroke="#6366F1"
+							strokeWidth={2}
+							type="monotone"
+						/>
+					</AreaChart>
+				</ResponsiveContainer>
+			);
 
 			return { default: NetWorthChartInner };
 		},
