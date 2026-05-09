@@ -21,7 +21,7 @@ export const EmergencyFundPanel = ({
 
 		<div className="space-y-4">
 			<div className="rounded-lg bg-[#FAFAFA] p-4">
-				<div className="mb-3 flex items-center gap-2 text-indigo-600">
+				<div className="mb-3 flex items-center gap-2 text-primary">
 					<ShieldCheck aria-hidden className="size-5" />
 
 					<span className="text-sm font-semibold text-[#0A0A0A]">

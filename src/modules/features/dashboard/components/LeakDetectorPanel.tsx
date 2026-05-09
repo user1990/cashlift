@@ -1,18 +1,10 @@
 "use client";
 
-import {
-	Bar,
-	BarChart,
-	CartesianGrid,
-	ResponsiveContainer,
-	Tooltip,
-	XAxis,
-	YAxis,
-} from "recharts";
 import { formatCurrency, percentage } from "@/modules/common/money/format";
 import { Panel, PanelHeader } from "@/modules/ui/components/Panel";
 import type { LeakChartDataPoint, SpendingLeak } from "../types";
 import { ChartPlaceholder } from "./ChartPlaceholder";
+import { LeakDetectorChart } from "./LeakDetectorChart";
 
 type LeakDetectorPanelProps = {
 	chartData: LeakChartDataPoint[];
@@ -41,19 +33,7 @@ export const LeakDetectorPanel = ({
 		<div className="grid gap-4 md:grid-cols-[0.9fr_1.1fr]">
 			<div className="h-56 min-h-0 min-w-0 w-full">
 				{chartsReady ? (
-					<ResponsiveContainer height={224} minWidth={0} width="100%">
-						<BarChart data={chartData}>
-							<CartesianGrid stroke="#E8E8EC" vertical={false} />
-
-							<XAxis axisLine={false} dataKey="merchant" tickLine={false} />
-
-							<YAxis axisLine={false} tickLine={false} />
-
-							<Tooltip formatter={(value) => [`$${value}`, "Monthly leak"]} />
-
-							<Bar dataKey="leak" fill="#6366F1" radius={[6, 6, 0, 0]} />
-						</BarChart>
-					</ResponsiveContainer>
+					<LeakDetectorChart chartData={chartData} />
 				) : (
 					<ChartPlaceholder />
 				)}

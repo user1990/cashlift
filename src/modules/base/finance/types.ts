@@ -1,21 +1,12 @@
 import type { MoneyCents } from "@/modules/common/money/types";
 
-export type Frequency =
-	| "weekly"
-	| "biweekly"
-	| "monthly"
-	| "quarterly"
-	| "annual";
+type SubscriptionStatus = "active" | "unused" | "trial";
 
-export type SubscriptionStatus = "active" | "unused" | "trial";
+type Frequency = "weekly" | "biweekly" | "monthly" | "quarterly" | "annual";
 
-export type DebtType =
-	| "credit-card"
-	| "student-loan"
-	| "auto-loan"
-	| "personal-loan";
+type DebtType = "credit-card" | "student-loan" | "auto-loan" | "personal-loan";
 
-export type SpendingCategory =
+type SpendingCategory =
 	| "dining"
 	| "subscriptions"
 	| "transport"
@@ -24,7 +15,7 @@ export type SpendingCategory =
 	| "utilities"
 	| "wellness";
 
-export type IncomeSource = {
+type IncomeSource = {
 	id: string;
 	label: string;
 	amountCents: MoneyCents;
@@ -33,7 +24,7 @@ export type IncomeSource = {
 	reliability: "stable" | "variable";
 };
 
-export type Bill = {
+type Bill = {
 	id: string;
 	label: string;
 	amountCents: MoneyCents;
@@ -42,7 +33,7 @@ export type Bill = {
 	category: "housing" | "insurance" | "utilities" | "debt" | "other";
 };
 
-export type Subscription = {
+type Subscription = {
 	id: string;
 	label: string;
 	amountCents: MoneyCents;
@@ -51,7 +42,7 @@ export type Subscription = {
 	lastUsedDate?: string;
 };
 
-export type Debt = {
+type Debt = {
 	id: string;
 	label: string;
 	type: DebtType;
@@ -61,7 +52,7 @@ export type Debt = {
 	dueDate: string;
 };
 
-export type SavingsGoal = {
+type SavingsGoal = {
 	id: string;
 	label: string;
 	targetCents: MoneyCents;
@@ -70,7 +61,7 @@ export type SavingsGoal = {
 	priority: "high" | "medium" | "low";
 };
 
-export type TransactionPattern = {
+type TransactionPattern = {
 	id: string;
 	merchant: string;
 	category: SpendingCategory;
@@ -79,14 +70,14 @@ export type TransactionPattern = {
 	avoidableScore: number;
 };
 
-export type NetWorthSnapshot = {
+type NetWorthSnapshot = {
 	id: string;
 	weekStart: string;
 	assetsCents: MoneyCents;
 	liabilitiesCents: MoneyCents;
 };
 
-export type IncomeIdea = {
+type IncomeIdea = {
 	id: string;
 	title: string;
 	expectedMonthlyCents: MoneyCents;
@@ -94,14 +85,14 @@ export type IncomeIdea = {
 	nextStep: string;
 };
 
-export type MoneyChallenge = {
+type MoneyChallenge = {
 	id: string;
 	title: string;
 	impactCents: MoneyCents;
 	action: string;
 };
 
-export type CashLiftProfile = {
+type CashLiftProfile = {
 	userId: string;
 	displayName: string;
 	monthlyEssentialExpensesCents: MoneyCents;

@@ -3,11 +3,26 @@
 :root {
 	--background: #fafafa;
 	--foreground: #0a0a0a;
+	--primary: #4f46e5;
+	--primary-hover: #4338ca;
+	--primary-foreground: #ffffff;
+	--primary-subtle: #eef2ff;
+	--primary-subtle-border: #c7d2fe;
+	--primary-muted: #e0e7ff;
+	--primary-strong: #4338ca;
 }
 
 @theme inline {
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
+	--color-primary: var(--primary);
+	--color-primary-hover: var(--primary-hover);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-primary-subtle: var(--primary-subtle);
+	--color-primary-subtle-border: var(--primary-subtle-border);
+	--color-primary-muted: var(--primary-muted);
+	--color-primary-strong: var(--primary-strong);
+	--shadow-primary-glow: 0 4px 12px rgb(79 70 229 / 0.35);
 	--font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
 	--font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
 }
@@ -19,7 +34,7 @@ body {
 }
 
 ::selection {
-	background: rgba(99, 102, 241, 0.18);
+	background: color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {

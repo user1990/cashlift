@@ -27,7 +27,7 @@ export const ProgressMeter = ({
 			role="progressbar"
 		>
 			<div
-				className="h-full rounded-full bg-indigo-600 transition-[width] duration-300 ease-out motion-reduce:transition-none"
+				className="h-full rounded-full bg-primary transition-[width] duration-300 ease-out motion-reduce:transition-none"
 				style={{ width: `${formatPercent(value)}%` }}
 			/>
 		</div>

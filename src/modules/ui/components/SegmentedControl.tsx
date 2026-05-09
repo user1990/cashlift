@@ -27,8 +27,8 @@ export const SegmentedControl = <T extends string>({
 				className={({ isFocusVisible, isSelected }) =>
 					cn(
 						"cursor-pointer rounded-md px-3 py-1.5 text-xs font-medium text-[#6B6B6B] outline-none transition-[background-color,color,box-shadow] duration-150 ease-out",
-						isSelected && "bg-white text-indigo-700 shadow-sm",
-						isFocusVisible && "ring-[3px] ring-indigo-500/15",
+						isSelected && "bg-white text-primary-strong shadow-sm",
+						isFocusVisible && "ring-[3px] ring-primary/15",
 					)
 				}
 				key={option.value}

@@ -1,19 +1,11 @@
 "use client";
 
 import { TrendingUp } from "lucide-react";
-import {
-	Area,
-	AreaChart,
-	CartesianGrid,
-	ResponsiveContainer,
-	Tooltip,
-	XAxis,
-	YAxis,
-} from "recharts";
 import { formatCurrency } from "@/modules/common/money/format";
 import { Panel, PanelHeader } from "@/modules/ui/components/Panel";
 import type { NetWorthChartDataPoint } from "../types";
 import { ChartPlaceholder } from "./ChartPlaceholder";
+import { NetWorthChart } from "./NetWorthChart";
 
 type NetWorthPanelProps = {
 	chartData: NetWorthChartDataPoint[];
@@ -42,30 +34,7 @@ export const NetWorthPanel = ({
 
 		<div className="h-64 min-h-0 min-w-0 w-full">
 			{chartsReady ? (
-				<ResponsiveContainer height={256} minWidth={0} width="100%">
-					<AreaChart data={chartData}>
-						<CartesianGrid stroke="#E8E8EC" vertical={false} />
-
-						<XAxis axisLine={false} dataKey="week" tickLine={false} />
-
-						<YAxis
-							axisLine={false}
-							tickFormatter={(value) => `$${value}k`}
-							tickLine={false}
-						/>
-
-						<Tooltip formatter={(value) => [`$${value}`, "Net worth"]} />
-
-						<Area
-							dataKey="netWorth"
-							fill="#6366F1"
-							fillOpacity={0.12}
-							stroke="#6366F1"
-							strokeWidth={2}
-							type="monotone"
-						/>
-					</AreaChart>
-				</ResponsiveContainer>
+				<NetWorthChart chartData={chartData} />
 			) : (
 				<ChartPlaceholder />
 			)}
