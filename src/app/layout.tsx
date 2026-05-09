@@ -10,20 +10,20 @@ export const metadata: Metadata = {
 	description: "A cashflow command center for better daily money decisions.",
 };
 
-export default function RootLayout({
+const RootLayout = ({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
-}>) {
-	return (
-		<html lang="en" className="h-full">
-			<body className="flex min-h-full flex-col antialiased">
-				<NextIntlClientProvider locale="en" messages={messages}>
-					<AppAuthProvider>
-						<QueryProvider>{children}</QueryProvider>
-					</AppAuthProvider>
-				</NextIntlClientProvider>
-			</body>
-		</html>
-	);
-}
+}>) => (
+	<html lang="en" className="h-full">
+		<body className="flex min-h-full flex-col antialiased">
+			<NextIntlClientProvider locale="en" messages={messages}>
+				<AppAuthProvider>
+					<QueryProvider>{children}</QueryProvider>
+				</AppAuthProvider>
+			</NextIntlClientProvider>
+		</body>
+	</html>
+);
+
+export default RootLayout;

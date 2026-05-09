@@ -16,7 +16,7 @@ import {
 	formatCurrency,
 } from "@/modules/common/money/format";
 import { Panel, PanelHeader } from "@/modules/ui/components/Panel";
-import { useHasMounted } from "../hooks/useHasMounted";
+import { useMounted } from "../hooks/useMounted";
 import type { DebtStrategy } from "../types";
 import { buildDashboardViewModel } from "../view-model";
 import { ActionTile } from "./ActionTile";
@@ -36,7 +36,7 @@ type DashboardProps = {
 };
 
 export const Dashboard = ({ dataset }: DashboardProps) => {
-	const chartsReady = useHasMounted();
+	const chartsReady = useMounted();
 	const [debtStrategy, setDebtStrategy] = useState<DebtStrategy>("avalanche");
 	const dashboard = useMemo(
 		() => buildDashboardViewModel({ dataset, debtStrategy }),
