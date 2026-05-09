@@ -40,9 +40,9 @@ export const NetWorthPanel = ({
 			title={`Net worth ${formatCurrency(currentCents)}`}
 		/>
 
-		<div className="h-64 min-w-0">
+		<div className="h-64 min-h-0 min-w-0 w-full">
 			{chartsReady ? (
-				<ResponsiveContainer height="100%" width="100%">
+				<ResponsiveContainer height={256} minWidth={0} width="100%">
 					<AreaChart data={chartData}>
 						<CartesianGrid stroke="#E8E8EC" vertical={false} />
 
