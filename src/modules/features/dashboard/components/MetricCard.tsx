@@ -1,7 +1,7 @@
 import { Panel } from "@/modules/ui/components/Panel";
 
 type MetricCardProps = {
-	accent?: "indigo";
+	accent?: "highlight";
 	icon: React.ReactNode;
 	label: string;
 	meta: string;
@@ -17,7 +17,9 @@ export const MetricCard = ({
 }: MetricCardProps) => (
 	<Panel
 		className={
-			accent === "indigo" ? "border-indigo-200 bg-indigo-50/40" : undefined
+			accent === "highlight"
+				? "border-primary-subtle-border bg-primary-subtle/40"
+				: undefined
 		}
 	>
 		<div className="flex items-start justify-between gap-4">
@@ -31,7 +33,7 @@ export const MetricCard = ({
 				<p className="mt-2 max-w-sm text-sm leading-5 text-[#6B6B6B]">{meta}</p>
 			</div>
 
-			<div className="rounded-lg border border-[#E8E8EC] bg-white p-2 text-indigo-600">
+			<div className="rounded-lg border border-[#E8E8EC] bg-white p-2 text-primary">
 				{icon}
 			</div>
 		</div>

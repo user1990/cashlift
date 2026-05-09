@@ -37,7 +37,7 @@ export const IncomeIdeasPanel = ({ dataset }: IncomeIdeasPanelProps) => {
 						key={idea.id}
 					>
 						<div className="mb-3 flex items-center justify-between gap-3">
-							<span className="rounded-md bg-white p-2 text-indigo-600">
+							<span className="rounded-md bg-white p-2 text-primary">
 								<Lightbulb aria-hidden className="size-4" />
 							</span>
 

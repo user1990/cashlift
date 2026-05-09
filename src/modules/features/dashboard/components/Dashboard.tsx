@@ -50,7 +50,7 @@ export const Dashboard = ({ dataset }: DashboardProps) => {
 
 				<section className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr_0.9fr]">
 					<MetricCard
-						accent="indigo"
+						accent="highlight"
 						icon={<Gauge aria-hidden className="size-5" />}
 						label="Safe to spend today"
 						meta="After bills, minimum debt payments, and goal funding"

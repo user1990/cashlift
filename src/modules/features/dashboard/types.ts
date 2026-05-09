@@ -1,9 +1,9 @@
 import type { DebtPayoffStrategy } from "@/modules/base/finance/types";
 import type { buildDashboardViewModel } from "./view-model";
 
-export type DebtStrategy = DebtPayoffStrategy;
+type DashboardViewModel = ReturnType<typeof buildDashboardViewModel>;
 
-export type DashboardViewModel = ReturnType<typeof buildDashboardViewModel>;
+export type DebtStrategy = DebtPayoffStrategy;
 
 export type UpcomingBill = DashboardViewModel["upcomingBills"][number];
 

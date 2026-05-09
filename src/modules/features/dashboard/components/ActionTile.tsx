@@ -8,7 +8,7 @@ type ActionTileProps = {
 export const ActionTile = ({ icon, label, meta, value }: ActionTileProps) => (
 	<div className="rounded-lg border border-[#E8E8EC] bg-[#FAFAFA] p-3">
 		<div className="mb-3 flex items-center justify-between gap-3">
-			<span className="rounded-md bg-white p-2 text-indigo-600">{icon}</span>
+			<span className="rounded-md bg-white p-2 text-primary">{icon}</span>
 
 			<span className="font-mono text-sm font-semibold text-[#0A0A0A]">
 				{value}
