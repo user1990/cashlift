@@ -1,20 +1,51 @@
-@import "../../node_modules/tailwindcss/index.css";
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
 
 :root {
-	--background: #fafafa;
-	--foreground: #0a0a0a;
-	--primary: #4f46e5;
-	--primary-hover: #4338ca;
-	--primary-foreground: #ffffff;
-	--primary-subtle: #eef2ff;
-	--primary-subtle-border: #c7d2fe;
-	--primary-muted: #e0e7ff;
-	--primary-strong: #4338ca;
+	--background: #05070d;
+	--foreground: #f4fbff;
+	--shell: #05070d;
+	--shell-band: #07101a;
+	--shell-elevated: #0a111d;
+	--shell-foreground: #f4fbff;
+	--shell-muted: #9aaebb;
+	--shell-border: rgb(148 246 255 / 0.18);
+	--panel: #fbfeff;
+	--panel-muted: #eef7f8;
+	--panel-foreground: #071018;
+	--muted-foreground: #60717d;
+	--border: #d9e6eb;
+	--border-strong: #a9c1ca;
+	--primary: #17dce8;
+	--primary-hover: #0bbfcd;
+	--primary-foreground: #031014;
+	--primary-subtle: #dffbff;
+	--primary-subtle-border: #8cebf2;
+	--primary-muted: #bdf5fa;
+	--primary-strong: #008d99;
+	--highlight: #ff3f9f;
+	--highlight-subtle: #ffe4f3;
+	--signal: #23c878;
+	--signal-subtle: #daf9e9;
+	--warning: #f4b63f;
+	--warning-subtle: #fff3d6;
 }
 
 @theme inline {
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
+	--color-shell: var(--shell);
+	--color-shell-band: var(--shell-band);
+	--color-shell-elevated: var(--shell-elevated);
+	--color-shell-foreground: var(--shell-foreground);
+	--color-shell-muted: var(--shell-muted);
+	--color-shell-border: var(--shell-border);
+	--color-panel: var(--panel);
+	--color-panel-muted: var(--panel-muted);
+	--color-panel-foreground: var(--panel-foreground);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-border: var(--border);
+	--color-border-strong: var(--border-strong);
 	--color-primary: var(--primary);
 	--color-primary-hover: var(--primary-hover);
 	--color-primary-foreground: var(--primary-foreground);
@@ -22,19 +53,48 @@
 	--color-primary-subtle-border: var(--primary-subtle-border);
 	--color-primary-muted: var(--primary-muted);
 	--color-primary-strong: var(--primary-strong);
-	--shadow-primary-glow: 0 4px 12px rgb(79 70 229 / 0.35);
+	--color-highlight: var(--highlight);
+	--color-highlight-subtle: var(--highlight-subtle);
+	--color-signal: var(--signal);
+	--color-signal-subtle: var(--signal-subtle);
+	--color-warning: var(--warning);
+	--color-warning-subtle: var(--warning-subtle);
+	--shadow-primary-glow: 0 10px 28px rgb(23 220 232 / 0.28);
+	--shadow-panel: 0 18px 45px rgb(3 16 20 / 0.12);
+	--shadow-shell: 0 18px 55px rgb(0 0 0 / 0.32);
 	--font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
 	--font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
 }
 
+html {
+	background: var(--shell);
+}
+
 body {
-	background: var(--background);
+	background: var(--shell);
 	color: var(--foreground);
-	font-family: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+	font-family: var(--font-sans);
 }
 
 ::selection {
 	background: color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+.hero-ambient {
+	animation: cashlift-hero-drift 18s ease-in-out infinite alternate;
+	transform: scale(1.03);
+	transform-origin: center;
+	will-change: transform;
+}
+
+@keyframes cashlift-hero-drift {
+	from {
+		transform: scale(1.03) translate3d(0, 0, 0);
+	}
+
+	to {
+		transform: scale(1.06) translate3d(-1.2%, -0.8%, 0);
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -45,5 +105,11 @@ body {
 		animation-iteration-count: 1;
 		scroll-behavior: auto;
 		transition-duration: 0.01ms;
+	}
+
+	.hero-ambient {
+		animation: none;
+		transform: none;
+		will-change: auto;
 	}
 }

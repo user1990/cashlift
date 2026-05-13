@@ -1,145 +1,135 @@
-import {
-	differenceInCalendarDays,
-	differenceInCalendarWeeks,
-	parseISO,
-} from "date-fns";
-import type { MoneyCents } from "@/modules/common/money/types";
-import type { DebtPayoffStrategy, FinancialDataset } from "./types";
+import { differenceInCalendarDays, parseISO } from "date-fns";
+import type {
+	ActionPriority,
+	CompanyRole,
+	FinancialDataset,
+	ForecastPoint,
+	Invoice,
+	SpendRequest,
+	Subscription,
+	TeamBudget,
+	VendorBill,
+} from "./types";
 
-type Bill = FinancialDataset["bills"][number];
-type Subscription = FinancialDataset["subscriptions"][number];
-type Debt = FinancialDataset["debts"][number];
-type SavingsGoal = FinancialDataset["savingsGoals"][number];
-type TransactionPattern = FinancialDataset["transactionPatterns"][number];
-type NetWorthSnapshot = FinancialDataset["netWorthSnapshots"][number];
-type Frequency = FinancialDataset["incomeSources"][number]["frequency"];
+const DAYS_IN_MONTH = 30;
 
-const frequencyMultipliers: Record<Frequency, number> = {
-	annual: 1 / 12,
-	biweekly: 26 / 12,
-	monthly: 1,
-	quarterly: 1 / 3,
-	weekly: 52 / 12,
+const ACTION_PRIORITY_WEIGHTS: Record<ActionPriority, number> = {
+	critical: 4,
+	high: 3,
+	medium: 2,
+	low: 1,
 };
 
-const monthlyAmount = (amountCents: MoneyCents, frequency: Frequency) =>
-	Math.round(amountCents * frequencyMultipliers[frequency]);
+const sumAmounts = <Item>(items: Item[], getAmountCents: (item: Item) => number) =>
+	items.reduce((total, item) => total + getAmountCents(item), 0);
 
-export const getMonthlyIncome = (dataset: FinancialDataset) =>
-	dataset.incomeSources.reduce(
-		(total, source) =>
-			total + monthlyAmount(source.amountCents, source.frequency),
-		0,
-	);
+export const getPendingApprovalCount = (requests: SpendRequest[]) =>
+	requests.filter((request) => request.status === "pending").length;
 
-export const getMonthlyObligations = (dataset: FinancialDataset) =>
-	dataset.bills.reduce((total, bill) => total + bill.amountCents, 0) +
-	dataset.subscriptions.reduce(
-		(total, subscription) => total + subscription.amountCents,
-		0,
-	) +
-	dataset.debts.reduce((total, debt) => total + debt.minimumPaymentCents, 0);
+const isInvoiceOutstanding = (invoice: Invoice) => invoice.status !== "paid";
 
-export const getSafeToSpendToday = (
-	dataset: FinancialDataset,
-	date = new Date(),
-) =>
-	Math.floor(
-		Math.max(
-			0,
-			getMonthlyIncome(dataset) -
-				getMonthlyObligations(dataset) -
-				dataset.savingsGoals.reduce(
-					(total, goal) => total + getSuggestedMonthlyContribution(goal, date),
-					0,
-				),
-		) / 30,
-	);
-
-export const getUpcomingBills = (
-	bills: Bill[],
-	subscriptions: Subscription[],
-	date = new Date(),
-) => {
-	const upcoming: Array<(Bill | Subscription) & { daysUntilDue: number }> = [];
-	for (const item of [...bills, ...subscriptions]) {
-		const daysUntilDue = differenceInCalendarDays(parseISO(item.dueDate), date);
-		if (daysUntilDue >= 0) {
-			upcoming.push({ ...item, daysUntilDue });
-		}
+export const isInvoiceOverdue = (invoice: Invoice, date = new Date()) => {
+	if (!isInvoiceOutstanding(invoice)) {
+		return false;
 	}
-	return upcoming
-		.toSorted((left, right) => left.daysUntilDue - right.daysUntilDue)
-		.slice(0, 6);
+
+	return invoice.status === "overdue" || dueWithinWindow(invoice.dueDate, date, -1);
 };
 
-export const getUnusedSubscriptionSavings = (subscriptions: Subscription[]) =>
-	subscriptions
-		.filter((subscription) => subscription.status === "unused")
-		.reduce((total, subscription) => total + subscription.amountCents, 0);
-
-export const getSuggestedMonthlyContribution = (
-	goal: SavingsGoal,
-	date = new Date(),
-) =>
-	Math.ceil(
-		Math.max(0, goal.targetCents - goal.currentCents) /
-			Math.max(
-				1,
-				Math.max(1, differenceInCalendarWeeks(parseISO(goal.deadline), date)) /
-					4.345,
-			),
+export const getInvoiceRiskTotal = (invoices: Invoice[], date = new Date()) =>
+	sumAmounts(
+		invoices.filter((invoice) => isInvoiceOverdue(invoice, date)),
+		(invoice) => invoice.amountCents,
 	);
 
-export const getGoalProgress = (goal: SavingsGoal) =>
-	goal.targetCents === 0
-		? 0
-		: Math.min(100, (goal.currentCents / goal.targetCents) * 100);
-
-export const getDebtPayoffOrder = (
-	debts: Debt[],
-	strategy: DebtPayoffStrategy,
-) =>
-	debts.toSorted((left, right) =>
-		strategy === "snowball"
-			? left.balanceCents - right.balanceCents
-			: right.interestRate - left.interestRate,
+export const getUpcomingInvoiceTotal = (invoices: Invoice[], date = new Date(), days = 14) =>
+	sumAmounts(
+		invoices.filter((invoice) => isInvoiceOutstanding(invoice) && dueWithinWindow(invoice.dueDate, date, days)),
+		(invoice) => invoice.amountCents,
 	);
 
-export const getSpendingLeaks = (patterns: TransactionPattern[]) =>
-	[...patterns]
-		.map((pattern) => ({
-			...pattern,
-			monthlyLeakCents: Math.round(
-				pattern.averageAmountCents *
-					pattern.monthlyOccurrences *
-					(pattern.avoidableScore / 100),
-			),
-		}))
-		.sort((left, right) => right.monthlyLeakCents - left.monthlyLeakCents);
+export const isVendorLeak = (subscription: Subscription) =>
+	subscription.status === "unused" ||
+	subscription.status === "duplicate" ||
+	(subscription.status === "trial" && subscription.usagePercent < 25);
 
-export const getEmergencyFundTarget = (
-	monthlyEssentialExpensesCents: MoneyCents,
-) => ({
-	sixMonthsCents: monthlyEssentialExpensesCents * 6,
-	threeMonthsCents: monthlyEssentialExpensesCents * 3,
-});
+export const getVendorLeakSavings = (subscriptions: Subscription[]) =>
+	sumAmounts(subscriptions.filter(isVendorLeak), (subscription) => subscription.amountCents);
 
-export const getNetWorth = (snapshot: NetWorthSnapshot) =>
-	snapshot.assetsCents - snapshot.liabilitiesCents;
+export const getTeamBudgetRemaining = ({
+	committedCents,
+	monthlyBudgetCents,
+}: Pick<TeamBudget, "committedCents" | "monthlyBudgetCents">) => Math.max(0, monthlyBudgetCents - committedCents);
 
-export const getNetWorthDirection = (snapshots: NetWorthSnapshot[]) => {
-	const sorted = snapshots.toSorted(
-		(left, right) =>
-			parseISO(left.weekStart).getTime() - parseISO(right.weekStart).getTime(),
+export const getTeamBudgetUsage = (budget: TeamBudget) =>
+	budget.monthlyBudgetCents === 0 ? 0 : (budget.committedCents / budget.monthlyBudgetCents) * 100;
+
+export const getUpcomingOutflowTotal = (dataset: FinancialDataset, date = new Date(), days = 14) => {
+	const dueVendorBills = dataset.vendorBills.filter((bill) => dueWithinWindow(bill.dueDate, date, days));
+	const dueSubscriptions = dataset.subscriptions.filter((subscription) =>
+		dueWithinWindow(subscription.renewalDate, date, days),
 	);
-	const latest = sorted.at(-1);
-	const previous = sorted.at(-2);
+	const pendingRequests = dataset.spendRequests.filter(
+		(request) => request.status !== "rejected" && dueWithinWindow(request.neededByDate, date, days),
+	);
 
-	return !latest || !previous
-		? { changeCents: 0, currentCents: latest ? getNetWorth(latest) : 0 }
-		: {
-				changeCents: getNetWorth(latest) - getNetWorth(previous),
-				currentCents: getNetWorth(latest),
-			};
+	return (
+		sumAmounts(dueVendorBills, (bill) => bill.amountCents) +
+		sumAmounts(dueSubscriptions, (subscription) => subscription.amountCents) +
+		sumAmounts(pendingRequests, (request) => request.amountCents)
+	);
+};
+
+const getProjectedCashBalance = (dataset: FinancialDataset, date = new Date(), days = 14) =>
+	dataset.profile.cashBalanceCents +
+	getUpcomingInvoiceTotal(dataset.invoices, date, days) -
+	getUpcomingOutflowTotal(dataset, date, days);
+
+export const getCashBufferRisk = (dataset: FinancialDataset, date = new Date()) =>
+	Math.max(0, dataset.profile.cashBufferTargetCents - getProjectedCashBalance(dataset, date));
+
+export const getRunwayDays = (dataset: FinancialDataset) => {
+	const recurringMonthlySpend =
+		dataset.profile.monthlyPayrollCents +
+		dataset.vendorBills.filter((bill) => bill.essential).reduce((total, bill) => total + bill.amountCents, 0) +
+		dataset.subscriptions.reduce((total, subscription) => total + subscription.amountCents, 0);
+	const dailySpend = Math.max(1, Math.round(recurringMonthlySpend / DAYS_IN_MONTH));
+
+	return Math.floor(dataset.profile.cashBalanceCents / dailySpend);
+};
+
+export const getSpendRequestCashImpact = (request: SpendRequest, dataset: FinancialDataset) =>
+	dataset.profile.cashBalanceCents - request.amountCents;
+
+export const getVisibleCashActions = (dataset: FinancialDataset, role: CompanyRole) =>
+	dataset.cashActions
+		.filter((action) => action.status === "open" && action.visibleTo.includes(role))
+		.toSorted((left, right) => {
+			const priorityDelta = ACTION_PRIORITY_WEIGHTS[right.priority] - ACTION_PRIORITY_WEIGHTS[left.priority];
+
+			if (priorityDelta !== 0) {
+				return priorityDelta;
+			}
+
+			const dateDelta = parseISO(left.dueDate).getTime() - parseISO(right.dueDate).getTime();
+
+			if (dateDelta !== 0) {
+				return dateDelta;
+			}
+
+			return right.impactCents - left.impactCents;
+		});
+
+export const getEndingBalance = (point: ForecastPoint) =>
+	point.openingBalanceCents + point.inflowCents - point.outflowCents;
+
+export const getDueVendorBills = (bills: VendorBill[], date = new Date(), days = 14) =>
+	bills
+		.filter((bill) => dueWithinWindow(bill.dueDate, date, days))
+		.toSorted((left, right) => parseISO(left.dueDate).getTime() - parseISO(right.dueDate).getTime());
+
+export const dueWithinWindow = (dueDate: string, date: Date, days: number) => {
+	const daysUntilDue = differenceInCalendarDays(parseISO(dueDate), date);
+
+	return days < 0 ? daysUntilDue < 0 : daysUntilDue >= 0 && daysUntilDue <= days;
 };

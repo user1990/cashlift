@@ -1,0 +1,17 @@
+language js(typescript, jsx)
+
+JsxText() as $text where {
+	$text <: after or {
+		JsxElement(),
+		JsxSelfClosingElement(),
+		JsxFragment()
+	},
+	$text <: before or {
+		JsxElement(),
+		JsxSelfClosingElement(),
+		JsxFragment()
+	},
+	$source = text($text),
+	! $source <: r".*\n[\t ]*\n.*",
+	register_diagnostic(span=$text, message="Add a blank line between JSX sibling elements.", severity="error")
+}

@@ -8,34 +8,18 @@ type MetricCardProps = {
 	value: string;
 };
 
-export const MetricCard = ({
-	accent,
-	icon,
-	label,
-	meta,
-	value,
-}: MetricCardProps) => (
-	<Panel
-		className={
-			accent === "highlight"
-				? "border-primary-subtle-border bg-primary-subtle/40"
-				: undefined
-		}
-	>
+export const MetricCard = ({ accent, icon, label, meta, value }: MetricCardProps) => (
+	<Panel as="article" variant={accent === "highlight" ? "accent" : "light"}>
 		<div className="flex items-start justify-between gap-4">
-			<div>
-				<p className="text-sm font-medium text-[#6B6B6B]">{label}</p>
+			<dl>
+				<dt className="text-m font-medium text-muted-foreground">{label}</dt>
 
-				<p className="mt-2 font-mono text-4xl font-semibold tracking-normal text-[#0A0A0A]">
-					{value}
-				</p>
+				<dd className="mt-2 font-mono text-5xl+ tracking-normal text-panel-foreground">{value}</dd>
 
-				<p className="mt-2 max-w-sm text-sm leading-5 text-[#6B6B6B]">{meta}</p>
-			</div>
+				<p className="mt-2 max-w-sm text-m leading-5 text-muted-foreground">{meta}</p>
+			</dl>
 
-			<div className="rounded-lg border border-[#E8E8EC] bg-white p-2 text-primary">
-				{icon}
-			</div>
+			<div className="rounded-lg border border-border bg-panel p-2 text-primary">{icon}</div>
 		</div>
 	</Panel>
 );

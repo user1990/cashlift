@@ -1,45 +1,77 @@
 import { describe, expect, it } from "vitest";
-import { mockFinancialDataset } from "./repositories/mock";
+import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import {
-	getDebtPayoffOrder,
-	getEmergencyFundTarget,
-	getGoalProgress,
-	getSafeToSpendToday,
-	getSpendingLeaks,
+	dueWithinWindow,
+	getCashBufferRisk,
+	getInvoiceRiskTotal,
+	getPendingApprovalCount,
+	getRunwayDays,
+	getSpendRequestCashImpact,
+	getTeamBudgetRemaining,
+	getVendorLeakSavings,
+	getVisibleCashActions,
+	isInvoiceOverdue,
+	isVendorLeak,
 } from "./utils";
 
-describe("finance calculations", () => {
-	it("keeps safe-to-spend positive after obligations and goal funding", () => {
+describe("company finance calculations", () => {
+	it("counts pending approvals", () => {
+		expect(getPendingApprovalCount(financialDatasetFixture.spendRequests)).toEqual(2);
+	});
+
+	it("calculates overdue invoice risk", () => {
+		expect(getInvoiceRiskTotal(financialDatasetFixture.invoices, new Date("2026-05-09"))).toEqual(1_840_000);
+	});
+
+	it("detects vendor leak savings", () => {
+		expect(getVendorLeakSavings(financialDatasetFixture.subscriptions)).toEqual(261_000);
+	});
+
+	it("identifies vendor leaks from unused, duplicate, and low-use trial subscriptions", () => {
+		expect(financialDatasetFixture.subscriptions.filter(isVendorLeak).map((subscription) => subscription.id)).toEqual([
+			"subscription-notion",
+			"subscription-survey",
+			"subscription-ai-notes",
+		]);
+	});
+
+	it("identifies overdue invoices without treating paid historical invoices as risk", () => {
+		const date = new Date("2026-05-09");
+
 		expect(
-			getSafeToSpendToday(mockFinancialDataset, new Date("2026-05-07")),
-		).toBeGreaterThan(0);
+			financialDatasetFixture.invoices
+				.filter((invoice) => isInvoiceOverdue(invoice, date))
+				.map((invoice) => invoice.id),
+		).toEqual(["invoice-northstar"]);
 	});
 
-	it("orders avalanche debts by highest interest rate", () => {
-		const debts = getDebtPayoffOrder(mockFinancialDataset.debts, "avalanche");
+	it("checks due dates inside future and overdue windows", () => {
+		const date = new Date("2026-05-09");
 
-		expect(debts[0].label).toBe("Rewards card");
+		expect(dueWithinWindow("2026-05-14", date, 14)).toEqual(true);
+		expect(dueWithinWindow("2026-06-14", date, 14)).toEqual(false);
+		expect(dueWithinWindow("2026-05-08", date, -1)).toEqual(true);
 	});
 
-	it("orders snowball debts by smallest balance", () => {
-		const debts = getDebtPayoffOrder(mockFinancialDataset.debts, "snowball");
-
-		expect(debts[0].label).toBe("Rewards card");
+	it("calculates team budget remaining", () => {
+		expect(getTeamBudgetRemaining(financialDatasetFixture.teamBudgets[0])).toEqual(940_000);
 	});
 
-	it("detects the largest monthly leak first", () => {
-		const leaks = getSpendingLeaks(mockFinancialDataset.transactionPatterns);
-
-		expect(leaks[0].merchant).toBe("Coffee runs");
-		expect(leaks[0].monthlyLeakCents).toBeGreaterThan(
-			leaks[1].monthlyLeakCents,
+	it("calculates spend request cash impact", () => {
+		expect(getSpendRequestCashImpact(financialDatasetFixture.spendRequests[0], financialDatasetFixture)).toEqual(
+			40_520_000,
 		);
 	});
 
-	it("calculates goal and emergency fund targets", () => {
-		expect(
-			getGoalProgress(mockFinancialDataset.savingsGoals[0]),
-		).toBeGreaterThan(30);
-		expect(getEmergencyFundTarget(400000).sixMonthsCents).toBe(2400000);
+	it("keeps cash buffer risk at zero when projected cash stays above target", () => {
+		expect(getCashBufferRisk(financialDatasetFixture, new Date("2026-05-09"))).toEqual(0);
+		expect(getRunwayDays(financialDatasetFixture)).toBeGreaterThan(50);
+	});
+
+	it("sorts visible cash actions by priority for finance users", () => {
+		const actions = getVisibleCashActions(financialDatasetFixture, "owner-finance");
+
+		expect(actions[0].priority).toEqual("critical");
+		expect(actions[0].id).toEqual("action-approval-design-suite");
 	});
 });

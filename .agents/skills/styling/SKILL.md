@@ -106,7 +106,7 @@ const buttonVariants = cva("inline-flex items-center rounded-md text-sm", {
 
 ## UI Structure In This Repo
 
-This app uses local UI primitives in `src/modules/ui/components/*` (for example `AppButton.tsx`, `Panel.tsx`, `AppTextField.tsx`).
+This app uses local UI primitives in `src/modules/ui/components/*` (for example `Button.tsx`, `Panel.tsx`, `TextField.tsx`).
 
 Before adding a new primitive:
 

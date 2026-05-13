@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Lint, types, unit tests, fallow, build
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: pnpm
+          node-version: 20
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Biome
+        run: pnpm lint
+
+      - name: TypeScript
+        run: pnpm typecheck
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Fallow
+        run: pnpm fallow
+
+      - name: React Doctor
+        run: pnpm doctor
+
+      - name: Production build
+        run: pnpm build
+
+  e2e-a11y:
+    name: Playwright + axe smoke
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: pnpm
+          node-version: 20
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run e2e smoke
+        run: pnpm test:e2e

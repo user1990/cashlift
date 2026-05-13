@@ -1,15 +1,7 @@
-import type { DebtPayoffStrategy } from "@/modules/base/finance/types";
 import type { buildDashboardViewModel } from "./view-model";
 
-type DashboardViewModel = ReturnType<typeof buildDashboardViewModel>;
+export type DashboardViewModel = ReturnType<typeof buildDashboardViewModel>;
 
-export type DebtStrategy = DebtPayoffStrategy;
+export type ForecastChartDataPoint = DashboardViewModel["forecastChartData"][number];
 
-export type UpcomingBill = DashboardViewModel["upcomingBills"][number];
-
-export type NetWorthChartDataPoint =
-	DashboardViewModel["netWorthChartData"][number];
-
-export type LeakChartDataPoint = DashboardViewModel["leakChartData"][number];
-
-export type SpendingLeak = DashboardViewModel["spendingLeaks"][number];
+export type SpendChartDataPoint = DashboardViewModel["spendChartData"][number];

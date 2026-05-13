@@ -1,0 +1,67 @@
+{
+	"$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+	"dynamicallyLoaded": ["src/services/i18n/request.ts"],
+	"boundaries": {
+		"zones": [
+			{ "name": "app", "patterns": ["src/app/**"] },
+			{
+				"name": "app-shell",
+				"patterns": ["src/modules/features/app-shell/**"]
+			},
+			{
+				"name": "dashboard",
+				"patterns": ["src/modules/features/dashboard/**"]
+			},
+			{
+				"name": "marketing",
+				"patterns": ["src/modules/features/marketing/**"]
+			},
+			{ "name": "base", "patterns": ["src/modules/base/**"] },
+			{ "name": "shared", "patterns": ["src/modules/shared/**"] },
+			{ "name": "ui", "patterns": ["src/modules/ui/**"] },
+			{ "name": "common", "patterns": ["src/modules/common/**"] },
+			{ "name": "services", "patterns": ["src/services/**"] }
+		],
+		"rules": [
+			{
+				"from": "app",
+				"allow": ["app-shell", "dashboard", "marketing", "base", "shared", "ui", "common", "services"]
+			},
+			{
+				"from": "app-shell",
+				"allow": ["base", "shared", "ui", "common", "services"]
+			},
+			{
+				"from": "dashboard",
+				"allow": ["base", "shared", "ui", "common", "services"]
+			},
+			{
+				"from": "marketing",
+				"allow": ["base", "shared", "ui", "common", "services"]
+			},
+			{ "from": "base", "allow": ["shared", "ui", "common", "services"] },
+			{ "from": "shared", "allow": ["ui", "common", "services"] },
+			{ "from": "services", "allow": ["ui", "common"] },
+			{ "from": "ui", "allow": [] },
+			{ "from": "common", "allow": [] }
+		]
+	},
+	"rules": {
+		"unused-files": "error",
+		"unused-exports": "error",
+		"unused-types": "error",
+		"unused-dependencies": "error",
+		"unused-dev-dependencies": "error",
+		"unused-optional-dependencies": "error",
+		"unused-enum-members": "error",
+		"unused-class-members": "error",
+		"unresolved-imports": "error",
+		"unlisted-dependencies": "error",
+		"duplicate-exports": "error",
+		"circular-dependencies": "error",
+		"boundary-violation": "error",
+		"type-only-dependencies": "error",
+		"test-only-dependencies": "error",
+		"stale-suppressions": "error"
+	}
+}

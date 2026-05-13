@@ -1,29 +1,32 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import { AppAuthProvider } from "@/services/clerk/provider";
+import { MotionProvider } from "@/modules/ui/components/MotionProvider";
+import { AuthProvider } from "@/services/clerk/provider";
 import messages from "@/services/i18n/messages/en.json";
 import { QueryProvider } from "@/services/query/provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
 	title: "CashLift",
-	description: "A cashflow command center for better daily money decisions.",
+	description: "A cash-aware spend decision command center for service firms.",
 };
 
-const RootLayout = ({
-	children,
-}: Readonly<{
+type RootLayoutProps = Readonly<{
 	children: React.ReactNode;
-}>) => (
-	<html lang="en" className="h-full">
-		<body className="flex min-h-full flex-col antialiased">
-			<NextIntlClientProvider locale="en" messages={messages}>
-				<AppAuthProvider>
-					<QueryProvider>{children}</QueryProvider>
-				</AppAuthProvider>
-			</NextIntlClientProvider>
-		</body>
-	</html>
-);
+}>;
 
-export default RootLayout;
+export default function RootLayout({ children }: RootLayoutProps) {
+	return (
+		<html lang="en" className="h-full">
+			<body className="flex min-h-full flex-col antialiased">
+				<NextIntlClientProvider locale="en" messages={messages}>
+					<AuthProvider>
+						<QueryProvider>
+							<MotionProvider>{children}</MotionProvider>
+						</QueryProvider>
+					</AuthProvider>
+				</NextIntlClientProvider>
+			</body>
+		</html>
+	);
+}
