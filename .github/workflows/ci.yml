@@ -33,12 +33,14 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --prefer-offline
+        # Removing --frozen-lockfile forces pnpm to fix the lockfile for Linux
+        run: pnpm install
         env:
           NODE_ENV: development
 
       - name: Biome
-        run: ./node_modules/.bin/biome check .
+        # npx is excellent at finding the binary if pnpm exec fails
+        run: npx @biomejs/biome check .
 
       - name: TypeScript
         run: pnpm exec tsc --noEmit
