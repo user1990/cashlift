@@ -1,9 +1,10 @@
-import type { DebtStrategy } from "./types";
+import type { CompanyRole } from "@/modules/base/finance/types";
 
-export const debtStrategyOptions: Array<{
+export const roleOptions: Array<{
 	label: string;
-	value: DebtStrategy;
+	value: CompanyRole;
 }> = [
-	{ label: "Avalanche", value: "avalanche" },
-	{ label: "Snowball", value: "snowball" },
+	{ label: "Finance", value: "owner-finance" },
+	{ label: "Manager", value: "manager" },
+	{ label: "Employee", value: "employee" },
 ];

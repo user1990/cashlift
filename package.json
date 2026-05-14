@@ -8,18 +8,28 @@
 		"start": "next start",
 		"lint": "biome check",
 		"lint:fix": "biome check --write .src/**",
+		"react-doctor": "npx -y react-doctor@latest",
+		"doctor": "pnpm react-doctor . --offline",
+		"doctor:diff": "pnpm react-doctor . --offline --diff main",
+		"doctor:score": "pnpm react-doctor . --offline --score",
 		"typecheck": "tsc --noEmit",
-		"test": "vitest run"
+		"test": "vitest run",
+		"test:e2e": "playwright test",
+		"test:e2e:install": "playwright install chromium",
+		"fallow": "fallow --summary",
+		"fallow:fix": "fallow fix --yes"
 	},
 	"dependencies": {
 		"@clerk/nextjs": "^7.3.2",
 		"@hookform/resolvers": "^5.2.2",
-		"@supabase/supabase-js": "^2.105.3",
+		"@sentry/nextjs": "^10",
+		"@supabase/ssr": "^0.10.3",
+		"@supabase/supabase-js": "^2.105.4",
 		"@tanstack/react-query": "^5.100.9",
-		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"date-fns": "^4.1.0",
 		"lucide-react": "^1.14.0",
+		"motion": "^12.38.0",
 		"next": "16.2.6",
 		"next-intl": "^4.11.0",
 		"react": "19.2.6",
@@ -28,10 +38,11 @@
 		"react-hook-form": "^7.75.0",
 		"recharts": "^3.8.1",
 		"tailwind-merge": "^3.5.0",
-		"zod": "^4.4.3",
-		"zustand": "^5.0.13"
+		"zod": "^4.4.3"
 	},
 	"devDependencies": {
+		"@axe-core/playwright": "^4.11.3",
+		"@playwright/test": "^1.60.0",
 		"@tailwindcss/postcss": "^4",
 		"@testing-library/jest-dom": "^6.9.1",
 		"@testing-library/react": "^16.3.2",
@@ -39,10 +50,16 @@
 		"@types/node": "^20",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
+		"fallow": "^2.69.0",
 		"jsdom": "^29.1.1",
 		"tailwindcss": "^4",
 		"typescript": "^5",
 		"vitest": "^4.1.5"
+	},
+	"pnpm": {
+		"overrides": {
+			"postcss": ">=8.5.10"
+		}
 	},
 	"packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b"
 }

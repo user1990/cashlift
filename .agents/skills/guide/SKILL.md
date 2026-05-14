@@ -32,9 +32,9 @@ Security is a shared responsibility. Keep these baseline rules in mind for all f
 
 ## Feature Delivery Workflow
 
-1. Create a feature branch off `master`
+1. Create a feature branch off `main`
 2. Implement the feature
-3. Create a pull request from the feature branch to `master`
+3. Create a pull request from the feature branch to `main`
 4. Assign and ping code reviewers
 5. Share the link to preview deployment in the domain's Slack channel
 6. Address feedback and receive approval
@@ -45,7 +45,7 @@ Security is a shared responsibility. Keep these baseline rules in mind for all f
 
 ### Trunk-Based Development
 
-The team collaborates on a single `master` branch kept deployable at all times. Feature branches are short-lived.
+The team collaborates on a single `main` branch kept deployable at all times. Feature branches are short-lived.
 
 ### Branch Naming
 
@@ -127,6 +127,26 @@ Keep schemas in `schemas.ts` and types in `types.ts`. Don't mix them — but mod
 
 ## JavaScript Conventions
 
+### Static Constants Use Uppercase
+
+Use `UPPER_SNAKE_CASE` for module-level static constants, including dates, lookup tables, query keys, config objects, and static UI/content arrays.
+
+```ts
+// ❌
+const invoiceRiskDate = new Date("2026-05-09");
+const actionPriorityWeights = { critical: 4, high: 3 };
+
+// ✅
+const INVOICE_RISK_DATE = new Date("2026-05-09");
+const ACTION_PRIORITY_WEIGHTS = { critical: 4, high: 3 };
+```
+
+Keep local runtime values in regular camelCase:
+
+```ts
+const invoiceRiskTotal = getInvoiceRiskTotal(invoices, INVOICE_RISK_DATE);
+```
+
 ### No Single-Letter Variables
 
 ```js
@@ -139,6 +159,20 @@ const expand = (e) => {
 const expand = (event) => {
   event.preventDefault();
 };
+```
+
+### Numeric Separators for Large Literals
+
+Use numeric separators for numeric literals with four or more digits. Keep user-facing strings, dates, URLs, SQL seed files, and SVG geometry in their native format.
+
+```js
+// ❌
+const cashBalanceCents = 41200000;
+const vendorLeakSavingsCents = 261000;
+
+// ✅
+const cashBalanceCents = 41_200_000;
+const vendorLeakSavingsCents = 261_000;
 ```
 
 ### Boolean Naming: Prefer Adjective Form
@@ -209,16 +243,40 @@ Use the shortest name that gives enough context. Avoid names that collide with d
 <dl className={styles.specs}>
 ```
 
+### Destructure JSX Map Items
+
+When mapping object arrays in JSX, destructure item properties in the callback parameters so the rendered shape is clear at the boundary. Put the `key` prop first on the mapped JSX element or component:
+
+```jsx
+// ❌
+{footerLinks.map((group) => (
+  <FooterGroup links={group.links} key={group.label} title={group.label} />
+))}
+
+// ✅
+{footerLinks.map(({ label, links }) => (
+  <FooterGroup key={label} links={links} title={label} />
+))}
+```
+
+### Local Helpers and List Keys
+
+Avoid extra named helpers for trivial one-off formatting (for example `week.slice(5)`); inline it at the call site or in a small prop callback so the main export stays easy to scan top-to-bottom.
+
+When list rows need stable unique keys and the domain field can repeat (for example the same calendar date twice), prefer deriving a stable key alongside the data (for example in the view-model `map` using `rowIndex`) rather than adding mapping helpers in the component.
+
+For non-trivial repeated logic, prefer `function helperName(...) {}` near the bottom of the file over arrow-const module-level helpers.
+
 ### Export Query Keys
 
 Extract and export `queryKey` from query hooks so they can be reused for invalidation:
 
 ```ts
-const reportsQueryKey = ['reports'];
+const REPORTS_QUERY_KEY = ['reports'];
 
-const useReportsDataQuery = () => useQuery({ queryKey: reportsQueryKey, queryFn: fetchReports });
+const useReportsDataQuery = () => useQuery({ queryKey: REPORTS_QUERY_KEY, queryFn: fetchReports });
 
-export { reportsQueryKey, useReportsDataQuery };
+export { REPORTS_QUERY_KEY, useReportsDataQuery };
 ```
 
 ### Use React Query Instead of Async Effects
@@ -243,7 +301,7 @@ const { mutate, isLoading } = useMutation({
 **Static data** — use constants:
 
 ```ts
-const schema = z.object({
+const USER_SCHEMA = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
 });
