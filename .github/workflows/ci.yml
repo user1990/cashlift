@@ -33,13 +33,11 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        # Removing --frozen-lockfile forces pnpm to fix the lockfile for Linux
         run: pnpm install
         env:
           NODE_ENV: development
 
       - name: Biome
-        # npx is excellent at finding the binary if pnpm exec fails
         run: npx @biomejs/biome check .
 
       - name: TypeScript
@@ -49,12 +47,12 @@ jobs:
         run: pnpm test
 
       - name: Fallow
-        run: pnpm exec fallow
+        run: npx fallow || pnpm run fallow
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: React Doctor
-        run: pnpm exec doctor
+        run: pnpm doctor || npx million doctor
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
