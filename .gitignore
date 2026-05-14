@@ -12,6 +12,10 @@
 
 # testing
 /coverage
+/.fallow/
+/playwright-report/
+/test-results/
+/blob-report/
 
 # next.js
 /.next/
@@ -39,3 +43,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Sentry Config File
+.env.sentry-build-plugin

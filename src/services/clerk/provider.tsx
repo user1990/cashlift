@@ -2,18 +2,16 @@
 
 import { ClerkProvider } from "@clerk/nextjs";
 
-type AppAuthProviderProps = {
+type AuthProviderProps = {
 	children: React.ReactNode;
 };
 
-export function AppAuthProvider({ children }: AppAuthProviderProps) {
+export function AuthProvider({ children }: AuthProviderProps) {
 	const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 	if (!publishableKey) {
 		return children;
 	}
 
-	return (
-		<ClerkProvider publishableKey={publishableKey}>{children}</ClerkProvider>
-	);
+	return <ClerkProvider publishableKey={publishableKey}>{children}</ClerkProvider>;
 }

@@ -116,7 +116,7 @@ const driver = createHookDriver({
         driver.getCurrent().someMethod();
       });
       await driver.waitFor(() => {
-        expect(driver.getCurrent().someState).toBe(true);
+        expect(driver.getCurrent().someState).toEqual(true);
       });
     },
 
@@ -195,10 +195,10 @@ it.each`
 it('handles async state changes', async () => {
   driver.mount({});
 
-  expect(driver.getLoadingState()).toBe(true);
+  expect(driver.getLoadingState()).toEqual(true);
 
   await waitFor(() => {
-    expect(driver.getLoadingState()).toBe(false);
+    expect(driver.getLoadingState()).toEqual(false);
   });
 
   expect(driver.getContent()).toBeVisible();

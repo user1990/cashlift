@@ -1,115 +1,119 @@
 import type { MoneyCents } from "@/modules/common/money/types";
 
-type SubscriptionStatus = "active" | "unused" | "trial";
+export type CompanyRole = "owner-finance" | "manager" | "employee";
 
-type Frequency = "weekly" | "biweekly" | "monthly" | "quarterly" | "annual";
+export type ActionPriority = "critical" | "high" | "medium" | "low";
 
-type DebtType = "credit-card" | "student-loan" | "auto-loan" | "personal-loan";
+export type ActionStatus = "open" | "done";
 
-type SpendingCategory =
-	| "dining"
-	| "subscriptions"
-	| "transport"
-	| "shopping"
-	| "fees"
-	| "utilities"
-	| "wellness";
+export type InvoiceStatus = "sent" | "overdue" | "promised" | "paid";
 
-type IncomeSource = {
-	id: string;
-	label: string;
-	amountCents: MoneyCents;
-	frequency: Frequency;
-	nextPayDate: string;
-	reliability: "stable" | "variable";
+export type VendorBillStatus = "scheduled" | "needs-review" | "approved";
+
+export type SubscriptionStatus = "active" | "unused" | "duplicate" | "trial";
+
+export type SpendRequestStatus = "pending" | "approved" | "rejected";
+
+export type CashActionType = "approval" | "collection" | "vendor-leak" | "cash-buffer" | "forecast";
+
+export type CompanyProfile = {
+	companyId: string;
+	name: string;
+	industry: "agency" | "consulting" | "software-services";
+	cashBalanceCents: MoneyCents;
+	cashBufferTargetCents: MoneyCents;
+	monthlyPayrollCents: MoneyCents;
+	defaultRole: CompanyRole;
 };
 
-type Bill = {
+export type TeamMember = {
 	id: string;
-	label: string;
-	amountCents: MoneyCents;
-	dueDate: string;
-	autopayEnabled: boolean;
-	category: "housing" | "insurance" | "utilities" | "debt" | "other";
+	name: string;
+	role: CompanyRole;
+	team: string;
 };
 
-type Subscription = {
+export type Invoice = {
 	id: string;
-	label: string;
+	client: string;
 	amountCents: MoneyCents;
 	dueDate: string;
+	status: InvoiceStatus;
+	owner: string;
+	collectionProbability: number;
+};
+
+export type VendorBill = {
+	id: string;
+	vendor: string;
+	amountCents: MoneyCents;
+	dueDate: string;
+	status: VendorBillStatus;
+	category: "software" | "contractor" | "operations" | "tax" | "payroll";
+	essential: boolean;
+};
+
+export type Subscription = {
+	id: string;
+	vendor: string;
+	amountCents: MoneyCents;
+	renewalDate: string;
 	status: SubscriptionStatus;
-	lastUsedDate?: string;
+	usagePercent: number;
+	owner: string;
 };
 
-type Debt = {
+export type SpendRequest = {
 	id: string;
-	label: string;
-	type: DebtType;
-	balanceCents: MoneyCents;
-	minimumPaymentCents: MoneyCents;
-	interestRate: number;
-	dueDate: string;
+	requester: string;
+	team: string;
+	vendor: string;
+	amountCents: MoneyCents;
+	category: "software" | "travel" | "contractor" | "marketing" | "hardware";
+	reason: string;
+	status: SpendRequestStatus;
+	requestedDate: string;
+	neededByDate: string;
 };
 
-type SavingsGoal = {
+export type TeamBudget = {
 	id: string;
-	label: string;
-	targetCents: MoneyCents;
-	currentCents: MoneyCents;
-	deadline: string;
-	priority: "high" | "medium" | "low";
+	team: string;
+	monthlyBudgetCents: MoneyCents;
+	committedCents: MoneyCents;
+	approvedCents: MoneyCents;
 };
 
-type TransactionPattern = {
+export type CashAction = {
 	id: string;
-	merchant: string;
-	category: SpendingCategory;
-	averageAmountCents: MoneyCents;
-	monthlyOccurrences: number;
-	avoidableScore: number;
-};
-
-type NetWorthSnapshot = {
-	id: string;
-	weekStart: string;
-	assetsCents: MoneyCents;
-	liabilitiesCents: MoneyCents;
-};
-
-type IncomeIdea = {
-	id: string;
+	type: CashActionType;
 	title: string;
-	expectedMonthlyCents: MoneyCents;
-	effort: "low" | "medium" | "high";
-	nextStep: string;
-};
-
-type MoneyChallenge = {
-	id: string;
-	title: string;
+	description: string;
 	impactCents: MoneyCents;
-	action: string;
+	dueDate: string;
+	priority: ActionPriority;
+	owner: string;
+	status: ActionStatus;
+	visibleTo: CompanyRole[];
 };
 
-type CashLiftProfile = {
-	userId: string;
-	displayName: string;
-	monthlyEssentialExpensesCents: MoneyCents;
-	currentEmergencyFundCents: MoneyCents;
+export type ForecastPoint = {
+	id: string;
+	date: string;
+	openingBalanceCents: MoneyCents;
+	inflowCents: MoneyCents;
+	outflowCents: MoneyCents;
+	scenario: "base" | "delayed-client" | "approved-spend";
 };
 
 export type FinancialDataset = {
-	profile: CashLiftProfile;
-	incomeSources: IncomeSource[];
-	bills: Bill[];
+	profile: CompanyProfile;
+	teamMembers: TeamMember[];
+	invoices: Invoice[];
+	vendorBills: VendorBill[];
 	subscriptions: Subscription[];
-	debts: Debt[];
-	savingsGoals: SavingsGoal[];
-	transactionPatterns: TransactionPattern[];
-	netWorthSnapshots: NetWorthSnapshot[];
-	incomeIdeas: IncomeIdea[];
-	dailyChallenges: MoneyChallenge[];
+	spendRequests: SpendRequest[];
+	teamBudgets: TeamBudget[];
+	cashActions: CashAction[];
+	forecast: ForecastPoint[];
 };
-
-export type DebtPayoffStrategy = "snowball" | "avalanche";

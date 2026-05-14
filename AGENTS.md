@@ -61,8 +61,11 @@ Skills live under `.agents/skills/<name>/SKILL.md` with frontmatter (`name`, `de
 | [guide](.agents/skills/guide/SKILL.md) | Conventions, file structure, Git/PR format, React patterns |
 | [styling](.agents/skills/styling/SKILL.md) | Tailwind, `cn()`, cva, design tokens, SCSS migration |
 | [testing](.agents/skills/testing/SKILL.md) | Drivers, mocking rules, RTL selectors |
+| [fallow](.agents/skills/fallow/SKILL.md) | Dead code, unused exports/deps, duplication, complexity, circular deps, architecture boundary checks |
+| [react-doctor](.agents/skills/react-doctor/SKILL.md) | React/Next quality scans, score regression checks, architecture/performance/accessibility diagnostics |
 | [figma](.agents/skills/figma/SKILL.md) | Implementing UI from Figma (requires Figma MCP) |
 | [create-pr](.agents/skills/create-pr/SKILL.md) | Open or update PRs using the repo's template |
+| [review-pr](.agents/skills/review-pr/SKILL.md) | Review the current branch locally without editing files |
 | [create-translation-task](.agents/skills/create-translation-task/SKILL.md) | Translation tasks in Jira |
 
 ## Key Principles
