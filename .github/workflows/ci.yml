@@ -41,7 +41,7 @@ jobs:
         run: npx @biomejs/biome check .
 
       - name: TypeScript
-        run: pnpm exec tsc --noEmit
+        run: pnpm exec tsgo --noEmit
 
       - name: Unit tests
         run: pnpm test
