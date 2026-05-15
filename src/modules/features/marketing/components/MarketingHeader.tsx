@@ -31,11 +31,12 @@ const activeGroup = (group: NavGroup, pathname: string) => group.items.some((ite
 
 export const MarketingHeader = () => {
 	const pathname = usePathname();
+
 	const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
 	return (
-		<header className="sticky top-0 z-30 border-b border-shell-border bg-shell/90 backdrop-blur">
-			<div className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+		<header className="sticky top-0 z-30 border-b border-shell-border bg-shell/90 backdrop-blur @container-[scroll-state]">
+			<div className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 h-16 transition-[height] duration-300 ease-in-out [@container_scroll-state(stuck:top)]:h-11">
 				<MarketingBrand onNavigate={() => setMobileNavOpen(false)} />
 
 				<DesktopNav pathname={pathname} />
@@ -55,9 +56,25 @@ export const MarketingHeader = () => {
 
 const MarketingBrand = ({ onNavigate }: { onNavigate: () => void }) => (
 	<Link className="shrink-0" href="/" onClick={onNavigate}>
-		<p className="text-s+ uppercase tracking-normal text-primary">CashLift</p>
+		<div className="flex items-center gap-2.5">
+			<div className="w-[34px] h-[34px] shrink-0 transition-[width,height] duration-300 ease-in-out [@container_scroll-state(stuck:top)]:w-[22px] [@container_scroll-state(stuck:top)]:h-[22px]">
+				<svg viewBox="0 0 36 36" fill="none" className="w-full h-full" aria-hidden="true">
+					<rect width="36" height="36" rx="9" fill="#0d1f16" />
 
-		<p className="text-xl+ tracking-normal text-shell-foreground">Teams</p>
+					<path d="M18 6 L26 28 Q18 23 10 28 Z" fill="#22c77a" />
+
+					<rect x="14" y="17" width="8" height="2.2" rx="1.1" fill="#0d1f16" />
+
+					<rect x="15.8" y="12.5" width="4.4" height="2" rx="1" fill="#0d1f16" />
+				</svg>
+			</div>
+
+			<span className="font-brand font-bold text-xl tracking-tight leading-none transition-[font-size] duration-300 ease-in-out [@container_scroll-state(stuck:top)]:text-sm">
+				<span className="text-foreground">Cash</span>
+
+				<span className="text-[#16a163]">Lift</span>
+			</span>
+		</div>
 	</Link>
 );
 

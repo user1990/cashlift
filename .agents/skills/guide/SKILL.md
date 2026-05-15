@@ -161,6 +161,51 @@ const expand = (event) => {
 };
 ```
 
+### TypeScript Type Property Ordering
+
+Always declare required properties before optional ones. Within each group, order properties alphabetically.
+
+This ordering makes a component's contract immediately readable — the essential shape is visible at a glance, and optional customisation sits below it.
+
+```ts
+// ❌
+type CardProps = {
+	className?: string;
+	title: string;
+	variant?: "default" | "outline";
+	children: React.ReactNode;
+	href?: string;
+};
+
+// ✅
+type CardProps = {
+	children: React.ReactNode;
+	title: string;
+	className?: string;
+	href?: string;
+	variant?: "default" | "outline";
+};
+```
+
+### Array of Objects Type Syntax
+Prefer the inline array syntax `T[]` over `Array<T>` for object types. For object shapes used more than once, extract a named type.
+This keeps generics clean and makes reuse explicit — the type name becomes part of the component's vocabulary.
+```ts
+// ❌
+options: Array<{ label: string; value: string }>;
+
+// ✅ (inline, single use)
+options: { label: string; value: string }[];
+
+// ✅✅ (extracted, when reused or semantically meaningful)
+type Option = {
+	label: string;
+	value: string;
+};
+
+options: Option[];
+```
+
 ### Numeric Separators for Large Literals
 
 Use numeric separators for numeric literals with four or more digits. Keep user-facing strings, dates, URLs, SQL seed files, and SVG geometry in their native format.

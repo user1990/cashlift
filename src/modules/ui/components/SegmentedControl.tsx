@@ -3,26 +3,40 @@
 import { useReducedMotion } from "motion/react";
 import * as m from "motion/react-m";
 import { useId } from "react";
-import { Radio, RadioGroup } from "react-aria-components";
+import { RadioGroup as RACRadioGroup, Radio } from "react-aria-components";
 import { cn } from "@/modules/ui/utils/cn";
 
-type SegmentedControlProps<T extends string> = {
+type SegmentedControlOption<TValue extends string> = {
 	label: string;
-	onChange: (value: T) => void;
-	options: Array<{ label: string; value: T }>;
-	value: T;
+	value: TValue;
 };
 
-export const SegmentedControl = <T extends string>({ label, onChange, options, value }: SegmentedControlProps<T>) => {
+type SegmentedControlProps<TValue extends string> = {
+	label: string;
+	onChange: (value: TValue) => void;
+	options: SegmentedControlOption<TValue>[];
+	value: TValue;
+};
+
+export const SegmentedControl = <TValue extends string>({
+	label,
+	onChange,
+	options,
+	value,
+}: SegmentedControlProps<TValue>) => {
 	const controlId = useId();
 	const reducedMotion = useReducedMotion();
 
 	return (
-		<RadioGroup
+		<RACRadioGroup
 			aria-label={label}
-			className="inline-flex rounded-lg border border-border bg-panel-muted p-1"
-			onChange={(nextValue) => onChange(nextValue as T)}
 			value={value}
+			onChange={(nextValue) => {
+				if (nextValue !== value) {
+					onChange(nextValue as TValue);
+				}
+			}}
+			className="inline-flex rounded-lg border border-border bg-panel-muted p-1"
 		>
 			{options.map(({ label: optionLabel, value: optionValue }) => (
 				<Radio
@@ -52,6 +66,6 @@ export const SegmentedControl = <T extends string>({ label, onChange, options, v
 					)}
 				</Radio>
 			))}
-		</RadioGroup>
+		</RACRadioGroup>
 	);
 };
