@@ -18,7 +18,7 @@
 		"test:e2e:install": "playwright install chromium",
 		"fallow": "fallow --summary",
 		"fallow:fix": "fallow fix --yes",
-		"postinstall": "lefthook install"
+		"prepare": "lefthook install"
 	},
 	"dependencies": {
 		"@clerk/nextjs": "^7.3.2",
@@ -27,6 +27,7 @@
 		"@supabase/ssr": "^0.10.3",
 		"@supabase/supabase-js": "^2.105.4",
 		"@tanstack/react-query": "^5.100.9",
+		"@vercel/analytics": "^2.0.1",
 		"@vercel/speed-insights": "^2.0.0",
 		"clsx": "^2.1.1",
 		"date-fns": "^4.1.0",
