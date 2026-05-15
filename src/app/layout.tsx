@@ -1,3 +1,4 @@
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { MotionProvider } from "@/modules/ui/components/MotionProvider";
@@ -23,6 +24,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
 					<AuthProvider>
 						<QueryProvider>
 							<MotionProvider>{children}</MotionProvider>
+
+							<SpeedInsights />
 						</QueryProvider>
 					</AuthProvider>
 				</NextIntlClientProvider>

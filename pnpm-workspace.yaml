@@ -1,3 +1,11 @@
+allowBuilds:
+  '@clerk/shared': false
+  '@parcel/watcher': false
+  '@sentry/cli': false
+  '@swc/core': false
+  fallow: true
+  lefthook: true
+  sharp: false
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver

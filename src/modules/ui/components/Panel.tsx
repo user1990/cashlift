@@ -1,10 +1,16 @@
 import { cn } from "@/modules/ui/utils/cn";
 
 type PanelProps = {
-	as?: "article" | "div" | "section";
 	children: React.ReactNode;
+	as?: "article" | "div" | "section";
 	className?: string;
 	variant?: "light" | "glass" | "accent";
+};
+
+type PanelHeaderProps = {
+	action?: React.ReactNode;
+	eyebrow?: string;
+	title: string;
 };
 
 export const Panel = ({ as: Component = "div", children, className, variant = "light" }: PanelProps) => (
@@ -21,12 +27,6 @@ export const Panel = ({ as: Component = "div", children, className, variant = "l
 		{children}
 	</Component>
 );
-
-type PanelHeaderProps = {
-	action?: React.ReactNode;
-	eyebrow?: string;
-	title: string;
-};
 
 export const PanelHeader = ({ action, eyebrow, title }: PanelHeaderProps) => (
 	<div className="mb-4 flex items-start justify-between gap-4">

@@ -10,8 +10,8 @@ type SubscriptionLeakRow = {
 };
 
 type SubscriptionLeakListProps = {
-	className?: string;
 	items: SubscriptionLeakRow[];
+	className?: string;
 };
 
 export const SubscriptionLeakList = ({ className, items }: SubscriptionLeakListProps) => (
@@ -19,9 +19,9 @@ export const SubscriptionLeakList = ({ className, items }: SubscriptionLeakListP
 		{items.map(({ amountCents, id, status, usagePercent, vendor }) => (
 			<AmountListItem
 				key={id}
+				title={vendor}
 				amountCents={amountCents}
 				meta={`${status} · usage ${percentage(usagePercent)}`}
-				title={vendor}
 			/>
 		))}
 	</ul>

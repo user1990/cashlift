@@ -23,8 +23,8 @@ export const ProgressBar = ({ className, label, value }: ProgressBarProps) => (
 			role="progressbar"
 		>
 			<div
-				className="h-full origin-left rounded-full bg-primary transition-transform duration-150 ease-out motion-reduce:transition-none"
 				style={{ transform: `scaleX(${formatPercent(value) / 100})` }}
+				className="h-full origin-left rounded-full bg-primary transition-transform duration-150 ease-out motion-reduce:transition-none"
 			/>
 		</div>
 	</div>

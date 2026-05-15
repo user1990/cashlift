@@ -18,8 +18,18 @@
 		"enabled": true,
 		"rules": {
 			"recommended": true,
+			"complexity": {
+				"useOptionalChain": "error"
+			},
 			"style": {
-				"useConsistentArrowReturn": "error"
+				"useConsistentArrowReturn": "error",
+				"noNonNullAssertion": "error",
+				"useConsistentArrayType": {
+					"level": "error",
+					"options": {
+						"syntax": "shorthand"
+					}
+				}
 			}
 		}
 	},
