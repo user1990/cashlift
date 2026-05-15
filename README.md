@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/assets/logo.png" width="110" alt="CashLift Logo" />
+  <img src="./src/app/logo.svg" width="110" alt="CashLift Logo" />
 </p>
 
 <h1 align="center">CashLift</h1>
@@ -37,7 +37,7 @@
 ---
 
 <p align="center">
-  <img src="./docs/screenshots/hero-dashboard.png" width="100%" alt="CashLift Dashboard" />
+  <img src="./src/app/dashboard.png" width="100%" alt="CashLift Dashboard" />
 </p>
 
 ---

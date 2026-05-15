@@ -104,6 +104,5 @@ Cross-cutting only. Domain-specific anti-patterns live in their skill (e.g. test
 ## Quick Reference
 
 - **Package manager:** pnpm
-- **Monorepo tool:** Turborepo
 - **Conventions:** [.agents/skills/guide/SKILL.md](.agents/skills/guide/SKILL.md)
 - **Directory guide:** [.agents/README.md](.agents/README.md) — what goes in skills vs docs
