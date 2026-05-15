@@ -1,93 +1,477 @@
-# CashLift
+<p align="center">
+  <img src="./docs/assets/logo.png" width="110" alt="CashLift Logo" />
+</p>
 
-CashLift is a B2B cash decision command center for service firms. It helps
-teams approve spend, chase receivables, protect cash buffers, and prevent
-financial leaks before money leaves the company.
+<h1 align="center">CashLift</h1>
 
-The app loads company finance data through a server repository (Supabase with
-Clerk-backed row-level security). Marketing and `/demo` stay public; `/app` and
-`/api/workspace/dataset` are protected when running in production mode.
+<p align="center">
+  Cash decision command center for service firms.
+</p>
 
-## Stack
+<p align="center">
+  Approve spend. Recover receivables. Protect runway.
+</p>
 
-- Next.js App Router, TypeScript, Tailwind CSS
-- React Aria Components for accessible UI primitives
-- TanStack Query for client refetches against the workspace dataset API
-- React Hook Form + Zod for demo, contact, signup, and spend request forms
-- Recharts for dashboard visualizations
-- next-intl for locale-ready copy
-- Clerk and Supabase integration boundaries without committed credentials
+<p align="center">
+  <a href="#why-cashlift">Why CashLift</a>
+  ·
+  <a href="#features">Features</a>
+  ·
+  <a href="#architecture">Architecture</a>
+  ·
+  <a href="#getting-started">Getting Started</a>
+  ·
+  <a href="#security">Security</a>
+  ·
+  <a href="#roadmap">Roadmap</a>
+</p>
 
-Domain language and relationships live in [CONTEXT.md](./CONTEXT.md). ADRs for
-demo vs workspace and Supabase RLS are under [docs/adr](./docs/adr/).
+<p align="center">
+  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-App%20Router-black">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-Strict-blue">
+  <img alt="Supabase" src="https://img.shields.io/badge/Supabase-RLS-green">
+  <img alt="Clerk" src="https://img.shields.io/badge/Auth-Clerk-purple">
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-lightgrey">
+</p>
 
-## Getting Started
+---
+
+<p align="center">
+  <img src="./docs/screenshots/hero-dashboard.png" width="100%" alt="CashLift Dashboard" />
+</p>
+
+---
+
+# Why CashLift
+
+Most finance tooling explains what already happened.
+
+CashLift helps operators control cash before damage happens.
+
+Built for agencies, consultancies, studios, and service businesses that need:
+
+- spend governance
+- receivable visibility
+- operational cash control
+- approval accountability
+- liquidity awareness
+- fewer spreadsheet workflows
+
+CashLift combines workflow controls, finance visibility, and workspace-level
+security into a single operational system.
+
+---
+
+# Features
+
+## Financial Operations
+
+- Spend approval workflows
+- Receivables tracking
+- Cash buffer monitoring
+- Financial leak detection
+- Workspace-scoped finance views
+- Operational finance dashboards
+
+## Platform
+
+- Public marketing + demo experience
+- Protected production workspace
+- Clerk authentication boundaries
+- Supabase row-level security
+- Locale-ready architecture
+- Accessible UI primitives
+
+## Developer Experience
+
+- TypeScript strict mode
+- Next.js App Router
+- E2E smoke coverage
+- Architecture decision records
+- CI-safe production defaults
+- Boundary validation tooling
+
+---
+
+# Screenshots
+
+## Executive Dashboard
+
+<p align="center">
+  <img src="./docs/screenshots/dashboard.png" width="100%" alt="Executive Dashboard" />
+</p>
+
+## Spend Approval Flow
+
+<p align="center">
+  <img src="./docs/screenshots/approvals.png" width="100%" alt="Spend Approval Flow" />
+</p>
+
+## Receivables Workspace
+
+<p align="center">
+  <img src="./docs/screenshots/receivables.png" width="100%" alt="Receivables Workspace" />
+</p>
+
+---
+
+# Architecture
+
+```text
+                         ┌─────────────────────┐
+                         │     Marketing       │
+                         │    Public Routes    │
+                         └──────────┬──────────┘
+                                    │
+                         ┌──────────▼──────────┐
+                         │      Demo Mode      │
+                         │ Shared Demo Dataset │
+                         └──────────┬──────────┘
+                                    │
+                 ┌──────────────────▼──────────────────┐
+                 │       Production Workspace          │
+                 │                                     │
+                 │  Clerk Authentication               │
+                 │  Supabase JWT Verification          │
+                 │  Row-Level Security Enforcement     │
+                 │  Workspace Data Isolation           │
+                 └─────────────────────────────────────┘
+```
+
+---
+
+# Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js App Router |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| UI | React Aria Components |
+| Forms | React Hook Form + Zod |
+| Data Fetching | TanStack Query |
+| Charts | Recharts |
+| Internationalization | next-intl |
+| Authentication | Clerk |
+| Database | Supabase |
+| Security | Supabase RLS |
+
+---
+
+# Project Structure
+
+```text
+app/                        Next.js routes
+components/                 Shared UI components
+features/                   Domain feature modules
+lib/                        Shared infrastructure
+hooks/                      Shared hooks
+providers/                  App providers
+supabase/                   SQL + RLS policies
+docs/adr/                   Architecture decisions
+public/                     Static assets
+tests/                      Automated tests
+```
+
+---
+
+# Getting Started
+
+## Install Dependencies
+
+```bash
+pnpm install
+```
+
+## Start Development Server
 
 ```bash
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser.
+Open:
 
-Useful checks:
+```text
+http://localhost:3000
+```
+
+---
+
+# Quality Checks
+
+## Lint
 
 ```bash
 pnpm lint
+```
+
+## Type Safety
+
+```bash
 pnpm typecheck
+```
+
+## Unit Tests
+
+```bash
 pnpm test
+```
+
+## Architecture Validation
+
+```bash
 pnpm fallow
+```
+
+## Production Build
+
+```bash
 pnpm build
+```
+
+## Diagnostics
+
+```bash
 pnpm doctor
+```
+
+## End-to-End Tests
+
+```bash
 pnpm test:e2e
 ```
 
-Install Playwright browsers once (Chromium is enough for the smoke suite):
+Install Playwright browsers once:
 
 ```bash
 pnpm test:e2e:install
 ```
 
-## Environment
+---
 
-`CASHLIFT_APP_MODE` is `demo` or `production`. If unset, local development
-defaults to **demo**; **CI** and **NODE_ENV=production** default to **production**
-(fail closed when required variables are missing).
+# Environment Modes
 
-### Demo mode (`CASHLIFT_APP_MODE=demo`)
+`CASHLIFT_APP_MODE` supports:
 
-- `/app` and `/api/workspace/dataset` serve the demo company dataset (no Clerk
-  session required for `/app`).
-- Required: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-- Optional: `SUPABASE_DEMO_COMPANY_ID` (defaults to `studio-nova` in code when
-  unset).
+- `demo`
+- `production`
 
-### Production mode (`CASHLIFT_APP_MODE=production`)
+If unset:
 
-- `/app` and `/api/workspace/dataset` require Clerk sign-in and a Supabase JWT
-  from the Clerk **`supabase`** JWT template.
-- Required:
-  - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
-  - `CLERK_SECRET_KEY`
-  - `NEXT_PUBLIC_SUPABASE_URL`
-  - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+- local development defaults to `demo`
+- CI defaults to `production`
+- production builds fail closed
 
-`SUPABASE_DEMO_COMPANY_ID` is only read in **demo** mode.
+---
 
-### Supabase dashboard setup
+## Mode Comparison
 
-Use the Supabase project dashboard values from **Project Settings → API Keys**:
+| Mode | Auth | Dataset | Intended Use |
+|---|---|---|---|
+| Demo | Optional | Shared demo company | Product walkthroughs |
+| Production | Required | Workspace-scoped | Real operations |
 
-- Copy **Project URL** into `NEXT_PUBLIC_SUPABASE_URL`.
-- Copy the **Publishable key** into `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
-- Do not use the database password in the frontend app env.
+---
 
-Then check **Authentication → URL Configuration**:
+## Demo Mode
 
-- Site URL: `http://localhost:3000` for local development.
-- Redirect URLs: add `http://localhost:3000/**`.
+```bash
+CASHLIFT_APP_MODE=demo
+```
 
-Apply row-level security policies so authenticated users only read their
-company’s rows (see `supabase/production-rls-policies.sql`). Enable RLS before
-exposing tables to the Data API.
+### Behavior
 
-No real credentials should be committed.
+- `/app` serves demo company data
+- `/api/workspace/dataset` uses shared dataset
+- authentication optional
+
+### Required Variables
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+```
+
+### Optional
+
+```env
+SUPABASE_DEMO_COMPANY_ID=
+```
+
+---
+
+## Production Mode
+
+```bash
+CASHLIFT_APP_MODE=production
+```
+
+### Behavior
+
+- authenticated workspace access required
+- Supabase JWT validation enabled
+- row-level security enforced
+
+### Required Variables
+
+```env
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+```
+
+---
+
+# Supabase Setup
+
+## API Configuration
+
+Use values from:
+
+```text
+Project Settings → API Keys
+```
+
+| Supabase Value | Environment Variable |
+|---|---|
+| Project URL | NEXT_PUBLIC_SUPABASE_URL |
+| Publishable Key | NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY |
+
+Never expose:
+
+- database passwords
+- service role keys
+- production secrets
+
+---
+
+## Authentication Configuration
+
+```text
+Authentication → URL Configuration
+```
+
+### Site URL
+
+```text
+http://localhost:3000
+```
+
+### Redirect URLs
+
+```text
+http://localhost:3000/**
+```
+
+---
+
+## Row-Level Security
+
+Apply policies from:
+
+```text
+supabase/production-rls-policies.sql
+```
+
+Production assumes:
+
+- RLS enabled
+- authenticated JWT verification active
+- workspace isolation enforced
+
+---
+
+# Security
+
+CashLift follows a fail-closed production model.
+
+## Protections
+
+- Clerk authentication
+- Supabase JWT validation
+- Workspace-level row isolation
+- Protected production APIs
+- Environment variable enforcement
+- No committed credentials
+
+## Security Boundaries
+
+| Area | Protection |
+|---|---|
+| Authentication | Clerk |
+| Authorization | Supabase RLS |
+| Workspace Isolation | Company-scoped policies |
+| APIs | Protected in production |
+| Secrets | Environment variables only |
+
+---
+
+# ADRs
+
+Architecture decisions live under:
+
+```text
+docs/adr/
+```
+
+Includes:
+
+- demo vs production separation
+- Supabase RLS strategy
+- auth boundary decisions
+- dataset architecture decisions
+
+---
+
+# Roadmap
+
+## Platform
+
+- [ ] Multi-workspace support
+- [ ] Audit timelines
+- [ ] Approval escalation chains
+- [ ] Role-based permissions
+- [ ] Activity feeds
+
+## Finance Intelligence
+
+- [ ] Cash forecasting engine
+- [ ] Vendor exposure analytics
+- [ ] Aging receivable automation
+- [ ] Payment anomaly detection
+- [ ] Liquidity trend analysis
+
+## Integrations
+
+- [ ] Slack approvals
+- [ ] QuickBooks sync
+- [ ] Stripe reconciliation
+- [ ] Banking integrations
+- [ ] Webhook platform
+
+---
+
+# Contributing
+
+```bash
+git clone <repo>
+pnpm install
+pnpm dev
+```
+
+Before opening PRs:
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm test:e2e
+```
+
+---
+
+# License
+
+MIT
