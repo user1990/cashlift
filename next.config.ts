@@ -4,6 +4,17 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
 	/* config options here */
+	turbopack: {
+		rules: {
+			"*.svg": {
+				loaders: ["turbopack-inline-svg-loader"],
+				condition: {
+					content: /^[\s\S]{0,4000}$/, // Inline SVGs smaller than ~4Kb
+				},
+				as: "*.js",
+			},
+		},
+	},
 };
 
 const withNextIntl = createNextIntlPlugin("./src/services/i18n/request.ts");

@@ -1,10 +1,12 @@
 "use client";
 
 import { ChevronDown, MenuIcon, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Button, Menu, MenuItem, MenuTrigger, Popover } from "react-aria-components";
+import logo from "@/app/logo.svg";
 import { cn } from "@/modules/ui/utils/cn";
 import { PRODUCT_NAV, SOLUTION_NAV } from "../content";
 
@@ -57,17 +59,9 @@ export const MarketingHeader = () => {
 const MarketingBrand = ({ onNavigate }: { onNavigate: () => void }) => (
 	<Link className="shrink-0" href="/" onClick={onNavigate}>
 		<div className="flex items-center gap-2.5">
-			<div className="w-[34px] h-[34px] shrink-0 transition-[width,height] duration-300 ease-in-out [@container_scroll-state(stuck:top)]:w-[22px] [@container_scroll-state(stuck:top)]:h-[22px]">
-				<svg viewBox="0 0 36 36" fill="none" className="w-full h-full" aria-hidden="true">
-					<rect width="36" height="36" rx="9" fill="#0d1f16" />
+			<div className="w-[34px] h-[34px] shrink-0 transition-[width,height] duration-300 ease-in-out [@container_scroll-state(stuck:top)]:w-[22px] [@container_scroll-state(stuck:top)]:h-[22px]"></div>
 
-					<path d="M18 6 L26 28 Q18 23 10 28 Z" fill="#22c77a" />
-
-					<rect x="14" y="17" width="8" height="2.2" rx="1.1" fill="#0d1f16" />
-
-					<rect x="15.8" y="12.5" width="4.4" height="2" rx="1" fill="#0d1f16" />
-				</svg>
-			</div>
+			<Image unoptimized src={logo} alt="CashLift Logo" width={36} height={36} className="h-9 w-9 shrink-0" />
 
 			<span className="font-brand font-bold text-xl tracking-tight leading-none transition-[font-size] duration-300 ease-in-out [@container_scroll-state(stuck:top)]:text-sm">
 				<span className="text-foreground">Cash</span>
