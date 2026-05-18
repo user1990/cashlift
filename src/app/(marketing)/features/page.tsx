@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { FeaturesPage } from "@/modules/features/marketing/components/FeaturesPage";
+import { FeaturesPage } from "@/modules/marketing/components/FeaturesPage";
 
 export const metadata: Metadata = {
 	title: "Features — CashLift",

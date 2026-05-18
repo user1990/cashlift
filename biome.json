@@ -8,16 +8,22 @@
 	"files": {
 		"ignoreUnknown": false
 	},
-	"plugins": ["./.biome/jsx-sibling-newlines.grit"],
+	"plugins": ["./.biome/jsx-sibling-newlines.grit", "./.biome/security-sensitive-browser-apis.grit"],
 	"formatter": {
-		"enabled": true,
-		"indentStyle": "tab",
 		"lineWidth": 120
 	},
 	"linter": {
-		"enabled": true,
 		"rules": {
 			"recommended": true,
+			"security": {
+				"noSecrets": {
+					"level": "error",
+					"options": { "entropyThreshold": 50 }
+				}
+			},
+			"correctness": {
+				"useExhaustiveDependencies": "error"
+			},
 			"complexity": {
 				"useOptionalChain": "error"
 			},
@@ -26,10 +32,11 @@
 				"noNonNullAssertion": "error",
 				"useConsistentArrayType": {
 					"level": "error",
-					"options": {
-						"syntax": "shorthand"
-					}
+					"options": { "syntax": "shorthand" }
 				}
+			},
+			"suspicious": {
+				"noDocumentCookie": "error"
 			}
 		}
 	},

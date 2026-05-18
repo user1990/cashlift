@@ -1,0 +1,58 @@
+language js(typescript, jsx)
+
+or {
+	`$storage.$method($args)` as $match where {
+		$storage <: or {
+			`localStorage`,
+			`sessionStorage`,
+			`window.localStorage`,
+			`window.sessionStorage`,
+			`globalThis.localStorage`,
+			`globalThis.sessionStorage`
+		},
+		register_diagnostic(span=$match, message="Do not use Web Storage for auth/session data. Keep sensitive tokens server-side or in HttpOnly provider cookies.", severity="error")
+	},
+	`$storage[$key] = $value` as $match where {
+		$storage <: or {
+			`localStorage`,
+			`sessionStorage`,
+			`window.localStorage`,
+			`window.sessionStorage`,
+			`globalThis.localStorage`,
+			`globalThis.sessionStorage`
+		},
+		register_diagnostic(span=$match, message="Do not use Web Storage for auth/session data. Keep sensitive tokens server-side or in HttpOnly provider cookies.", severity="error")
+	},
+	`$storage.$property = $value` as $match where {
+		$storage <: or {
+			`localStorage`,
+			`sessionStorage`,
+			`window.localStorage`,
+			`window.sessionStorage`,
+			`globalThis.localStorage`,
+			`globalThis.sessionStorage`
+		},
+		register_diagnostic(span=$match, message="Do not use Web Storage for auth/session data. Keep sensitive tokens server-side or in HttpOnly provider cookies.", severity="error")
+	},
+	`document.cookie` as $match where {
+		register_diagnostic(span=$match, message="Do not access cookies from client JavaScript. Use framework/server cookie APIs and HttpOnly provider cookies.", severity="error")
+	},
+	`window.document.cookie` as $match where {
+		register_diagnostic(span=$match, message="Do not access cookies from client JavaScript. Use framework/server cookie APIs and HttpOnly provider cookies.", severity="error")
+	},
+	`$element.innerHTML = $html` as $match where {
+		register_diagnostic(span=$match, message="Do not assign raw HTML. Render JSX text or sanitize reviewed HTML before using an explicit sink.", severity="error")
+	},
+	`$element.outerHTML = $html` as $match where {
+		register_diagnostic(span=$match, message="Do not assign raw HTML. Render JSX text or sanitize reviewed HTML before using an explicit sink.", severity="error")
+	},
+	`$element.insertAdjacentHTML($args)` as $match where {
+		register_diagnostic(span=$match, message="Do not insert raw HTML. Render JSX text or sanitize reviewed HTML before using an explicit sink.", severity="error")
+	},
+	`new Function($args)` as $match where {
+		register_diagnostic(span=$match, message="Do not evaluate strings as code. Use explicit functions or data parsers instead.", severity="error")
+	},
+	`Function($args)` as $match where {
+		register_diagnostic(span=$match, message="Do not evaluate strings as code. Use explicit functions or data parsers instead.", severity="error")
+	}
+}

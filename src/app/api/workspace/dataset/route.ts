@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { resolveWorkspaceDataset } from "@/modules/base/finance/resolveWorkspaceDataset";
+import { resolveWorkspaceDataset } from "@/modules/workspace/resolveWorkspaceDataset";
 import { apiError } from "./errors";
 
 export const GET = async () => {
@@ -9,13 +9,29 @@ export const GET = async () => {
 		case "success":
 			return NextResponse.json(result.dataset);
 		case "config":
+			return apiError({
+				code: "workspace_config_unavailable",
+				error: result.message,
+				requestId: result.requestId,
+				status: 503,
+			});
 		case "service":
-			return apiError(result.message, 503);
+			return apiError({
+				code: "workspace_service_unavailable",
+				error: result.message,
+				requestId: result.requestId,
+				status: 503,
+			});
 		case "unauthenticated":
-			return apiError(result.message, 401);
+			return apiError({ code: "workspace_unauthenticated", error: result.message, status: 401 });
 		case "forbidden":
-			return apiError(result.message, 403);
+			return apiError({ code: "workspace_forbidden", error: result.message, status: 403 });
 		case "data_error":
-			return apiError(result.message, 500);
+			return apiError({
+				code: "workspace_data_unavailable",
+				error: result.message,
+				requestId: result.requestId,
+				status: 500,
+			});
 	}
 };

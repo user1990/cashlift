@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { UseCasePage } from "@/modules/features/marketing/components/UseCasePage";
-import { USE_CASES } from "@/modules/features/marketing/content";
+import { UseCasePage } from "@/modules/marketing/components/UseCasePage";
+import { USE_CASES } from "@/modules/marketing/content";
 
 export const metadata: Metadata = {
 	title: "Consulting — CashLift",

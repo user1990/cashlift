@@ -54,6 +54,7 @@
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
 		"@typescript/native-preview": "7.0.0-dev.20260421.2",
+		"babel-plugin-react-compiler": "^1.0.0",
 		"fallow": "^2.69.0",
 		"jsdom": "^29.1.1",
 		"lefthook": "^2.1.6",

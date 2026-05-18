@@ -1,4 +1,4 @@
-import { MarketingLayout } from "@/modules/features/marketing/components/MarketingLayout";
+import { MarketingLayout } from "@/modules/marketing/components/MarketingLayout";
 
 type MarketingRouteLayoutProps = {
 	children: React.ReactNode;

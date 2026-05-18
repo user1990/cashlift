@@ -4,42 +4,40 @@ description: Coding conventions, file structure, Git/PR/commit rules, React/Zod/
 ---
 
 # Frontend Guide
-
-Coding style, conventions, and workflow for frontend development.
+Coding style, conventions, and workflow for frontend development. For deeper rationale, historical conventions, and full process details such as feature delivery workflow, read `.agents/docs/guide.md` only when needed.
 
 ## Technology Stack
 
 | Category   | Tools                                                  |
 | ---------- | ------------------------------------------------------ |
-| Runtime    | Node.js + pnpm                                         |
-| Language   | TypeScript                                             |
-| Frameworks | React, Next.js                                          |
-| Auth/Data  | Clerk, Supabase JS                                      |
-| State      | Zustand, TanStack Query (React Query), React Hook Form |
-| Styling    | Tailwind CSS                                           |
+| Runtime    | Node.js 22.13+ + pnpm 11                               |
+| Language   | TypeScript + tsgo                                      |
+| Frameworks | React, React DOM, Next.js, React Compiler, Turbopack   |
+| Auth/Data  | Clerk, Supabase SSR, Supabase JS, TanStack Query       |
+| Forms      | React Hook Form, @hookform/resolvers, Zod              |
+| Styling    | Tailwind CSS v4, @tailwindcss/postcss, clsx, tailwind-merge |
+| UI/Motion  | react-aria-components, lucide-react, motion            |
 | i18n       | next-intl                                              |
-| Testing    | Vitest                                                 |
-| Linting    | Biome (lint + format)                                  |
-| Utilities  | Zod, date-fns, Recharts, react-aria-components, lucide-react, class-variance-authority, clsx, tailwind-merge |
+| Charts     | Recharts                                               |
+| Testing    | Vitest, jsdom, Testing Library, Playwright, axe-core Playwright |
+| Linting    | Biome (lint + format + import organization)            |
+| Monitoring | Sentry, Vercel Analytics, Vercel Speed Insights        |
+| Diagnostics | Fallow, React Doctor                                  |
+| Workflow   | Lefthook                                               |
 
 ## Security Guidelines
 
 Security is a shared responsibility. Keep these baseline rules in mind for all feature work:
 
 - Follow OWASP Top Ten guidance and common web security practices.
-- Validate and sanitize all external input at boundaries (API, forms, URL params, storage).
+- Render user text through JSX by default. Avoid `dangerouslySetInnerHTML`; when raw HTML is unavoidable, sanitize it first with a reviewed sanitizer and keep the sink local and obvious.
+- Never store auth tokens or session secrets in `localStorage` or `sessionStorage`. Use the auth provider's HttpOnly/Secure/SameSite cookie flow and keep tokens server-side.
+- For cookie-authenticated state-changing requests, include and validate a CSRF token unless the endpoint is already protected by an equivalent framework/provider guarantee.
+- Validate all external input at server boundaries with Zod or an equivalent schema before using it. Client-side validation is UX only.
+- Authorize before data access or mutation, and scope every query to the authenticated user/workspace.
+- Use parameterized queries/query builders only. Never concatenate external input into SQL or filter strings.
+- Keep a restrictive CSP and browser hardening headers in place. Use nonces for inline scripts/styles in Next.js instead of broad `'unsafe-inline'`.
 - Raise security concerns early during implementation and code review.
-
-## Feature Delivery Workflow
-
-1. Create a feature branch off `main`
-2. Implement the feature
-3. Create a pull request from the feature branch to `main`
-4. Assign and ping code reviewers
-5. Share the link to preview deployment in the domain's Slack channel
-6. Address feedback and receive approval
-7. Merge the pull request via **"Squash and merge"**
-8. Validate the feature on production
 
 ## Source Control (Git)
 
@@ -62,13 +60,13 @@ Types: `feat/`, `fix/`, `refactor/`, `test/`, `docs/`, `chore/`, `release/`, `ho
 ### PR Titles
 
 ```
-project(s): Description
+Scope: Description
 ```
 
 Examples:
 
-- `web-app: Update homepage hero`
-- `web-app/report-viewer/tailwind-config: Update design system colors`
+- `Analytics: Add vercel analytics`
+- `Refactor: App structure, various improvements`
 
 ### Commit Messages
 
@@ -81,25 +79,37 @@ A properly formed message completes: _"If applied, this commit will **your messa
 
 ## File Structure
 
-### Module-Based Organization
+### Flat Business Modules
 
-Each module encapsulates a specific domain or feature:
+`src/modules/*` contains business/product modules only. Support layers live outside `modules`.
 
 ```
-└── src/modules/
-    └── payments/
-        ├── components/
-        ├── hooks/
-        │   ├── index.ts
-        │   ├── useOrderStatusQuery.ts
-        │   └── useCheckout.ts
-        ├── constants.ts
-        ├── utils.ts
-        ├── api.ts
-        ├── schemas.ts
-        ├── types.ts
-        └── assets/
+└── src/
+    ├── app/
+    ├── modules/
+    │   ├── workspace/
+    │   ├── money/
+    │   ├── spend-requests/
+    │   │   ├── components/
+    │   │   ├── hooks/
+    │   │   │   ├── useSpendRequestsQuery.ts
+    │   │   │   └── useApproveSpendRequestMutation.ts
+    │   │   ├── api.ts
+    │   │   ├── server.ts
+    │   │   ├── schemas.ts
+    │   │   ├── types.ts
+    │   │   ├── utils.ts
+    │   │   └── assets/
+    │   ├── dashboard/
+    │   ├── marketing/
+    │   └── page-shell/
+    ├── ui/
+    ├── services/
+    ├── utilities/
+    └── test/
 ```
+
+Business modules should not import other business modules by default. Compose multiple modules in `src/app`, or extract a shared business primitive into its own module, such as `modules/money`.
 
 ### No File Prefixing
 
@@ -220,6 +230,25 @@ const cashBalanceCents = 41_200_000;
 const vendorLeakSavingsCents = 261_000;
 ```
 
+### Count User-Visible Characters With Intl.Segmenter
+
+Use grapheme clusters for user-facing character counts, text limits, and counters. JavaScript's `.length` counts UTF-16 code units, so emoji sequences, flags, skin-tone modifiers, and many non-Latin scripts can be counted as multiple characters even when users see one.
+
+Use the shared `countCharacters` utility from `utilities/text/countCharacters` instead of inlining `Intl.Segmenter`. MDN reference: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter
+
+```ts
+// ❌ Counts UTF-16 code units.
+const characterCount = value.length;
+
+// ❌ Better, but still splits zero-width-joiner emoji sequences.
+const characterCount = Array.from(value).length;
+
+// ✅ Counts user-visible characters.
+const characterCount = countCharacters(value);
+```
+
+Use `granularity: "word"` for user-facing word counts in languages without space-delimited words. Do not use grapheme counts for database byte limits, ASCII-only protocols, or backend validation that explicitly enforces UTF-8 bytes or another storage-specific definition.
+
 ### Boolean Naming: Prefer Adjective Form
 
 Prefixing with "is" or "has" adds noise when a clean adjective exists. The name already implies a boolean:
@@ -312,6 +341,24 @@ When list rows need stable unique keys and the domain field can repeat (for exam
 
 For non-trivial repeated logic, prefer `function helperName(...) {}` near the bottom of the file over arrow-const module-level helpers.
 
+### Use key for Intentional Component Resets
+
+React uses `key` for component identity, not only list diffing. When a component's local state should be thrown away after switching to a different entity, prefer a stable identity key over effect-based prop-to-state synchronization.
+
+```tsx
+// ❌ Manual reset logic is easy to make stale.
+useEffect(() => {
+	resetForm(user);
+}, [user]);
+
+// ✅ A new user identity remounts the form and resets local state.
+<UserForm key={user.id} user={user} />
+```
+
+Good fits include forms, modals, tabs, profile switchers, and dashboards where stale local state, subscriptions, or animations should restart for a new entity. Key by the smallest stable domain identity that should own the state, such as `user.id`, `workspace.id`, or `selectedTabId`.
+
+Do not use keyed remounts when preserving local state is part of the experience, or when the component owns heavy work, expensive subscriptions, or a large subtree that would be costly to recreate. In those cases, keep explicit state transitions near the component that owns the behavior.
+
 ### Export Query Keys
 
 Extract and export `queryKey` from query hooks so they can be reused for invalidation:
@@ -386,6 +433,45 @@ className={cn('w-full', { 'bg-dark': darkMode })}
 // ✅
 className={cn('w-full', darkMode && 'bg-dark')}
 ```
+
+### Prefer :has() Over Styling-Only React State
+
+When a parent style depends only on descendant structure or native element state, consider CSS `:has()` instead of React state, event handlers, wrapper elements, or prop drilling. Use it when the selector is clearer than lifting a state class to the component root.
+
+```tsx
+// ❌ Styling-only state and handler.
+const [invalid, setInvalid] = useState(false);
+
+return (
+	<form className={cn(invalid && "border-warning")}>
+		<input onChange={(event) => setInvalid(!event.currentTarget.validity.valid)} />
+	</form>
+);
+```
+
+```css
+/* ✅ CSS handles the structural relationship. */
+form:has(input:invalid) {
+	border-color: var(--warning);
+}
+```
+
+Good fits include `form:has(input:invalid)`, `li:has(input:checked)`, `.grid:has(> :nth-child(4))`, and `article:not(:has(img))`. Keep the condition in JavaScript when explicit downward state flow is easier to read, when future readers will expect the state near the component root, or when the condition also drives behavior, data fetching, accessibility attributes, analytics, business rules, API results, feature flags, permissions, or multi-step user state.
+
+Avoid chained, deeply nested, or broad `:has()` selectors on large or frequently mutating DOMs. Selectors such as `.card:has(.selected):has(.error)` shift state work into the CSS engine and can be more expensive to re-evaluate during DOM mutations.
+
+### Prefer Native View Transitions Before Animation Dependencies
+
+For page-level crossfades, route state changes, and shared element morphs, check whether the browser View Transition API covers the interaction before adding `motion`, Framer Motion, GSAP, or another runtime animation dependency.
+
+Use native View Transitions when the animation is snapshot-based:
+
+- same-document UI changes can use `document.startViewTransition(() => updateDom())`
+- shared elements can use a stable `view-transition-name`
+- MPA page navigations can use `@view-transition { navigation: auto; }` when browser support matches the audience
+- timing and easing should live in CSS via `::view-transition-*` pseudo-elements
+
+Keep an animation library for gesture-driven interactions, drag physics, spring behavior, interruption-heavy animations, or complex staggered choreography. In Next.js, do not enable `experimental.viewTransition` in production unless the framework docs mark it production-ready for the version in use.
 
 ### Explicit Children Prop
 

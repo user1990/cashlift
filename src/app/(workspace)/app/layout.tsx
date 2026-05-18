@@ -25,7 +25,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
 }
 
 const SignedOutFallback = () => (
-	<main className="flex min-h-screen items-center justify-center bg-shell px-4">
+	<main id="main-content" className="flex min-h-screen items-center justify-center bg-shell px-4">
 		<div className="max-w-md rounded-lg border border-border bg-panel p-6 text-center shadow-panel">
 			<p className="text-s+ uppercase tracking-normal text-primary">CashLift</p>
 
@@ -46,7 +46,7 @@ const SignedOutFallback = () => (
 );
 
 const WorkspaceUnavailable = ({ message }: { message: string }) => (
-	<main className="flex min-h-screen items-center justify-center bg-shell px-4">
+	<main id="main-content" className="flex min-h-screen items-center justify-center bg-shell px-4">
 		<div className="max-w-md rounded-lg border border-border bg-panel p-6 text-center shadow-panel">
 			<p className="text-s+ uppercase tracking-normal text-primary">CashLift</p>
 

@@ -40,17 +40,6 @@ export const getWorkspaceRuntimeConfig = (env: CashLiftProcessEnv = process.env)
 	const supabasePublishableKey = env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
 	if (mode === "demo") {
-		const missingKeys = getMissingKeys(env, ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"]);
-
-		if (missingKeys.length > 0) {
-			return {
-				configured: false,
-				message: "Supabase demo environment variables are not configured.",
-				missingKeys,
-				mode,
-			};
-		}
-
 		return {
 			configured: true,
 			mode,

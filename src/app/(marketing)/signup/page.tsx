@@ -1,6 +1,6 @@
 import { SignUp } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { AuthPage } from "@/modules/features/marketing/components/AuthPage";
+import { AuthPage } from "@/modules/marketing/components/AuthPage";
 
 export const metadata: Metadata = {
 	title: "Sign up — CashLift",
@@ -13,7 +13,7 @@ export default function SignUpPage() {
 	}
 
 	return (
-		<main className="mx-auto flex max-w-[980px] justify-center px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+		<main id="main-content" className="flex min-h-screen justify-center bg-shell px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
 			<SignUp />
 		</main>
 	);

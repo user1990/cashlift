@@ -2,33 +2,36 @@
 @config "../../tailwind.config.ts";
 
 :root {
-	--background: #05070d;
-	--foreground: #f4fbff;
-	--shell: #05070d;
-	--shell-band: #07101a;
-	--shell-elevated: #0a111d;
-	--shell-foreground: #f4fbff;
-	--shell-muted: #9aaebb;
-	--shell-border: rgb(148 246 255 / 0.18);
-	--panel: #fbfeff;
-	--panel-muted: #eef7f8;
-	--panel-foreground: #071018;
-	--muted-foreground: #60717d;
-	--border: #d9e6eb;
-	--border-strong: #a9c1ca;
-	--primary: #17dce8;
-	--primary-hover: #0bbfcd;
-	--primary-foreground: #031014;
-	--primary-subtle: #dffbff;
-	--primary-subtle-border: #8cebf2;
-	--primary-muted: #bdf5fa;
-	--primary-strong: #008d99;
-	--highlight: #ff3f9f;
-	--highlight-subtle: #ffe4f3;
-	--signal: #23c878;
-	--signal-subtle: #daf9e9;
-	--warning: #f4b63f;
-	--warning-subtle: #fff3d6;
+	--background: #040a12;
+	--foreground: #f8fbff;
+	--shell: #040a12;
+	--shell-band: #080f18;
+	--shell-elevated: #0e1824;
+	--shell-foreground: #f8fbff;
+	--shell-muted: #a4adb8;
+	--shell-border: rgb(103 143 170 / 0.34);
+	--panel: #101b28;
+	--panel-muted: #162436;
+	--panel-foreground: #f8fbff;
+	--muted-foreground: #8a949f;
+	--border: #23394b;
+	--border-strong: #3c6077;
+	--primary: #02daeb;
+	--primary-hover: #02bcd4;
+	--primary-foreground: #021014;
+	--primary-subtle: #073945;
+	--primary-subtle-border: #0a9eb4;
+	--primary-muted: #06626e;
+	--primary-strong: #0295aa;
+	--highlight: #dc1693;
+	--highlight-muted: #a61271;
+	--highlight-subtle: #30192b;
+	--signal: #22c77a;
+	--signal-subtle: #0d2d24;
+	--warning: #d7a02d;
+	--warning-subtle: #312711;
+	--violet: #632c97;
+	--violet-subtle: #28184c;
 }
 
 @theme inline {
@@ -54,26 +57,41 @@
 	--color-primary-muted: var(--primary-muted);
 	--color-primary-strong: var(--primary-strong);
 	--color-highlight: var(--highlight);
+	--color-highlight-muted: var(--highlight-muted);
 	--color-highlight-subtle: var(--highlight-subtle);
 	--color-signal: var(--signal);
 	--color-signal-subtle: var(--signal-subtle);
 	--color-warning: var(--warning);
 	--color-warning-subtle: var(--warning-subtle);
-	--shadow-primary-glow: 0 10px 28px rgb(23 220 232 / 0.28);
-	--shadow-panel: 0 18px 45px rgb(3 16 20 / 0.12);
-	--shadow-shell: 0 18px 55px rgb(0 0 0 / 0.32);
+	--color-violet: var(--violet);
+	--color-violet-subtle: var(--violet-subtle);
+	--shadow-primary-glow: 0 10px 30px rgb(2 218 235 / 0.3);
+	--shadow-panel: 0 18px 45px rgb(0 0 0 / 0.28);
+	--shadow-shell: 0 18px 55px rgb(0 0 0 / 0.36);
 	--font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
 	--font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
 }
 
 html {
 	background: var(--shell);
+	color-scheme: dark;
+	scroll-behavior: smooth;
+	-webkit-tap-highlight-color: color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
 body {
 	background: var(--shell);
 	color: var(--foreground);
 	font-family: var(--font-sans);
+}
+
+button,
+a,
+input,
+select,
+textarea,
+[role="button"] {
+	touch-action: manipulation;
 }
 
 ::selection {
@@ -98,6 +116,10 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
 	*,
 	*::before,
 	*::after {

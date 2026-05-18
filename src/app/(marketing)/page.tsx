@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { HomePage } from "@/modules/features/marketing/components/HomePage";
+import { HomePage } from "@/modules/marketing/components/HomePage";
 
 export const metadata: Metadata = {
 	title: "CashLift — Cash-aware spend decisions for service teams",

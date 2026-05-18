@@ -1,0 +1,20 @@
+import { formatCurrency } from "@/modules/money/format";
+import { SubscriptionLeakList } from "@/modules/subscriptions/components/SubscriptionLeakList";
+import type { FinancialDataset } from "@/modules/workspace/types";
+import { getVendorLeakSavings } from "@/modules/workspace/utils";
+import { Panel, PanelHeader } from "@/ui/components/Panel";
+
+type WorkspaceVendorsSectionProps = {
+	dataset: FinancialDataset;
+};
+
+export const WorkspaceVendorsSection = ({ dataset }: WorkspaceVendorsSectionProps) => (
+	<Panel className="@container">
+		<PanelHeader
+			eyebrow="Leaks"
+			title={`${formatCurrency(getVendorLeakSavings(dataset.subscriptions))} monthly vendor savings`}
+		/>
+
+		<SubscriptionLeakList className="grid gap-3 @md:grid-cols-2" items={dataset.subscriptions} />
+	</Panel>
+);
