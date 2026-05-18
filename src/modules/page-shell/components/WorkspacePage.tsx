@@ -5,7 +5,7 @@ import { WorkspaceLayout } from "./WorkspaceLayout";
 import { WorkspaceState } from "./WorkspaceState";
 
 export const WorkspacePage = async ({ section }: WorkspacePageProps) => {
-	const result = await loadWorkspaceDataset();
+	const result = await loadWorkspaceDataset(section);
 	const mode = getCashLiftAppMode();
 
 	if (result.status === "success") {

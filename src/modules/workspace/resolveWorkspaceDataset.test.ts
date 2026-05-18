@@ -4,8 +4,7 @@ import { demoWorkspaceDataset } from "./demoDataset";
 const authMock = vi.hoisted(() => vi.fn());
 const captureAppExceptionMock = vi.hoisted(() => vi.fn(() => "event-exception-id"));
 const captureAppMessageMock = vi.hoisted(() => vi.fn(() => "event-message-id"));
-const getDashboardDatasetMock = vi.hoisted(() => vi.fn());
-const getDashboardDatasetByCompanyIdMock = vi.hoisted(() => vi.fn());
+const getWorkspaceDatasetMock = vi.hoisted(() => vi.fn());
 
 vi.mock("@clerk/nextjs/server", () => ({
 	auth: authMock,
@@ -27,8 +26,7 @@ vi.mock("@/modules/workspace/repositories/supabase", () => {
 	return {
 		CompanyMembershipNotFoundError,
 		supabaseFinanceRepository: {
-			getDashboardDataset: getDashboardDatasetMock,
-			getDashboardDatasetByCompanyId: getDashboardDatasetByCompanyIdMock,
+			getWorkspaceDataset: getWorkspaceDatasetMock,
 		},
 	};
 });
@@ -49,6 +47,12 @@ const resolveDataset = async () => {
 	const { resolveWorkspaceDataset } = await import("./resolveWorkspaceDataset");
 
 	return resolveWorkspaceDataset();
+};
+
+const resolveVendorsDataset = async () => {
+	const { resolveWorkspaceDataset } = await import("./resolveWorkspaceDataset");
+
+	return resolveWorkspaceDataset("vendors");
 };
 
 const expectDataErrorResult = (result: unknown) => {
@@ -91,11 +95,44 @@ describe("resolveWorkspaceDataset", () => {
 		const result = await resolveDataset();
 
 		expect(result).toEqual({ dataset: demoWorkspaceDataset, kind: "success" });
-		expect(getDashboardDatasetByCompanyIdMock).not.toHaveBeenCalled();
-		expect(getDashboardDatasetMock).not.toHaveBeenCalled();
+		expect(getWorkspaceDatasetMock).not.toHaveBeenCalled();
 		expect(captureAppExceptionMock).not.toHaveBeenCalled();
 		expect(captureAppMessageMock).not.toHaveBeenCalled();
 		expect(authMock).not.toHaveBeenCalled();
+	});
+
+	it("returns scoped demo data for non-overview pages", async () => {
+		stubDemoWorkspaceEnv();
+
+		const result = await resolveVendorsDataset();
+
+		expect(result).toEqual({
+			dataset: {
+				...demoWorkspaceDataset,
+				cashActions: [],
+				forecast: [],
+				invoices: [],
+				spendRequests: [],
+				teamBudgets: [],
+				teamMembers: [],
+				vendorBills: [],
+			},
+			kind: "success",
+		});
+	});
+
+	it("passes the requested scope to production data loading", async () => {
+		stubProductionWorkspaceEnv();
+		authMock.mockResolvedValue({
+			getToken: vi.fn().mockResolvedValue("jwt"),
+			userId: "user-1",
+		});
+		getWorkspaceDatasetMock.mockResolvedValue(demoWorkspaceDataset);
+
+		const result = await resolveVendorsDataset();
+
+		expect(result).toEqual({ dataset: demoWorkspaceDataset, kind: "success" });
+		expect(getWorkspaceDatasetMock).toHaveBeenCalledWith("user-1", "jwt", "vendors");
 	});
 
 	it("captures config failures", async () => {
@@ -125,7 +162,7 @@ describe("resolveWorkspaceDataset", () => {
 			getToken: vi.fn().mockResolvedValue("jwt"),
 			userId: "user-1",
 		});
-		getDashboardDatasetMock.mockRejectedValue(new CompanyMembershipNotFoundError());
+		getWorkspaceDatasetMock.mockRejectedValue(new CompanyMembershipNotFoundError());
 
 		const result = await resolveDataset();
 
@@ -144,7 +181,7 @@ describe("resolveWorkspaceDataset", () => {
 			getToken: vi.fn().mockResolvedValue("jwt"),
 			userId: "user-1",
 		});
-		getDashboardDatasetMock.mockRejectedValue(error);
+		getWorkspaceDatasetMock.mockRejectedValue(error);
 
 		const result = await resolveDataset();
 

@@ -4,7 +4,7 @@ const localBaseUrl = "http://127.0.0.1:3000";
 
 export default defineConfig({
 	expect: { timeout: 10_000 },
-	forbidOnly: Boolean(process.env.CI),
+	forbidOnly: !!process.env.CI,
 	fullyParallel: true,
 	projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
 	reporter: process.env.CI ? "github" : "list",

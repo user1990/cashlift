@@ -1,6 +1,7 @@
 import { Show } from "@clerk/nextjs";
 import Link from "next/link";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
+import { WorkspaceProviders } from "./WorkspaceProviders";
 
 type AppLayoutProps = {
 	children: React.ReactNode;
@@ -14,13 +15,15 @@ export default function AppLayout({ children }: AppLayoutProps) {
 	}
 
 	if (workspaceDemoEnabled()) {
-		return children;
+		return <WorkspaceProviders>{children}</WorkspaceProviders>;
 	}
 
 	return (
-		<Show when="signed-in" fallback={<SignedOutFallback />}>
-			{children}
-		</Show>
+		<WorkspaceProviders>
+			<Show when="signed-in" fallback={<SignedOutFallback />}>
+				{children}
+			</Show>
+		</WorkspaceProviders>
 	);
 }
 

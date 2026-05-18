@@ -1,4 +1,4 @@
-import type { FinancialDataset } from "@/modules/workspace/types";
+import type { FinancialDataset, WorkspaceDatasetScope } from "@/modules/workspace/types";
 import type { ResolveWorkspaceDatasetResult } from "./resolveWorkspaceDataset";
 import { resolveWorkspaceDataset } from "./resolveWorkspaceDataset";
 
@@ -26,8 +26,10 @@ const mapFailure = (
 	return { message: result.message, status: "unavailable" };
 };
 
-export const loadWorkspaceDataset = async (): Promise<WorkspaceDatasetLoadResult> => {
-	const result = await resolveWorkspaceDataset();
+export const loadWorkspaceDataset = async (
+	scope: WorkspaceDatasetScope = "overview",
+): Promise<WorkspaceDatasetLoadResult> => {
+	const result = await resolveWorkspaceDataset(scope);
 
 	return result.kind === "success" ? { dataset: result.dataset, status: "success" } : mapFailure(result);
 };

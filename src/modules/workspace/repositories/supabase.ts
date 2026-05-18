@@ -12,6 +12,7 @@ import type {
 	SpendRequestStatus,
 	SubscriptionStatus,
 	VendorBillStatus,
+	WorkspaceDatasetScope,
 } from "../types";
 
 type CompanyMemberRow = {
@@ -187,7 +188,95 @@ const selectSingleRow = async <Row>(table: string, query: PromiseLike<SupabaseQu
 	return data;
 };
 
-const getDatasetByCompanyId = async (client: SupabaseClient, companyId: string): Promise<FinancialDataset> => {
+const EMPTY_DATASET_PARTS = {
+	cashActions: [],
+	forecast: [],
+	invoices: [],
+	spendRequests: [],
+	subscriptions: [],
+	teamBudgets: [],
+	teamMembers: [],
+	vendorBills: [],
+} as const satisfies Omit<FinancialDataset, "profile">;
+
+type DatasetTable = keyof Omit<FinancialDataset, "profile">;
+
+const SCOPE_TABLES = {
+	approvals: ["spendRequests"],
+	budgets: ["teamBudgets"],
+	cash: [],
+	invoices: ["invoices"],
+	overview: [
+		"cashActions",
+		"forecast",
+		"invoices",
+		"spendRequests",
+		"subscriptions",
+		"teamBudgets",
+		"teamMembers",
+		"vendorBills",
+	],
+	settings: [],
+	team: ["teamMembers"],
+	vendors: ["subscriptions"],
+} as const satisfies Record<WorkspaceDatasetScope, readonly DatasetTable[]>;
+
+const shouldLoadTable = (scope: WorkspaceDatasetScope, table: DatasetTable) =>
+	(SCOPE_TABLES[scope] as readonly DatasetTable[]).includes(table);
+
+const selectCompany = async (client: SupabaseClient, companyId: string) =>
+	selectSingleRow<CompanyRow>("companies", client.from("companies").select("*").eq("id", companyId).single());
+
+const selectTeamMembers = async (client: SupabaseClient, companyId: string) =>
+	selectRows<TeamMemberRow>(
+		"company_members",
+		client.from("company_members").select("id, name, role, team").eq("company_id", companyId),
+	);
+
+const selectInvoices = async (client: SupabaseClient, companyId: string) =>
+	selectRows<InvoiceRow>("invoices", client.from("invoices").select("*").eq("company_id", companyId).order("due_date"));
+
+const selectVendorBills = async (client: SupabaseClient, companyId: string) =>
+	selectRows<VendorBillRow>(
+		"vendor_bills",
+		client.from("vendor_bills").select("*").eq("company_id", companyId).order("due_date"),
+	);
+
+const selectSubscriptions = async (client: SupabaseClient, companyId: string) =>
+	selectRows<SubscriptionRow>(
+		"subscriptions",
+		client.from("subscriptions").select("*").eq("company_id", companyId).order("renewal_date"),
+	);
+
+const selectSpendRequests = async (client: SupabaseClient, companyId: string) =>
+	selectRows<SpendRequestRow>(
+		"spend_requests",
+		client.from("spend_requests").select("*").eq("company_id", companyId).order("needed_by_date"),
+	);
+
+const selectTeamBudgets = async (client: SupabaseClient, companyId: string) =>
+	selectRows<TeamBudgetRow>(
+		"team_budgets",
+		client.from("team_budgets").select("*").eq("company_id", companyId).order("team"),
+	);
+
+const selectCashActions = async (client: SupabaseClient, companyId: string) =>
+	selectRows<CashActionRow>(
+		"cash_actions",
+		client.from("cash_actions").select("*").eq("company_id", companyId).order("due_date"),
+	);
+
+const selectForecast = async (client: SupabaseClient, companyId: string) =>
+	selectRows<ForecastPointRow>(
+		"forecast_points",
+		client.from("forecast_points").select("*").eq("company_id", companyId).order("date"),
+	);
+
+const getDatasetByCompanyId = async (
+	client: SupabaseClient,
+	companyId: string,
+	scope: WorkspaceDatasetScope,
+): Promise<FinancialDataset> => {
 	const [
 		company,
 		teamMembers,
@@ -199,39 +288,19 @@ const getDatasetByCompanyId = async (client: SupabaseClient, companyId: string):
 		cashActions,
 		forecast,
 	] = await Promise.all([
-		selectSingleRow<CompanyRow>("companies", client.from("companies").select("*").eq("id", companyId).single()),
-		selectRows<TeamMemberRow>(
-			"company_members",
-			client.from("company_members").select("id, name, role, team").eq("company_id", companyId),
-		),
-		selectRows<InvoiceRow>(
-			"invoices",
-			client.from("invoices").select("*").eq("company_id", companyId).order("due_date"),
-		),
-		selectRows<VendorBillRow>(
-			"vendor_bills",
-			client.from("vendor_bills").select("*").eq("company_id", companyId).order("due_date"),
-		),
-		selectRows<SubscriptionRow>(
-			"subscriptions",
-			client.from("subscriptions").select("*").eq("company_id", companyId).order("renewal_date"),
-		),
-		selectRows<SpendRequestRow>(
-			"spend_requests",
-			client.from("spend_requests").select("*").eq("company_id", companyId).order("needed_by_date"),
-		),
-		selectRows<TeamBudgetRow>(
-			"team_budgets",
-			client.from("team_budgets").select("*").eq("company_id", companyId).order("team"),
-		),
-		selectRows<CashActionRow>(
-			"cash_actions",
-			client.from("cash_actions").select("*").eq("company_id", companyId).order("due_date"),
-		),
-		selectRows<ForecastPointRow>(
-			"forecast_points",
-			client.from("forecast_points").select("*").eq("company_id", companyId).order("date"),
-		),
+		selectCompany(client, companyId),
+		shouldLoadTable(scope, "teamMembers") ? selectTeamMembers(client, companyId) : EMPTY_DATASET_PARTS.teamMembers,
+		shouldLoadTable(scope, "invoices") ? selectInvoices(client, companyId) : EMPTY_DATASET_PARTS.invoices,
+		shouldLoadTable(scope, "vendorBills") ? selectVendorBills(client, companyId) : EMPTY_DATASET_PARTS.vendorBills,
+		shouldLoadTable(scope, "subscriptions")
+			? selectSubscriptions(client, companyId)
+			: EMPTY_DATASET_PARTS.subscriptions,
+		shouldLoadTable(scope, "spendRequests")
+			? selectSpendRequests(client, companyId)
+			: EMPTY_DATASET_PARTS.spendRequests,
+		shouldLoadTable(scope, "teamBudgets") ? selectTeamBudgets(client, companyId) : EMPTY_DATASET_PARTS.teamBudgets,
+		shouldLoadTable(scope, "cashActions") ? selectCashActions(client, companyId) : EMPTY_DATASET_PARTS.cashActions,
+		shouldLoadTable(scope, "forecast") ? selectForecast(client, companyId) : EMPTY_DATASET_PARTS.forecast,
 	]);
 
 	return {
@@ -319,18 +388,11 @@ const getDatasetByCompanyId = async (client: SupabaseClient, companyId: string):
 	};
 };
 
-export const supabaseFinanceRepository: FinanceRepository & {
-	getDashboardDatasetByCompanyId(companyId: string): Promise<FinancialDataset>;
-} = {
-	async getDashboardDataset(userId, accessToken) {
+export const supabaseFinanceRepository: FinanceRepository = {
+	async getWorkspaceDataset(userId, accessToken, scope) {
 		const client = createServerSupabaseClient({ accessToken });
 		const companyId = await selectCompanyId(client, userId);
 
-		return getDatasetByCompanyId(client, companyId);
-	},
-	async getDashboardDatasetByCompanyId(companyId) {
-		const client = createServerSupabaseClient();
-
-		return getDatasetByCompanyId(client, companyId);
+		return getDatasetByCompanyId(client, companyId, scope);
 	},
 };

@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/ui/components/Button";
 import { ControlledTextField } from "@/ui/components/ControlledTextField";
@@ -11,18 +12,22 @@ type LeadCaptureFormProps = {
 };
 
 export const LeadCaptureForm = ({ buttonLabel }: LeadCaptureFormProps) => {
+	const [submitted, setSubmitted] = useState(false);
 	const form = useForm<LeadCaptureFormValues>({
 		defaultValues: {
-			company: "Studio Nova",
-			email: "maya@studionova.example",
-			name: "Maya Chen",
+			company: "",
+			email: "",
+			name: "",
 		},
 		resolver: zodResolver(leadCaptureSchema),
 	});
 
 	const { control, handleSubmit, reset } = form;
 
-	const submitForm = () => reset();
+	const submitForm = () => {
+		setSubmitted(true);
+		reset();
+	};
 
 	return (
 		<form className="space-y-3" onSubmit={handleSubmit(submitForm)}>
@@ -48,6 +53,12 @@ export const LeadCaptureForm = ({ buttonLabel }: LeadCaptureFormProps) => {
 			<Button className="w-full" type="submit" variant="primary">
 				{buttonLabel}
 			</Button>
+
+			{submitted && (
+				<p aria-live="polite" className="text-s leading-5 text-signal">
+					Demo request captured. No private company data was sent.
+				</p>
+			)}
 		</form>
 	);
 };

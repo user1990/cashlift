@@ -3,7 +3,6 @@
 import { useReducedMotion } from "motion/react";
 import { DashboardContent } from "@/modules/dashboard/components/DashboardContent";
 import type { FinancialDataset } from "@/modules/workspace/types";
-import { Reveal } from "@/ui/components/Reveal";
 import type { WorkspaceMode, WorkspacePageProps, WorkspaceSection, WorkspaceSectionComponent } from "./types";
 import { WorkspaceApprovalsSection } from "./WorkspaceApprovalsSection";
 import { WorkspaceBudgetsSection } from "./WorkspaceBudgetsSection";
@@ -50,9 +49,7 @@ const WorkspaceSubpage = ({ dataset, section }: WorkspaceSubpageProps) => {
 		<>
 			<WorkspaceSectionHeader section={section} />
 
-			<Reveal duration={0.18} y={8}>
-				<SectionComponent dataset={dataset} />
-			</Reveal>
+			<SectionComponent dataset={dataset} />
 		</>
 	);
 };

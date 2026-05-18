@@ -1,10 +1,10 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import type { FinancialDataset } from "@/modules/workspace/types";
+import type { FinancialDataset, WorkspaceDatasetScope } from "@/modules/workspace/types";
 import type { CashLiftAppMode } from "@/services/env/app";
 
 export type WorkspacePageProps = {
-	section: "approvals" | "budgets" | "cash" | "invoices" | "overview" | "settings" | "team" | "vendors";
+	section: WorkspaceDatasetScope;
 };
 
 export type WorkspaceSection = WorkspacePageProps["section"];

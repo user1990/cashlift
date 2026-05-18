@@ -35,7 +35,7 @@ export const WorkspaceSidebar = ({ mode, reducedMotion, section }: WorkspaceSide
 			))}
 		</nav>
 
-		<div className="mt-auto pt-8">
+		<div className="mt-auto sm:pt-8">
 			<WorkspaceAccountMenu mode={mode} />
 		</div>
 	</aside>

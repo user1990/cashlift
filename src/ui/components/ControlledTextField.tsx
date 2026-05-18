@@ -28,7 +28,7 @@ export const ControlledTextField = <TFieldValues extends FieldValues, TName exte
 			<TextField
 				{...props}
 				errorMessage={fieldState.error?.message}
-				invalid={Boolean(fieldState.error)}
+				invalid={!!fieldState.error}
 				onBlur={field.onBlur}
 				onChange={(value) => field.onChange(parseValue ? parseValue(value) : value)}
 				value={formatValue ? formatValue(field.value) : String(field.value ?? "")}

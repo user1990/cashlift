@@ -6,7 +6,7 @@ type AuthProviderProps = {
 	children: React.ReactNode;
 };
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 	if (!publishableKey) {
@@ -14,4 +14,4 @@ export function AuthProvider({ children }: AuthProviderProps) {
 	}
 
 	return <ClerkProvider publishableKey={publishableKey}>{children}</ClerkProvider>;
-}
+};

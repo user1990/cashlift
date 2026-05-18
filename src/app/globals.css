@@ -99,20 +99,8 @@ textarea,
 }
 
 .hero-ambient {
-	animation: cashlift-hero-drift 18s ease-in-out infinite alternate;
 	transform: scale(1.03);
 	transform-origin: center;
-	will-change: transform;
-}
-
-@keyframes cashlift-hero-drift {
-	from {
-		transform: scale(1.03) translate3d(0, 0, 0);
-	}
-
-	to {
-		transform: scale(1.06) translate3d(-1.2%, -0.8%, 0);
-	}
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -130,8 +118,6 @@ textarea,
 	}
 
 	.hero-ambient {
-		animation: none;
 		transform: none;
-		will-change: auto;
 	}
 }
