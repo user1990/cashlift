@@ -1,4 +1,4 @@
-import type { FinancialDataset } from "@/modules/base/finance/types";
+import type { FinancialDataset } from "@/modules/workspace/types";
 
 export const financialDatasetFixture: FinancialDataset = {
 	cashActions: [

@@ -5,143 +5,113 @@ description: Module boundaries, import rules, path aliases, folder layout, and s
 
 # Architecture
 
-Module-oriented architecture for web apps (Next.js)
+Flat module architecture for CashLift's Next.js app.
 
-## Project Structure (Web)
+## Project Structure
 
-```
+```text
 ├── src/
-│   ├── app/            # App Router
-│   ├── modules/
-│   │   ├── base/       # Empowers feature modules (user, vehicles, etc.)
-│   │   ├── features/   # Domain-specific business logic
-│   │   ├── ui/         # Design system implementation
-│   │   ├── common/     # Generic utilities, types, constants
-│   │   └── shared/     # Reusable composites wrapping ui/common/services
-│   ├── services/       # Browser/Node integrations
-│   └── types/          # App-wide types (discouraged, prefer module types)
-├── public/             # Static assets
-└── styles/             # Global styles (legacy SCSS)
+│   ├── app/            # App Router: thin route wrappers, metadata, layouts, server orchestration
+│   ├── modules/        # Business/product modules only
+│   │   ├── workspace/
+│   │   ├── money/
+│   │   ├── spend-requests/
+│   │   ├── invoices/
+│   │   ├── vendors/
+│   │   ├── subscriptions/
+│   │   ├── budgets/
+│   │   ├── cash-outlook/
+│   │   ├── dashboard/
+│   │   ├── marketing/
+│   │   └── page-shell/
+│   ├── ui/             # Generic design-system primitives
+│   ├── services/       # Technical integrations and platform adapters
+│   ├── utilities/      # Domain-agnostic helpers
+│   └── test/           # Test setup and fixtures
+└── public/             # Static assets
 ```
 
-## Module Types & Import Rules
+## Source Categories & Import Rules
 
-These boundaries are enforced and non-negotiable. Violating them causes circular dependencies, breaks encapsulation, and makes refactoring painful.
+These boundaries are enforced. Violating them causes circular dependencies, weakens module ownership, and makes refactoring painful.
 
-### 1. UI
+### 1. App
 
-Design system components, animations, layouts.
+Route files under `src/app/**` orchestrate modules and support layers.
 
-- **Cannot import from**: any other modules
+- **Can import from**: `modules`, `ui`, `services`, `utilities`
+- Keep route files thin: routing, metadata, auth/layout gates, server data loading, and composition.
+- Route-private `_components` and `_lib` are allowed only for one-off page composition.
 
-### 2. Common
+### 2. Business Modules
 
-Generic utilities, common types, constants.
+Business/product capabilities under `src/modules/*`.
 
-- **Cannot import from**: any other modules
+- Own their local `components`, `hooks`, `api.ts`, `server.ts`, `schemas.ts`, `types.ts`, `utils.ts`, and `assets` when useful.
+- API/data code stays colocated with the module that owns the business concept.
+- Business modules should not import other business modules by default. Compose multiple modules in `src/app`, or extract a shared business primitive into its own module such as `modules/money`.
+- Current explicit composition modules, such as `workspace`, `dashboard`, and `page-shell`, may import the business modules they intentionally compose.
 
-### 3. Services
+### 3. UI
 
-Browser/Node integrations and technical foundation.
+Generic design-system primitives under `src/ui`.
 
-- **Can import from**: `ui`, `common`
-- **Cannot import from**: `feature`, `base`, `shared`
-- **Platform submodule**: must not import from any other module (including `ui`/`common`)
-- 3rd-party integrations (Klaviyo, PostHog, Firebase, etc.) must be wrapped in `services/platform/integrations/*`
+- **Can import from**: `ui`, `utilities`
+- **Cannot import from**: `modules`, `services`, `app`
 
-### 4. Shared
+### 4. Services
 
-Reusable composites wrapping `ui`, `common`, and `services`.
+Technical integrations and platform adapters under `src/services`.
 
-- **Can only import from**: `ui`, `common`, `services`
+- **Can import from**: `services`, `utilities`
+- **Cannot import from**: `modules`, `ui`, `app`
+- Third-party integrations (Sentry, Clerk, Supabase, etc.) live under `services` or `services/platform/integrations/*`.
 
-### 5. Base
+### 5. Utilities
 
-Modules that empower feature modules (core data like user, vehicles).
+Domain-agnostic helpers under `src/utilities`.
 
-- **Cannot import from**: feature modules
-- **Can import from**: `shared`, `ui`, `common`, `services`
+- **Can import from**: `utilities`
+- **Cannot import from**: `modules`, `ui`, `services`, `app`
+- If a helper has CashLift business meaning, it belongs in a business module instead. Example: `MoneyCents` belongs in `modules/money`, not `utilities`.
 
-### 6. Feature
+## Quick Reference Table
 
-Standalone modules for domain-specific business logic.
-
-- **Cannot import from**: other feature modules
-- Prefer explicit file imports (hooks/components/api/types), not module-root barrels
-
-### Quick Reference Table
-
-| Module Type  | Can Import From                              |
-| ------------ | -------------------------------------------- |
-| **UI**       | Nothing (standalone)                         |
-| **Common**   | Nothing (standalone)                         |
-| **Services** | `ui`, `common` (platform submodule: nothing) |
-| **Shared**   | `ui`, `common`, `services`                   |
-| **Base**     | `shared`, `ui`, `common`, `services`         |
-| **Feature**  | `base`, `shared`, `ui`, `common`, `services` |
+| Source area | Can Import From |
+| --- | --- |
+| `app` | `modules`, `ui`, `services`, `utilities` |
+| `modules/*` | `ui`, `services`, `utilities`, explicit business module dependencies |
+| `ui` | `utilities` |
+| `services` | `utilities` |
+| `utilities` | nothing outside utilities |
 
 ## Path Aliases
 
-**Check the local `tsconfig.json` before writing an import** — alias configuration is per-app, not uniform across the monorepo.
-
-Most apps (e.g. `web-app`) rely on `"baseUrl": "src"` and import from `modules/...` directly:
+Use the existing `@/*` alias from `tsconfig.json`.
 
 ```ts
-import { useAuthSession } from 'modules/auth/hooks/useAuthSession';
-import Page from 'modules/page-shell/components/Page';
+import { Button } from "@/ui/components/Button";
+import { formatCurrency } from "@/modules/money/format";
+import { loadWorkspaceDataset } from "@/modules/workspace/server";
 ```
 
-Some apps configure an `@/*` alias to the app root (e.g. `apps/affiliate`, `apps/signature-generator`):
-
-```json
-{ "paths": { "@/*": ["./*"] } }
-```
-
-The `@base/*`, `@features/*`, `@ui/*`, `@common/*`, `@shared/*`, `@services/*` aliases are the **target** convention for new setups but are **not configured in existing apps today**. When adding them, update the app's `tsconfig.json` first. Match whatever style the rest of the app uses; do not mix.
+Do not add `@modules/*`, `@ui/*`, or similar aliases unless the app's `tsconfig.json` is updated first and the existing imports are migrated consistently.
 
 ## State Management
 
-| Purpose      | Tool                         |
-| ------------ | ---------------------------- |
-| Server state | TanStack Query (React Query) |
-| UI state     | Zustand                      |
-| Forms        | React Hook Form + Zod        |
+| Purpose | Tool |
+| --- | --- |
+| Server state | Server Components first; TanStack Query for client refetch/mutations |
+| UI state | Zustand when local React state is not enough |
+| Forms | React Hook Form + Zod |
 
-Expose state from base modules via explicit hook files (for example `hooks/useUser.ts`).
-
-## Routing
-
-- **All pages**: Next.js App Router (`src/app`)
+Protected workspace routes default to server-first data loading. Client Components should be interactive leaves, not initial page data shells.
 
 ## General Rules
 
-1. App-wide types belong in specific submodules within `modules/common` (e.g., `modules/common/money` for a `Money` type)
-2. State from base modules is available via hooks imported from explicit files
-3. Feature modules communicate at the route level via props or route params — never import across features
-4. All UI elements come from `modules/ui`, composed in `modules/shared` when needed
-
-## Example: Vehicle Info Screen
-
-This shows how route-level pages orchestrate feature and base modules without cross-feature imports:
-
-```tsx
-// src/app/vehicles/[vin]/page.tsx
-import { VehicleCard } from '@base/vehicles/components/VehicleCard';
-import { useInsuranceStatus } from '@features/insurance/hooks/useInsuranceStatus';
-import { useMotStatus } from '@features/mot/hooks/useMotStatus';
-import type { ServiceStatus } from '@shared/types/service-status';
-import { StatusCard } from '@shared/status/components/StatusCard';
-
-export default function VehicleInfoPage({ params }: { params: { vin: string } }) {
-  const motStatus: ServiceStatus = useMotStatus(params.vin);
-  const insuranceStatus: ServiceStatus = useInsuranceStatus(params.vin);
-
-  return (
-    <VehicleCard vin={params.vin}>
-      <StatusCard type="insurance" status={insuranceStatus} />
-
-      <StatusCard type="mot" status={motStatus} />
-    </VehicleCard>
-  );
-}
-```
+1. `src/modules/*` means business/product modules. Do not put generic support code there.
+2. Shared business primitives become modules, for example `modules/money`.
+3. Truly generic helpers live in `src/utilities`.
+4. Generic UI primitives live in `src/ui`.
+5. Business modules communicate through route-level composition or explicit, documented dependencies.
+6. Prefer explicit file imports over broad module-root barrels.

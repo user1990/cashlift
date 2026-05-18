@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PricingPage } from "@/modules/features/marketing/components/PricingPage";
+import { PricingPage } from "@/modules/marketing/components/PricingPage";
 
 export const metadata: Metadata = {
 	title: "Pricing — CashLift",

@@ -4,9 +4,11 @@ import { type NextRequest, NextResponse } from "next/server";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-export const updateSupabaseSession = async (request: NextRequest) => {
+export const updateSupabaseSession = async (request: NextRequest, requestHeaders = request.headers) => {
 	let response = NextResponse.next({
-		request,
+		request: {
+			headers: requestHeaders,
+		},
 	});
 
 	if (!supabaseUrl || !supabasePublishableKey) {
@@ -24,7 +26,9 @@ export const updateSupabaseSession = async (request: NextRequest) => {
 				}
 
 				response = NextResponse.next({
-					request,
+					request: {
+						headers: requestHeaders,
+					},
 				});
 
 				for (const { name, value, options } of cookiesToSet) {

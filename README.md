@@ -44,148 +44,109 @@
 
 # Why CashLift
 
-Most finance tooling explains what already happened.
+Most finance tools explain what already happened. CashLift helps service firms decide what to do before cash gets tight.
 
-CashLift helps operators control cash before damage happens.
+CashLift turns invoices, vendor renewals, spend requests, team budgets, and cash forecasts into one daily operating view. Finance leads can see which collections protect runway, which renewals should be cut, and which spend requests can be approved without breaking the buffer.
 
-Built for agencies, consultancies, studios, and service businesses that need:
+Built for agencies, consultancies, studios, and software service firms that need to:
 
-- spend governance
-- receivable visibility
-- operational cash control
-- approval accountability
-- liquidity awareness
-- fewer spreadsheet workflows
+- approve spend with cash impact visible
+- recover receivables before buffer risk appears
+- find unused subscriptions and duplicate vendor spend
+- keep team budgets inside guardrails
+- understand cash runway without spreadsheet work
+- give finance, managers, and employees the right workspace views
 
-CashLift combines workflow controls, finance visibility, and workspace-level
-security into a single operational system.
+The business model is a finance operations workspace for service companies: CashLift does not move money. It helps teams make better cash decisions around approvals, collections, vendor leaks, budgets, and runway.
 
 ---
 
 # Features
 
-## Financial Operations
+## Workspace Dashboard
 
-- Spend approval workflows
-- Receivables tracking
-- Cash buffer monitoring
-- Financial leak detection
-- Workspace-scoped finance views
-- Operational finance dashboards
+- Overview dashboard with cash outlook, team budgets, invoice risk, vendor leaks, guardrails, and KPI summary
+- Flat workspace navigation: Overview, Cash Insights, Invoices, Vendors, Budgets, Approvals, Team, Settings
+- Demo workspace that runs from a local typed fixture
+- Production workspace that loads authenticated company data from Supabase
+
+## Finance Workflows
+
+- Spend approvals with requester, vendor, reason, amount, team, and cash impact
+- Invoice collection queue with owner and collection probability
+- Vendor leak detection for unused, duplicate, and renewal-risk subscriptions
+- Team budget tracking with used and remaining budget
+- Cash buffer, payroll, runway, inflow, and outflow context
 
 ## Platform
 
-- Public marketing + demo experience
-- Protected production workspace
-- Clerk authentication boundaries
-- Supabase row-level security
-- Locale-ready architecture
-- Accessible UI primitives
-
-## Developer Experience
-
-- TypeScript strict mode
-- Next.js App Router
-- E2E smoke coverage
-- Architecture decision records
-- CI-safe production defaults
-- Boundary validation tooling
-
----
-
-# Screenshots
-
-## Executive Dashboard
-
-<p align="center">
-  <img src="./docs/screenshots/dashboard.png" width="100%" alt="Executive Dashboard" />
-</p>
-
-## Spend Approval Flow
-
-<p align="center">
-  <img src="./docs/screenshots/approvals.png" width="100%" alt="Spend Approval Flow" />
-</p>
-
-## Receivables Workspace
-
-<p align="center">
-  <img src="./docs/screenshots/receivables.png" width="100%" alt="Receivables Workspace" />
-</p>
+- Next.js App Router application
+- Clerk authentication for production workspaces
+- Supabase-backed production dataset loading
+- Local demo mode without external credentials
+- Tailwind CSS design system and local UI primitives
+- Vitest, Biome, Fallow, and Playwright-based quality checks
 
 ---
 
 # Architecture
 
-```text
-                         ┌─────────────────────┐
-                         │     Marketing       │
-                         │    Public Routes    │
-                         └──────────┬──────────┘
-                                    │
-                         ┌──────────▼──────────┐
-                         │      Demo Mode      │
-                         │ Shared Demo Dataset │
-                         └──────────┬──────────┘
-                                    │
-                 ┌──────────────────▼──────────────────┐
-                 │       Production Workspace          │
-                 │                                     │
-                 │  Clerk Authentication               │
-                 │  Supabase JWT Verification          │
-                 │  Row-Level Security Enforcement     │
-                 │  Workspace Data Isolation           │
-                 └─────────────────────────────────────┘
-```
-
----
-
-# Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Framework | Next.js App Router |
-| Language | TypeScript |
-| Styling | Tailwind CSS |
-| UI | React Aria Components |
-| Forms | React Hook Form + Zod |
-| Data Fetching | TanStack Query |
-| Charts | Recharts |
-| Internationalization | next-intl |
-| Authentication | Clerk |
-| Database | Supabase |
-| Security | Supabase RLS |
-
----
-
-# Project Structure
+CashLift separates public marketing, demo mode, and production workspace behavior.
 
 ```text
-app/                        Next.js routes
-components/                 Shared UI components
-features/                   Domain feature modules
-lib/                        Shared infrastructure
-hooks/                      Shared hooks
-providers/                  App providers
-supabase/                   SQL + RLS policies
-docs/adr/                   Architecture decisions
-public/                     Static assets
-tests/                      Automated tests
+Public marketing routes
+        |
+        v
+Demo mode
+Local typed fixture data
+        |
+        v
+Workspace shell and dashboard UI
+
+Production mode
+Clerk authenticated user
+        |
+        v
+Supabase workspace dataset
+        |
+        v
+Workspace shell and dashboard UI
 ```
+
+## Source Layout
+
+```text
+src/app/                Next.js route wrappers, layouts, metadata, API routes
+src/modules/dashboard/  Overview dashboard components and view model
+src/modules/page-shell/ Workspace shell, sidebar navigation, subpage composition
+src/modules/workspace/  Dataset loading, demo fixture, Supabase repository, shared types
+src/modules/money/      Money formatting and money value types
+src/modules/*           Business modules: invoices, vendors, budgets, approvals, subscriptions
+src/ui/                 Generic reusable UI primitives
+src/services/           Clerk, Supabase, Sentry, env, i18n, query providers
+src/utilities/          Domain-agnostic helpers
+src/test/               Test setup and fixtures
+supabase/               Schema and RLS policy SQL
+e2e/                    Playwright smoke tests
+```
+
+## Module Rules
+
+- `src/app/**` stays thin: routing, metadata, auth/layout gates, and composition.
+- `src/modules/*` owns business and product behavior.
+- `src/ui/**` contains generic reusable UI primitives.
+- `src/services/**` contains technical integrations.
+- `src/utilities/**` contains domain-agnostic helpers.
+- Business modules should not import other business modules by default; compose through routes or explicit shell/dashboard composition.
 
 ---
 
 # Getting Started
 
-## Install Dependencies
+This repo uses pnpm.
 
 ```bash
 pnpm install
-```
-
-## Start Development Server
-
-```bash
 pnpm dev
 ```
 
@@ -195,49 +156,51 @@ Open:
 http://localhost:3000
 ```
 
+The configured pnpm version requires Node 22.13 or newer.
+
+## Demo Mode
+
+Local development defaults to demo mode.
+
+```bash
+CASHLIFT_APP_MODE=demo pnpm dev
+```
+
+Demo mode:
+
+- does not require Clerk keys
+- does not require Supabase keys
+- uses `src/modules/workspace/demoDataset.ts`
+- serves the product workspace at `/app`
+
+## Production Mode
+
+Production mode requires Clerk and Supabase configuration.
+
+```env
+CASHLIFT_APP_MODE=production
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+```
+
+Production mode:
+
+- requires an authenticated Clerk user
+- requests a Supabase JWT from Clerk
+- loads the user’s company dataset from Supabase
+- fails closed when required environment variables are missing
+
 ---
 
 # Quality Checks
 
-## Lint
-
 ```bash
 pnpm lint
-```
-
-## Type Safety
-
-```bash
 pnpm typecheck
-```
-
-## Unit Tests
-
-```bash
 pnpm test
-```
-
-## Architecture Validation
-
-```bash
 pnpm fallow
-```
-
-## Production Build
-
-```bash
-pnpm build
-```
-
-## Diagnostics
-
-```bash
-pnpm doctor
-```
-
-## End-to-End Tests
-
-```bash
 pnpm test:e2e
 ```
 
@@ -249,179 +212,16 @@ pnpm test:e2e:install
 
 ---
 
-# Environment Modes
-
-`CASHLIFT_APP_MODE` supports:
-
-- `demo`
-- `production`
-
-If unset:
-
-- local development defaults to `demo`
-- CI defaults to `production`
-- production builds fail closed
-
----
-
-## Mode Comparison
-
-| Mode | Auth | Dataset | Intended Use |
-|---|---|---|---|
-| Demo | Optional | Shared demo company | Product walkthroughs |
-| Production | Required | Workspace-scoped | Real operations |
-
----
-
-## Demo Mode
-
-```bash
-CASHLIFT_APP_MODE=demo
-```
-
-### Behavior
-
-- `/app` serves demo company data
-- `/api/workspace/dataset` uses shared dataset
-- authentication optional
-
-### Required Variables
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
-```
-
-### Optional
-
-```env
-SUPABASE_DEMO_COMPANY_ID=
-```
-
----
-
-## Production Mode
-
-```bash
-CASHLIFT_APP_MODE=production
-```
-
-### Behavior
-
-- authenticated workspace access required
-- Supabase JWT validation enabled
-- row-level security enforced
-
-### Required Variables
-
-```env
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-CLERK_SECRET_KEY=
-
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
-```
-
----
-
-# Supabase Setup
-
-## API Configuration
-
-Use values from:
-
-```text
-Project Settings → API Keys
-```
-
-| Supabase Value | Environment Variable |
-|---|---|
-| Project URL | NEXT_PUBLIC_SUPABASE_URL |
-| Publishable Key | NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY |
-
-Never expose:
-
-- database passwords
-- service role keys
-- production secrets
-
----
-
-## Authentication Configuration
-
-```text
-Authentication → URL Configuration
-```
-
-### Site URL
-
-```text
-http://localhost:3000
-```
-
-### Redirect URLs
-
-```text
-http://localhost:3000/**
-```
-
----
-
-## Row-Level Security
-
-Apply policies from:
-
-```text
-supabase/production-rls-policies.sql
-```
-
-Production assumes:
-
-- RLS enabled
-- authenticated JWT verification active
-- workspace isolation enforced
-
----
-
 # Security
 
 CashLift follows a fail-closed production model.
 
-## Protections
-
-- Clerk authentication
-- Supabase JWT validation
-- Workspace-level row isolation
-- Protected production APIs
-- Environment variable enforcement
-- No committed credentials
-
-## Security Boundaries
-
-| Area | Protection |
-|---|---|
-| Authentication | Clerk |
-| Authorization | Supabase RLS |
-| Workspace Isolation | Company-scoped policies |
-| APIs | Protected in production |
-| Secrets | Environment variables only |
-
----
-
-# ADRs
-
-Architecture decisions live under:
-
-```text
-docs/adr/
-```
-
-Includes:
-
-- demo vs production separation
-- Supabase RLS strategy
-- auth boundary decisions
-- dataset architecture decisions
+- Demo mode uses local fixture data and requires no secrets.
+- Production mode requires Clerk authentication.
+- Supabase JWTs scope production data access.
+- Supabase RLS policies enforce company-level isolation.
+- Secrets must stay in environment variables.
+- No service role keys or database passwords should be exposed to the browser.
 
 ---
 
@@ -450,25 +250,6 @@ Includes:
 - [ ] Stripe reconciliation
 - [ ] Banking integrations
 - [ ] Webhook platform
-
----
-
-# Contributing
-
-```bash
-git clone <repo>
-pnpm install
-pnpm dev
-```
-
-Before opening PRs:
-
-```bash
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm test:e2e
-```
 
 ---
 

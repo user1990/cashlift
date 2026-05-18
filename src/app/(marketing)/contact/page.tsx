@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ContactPage } from "@/modules/features/marketing/components/ContactPage";
+import { ContactPage } from "@/modules/marketing/components/ContactPage";
 
 export const metadata: Metadata = {
 	title: "Contact — CashLift",

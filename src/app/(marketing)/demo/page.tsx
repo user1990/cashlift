@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DemoPage } from "@/modules/features/marketing/components/DemoPage";
+import { DemoPage } from "@/modules/marketing/components/DemoPage";
 
 export const metadata: Metadata = {
 	title: "Demo — CashLift",

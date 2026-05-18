@@ -1,0 +1,158 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { demoWorkspaceDataset } from "./demoDataset";
+
+const authMock = vi.hoisted(() => vi.fn());
+const captureAppExceptionMock = vi.hoisted(() => vi.fn(() => "event-exception-id"));
+const captureAppMessageMock = vi.hoisted(() => vi.fn(() => "event-message-id"));
+const getDashboardDatasetMock = vi.hoisted(() => vi.fn());
+const getDashboardDatasetByCompanyIdMock = vi.hoisted(() => vi.fn());
+
+vi.mock("@clerk/nextjs/server", () => ({
+	auth: authMock,
+}));
+
+vi.mock("@/services/platform/integrations/sentry", () => ({
+	captureAppException: captureAppExceptionMock,
+	captureAppMessage: captureAppMessageMock,
+}));
+
+vi.mock("@/modules/workspace/repositories/supabase", () => {
+	class CompanyMembershipNotFoundError extends Error {
+		constructor() {
+			super("No company workspace is assigned to this user.");
+			this.name = "CompanyMembershipNotFoundError";
+		}
+	}
+
+	return {
+		CompanyMembershipNotFoundError,
+		supabaseFinanceRepository: {
+			getDashboardDataset: getDashboardDatasetMock,
+			getDashboardDatasetByCompanyId: getDashboardDatasetByCompanyIdMock,
+		},
+	};
+});
+
+const stubDemoWorkspaceEnv = () => {
+	vi.stubEnv("CASHLIFT_APP_MODE", "demo");
+};
+
+const stubProductionWorkspaceEnv = () => {
+	vi.stubEnv("CASHLIFT_APP_MODE", "production");
+	vi.stubEnv("CLERK_SECRET_KEY", "secret");
+	vi.stubEnv("NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY", "pk");
+	vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
+	vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "anon");
+};
+
+const resolveDataset = async () => {
+	const { resolveWorkspaceDataset } = await import("./resolveWorkspaceDataset");
+
+	return resolveWorkspaceDataset();
+};
+
+const expectDataErrorResult = (result: unknown) => {
+	expect(result).toEqual({
+		kind: "data_error",
+		message: "Unable to load workspace data.",
+		requestId: "event-exception-id",
+	});
+};
+
+const expectWorkspaceExceptionCaptured = ({
+	error,
+	extra,
+	failureKind,
+}: {
+	error: Error;
+	extra: Record<string, string>;
+	failureKind: string;
+}) => {
+	expect(captureAppExceptionMock).toHaveBeenCalledWith({
+		error,
+		extra,
+		fingerprint: ["workspace-dataset", failureKind],
+		tags: {
+			failureKind,
+			feature: "workspace-dataset",
+		},
+	});
+};
+
+describe("resolveWorkspaceDataset", () => {
+	beforeEach(() => {
+		vi.resetModules();
+		vi.clearAllMocks();
+	});
+
+	it("returns demo dataset when demo mode is enabled", async () => {
+		stubDemoWorkspaceEnv();
+
+		const result = await resolveDataset();
+
+		expect(result).toEqual({ dataset: demoWorkspaceDataset, kind: "success" });
+		expect(getDashboardDatasetByCompanyIdMock).not.toHaveBeenCalled();
+		expect(getDashboardDatasetMock).not.toHaveBeenCalled();
+		expect(captureAppExceptionMock).not.toHaveBeenCalled();
+		expect(captureAppMessageMock).not.toHaveBeenCalled();
+		expect(authMock).not.toHaveBeenCalled();
+	});
+
+	it("captures config failures", async () => {
+		vi.stubEnv("CASHLIFT_APP_MODE", "production");
+
+		const result = await resolveDataset();
+
+		expect(result).toEqual({
+			kind: "config",
+			message: "Workspace production environment variables are not configured.",
+			requestId: "event-message-id",
+		});
+		expect(captureAppMessageMock).toHaveBeenCalledWith({
+			fingerprint: ["workspace-dataset", "config"],
+			message: "Workspace production environment variables are not configured.",
+			tags: {
+				failureKind: "config",
+				feature: "workspace-dataset",
+			},
+		});
+	});
+
+	it("returns forbidden when membership is missing", async () => {
+		stubProductionWorkspaceEnv();
+		const { CompanyMembershipNotFoundError } = await import("@/modules/workspace/repositories/supabase");
+		authMock.mockResolvedValue({
+			getToken: vi.fn().mockResolvedValue("jwt"),
+			userId: "user-1",
+		});
+		getDashboardDatasetMock.mockRejectedValue(new CompanyMembershipNotFoundError());
+
+		const result = await resolveDataset();
+
+		expect(result).toEqual({
+			kind: "forbidden",
+			message: "No company workspace is assigned to this user.",
+		});
+		expect(captureAppExceptionMock).not.toHaveBeenCalled();
+		expect(captureAppMessageMock).not.toHaveBeenCalled();
+	});
+
+	it("captures authenticated data failures", async () => {
+		stubProductionWorkspaceEnv();
+		const error = new Error("Supabase failed");
+		authMock.mockResolvedValue({
+			getToken: vi.fn().mockResolvedValue("jwt"),
+			userId: "user-1",
+		});
+		getDashboardDatasetMock.mockRejectedValue(error);
+
+		const result = await resolveDataset();
+
+		expectDataErrorResult(result);
+		expectWorkspaceExceptionCaptured({
+			error,
+			extra: { userId: "user-1" },
+			failureKind: "data-error",
+		});
+	});
+});

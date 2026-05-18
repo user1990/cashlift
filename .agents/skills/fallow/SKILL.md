@@ -40,9 +40,10 @@ pnpm exec fallow dupes --trace src/path/file.ts:42 --format json --quiet 2>/dev/
 
 This app uses `.fallowrc.json` to enforce local module boundaries:
 
-- Route files under `src/app/**` orchestrate feature modules.
-- Feature modules under `src/modules/features/*` may import `base`, `ui`, `common`, and `services`, but must not import other feature modules.
-- `ui` and `common` are isolated except for self-imports inside their own zones.
+- Route files under `src/app/**` orchestrate business modules and support layers.
+- Business/product modules live directly under `src/modules/*`.
+- Support layers live outside modules: `src/ui`, `src/services`, and `src/utilities`.
+- `ui`, `services`, and `utilities` must not import from `src/modules`.
 - Boundary and cleanup findings start as warnings; unresolved imports and unlisted dependencies are errors.
 
 When a finding is intentional, prefer the narrowest durable mechanism: model real entry points in config, use `@expected-unused` for intentionally retained exports, or add a one-line `fallow-ignore-next-line <rule>` only for local false positives.

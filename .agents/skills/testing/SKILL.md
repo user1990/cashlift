@@ -51,83 +51,16 @@ description: RTL patterns (without driver abstraction), mocking rules (storage/H
 - Can I use a real hook to trigger the state change? (YES - do that)
 - Is this a top-level boundary (storage/HTTP)? (NO - don't mock it)
 
-See section 9 for detailed examples and patterns.
+See "Mocking and State Management" for detailed examples and patterns.
 
-## Driver Patterns
+## Query and Interaction Patterns
 
-1. **Component Driver Pattern**
-
-```typescript
-const driver = createComponentDriver({
-  Component: YourComponent,
-  defaultProps: { id: 'component-id' },
-  actions: {
-    getRecords: () => screen.getAllByRole('article').map(formatRecord),
-
-    expandRecord: async (index: number) => {
-      const record = driver.getRecords()[index];
-      await driver.user.click(within(record).getByRole('button'));
-    },
-
-    waitForComponent: () =>
-      waitFor(() => expect(screen.getByText('Expected Text')).toBeInTheDocument()),
-
-    mountAndWait: async (props = {}) => {
-      driver.mount(props);
-      await driver.waitForComponent();
-    },
-  },
-});
-```
-
-2. **Section Driver Pattern**
-
-```typescript
-const driver = createSectionDriver({
-  Component: YourSection,
-  defaultProps: { id: 'section-id' },
-  actions: {
-    waitForSection: () => driver.waitForSection('Section Name'),
-
-    getSubsectionLabels: () =>
-      screen
-        .queryAllByRole('heading', { level: 3 })
-        .map((element) => element.textContent)
-        .filter(Boolean),
-
-    getBasicCardInfo: (card: HTMLElement) => ({
-      label: within(card).getByRole('heading').textContent,
-      hasRecords: cardHasRecords(card),
-      date: extractDate(card),
-      metadata: extractMetadata(card),
-    }),
-  },
-});
-```
-
-3. **Hook Driver Pattern**
-
-```typescript
-const driver = createHookDriver({
-  hook: useYourHook,
-  actions: {
-    performActionAndWait: async () => {
-      driver.act(() => {
-        driver.getCurrent().someMethod();
-      });
-      await driver.waitFor(() => {
-        expect(driver.getCurrent().someState).toEqual(true);
-      });
-    },
-
-    expectStateToMatch: async (expectedState) => {
-      await driver.waitFor(() => {
-        expect(driver.getCurrent()).toEqual(expectedState);
-      });
-    },
-  },
-});
-```
+- Render components directly with the repo's test utilities.
+- Use `userEvent.setup()` for user interactions.
+- Use RTL queries directly in the test body for simple cases.
+- Extract local helper functions only when a query, interaction, or assertion is repeated or semantically meaningful.
+- Keep helpers in the same test file unless they are reused across files; shared helpers belong in module-local `test-utils.ts`.
+- Prefer `within()` for scoped queries and role/name queries for accessible elements.
 
 ## Test Organization
 
@@ -136,22 +69,26 @@ const driver = createHookDriver({
 ```typescript
 describe('ComponentName', () => {
   it('mounts with required props', async () => {
-    await driver.mountAndWait({ prop: 'value' });
-    expect(driver.getRoot()).toBeInTheDocument();
+    render(<ComponentName prop="value" />);
+
+    expect(screen.getByRole('region', { name: /component name/i })).toBeInTheDocument();
   });
 
   it('transforms data according to business rules', () => {
-    driver.mount({ data: mockData });
-    expect(driver.getFormattedData()).toEqual(expectedFormat);
+    render(<ComponentName data={mockData} />);
+
+    expect(screen.getAllByRole('listitem').map((item) => item.textContent)).toEqual(
+      expectedFormat,
+    );
   });
 
   describe('specific feature', () => {
     beforeEach(() => {
-      // Feature-specific setup
+      setupFeatureScenario();
     });
 
     it('handles feature-specific logic', () => {
-      // Feature test
+      expect(screen.getByRole('status')).toHaveTextContent(/ready/i);
     });
   });
 });
@@ -163,14 +100,18 @@ describe('ComponentName', () => {
 describe('ComponentWithIntegration', () => {
   it('integrates with external service', async () => {
     server.use(createServiceHandler(mockResponse));
-    await driver.mountAndWait();
-    expect(driver.getIntegratedData()).toEqual(expectedData);
+
+    render(<ComponentWithIntegration />);
+
+    expect(await screen.findByText(expectedData.label)).toBeVisible();
   });
 
   it('adapts to feature flags', async () => {
     setFeatureFlags({ 'feature-name': true });
-    await driver.mountAndWait();
-    expect(driver.getFeatureElements()).toBeVisible();
+
+    render(<ComponentWithIntegration />);
+
+    expect(await screen.findByRole('button', { name: /feature action/i })).toBeVisible();
   });
 });
 ```
@@ -193,15 +134,15 @@ it.each`
 
 ```typescript
 it('handles async state changes', async () => {
-  driver.mount({});
+  render(<ComponentName />);
 
-  expect(driver.getLoadingState()).toEqual(true);
+  expect(screen.getByRole('status')).toHaveTextContent(/loading/i);
 
   await waitFor(() => {
-    expect(driver.getLoadingState()).toEqual(false);
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });
 
-  expect(driver.getContent()).toBeVisible();
+  expect(screen.getByRole('main')).toBeVisible();
 });
 ```
 
@@ -209,13 +150,14 @@ it('handles async state changes', async () => {
 
 ```typescript
 it('handles complex user flows', async () => {
-  await driver.mountAndWait();
+  const user = userEvent.setup();
+  render(<ComponentName />);
 
-  await driver.expandSection();
-  await driver.selectOption('choice');
-  await driver.submitForm();
+  await user.click(screen.getByRole('button', { name: /expand/i }));
+  await user.click(screen.getByRole('option', { name: /choice/i }));
+  await user.click(screen.getByRole('button', { name: /submit/i }));
 
-  expect(driver.getSubmissionResult()).toEqual(expected);
+  expect(await screen.findByText(expected.label)).toBeVisible();
 });
 ```
 
@@ -223,27 +165,29 @@ it('handles complex user flows', async () => {
 
 ```typescript
 it('adapts to feature flags', async () => {
-  await driver.mountAndWait();
-  expect(driver.getFeatureElement()).not.toBeInTheDocument();
+  const { unmount } = render(<ComponentName />);
 
+  expect(screen.queryByRole('button', { name: /feature action/i })).not.toBeInTheDocument();
+
+  unmount();
   setFeatureFlags({ 'feature-name': true });
-  await driver.mountAndWait();
-  expect(driver.getFeatureElement()).toBeInTheDocument();
+  render(<ComponentName />);
+
+  expect(screen.getByRole('button', { name: /feature action/i })).toBeInTheDocument();
 });
 ```
 
 ## Best Practices
 
-1. **Driver Actions**
+1. **Local Helpers**
 
-   - **Always put repetitive selectors in driver config, never use raw selectors in tests**
-   - Do not use raw selectors (e.g., `screen.getByRole`, `screen.getByText`) directly in tests - wrap them in driver actions
-   - Group related selectors into semantic actions
-   - Handle complex UI interactions (clicks, form submissions, etc.) in driver actions
+   - Use direct RTL queries in tests when the selector is clear and used once
+   - Extract repeated selectors or multi-step interactions into local helper functions
+   - Group related helper functions by behavior, not by DOM structure
    - Use `within()` for scoped queries
    - Return formatted/parsed data instead of raw elements
    - Provide waiting utilities for async operations
-   - Simple wrappers around `act()` or hook method calls are usually unnecessary - only add actions for complex interactions
+   - Avoid helper layers that only rename `screen.getByRole()` without adding meaning
 
 2. **Test Data**
 
@@ -263,13 +207,13 @@ it('adapts to feature flags', async () => {
 
      ```typescript
      // GOOD: Assert entire list
-     expect(driver.getVisibleItems()).toEqual(['Item 1', 'Item 2', 'Item 3']);
+     expect(getVisibleItems()).toEqual(['Item 1', 'Item 2', 'Item 3']);
 
      // BAD: Manual checking of each item
-     expect(driver.getVisibleItems()).toHaveLength(3);
-     expect(driver.getVisibleItems()).toContain('Item 1');
-     expect(driver.getVisibleItems()).toContain('Item 2');
-     expect(driver.getVisibleItems()).toContain('Item 3');
+     expect(getVisibleItems()).toHaveLength(3);
+     expect(getVisibleItems()).toContain('Item 1');
+     expect(getVisibleItems()).toContain('Item 2');
+     expect(getVisibleItems()).toContain('Item 3');
      ```
 
 4. **Async Testing**
@@ -289,7 +233,7 @@ it('adapts to feature flags', async () => {
 
 6. **Imports and Utilities**
 
-   - **`act` usage**: Always import `act` from `test-utils` (or `@your-org/test-utils`) and use it directly. **Never use `driver.act()`** - always use the imported `act` function. Do not import `act` from `react` or `@testing-library/react` directly
+   - **`act` usage**: Always import `act` from `test-utils` (or `@your-org/test-utils`) and use it directly. Do not import `act` from `react` or `@testing-library/react` directly
    - Always use `waitFor` from `test-utils` (or `@your-org/test-utils`), not from `react` or `@testing-library/react`
    - Use `@your-org/test-utils` implementations for testing utilities when available
    - For MSW-specific utilities like `HttpResponse`, import directly from `msw` (as fixtures do)
@@ -320,7 +264,7 @@ it('adapts to feature flags', async () => {
    - **NEVER directly manipulate Zustand stores** (e.g., `useAuthStore.setState()`, `useAuthStore.getState().actions`) - this is an implementation detail
    - **NEVER create test utilities that manipulate stores directly** - unless it's a documented workaround (see below)
    - **ONLY mock top-level boundaries**: storage (localStorage, sessionStorage) and HTTP calls (via MSW)
-   - **Use real hooks to trigger state changes**: If you need to change auth state, use the actual `useAuthSession().authenticate()` or `useLogout().logout()` hooks through a driver
+   - **Use real hooks to trigger state changes**: If you need to change auth state, render a small test component or use `renderHook()` with the actual `useAuthSession().authenticate()` or `useLogout().logout()` hook
    - **Manipulate storage, not stores**: Use test utilities like `setUserAlreadyAuthenticated()` and `clearAuthenticatedUser()` which manipulate localStorage, then let real hooks read from storage naturally
    - **Workaround exception**: Some test utilities (like `setPendingAuthState`) may need to access store actions directly due to Zustand persist timing issues. These should be clearly documented with comments explaining why it's necessary.
 
@@ -331,18 +275,13 @@ it('adapts to feature flags', async () => {
    import { useAuthSession } from './useAuthSession';
    import { useLogout } from './useLogout';
 
-   const driver = createHookDriver({
-     hook: useYourHook,
-     actions: {
-       authenticate: () => {
-         driver.getCurrent().authSession.authenticate('token', { skipRedirect: true });
-       },
-     },
-   });
-
    it('tests behavior', async () => {
      clearAuthenticatedUser();
-     driver.mount();
+     const { result } = renderHook(() => useYourHook());
+
+     act(() => {
+       result.current.authSession.authenticate('token', { skipRedirect: true });
+     });
    });
    ```
 
@@ -374,21 +313,13 @@ it('adapts to feature flags', async () => {
      return { authSession, logout, listener };
    };
 
-   const driver = createHookDriver({
-     hook: useCompositeAuthHooks,
-     actions: {
-       authenticate: () =>
-         driver.getCurrent().authSession.authenticate('token', { skipRedirect: true }),
-       logout: () => driver.getCurrent().logout.logout(),
-     },
-   });
-
    it('calls callback on state change', async () => {
+     const onAuthenticated = jest.fn();
      clearAuthenticatedUser();
-     driver.mount({ onAuthenticated: jest.fn() });
+     const { result } = renderHook(() => useCompositeAuthHooks({ onAuthenticated }));
 
-     driver.act(() => {
-       driver.authenticate();
+     act(() => {
+       result.current.authSession.authenticate('token', { skipRedirect: true });
      });
 
      await waitFor(() => {
