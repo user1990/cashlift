@@ -1,6 +1,7 @@
 import { domAnimation, LazyMotion } from "motion/react";
 import * as m from "motion/react-m";
 import dynamic from "next/dynamic";
+import type { ComponentType } from "react";
 import { formatCurrencyDollars } from "@/modules/money/format";
 import type { SpendChartDataPoint } from "../types";
 import { ChartPlaceholder } from "./ChartPlaceholder";
@@ -8,8 +9,9 @@ import { ChartPlaceholder } from "./ChartPlaceholder";
 const CHART_HEIGHT = 245;
 const TICK_COUNT = 4;
 
-const createDynamicRechartsComponent = (name: string) =>
-	dynamic(() => import("recharts").then((mod) => mod[name] as React.ComponentType<object>), { ssr: false });
+const createDynamicRechartsComponent = <T extends keyof typeof import("recharts")>(name: T) =>
+	// biome-ignore lint/suspicious/noExplicitAny: Recharts components have varying prop shapes; ComponentType<any> is required for dynamic() compatibility
+	dynamic(() => import("recharts").then((mod) => mod[name] as ComponentType<any>), { ssr: false });
 const ResponsiveContainer = createDynamicRechartsComponent("ResponsiveContainer");
 const BarChart = createDynamicRechartsComponent("BarChart");
 const CartesianGrid = createDynamicRechartsComponent("CartesianGrid");
