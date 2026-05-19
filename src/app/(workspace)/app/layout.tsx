@@ -39,8 +39,8 @@ const SignedOutFallback = () => (
 			</p>
 
 			<Link
-				className="mt-6 inline-flex h-10 items-center justify-center rounded-md border border-primary bg-primary px-4 text-m font-medium text-primary-foreground"
 				href="/login"
+				className="mt-6 inline-flex h-10 items-center justify-center rounded-md border border-primary bg-primary px-4 text-m font-medium text-primary-foreground"
 			>
 				Log in
 			</Link>

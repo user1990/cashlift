@@ -66,7 +66,7 @@ const PricingPlanCard = ({ plan }: { plan: PricingPlan }) => {
 					))}
 				</ul>
 
-				<Link className={getPlanLinkClassName(highlighted)} href="/signup">
+				<Link href="/signup" className={getPlanLinkClassName(highlighted)}>
 					Start free trial
 				</Link>
 			</Panel>

@@ -13,7 +13,7 @@ const INVOICE_RISK_DATE = new Date("2026-05-09");
 export const WorkspaceInvoicesSection = ({ dataset }: WorkspaceInvoicesSectionProps) => (
 	<Panel className="@container">
 		<PanelHeader
-			eyebrow="Receivables"
+			label="Receivables"
 			title={`${formatCurrency(getInvoiceRiskTotal(dataset.invoices, INVOICE_RISK_DATE))} overdue cash risk`}
 		/>
 

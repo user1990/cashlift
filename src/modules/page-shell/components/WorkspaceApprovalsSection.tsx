@@ -12,7 +12,7 @@ export const WorkspaceApprovalsSection = ({ dataset }: WorkspaceApprovalsSection
 	return (
 		<div className="grid gap-4 xl:grid-cols-[1fr_0.7fr]">
 			<Panel>
-				<PanelHeader eyebrow="Queue" title={`${pendingRequests.length} requests need review`} />
+				<PanelHeader label="Queue" title={`${pendingRequests.length} requests need review`} />
 
 				<ul className="space-y-3">
 					{pendingRequests.map(({ amountCents, id, reason, requester, status, team, vendor }) => (
@@ -28,7 +28,7 @@ export const WorkspaceApprovalsSection = ({ dataset }: WorkspaceApprovalsSection
 			</Panel>
 
 			<Panel>
-				<PanelHeader eyebrow="Rules" title="Approval policy" />
+				<PanelHeader label="Rules" title="Approval policy" />
 
 				<div className="space-y-3 text-m leading-6 text-muted-foreground">
 					<p>Managers approve team spend after CashLift shows cash impact.</p>

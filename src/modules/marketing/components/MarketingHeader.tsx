@@ -34,9 +34,9 @@ export const MarketingHeader = () => (
 );
 
 const MarketingBrand = () => (
-	<Link className="shrink-0" href="/">
+	<Link href="/" className="shrink-0">
 		<div className="flex items-center gap-2.5">
-			<Image src={logo} alt="CashLift Logo" className="shrink-0" width={36} height={36} priority />
+			<Image src={logo} alt="CashLift Logo" width={36} height={36} priority className="shrink-0" />
 
 			<span className="font-brand font-bold text-xl leading-none tracking-tight">
 				<span className="text-foreground">Cash</span>
@@ -54,8 +54,8 @@ const DesktopNav = () => (
 		))}
 
 		<Link
-			className="inline-flex h-9 items-center rounded-md px-3 transition-colors duration-150 hover:text-primary"
 			href="/customers"
+			className="inline-flex h-9 items-center rounded-md px-3 transition-colors duration-150 hover:text-primary"
 		>
 			Customers
 		</Link>
@@ -65,15 +65,15 @@ const DesktopNav = () => (
 const HeaderActions = () => (
 	<div className="flex items-center gap-2">
 		<Link
-			className="hidden h-9 items-center rounded-md px-3 text-m font-medium text-shell-muted transition-colors duration-150 hover:text-primary sm:inline-flex"
 			href="/login"
+			className="hidden h-9 items-center rounded-md px-3 text-m font-medium text-shell-muted transition-colors duration-150 hover:text-primary sm:inline-flex"
 		>
 			Login
 		</Link>
 
 		<Link
-			className="inline-flex h-9 items-center justify-center rounded-md border border-primary bg-primary px-3 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
 			href="/demo"
+			className="inline-flex h-9 items-center justify-center rounded-md border border-primary bg-primary px-3 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
 		>
 			Run leak audit
 		</Link>
@@ -103,8 +103,8 @@ const DesktopNavGroup = ({ group }: { group: NavGroup }) => (
 					{group.items.map(({ href, label }) => (
 						<li key={href}>
 							<Link
-								className="block rounded-md px-3 py-2 text-m font-medium text-shell-muted outline-none transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground focus-visible:ring-[3px] focus-visible:ring-primary/20"
 								href={href}
+								className="block rounded-md px-3 py-2 text-m font-medium text-shell-muted outline-none transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground focus-visible:ring-[3px] focus-visible:ring-primary/20"
 							>
 								{label}
 							</Link>
@@ -143,8 +143,8 @@ const MobileNav = () => (
 					<MobileNavLink href="/login">Login</MobileNavLink>
 
 					<Link
-						className="mt-2 inline-flex h-10 items-center justify-center rounded-md border border-primary bg-primary px-3 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
 						href="/demo"
+						className="mt-2 inline-flex h-10 items-center justify-center rounded-md border border-primary bg-primary px-3 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
 					>
 						Run leak audit
 					</Link>
@@ -174,8 +174,8 @@ const MobileNavGroup = ({ group }: { group: NavGroup }) => (
 
 const MobileNavLink = ({ children, href }: { children: React.ReactNode; href: string }) => (
 	<Link
-		className="rounded-md px-3 py-2 text-m font-medium text-shell-muted transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground"
 		href={href}
+		className="rounded-md px-3 py-2 text-m font-medium text-shell-muted transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground"
 	>
 		{children}
 	</Link>

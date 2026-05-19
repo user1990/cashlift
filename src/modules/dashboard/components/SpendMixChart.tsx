@@ -1,17 +1,20 @@
+import { domAnimation, LazyMotion } from "motion/react";
+import * as m from "motion/react-m";
+import dynamic from "next/dynamic";
 import { formatCurrencyDollars } from "@/modules/money/format";
 import type { SpendChartDataPoint } from "../types";
 import { ChartPlaceholder } from "./ChartPlaceholder";
 
-const BAR_GAP = 12;
-const BAR_WIDTH = 36;
 const CHART_HEIGHT = 245;
-const CHART_WIDTH = 640;
-const GROUP_GAP = 34;
-const PADDING_BOTTOM = 30;
-const PADDING_LEFT = 54;
-const PADDING_RIGHT = 12;
-const PADDING_TOP = 14;
 const TICK_COUNT = 4;
+
+const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
+const BarChart = dynamic(() => import("recharts").then((mod) => mod.BarChart), { ssr: false });
+const CartesianGrid = dynamic(() => import("recharts").then((mod) => mod.CartesianGrid), { ssr: false });
+const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
+const YAxis = dynamic(() => import("recharts").then((mod) => mod.YAxis), { ssr: false });
+const Tooltip = dynamic(() => import("recharts").then((mod) => mod.Tooltip), { ssr: false });
+const Bar = dynamic(() => import("recharts").then((mod) => mod.Bar), { ssr: false });
 
 type SpendMixChartProps = {
 	chartData: SpendChartDataPoint[];
@@ -35,96 +38,82 @@ type SpendMixChartContentProps = {
 
 const SpendMixChartContent = ({ chartData }: SpendMixChartContentProps) => {
 	const maximumValue = Math.max(...chartData.flatMap(({ remaining, used }) => [remaining, used]), 1);
-	const chartAreaHeight = CHART_HEIGHT - PADDING_TOP - PADDING_BOTTOM;
-	const baseline = CHART_HEIGHT - PADDING_BOTTOM;
 
 	return (
-		<svg
-			aria-labelledby="spend-mix-chart-title"
-			className="h-[245px] w-full overflow-visible"
-			focusable="false"
-			role="img"
-			viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-		>
-			<title id="spend-mix-chart-title">Committed spend by team</title>
+		<LazyMotion features={domAnimation}>
+			<m.div
+				animate={{ opacity: 1, y: 0 }}
+				aria-hidden="true"
+				className="h-[245px] w-full"
+				initial={{ opacity: 0, y: 8 }}
+				transition={{ duration: 0.35, ease: "easeOut" }}
+			>
+				<ResponsiveContainer height={CHART_HEIGHT} width="100%">
+					<BarChart data={chartData} margin={{ bottom: 0, left: 4, right: 8, top: 12 }}>
+						<defs>
+							<linearGradient id="budgetUsedFill" x1="0" x2="0" y1="0" y2="1">
+								<stop offset="0%" stopColor="var(--primary)" />
 
-			<defs>
-				<linearGradient id="budgetUsedFill" x1="0" x2="0" y1="0" y2="1">
-					<stop offset="0%" stopColor="var(--primary)" />
+								<stop offset="100%" stopColor="var(--primary-muted)" />
+							</linearGradient>
 
-					<stop offset="100%" stopColor="var(--primary-muted)" />
-				</linearGradient>
+							<linearGradient id="budgetRemainingFill" x1="0" x2="0" y1="0" y2="1">
+								<stop offset="0%" stopColor="var(--highlight)" />
 
-				<linearGradient id="budgetRemainingFill" x1="0" x2="0" y1="0" y2="1">
-					<stop offset="0%" stopColor="var(--highlight)" />
+								<stop offset="100%" stopColor="var(--highlight-muted)" />
+							</linearGradient>
+						</defs>
 
-					<stop offset="100%" stopColor="var(--highlight-muted)" />
-				</linearGradient>
-			</defs>
+						<CartesianGrid stroke="var(--border)" strokeOpacity={0.8} vertical={false} />
 
-			{getValueTicks(maximumValue).map((tick) => {
-				const yPosition = baseline - (tick / maximumValue) * chartAreaHeight;
-
-				return (
-					<g key={tick}>
-						<line
-							stroke="var(--border)"
-							strokeOpacity="0.8"
-							x1={PADDING_LEFT}
-							x2={CHART_WIDTH - PADDING_RIGHT}
-							y1={yPosition}
-							y2={yPosition}
+						<XAxis
+							axisLine={false}
+							dataKey="team"
+							tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+							tickLine={false}
 						/>
 
-						<text
-							className="fill-muted-foreground font-sans text-xs"
-							textAnchor="end"
-							x={PADDING_LEFT - 10}
-							y={yPosition + 4}
-						>
-							{formatThousands(tick)}
-						</text>
-					</g>
-				);
-			})}
+						<YAxis
+							axisLine={false}
+							domain={[0, maximumValue]}
+							tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+							tickCount={TICK_COUNT}
+							tickFormatter={formatThousands}
+							tickLine={false}
+							width={48}
+						/>
 
-			{chartData.map(({ remaining, team, used }, itemIndex) => {
-				const xPosition = getGroupXPosition(itemIndex);
-				const remainingHeight = (remaining / maximumValue) * chartAreaHeight;
-				const usedHeight = (used / maximumValue) * chartAreaHeight;
+						<Tooltip
+							contentStyle={{
+								background: "var(--panel)",
+								border: "1px solid var(--border)",
+								borderRadius: 8,
+								color: "var(--panel-foreground)",
+							}}
+							formatter={formatTooltipCurrency}
+						/>
 
-				return (
-					<g key={team}>
-						<rect
+						<Bar
+							animationDuration={650}
+							dataKey="used"
 							fill="url(#budgetUsedFill)"
-							height={usedHeight}
-							rx="6"
-							x={xPosition}
-							y={baseline - usedHeight}
-							width={BAR_WIDTH}
+							isAnimationActive
+							name="Budget used"
+							radius={[6, 6, 0, 0]}
 						/>
 
-						<rect
+						<Bar
+							animationDuration={650}
+							dataKey="remaining"
 							fill="url(#budgetRemainingFill)"
-							height={remainingHeight}
-							rx="6"
-							x={xPosition + BAR_WIDTH + BAR_GAP}
-							y={baseline - remainingHeight}
-							width={BAR_WIDTH}
+							isAnimationActive
+							name="Remaining budget"
+							radius={[6, 6, 0, 0]}
 						/>
-
-						<text
-							className="fill-muted-foreground font-sans text-xs"
-							textAnchor="middle"
-							x={xPosition + BAR_WIDTH + BAR_GAP / 2}
-							y={CHART_HEIGHT - 7}
-						>
-							{team}
-						</text>
-					</g>
-				);
-			})}
-		</svg>
+					</BarChart>
+				</ResponsiveContainer>
+			</m.div>
+		</LazyMotion>
 	);
 };
 
@@ -156,17 +145,10 @@ const SpendMixChartSummary = ({ chartData }: SpendMixChartContentProps) => (
 	</table>
 );
 
-function getGroupXPosition(itemIndex: number) {
-	return PADDING_LEFT + itemIndex * (BAR_WIDTH * 2 + BAR_GAP + GROUP_GAP);
-}
-
-function getValueTicks(maximumValue: number) {
-	return Array.from(
-		{ length: TICK_COUNT },
-		(_, tickIndex) => (maximumValue / (TICK_COUNT - 1)) * tickIndex,
-	).toReversed();
-}
-
 function formatThousands(value: number) {
 	return `$${Math.round(value / 1_000)}K`;
+}
+
+function formatTooltipCurrency(value: unknown) {
+	return formatCurrencyDollars(Number(value));
 }

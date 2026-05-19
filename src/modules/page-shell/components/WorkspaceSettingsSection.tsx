@@ -9,7 +9,7 @@ type WorkspaceSettingsSectionProps = {
 export const WorkspaceSettingsSection = ({ dataset }: WorkspaceSettingsSectionProps) => (
 	<div className="grid gap-4 md:grid-cols-2">
 		<Panel>
-			<PanelHeader eyebrow="Company" title={dataset.profile.name} />
+			<PanelHeader label="Company" title={dataset.profile.name} />
 
 			<dl className="space-y-2 text-m text-muted-foreground">
 				<div>
@@ -33,7 +33,7 @@ export const WorkspaceSettingsSection = ({ dataset }: WorkspaceSettingsSectionPr
 		</Panel>
 
 		<Panel>
-			<PanelHeader eyebrow="Safety" title="MVP boundaries" />
+			<PanelHeader label="Safety" title="MVP boundaries" />
 
 			<div className="space-y-2 text-m text-muted-foreground">
 				<p>No cards, ACH, bill pay, payroll, or money movement.</p>

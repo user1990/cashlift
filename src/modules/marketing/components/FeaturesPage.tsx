@@ -54,8 +54,8 @@ export const FeaturesPage = () => (
 			</div>
 
 			<Link
-				className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-primary bg-primary px-4 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
 				href="/demo"
+				className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-primary bg-primary px-4 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
 			>
 				See demo
 				<ArrowRight aria-hidden className="size-4" />

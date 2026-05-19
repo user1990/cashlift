@@ -40,16 +40,16 @@ export const HomePage = () => (
 
 					<div className="mt-8 flex flex-wrap items-center gap-3">
 						<Link
-							className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-primary bg-primary px-4 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
 							href="/demo"
+							className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-primary bg-primary px-4 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
 						>
 							Run leak audit
 							<ArrowRight aria-hidden className="size-4" />
 						</Link>
 
 						<Link
-							className="inline-flex h-11 items-center justify-center rounded-md border border-shell-border bg-shell-elevated/80 px-4 text-m font-medium text-shell-foreground transition-[border-color,color] duration-150 ease hover:border-primary-subtle-border hover:text-primary"
 							href="/app"
+							className="inline-flex h-11 items-center justify-center rounded-md border border-shell-border bg-shell-elevated/80 px-4 text-m font-medium text-shell-foreground transition-[border-color,color] duration-150 ease hover:border-primary-subtle-border hover:text-primary"
 						>
 							Open demo app
 						</Link>

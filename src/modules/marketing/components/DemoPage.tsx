@@ -30,15 +30,15 @@ export const DemoPage = () => (
 			</ol>
 
 			<Link
-				className="mt-8 inline-flex h-11 items-center justify-center rounded-md border border-shell-border bg-shell-elevated px-4 text-m font-medium text-shell-foreground transition-[border-color,color] duration-150 ease hover:border-primary-subtle-border hover:text-primary"
 				href="/app"
+				className="mt-8 inline-flex h-11 items-center justify-center rounded-md border border-shell-border bg-shell-elevated px-4 text-m font-medium text-shell-foreground transition-[border-color,color] duration-150 ease hover:border-primary-subtle-border hover:text-primary"
 			>
 				Open interactive demo app
 			</Link>
 		</div>
 
 		<Panel>
-			<PanelHeader eyebrow="Book demo" title="Get the audit walkthrough" />
+			<PanelHeader label="Book demo" title="Get the audit walkthrough" />
 
 			<LeadCaptureForm buttonLabel="Book demo" />
 		</Panel>

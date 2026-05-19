@@ -19,13 +19,13 @@ export const DashboardHeader = ({ dashboard }: DashboardHeaderProps) => (
 		</div>
 
 		<div className="flex flex-wrap items-center gap-3">
-			<Button className="h-11 border-border bg-shell-elevated px-4 text-shell-foreground" variant="secondary">
+			<Button variant="secondary" className="h-11 border-border bg-shell-elevated px-4 text-shell-foreground">
 				<CalendarDays aria-hidden className="size-4" />
 				{dashboard.dateRangeLabel}
 				<ChevronDown aria-hidden className="size-4" />
 			</Button>
 
-			<Button className="h-11 px-4" variant="primary">
+			<Button variant="primary" className="h-11 px-4">
 				<Download aria-hidden className="size-4" />
 				Export report
 			</Button>

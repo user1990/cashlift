@@ -6,7 +6,7 @@ type ProgressBarProps = {
 	className?: string;
 };
 
-export const ProgressBar = ({ className, label, value }: ProgressBarProps) => (
+export const ProgressBar = ({ label, value, className }: ProgressBarProps) => (
 	<div className={cn("space-y-1.5", className)}>
 		<div className="flex items-center justify-between gap-3 text-s">
 			<span className="font-medium text-panel-foreground">{label}</span>

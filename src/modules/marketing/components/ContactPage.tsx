@@ -38,7 +38,7 @@ export const ContactPage = () => (
 		</div>
 
 		<Panel>
-			<PanelHeader eyebrow="Message" title="Send details" />
+			<PanelHeader label="Message" title="Send details" />
 
 			<LeadCaptureForm buttonLabel="Send message" />
 		</Panel>

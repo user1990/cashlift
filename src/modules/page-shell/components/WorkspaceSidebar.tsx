@@ -16,7 +16,7 @@ type WorkspaceSidebarProps = {
 
 export const WorkspaceSidebar = ({ mode, section }: WorkspaceSidebarProps) => (
 	<aside className="flex min-h-[calc(100vh-2rem)] flex-col rounded-lg border border-white/5 bg-black/30 p-3 shadow-shell backdrop-blur lg:sticky lg:top-4 lg:self-start">
-		<Link className="flex items-center gap-3 px-2 py-3" href="/app">
+		<Link href="/app" className="flex items-center gap-3 px-2 py-3">
 			<span className="grid size-10 place-items-center rounded-lg bg-signal-subtle text-signal shadow-primary-glow">
 				<span className="size-6 rounded-[6px] bg-signal [clip-path:polygon(50%_0,100%_100%,50%_78%,0_100%)]" />
 			</span>
@@ -47,7 +47,7 @@ const WorkspaceNavLink = ({ active, item }: WorkspaceNavLinkProps) => {
 	const Icon = item.icon;
 
 	return (
-		<Link aria-current={active ? "page" : undefined} className={getWorkspaceNavLinkClassName(active)} href={item.href}>
+		<Link aria-current={active ? "page" : undefined} href={item.href} className={getWorkspaceNavLinkClassName(active)}>
 			<WorkspaceActiveIndicator active={active} />
 
 			<Icon aria-hidden className="relative z-10 size-5" />
@@ -145,7 +145,7 @@ const AccountMenuShell = ({ avatar, description, items, name, signOut }: Account
 
 		<div className="absolute bottom-full left-0 z-20 mb-2 grid w-56 gap-1 rounded-lg border border-shell-border bg-shell-elevated p-1 shadow-shell">
 			{items.map(({ href, label }) => (
-				<Link key={href} className={menuItemClassName} href={href}>
+				<Link key={href} href={href} className={menuItemClassName}>
 					{label}
 				</Link>
 			))}

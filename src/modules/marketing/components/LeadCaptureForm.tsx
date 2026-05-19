@@ -50,7 +50,7 @@ export const LeadCaptureForm = ({ buttonLabel }: LeadCaptureFormProps) => {
 				placeholder="Studio Nova…"
 			/>
 
-			<Button className="w-full" type="submit" variant="primary">
+			<Button type="submit" variant="primary" className="w-full">
 				{buttonLabel}
 			</Button>
 

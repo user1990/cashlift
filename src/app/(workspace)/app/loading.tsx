@@ -17,7 +17,7 @@ export default function WorkspaceLoading() {
 
 				<section className="min-w-0 space-y-5">
 					<Panel className="p-6">
-						<PanelHeader eyebrow="Today" title="Loading cash command center..." />
+						<PanelHeader label="Today" title="Loading cash command center..." />
 
 						<div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
 							{["Cash buffer", "Runway", "Approvals", "Leaks"].map((label) => (
@@ -28,13 +28,13 @@ export default function WorkspaceLoading() {
 
 					<div className="grid gap-4 xl:grid-cols-2">
 						<Panel className="min-h-[365px] p-6">
-							<PanelHeader eyebrow="13-week cash outlook" title="Cash outlook from accounting-style data" />
+							<PanelHeader label="13-week cash outlook" title="Cash outlook from accounting-style data" />
 
 							<ChartPlaceholder />
 						</Panel>
 
 						<Panel className="min-h-[365px] p-6">
-							<PanelHeader eyebrow="Team budgets" title="Committed spend by team" />
+							<PanelHeader label="Team budgets" title="Committed spend by team" />
 
 							<ChartPlaceholder />
 						</Panel>

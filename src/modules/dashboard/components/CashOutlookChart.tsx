@@ -1,14 +1,20 @@
+import { domAnimation, LazyMotion } from "motion/react";
+import * as m from "motion/react-m";
+import dynamic from "next/dynamic";
 import { formatCurrencyDollars } from "@/modules/money/format";
 import type { ForecastChartDataPoint } from "../types";
 import { ChartPlaceholder } from "./ChartPlaceholder";
 
 const CHART_HEIGHT = 245;
-const CHART_WIDTH = 640;
-const PADDING_BOTTOM = 28;
-const PADDING_LEFT = 54;
-const PADDING_RIGHT = 10;
-const PADDING_TOP = 14;
 const TICK_COUNT = 4;
+
+const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
+const AreaChart = dynamic(() => import("recharts").then((mod) => mod.AreaChart), { ssr: false });
+const Area = dynamic(() => import("recharts").then((mod) => mod.Area), { ssr: false });
+const CartesianGrid = dynamic(() => import("recharts").then((mod) => mod.CartesianGrid), { ssr: false });
+const Tooltip = dynamic(() => import("recharts").then((mod) => mod.Tooltip), { ssr: false });
+const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
+const YAxis = dynamic(() => import("recharts").then((mod) => mod.YAxis), { ssr: false });
 
 type CashOutlookChartProps = {
 	chartData: ForecastChartDataPoint[];
@@ -34,83 +40,72 @@ const CashOutlookChartContent = ({ chartData }: CashOutlookChartContentProps) =>
 	const balances = chartData.map(({ balance }) => balance);
 	const minimumBalance = Math.min(...balances);
 	const maximumBalance = Math.max(...balances);
-	const chartAreaWidth = CHART_WIDTH - PADDING_LEFT - PADDING_RIGHT;
-	const chartAreaHeight = CHART_HEIGHT - PADDING_TOP - PADDING_BOTTOM;
-	const balanceRange = Math.max(1, maximumBalance - minimumBalance);
-	const points = chartData.map((point, pointIndex) => {
-		const xPosition =
-			PADDING_LEFT + (chartData.length <= 1 ? 0 : (pointIndex / (chartData.length - 1)) * chartAreaWidth);
-		const yPosition = PADDING_TOP + ((maximumBalance - point.balance) / balanceRange) * chartAreaHeight;
-
-		return { ...point, xPosition, yPosition };
-	});
-	const areaPath = `${buildLinePath(points)} L ${points.at(-1)?.xPosition ?? PADDING_LEFT} ${
-		CHART_HEIGHT - PADDING_BOTTOM
-	} L ${PADDING_LEFT} ${CHART_HEIGHT - PADDING_BOTTOM} Z`;
 
 	return (
-		<svg
-			aria-labelledby="cash-outlook-chart-title"
-			className="h-[245px] w-full overflow-visible"
-			focusable="false"
-			role="img"
-			viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-		>
-			<title id="cash-outlook-chart-title">13-week cash outlook trend</title>
+		<LazyMotion features={domAnimation}>
+			<m.div
+				animate={{ opacity: 1, y: 0 }}
+				aria-hidden="true"
+				className="h-[245px] w-full"
+				initial={{ opacity: 0, y: 8 }}
+				transition={{ duration: 0.35, ease: "easeOut" }}
+			>
+				<ResponsiveContainer height={CHART_HEIGHT} width="100%">
+					<AreaChart data={chartData} margin={{ bottom: 0, left: 4, right: 8, top: 12 }}>
+						<defs>
+							<linearGradient id="cashOutlookFill" x1="0" x2="0" y1="0" y2="1">
+								<stop offset="0%" stopColor="var(--primary)" stopOpacity="0.45" />
 
-			<defs>
-				<linearGradient id="cashOutlookFill" x1="0" x2="0" y1="0" y2="1">
-					<stop offset="0%" stopColor="var(--primary)" stopOpacity="0.45" />
+								<stop offset="100%" stopColor="var(--primary)" stopOpacity="0.02" />
+							</linearGradient>
+						</defs>
 
-					<stop offset="100%" stopColor="var(--primary)" stopOpacity="0.02" />
-				</linearGradient>
-			</defs>
+						<CartesianGrid stroke="var(--border)" strokeOpacity={0.8} vertical={false} />
 
-			{getBalanceTicks(minimumBalance, maximumBalance).map((tick) => {
-				const yPosition = PADDING_TOP + ((maximumBalance - tick) / balanceRange) * chartAreaHeight;
-
-				return (
-					<g key={tick}>
-						<line
-							stroke="var(--border)"
-							strokeOpacity="0.8"
-							x1={PADDING_LEFT}
-							x2={CHART_WIDTH - PADDING_RIGHT}
-							y1={yPosition}
-							y2={yPosition}
+						<XAxis
+							axisLine={false}
+							dataKey="week"
+							tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+							tickFormatter={formatWeekLabel}
+							tickLine={false}
 						/>
 
-						<text
-							className="fill-muted-foreground font-sans text-xs"
-							textAnchor="end"
-							x={PADDING_LEFT - 10}
-							y={yPosition + 4}
-						>
-							{formatMillions(tick)}
-						</text>
-					</g>
-				);
-			})}
+						<YAxis
+							axisLine={false}
+							domain={[minimumBalance, maximumBalance]}
+							tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+							tickCount={TICK_COUNT}
+							tickFormatter={formatMillions}
+							tickLine={false}
+							width={48}
+						/>
 
-			<path d={areaPath} fill="url(#cashOutlookFill)" />
+						<Tooltip
+							contentStyle={{
+								background: "var(--panel)",
+								border: "1px solid var(--border)",
+								borderRadius: 8,
+								color: "var(--panel-foreground)",
+							}}
+							formatter={formatTooltipCurrency}
+							labelFormatter={formatWeekLabel}
+						/>
 
-			<path d={buildLinePath(points)} fill="none" stroke="var(--primary)" strokeWidth="3" />
-
-			{points.map(({ rowKey, week, xPosition, yPosition }) => (
-				<g key={rowKey}>
-					<circle cx={xPosition} cy={yPosition} fill="var(--primary)" r="4" stroke="var(--shell)" strokeWidth="2" />
-
-					<text
-						className="fill-muted-foreground font-sans text-xs"
-						textAnchor="middle"
-						x={xPosition}
-						y={CHART_HEIGHT - 7}
-					>
-						{week.slice(5)}
-					</text>
-				</g>
-			))}
-		</svg>
+						<Area
+							animationDuration={700}
+							dataKey="balance"
+							dot={{ fill: "var(--primary)", r: 4, stroke: "var(--shell)", strokeWidth: 2 }}
+							fill="url(#cashOutlookFill)"
+							isAnimationActive
+							name="Projected balance"
+							stroke="var(--primary)"
+							strokeWidth={3}
+							type="monotone"
+						/>
+					</AreaChart>
+				</ResponsiveContainer>
+			</m.div>
+		</LazyMotion>
 	);
 };
 
@@ -146,21 +141,14 @@ const CashOutlookChartSummary = ({ chartData }: CashOutlookChartContentProps) =>
 	</table>
 );
 
-function buildLinePath(points: { xPosition: number; yPosition: number }[]) {
-	return points
-		.map(({ xPosition, yPosition }, pointIndex) => `${pointIndex === 0 ? "M" : "L"} ${xPosition} ${yPosition}`)
-		.join(" ");
-}
-
-function getBalanceTicks(minimumBalance: number, maximumBalance: number) {
-	const balanceRange = Math.max(1, maximumBalance - minimumBalance);
-
-	return Array.from(
-		{ length: TICK_COUNT },
-		(_, tickIndex) => maximumBalance - (tickIndex / (TICK_COUNT - 1)) * balanceRange,
-	);
-}
-
 function formatMillions(value: number) {
 	return `$${(value / 1_000_000).toFixed(1)}M`;
+}
+
+function formatTooltipCurrency(value: unknown) {
+	return formatCurrencyDollars(Number(value));
+}
+
+function formatWeekLabel(week: unknown) {
+	return String(week).slice(5);
 }

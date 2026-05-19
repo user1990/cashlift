@@ -22,7 +22,7 @@ export const DashboardChartsSection = ({ chartsReady, dashboard }: DashboardChar
 						<p className="text-s text-muted-foreground">Ending cash balance</p>
 					</div>
 				}
-				eyebrow="13-week cash outlook"
+				label="13-week cash outlook"
 				title="Cash outlook from accounting-style data"
 			/>
 
@@ -30,7 +30,7 @@ export const DashboardChartsSection = ({ chartsReady, dashboard }: DashboardChar
 		</Panel>
 
 		<Panel className="min-h-[365px] p-6">
-			<PanelHeader action={<BudgetLegend />} eyebrow="Team budgets" title="Committed spend by team" />
+			<PanelHeader action={<BudgetLegend />} label="Team budgets" title="Committed spend by team" />
 
 			<SpendMixChart chartData={dashboard.spendChartData} chartsReady={chartsReady} />
 		</Panel>

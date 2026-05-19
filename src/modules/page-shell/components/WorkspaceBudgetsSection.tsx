@@ -12,7 +12,7 @@ export const WorkspaceBudgetsSection = ({ dataset }: WorkspaceBudgetsSectionProp
 		{dataset.teamBudgets.map(({ committedCents, id, monthlyBudgetCents, team }) => (
 			<li key={id}>
 				<Panel as="article">
-					<PanelHeader eyebrow="Team" title={team} />
+					<PanelHeader label="Team" title={team} />
 
 					<dl>
 						<dt className="sr-only">Remaining this month</dt>

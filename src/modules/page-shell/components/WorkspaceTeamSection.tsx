@@ -9,7 +9,7 @@ export const WorkspaceTeamSection = ({ dataset }: WorkspaceTeamSectionProps) => 
 	<div className="grid gap-4 md:grid-cols-3">
 		{dataset.teamMembers.map(({ id, name, role, team }) => (
 			<Panel key={id} as="article" className="min-h-40">
-				<PanelHeader eyebrow={team} title={name} />
+				<PanelHeader label={team} title={name} />
 
 				<p className="inline-flex rounded-md border border-primary-subtle-border bg-primary-subtle px-2 py-1 text-s+ font-medium text-primary">
 					{formatRole(role)}

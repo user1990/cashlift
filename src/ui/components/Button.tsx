@@ -2,11 +2,12 @@
 
 import { cn } from "@/ui/utils/cn";
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+type ButtonProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "className"> & {
 	variant: "primary" | "secondary" | "ghost";
+	className?: string;
 };
 
-export const Button = ({ className, type = "button", variant = "secondary", ...props }: ButtonProps) => (
+export const Button = ({ type = "button", variant = "secondary", className, ...props }: ButtonProps) => (
 	<button
 		className={cn(
 			"inline-flex h-9 items-center justify-center gap-2 rounded-md px-3 text-m font-medium outline-none transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease active:scale-[0.98] motion-reduce:active:scale-100",
