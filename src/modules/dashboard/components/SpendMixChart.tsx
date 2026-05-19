@@ -8,13 +8,15 @@ import { ChartPlaceholder } from "./ChartPlaceholder";
 const CHART_HEIGHT = 245;
 const TICK_COUNT = 4;
 
-const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
-const BarChart = dynamic(() => import("recharts").then((mod) => mod.BarChart), { ssr: false });
-const CartesianGrid = dynamic(() => import("recharts").then((mod) => mod.CartesianGrid), { ssr: false });
-const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
-const YAxis = dynamic(() => import("recharts").then((mod) => mod.YAxis), { ssr: false });
-const Tooltip = dynamic(() => import("recharts").then((mod) => mod.Tooltip), { ssr: false });
-const Bar = dynamic(() => import("recharts").then((mod) => mod.Bar), { ssr: false });
+const createDynamicRechartsComponent = (name: string) =>
+	dynamic(() => import("recharts").then((mod) => mod[name] as React.ComponentType<object>), { ssr: false });
+const ResponsiveContainer = createDynamicRechartsComponent("ResponsiveContainer");
+const BarChart = createDynamicRechartsComponent("BarChart");
+const CartesianGrid = createDynamicRechartsComponent("CartesianGrid");
+const XAxis = createDynamicRechartsComponent("XAxis");
+const YAxis = createDynamicRechartsComponent("YAxis");
+const Tooltip = createDynamicRechartsComponent("Tooltip");
+const Bar = createDynamicRechartsComponent("Bar");
 
 type SpendMixChartProps = {
 	chartData: SpendChartDataPoint[];
