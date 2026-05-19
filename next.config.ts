@@ -26,6 +26,7 @@ const sentryBuildOptions = {
 	// https://www.npmjs.com/package/@sentry/webpack-plugin#options
 	org: "dev-experts",
 	project: "cash-lift",
+	authToken: process.env.SENTRY_AUTH_TOKEN,
 	silent: !process.env.CI,
 	widenClientFileUpload: true,
 	treeshake: {
