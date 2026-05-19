@@ -38,7 +38,7 @@ jobs:
           NODE_ENV: development
 
       - name: Biome
-        run: npx @biomejs/biome check .
+        run: npx biome check .
 
       - name: TypeScript
         run: pnpm exec tsgo --noEmit
