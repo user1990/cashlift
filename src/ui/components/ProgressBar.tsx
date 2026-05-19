@@ -14,19 +14,15 @@ export const ProgressBar = ({ className, label, value }: ProgressBarProps) => (
 			<span className="font-mono text-muted-foreground">{Math.round(formatPercent(value))}%</span>
 		</div>
 
-		<div
+		<progress
 			aria-label={label}
 			aria-valuemax={100}
 			aria-valuemin={0}
 			aria-valuenow={Math.round(formatPercent(value))}
-			className="h-2 overflow-hidden rounded-full bg-panel-muted"
-			role="progressbar"
-		>
-			<div
-				style={{ transform: `scaleX(${formatPercent(value) / 100})` }}
-				className="h-full origin-left rounded-full bg-primary transition-transform duration-150 ease-out motion-reduce:transition-none"
-			/>
-		</div>
+			className="progress-bar h-2 w-full overflow-hidden rounded-full bg-panel-muted"
+			max={100}
+			value={formatPercent(value)}
+		/>
 	</div>
 );
 

@@ -83,28 +83,37 @@ const HeaderActions = () => (
 );
 
 const DesktopNavGroup = ({ group }: { group: NavGroup }) => (
-	<details className="group relative">
-		<summary className="inline-flex h-9 cursor-pointer list-none items-center gap-1 rounded-md px-3 text-m font-medium text-shell-muted outline-none transition-colors duration-150 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
+	<div className="group relative">
+		<button
+			aria-haspopup="true"
+			className="inline-flex h-9 cursor-pointer items-center gap-1 rounded-md px-3 text-m font-medium text-shell-muted outline-none transition-colors duration-150 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
+			type="button"
+		>
 			{group.label}
 
-			<ChevronDown aria-hidden className="size-4 transition-transform duration-150 group-open:rotate-180" />
-		</summary>
+			<ChevronDown
+				aria-hidden
+				className="size-4 transition-transform duration-150 group-hover:rotate-180 group-focus-within:rotate-180"
+			/>
+		</button>
 
-		<div className="absolute left-0 top-full mt-2 w-48 rounded-lg border border-shell-border bg-shell-elevated p-1 shadow-shell">
-			<ul className="grid gap-1">
-				{group.items.map(({ href, label }) => (
-					<li key={href}>
-						<Link
-							className="block rounded-md px-3 py-2 text-m font-medium text-shell-muted outline-none transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground focus-visible:ring-[3px] focus-visible:ring-primary/20"
-							href={href}
-						>
-							{label}
-						</Link>
-					</li>
-				))}
-			</ul>
+		<div className="invisible pointer-events-none absolute left-0 top-full w-48 translate-y-1 pt-2 opacity-0 transition-[opacity,transform] duration-150 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100">
+			<div className="rounded-lg border border-shell-border bg-shell-elevated p-1 shadow-shell">
+				<ul className="grid gap-1">
+					{group.items.map(({ href, label }) => (
+						<li key={href}>
+							<Link
+								className="block rounded-md px-3 py-2 text-m font-medium text-shell-muted outline-none transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground focus-visible:ring-[3px] focus-visible:ring-primary/20"
+								href={href}
+							>
+								{label}
+							</Link>
+						</li>
+					))}
+				</ul>
+			</div>
 		</div>
-	</details>
+	</div>
 );
 
 const MobileNav = () => (
@@ -146,17 +155,21 @@ const MobileNav = () => (
 );
 
 const MobileNavGroup = ({ group }: { group: NavGroup }) => (
-	<div>
-		<p className="text-s+ uppercase tracking-normal text-primary">{group.label}</p>
+	<details className="group">
+		<summary className="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-md px-3 text-s+ uppercase tracking-normal text-primary outline-none transition-colors duration-150 hover:bg-panel/10 focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
+			{group.label}
 
-		<div className="mt-2 grid gap-1">
+			<ChevronDown aria-hidden className="size-4 transition-transform duration-150 group-open:rotate-180" />
+		</summary>
+
+		<div className="mt-2 grid gap-1 pl-3">
 			{group.items.map(({ href, label }) => (
 				<MobileNavLink key={href} href={href}>
 					{label}
 				</MobileNavLink>
 			))}
 		</div>
-	</div>
+	</details>
 );
 
 const MobileNavLink = ({ children, href }: { children: React.ReactNode; href: string }) => (

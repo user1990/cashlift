@@ -2,9 +2,7 @@
 
 import { useClerk, useUser } from "@clerk/nextjs";
 import { ChevronDown } from "lucide-react";
-import * as m from "motion/react-m";
 import Link from "next/link";
-import { Menu, MenuItem, MenuTrigger, Popover } from "react-aria-components";
 import { cn } from "@/ui/utils/cn";
 import { WORKSPACE_NAV_ITEMS } from "./navigation";
 import type { WorkspaceMode, WorkspaceNavItem, WorkspaceSection } from "./types";
@@ -13,11 +11,10 @@ type ClerkUser = NonNullable<ReturnType<typeof useUser>["user"]>;
 
 type WorkspaceSidebarProps = {
 	mode: WorkspaceMode;
-	reducedMotion: boolean | null;
 	section: WorkspaceSection;
 };
 
-export const WorkspaceSidebar = ({ mode, reducedMotion, section }: WorkspaceSidebarProps) => (
+export const WorkspaceSidebar = ({ mode, section }: WorkspaceSidebarProps) => (
 	<aside className="flex min-h-[calc(100vh-2rem)] flex-col rounded-lg border border-white/5 bg-black/30 p-3 shadow-shell backdrop-blur lg:sticky lg:top-4 lg:self-start">
 		<Link className="flex items-center gap-3 px-2 py-3" href="/app">
 			<span className="grid size-10 place-items-center rounded-lg bg-signal-subtle text-signal shadow-primary-glow">
@@ -31,7 +28,7 @@ export const WorkspaceSidebar = ({ mode, reducedMotion, section }: WorkspaceSide
 
 		<nav className="mt-7 grid gap-2" aria-label="Workspace">
 			{WORKSPACE_NAV_ITEMS.map((item) => (
-				<WorkspaceNavLink key={item.href} active={item.section === section} item={item} reducedMotion={reducedMotion} />
+				<WorkspaceNavLink key={item.href} active={item.section === section} item={item} />
 			))}
 		</nav>
 
@@ -44,15 +41,14 @@ export const WorkspaceSidebar = ({ mode, reducedMotion, section }: WorkspaceSide
 type WorkspaceNavLinkProps = {
 	active: boolean;
 	item: WorkspaceNavItem;
-	reducedMotion: boolean | null;
 };
 
-const WorkspaceNavLink = ({ active, item, reducedMotion }: WorkspaceNavLinkProps) => {
+const WorkspaceNavLink = ({ active, item }: WorkspaceNavLinkProps) => {
 	const Icon = item.icon;
 
 	return (
 		<Link aria-current={active ? "page" : undefined} className={getWorkspaceNavLinkClassName(active)} href={item.href}>
-			<WorkspaceActiveIndicator active={active} reducedMotion={reducedMotion} />
+			<WorkspaceActiveIndicator active={active} />
 
 			<Icon aria-hidden className="relative z-10 size-5" />
 
@@ -61,18 +57,12 @@ const WorkspaceNavLink = ({ active, item, reducedMotion }: WorkspaceNavLinkProps
 	);
 };
 
-const WorkspaceActiveIndicator = ({ active, reducedMotion }: { active: boolean; reducedMotion: boolean | null }) => {
+const WorkspaceActiveIndicator = ({ active }: { active: boolean }) => {
 	if (!active) {
 		return null;
 	}
 
-	return (
-		<m.span
-			className="absolute inset-0 rounded-lg border border-primary-subtle-border bg-primary/10"
-			layoutId="workspace-nav-active"
-			transition={getWorkspaceNavActiveTransition(reducedMotion)}
-		/>
-	);
+	return <span className="absolute inset-0 rounded-lg border border-primary-subtle-border bg-primary/10" />;
 };
 
 const WorkspaceAccountMenu = ({ mode }: { mode: WorkspaceMode }) => {
@@ -138,11 +128,8 @@ type AccountMenuShellProps = {
 };
 
 const AccountMenuShell = ({ avatar, description, items, name, signOut }: AccountMenuShellProps) => (
-	<MenuTrigger>
-		<button
-			className="flex w-full items-center gap-3 rounded-lg px-2 py-3 text-left text-shell-foreground transition-colors duration-150 ease hover:bg-white/5"
-			type="button"
-		>
+	<details className="relative">
+		<summary className="flex w-full cursor-pointer list-none items-center gap-3 rounded-lg px-2 py-3 text-left text-shell-foreground transition-colors duration-150 ease hover:bg-white/5 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
 			<span className="grid size-10 shrink-0 place-items-center rounded-full bg-panel-muted text-s+ font-semibold text-shell-foreground">
 				{avatar}
 			</span>
@@ -154,28 +141,22 @@ const AccountMenuShell = ({ avatar, description, items, name, signOut }: Account
 			</span>
 
 			<ChevronDown aria-hidden className="size-4 text-shell-muted" />
-		</button>
+		</summary>
 
-		<Popover
-			className="w-56 rounded-lg border border-shell-border bg-shell-elevated p-1 shadow-shell outline-none"
-			offset={8}
-			placement="top start"
-		>
-			<Menu className="grid gap-1 outline-none">
-				{items.map(({ href, label }) => (
-					<MenuItem key={href} className={menuItemClassName} href={href} textValue={label}>
-						{label}
-					</MenuItem>
-				))}
+		<div className="absolute bottom-full left-0 z-20 mb-2 grid w-56 gap-1 rounded-lg border border-shell-border bg-shell-elevated p-1 shadow-shell">
+			{items.map(({ href, label }) => (
+				<Link key={href} className={menuItemClassName} href={href}>
+					{label}
+				</Link>
+			))}
 
-				{signOut && (
-					<MenuItem className={menuItemClassName} onAction={signOut} textValue="Sign out">
-						Sign out
-					</MenuItem>
-				)}
-			</Menu>
-		</Popover>
-	</MenuTrigger>
+			{signOut && (
+				<button className={menuItemClassName} onClick={signOut} type="button">
+					Sign out
+				</button>
+			)}
+		</div>
+	</details>
 );
 
 const getWorkspaceNavLinkClassName = (active: boolean) =>
@@ -184,11 +165,8 @@ const getWorkspaceNavLinkClassName = (active: boolean) =>
 		active ? "text-primary" : "text-shell-muted hover:bg-white/5 hover:text-shell-foreground",
 	);
 
-const menuItemClassName = ({ isFocusVisible, isHovered }: { isFocusVisible: boolean; isHovered: boolean }) =>
-	cn(
-		"flex cursor-pointer items-center rounded-md px-3 py-2 text-m font-medium text-shell-muted outline-none transition-colors duration-150",
-		(isHovered || isFocusVisible) && "bg-panel-muted text-shell-foreground",
-	);
+const menuItemClassName =
+	"flex cursor-pointer items-center rounded-md px-3 py-2 text-left text-m font-medium text-shell-muted outline-none transition-colors duration-150 hover:bg-panel-muted hover:text-shell-foreground focus-visible:bg-panel-muted focus-visible:text-shell-foreground";
 
 function getInitials(name: string) {
 	return name
@@ -198,15 +176,3 @@ function getInitials(name: string) {
 		.slice(0, 2)
 		.toUpperCase();
 }
-
-const getWorkspaceNavActiveTransition = (reducedMotion: boolean | null) => {
-	if (reducedMotion) {
-		return { duration: 0 } as const;
-	}
-
-	return {
-		duration: 0.2,
-		ease: "easeInOut",
-		type: "tween",
-	} as const;
-};

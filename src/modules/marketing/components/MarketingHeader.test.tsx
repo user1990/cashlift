@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import type { ImageProps } from "next/image";
 import { createElement } from "react";
 import { describe, expect, it, vi } from "vitest";
@@ -21,5 +22,28 @@ describe("MarketingHeader", () => {
 		expect(screen.getAllByRole("link", { name: "Pricing" })).toHaveLength(2);
 		expect(screen.getAllByRole("link", { name: "Customers" })).toHaveLength(2);
 		expect(screen.getAllByRole("link", { name: "Run leak audit" })).toHaveLength(2);
+	});
+
+	it("uses hover triggers on desktop and pressed disclosures on mobile nested groups", async () => {
+		const user = userEvent.setup();
+
+		render(<MarketingHeader />);
+
+		expect(screen.getByRole("button", { name: "Product" })).toHaveAttribute("aria-haspopup", "true");
+
+		const productSummary = screen
+			.getAllByText("Product")
+			.find((element) => element.tagName.toLowerCase() === "summary");
+		const productDetails = productSummary?.closest("details");
+
+		if (!productSummary || !productDetails) {
+			throw new Error("Expected mobile Product navigation group to render as a details disclosure");
+		}
+
+		expect(productDetails).not.toHaveAttribute("open");
+
+		await user.click(productSummary);
+
+		expect(productDetails).toHaveAttribute("open");
 	});
 });

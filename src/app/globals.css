@@ -94,6 +94,28 @@ textarea,
 	touch-action: manipulation;
 }
 
+.progress-bar {
+	appearance: none;
+	border: 0;
+	color: var(--primary);
+	display: block;
+}
+
+.progress-bar::-webkit-progress-bar {
+	background: var(--panel-muted);
+	border-radius: 9999px;
+}
+
+.progress-bar::-webkit-progress-value {
+	background: var(--primary);
+	border-radius: 9999px;
+}
+
+.progress-bar::-moz-progress-bar {
+	background: var(--primary);
+	border-radius: 9999px;
+}
+
 ::selection {
 	background: color-mix(in srgb, var(--primary) 18%, transparent);
 }

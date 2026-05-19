@@ -1,69 +1,14 @@
-"use client";
-
-import dynamic from "next/dynamic";
 import { formatCurrencyDollars } from "@/modules/money/format";
 import type { ForecastChartDataPoint } from "../types";
 import { ChartPlaceholder } from "./ChartPlaceholder";
 
-type CashOutlookChartContentProps = {
-	chartData: ForecastChartDataPoint[];
-};
-
-const CashOutlookChartContent = dynamic<CashOutlookChartContentProps>(
-	async () => {
-		const { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } = await import("recharts");
-
-		return function CashOutlookChartContent({ chartData }: CashOutlookChartContentProps) {
-			return (
-				<ResponsiveContainer height={245} minWidth={0} width="100%">
-					<AreaChart data={chartData} margin={{ bottom: 0, left: 0, right: 8, top: 12 }}>
-						<defs>
-							<linearGradient id="cashOutlookFill" x1="0" x2="0" y1="0" y2="1">
-								<stop offset="0%" stopColor="var(--primary)" stopOpacity={0.45} />
-
-								<stop offset="100%" stopColor="var(--primary)" stopOpacity={0.02} />
-							</linearGradient>
-						</defs>
-
-						<CartesianGrid stroke="var(--border)" strokeOpacity={0.8} vertical={false} />
-
-						<XAxis
-							axisLine={false}
-							dataKey="week"
-							tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
-							tickFormatter={(value: string) => value.slice(5)}
-							tickLine={false}
-						/>
-
-						<YAxis
-							axisLine={false}
-							tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
-							tickFormatter={(value: number) => `$${(value / 1_000_000).toFixed(1)}M`}
-							tickLine={false}
-							width={52}
-						/>
-
-						<Tooltip formatter={(value) => [`$${value}`, "Projected"]} />
-
-						<Area
-							dataKey="balance"
-							dot={{ fill: "var(--primary)", r: 4, stroke: "var(--shell)", strokeWidth: 2 }}
-							fill="url(#cashOutlookFill)"
-							fillOpacity={1}
-							stroke="var(--primary)"
-							strokeWidth={3}
-							type="monotone"
-						/>
-					</AreaChart>
-				</ResponsiveContainer>
-			);
-		};
-	},
-	{
-		loading: () => <ChartPlaceholder />,
-		ssr: false,
-	},
-);
+const CHART_HEIGHT = 245;
+const CHART_WIDTH = 640;
+const PADDING_BOTTOM = 28;
+const PADDING_LEFT = 54;
+const PADDING_RIGHT = 10;
+const PADDING_TOP = 14;
+const TICK_COUNT = 4;
 
 type CashOutlookChartProps = {
 	chartData: ForecastChartDataPoint[];
@@ -80,6 +25,94 @@ export const CashOutlookChart = ({ chartData, chartsReady }: CashOutlookChartPro
 	) : (
 		<ChartPlaceholder />
 	);
+
+type CashOutlookChartContentProps = {
+	chartData: ForecastChartDataPoint[];
+};
+
+const CashOutlookChartContent = ({ chartData }: CashOutlookChartContentProps) => {
+	const balances = chartData.map(({ balance }) => balance);
+	const minimumBalance = Math.min(...balances);
+	const maximumBalance = Math.max(...balances);
+	const chartAreaWidth = CHART_WIDTH - PADDING_LEFT - PADDING_RIGHT;
+	const chartAreaHeight = CHART_HEIGHT - PADDING_TOP - PADDING_BOTTOM;
+	const balanceRange = Math.max(1, maximumBalance - minimumBalance);
+	const points = chartData.map((point, pointIndex) => {
+		const xPosition =
+			PADDING_LEFT + (chartData.length <= 1 ? 0 : (pointIndex / (chartData.length - 1)) * chartAreaWidth);
+		const yPosition = PADDING_TOP + ((maximumBalance - point.balance) / balanceRange) * chartAreaHeight;
+
+		return { ...point, xPosition, yPosition };
+	});
+	const areaPath = `${buildLinePath(points)} L ${points.at(-1)?.xPosition ?? PADDING_LEFT} ${
+		CHART_HEIGHT - PADDING_BOTTOM
+	} L ${PADDING_LEFT} ${CHART_HEIGHT - PADDING_BOTTOM} Z`;
+
+	return (
+		<svg
+			aria-labelledby="cash-outlook-chart-title"
+			className="h-[245px] w-full overflow-visible"
+			focusable="false"
+			role="img"
+			viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
+		>
+			<title id="cash-outlook-chart-title">13-week cash outlook trend</title>
+
+			<defs>
+				<linearGradient id="cashOutlookFill" x1="0" x2="0" y1="0" y2="1">
+					<stop offset="0%" stopColor="var(--primary)" stopOpacity="0.45" />
+
+					<stop offset="100%" stopColor="var(--primary)" stopOpacity="0.02" />
+				</linearGradient>
+			</defs>
+
+			{getBalanceTicks(minimumBalance, maximumBalance).map((tick) => {
+				const yPosition = PADDING_TOP + ((maximumBalance - tick) / balanceRange) * chartAreaHeight;
+
+				return (
+					<g key={tick}>
+						<line
+							stroke="var(--border)"
+							strokeOpacity="0.8"
+							x1={PADDING_LEFT}
+							x2={CHART_WIDTH - PADDING_RIGHT}
+							y1={yPosition}
+							y2={yPosition}
+						/>
+
+						<text
+							className="fill-muted-foreground font-sans text-xs"
+							textAnchor="end"
+							x={PADDING_LEFT - 10}
+							y={yPosition + 4}
+						>
+							{formatMillions(tick)}
+						</text>
+					</g>
+				);
+			})}
+
+			<path d={areaPath} fill="url(#cashOutlookFill)" />
+
+			<path d={buildLinePath(points)} fill="none" stroke="var(--primary)" strokeWidth="3" />
+
+			{points.map(({ rowKey, week, xPosition, yPosition }) => (
+				<g key={rowKey}>
+					<circle cx={xPosition} cy={yPosition} fill="var(--primary)" r="4" stroke="var(--shell)" strokeWidth="2" />
+
+					<text
+						className="fill-muted-foreground font-sans text-xs"
+						textAnchor="middle"
+						x={xPosition}
+						y={CHART_HEIGHT - 7}
+					>
+						{week.slice(5)}
+					</text>
+				</g>
+			))}
+		</svg>
+	);
+};
 
 const CashOutlookChartSummary = ({ chartData }: CashOutlookChartContentProps) => (
 	<table className="sr-only">
@@ -112,3 +145,22 @@ const CashOutlookChartSummary = ({ chartData }: CashOutlookChartContentProps) =>
 		</tbody>
 	</table>
 );
+
+function buildLinePath(points: { xPosition: number; yPosition: number }[]) {
+	return points
+		.map(({ xPosition, yPosition }, pointIndex) => `${pointIndex === 0 ? "M" : "L"} ${xPosition} ${yPosition}`)
+		.join(" ");
+}
+
+function getBalanceTicks(minimumBalance: number, maximumBalance: number) {
+	const balanceRange = Math.max(1, maximumBalance - minimumBalance);
+
+	return Array.from(
+		{ length: TICK_COUNT },
+		(_, tickIndex) => maximumBalance - (tickIndex / (TICK_COUNT - 1)) * balanceRange,
+	);
+}
+
+function formatMillions(value: number) {
+	return `$${(value / 1_000_000).toFixed(1)}M`;
+}

@@ -70,6 +70,8 @@ skills/
 
 docs/
 ├── guide.md
+├── styling.md
+├── testing.md
 └── web-interface-guidelines.md
 ```
 

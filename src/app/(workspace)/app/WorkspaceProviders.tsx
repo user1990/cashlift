@@ -1,6 +1,5 @@
 "use client";
 
-import { domAnimation, LazyMotion as LazyMotionProvider } from "motion/react";
 import { NextIntlClientProvider } from "next-intl";
 import { AuthProvider } from "@/services/clerk/provider";
 import messages from "@/services/i18n/messages/en.json";
@@ -15,9 +14,7 @@ export const WorkspaceProviders = ({ children }: WorkspaceProvidersProps) => (
 	<AuthProvider>
 		<NextIntlClientProvider locale="en" messages={messages}>
 			<QueryProvider>
-				<LazyMotionProvider features={domAnimation} strict>
-					{children}
-				</LazyMotionProvider>
+				{children}
 
 				<ScrollToTopButton />
 			</QueryProvider>

@@ -10,7 +10,9 @@ export const createContentSecurityPolicy = (nonce: string) =>
 	[
 		"default-src 'self'",
 		`script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDevelopment() ? " 'unsafe-eval'" : ""}`,
-		`style-src 'self' 'nonce-${nonce}'${isDevelopment() ? " 'unsafe-inline'" : ""}`,
+		`style-src 'self' 'nonce-${nonce}'`,
+		...(isDevelopment() ? ["style-src-elem 'self' 'unsafe-inline'"] : []),
+		"style-src-attr 'none'",
 		"img-src 'self' blob: data: https:",
 		"font-src 'self'",
 		"connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://*.supabase.co https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.vercel-insights.com",
