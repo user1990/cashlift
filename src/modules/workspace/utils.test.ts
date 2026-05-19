@@ -27,22 +27,27 @@ describe("company finance calculations", () => {
 		expect(getVendorLeakSavings(financialDatasetFixture.subscriptions)).toEqual(261_000);
 	});
 
-	it("identifies vendor leaks from unused, duplicate, and low-use trial subscriptions", () => {
-		expect(financialDatasetFixture.subscriptions.filter(isVendorLeak).map((subscription) => subscription.id)).toEqual([
-			"subscription-notion",
-			"subscription-survey",
-			"subscription-ai-notes",
-		]);
+	it("identifies vendor leaks from unused, duplicate, and low-use trial subscriptions (single iteration)", () => {
+		const expectedIds = ["subscription-notion", "subscription-survey", "subscription-ai-notes"];
+		const resultIds = [];
+		for (const subscription of financialDatasetFixture.subscriptions) {
+			if (isVendorLeak(subscription)) {
+				resultIds.push(subscription.id);
+			}
+		}
+		expect(resultIds).toEqual(expectedIds);
 	});
 
-	it("identifies overdue invoices without treating paid historical invoices as risk", () => {
+	it("identifies overdue invoices without treating paid historical invoices as risk (single iteration)", () => {
 		const date = new Date("2026-05-09");
-
-		expect(
-			financialDatasetFixture.invoices
-				.filter((invoice) => isInvoiceOverdue(invoice, date))
-				.map((invoice) => invoice.id),
-		).toEqual(["invoice-northstar"]);
+		const expectedIds = ["invoice-northstar"];
+		const resultIds = [];
+		for (const invoice of financialDatasetFixture.invoices) {
+			if (isInvoiceOverdue(invoice, date)) {
+				resultIds.push(invoice.id);
+			}
+		}
+		expect(resultIds).toEqual(expectedIds);
 	});
 
 	it("checks due dates inside future and overdue windows", () => {
