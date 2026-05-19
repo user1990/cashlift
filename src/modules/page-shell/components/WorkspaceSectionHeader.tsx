@@ -14,8 +14,8 @@ export const WorkspaceSectionHeader = ({ section }: WorkspaceSectionHeaderProps)
 		</div>
 
 		<Link
-			className="inline-flex h-9 items-center justify-center rounded-md border border-primary bg-primary px-3 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
 			href="/demo"
+			className="inline-flex h-9 items-center justify-center rounded-md border border-primary bg-primary px-3 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
 		>
 			Run leak audit
 		</Link>

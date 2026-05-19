@@ -13,7 +13,7 @@ type DashboardQueuesSectionProps = {
 export const DashboardQueuesSection = ({ dashboard }: DashboardQueuesSectionProps) => (
 	<section className="grid gap-4 xl:grid-cols-3">
 		<Panel className="min-h-[348px] p-5">
-			<PanelHeader eyebrow="Invoices" title="Collection queue before buffer risk" />
+			<PanelHeader label="Invoices" title="Collection queue before buffer risk" />
 
 			<ul className="space-y-3">
 				{dashboard.overdueInvoices.slice(0, 1).map(({ amountCents, client, collectionProbability, id, owner }) => (
@@ -43,15 +43,15 @@ export const DashboardQueuesSection = ({ dashboard }: DashboardQueuesSectionProp
 		</Panel>
 
 		<Panel className="min-h-[348px] p-5">
-			<PanelHeader eyebrow="Vendor leaks" title="Renewals to cut first" />
+			<PanelHeader label="Vendor leaks" title="Renewals to cut first" />
 
-			<SubscriptionLeakList className="space-y-3" items={dashboard.vendorLeaks.slice(0, 2)} />
+			<SubscriptionLeakList items={dashboard.vendorLeaks.slice(0, 2)} className="space-y-3" />
 
 			<DashboardPanelLink href="/app/vendors">View all vendor leaks</DashboardPanelLink>
 		</Panel>
 
 		<Panel className="min-h-[348px] p-5">
-			<PanelHeader eyebrow="Budget guardrails" title="Team limits" />
+			<PanelHeader label="Budget guardrails" title="Team limits" />
 
 			<ul className="space-y-4">
 				{dashboard.budgetRows.slice(0, 3).map(({ id, remainingCents, team, usagePercent }) => (
@@ -79,8 +79,8 @@ type DashboardPanelLinkProps = {
 
 const DashboardPanelLink = ({ children, href }: DashboardPanelLinkProps) => (
 	<Link
-		className="mt-6 flex h-11 items-center justify-between rounded-lg bg-panel-muted px-4 text-m font-semibold text-panel-foreground transition-colors duration-150 ease hover:bg-primary-subtle hover:text-primary"
 		href={href}
+		className="mt-6 flex h-11 items-center justify-between rounded-lg bg-panel-muted px-4 text-m font-semibold text-panel-foreground transition-colors duration-150 ease hover:bg-primary-subtle hover:text-primary"
 	>
 		{children}
 

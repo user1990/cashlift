@@ -15,19 +15,22 @@ permissions:
   checks: write
   pull-requests: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   verify:
     name: Lint, types, unit tests, fallow, build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: 'pnpm'
@@ -38,7 +41,7 @@ jobs:
           NODE_ENV: development
 
       - name: Biome
-        run: npx @biomejs/biome check .
+        run: npx biome check .
 
       - name: TypeScript
         run: pnpm exec tsgo --noEmit
@@ -47,7 +50,7 @@ jobs:
         run: pnpm test
 
       - name: Fallow
-        run: npx fallow || pnpm run fallow
+        run: pnpm run fallow
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

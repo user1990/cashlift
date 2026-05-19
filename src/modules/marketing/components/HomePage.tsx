@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ShellContainer } from "@/modules/page-shell/components/ShellContainer";
 import { ShellSection } from "@/modules/page-shell/components/ShellSection";
 import { Panel } from "@/ui/components/Panel";
-import { Reveal } from "@/ui/components/Reveal";
 import { FEATURE_CARDS, PROOF_POINTS } from "../content";
 import { MarketingIconCard } from "./MarketingIconCard";
 
@@ -28,44 +27,36 @@ export const HomePage = () => (
 
 			<div className="relative mx-auto grid min-h-[82svh] max-w-[1180px] items-center gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_0.82fr] lg:px-8">
 				<div>
-					<Reveal duration={0.24}>
-						<p className="text-s+ uppercase tracking-normal text-primary">Cash-aware spend decisions</p>
-					</Reveal>
+					<p className="text-s+ uppercase tracking-normal text-primary">Cash-aware spend decisions</p>
 
-					<Reveal delay={0.06} duration={0.24}>
-						<h1 className="mt-4 max-w-3xl text-6xl+ tracking-normal text-shell-foreground sm:text-7xl+">
-							Approve spend, chase cash, and prevent leaks before money leaves.
-						</h1>
-					</Reveal>
+					<h1 className="mt-4 max-w-3xl text-6xl+ tracking-normal text-shell-foreground sm:text-7xl+">
+						Approve spend, chase cash, and prevent leaks before money leaves.
+					</h1>
 
-					<Reveal delay={0.12} duration={0.24}>
-						<p className="mt-5 max-w-2xl text-xl leading-8 text-shell-muted">
-							CashLift gives service firms one daily command center for cash actions: approvals, receivables, vendor
-							leaks, budgets, and runway.
-						</p>
-					</Reveal>
+					<p className="mt-5 max-w-2xl text-xl leading-8 text-shell-muted">
+						CashLift gives service firms one daily command center for cash actions: approvals, receivables, vendor
+						leaks, budgets, and runway.
+					</p>
 
-					<Reveal delay={0.18} duration={0.24}>
-						<div className="mt-8 flex flex-wrap items-center gap-3">
-							<Link
-								className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-primary bg-primary px-4 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
-								href="/demo"
-							>
-								Run leak audit
-								<ArrowRight aria-hidden className="size-4" />
-							</Link>
+					<div className="mt-8 flex flex-wrap items-center gap-3">
+						<Link
+							href="/demo"
+							className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-primary bg-primary px-4 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
+						>
+							Run leak audit
+							<ArrowRight aria-hidden className="size-4" />
+						</Link>
 
-							<Link
-								className="inline-flex h-11 items-center justify-center rounded-md border border-shell-border bg-shell-elevated/80 px-4 text-m font-medium text-shell-foreground transition-[border-color,color] duration-150 ease hover:border-primary-subtle-border hover:text-primary"
-								href="/app"
-							>
-								Open demo app
-							</Link>
-						</div>
-					</Reveal>
+						<Link
+							href="/app"
+							className="inline-flex h-11 items-center justify-center rounded-md border border-shell-border bg-shell-elevated/80 px-4 text-m font-medium text-shell-foreground transition-[border-color,color] duration-150 ease hover:border-primary-subtle-border hover:text-primary"
+						>
+							Open demo app
+						</Link>
+					</div>
 				</div>
 
-				<Reveal className="self-start" delay={0.24} duration={0.24}>
+				<div className="self-start">
 					<Panel variant="glass">
 						<div className="mb-4">
 							<p className="mb-1 text-2xs+ uppercase tracking-normal text-primary">Today&apos;s CashLift</p>
@@ -94,7 +85,7 @@ export const HomePage = () => (
 							))}
 						</ul>
 					</Panel>
-				</Reveal>
+				</div>
 			</div>
 		</section>
 

@@ -24,7 +24,7 @@ export const WorkspaceState = ({ message, section, title }: WorkspaceStateProps)
 				<WorkspaceSectionHeader section={section} />
 
 				<Panel>
-					<PanelHeader eyebrow="Status" title={title} />
+					<PanelHeader label="Status" title={title} />
 
 					<p className="text-m leading-6 text-muted-foreground">{message}</p>
 				</Panel>

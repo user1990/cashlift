@@ -94,25 +94,35 @@ textarea,
 	touch-action: manipulation;
 }
 
+.progress-bar {
+	appearance: none;
+	border: 0;
+	color: var(--primary);
+	display: block;
+}
+
+.progress-bar::-webkit-progress-bar {
+	background: var(--panel-muted);
+	border-radius: 9999px;
+}
+
+.progress-bar::-webkit-progress-value {
+	background: var(--primary);
+	border-radius: 9999px;
+}
+
+.progress-bar::-moz-progress-bar {
+	background: var(--primary);
+	border-radius: 9999px;
+}
+
 ::selection {
 	background: color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
 .hero-ambient {
-	animation: cashlift-hero-drift 18s ease-in-out infinite alternate;
 	transform: scale(1.03);
 	transform-origin: center;
-	will-change: transform;
-}
-
-@keyframes cashlift-hero-drift {
-	from {
-		transform: scale(1.03) translate3d(0, 0, 0);
-	}
-
-	to {
-		transform: scale(1.06) translate3d(-1.2%, -0.8%, 0);
-	}
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -130,8 +140,6 @@ textarea,
 	}
 
 	.hero-ambient {
-		animation: none;
 		transform: none;
-		will-change: auto;
 	}
 }

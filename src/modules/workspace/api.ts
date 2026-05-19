@@ -1,5 +1,5 @@
-import type { FinancialDataset } from "./types";
+import type { FinancialDataset, WorkspaceDatasetScope } from "./types";
 
 export type FinanceRepository = {
-	getDashboardDataset(userId: string, accessToken: string): Promise<FinancialDataset>;
+	getWorkspaceDataset(userId: string, accessToken: string, scope: WorkspaceDatasetScope): Promise<FinancialDataset>;
 };

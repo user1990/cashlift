@@ -1,69 +1,20 @@
-"use client";
-
+import { domAnimation, LazyMotion } from "motion/react";
+import * as m from "motion/react-m";
 import dynamic from "next/dynamic";
 import { formatCurrencyDollars } from "@/modules/money/format";
 import type { ForecastChartDataPoint } from "../types";
 import { ChartPlaceholder } from "./ChartPlaceholder";
 
-type CashOutlookChartContentProps = {
-	chartData: ForecastChartDataPoint[];
-};
+const CHART_HEIGHT = 245;
+const TICK_COUNT = 4;
 
-const CashOutlookChartContent = dynamic<CashOutlookChartContentProps>(
-	async () => {
-		const { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } = await import("recharts");
-
-		return function CashOutlookChartContent({ chartData }: CashOutlookChartContentProps) {
-			return (
-				<ResponsiveContainer height={245} minWidth={0} width="100%">
-					<AreaChart data={chartData} margin={{ bottom: 0, left: 0, right: 8, top: 12 }}>
-						<defs>
-							<linearGradient id="cashOutlookFill" x1="0" x2="0" y1="0" y2="1">
-								<stop offset="0%" stopColor="var(--primary)" stopOpacity={0.45} />
-
-								<stop offset="100%" stopColor="var(--primary)" stopOpacity={0.02} />
-							</linearGradient>
-						</defs>
-
-						<CartesianGrid stroke="var(--border)" strokeOpacity={0.8} vertical={false} />
-
-						<XAxis
-							axisLine={false}
-							dataKey="week"
-							tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
-							tickFormatter={(value: string) => value.slice(5)}
-							tickLine={false}
-						/>
-
-						<YAxis
-							axisLine={false}
-							tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
-							tickFormatter={(value: number) => `$${(value / 1_000_000).toFixed(1)}M`}
-							tickLine={false}
-							width={52}
-						/>
-
-						<Tooltip formatter={(value) => [`$${value}`, "Projected"]} />
-
-						<Area
-							dataKey="balance"
-							dot={{ fill: "var(--primary)", r: 4, stroke: "var(--shell)", strokeWidth: 2 }}
-							fill="url(#cashOutlookFill)"
-							fillOpacity={1}
-							stroke="var(--primary)"
-							strokeWidth={3}
-							type="monotone"
-						/>
-					</AreaChart>
-				</ResponsiveContainer>
-			);
-		};
-	},
-	{
-		loading: () => <ChartPlaceholder />,
-		ssr: false,
-	},
-);
+const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
+const AreaChart = dynamic(() => import("recharts").then((mod) => mod.AreaChart), { ssr: false });
+const Area = dynamic(() => import("recharts").then((mod) => mod.Area), { ssr: false });
+const CartesianGrid = dynamic(() => import("recharts").then((mod) => mod.CartesianGrid), { ssr: false });
+const Tooltip = dynamic(() => import("recharts").then((mod) => mod.Tooltip), { ssr: false });
+const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
+const YAxis = dynamic(() => import("recharts").then((mod) => mod.YAxis), { ssr: false });
 
 type CashOutlookChartProps = {
 	chartData: ForecastChartDataPoint[];
@@ -80,6 +31,83 @@ export const CashOutlookChart = ({ chartData, chartsReady }: CashOutlookChartPro
 	) : (
 		<ChartPlaceholder />
 	);
+
+type CashOutlookChartContentProps = {
+	chartData: ForecastChartDataPoint[];
+};
+
+const CashOutlookChartContent = ({ chartData }: CashOutlookChartContentProps) => {
+	const balances = chartData.map(({ balance }) => balance);
+	const minimumBalance = Math.min(...balances);
+	const maximumBalance = Math.max(...balances);
+
+	return (
+		<LazyMotion features={domAnimation}>
+			<m.div
+				animate={{ opacity: 1, y: 0 }}
+				aria-hidden="true"
+				className="h-[245px] w-full"
+				initial={{ opacity: 0, y: 8 }}
+				transition={{ duration: 0.35, ease: "easeOut" }}
+			>
+				<ResponsiveContainer height={CHART_HEIGHT} width="100%">
+					<AreaChart data={chartData} margin={{ bottom: 0, left: 4, right: 8, top: 12 }}>
+						<defs>
+							<linearGradient id="cashOutlookFill" x1="0" x2="0" y1="0" y2="1">
+								<stop offset="0%" stopColor="var(--primary)" stopOpacity="0.45" />
+
+								<stop offset="100%" stopColor="var(--primary)" stopOpacity="0.02" />
+							</linearGradient>
+						</defs>
+
+						<CartesianGrid stroke="var(--border)" strokeOpacity={0.8} vertical={false} />
+
+						<XAxis
+							axisLine={false}
+							dataKey="week"
+							tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+							tickFormatter={formatWeekLabel}
+							tickLine={false}
+						/>
+
+						<YAxis
+							axisLine={false}
+							domain={[minimumBalance, maximumBalance]}
+							tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+							tickCount={TICK_COUNT}
+							tickFormatter={formatMillions}
+							tickLine={false}
+							width={48}
+						/>
+
+						<Tooltip
+							contentStyle={{
+								background: "var(--panel)",
+								border: "1px solid var(--border)",
+								borderRadius: 8,
+								color: "var(--panel-foreground)",
+							}}
+							formatter={formatTooltipCurrency}
+							labelFormatter={formatWeekLabel}
+						/>
+
+						<Area
+							animationDuration={700}
+							dataKey="balance"
+							dot={{ fill: "var(--primary)", r: 4, stroke: "var(--shell)", strokeWidth: 2 }}
+							fill="url(#cashOutlookFill)"
+							isAnimationActive
+							name="Projected balance"
+							stroke="var(--primary)"
+							strokeWidth={3}
+							type="monotone"
+						/>
+					</AreaChart>
+				</ResponsiveContainer>
+			</m.div>
+		</LazyMotion>
+	);
+};
 
 const CashOutlookChartSummary = ({ chartData }: CashOutlookChartContentProps) => (
 	<table className="sr-only">
@@ -112,3 +140,15 @@ const CashOutlookChartSummary = ({ chartData }: CashOutlookChartContentProps) =>
 		</tbody>
 	</table>
 );
+
+function formatMillions(value: number) {
+	return `$${(value / 1_000_000).toFixed(1)}M`;
+}
+
+function formatTooltipCurrency(value: unknown) {
+	return formatCurrencyDollars(Number(value));
+}
+
+function formatWeekLabel(week: unknown) {
+	return String(week).slice(5);
+}

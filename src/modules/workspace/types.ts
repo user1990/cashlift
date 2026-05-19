@@ -16,6 +16,15 @@ export type { Subscription, SubscriptionStatus } from "@/modules/subscriptions/t
 export type { VendorBill, VendorBillStatus } from "@/modules/vendors/types";
 
 export type CompanyRole = "owner-finance" | "manager" | "employee";
+export type WorkspaceDatasetScope =
+	| "approvals"
+	| "budgets"
+	| "cash"
+	| "invoices"
+	| "overview"
+	| "settings"
+	| "team"
+	| "vendors";
 
 export type CompanyProfile = {
 	companyId: string;

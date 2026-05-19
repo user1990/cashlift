@@ -9,20 +9,21 @@ import {
 } from "react-aria-components";
 import { cn } from "@/ui/utils/cn";
 
-type TextFieldProps = RACTextFieldProps & {
+type TextFieldProps = Omit<RACTextFieldProps, "className"> & {
 	label: string;
 	errorMessage?: string;
 	invalid?: boolean;
 	placeholder?: string;
+	className?: string;
 };
 
-export const TextField = ({ className, errorMessage, invalid, label, placeholder, ...props }: TextFieldProps) => (
+export const TextField = ({ errorMessage, invalid, label, placeholder, className, ...props }: TextFieldProps) => (
 	<RACTextField
+		isInvalid={invalid}
 		className={cn(
 			"space-y-1.5 [&:has(input[data-invalid])_input]:border-warning [&:has(input[data-invalid])_input]:focus:border-warning [&:has(input[data-invalid])_input]:focus:ring-warning/20",
 			className,
 		)}
-		isInvalid={invalid}
 		{...props}
 	>
 		<Label className="text-s font-medium text-panel-foreground">{label}</Label>

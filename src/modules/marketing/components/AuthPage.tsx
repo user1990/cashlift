@@ -36,7 +36,7 @@ export const AuthPage = ({ mode }: AuthPageProps) => {
 		<main id="main-content" className="min-h-screen bg-shell px-4 py-10 text-shell-foreground sm:px-6 lg:px-8">
 			<div className="mx-auto grid max-w-[1120px] gap-8 lg:grid-cols-[1fr_0.78fr] lg:items-center">
 				<div>
-					<Link className="mb-12 inline-flex items-center gap-3" href="/">
+					<Link href="/" className="mb-12 inline-flex items-center gap-3">
 						<span className="grid size-10 place-items-center rounded-lg bg-signal-subtle text-signal shadow-primary-glow">
 							<span className="size-6 rounded-[6px] bg-signal [clip-path:polygon(50%_0,100%_100%,50%_78%,0_100%)]" />
 						</span>
@@ -56,15 +56,15 @@ export const AuthPage = ({ mode }: AuthPageProps) => {
 					</p>
 
 					<Link
-						className="mt-8 inline-flex h-11 items-center justify-center rounded-md border border-primary bg-primary px-4 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
 						href="/app"
+						className="mt-8 inline-flex h-11 items-center justify-center rounded-md border border-primary bg-primary px-4 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
 					>
 						Continue to demo workspace
 					</Link>
 				</div>
 
 				<Panel className="p-6">
-					<PanelHeader eyebrow="Demo credentials" title={content.panelTitle} />
+					<PanelHeader label="Demo credentials" title={content.panelTitle} />
 
 					<LeadCaptureForm buttonLabel={content.buttonLabel} />
 				</Panel>

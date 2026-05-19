@@ -11,10 +11,10 @@ type WorkspaceVendorsSectionProps = {
 export const WorkspaceVendorsSection = ({ dataset }: WorkspaceVendorsSectionProps) => (
 	<Panel className="@container">
 		<PanelHeader
-			eyebrow="Leaks"
+			label="Leaks"
 			title={`${formatCurrency(getVendorLeakSavings(dataset.subscriptions))} monthly vendor savings`}
 		/>
 
-		<SubscriptionLeakList className="grid gap-3 @md:grid-cols-2" items={dataset.subscriptions} />
+		<SubscriptionLeakList items={dataset.subscriptions} className="grid gap-3 @md:grid-cols-2" />
 	</Panel>
 );

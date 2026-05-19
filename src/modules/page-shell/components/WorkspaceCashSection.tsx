@@ -9,7 +9,7 @@ type WorkspaceCashSectionProps = {
 export const WorkspaceCashSection = ({ dataset }: WorkspaceCashSectionProps) => (
 	<div className="grid gap-4 md:grid-cols-3">
 		<Panel>
-			<PanelHeader eyebrow="Cash" title="Available balance" />
+			<PanelHeader label="Cash" title="Available balance" />
 
 			<dl>
 				<dt className="sr-only">Available balance</dt>
@@ -21,7 +21,7 @@ export const WorkspaceCashSection = ({ dataset }: WorkspaceCashSectionProps) => 
 		</Panel>
 
 		<Panel>
-			<PanelHeader eyebrow="Buffer" title="Target reserve" />
+			<PanelHeader label="Buffer" title="Target reserve" />
 
 			<dl>
 				<dt className="sr-only">Target reserve</dt>
@@ -33,7 +33,7 @@ export const WorkspaceCashSection = ({ dataset }: WorkspaceCashSectionProps) => 
 		</Panel>
 
 		<Panel>
-			<PanelHeader eyebrow="Payroll" title="Monthly payroll" />
+			<PanelHeader label="Payroll" title="Monthly payroll" />
 
 			<dl>
 				<dt className="sr-only">Monthly payroll</dt>

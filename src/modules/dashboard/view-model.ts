@@ -98,6 +98,8 @@ const withCashImpact = (request: SpendRequest, dataset: FinancialDataset) => ({
 	cashAfterApprovalCents: getSpendRequestCashImpact(request, dataset),
 });
 
+const dateRangeFormatter = new Intl.DateTimeFormat("en-US", { day: "numeric", month: "short" });
+
 function getDateRangeLabel(forecast: FinancialDataset["forecast"]) {
 	if (forecast.length === 0) {
 		return "Current period";
@@ -105,9 +107,8 @@ function getDateRangeLabel(forecast: FinancialDataset["forecast"]) {
 
 	const startDate = new Date(`${forecast[0].date}T00:00:00`);
 	const endDate = new Date(`${forecast[forecast.length - 1].date}T00:00:00`);
-	const formatter = new Intl.DateTimeFormat("en-US", { day: "numeric", month: "short" });
 
-	return `${formatter.format(startDate)} - ${formatter.format(endDate)}, ${endDate.getFullYear()}`;
+	return `${dateRangeFormatter.format(startDate)} - ${dateRangeFormatter.format(endDate)}, ${endDate.getFullYear()}`;
 }
 
 function getDefaultDashboardDate(dataset: FinancialDataset) {

@@ -1,22 +1,59 @@
-"use client";
-
+import { domAnimation, LazyMotion } from "motion/react";
+import * as m from "motion/react-m";
 import dynamic from "next/dynamic";
+import type { ComponentType } from "react";
 import { formatCurrencyDollars } from "@/modules/money/format";
 import type { SpendChartDataPoint } from "../types";
 import { ChartPlaceholder } from "./ChartPlaceholder";
+
+const CHART_HEIGHT = 245;
+const TICK_COUNT = 4;
+
+const createDynamicRechartsComponent = <T extends keyof typeof import("recharts")>(name: T) =>
+	// biome-ignore lint/suspicious/noExplicitAny: Recharts components have varying prop shapes; ComponentType<any> is required for dynamic() compatibility
+	dynamic(() => import("recharts").then((mod) => mod[name] as ComponentType<any>), { ssr: false });
+const ResponsiveContainer = createDynamicRechartsComponent("ResponsiveContainer");
+const BarChart = createDynamicRechartsComponent("BarChart");
+const CartesianGrid = createDynamicRechartsComponent("CartesianGrid");
+const XAxis = createDynamicRechartsComponent("XAxis");
+const YAxis = createDynamicRechartsComponent("YAxis");
+const Tooltip = createDynamicRechartsComponent("Tooltip");
+const Bar = createDynamicRechartsComponent("Bar");
+
+type SpendMixChartProps = {
+	chartData: SpendChartDataPoint[];
+	chartsReady: boolean;
+};
+
+export const SpendMixChart = ({ chartData, chartsReady }: SpendMixChartProps) =>
+	chartsReady ? (
+		<>
+			<SpendMixChartSummary chartData={chartData} />
+
+			<SpendMixChartContent chartData={chartData} />
+		</>
+	) : (
+		<ChartPlaceholder />
+	);
 
 type SpendMixChartContentProps = {
 	chartData: SpendChartDataPoint[];
 };
 
-const SpendMixChartContent = dynamic<SpendMixChartContentProps>(
-	async () => {
-		const { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } = await import("recharts");
+const SpendMixChartContent = ({ chartData }: SpendMixChartContentProps) => {
+	const maximumValue = Math.max(...chartData.flatMap(({ remaining, used }) => [remaining, used]), 1);
 
-		return function SpendMixChartContent({ chartData }: SpendMixChartContentProps) {
-			return (
-				<ResponsiveContainer height={245} minWidth={0} width="100%">
-					<BarChart barGap={12} barSize={44} data={chartData} margin={{ bottom: 0, left: 0, right: 0, top: 12 }}>
+	return (
+		<LazyMotion features={domAnimation}>
+			<m.div
+				animate={{ opacity: 1, y: 0 }}
+				aria-hidden="true"
+				className="h-[245px] w-full"
+				initial={{ opacity: 0, y: 8 }}
+				transition={{ duration: 0.35, ease: "easeOut" }}
+			>
+				<ResponsiveContainer height={CHART_HEIGHT} width="100%">
+					<BarChart data={chartData} margin={{ bottom: 0, left: 4, right: 8, top: 12 }}>
 						<defs>
 							<linearGradient id="budgetUsedFill" x1="0" x2="0" y1="0" y2="1">
 								<stop offset="0%" stopColor="var(--primary)" />
@@ -42,43 +79,47 @@ const SpendMixChartContent = dynamic<SpendMixChartContentProps>(
 
 						<YAxis
 							axisLine={false}
+							domain={[0, maximumValue]}
 							tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
-							tickFormatter={(value: number) => `$${Math.round(value / 1_000)}K`}
+							tickCount={TICK_COUNT}
+							tickFormatter={formatThousands}
 							tickLine={false}
-							width={52}
+							width={48}
 						/>
 
-						<Tooltip formatter={(value) => [`$${value}`, "Spend"]} />
+						<Tooltip
+							contentStyle={{
+								background: "var(--panel)",
+								border: "1px solid var(--border)",
+								borderRadius: 8,
+								color: "var(--panel-foreground)",
+							}}
+							formatter={formatTooltipCurrency}
+						/>
 
-						<Bar dataKey="used" fill="url(#budgetUsedFill)" name="Budget used" radius={[6, 6, 0, 0]} />
+						<Bar
+							animationDuration={650}
+							dataKey="used"
+							fill="url(#budgetUsedFill)"
+							isAnimationActive
+							name="Budget used"
+							radius={[6, 6, 0, 0]}
+						/>
 
-						<Bar dataKey="remaining" fill="url(#budgetRemainingFill)" name="Remaining" radius={[6, 6, 0, 0]} />
+						<Bar
+							animationDuration={650}
+							dataKey="remaining"
+							fill="url(#budgetRemainingFill)"
+							isAnimationActive
+							name="Remaining budget"
+							radius={[6, 6, 0, 0]}
+						/>
 					</BarChart>
 				</ResponsiveContainer>
-			);
-		};
-	},
-	{
-		loading: () => <ChartPlaceholder />,
-		ssr: false,
-	},
-);
-
-type SpendMixChartProps = {
-	chartData: SpendChartDataPoint[];
-	chartsReady: boolean;
-};
-
-export const SpendMixChart = ({ chartData, chartsReady }: SpendMixChartProps) =>
-	chartsReady ? (
-		<>
-			<SpendMixChartSummary chartData={chartData} />
-
-			<SpendMixChartContent chartData={chartData} />
-		</>
-	) : (
-		<ChartPlaceholder />
+			</m.div>
+		</LazyMotion>
 	);
+};
 
 const SpendMixChartSummary = ({ chartData }: SpendMixChartContentProps) => (
 	<table className="sr-only">
@@ -107,3 +148,11 @@ const SpendMixChartSummary = ({ chartData }: SpendMixChartContentProps) => (
 		</tbody>
 	</table>
 );
+
+function formatThousands(value: number) {
+	return `$${Math.round(value / 1_000)}K`;
+}
+
+function formatTooltipCurrency(value: unknown) {
+	return formatCurrencyDollars(Number(value));
+}

@@ -1,6 +1,5 @@
 import { formatPreciseCompactCurrency } from "@/modules/money/format";
 import { Panel, PanelHeader } from "@/ui/components/Panel";
-import { Reveal } from "@/ui/components/Reveal";
 import type { DashboardViewModel } from "../types";
 import { CashOutlookChart } from "./CashOutlookChart";
 import { SpendMixChart } from "./SpendMixChart";
@@ -11,7 +10,7 @@ type DashboardChartsSectionProps = {
 };
 
 export const DashboardChartsSection = ({ chartsReady, dashboard }: DashboardChartsSectionProps) => (
-	<Reveal className="grid gap-4 xl:grid-cols-[0.98fr_1.03fr]" delay={0.08} duration={0.16} y={8}>
+	<div className="grid gap-4 xl:grid-cols-[0.98fr_1.03fr]">
 		<Panel className="min-h-[365px] p-6">
 			<PanelHeader
 				action={
@@ -23,7 +22,7 @@ export const DashboardChartsSection = ({ chartsReady, dashboard }: DashboardChar
 						<p className="text-s text-muted-foreground">Ending cash balance</p>
 					</div>
 				}
-				eyebrow="13-week cash outlook"
+				label="13-week cash outlook"
 				title="Cash outlook from accounting-style data"
 			/>
 
@@ -31,11 +30,11 @@ export const DashboardChartsSection = ({ chartsReady, dashboard }: DashboardChar
 		</Panel>
 
 		<Panel className="min-h-[365px] p-6">
-			<PanelHeader action={<BudgetLegend />} eyebrow="Team budgets" title="Committed spend by team" />
+			<PanelHeader action={<BudgetLegend />} label="Team budgets" title="Committed spend by team" />
 
 			<SpendMixChart chartData={dashboard.spendChartData} chartsReady={chartsReady} />
 		</Panel>
-	</Reveal>
+	</div>
 );
 
 const BudgetLegend = () => (

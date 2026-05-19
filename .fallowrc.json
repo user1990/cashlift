@@ -4,18 +4,109 @@
 		"zones": [
 			{ "name": "test", "patterns": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/test/**", "e2e/**"] },
 			{ "name": "app", "patterns": ["src/app/**"] },
-			{ "name": "modules", "patterns": ["src/modules/**"] },
+			{ "name": "module-budgets", "patterns": ["src/modules/budgets/**"] },
+			{ "name": "module-cash-actions", "patterns": ["src/modules/cash-actions/**"] },
+			{ "name": "module-cash-outlook", "patterns": ["src/modules/cash-outlook/**"] },
+			{ "name": "module-dashboard", "patterns": ["src/modules/dashboard/**"] },
+			{ "name": "module-invoices", "patterns": ["src/modules/invoices/**"] },
+			{ "name": "module-marketing", "patterns": ["src/modules/marketing/**"] },
+			{ "name": "module-money", "patterns": ["src/modules/money/**"] },
+			{ "name": "module-page-shell", "patterns": ["src/modules/page-shell/**"] },
+			{ "name": "module-spend-requests", "patterns": ["src/modules/spend-requests/**"] },
+			{ "name": "module-subscriptions", "patterns": ["src/modules/subscriptions/**"] },
+			{ "name": "module-vendors", "patterns": ["src/modules/vendors/**"] },
+			{ "name": "module-workspace", "patterns": ["src/modules/workspace/**"] },
 			{ "name": "ui", "patterns": ["src/ui/**"] },
 			{ "name": "services", "patterns": ["src/services/**"] },
 			{ "name": "utilities", "patterns": ["src/utilities/**"] }
 		],
 		"rules": [
-			{ "from": "app", "allow": ["modules", "ui", "services", "utilities"] },
-			{ "from": "modules", "allow": ["ui", "services", "utilities"] },
+			{
+				"from": "app",
+				"allow": [
+					"module-budgets",
+					"module-cash-actions",
+					"module-cash-outlook",
+					"module-dashboard",
+					"module-invoices",
+					"module-marketing",
+					"module-money",
+					"module-page-shell",
+					"module-spend-requests",
+					"module-subscriptions",
+					"module-vendors",
+					"module-workspace",
+					"ui",
+					"services",
+					"utilities"
+				]
+			},
+			{ "from": "module-budgets", "allow": ["module-money", "ui", "services", "utilities"] },
+			{ "from": "module-cash-actions", "allow": ["module-money", "module-workspace", "ui", "services", "utilities"] },
+			{ "from": "module-cash-outlook", "allow": ["module-money", "ui", "services", "utilities"] },
+			{
+				"from": "module-dashboard",
+				"allow": ["module-money", "module-subscriptions", "module-workspace", "ui", "services", "utilities"]
+			},
+			{ "from": "module-invoices", "allow": ["module-money", "ui", "services", "utilities"] },
+			{ "from": "module-marketing", "allow": ["module-page-shell", "ui", "services", "utilities"] },
+			{ "from": "module-money", "allow": ["ui", "services", "utilities"] },
+			{
+				"from": "module-page-shell",
+				"allow": [
+					"module-dashboard",
+					"module-money",
+					"module-spend-requests",
+					"module-subscriptions",
+					"module-workspace",
+					"ui",
+					"services",
+					"utilities"
+				]
+			},
+			{ "from": "module-spend-requests", "allow": ["module-money", "ui", "services", "utilities"] },
+			{ "from": "module-subscriptions", "allow": ["module-money", "ui", "services", "utilities"] },
+			{ "from": "module-vendors", "allow": ["module-money", "ui", "services", "utilities"] },
+			{
+				"from": "module-workspace",
+				"allow": [
+					"module-budgets",
+					"module-cash-actions",
+					"module-cash-outlook",
+					"module-invoices",
+					"module-money",
+					"module-spend-requests",
+					"module-subscriptions",
+					"module-vendors",
+					"ui",
+					"services",
+					"utilities"
+				]
+			},
 			{ "from": "ui", "allow": ["utilities"] },
 			{ "from": "services", "allow": ["utilities"] },
 			{ "from": "utilities", "allow": [] },
-			{ "from": "test", "allow": ["app", "modules", "ui", "services", "utilities"] }
+			{
+				"from": "test",
+				"allow": [
+					"app",
+					"module-budgets",
+					"module-cash-actions",
+					"module-cash-outlook",
+					"module-dashboard",
+					"module-invoices",
+					"module-marketing",
+					"module-money",
+					"module-page-shell",
+					"module-spend-requests",
+					"module-subscriptions",
+					"module-vendors",
+					"module-workspace",
+					"ui",
+					"services",
+					"utilities"
+				]
+			}
 		]
 	},
 	"dynamicallyLoaded": ["src/services/i18n/request.ts"],

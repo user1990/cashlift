@@ -14,7 +14,7 @@ type SubscriptionLeakListProps = {
 	className?: string;
 };
 
-export const SubscriptionLeakList = ({ className, items }: SubscriptionLeakListProps) => (
+export const SubscriptionLeakList = ({ items, className }: SubscriptionLeakListProps) => (
 	<ul className={className}>
 		{items.map(({ amountCents, id, status, usagePercent, vendor }) => (
 			<AmountListItem

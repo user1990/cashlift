@@ -1,13 +1,5 @@
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { domAnimation, LazyMotion as LazyMotionProvider } from "motion/react";
 import type { Metadata, Viewport } from "next";
-import { connection } from "next/server";
-import { NextIntlClientProvider } from "next-intl";
-import { AuthProvider } from "@/services/clerk/provider";
-import messages from "@/services/i18n/messages/en.json";
-import { QueryProvider } from "@/services/query/provider";
-import { ScrollToTopButton } from "./ScrollToTopButton";
+import { ClientTelemetry } from "./ClientTelemetry";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -23,9 +15,7 @@ type RootLayoutProps = Readonly<{
 	children: React.ReactNode;
 }>;
 
-export default async function RootLayout({ children }: RootLayoutProps) {
-	await connection();
-
+export default function RootLayout({ children }: RootLayoutProps) {
 	return (
 		<html lang="en" className="h-full">
 			<body className="grid min-h-full grid-cols-[1fr_0px] antialiased" id="top">
@@ -36,21 +26,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 					Skip to content
 				</a>
 
-				<NextIntlClientProvider locale="en" messages={messages}>
-					<AuthProvider>
-						<QueryProvider>
-							<LazyMotionProvider features={domAnimation} strict>
-								{children}
-							</LazyMotionProvider>
+				{children}
 
-							<ScrollToTopButton />
-
-							<SpeedInsights />
-
-							<Analytics />
-						</QueryProvider>
-					</AuthProvider>
-				</NextIntlClientProvider>
+				<ClientTelemetry />
 			</body>
 		</html>
 	);

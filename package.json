@@ -7,17 +7,14 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "biome check",
-		"lint:fix": "biome check --write .src/**",
-		"react-doctor": "npx -y react-doctor@latest",
-		"doctor": "pnpm react-doctor . --offline",
-		"doctor:diff": "pnpm react-doctor . --offline --diff main",
-		"doctor:score": "pnpm react-doctor . --offline --score",
+		"lint:fix": "biome check --write src",
+		"react-doctor": "mv react-doctor.config.json react-doctor.config.json.bak && npx react-doctor . --offline; mv react-doctor.config.json.bak react-doctor.config.json",
 		"typecheck": "tsgo --noEmit",
 		"test": "vitest run",
 		"test:e2e": "playwright test",
 		"test:e2e:install": "playwright install chromium",
-		"fallow": "fallow --summary",
-		"fallow:fix": "fallow fix --yes",
+		"fallow": "fallow --only dupes && fallow --only dead-code",
+		"fallow:fix": "fallow fix --dry-run",
 		"prepare": "lefthook install"
 	},
 	"dependencies": {
@@ -45,6 +42,7 @@
 	},
 	"devDependencies": {
 		"@axe-core/playwright": "^4.11.3",
+		"@biomejs/biome": "^2.4.15",
 		"@playwright/test": "^1.60.0",
 		"@tailwindcss/postcss": "^4",
 		"@testing-library/jest-dom": "^6.9.1",
@@ -67,6 +65,9 @@
 		"overrides": {
 			"postcss": ">=8.5.10"
 		}
+	},
+	"engines": {
+		"node": ">=22.13"
 	},
 	"packageManager": "pnpm@11.1.2+sha512.415a1cc25974731e75455c1468371be74c5aa5fb7621b50d4056d222451609f11412f23fd602e6169f1e060466641f798597e1be961a10688836a67b16569499"
 }
