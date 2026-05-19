@@ -108,7 +108,7 @@ function getDateRangeLabel(forecast: FinancialDataset["forecast"]) {
 	const startDate = new Date(`${forecast[0].date}T00:00:00`);
 	const endDate = new Date(`${forecast[forecast.length - 1].date}T00:00:00`);
 
-	return `${dateRangeFormatter.format(startDate)} - ${dateRangeFormatter.format(endDate)}, ...`;
+	return `${dateRangeFormatter.format(startDate)} - ${dateRangeFormatter.format(endDate)}, ${endDate.getFullYear()}`;
 }
 
 function getDefaultDashboardDate(dataset: FinancialDataset) {
