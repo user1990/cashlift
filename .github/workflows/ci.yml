@@ -15,6 +15,9 @@ permissions:
   checks: write
   pull-requests: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   verify:
     name: Lint, types, unit tests, fallow, build
