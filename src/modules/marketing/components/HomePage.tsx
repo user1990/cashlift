@@ -1,6 +1,6 @@
 import { ArrowRight, CheckCircle2 } from "lucide-react";
-import { ScrollToTopButton } from "@/app/ScrollToTopButton";
 import { MainContent } from "@/modules/page-shell/components/MainContent";
+import { ScrollToTopButton } from "@/modules/page-shell/components/ScrollToTopButton";
 import { ShellContainer } from "@/modules/page-shell/components/ShellContainer";
 import { ShellSection } from "@/modules/page-shell/components/ShellSection";
 import { Panel } from "@/ui/components/Panel";
