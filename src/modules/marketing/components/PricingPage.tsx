@@ -1,29 +1,27 @@
 import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { MainContent } from "@/modules/page-shell/components/MainContent";
 import { Panel } from "@/ui/components/Panel";
 import { cn } from "@/ui/utils/cn";
 import { PRICING_PLANS } from "../content";
+import { MarketingHero } from "./MarketingHero";
 
 type PricingPlan = (typeof PRICING_PLANS)[number];
 
 export const PricingPage = () => (
-	<main id="main-content" className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-		<p className="text-s+ uppercase tracking-normal text-primary">Pricing</p>
-
-		<h1 className="mt-4 max-w-3xl text-6xl+ tracking-normal text-shell-foreground">
-			Flat team plans. Invite every employee without seat anxiety.
-		</h1>
-
-		<p className="mt-5 max-w-2xl text-xl leading-8 text-shell-muted">
-			Start with a free cash leak audit, then use one plan for owners, finance, managers, and request-only employees.
-		</p>
+	<MainContent variant="marketing">
+		<MarketingHero
+			description="Start with a free cash leak audit, then use one plan for owners, finance, managers, and request-only employees."
+			label="Pricing"
+			title="Flat team plans. Invite every employee without seat anxiety."
+		/>
 
 		<ul className="mt-10 grid auto-rows-fr items-stretch gap-4 lg:grid-cols-3">
 			{PRICING_PLANS.map((plan) => (
 				<PricingPlanCard key={plan.name} plan={plan} />
 			))}
 		</ul>
-	</main>
+	</MainContent>
 );
 
 const PricingPlanCard = ({ plan }: { plan: PricingPlan }) => {

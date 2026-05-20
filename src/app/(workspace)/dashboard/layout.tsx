@@ -1,13 +1,14 @@
 import { Show } from "@clerk/nextjs";
 import Link from "next/link";
+import { MainContent } from "@/modules/page-shell/components/MainContent";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
 import { WorkspaceProviders } from "./WorkspaceProviders";
 
-type AppLayoutProps = {
+type DashboardLayoutProps = {
 	children: React.ReactNode;
 };
 
-export default function AppLayout({ children }: AppLayoutProps) {
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
 	const config = getWorkspaceRuntimeConfig();
 
 	if (!config.configured) {
@@ -28,7 +29,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
 }
 
 const SignedOutFallback = () => (
-	<main id="main-content" className="flex min-h-screen items-center justify-center bg-shell px-4">
+	<MainContent variant="workspace" className="flex items-center justify-center px-4">
 		<div className="max-w-md rounded-lg border border-border bg-panel p-6 text-center shadow-panel">
 			<p className="text-s+ uppercase tracking-normal text-primary">CashLift</p>
 
@@ -45,11 +46,11 @@ const SignedOutFallback = () => (
 				Log in
 			</Link>
 		</div>
-	</main>
+	</MainContent>
 );
 
 const WorkspaceUnavailable = ({ message }: { message: string }) => (
-	<main id="main-content" className="flex min-h-screen items-center justify-center bg-shell px-4">
+	<MainContent variant="workspace" className="flex items-center justify-center px-4">
 		<div className="max-w-md rounded-lg border border-border bg-panel p-6 text-center shadow-panel">
 			<p className="text-s+ uppercase tracking-normal text-primary">CashLift</p>
 
@@ -57,5 +58,5 @@ const WorkspaceUnavailable = ({ message }: { message: string }) => (
 
 			<p className="mt-3 text-m leading-6 text-muted-foreground">{message}</p>
 		</div>
-	</main>
+	</MainContent>
 );

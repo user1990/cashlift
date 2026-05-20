@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Panel, PanelHeader } from "@/ui/components/Panel";
+import { MainContent } from "./MainContent";
 import type { WorkspaceSection } from "./types";
 import { WorkspaceSectionHeader } from "./WorkspaceSectionHeader";
 
@@ -10,7 +11,7 @@ type WorkspaceStateProps = {
 };
 
 export const WorkspaceState = ({ message, section, title }: WorkspaceStateProps) => (
-	<main id="main-content" className="min-h-screen bg-shell text-shell-foreground">
+	<MainContent variant="workspace">
 		<div className="mx-auto grid w-full max-w-[1440px] gap-5 px-4 py-5 sm:px-6 lg:grid-cols-[240px_1fr] lg:px-8">
 			<aside className="rounded-lg border border-shell-border bg-shell-elevated p-3 shadow-shell lg:sticky lg:top-5 lg:self-start">
 				<Link href="/" className="block p-2">
@@ -30,5 +31,5 @@ export const WorkspaceState = ({ message, section, title }: WorkspaceStateProps)
 				</Panel>
 			</section>
 		</div>
-	</main>
+	</MainContent>
 );

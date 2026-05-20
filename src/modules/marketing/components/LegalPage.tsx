@@ -1,9 +1,11 @@
+import { MainContent } from "@/modules/page-shell/components/MainContent";
+
 type LegalPageProps = {
 	title: string;
 };
 
 export const LegalPage = ({ title }: LegalPageProps) => (
-	<main id="main-content" className="mx-auto max-w-[820px] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+	<MainContent variant="marketing" className="max-w-[820px]">
 		<p className="text-s+ uppercase tracking-normal text-primary">Legal</p>
 
 		<h1 className="mt-4 text-6xl+ tracking-normal text-shell-foreground">{title}</h1>
@@ -16,5 +18,5 @@ export const LegalPage = ({ title }: LegalPageProps) => (
 
 			<p>Do not enter real credentials, personal financial data, or private company records into the demo workspace.</p>
 		</div>
-	</main>
+	</MainContent>
 );
