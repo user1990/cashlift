@@ -6,6 +6,6 @@ export const metadata: Metadata = {
 	description: "Daily cash action inbox for approvals, collections, vendor leaks, and cash buffer decisions.",
 };
 
-export default async function AppHome() {
+export default async function DashboardHome() {
 	return <WorkspacePage section="overview" />;
 }

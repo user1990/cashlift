@@ -3,7 +3,7 @@ import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server
 import { updateSupabaseSession } from "@/services/supabase/proxy";
 
 const CLERK_CONFIGURED = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-const WORKSPACE_SESSION_PATH_PREFIXES = ["/app", "/api/workspace"] as const;
+const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard", "/api/workspace"] as const;
 const isDevelopment = () => process.env.NODE_ENV === "development";
 
 export const createContentSecurityPolicy = (nonce: string) =>
@@ -15,8 +15,8 @@ export const createContentSecurityPolicy = (nonce: string) =>
 		"style-src-attr 'none'",
 		"img-src 'self' blob: data: https:",
 		"font-src 'self'",
-		"connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://*.supabase.co https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.vercel-insights.com",
-		"frame-src 'self' https://*.clerk.accounts.dev https://*.clerk.com",
+		"connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.supabase.co https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.vercel-insights.com",
+		"frame-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com",
 		"worker-src 'self' blob:",
 		"object-src 'none'",
 		"base-uri 'self'",

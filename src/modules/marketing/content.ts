@@ -177,7 +177,7 @@ export const FOOTER_LINKS = [
 			{ href: "/features", label: "Features" },
 			{ href: "/pricing", label: "Pricing" },
 			{ href: "/demo", label: "Demo" },
-			{ href: "/app", label: "App" },
+			{ href: "/dashboard", label: "Dashboard" },
 		],
 	},
 	{

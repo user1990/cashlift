@@ -2,6 +2,7 @@
 
 import { DashboardContent } from "@/modules/dashboard/components/DashboardContent";
 import type { FinancialDataset } from "@/modules/workspace/types";
+import { MainContent } from "./MainContent";
 import type { WorkspaceMode, WorkspacePageProps, WorkspaceSection, WorkspaceSectionComponent } from "./types";
 import { WorkspaceApprovalsSection } from "./WorkspaceApprovalsSection";
 import { WorkspaceBudgetsSection } from "./WorkspaceBudgetsSection";
@@ -23,7 +24,7 @@ export const WorkspaceLayout = ({ dataset, mode, section }: WorkspaceLayoutProps
 	const overview = section === "overview";
 
 	return (
-		<main id="main-content" className="min-h-screen bg-shell text-shell-foreground">
+		<MainContent variant="workspace">
 			<div className="mx-auto grid w-full max-w-[1600px] gap-6 p-4 lg:grid-cols-[236px_1fr]">
 				<WorkspaceSidebar mode={mode} section={section} />
 
@@ -31,7 +32,7 @@ export const WorkspaceLayout = ({ dataset, mode, section }: WorkspaceLayoutProps
 					{overview ? <SectionComponent dataset={dataset} /> : <WorkspaceSubpage section={section} dataset={dataset} />}
 				</section>
 			</div>
-		</main>
+		</MainContent>
 	);
 };
 

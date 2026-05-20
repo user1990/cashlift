@@ -1,10 +1,11 @@
-import { ArrowRight, FileText } from "lucide-react";
-import Link from "next/link";
+import { FileText } from "lucide-react";
 import { formatCurrency, percentage } from "@/modules/money/format";
 import { SubscriptionLeakList } from "@/modules/subscriptions/components/SubscriptionLeakList";
-import { Panel, PanelHeader } from "@/ui/components/Panel";
 import { ProgressBar } from "@/ui/components/ProgressBar";
 import type { DashboardViewModel } from "../types";
+import { DashboardListRow } from "./DashboardListRow";
+import { DashboardPanel } from "./DashboardPanel";
+import { DashboardPanelLink } from "./DashboardPanelLink";
 
 type DashboardQueuesSectionProps = {
 	dashboard: DashboardViewModel;
@@ -12,47 +13,34 @@ type DashboardQueuesSectionProps = {
 
 export const DashboardQueuesSection = ({ dashboard }: DashboardQueuesSectionProps) => (
 	<section className="grid gap-4 xl:grid-cols-3">
-		<Panel className="min-h-[348px] p-5">
-			<PanelHeader label="Invoices" title="Collection queue before buffer risk" />
-
+		<DashboardPanel className="min-h-88 p-5" label="Invoices" title="Collection queue before buffer risk">
 			<ul className="space-y-3">
 				{dashboard.overdueInvoices.slice(0, 1).map(({ amountCents, client, collectionProbability, id, owner }) => (
-					<li key={id} className="rounded-lg border border-primary-muted/80 bg-primary-subtle p-4">
-						<div className="flex items-center justify-between gap-3">
-							<div className="flex items-center gap-3">
-								<span className="grid size-10 place-items-center rounded-full bg-primary-muted text-primary">
-									<FileText aria-hidden className="size-5" />
-								</span>
-
-								<div>
-									<p className="text-m+ font-semibold text-panel-foreground">{client}</p>
-
-									<p className="mt-1 text-s text-shell-muted">
-										Owner: {owner} • Probability {percentage(collectionProbability)}
-									</p>
-								</div>
-							</div>
-
-							<span className="font-mono text-m+ text-primary">{formatCurrency(amountCents)}</span>
-						</div>
-					</li>
+					<DashboardListRow
+						key={id}
+						icon={
+							<span className="grid size-10 place-items-center rounded-full bg-primary-muted text-primary">
+								<FileText aria-hidden className="size-5" />
+							</span>
+						}
+						meta={`Owner: ${owner} • Probability ${percentage(collectionProbability)}`}
+						title={client}
+						value={formatCurrency(amountCents)}
+						variant="primary"
+					/>
 				))}
 			</ul>
 
-			<DashboardPanelLink href="/app/invoices">View all invoices</DashboardPanelLink>
-		</Panel>
+			<DashboardPanelLink href="/dashboard/invoices">View all invoices</DashboardPanelLink>
+		</DashboardPanel>
 
-		<Panel className="min-h-[348px] p-5">
-			<PanelHeader label="Vendor leaks" title="Renewals to cut first" />
-
+		<DashboardPanel className="min-h-88 p-5" label="Vendor leaks" title="Renewals to cut first">
 			<SubscriptionLeakList items={dashboard.vendorLeaks.slice(0, 2)} className="space-y-3" />
 
-			<DashboardPanelLink href="/app/vendors">View all vendor leaks</DashboardPanelLink>
-		</Panel>
+			<DashboardPanelLink href="/dashboard/vendors">View all vendor leaks</DashboardPanelLink>
+		</DashboardPanel>
 
-		<Panel className="min-h-[348px] p-5">
-			<PanelHeader label="Budget guardrails" title="Team limits" />
-
+		<DashboardPanel className="min-h-88 p-5" label="Budget guardrails" title="Team limits">
 			<ul className="space-y-4">
 				{dashboard.budgetRows.slice(0, 3).map(({ id, remainingCents, team, usagePercent }) => (
 					<li key={id}>
@@ -67,23 +55,7 @@ export const DashboardQueuesSection = ({ dashboard }: DashboardQueuesSectionProp
 				))}
 			</ul>
 
-			<DashboardPanelLink href="/app/budgets">Manage guardrails</DashboardPanelLink>
-		</Panel>
+			<DashboardPanelLink href="/dashboard/budgets">Manage guardrails</DashboardPanelLink>
+		</DashboardPanel>
 	</section>
-);
-
-type DashboardPanelLinkProps = {
-	children: React.ReactNode;
-	href: string;
-};
-
-const DashboardPanelLink = ({ children, href }: DashboardPanelLinkProps) => (
-	<Link
-		href={href}
-		className="mt-6 flex h-11 items-center justify-between rounded-lg bg-panel-muted px-4 text-m font-semibold text-panel-foreground transition-colors duration-150 ease hover:bg-primary-subtle hover:text-primary"
-	>
-		{children}
-
-		<ArrowRight aria-hidden className="size-4" />
-	</Link>
 );

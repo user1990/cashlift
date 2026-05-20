@@ -16,7 +16,7 @@ describe("proxy security headers", () => {
 	});
 
 	it("adds browser hardening headers to matched requests", async () => {
-		const request = new NextRequest("https://cashlift.test/app");
+		const request = new NextRequest("https://cashlift.test/dashboard");
 
 		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
 
