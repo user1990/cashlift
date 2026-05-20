@@ -1,10 +1,14 @@
 import { ArrowRight, CheckCircle2 } from "lucide-react";
-import Link from "next/link";
+import { MainContent } from "@/modules/page-shell/components/MainContent";
+import { ScrollToTopButton } from "@/modules/page-shell/components/ScrollToTopButton";
 import { ShellContainer } from "@/modules/page-shell/components/ShellContainer";
 import { ShellSection } from "@/modules/page-shell/components/ShellSection";
 import { Panel } from "@/ui/components/Panel";
 import { FEATURE_CARDS, PROOF_POINTS } from "../content";
+import { MarketingActionLink } from "./MarketingActionLink";
+import { MarketingHero } from "./MarketingHero";
 import { MarketingIconCard } from "./MarketingIconCard";
+import { MarketingProofList } from "./MarketingProofList";
 
 const CASH_ACTION_PREVIEW_ITEMS = [
 	["Critical", "Chase Northstar invoice", "$18.4k"],
@@ -14,7 +18,7 @@ const CASH_ACTION_PREVIEW_ITEMS = [
 ] as const;
 
 export const HomePage = () => (
-	<main id="main-content">
+	<MainContent variant="plain">
 		<section className="relative isolate overflow-hidden border-b border-shell-border bg-shell">
 			<div
 				aria-hidden
@@ -27,32 +31,22 @@ export const HomePage = () => (
 
 			<div className="relative mx-auto grid min-h-[82svh] max-w-[1180px] items-center gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_0.82fr] lg:px-8">
 				<div>
-					<p className="text-s+ uppercase tracking-normal text-primary">Cash-aware spend decisions</p>
-
-					<h1 className="mt-4 max-w-3xl text-6xl+ tracking-normal text-shell-foreground sm:text-7xl+">
-						Approve spend, chase cash, and prevent leaks before money leaves.
-					</h1>
-
-					<p className="mt-5 max-w-2xl text-xl leading-8 text-shell-muted">
-						CashLift gives service firms one daily command center for cash actions: approvals, receivables, vendor
-						leaks, budgets, and runway.
-					</p>
+					<MarketingHero
+						description="CashLift gives service firms one daily command center for cash actions: approvals, receivables, vendor leaks, budgets, and runway."
+						label="Cash-aware spend decisions"
+						title="Approve spend, chase cash, and prevent leaks before money leaves."
+						titleClassName="sm:text-7xl+"
+					/>
 
 					<div className="mt-8 flex flex-wrap items-center gap-3">
-						<Link
-							href="/demo"
-							className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-primary bg-primary px-4 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
-						>
+						<MarketingActionLink href="/demo">
 							Run leak audit
 							<ArrowRight aria-hidden className="size-4" />
-						</Link>
+						</MarketingActionLink>
 
-						<Link
-							href="/app"
-							className="inline-flex h-11 items-center justify-center rounded-md border border-shell-border bg-shell-elevated/80 px-4 text-m font-medium text-shell-foreground transition-[border-color,color] duration-150 ease hover:border-primary-subtle-border hover:text-primary"
-						>
+						<MarketingActionLink href="/dashboard" variant="secondary" className="bg-shell-elevated/80">
 							Open demo app
-						</Link>
+						</MarketingActionLink>
 					</div>
 				</div>
 
@@ -91,19 +85,7 @@ export const HomePage = () => (
 
 		<ShellSection className="bg-cyan-950">
 			<ShellContainer className="py-8 sm:px-6 md:grid-cols-3 lg:px-8">
-				<ul className="contents">
-					{PROOF_POINTS.map(({ metric, text }) => (
-						<li key={metric}>
-							<dl>
-								<dt className="sr-only">Proof point</dt>
-
-								<dd className="font-mono text-4xl+ text-primary">{metric}</dd>
-							</dl>
-
-							<p className="mt-2 text-m leading-6 text-shell-muted">{text}</p>
-						</li>
-					))}
-				</ul>
+				<MarketingProofList items={PROOF_POINTS} variant="shell" />
 			</ShellContainer>
 		</ShellSection>
 
@@ -124,5 +106,7 @@ export const HomePage = () => (
 				))}
 			</ul>
 		</section>
-	</main>
+
+		<ScrollToTopButton />
+	</MainContent>
 );

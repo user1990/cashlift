@@ -1,9 +1,10 @@
 import { ChartPlaceholder } from "@/modules/dashboard/components/ChartPlaceholder";
+import { MainContent } from "@/modules/page-shell/components/MainContent";
 import { Panel, PanelHeader } from "@/ui/components/Panel";
 
 export default function WorkspaceLoading() {
 	return (
-		<main id="main-content" className="min-h-screen bg-shell text-shell-foreground">
+		<MainContent variant="workspace">
 			<div className="mx-auto grid w-full max-w-[1600px] gap-6 p-4 lg:grid-cols-[236px_1fr]">
 				<aside className="rounded-lg border border-shell-border bg-shell-elevated p-3 shadow-shell lg:sticky lg:top-4 lg:self-start">
 					<p className="p-2 text-s+ uppercase tracking-normal text-primary">CashLift</p>
@@ -27,13 +28,13 @@ export default function WorkspaceLoading() {
 					</Panel>
 
 					<div className="grid gap-4 xl:grid-cols-2">
-						<Panel className="min-h-[365px] p-6">
+						<Panel className="min-h-96 p-6">
 							<PanelHeader label="13-week cash outlook" title="Cash outlook from accounting-style data" />
 
 							<ChartPlaceholder />
 						</Panel>
 
-						<Panel className="min-h-[365px] p-6">
+						<Panel className="min-h-96 p-6">
 							<PanelHeader label="Team budgets" title="Committed spend by team" />
 
 							<ChartPlaceholder />
@@ -41,6 +42,6 @@ export default function WorkspaceLoading() {
 					</div>
 				</section>
 			</div>
-		</main>
+		</MainContent>
 	);
 }

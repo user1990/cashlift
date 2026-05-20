@@ -1,24 +1,17 @@
 import { domAnimation, LazyMotion } from "motion/react";
 import * as m from "motion/react-m";
-import dynamic from "next/dynamic";
-import type { ComponentType } from "react";
 import { formatCurrencyDollars } from "@/modules/money/format";
 import type { SpendChartDataPoint } from "../types";
 import { ChartPlaceholder } from "./ChartPlaceholder";
-
-const CHART_HEIGHT = 245;
-const TICK_COUNT = 4;
-
-const createDynamicRechartsComponent = <T extends keyof typeof import("recharts")>(name: T) =>
-	// biome-ignore lint/suspicious/noExplicitAny: Recharts components have varying prop shapes; ComponentType<any> is required for dynamic() compatibility
-	dynamic(() => import("recharts").then((mod) => mod[name] as ComponentType<any>), { ssr: false });
-const ResponsiveContainer = createDynamicRechartsComponent("ResponsiveContainer");
-const BarChart = createDynamicRechartsComponent("BarChart");
-const CartesianGrid = createDynamicRechartsComponent("CartesianGrid");
-const XAxis = createDynamicRechartsComponent("XAxis");
-const YAxis = createDynamicRechartsComponent("YAxis");
-const Tooltip = createDynamicRechartsComponent("Tooltip");
-const Bar = createDynamicRechartsComponent("Bar");
+import {
+	RechartsBar,
+	RechartsBarChart,
+	RechartsCartesianGrid,
+	RechartsResponsiveContainer,
+	RechartsTooltip,
+	RechartsXAxis,
+	RechartsYAxis,
+} from "./LazyRechartsComponent";
 
 type SpendMixChartProps = {
 	chartData: SpendChartDataPoint[];
@@ -48,12 +41,12 @@ const SpendMixChartContent = ({ chartData }: SpendMixChartContentProps) => {
 			<m.div
 				animate={{ opacity: 1, y: 0 }}
 				aria-hidden="true"
-				className="h-[245px] w-full"
+				className="h-60 w-full"
 				initial={{ opacity: 0, y: 8 }}
 				transition={{ duration: 0.35, ease: "easeOut" }}
 			>
-				<ResponsiveContainer height={CHART_HEIGHT} width="100%">
-					<BarChart data={chartData} margin={{ bottom: 0, left: 4, right: 8, top: 12 }}>
+				<RechartsResponsiveContainer>
+					<RechartsBarChart data={chartData}>
 						<defs>
 							<linearGradient id="budgetUsedFill" x1="0" x2="0" y1="0" y2="1">
 								<stop offset="0%" stopColor="var(--primary)" />
@@ -68,54 +61,24 @@ const SpendMixChartContent = ({ chartData }: SpendMixChartContentProps) => {
 							</linearGradient>
 						</defs>
 
-						<CartesianGrid stroke="var(--border)" strokeOpacity={0.8} vertical={false} />
+						<RechartsCartesianGrid />
 
-						<XAxis
-							axisLine={false}
-							dataKey="team"
-							tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
-							tickLine={false}
-						/>
+						<RechartsXAxis dataKey="team" />
 
-						<YAxis
-							axisLine={false}
-							domain={[0, maximumValue]}
-							tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
-							tickCount={TICK_COUNT}
-							tickFormatter={formatThousands}
-							tickLine={false}
-							width={48}
-						/>
+						<RechartsYAxis domain={[0, maximumValue]} tickFormatter={formatThousands} />
 
-						<Tooltip
-							contentStyle={{
-								background: "var(--panel)",
-								border: "1px solid var(--border)",
-								borderRadius: 8,
-								color: "var(--panel-foreground)",
-							}}
-							formatter={formatTooltipCurrency}
-						/>
+						<RechartsTooltip formatter={formatTooltipCurrency} />
 
-						<Bar
-							animationDuration={650}
-							dataKey="used"
-							fill="url(#budgetUsedFill)"
-							isAnimationActive
-							name="Budget used"
-							radius={[6, 6, 0, 0]}
-						/>
+						<RechartsBar animationDuration={650} dataKey="used" fill="url(#budgetUsedFill)" name="Budget used" />
 
-						<Bar
+						<RechartsBar
 							animationDuration={650}
 							dataKey="remaining"
 							fill="url(#budgetRemainingFill)"
-							isAnimationActive
 							name="Remaining budget"
-							radius={[6, 6, 0, 0]}
 						/>
-					</BarChart>
-				</ResponsiveContainer>
+					</RechartsBarChart>
+				</RechartsResponsiveContainer>
 			</m.div>
 		</LazyMotion>
 	);

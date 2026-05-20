@@ -16,7 +16,7 @@ type WorkspaceSidebarProps = {
 
 export const WorkspaceSidebar = ({ mode, section }: WorkspaceSidebarProps) => (
 	<aside className="flex min-h-[calc(100vh-2rem)] flex-col rounded-lg border border-white/5 bg-black/30 p-3 shadow-shell backdrop-blur lg:sticky lg:top-4 lg:self-start">
-		<Link href="/app" className="flex items-center gap-3 px-2 py-3">
+		<Link href="/dashboard" className="flex items-center gap-3 px-2 py-3">
 			<span className="grid size-10 place-items-center rounded-lg bg-signal-subtle text-signal shadow-primary-glow">
 				<span className="size-6 rounded-[6px] bg-signal [clip-path:polygon(50%_0,100%_100%,50%_78%,0_100%)]" />
 			</span>
@@ -72,7 +72,7 @@ const WorkspaceAccountMenu = ({ mode }: { mode: WorkspaceMode }) => {
 				avatar="SC"
 				description="Finance Lead"
 				items={[
-					{ href: "/app/settings", label: "Workspace settings" },
+					{ href: "/dashboard/settings", label: "Workspace settings" },
 					{ href: "/login", label: "Log in" },
 				]}
 				name="Samira Chen"
@@ -92,7 +92,7 @@ const ProductionAccountMenu = () => {
 			<AccountMenuShell
 				avatar="AC"
 				description="Workspace user"
-				items={[{ href: "/app/settings", label: "Workspace settings" }]}
+				items={[{ href: "/dashboard/settings", label: "Workspace settings" }]}
 				name="Account"
 				signOut={() => signOut({ redirectUrl: "/login" })}
 			/>
@@ -112,7 +112,7 @@ const SignedInAccountMenu = ({ signOut, user }: { signOut: () => void; user: Cle
 		<AccountMenuShell
 			avatar={avatar}
 			description={description}
-			items={[{ href: "/app/settings", label: "Workspace settings" }]}
+			items={[{ href: "/dashboard/settings", label: "Workspace settings" }]}
 			name={name}
 			signOut={signOut}
 		/>

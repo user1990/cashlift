@@ -1,7 +1,7 @@
 import { formatPreciseCompactCurrency } from "@/modules/money/format";
-import { Panel, PanelHeader } from "@/ui/components/Panel";
 import type { DashboardViewModel } from "../types";
 import { CashOutlookChart } from "./CashOutlookChart";
+import { DashboardPanel } from "./DashboardPanel";
 import { SpendMixChart } from "./SpendMixChart";
 
 type DashboardChartsSectionProps = {
@@ -11,29 +11,25 @@ type DashboardChartsSectionProps = {
 
 export const DashboardChartsSection = ({ chartsReady, dashboard }: DashboardChartsSectionProps) => (
 	<div className="grid gap-4 xl:grid-cols-[0.98fr_1.03fr]">
-		<Panel className="min-h-[365px] p-6">
-			<PanelHeader
-				action={
-					<div className="text-right">
-						<p className="font-mono text-3xl+ text-panel-foreground">
-							{formatPreciseCompactCurrency(dashboard.endingCashBalanceCents)}
-						</p>
+		<DashboardPanel
+			action={
+				<div className="text-right">
+					<p className="font-mono text-3xl+ text-panel-foreground">
+						{formatPreciseCompactCurrency(dashboard.endingCashBalanceCents)}
+					</p>
 
-						<p className="text-s text-muted-foreground">Ending cash balance</p>
-					</div>
-				}
-				label="13-week cash outlook"
-				title="Cash outlook from accounting-style data"
-			/>
-
+					<p className="text-s text-muted-foreground">Ending cash balance</p>
+				</div>
+			}
+			label="13-week cash outlook"
+			title="Cash outlook from accounting-style data"
+		>
 			<CashOutlookChart chartData={dashboard.forecastChartData} chartsReady={chartsReady} />
-		</Panel>
+		</DashboardPanel>
 
-		<Panel className="min-h-[365px] p-6">
-			<PanelHeader action={<BudgetLegend />} label="Team budgets" title="Committed spend by team" />
-
+		<DashboardPanel action={<BudgetLegend />} label="Team budgets" title="Committed spend by team">
 			<SpendMixChart chartData={dashboard.spendChartData} chartsReady={chartsReady} />
-		</Panel>
+		</DashboardPanel>
 	</div>
 );
 

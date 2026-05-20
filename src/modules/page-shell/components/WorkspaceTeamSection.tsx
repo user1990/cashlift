@@ -1,12 +1,13 @@
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { Panel, PanelHeader } from "@/ui/components/Panel";
+import { WorkspaceCardGrid } from "./WorkspaceCardGrid";
 
 type WorkspaceTeamSectionProps = {
 	dataset: FinancialDataset;
 };
 
 export const WorkspaceTeamSection = ({ dataset }: WorkspaceTeamSectionProps) => (
-	<div className="grid gap-4 md:grid-cols-3">
+	<WorkspaceCardGrid>
 		{dataset.teamMembers.map(({ id, name, role, team }) => (
 			<Panel key={id} as="article" className="min-h-40">
 				<PanelHeader label={team} title={name} />
@@ -16,7 +17,7 @@ export const WorkspaceTeamSection = ({ dataset }: WorkspaceTeamSectionProps) => 
 				</p>
 			</Panel>
 		))}
-	</div>
+	</WorkspaceCardGrid>
 );
 
 function formatRole(role: FinancialDataset["teamMembers"][number]["role"]) {

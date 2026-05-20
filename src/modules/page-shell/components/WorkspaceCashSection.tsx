@@ -1,47 +1,30 @@
 import { formatCurrency } from "@/modules/money/format";
 import type { FinancialDataset } from "@/modules/workspace/types";
-import { Panel, PanelHeader } from "@/ui/components/Panel";
+import { WorkspaceCardGrid } from "./WorkspaceCardGrid";
+import { WorkspaceMetricCard } from "./WorkspaceMetricCard";
 
 type WorkspaceCashSectionProps = {
 	dataset: FinancialDataset;
 };
 
 export const WorkspaceCashSection = ({ dataset }: WorkspaceCashSectionProps) => (
-	<div className="grid gap-4 md:grid-cols-3">
-		<Panel>
-			<PanelHeader label="Cash" title="Available balance" />
+	<WorkspaceCardGrid>
+		<WorkspaceMetricCard
+			label="Cash"
+			title="Available balance"
+			value={formatCurrency(dataset.profile.cashBalanceCents)}
+		/>
 
-			<dl>
-				<dt className="sr-only">Available balance</dt>
+		<WorkspaceMetricCard
+			label="Buffer"
+			title="Target reserve"
+			value={formatCurrency(dataset.profile.cashBufferTargetCents)}
+		/>
 
-				<dd className="font-mono text-5xl+ text-panel-foreground">
-					{formatCurrency(dataset.profile.cashBalanceCents)}
-				</dd>
-			</dl>
-		</Panel>
-
-		<Panel>
-			<PanelHeader label="Buffer" title="Target reserve" />
-
-			<dl>
-				<dt className="sr-only">Target reserve</dt>
-
-				<dd className="font-mono text-5xl+ text-panel-foreground">
-					{formatCurrency(dataset.profile.cashBufferTargetCents)}
-				</dd>
-			</dl>
-		</Panel>
-
-		<Panel>
-			<PanelHeader label="Payroll" title="Monthly payroll" />
-
-			<dl>
-				<dt className="sr-only">Monthly payroll</dt>
-
-				<dd className="font-mono text-5xl+ text-panel-foreground">
-					{formatCurrency(dataset.profile.monthlyPayrollCents)}
-				</dd>
-			</dl>
-		</Panel>
-	</div>
+		<WorkspaceMetricCard
+			label="Payroll"
+			title="Monthly payroll"
+			value={formatCurrency(dataset.profile.monthlyPayrollCents)}
+		/>
+	</WorkspaceCardGrid>
 );
