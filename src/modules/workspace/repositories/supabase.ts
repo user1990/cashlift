@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { selectCompanyId } from "@/modules/company-memberships/repositories/supabase";
 import { createServerSupabaseClient } from "@/services/supabase/server";
 import { AppError } from "@/utilities/errors/AppError";
 import type { FinanceRepository } from "../api";
@@ -14,10 +15,6 @@ import type {
 	VendorBillStatus,
 	WorkspaceDatasetScope,
 } from "../types";
-
-type CompanyMemberRow = {
-	company_id: string;
-};
 
 type CompanyRow = {
 	cash_balance_cents: number;
@@ -117,40 +114,6 @@ type SupabaseQueryError = {
 type SupabaseQueryResult<Data> = {
 	data: Data | null;
 	error: SupabaseQueryError | null;
-};
-
-export class CompanyMembershipNotFoundError extends AppError {
-	constructor() {
-		super({
-			code: "workspace_forbidden",
-			message: "No company workspace is assigned to this user.",
-		});
-		this.name = "CompanyMembershipNotFoundError";
-	}
-}
-
-const selectCompanyId = async (client: SupabaseClient, userId: string) => {
-	const { data, error } = await client
-		.from("company_members")
-		.select("company_id")
-		.eq("clerk_user_id", userId)
-		.limit(1)
-		.maybeSingle<CompanyMemberRow>();
-
-	if (error) {
-		throw new AppError({
-			cause: error,
-			code: "supabase_query_failed",
-			details: { table: "company_members", supabaseCode: error.code },
-			message: "Unable to find company membership.",
-		});
-	}
-
-	if (!data) {
-		throw new CompanyMembershipNotFoundError();
-	}
-
-	return data.company_id;
 };
 
 const getSupabaseQueryData = async <Data>(table: string, query: PromiseLike<SupabaseQueryResult<Data>>) => {

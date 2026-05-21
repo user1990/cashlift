@@ -19,7 +19,6 @@
 	},
 	"dependencies": {
 		"@clerk/nextjs": "^7.3.2",
-		"@hookform/resolvers": "^5.2.2",
 		"@sentry/nextjs": "^10",
 		"@supabase/ssr": "^0.10.3",
 		"@supabase/supabase-js": "^2.105.4",
@@ -35,7 +34,6 @@
 		"react": "19.2.6",
 		"react-aria-components": "^1.17.0",
 		"react-dom": "19.2.6",
-		"react-hook-form": "^7.75.0",
 		"recharts": "^3.8.1",
 		"tailwind-merge": "^3.5.0",
 		"zod": "^4.4.3"

@@ -1,13 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { stubProductionWorkspaceEnv } from "@/test/workspaceEnv";
 
 const authMock = vi.hoisted(() => vi.fn());
 const captureAppExceptionMock = vi.hoisted(() => vi.fn());
 const captureAppMessageMock = vi.hoisted(() => vi.fn());
 const createServerSupabaseClientMock = vi.hoisted(() => vi.fn());
 
-vi.mock("@clerk/nextjs/server", () => ({
-	auth: authMock,
-}));
+vi.mock("@clerk/nextjs/server", () => ({ auth: (...args: unknown[]) => authMock(...args) }));
 
 vi.mock("@/services/platform/integrations/sentry", () => ({
 	captureAppException: captureAppExceptionMock,
@@ -17,14 +16,6 @@ vi.mock("@/services/platform/integrations/sentry", () => ({
 vi.mock("@/services/supabase/server", () => ({
 	createServerSupabaseClient: createServerSupabaseClientMock,
 }));
-
-const stubProductionWorkspaceEnv = () => {
-	vi.stubEnv("CASHLIFT_APP_MODE", "production");
-	vi.stubEnv("CLERK_SECRET_KEY", "secret");
-	vi.stubEnv("NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY", "pk");
-	vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
-	vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "anon");
-};
 
 const decideRequest = async (input = { id: "request-brandforge", status: "approved" as const }) => {
 	const { decideSpendRequest } = await import("./server");

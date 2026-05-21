@@ -67,5 +67,6 @@ Always read this file first. It defines the shared workflow for all apps and pac
 ## Quick Reference
 
 - Package manager: `pnpm`
+- Runtime: shell commands must auto-select Node from `.nvmrc` / `.node-version` before any `pnpm` command. `pnpm` can fail before project scripts run on older Node versions.
 - Conventions: `.agents/skills/guide/SKILL.md`
 - Directory guide: `.agents/README.md`

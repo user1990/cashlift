@@ -1,15 +1,12 @@
 import { auth } from "@clerk/nextjs/server";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { CompanyMembershipNotFoundError, selectCompanyId } from "@/modules/company-memberships/repositories/supabase";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
 import { captureAppException, captureAppMessage } from "@/services/platform/integrations/sentry";
 import { createServerSupabaseClient } from "@/services/supabase/server";
 import { AppError } from "@/utilities/errors/AppError";
 import type { SpendRequestDecisionInput } from "./schemas";
 import { spendRequestDecisionSchema } from "./schemas";
-
-type CompanyMemberRow = {
-	company_id: string;
-};
 
 type UpdatedSpendRequestRow = {
 	id: string;
@@ -37,16 +34,6 @@ export type SpendRequestDecisionResult =
 	  };
 
 type AuthSession = Awaited<ReturnType<typeof auth>>;
-
-class SpendRequestCompanyMembershipNotFoundError extends AppError {
-	constructor() {
-		super({
-			code: "workspace_forbidden",
-			message: "No company workspace is assigned to this user.",
-		});
-		this.name = "SpendRequestCompanyMembershipNotFoundError";
-	}
-}
 
 class SpendRequestNotFoundError extends AppError {
 	constructor() {
@@ -78,30 +65,6 @@ const captureSpendRequestMessage = (message: string, failureKind: string) =>
 			feature: "spend-request-decision",
 		},
 	});
-
-const selectCompanyId = async (client: SupabaseClient, userId: string) => {
-	const { data, error } = await client
-		.from("company_members")
-		.select("company_id")
-		.eq("clerk_user_id", userId)
-		.limit(1)
-		.maybeSingle<CompanyMemberRow>();
-
-	if (error) {
-		throw new AppError({
-			cause: error,
-			code: "supabase_query_failed",
-			details: { table: "company_members", supabaseCode: error.code },
-			message: "Unable to find company membership.",
-		});
-	}
-
-	if (!data) {
-		throw new SpendRequestCompanyMembershipNotFoundError();
-	}
-
-	return data.company_id;
-};
 
 const updateSpendRequestStatus = async (
 	client: SupabaseClient,
@@ -175,7 +138,7 @@ export const decideSpendRequest = async (
 
 		return { refresh: true, status: "success" };
 	} catch (error) {
-		if (error instanceof SpendRequestCompanyMembershipNotFoundError) {
+		if (error instanceof CompanyMembershipNotFoundError) {
 			return { code: "forbidden", message: "No company workspace is assigned to this user.", status: "error" };
 		}
 
