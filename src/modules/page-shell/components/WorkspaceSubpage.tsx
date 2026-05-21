@@ -1,5 +1,5 @@
 import type { FinancialDataset } from "@/modules/workspace/types";
-import type { WorkspaceSection, WorkspaceSectionComponent } from "./types";
+import type { WorkspaceSection } from "./types";
 import { WorkspaceApprovalsSection } from "./WorkspaceApprovalsSection";
 import { WorkspaceBudgetsSection } from "./WorkspaceBudgetsSection";
 import { WorkspaceCashSection } from "./WorkspaceCashSection";
@@ -14,28 +14,29 @@ type WorkspaceSubpageProps = {
 	section: Exclude<WorkspaceSection, "overview">;
 };
 
-export const WorkspaceSubpage = ({ dataset, section }: WorkspaceSubpageProps) => {
-	const SectionComponent = getWorkspaceSectionComponent(section);
+export const WorkspaceSubpage = ({ dataset, section }: WorkspaceSubpageProps) => (
+	<>
+		<WorkspaceSectionHeader section={section} />
 
-	return (
-		<>
-			<WorkspaceSectionHeader section={section} />
+		<WorkspaceSubpageSection dataset={dataset} section={section} />
+	</>
+);
 
-			<SectionComponent dataset={dataset} />
-		</>
-	);
-};
-
-const WORKSPACE_SUBPAGE_COMPONENTS = {
-	approvals: WorkspaceApprovalsSection,
-	budgets: WorkspaceBudgetsSection,
-	cash: WorkspaceCashSection,
-	invoices: WorkspaceInvoicesSection,
-	settings: WorkspaceSettingsSection,
-	team: WorkspaceTeamSection,
-	vendors: WorkspaceVendorsSection,
-} as const satisfies Record<Exclude<WorkspaceSection, "overview">, WorkspaceSectionComponent>;
-
-function getWorkspaceSectionComponent(section: Exclude<WorkspaceSection, "overview">) {
-	return WORKSPACE_SUBPAGE_COMPONENTS[section];
+function WorkspaceSubpageSection({ dataset, section }: WorkspaceSubpageProps) {
+	switch (section) {
+		case "approvals":
+			return <WorkspaceApprovalsSection dataset={dataset} />;
+		case "budgets":
+			return <WorkspaceBudgetsSection dataset={dataset} />;
+		case "cash":
+			return <WorkspaceCashSection dataset={dataset} />;
+		case "invoices":
+			return <WorkspaceInvoicesSection dataset={dataset} />;
+		case "settings":
+			return <WorkspaceSettingsSection dataset={dataset} />;
+		case "team":
+			return <WorkspaceTeamSection dataset={dataset} />;
+		case "vendors":
+			return <WorkspaceVendorsSection dataset={dataset} />;
+	}
 }

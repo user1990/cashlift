@@ -8,10 +8,12 @@ type SpendRequestListItemProps = {
 	meta: ReactNode;
 	reason: string;
 	vendor: string;
+	actions?: ReactNode;
 	cashAfterApprovalCents?: MoneyCents;
 };
 
 export const SpendRequestListItem = ({
+	actions,
 	amountCents,
 	cashAfterApprovalCents,
 	meta,
@@ -22,12 +24,18 @@ export const SpendRequestListItem = ({
 		amountCents={amountCents}
 		description={reason}
 		footer={
-			cashAfterApprovalCents !== undefined && (
-				<div className="mt-3 rounded-md bg-panel p-2 text-s text-muted-foreground">
-					<span>Cash after approval: </span>
+			(cashAfterApprovalCents !== undefined || actions) && (
+				<>
+					{cashAfterApprovalCents !== undefined && (
+						<div className="mt-3 rounded-md bg-panel p-2 text-s text-muted-foreground">
+							<span>Cash after approval: </span>
 
-					<span className="font-mono text-s+ text-panel-foreground">{formatCurrency(cashAfterApprovalCents)}</span>
-				</div>
+							<span className="font-mono text-s+ text-panel-foreground">{formatCurrency(cashAfterApprovalCents)}</span>
+						</div>
+					)}
+
+					{actions}
+				</>
 			)
 		}
 		meta={meta}

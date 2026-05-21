@@ -772,6 +772,53 @@ const { mutate, isLoading } = useMutation({
 });
 ```
 
+#### Choose the right React 19 data and mutation primitive
+
+CashLift is server-first by default. Use React 19 primitives where they remove state plumbing without weakening validation, authorization, or module ownership.
+
+| Need | Prefer | Notes |
+| --- | --- | --- |
+| Initial workspace/page data | Server Components and route-level loading | Default for App Router pages. Keep client leaves interactive, not responsible for first load. |
+| Client refetching, cache, polling, or long-lived server state | TanStack Query | Export query keys from query hooks so mutations can invalidate consistently. |
+| Simple form-style server mutation | Server Actions with `useActionState` and `useFormStatus` | Good for native forms with pending/error state. Keep React Hook Form for rich validation, field arrays, or complex controlled inputs. |
+| Instant user feedback over confirmed server state | `useOptimistic` | Good for approve/reject, save, follow, add-to-list, and similar user-triggered mutations. Server still validates and authorizes. |
+
+Use `useOptimistic` when the user should see the likely result immediately while the server mutation is in flight. Put the optimistic update inside `startTransition` when the action is async so React can show the optimistic render before awaiting network/server work.
+
+```tsx
+const [optimisticRequests, addOptimisticDecision] = useOptimistic(
+  requests,
+  (currentRequests, decision: Decision) =>
+    currentRequests.map((request) =>
+      request.id === decision.id ? { ...request, status: decision.status } : request,
+    ),
+);
+
+const decideRequest = (decision: Decision) => {
+  startTransition(async () => {
+    addOptimisticDecision(decision);
+
+    const result = await decideSpendRequestAction(decision);
+
+    if (result.status === "error") {
+      showError(result.message);
+    }
+  });
+};
+```
+
+Do not use optimistic UI to bypass permissions, schema checks, CSRF protection, or server-side conflict handling. Treat it as a temporary UI projection over confirmed server state.
+
+Use `<Activity>` when the user is likely to return to hidden UI and local/DOM state should survive, such as stateful tabs, drawers, filters, or review panels. Hidden Activity subtrees keep state and DOM, pause Effects, and still re-render at lower priority when props change. Avoid wrapping large trees that are unlikely to become visible again.
+
+Use `useEffectEvent` only for event-like callbacks fired from Effects that need the latest props or state without restarting the subscription. It is not a generic way to silence `exhaustive-deps`.
+
+Use React's `use` for conditional context reads or framework/cached promises. Do not create uncached promises during client render.
+
+Use React DOM resource APIs such as `preconnect`, `preload`, `preinit`, and `preloadModule` only for proven critical resources or anticipated navigation/module warming. Do not add speculative preloads without evidence because they can compete with current-page work.
+
+React Compiler is enabled, so avoid defensive `useMemo` and `useCallback` by default. Add manual memoization when a stable reference is part of an API contract, preserves semantic identity, or fixes a measured performance issue.
+
 #### ZOD schema structure
 
 There can be multiple use cases of how we use ZOD schemas: form validation, API response validation, custom error messages, etc. It's important to keep the schema structure consistent and easy to understand.
