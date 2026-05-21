@@ -20,10 +20,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	return (
 		<ClerkProvider
 			publishableKey={publishableKey}
-			signInFallbackRedirectUrl={WORKSPACE_REDIRECT_URL}
 			signInUrl={SIGN_IN_URL}
-			signUpFallbackRedirectUrl={WORKSPACE_REDIRECT_URL}
 			signUpUrl={SIGN_UP_URL}
+			signInFallbackRedirectUrl={WORKSPACE_REDIRECT_URL}
+			signUpFallbackRedirectUrl={WORKSPACE_REDIRECT_URL}
 		>
 			{children}
 		</ClerkProvider>
