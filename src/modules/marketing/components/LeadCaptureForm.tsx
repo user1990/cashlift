@@ -1,82 +1,60 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import { useFormStatus } from "react-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Button } from "@/ui/components/Button";
-import { TextField } from "@/ui/components/TextField";
+import { ControlledTextField } from "@/ui/components/ControlledTextField";
 import { type LeadCaptureFormValues, leadCaptureSchema } from "../schemas";
 
 type LeadCaptureFormProps = {
 	buttonLabel: string;
 };
 
-type LeadCaptureFormState = {
-	errors: Partial<Record<"company" | "email" | "name", string>>;
-	submitted: boolean;
-};
-
-const INITIAL_FORM_STATE = {
-	errors: {},
-	submitted: false,
-} as const satisfies LeadCaptureFormState;
-
-const INITIAL_FORM_VALUES = {
-	company: "",
-	email: "",
-	name: "",
-} as const satisfies LeadCaptureFormValues;
-
 export const LeadCaptureForm = ({ buttonLabel }: LeadCaptureFormProps) => {
-	const [values, setValues] = useState<LeadCaptureFormValues>(INITIAL_FORM_VALUES);
-	const [state, submitForm] = useActionState((_state: LeadCaptureFormState, formData: FormData) => {
-		const result = validateLeadCaptureForm(formData);
+	const [submitted, setSubmitted] = useState(false);
+	const form = useForm<LeadCaptureFormValues>({
+		defaultValues: {
+			company: "",
+			email: "",
+			name: "",
+		},
+		resolver: zodResolver(leadCaptureSchema),
+	});
 
-		if (result.submitted) {
-			setValues(INITIAL_FORM_VALUES);
-		}
+	const { control, handleSubmit, reset } = form;
 
-		return result;
-	}, INITIAL_FORM_STATE);
+	const submitForm = () => {
+		setSubmitted(true);
+		reset();
+	};
 
 	return (
-		<form action={submitForm} className="space-y-3">
-			<TextField
-				autoComplete="name"
-				errorMessage={state.errors.name}
-				invalid={!!state.errors.name}
-				label="Name"
-				name="name"
-				onChange={(name) => setValues((currentValues) => ({ ...currentValues, name }))}
-				placeholder="Maya Chen…"
-				value={values.name}
-			/>
+		<form className="space-y-3" onSubmit={handleSubmit(submitForm)}>
+			<ControlledTextField autoComplete="name" control={control} label="Name" name="name" placeholder="Maya Chen…" />
 
-			<TextField
+			<ControlledTextField
 				autoComplete="email"
-				errorMessage={state.errors.email}
-				invalid={!!state.errors.email}
+				control={control}
 				label="Work email"
 				name="email"
-				onChange={(email) => setValues((currentValues) => ({ ...currentValues, email }))}
 				placeholder="maya@company.com…"
 				type="email"
-				value={values.email}
 			/>
 
-			<TextField
+			<ControlledTextField
 				autoComplete="organization"
-				errorMessage={state.errors.company}
-				invalid={!!state.errors.company}
+				control={control}
 				label="Company"
 				name="company"
-				onChange={(company) => setValues((currentValues) => ({ ...currentValues, company }))}
 				placeholder="Studio Nova…"
-				value={values.company}
 			/>
 
-			<LeadCaptureSubmitButton label={buttonLabel} />
+			<Button type="submit" variant="primary" className="w-full">
+				{buttonLabel}
+			</Button>
 
-			{state.submitted && (
+			{submitted && (
 				<p aria-live="polite" className="text-s leading-5 text-signal">
 					Demo request captured. No private company data was sent.
 				</p>
@@ -84,39 +62,3 @@ export const LeadCaptureForm = ({ buttonLabel }: LeadCaptureFormProps) => {
 		</form>
 	);
 };
-
-const LeadCaptureSubmitButton = ({ label }: { label: string }) => {
-	const { pending } = useFormStatus();
-
-	return (
-		<Button className="w-full" disabled={pending} type="submit" variant="primary">
-			{pending ? "Capturing…" : label}
-		</Button>
-	);
-};
-
-function validateLeadCaptureForm(formData: FormData): LeadCaptureFormState {
-	const result = leadCaptureSchema.safeParse({
-		company: formData.get("company"),
-		email: formData.get("email"),
-		name: formData.get("name"),
-	});
-
-	if (!result.success) {
-		const errors = result.error.flatten().fieldErrors;
-
-		return {
-			errors: {
-				company: errors.company?.[0],
-				email: errors.email?.[0],
-				name: errors.name?.[0],
-			},
-			submitted: false,
-		};
-	}
-
-	return {
-		errors: {},
-		submitted: true,
-	};
-}

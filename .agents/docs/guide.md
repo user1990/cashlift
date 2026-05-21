@@ -780,7 +780,6 @@ CashLift is server-first by default. Use React 19 primitives where they remove s
 | --- | --- | --- |
 | Initial workspace/page data | Server Components and route-level loading | Default for App Router pages. Keep client leaves interactive, not responsible for first load. |
 | Client refetching, cache, polling, or long-lived server state | TanStack Query | Export query keys from query hooks so mutations can invalidate consistently. |
-| Simple form-style server mutation | Server Actions with `useActionState` and `useFormStatus` | Good for native forms with pending/error state. Keep React Hook Form for rich validation, field arrays, or complex controlled inputs. |
 | Instant user feedback over confirmed server state | `useOptimistic` | Good for approve/reject, save, follow, add-to-list, and similar user-triggered mutations. Server still validates and authorizes. |
 
 Use `useOptimistic` when the user should see the likely result immediately while the server mutation is in flight. Put the optimistic update inside `startTransition` when the action is async so React can show the optimistic render before awaiting network/server work.

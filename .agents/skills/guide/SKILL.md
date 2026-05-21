@@ -42,7 +42,6 @@ Node.js 22.13+, pnpm 11, TypeScript, React, Next.js App Router, React Compiler, 
 - Extract and export React Query query keys so mutations can invalidate them.
 - Use React Query instead of manual async `useEffect`.
 - Use `useOptimistic` for user-triggered mutations that need instant feedback; call optimistic updates inside `startTransition` for async actions and keep server validation/auth as source of truth.
-- Prefer `useActionState`, form Actions, and `useFormStatus` for simple native form submissions with pending/error state; keep React Hook Form for complex validation, field arrays, and controlled inputs.
 - Use `<Activity>` only for UI likely to return where local/DOM state should survive hiding; avoid it for large one-way trees because hidden work still re-renders at low priority.
 - Use `useEffectEvent` only for event-like callbacks fired by Effects that need latest props/state without resubscribing.
 - Use `use` only with framework/cached promises or conditional context reads; do not create uncached promises during client render.
