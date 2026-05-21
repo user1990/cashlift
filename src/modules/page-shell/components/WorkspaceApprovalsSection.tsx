@@ -1,4 +1,4 @@
-import { SpendRequestListItem } from "@/modules/spend-requests/components/SpendRequestListItem";
+import { SpendRequestApprovalQueue } from "@/modules/spend-requests/components/SpendRequestApprovalQueue";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { Panel, PanelHeader } from "@/ui/components/Panel";
 
@@ -14,17 +14,7 @@ export const WorkspaceApprovalsSection = ({ dataset }: WorkspaceApprovalsSection
 			<Panel>
 				<PanelHeader label="Queue" title={`${pendingRequests.length} requests need review`} />
 
-				<ul className="space-y-3">
-					{pendingRequests.map(({ amountCents, id, reason, requester, status, team, vendor }) => (
-						<SpendRequestListItem
-							key={id}
-							amountCents={amountCents}
-							meta={`${requester} · ${team} · ${status}`}
-							reason={reason}
-							vendor={vendor}
-						/>
-					))}
-				</ul>
+				<SpendRequestApprovalQueue requests={dataset.spendRequests} />
 			</Panel>
 
 			<Panel>

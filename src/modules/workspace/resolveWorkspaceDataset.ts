@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
+import { CompanyMembershipNotFoundError } from "@/modules/company-memberships/repositories/supabase";
 import { reduceDatasetForScope } from "@/modules/workspace/read-models";
-import { CompanyMembershipNotFoundError, supabaseFinanceRepository } from "@/modules/workspace/repositories/supabase";
+import { supabaseFinanceRepository } from "@/modules/workspace/repositories/supabase";
 import type { FinancialDataset, WorkspaceDatasetScope } from "@/modules/workspace/types";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
 import { captureAppException, captureAppMessage } from "@/services/platform/integrations/sentry";

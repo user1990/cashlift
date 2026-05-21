@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { stubDemoWorkspaceEnv, stubProductionWorkspaceEnv } from "@/test/workspaceEnv";
 import { demoWorkspaceDataset } from "./demoDataset";
 
 const authMock = vi.hoisted(() => vi.fn());
@@ -15,33 +16,11 @@ vi.mock("@/services/platform/integrations/sentry", () => ({
 	captureAppMessage: captureAppMessageMock,
 }));
 
-vi.mock("@/modules/workspace/repositories/supabase", () => {
-	class CompanyMembershipNotFoundError extends Error {
-		constructor() {
-			super("No company workspace is assigned to this user.");
-			this.name = "CompanyMembershipNotFoundError";
-		}
-	}
-
-	return {
-		CompanyMembershipNotFoundError,
-		supabaseFinanceRepository: {
-			getWorkspaceDataset: getWorkspaceDatasetMock,
-		},
-	};
-});
-
-const stubDemoWorkspaceEnv = () => {
-	vi.stubEnv("CASHLIFT_APP_MODE", "demo");
-};
-
-const stubProductionWorkspaceEnv = () => {
-	vi.stubEnv("CASHLIFT_APP_MODE", "production");
-	vi.stubEnv("CLERK_SECRET_KEY", "secret");
-	vi.stubEnv("NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY", "pk");
-	vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
-	vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "anon");
-};
+vi.mock("@/modules/workspace/repositories/supabase", () => ({
+	supabaseFinanceRepository: {
+		getWorkspaceDataset: getWorkspaceDatasetMock,
+	},
+}));
 
 const resolveDataset = async () => {
 	const { resolveWorkspaceDataset } = await import("./resolveWorkspaceDataset");
@@ -157,7 +136,7 @@ describe("resolveWorkspaceDataset", () => {
 
 	it("returns forbidden when membership is missing", async () => {
 		stubProductionWorkspaceEnv();
-		const { CompanyMembershipNotFoundError } = await import("@/modules/workspace/repositories/supabase");
+		const { CompanyMembershipNotFoundError } = await import("@/modules/company-memberships/repositories/supabase");
 		authMock.mockResolvedValue({
 			getToken: vi.fn().mockResolvedValue("jwt"),
 			userId: "user-1",

@@ -143,7 +143,7 @@ e2e/                    Playwright smoke tests
 
 # Getting Started
 
-This repo uses pnpm.
+This repo pins Node in `.nvmrc` and `.node-version`. Shells should auto-select that version before pnpm runs, because pnpm can fail before project scripts run on older runtimes.
 
 ```bash
 pnpm install

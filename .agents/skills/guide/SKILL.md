@@ -41,6 +41,12 @@ Node.js 22.13+, pnpm 11, TypeScript, React, Next.js App Router, React Compiler, 
 - Use `key` for intentional component state resets when switching entity identity; avoid it when preserving local state or avoiding expensive remounts matters.
 - Extract and export React Query query keys so mutations can invalidate them.
 - Use React Query instead of manual async `useEffect`.
+- Use `useOptimistic` for user-triggered mutations that need instant feedback; call optimistic updates inside `startTransition` for async actions and keep server validation/auth as source of truth.
+- Use `<Activity>` only for UI likely to return where local/DOM state should survive hiding; avoid it for large one-way trees because hidden work still re-renders at low priority.
+- Use `useEffectEvent` only for event-like callbacks fired by Effects that need latest props/state without resubscribing.
+- Use `use` only with framework/cached promises or conditional context reads; do not create uncached promises during client render.
+- Use React DOM resource preloading APIs only for proven critical resources or anticipated navigation/module warming.
+- Trust React Compiler by default; add `useMemo`/`useCallback` only for semantic stability or measured need.
 - Zod schemas: constants for static schemas, functions for dynamic schemas, hooks only when schema construction needs hooks/translations.
 - `cn()` conditions use logical expressions, not object syntax.
 - Prefer CSS `:has()` over React state/handlers/props when the state only exists to style a parent based on descendant structure/native state.
