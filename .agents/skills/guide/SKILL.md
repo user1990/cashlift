@@ -46,6 +46,7 @@ Node.js 22.13+, pnpm 11, TypeScript, React, Next.js App Router, React Compiler, 
 - Prefer CSS `:has()` over React state/handlers/props when the state only exists to style a parent based on descendant structure/native state.
 - Prefer native View Transitions for snapshot-based page/UI transitions before adding animation dependencies.
 - Declare `children` explicitly in props; avoid `React.PropsWithChildren`.
+- Component boolean props should be optional by default and default to `false` in the component unless the boolean is truly required domain data.
 - Avoid `returnObjects: true` for object-shaped translations; it is acceptable for translated arrays.
 
 ## Security

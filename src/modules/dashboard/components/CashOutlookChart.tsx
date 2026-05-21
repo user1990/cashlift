@@ -5,10 +5,10 @@ import { ChartPlaceholder } from "./ChartPlaceholder";
 
 type CashOutlookChartProps = {
 	chartData: ForecastChartDataPoint[];
-	chartsReady: boolean;
+	chartsReady?: boolean;
 };
 
-export const CashOutlookChart = ({ chartData, chartsReady }: CashOutlookChartProps) =>
+export const CashOutlookChart = ({ chartData, chartsReady = false }: CashOutlookChartProps) =>
 	chartsReady ? (
 		<>
 			<CashOutlookChartSummary chartData={chartData} />

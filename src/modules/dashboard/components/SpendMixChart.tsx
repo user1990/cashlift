@@ -5,10 +5,10 @@ import { SpendMixChartSummary } from "./SpendMixChartSummary";
 
 type SpendMixChartProps = {
 	chartData: SpendChartDataPoint[];
-	chartsReady: boolean;
+	chartsReady?: boolean;
 };
 
-export const SpendMixChart = ({ chartData, chartsReady }: SpendMixChartProps) =>
+export const SpendMixChart = ({ chartData, chartsReady = false }: SpendMixChartProps) =>
 	chartsReady ? (
 		<>
 			<SpendMixChartSummary chartData={chartData} />

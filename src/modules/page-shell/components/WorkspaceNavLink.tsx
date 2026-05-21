@@ -3,11 +3,11 @@ import { cn } from "@/ui/utils/cn";
 import type { WorkspaceNavItem } from "./types";
 
 type WorkspaceNavLinkProps = {
-	active: boolean;
 	item: WorkspaceNavItem;
+	active?: boolean;
 };
 
-export const WorkspaceNavLink = ({ active, item }: WorkspaceNavLinkProps) => {
+export const WorkspaceNavLink = ({ active = false, item }: WorkspaceNavLinkProps) => {
 	const Icon = item.icon;
 
 	return (
@@ -21,7 +21,7 @@ export const WorkspaceNavLink = ({ active, item }: WorkspaceNavLinkProps) => {
 	);
 };
 
-const WorkspaceActiveIndicator = ({ active }: { active: boolean }) => {
+const WorkspaceActiveIndicator = ({ active = false }: { active?: boolean }) => {
 	if (!active) {
 		return null;
 	}
