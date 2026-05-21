@@ -5,12 +5,12 @@ import { CashOutlookChart } from "./CashOutlookChart";
 import { DashboardPanel } from "./DashboardPanel";
 import { SpendMixChart } from "./SpendMixChart";
 
-type DashboardChartsSectionProps = {
+type ChartsSectionProps = {
 	dashboard: DashboardViewModel;
 	chartsReady?: boolean;
 };
 
-export const DashboardChartsSection = ({ chartsReady, dashboard }: DashboardChartsSectionProps) => (
+export const ChartsSection = ({ chartsReady, dashboard }: ChartsSectionProps) => (
 	<div className="grid gap-4 xl:grid-cols-[0.98fr_1.03fr]">
 		<DashboardPanel
 			action={

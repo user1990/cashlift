@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/ui/utils/cn";
 
-type DashboardListRowProps = {
+type QueueRowProps = {
 	title: ReactNode;
 	icon?: ReactNode;
 	meta?: ReactNode;
@@ -9,7 +9,7 @@ type DashboardListRowProps = {
 	variant?: "primary" | "plain";
 };
 
-export const DashboardListRow = ({ icon, meta, title, value, variant = "plain" }: DashboardListRowProps) => (
+export const QueueRow = ({ icon, meta, title, value, variant = "plain" }: QueueRowProps) => (
 	<li className={cn(variant === "primary" && "rounded-lg border border-primary-muted/80 bg-primary-subtle p-4")}>
 		<div className="flex items-center justify-between gap-3">
 			<div className="flex items-center gap-3">

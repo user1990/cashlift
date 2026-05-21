@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
-import { SpendRequestApprovalQueue } from "./SpendRequestApprovalQueue";
+import { ApprovalQueue } from "./ApprovalQueue";
 
 const mocks = vi.hoisted(() => ({
 	decideSpendRequestAction: vi.fn(),
@@ -19,7 +19,7 @@ vi.mock("next/navigation", () => ({
 	}),
 }));
 
-describe("SpendRequestApprovalQueue", () => {
+describe("ApprovalQueue", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
@@ -31,7 +31,7 @@ describe("SpendRequestApprovalQueue", () => {
 			resolveAction = resolve;
 		});
 		mocks.decideSpendRequestAction.mockReturnValue(action);
-		render(<SpendRequestApprovalQueue requests={financialDatasetFixture.spendRequests} />);
+		render(<ApprovalQueue requests={financialDatasetFixture.spendRequests} />);
 
 		await user.click(screen.getByRole("button", { name: "Approve BrandForge" }));
 
@@ -54,7 +54,7 @@ describe("SpendRequestApprovalQueue", () => {
 			message: "Unable to update spend request.",
 			status: "error",
 		});
-		render(<SpendRequestApprovalQueue requests={financialDatasetFixture.spendRequests} />);
+		render(<ApprovalQueue requests={financialDatasetFixture.spendRequests} />);
 
 		await user.click(screen.getByRole("button", { name: "Reject Delta" }));
 

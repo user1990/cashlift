@@ -1,4 +1,4 @@
-import { AmountListItem } from "@/modules/money/components/AmountListItem";
+import { AmountItem } from "@/modules/money/components/AmountItem";
 import { formatCurrency, percentage } from "@/modules/money/format";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { getInvoiceRiskTotal } from "@/modules/workspace/utils";
@@ -19,7 +19,7 @@ export const WorkspaceInvoicesSection = ({ dataset }: WorkspaceInvoicesSectionPr
 
 		<ul className="grid gap-3 @md:grid-cols-2">
 			{dataset.invoices.map(({ amountCents, id, status, collectionProbability, owner, client }) => (
-				<AmountListItem
+				<AmountItem
 					key={id}
 					amountCents={amountCents}
 					meta={`${status} · ${percentage(collectionProbability)} · ${owner}`}

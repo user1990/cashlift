@@ -3,10 +3,10 @@ import Link from "next/link";
 import type { NavGroup } from "./marketingHeaderNavigation";
 import { MARKETING_NAV_GROUPS } from "./marketingHeaderNavigation";
 
-export const MarketingDesktopNav = () => (
+export const DesktopNav = () => (
 	<nav aria-label="Main navigation" className="hidden items-center gap-2 text-m font-medium text-shell-muted lg:flex">
 		{MARKETING_NAV_GROUPS.map((group) => (
-			<MarketingDesktopNavGroup key={group.label} group={group} />
+			<DesktopNavGroup key={group.label} group={group} />
 		))}
 
 		<Link
@@ -18,7 +18,7 @@ export const MarketingDesktopNav = () => (
 	</nav>
 );
 
-const MarketingDesktopNavGroup = ({ group }: { group: NavGroup }) => (
+const DesktopNavGroup = ({ group }: { group: NavGroup }) => (
 	<div className="group relative">
 		<button
 			aria-haspopup="true"

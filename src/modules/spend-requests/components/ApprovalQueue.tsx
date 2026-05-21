@@ -6,9 +6,9 @@ import { startTransition, useOptimistic, useState } from "react";
 import { Button } from "@/ui/components/Button";
 import { decideSpendRequestAction } from "../actions";
 import type { SpendRequest, SpendRequestStatus } from "../types";
-import { SpendRequestListItem } from "./SpendRequestListItem";
+import { RequestItem } from "./RequestItem";
 
-type SpendRequestApprovalQueueProps = {
+type ApprovalQueueProps = {
 	requests: SpendRequest[];
 };
 
@@ -17,7 +17,7 @@ type OptimisticDecision = {
 	status: Exclude<SpendRequestStatus, "pending">;
 };
 
-export const SpendRequestApprovalQueue = ({ requests }: SpendRequestApprovalQueueProps) => {
+export const ApprovalQueue = ({ requests }: ApprovalQueueProps) => {
 	const { refresh } = useRouter();
 	const [message, setMessage] = useState<string | null>(null);
 	const [optimisticRequests, addOptimisticDecision] = useOptimistic(
@@ -62,7 +62,7 @@ export const SpendRequestApprovalQueue = ({ requests }: SpendRequestApprovalQueu
 			{pendingRequests.length > 0 ? (
 				<ul className="space-y-3">
 					{pendingRequests.map(({ amountCents, id, reason, requester, status, team, vendor }) => (
-						<SpendRequestListItem
+						<RequestItem
 							key={id}
 							actions={
 								<div className="mt-3 flex flex-wrap gap-2">

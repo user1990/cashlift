@@ -5,10 +5,10 @@ import { ShellContainer } from "@/modules/page-shell/components/ShellContainer";
 import { ShellSection } from "@/modules/page-shell/components/ShellSection";
 import { Panel } from "@/ui/components/Panel";
 import { FEATURE_CARDS, PROOF_POINTS } from "../content";
-import { MarketingActionLink } from "./MarketingActionLink";
-import { MarketingHero } from "./MarketingHero";
-import { MarketingIconCard } from "./MarketingIconCard";
-import { MarketingProofList } from "./MarketingProofList";
+import { ActionLink } from "./ActionLink";
+import { Hero } from "./Hero";
+import { IconCard } from "./IconCard";
+import { ProofList } from "./ProofList";
 
 const CASH_ACTION_PREVIEW_ITEMS = [
 	["Critical", "Chase Northstar invoice", "$18.4k"],
@@ -31,7 +31,7 @@ export const HomePage = () => (
 
 			<div className="relative mx-auto grid min-h-[82svh] max-w-[1180px] items-center gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_0.82fr] lg:px-8">
 				<div>
-					<MarketingHero
+					<Hero
 						description="CashLift gives service firms one daily command center for cash actions: approvals, receivables, vendor leaks, budgets, and runway."
 						label="Cash-aware spend decisions"
 						title="Approve spend, chase cash, and prevent leaks before money leaves."
@@ -39,14 +39,14 @@ export const HomePage = () => (
 					/>
 
 					<div className="mt-8 flex flex-wrap items-center gap-3">
-						<MarketingActionLink href="/demo">
+						<ActionLink href="/demo">
 							Run leak audit
 							<ArrowRight aria-hidden className="size-4" />
-						</MarketingActionLink>
+						</ActionLink>
 
-						<MarketingActionLink href="/dashboard" variant="secondary" className="bg-shell-elevated/80">
+						<ActionLink href="/dashboard" variant="secondary" className="bg-shell-elevated/80">
 							Open demo app
-						</MarketingActionLink>
+						</ActionLink>
 					</div>
 				</div>
 
@@ -85,7 +85,7 @@ export const HomePage = () => (
 
 		<ShellSection className="bg-cyan-950">
 			<ShellContainer className="py-8 sm:px-6 md:grid-cols-3 lg:px-8">
-				<MarketingProofList items={PROOF_POINTS} variant="shell" />
+				<ProofList items={PROOF_POINTS} variant="shell" />
 			</ShellContainer>
 		</ShellSection>
 
@@ -101,7 +101,7 @@ export const HomePage = () => (
 			<ul className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
 				{FEATURE_CARDS.map(({ description, icon: Icon, title }) => (
 					<li key={title}>
-						<MarketingIconCard description={description} Icon={Icon} title={title} />
+						<IconCard description={description} Icon={Icon} title={title} />
 					</li>
 				))}
 			</ul>

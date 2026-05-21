@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { formatCurrency } from "@/modules/money/format";
 import type { MoneyCents } from "@/modules/money/types";
 
-type AmountListItemProps = {
+type AmountItemProps = {
 	title: string;
 	amountCents: MoneyCents;
 	description?: ReactNode;
@@ -10,7 +10,7 @@ type AmountListItemProps = {
 	meta?: ReactNode;
 };
 
-export const AmountListItem = ({ amountCents, description, footer, meta, title }: AmountListItemProps) => (
+export const AmountItem = ({ amountCents, description, footer, meta, title }: AmountItemProps) => (
 	<li className="rounded-lg border border-border bg-panel-muted p-3">
 		<div className="flex items-start justify-between gap-3">
 			<div>

@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import type { NavGroup } from "./marketingHeaderNavigation";
 import { MARKETING_NAV_GROUPS } from "./marketingHeaderNavigation";
 
-export const MarketingMobileNav = () => (
+export const MobileNav = () => (
 	<details className="group lg:hidden">
 		<summary
 			aria-label="Toggle navigation"
@@ -22,13 +22,13 @@ export const MarketingMobileNav = () => (
 		>
 			<div className="mx-auto grid max-w-[1180px] gap-5">
 				{MARKETING_NAV_GROUPS.map((group) => (
-					<MarketingMobileNavGroup key={group.label} group={group} />
+					<MobileNavGroup key={group.label} group={group} />
 				))}
 
 				<div className="grid gap-1 border-t border-shell-border pt-4">
-					<MarketingMobileNavLink href="/customers">Customers</MarketingMobileNavLink>
+					<MobileNavLink href="/customers">Customers</MobileNavLink>
 
-					<MarketingMobileNavLink href="/login">Login</MarketingMobileNavLink>
+					<MobileNavLink href="/login">Login</MobileNavLink>
 
 					<Link
 						href="/demo"
@@ -42,7 +42,7 @@ export const MarketingMobileNav = () => (
 	</details>
 );
 
-const MarketingMobileNavGroup = ({ group }: { group: NavGroup }) => (
+const MobileNavGroup = ({ group }: { group: NavGroup }) => (
 	<details className="group">
 		<summary className="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-md px-3 text-s+ uppercase tracking-normal text-primary outline-none transition-colors duration-150 hover:bg-panel/10 focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
 			{group.label}
@@ -52,15 +52,15 @@ const MarketingMobileNavGroup = ({ group }: { group: NavGroup }) => (
 
 		<div className="mt-2 grid gap-1 pl-3">
 			{group.items.map(({ href, label }) => (
-				<MarketingMobileNavLink key={href} href={href}>
+				<MobileNavLink key={href} href={href}>
 					{label}
-				</MarketingMobileNavLink>
+				</MobileNavLink>
 			))}
 		</div>
 	</details>
 );
 
-const MarketingMobileNavLink = ({ children, href }: { children: ReactNode; href: string }) => (
+const MobileNavLink = ({ children, href }: { children: ReactNode; href: string }) => (
 	<Link
 		href={href}
 		className="rounded-md px-3 py-2 text-m font-medium text-shell-muted transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground"

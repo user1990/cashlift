@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { FOOTER_LINKS } from "../content";
-import { MarketingHeader } from "./MarketingHeader";
+import { Header } from "./Header";
 
-type MarketingLayoutProps = {
+type ShellProps = {
 	children: React.ReactNode;
 };
 
-export const MarketingLayout = ({ children }: MarketingLayoutProps) => (
+export const Shell = ({ children }: ShellProps) => (
 	<div className="flex min-h-screen flex-col bg-shell text-shell-foreground">
-		<MarketingHeader />
+		<Header />
 
 		{children}
 

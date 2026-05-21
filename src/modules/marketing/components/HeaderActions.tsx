@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { MarketingMobileNav } from "./MarketingMobileNav";
+import { MobileNav } from "./MobileNav";
 
-export const MarketingHeaderActions = () => (
+export const HeaderActions = () => (
 	<div className="flex items-center gap-2">
 		<Link
 			href="/login"
@@ -17,6 +17,6 @@ export const MarketingHeaderActions = () => (
 			Run leak audit
 		</Link>
 
-		<MarketingMobileNav />
+		<MobileNav />
 	</div>
 );

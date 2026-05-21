@@ -4,7 +4,7 @@ import Link from "next/link";
 import { WORKSPACE_NAV_ITEMS } from "./navigation";
 import type { WorkspaceMode, WorkspaceSection } from "./types";
 import { WorkspaceAccountMenu } from "./WorkspaceAccountMenu";
-import { WorkspaceNavLink } from "./WorkspaceNavLink";
+import { WorkspaceSidebarLink } from "./WorkspaceSidebarLink";
 
 type WorkspaceSidebarProps = {
 	mode: WorkspaceMode;
@@ -25,7 +25,7 @@ export const WorkspaceSidebar = ({ mode, section }: WorkspaceSidebarProps) => (
 
 		<nav className="mt-7 grid gap-2" aria-label="Workspace">
 			{WORKSPACE_NAV_ITEMS.map((item) => (
-				<WorkspaceNavLink key={item.href} active={item.section === section} item={item} />
+				<WorkspaceSidebarLink key={item.href} active={item.section === section} item={item} />
 			))}
 		</nav>
 

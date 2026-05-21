@@ -4,13 +4,13 @@ import { MainContent } from "./MainContent";
 import type { WorkspaceSection } from "./types";
 import { WorkspaceSectionHeader } from "./WorkspaceSectionHeader";
 
-type WorkspaceStateProps = {
+type WorkspaceLoadStateProps = {
 	message: string;
 	section: WorkspaceSection;
 	title: string;
 };
 
-export const WorkspaceState = ({ message, section, title }: WorkspaceStateProps) => (
+export const WorkspaceLoadState = ({ message, section, title }: WorkspaceLoadStateProps) => (
 	<MainContent variant="workspace">
 		<div className="mx-auto grid w-full max-w-[1440px] gap-5 px-4 py-5 sm:px-6 lg:grid-cols-[240px_1fr] lg:px-8">
 			<aside className="rounded-lg border border-shell-border bg-shell-elevated p-3 shadow-shell lg:sticky lg:top-5 lg:self-start">
