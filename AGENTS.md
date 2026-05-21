@@ -31,6 +31,7 @@ Always read this file first. It defines the shared workflow for all apps and pac
 5. Match local conventions before editing.
    - Read 2-3 nearby files of the same kind before writing code.
    - Replicate local export style, type placement, function style, test shape, file naming, import ordering, and component structure.
+   - Keep page and parent components lean. When a TSX file defines nontrivial child components, cards, list items, legends, menus, summaries, or repeated UI blocks inline, extract each one into its own colocated component file without asking first.
    - Confirm aliases in the local `tsconfig.json`; this app uses `@/*` to `src/*`.
 
 6. Keep context compact.
@@ -56,6 +57,7 @@ Always read this file first. It defines the shared workflow for all apps and pac
 
 - Never guess imports or duplicate existing helpers/components.
 - Never import across feature/module boundaries casually.
+- Do not leave nontrivial child components inline inside page or parent TSX files. Split them into separate colocated component files by default so the parent stays focused on composition.
 - Prefer design tokens and theme-backed utilities; avoid arbitrary pixels/colors unless justified.
 - Prefer CSS `:has()` for styling-only parent state when clearer than React state.
 - Validate server-boundary input with Zod or equivalent, authorize before data access, and avoid SQL/query string concatenation.

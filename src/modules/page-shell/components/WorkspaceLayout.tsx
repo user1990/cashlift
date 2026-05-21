@@ -8,9 +8,9 @@ import { WorkspaceApprovalsSection } from "./WorkspaceApprovalsSection";
 import { WorkspaceBudgetsSection } from "./WorkspaceBudgetsSection";
 import { WorkspaceCashSection } from "./WorkspaceCashSection";
 import { WorkspaceInvoicesSection } from "./WorkspaceInvoicesSection";
-import { WorkspaceSectionHeader } from "./WorkspaceSectionHeader";
 import { WorkspaceSettingsSection } from "./WorkspaceSettingsSection";
 import { WorkspaceSidebar } from "./WorkspaceSidebar";
+import { WorkspaceSubpage } from "./WorkspaceSubpage";
 import { WorkspaceTeamSection } from "./WorkspaceTeamSection";
 import { WorkspaceVendorsSection } from "./WorkspaceVendorsSection";
 
@@ -33,23 +33,6 @@ export const WorkspaceLayout = ({ dataset, mode, section }: WorkspaceLayoutProps
 				</section>
 			</div>
 		</MainContent>
-	);
-};
-
-type WorkspaceSubpageProps = {
-	dataset: FinancialDataset;
-	section: Exclude<WorkspaceSection, "overview">;
-};
-
-const WorkspaceSubpage = ({ dataset, section }: WorkspaceSubpageProps) => {
-	const SectionComponent = getWorkspaceSectionComponent(section);
-
-	return (
-		<>
-			<WorkspaceSectionHeader section={section} />
-
-			<SectionComponent dataset={dataset} />
-		</>
 	);
 };
 

@@ -1,12 +1,13 @@
 import { formatPreciseCompactCurrency } from "@/modules/money/format";
 import type { DashboardViewModel } from "../types";
+import { BudgetLegend } from "./BudgetLegend";
 import { CashOutlookChart } from "./CashOutlookChart";
 import { DashboardPanel } from "./DashboardPanel";
 import { SpendMixChart } from "./SpendMixChart";
 
 type DashboardChartsSectionProps = {
-	chartsReady: boolean;
 	dashboard: DashboardViewModel;
+	chartsReady?: boolean;
 };
 
 export const DashboardChartsSection = ({ chartsReady, dashboard }: DashboardChartsSectionProps) => (
@@ -30,19 +31,5 @@ export const DashboardChartsSection = ({ chartsReady, dashboard }: DashboardChar
 		<DashboardPanel action={<BudgetLegend />} label="Team budgets" title="Committed spend by team">
 			<SpendMixChart chartData={dashboard.spendChartData} chartsReady={chartsReady} />
 		</DashboardPanel>
-	</div>
-);
-
-const BudgetLegend = () => (
-	<div className="flex flex-wrap items-center gap-4 text-s+ text-shell-muted">
-		<span className="inline-flex items-center gap-2">
-			<span className="size-3 rounded-full bg-primary" />
-			Budget used
-		</span>
-
-		<span className="inline-flex items-center gap-2">
-			<span className="size-3 rounded-full bg-highlight" />
-			Remaining
-		</span>
 	</div>
 );

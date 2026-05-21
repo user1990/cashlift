@@ -1,4 +1,5 @@
 import { Panel } from "@/ui/components/Panel";
+import { ProofPoint } from "./ProofPoint";
 
 type MarketingProofListProps = {
 	items: readonly {
@@ -34,24 +35,4 @@ export const MarketingProofList = ({ items, variant = "panel" }: MarketingProofL
 			</li>
 		))}
 	</ul>
-);
-
-type ProofPointProps = {
-	metric: string;
-	metricClassName: string;
-	term: string;
-	text: string;
-	textClassName: string;
-};
-
-const ProofPoint = ({ metric, metricClassName, term, text, textClassName }: ProofPointProps) => (
-	<>
-		<dl>
-			<dt className="sr-only">{term}</dt>
-
-			<dd className={`font-mono ${metricClassName}`}>{metric}</dd>
-		</dl>
-
-		<p className={`text-m leading-6 ${textClassName}`}>{text}</p>
-	</>
 );
