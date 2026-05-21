@@ -1,10 +1,10 @@
 import { Panel } from "@/ui/components/Panel";
 
-type UseCaseAnswersListProps = {
+type UseCaseAnswersProps = {
 	answers: readonly string[];
 };
 
-export const UseCaseAnswersList = ({ answers }: UseCaseAnswersListProps) => (
+export const UseCaseAnswers = ({ answers }: UseCaseAnswersProps) => (
 	<ul className="mt-10 grid gap-4 md:grid-cols-3">
 		{answers.map((answer) => (
 			<li key={answer}>

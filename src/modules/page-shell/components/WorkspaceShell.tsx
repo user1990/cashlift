@@ -1,18 +1,18 @@
 "use client";
 
-import { DashboardContent } from "@/modules/dashboard/components/DashboardContent";
+import { Overview } from "@/modules/dashboard/components/Overview";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { MainContent } from "./MainContent";
 import type { WorkspaceMode, WorkspacePageProps } from "./types";
+import { WorkspaceSectionPage } from "./WorkspaceSectionPage";
 import { WorkspaceSidebar } from "./WorkspaceSidebar";
-import { WorkspaceSubpage } from "./WorkspaceSubpage";
 
-type WorkspaceLayoutProps = WorkspacePageProps & {
+type WorkspaceShellProps = WorkspacePageProps & {
 	dataset: FinancialDataset;
 	mode: WorkspaceMode;
 };
 
-export const WorkspaceLayout = ({ dataset, mode, section }: WorkspaceLayoutProps) => {
+export const WorkspaceShell = ({ dataset, mode, section }: WorkspaceShellProps) => {
 	const overview = section === "overview";
 
 	return (
@@ -21,7 +21,7 @@ export const WorkspaceLayout = ({ dataset, mode, section }: WorkspaceLayoutProps
 				<WorkspaceSidebar mode={mode} section={section} />
 
 				<section className="min-w-0 space-y-5">
-					{overview ? <DashboardContent dataset={dataset} /> : <WorkspaceSubpage section={section} dataset={dataset} />}
+					{overview ? <Overview dataset={dataset} /> : <WorkspaceSectionPage section={section} dataset={dataset} />}
 				</section>
 			</div>
 		</MainContent>

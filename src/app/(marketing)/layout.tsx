@@ -1,9 +1,9 @@
-import { MarketingLayout } from "@/modules/marketing/components/MarketingLayout";
+import { Shell } from "@/modules/marketing/components/Shell";
 
 type MarketingRouteLayoutProps = {
 	children: React.ReactNode;
 };
 
 export default function MarketingRouteLayout({ children }: MarketingRouteLayoutProps) {
-	return <MarketingLayout>{children}</MarketingLayout>;
+	return <Shell>{children}</Shell>;
 }

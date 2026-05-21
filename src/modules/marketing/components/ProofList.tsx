@@ -1,7 +1,7 @@
 import { Panel } from "@/ui/components/Panel";
 import { ProofPoint } from "./ProofPoint";
 
-type MarketingProofListProps = {
+type ProofListProps = {
 	items: readonly {
 		metric: string;
 		text: string;
@@ -9,7 +9,7 @@ type MarketingProofListProps = {
 	variant?: "panel" | "shell";
 };
 
-export const MarketingProofList = ({ items, variant = "panel" }: MarketingProofListProps) => (
+export const ProofList = ({ items, variant = "panel" }: ProofListProps) => (
 	<ul className={variant === "panel" ? "mt-10 grid gap-4 md:grid-cols-3" : "contents"}>
 		{items.map(({ metric, text }) => (
 			<li key={metric}>

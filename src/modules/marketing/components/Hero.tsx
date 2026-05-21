@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/ui/utils/cn";
 
-type MarketingHeroProps = {
+type HeroProps = {
 	description: ReactNode;
 	label: ReactNode;
 	title: ReactNode;
@@ -10,14 +10,7 @@ type MarketingHeroProps = {
 	titleClassName?: string;
 };
 
-export const MarketingHero = ({
-	as: Component = "h1",
-	className,
-	description,
-	label,
-	title,
-	titleClassName,
-}: MarketingHeroProps) => (
+export const Hero = ({ as: Component = "h1", className, description, label, title, titleClassName }: HeroProps) => (
 	<div className={className}>
 		<p className="text-s+ uppercase tracking-normal text-primary">{label}</p>
 

@@ -9,20 +9,20 @@ import { WorkspaceSettingsSection } from "./WorkspaceSettingsSection";
 import { WorkspaceTeamSection } from "./WorkspaceTeamSection";
 import { WorkspaceVendorsSection } from "./WorkspaceVendorsSection";
 
-type WorkspaceSubpageProps = {
+type WorkspaceSectionPageProps = {
 	dataset: FinancialDataset;
 	section: Exclude<WorkspaceSection, "overview">;
 };
 
-export const WorkspaceSubpage = ({ dataset, section }: WorkspaceSubpageProps) => (
+export const WorkspaceSectionPage = ({ dataset, section }: WorkspaceSectionPageProps) => (
 	<>
 		<WorkspaceSectionHeader section={section} />
 
-		<WorkspaceSubpageSection dataset={dataset} section={section} />
+		<WorkspaceSectionContent dataset={dataset} section={section} />
 	</>
 );
 
-function WorkspaceSubpageSection({ dataset, section }: WorkspaceSubpageProps) {
+function WorkspaceSectionContent({ dataset, section }: WorkspaceSectionPageProps) {
 	switch (section) {
 		case "approvals":
 			return <WorkspaceApprovalsSection dataset={dataset} />;

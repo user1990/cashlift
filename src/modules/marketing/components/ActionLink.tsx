@@ -2,16 +2,11 @@ import Link from "next/link";
 import type { ComponentProps } from "react";
 import { cn } from "@/ui/utils/cn";
 
-type MarketingActionLinkProps = ComponentProps<typeof Link> & {
+type ActionLinkProps = ComponentProps<typeof Link> & {
 	variant?: "primary" | "secondary";
 };
 
-export const MarketingActionLink = ({
-	children,
-	className,
-	variant = "primary",
-	...props
-}: MarketingActionLinkProps) => (
+export const ActionLink = ({ children, className, variant = "primary", ...props }: ActionLinkProps) => (
 	<Link
 		className={cn(
 			"inline-flex h-11 items-center justify-center rounded-md border px-4 text-m font-medium transition-[background-color,border-color,box-shadow,color] duration-150 ease",

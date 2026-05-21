@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
-import { AmountListItem } from "@/modules/money/components/AmountListItem";
+import { AmountItem } from "@/modules/money/components/AmountItem";
 import { formatCurrency } from "@/modules/money/format";
 import type { MoneyCents } from "@/modules/money/types";
 
-type SpendRequestListItemProps = {
+type RequestItemProps = {
 	amountCents: MoneyCents;
 	meta: ReactNode;
 	reason: string;
@@ -12,15 +12,15 @@ type SpendRequestListItemProps = {
 	cashAfterApprovalCents?: MoneyCents;
 };
 
-export const SpendRequestListItem = ({
+export const RequestItem = ({
 	actions,
 	amountCents,
 	cashAfterApprovalCents,
 	meta,
 	reason,
 	vendor,
-}: SpendRequestListItemProps) => (
-	<AmountListItem
+}: RequestItemProps) => (
+	<AmountItem
 		amountCents={amountCents}
 		description={reason}
 		footer={

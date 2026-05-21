@@ -4,11 +4,11 @@ import { CalendarDays, ChevronDown, Download } from "lucide-react";
 import { Button } from "@/ui/components/Button";
 import type { DashboardViewModel } from "../types";
 
-type DashboardHeaderProps = {
+type OverviewHeaderProps = {
 	dashboard: DashboardViewModel;
 };
 
-export const DashboardHeader = ({ dashboard }: DashboardHeaderProps) => (
+export const OverviewHeader = ({ dashboard }: OverviewHeaderProps) => (
 	<header className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
 		<div>
 			<h1 className="text-3xl+ font-semibold tracking-normal text-shell-foreground">

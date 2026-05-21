@@ -1,4 +1,4 @@
-import { AmountListItem } from "@/modules/money/components/AmountListItem";
+import { AmountItem } from "@/modules/money/components/AmountItem";
 import { percentage } from "@/modules/money/format";
 
 type SubscriptionLeakRow = {
@@ -9,15 +9,15 @@ type SubscriptionLeakRow = {
 	vendor: string;
 };
 
-type SubscriptionLeakListProps = {
+type LeakListProps = {
 	items: SubscriptionLeakRow[];
 	className?: string;
 };
 
-export const SubscriptionLeakList = ({ items, className }: SubscriptionLeakListProps) => (
+export const LeakList = ({ items, className }: LeakListProps) => (
 	<ul className={className}>
 		{items.map(({ amountCents, id, status, usagePercent, vendor }) => (
-			<AmountListItem
+			<AmountItem
 				key={id}
 				title={vendor}
 				amountCents={amountCents}

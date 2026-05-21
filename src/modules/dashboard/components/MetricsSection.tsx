@@ -4,11 +4,11 @@ import { Panel } from "@/ui/components/Panel";
 import type { DashboardViewModel } from "../types";
 import { MetricItem } from "./MetricItem";
 
-type DashboardMetricsSectionProps = {
+type MetricsSectionProps = {
 	dashboard: DashboardViewModel;
 };
 
-export const DashboardMetricsSection = ({ dashboard }: DashboardMetricsSectionProps) => (
+export const MetricsSection = ({ dashboard }: MetricsSectionProps) => (
 	<Panel className="grid gap-0 p-0 md:grid-cols-2 xl:grid-cols-4">
 		<MetricItem
 			direction="up"

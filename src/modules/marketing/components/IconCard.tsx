@@ -1,13 +1,13 @@
 import type { LucideIcon } from "lucide-react";
 import { Panel } from "@/ui/components/Panel";
 
-type MarketingIconCardProps = {
+type IconCardProps = {
 	description: string;
 	Icon: LucideIcon;
 	title: string;
 };
 
-export const MarketingIconCard = ({ description, Icon, title }: MarketingIconCardProps) => (
+export const IconCard = ({ description, Icon, title }: IconCardProps) => (
 	<Panel as="article">
 		<Icon aria-hidden className="size-5 text-primary" />
 

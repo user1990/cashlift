@@ -1,8 +1,8 @@
 import { MainContent } from "@/modules/page-shell/components/MainContent";
 import type { USE_CASES } from "../content";
-import { MarketingActionLink } from "./MarketingActionLink";
-import { MarketingHero } from "./MarketingHero";
-import { UseCaseAnswersList } from "./UseCaseAnswersList";
+import { ActionLink } from "./ActionLink";
+import { Hero } from "./Hero";
+import { UseCaseAnswers } from "./UseCaseAnswers";
 
 type UseCasePageProps = {
 	useCase: (typeof USE_CASES)[keyof typeof USE_CASES];
@@ -10,12 +10,12 @@ type UseCasePageProps = {
 
 export const UseCasePage = ({ useCase }: UseCasePageProps) => (
 	<MainContent variant="marketing">
-		<MarketingHero description={useCase.description} label={useCase.label} title={useCase.headline} />
+		<Hero description={useCase.description} label={useCase.label} title={useCase.headline} />
 
-		<UseCaseAnswersList answers={useCase.answers} />
+		<UseCaseAnswers answers={useCase.answers} />
 
-		<MarketingActionLink href="/demo" className="mt-8">
+		<ActionLink href="/demo" className="mt-8">
 			Run use-case demo
-		</MarketingActionLink>
+		</ActionLink>
 	</MainContent>
 );
