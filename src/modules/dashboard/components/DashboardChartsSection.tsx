@@ -6,8 +6,8 @@ import { DashboardPanel } from "./DashboardPanel";
 import { SpendMixChart } from "./SpendMixChart";
 
 type DashboardChartsSectionProps = {
-	chartsReady: boolean;
 	dashboard: DashboardViewModel;
+	chartsReady?: boolean;
 };
 
 export const DashboardChartsSection = ({ chartsReady, dashboard }: DashboardChartsSectionProps) => (
