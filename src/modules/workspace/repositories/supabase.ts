@@ -1,8 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { selectCompanyId } from "@/modules/company-memberships/repositories/supabase";
+import { spendRequestSchema } from "@/modules/spend-requests/schemas";
 import { createServerSupabaseClient } from "@/services/supabase/server";
 import { AppError } from "@/utilities/errors/AppError";
 import type { FinanceRepository } from "../api";
+import { financialDatasetSchema } from "../schemas";
 import type {
 	ActionPriority,
 	ActionStatus,
@@ -126,7 +128,11 @@ export class SpendRequestNotFoundError extends AppError {
 	}
 }
 
-const getSupabaseQueryData = async <Data>(table: string, query: PromiseLike<SupabaseQueryResult<Data>>) => {
+const getSupabaseQueryData = async <Data>(
+	table: string,
+	query: PromiseLike<SupabaseQueryResult<Data>>,
+	message = `Unable to load ${table}.`,
+) => {
 	const { data, error } = await query;
 
 	if (error) {
@@ -134,7 +140,7 @@ const getSupabaseQueryData = async <Data>(table: string, query: PromiseLike<Supa
 			cause: error,
 			code: "supabase_query_failed",
 			details: { table, supabaseCode: error.code },
-			message: `Unable to load ${table}.`,
+			message,
 		});
 	}
 
@@ -246,28 +252,23 @@ const updateSpendRequestStatusByCompanyId = async (
 	id: string,
 	status: Exclude<SpendRequestStatus, "pending">,
 ) => {
-	const { data, error } = (await client
-		.from("spend_requests")
-		.update({ status, updated_at: new Date().toISOString() })
-		.eq("company_id", companyId)
-		.eq("id", id)
-		.select("*")
-		.maybeSingle<SpendRequestRow>()) as SupabaseQueryResult<SpendRequestRow>;
-
-	if (error) {
-		throw new AppError({
-			cause: error,
-			code: "supabase_query_failed",
-			details: { table: "spend_requests", supabaseCode: error.code },
-			message: "Unable to update spend request.",
-		});
-	}
+	const data = await getSupabaseQueryData(
+		"spend_requests",
+		client
+			.from("spend_requests")
+			.update({ status, updated_at: new Date().toISOString() })
+			.eq("company_id", companyId)
+			.eq("id", id)
+			.select("*")
+			.maybeSingle<SpendRequestRow>(),
+		"Unable to update spend request.",
+	);
 
 	if (!data) {
 		throw new SpendRequestNotFoundError();
 	}
 
-	return mapSpendRequest(data);
+	return spendRequestSchema.parse(mapSpendRequest(data));
 };
 
 const selectTeamBudgets = async (client: SupabaseClient, companyId: string) =>
@@ -319,7 +320,7 @@ const getDatasetByCompanyId = async (
 		shouldLoadTable(scope, "forecast") ? selectForecast(client, companyId) : EMPTY_DATASET_PARTS.forecast,
 	]);
 
-	return {
+	const dataset = {
 		cashActions: cashActions.map((action) => ({
 			description: action.description,
 			dueDate: action.due_date,
@@ -391,6 +392,8 @@ const getDatasetByCompanyId = async (
 			vendor: bill.vendor,
 		})),
 	};
+
+	return financialDatasetSchema.parse(dataset);
 };
 
 export const supabaseFinanceRepository: FinanceRepository = {

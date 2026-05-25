@@ -70,7 +70,7 @@ export const FEATURE_CARDS = [
 	{
 		description: "One prioritized feed for approvals, overdue invoices, vendor leaks, and cash buffer warnings.",
 		icon: ClipboardCheck,
-		title: "Today’s CashLift",
+		title: "Today’s Kuvro",
 	},
 	{
 		description:
@@ -110,7 +110,7 @@ export const PRICING_PLANS = [
 		slug: "control",
 	},
 	{
-		description: "For teams using CashLift several times a day.",
+		description: "For teams using Kuvro several times a day.",
 		features: ["Unlimited request-only employees", "Manager approval queues", "Team budgets", "Vendor renewal reviews"],
 		highlighted: true,
 		name: "Command",
@@ -139,7 +139,7 @@ export const USE_CASES = {
 			"What vendor spend can we cut before next month?",
 		],
 		description:
-			"Agency cash changes with project milestones, client delays, contractor bills, and tool renewals. CashLift turns those moving parts into daily actions.",
+			"Agency cash changes with project milestones, client delays, contractor bills, and tool renewals. Kuvro turns those moving parts into daily actions.",
 		headline: "Keep agency spend aligned with client cash.",
 		label: "Agencies",
 	},
@@ -150,7 +150,7 @@ export const USE_CASES = {
 			"Which team has budget room for a contractor?",
 		],
 		description:
-			"Consulting teams need fast decisions across retainers, travel, contractors, and partner tools. CashLift shows the cash impact first.",
+			"Consulting teams need fast decisions across retainers, travel, contractors, and partner tools. Kuvro shows the cash impact first.",
 		headline: "Approve consulting spend with retainer timing in view.",
 		label: "Consulting",
 	},
@@ -161,7 +161,7 @@ export const USE_CASES = {
 			"What happens if a milestone payment slips one week?",
 		],
 		description:
-			"Software service firms balance payroll, cloud costs, contractors, retainers, and client milestone risk. CashLift keeps decisions tied to runway.",
+			"Software service firms balance payroll, cloud costs, contractors, retainers, and client milestone risk. Kuvro keeps decisions tied to runway.",
 		headline: "Control project spend before cash gets tight.",
 		label: "Software Services",
 	},
@@ -219,7 +219,7 @@ export const DEMO_STEPS = [
 		title: "Connect accounting data",
 	},
 	{
-		description: "CashLift ranks approvals, collections, vendor leaks, and buffer risks.",
+		description: "Kuvro ranks approvals, collections, vendor leaks, and buffer risks.",
 		icon: ShieldCheck,
 		title: "Run the cash leak audit",
 	},

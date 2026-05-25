@@ -27,7 +27,7 @@ const WORKFLOW_STEPS = [
 
 export const HomeWorkflowSection = () => (
 	<section className="mx-auto grid max-w-[1180px] gap-8 px-4 pb-14 sm:px-6 lg:grid-cols-[1fr_0.95fr] lg:px-8">
-		<div>
+		<section>
 			<p className="text-s+ uppercase tracking-normal text-primary">How it works</p>
 
 			<h2 className="mt-2 text-4xl+ tracking-normal text-shell-foreground">
@@ -51,7 +51,7 @@ export const HomeWorkflowSection = () => (
 					</li>
 				))}
 			</ol>
-		</div>
+		</section>
 
 		<HomeCashFlowIllustration />
 	</section>

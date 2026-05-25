@@ -29,7 +29,7 @@ const AUDIT_STEPS = [
 export const HomeAuditSection = () => (
 	<section className="border-t border-shell-border bg-shell-band">
 		<div className="mx-auto grid max-w-[1180px] gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[0.85fr_1fr] lg:px-8">
-			<div>
+			<header>
 				<p className="text-s+ uppercase tracking-normal text-primary">Leak audit</p>
 
 				<h2 className="mt-2 text-4xl+ tracking-normal text-shell-foreground">
@@ -44,7 +44,7 @@ export const HomeAuditSection = () => (
 					Run leak audit
 					<ArrowRight aria-hidden className="size-4" />
 				</ActionLink>
-			</div>
+			</header>
 
 			<Panel variant="glass" className="overflow-hidden p-0">
 				<div className="border-b border-shell-border p-5">

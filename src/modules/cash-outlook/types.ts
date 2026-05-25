@@ -1,10 +1,4 @@
-import type { MoneyCents } from "@/modules/money/types";
+import type { z } from "zod";
+import type { forecastPointSchema } from "./schemas";
 
-export type ForecastPoint = {
-	date: string;
-	id: string;
-	inflowCents: MoneyCents;
-	openingBalanceCents: MoneyCents;
-	outflowCents: MoneyCents;
-	scenario: "base" | "delayed-client" | "approved-spend";
-};
+export type ForecastPoint = z.infer<typeof forecastPointSchema>;

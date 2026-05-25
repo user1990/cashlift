@@ -1,6 +1,6 @@
-# CashLift
+# Kuvro
 
-CashLift helps service firms make daily cash decisions across approvals, receivables, vendor spend, budgets, and runway.
+Kuvro helps service firms make daily cash decisions across approvals, receivables, vendor spend, budgets, and runway.
 
 ## Language
 
@@ -9,7 +9,7 @@ The company-scoped operating space where members review cash actions, spend requ
 _Avoid_: account, tenant
 
 **Company Member**:
-A person assigned to a company workspace with a CashLift role.
+A person assigned to a company workspace with a Kuvro role.
 _Avoid_: user, seat
 
 **Cash Action**:
@@ -55,5 +55,5 @@ _Avoid_: overspend
 
 ## Flagged ambiguities
 
-- “Account” is avoided because it can mean auth identity, customer, or tenant. Use **Company Workspace** for CashLift data scope.
+- “Account” is avoided because it can mean auth identity, customer, or tenant. Use **Company Workspace** for Kuvro data scope.
 - “User” is avoided in domain language when role and company scope matter. Use **Company Member**.

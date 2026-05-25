@@ -1,13 +1,6 @@
-import type { MoneyCents } from "@/modules/money/types";
+import type { z } from "zod";
+import type { vendorBillSchema, vendorBillStatusSchema } from "./schemas";
 
-export type VendorBillStatus = "scheduled" | "needs-review" | "approved";
+export type VendorBillStatus = z.infer<typeof vendorBillStatusSchema>;
 
-export type VendorBill = {
-	amountCents: MoneyCents;
-	category: "software" | "contractor" | "operations" | "tax" | "payroll";
-	dueDate: string;
-	essential: boolean;
-	id: string;
-	status: VendorBillStatus;
-	vendor: string;
-};
+export type VendorBill = z.infer<typeof vendorBillSchema>;

@@ -26,13 +26,13 @@ const HOME_FEATURE_CARDS = [
 
 export const HomeProductSection = () => (
 	<section className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 lg:px-8">
-		<div className="max-w-2xl">
+		<header className="max-w-2xl">
 			<p className="text-s+ uppercase tracking-normal text-primary">Product</p>
 
 			<h2 className="mt-2 text-4xl+ tracking-normal text-shell-foreground">
 				The core cash workflows, stripped down to action.
 			</h2>
-		</div>
+		</header>
 
 		<ul className="mt-8 grid auto-rows-fr gap-4 md:grid-cols-2 xl:grid-cols-4">
 			{HOME_FEATURE_CARDS.map(({ description, icon: Icon, title }) => (

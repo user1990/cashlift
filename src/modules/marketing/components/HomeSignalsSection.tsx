@@ -9,7 +9,7 @@ const SIGNAL_GROUPS = [
 		title: "Signals",
 	},
 	{
-		description: "CashLift ranks urgency by runway, due date, value, and owner.",
+		description: "Kuvro ranks urgency by runway, due date, value, and owner.",
 		icon: ShieldCheck,
 		title: "Priority",
 	},
@@ -30,7 +30,7 @@ export const HomeSignalsSection = () => (
 	<section className="border-y border-shell-border bg-shell-band">
 		<div className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 lg:px-8">
 			<div className="grid gap-8 lg:grid-cols-[0.8fr_1fr] lg:items-center">
-				<div>
+				<header>
 					<p className="text-s+ uppercase tracking-normal text-primary">Signals to cash actions</p>
 
 					<h2 className="mt-2 max-w-2xl text-4xl+ tracking-normal text-shell-foreground">
@@ -38,14 +38,14 @@ export const HomeSignalsSection = () => (
 					</h2>
 
 					<p className="mt-4 max-w-xl text-m leading-7 text-shell-muted">
-						CashLift converts the work finance already tracks into a ranked queue your team can act on.
+						Kuvro converts the work finance already tracks into a ranked queue your team can act on.
 					</p>
 
 					<ActionLink href="/demo" className="mt-8">
 						Run leak audit
 						<ArrowRight aria-hidden className="size-4" />
 					</ActionLink>
-				</div>
+				</header>
 
 				<Panel variant="glass" className="overflow-hidden p-0">
 					<div className="grid border-b border-shell-border md:grid-cols-3">

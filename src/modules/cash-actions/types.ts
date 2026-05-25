@@ -1,21 +1,10 @@
-import type { MoneyCents } from "@/modules/money/types";
-import type { CompanyRole } from "@/modules/workspace/types";
+import type { z } from "zod";
+import type { actionPrioritySchema, actionStatusSchema, cashActionSchema, cashActionTypeSchema } from "./schemas";
 
-export type ActionPriority = "critical" | "high" | "medium" | "low";
+export type ActionPriority = z.infer<typeof actionPrioritySchema>;
 
-export type ActionStatus = "open" | "done";
+export type ActionStatus = z.infer<typeof actionStatusSchema>;
 
-export type CashActionType = "approval" | "collection" | "vendor-leak" | "cash-buffer" | "forecast";
+export type CashActionType = z.infer<typeof cashActionTypeSchema>;
 
-export type CashAction = {
-	description: string;
-	dueDate: string;
-	id: string;
-	impactCents: MoneyCents;
-	owner: string;
-	priority: ActionPriority;
-	status: ActionStatus;
-	title: string;
-	type: CashActionType;
-	visibleTo: CompanyRole[];
-};
+export type CashAction = z.infer<typeof cashActionSchema>;

@@ -22,7 +22,7 @@ export const WorkspaceApprovalsSection = ({ dataset }: WorkspaceApprovalsSection
 				<PanelHeader label="Rules" title="Approval policy" />
 
 				<div className="space-y-3 text-m leading-6 text-muted-foreground">
-					<p>Managers approve team spend after CashLift shows cash impact.</p>
+					<p>Managers approve team spend after Kuvro shows cash impact.</p>
 
 					<p>Finance holds non-essential requests if buffer risk appears.</p>
 

@@ -5,7 +5,7 @@ description: Tailwind CSS v4, `cn()` usage, class composition patterns, and them
 
 # Styling
 
-Use this skill for CashLift styling changes. Read `.agents/docs/styling.md` only when you need examples or deeper rationale.
+Use this skill for Kuvro styling changes. Read `.agents/docs/styling.md` only when you need examples or deeper rationale.
 
 ## Toolchain
 

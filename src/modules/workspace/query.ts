@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { financialDatasetSchema } from "./schemas";
 import type { FinancialDataset, WorkspaceDatasetScope } from "./types";
 
 export const workspaceDatasetQueryKeys = {
@@ -15,7 +16,7 @@ const fetchWorkspaceDataset = async (scope: WorkspaceDatasetScope) => {
 		throw new Error("Unable to load workspace data.");
 	}
 
-	return response.json() as Promise<FinancialDataset>;
+	return financialDatasetSchema.parse(await response.json());
 };
 
 export const useWorkspaceDatasetQuery = (initialDataset: FinancialDataset, scope: WorkspaceDatasetScope) =>

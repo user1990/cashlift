@@ -4,8 +4,8 @@ import { MainContent } from "@/modules/page-shell/components/MainContent";
 import { AuthProvider } from "@/services/clerk/provider";
 
 export const metadata: Metadata = {
-	title: "Login — CashLift",
-	description: "Log in to a CashLift company workspace.",
+	title: "Login — Kuvro",
+	description: "Log in to a Kuvro company workspace.",
 };
 
 export default function Login() {

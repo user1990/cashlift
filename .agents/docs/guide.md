@@ -183,7 +183,7 @@ You'll notice that the list of conventions is rather small. **Our general philos
 
 > **Why**?
 >
-> **Separation of Concerns**: Each module owns one CashLift business capability.
+> **Separation of Concerns**: Each module owns one Kuvro business capability.
 >
 > **Colocation**: Components, hooks, API/server code, schemas, types, utilities, and assets live near the capability they support.
 >
@@ -224,7 +224,7 @@ Keep support layers outside `modules`:
 
 - `ui` for generic UI primitives.
 - `services` for Clerk, Supabase, Sentry, env, i18n, and query providers.
-- `utilities` for helpers with no CashLift business meaning.
+- `utilities` for helpers with no Kuvro business meaning.
 
 #### Avoid prefixing inner module files
 
@@ -774,7 +774,7 @@ const { mutate, isLoading } = useMutation({
 
 #### Choose the right React 19 data and mutation primitive
 
-CashLift is server-first by default. Use React 19 primitives where they remove state plumbing without weakening validation, authorization, or module ownership.
+Kuvro is server-first by default. Use React 19 primitives where they remove state plumbing without weakening validation, authorization, or module ownership.
 
 | Need | Prefer | Notes |
 | --- | --- | --- |

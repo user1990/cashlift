@@ -1,6 +1,6 @@
 ---
 name: react-doctor
-description: Use after React or Next.js code changes, before committing React code, or when improving CashLift code quality. Runs React Doctor score checks for lint, dead code, accessibility, bundle size, performance, correctness, and architecture diagnostics.
+description: Use after React or Next.js code changes, before committing React code, or when improving Kuvro code quality. Runs React Doctor score checks for lint, dead code, accessibility, bundle size, performance, correctness, and architecture diagnostics.
 version: "1.0.0"
 ---
 
@@ -8,7 +8,7 @@ version: "1.0.0"
 
 React Doctor scans React codebases for security, performance, correctness, accessibility, bundle-size, dead-code, and architecture issues. It outputs a 0-100 health score.
 
-## CashLift Workflow
+## Kuvro Workflow
 
 After React or Next.js changes, run:
 

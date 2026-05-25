@@ -5,7 +5,7 @@ description: Module boundaries, import rules, path aliases, folder layout, and s
 
 # Architecture
 
-Flat module architecture for CashLift's Next.js app.
+Flat module architecture for Kuvro's Next.js app.
 
 ## Project Structure
 
@@ -73,7 +73,7 @@ Domain-agnostic helpers under `src/utilities`.
 
 - **Can import from**: `utilities`
 - **Cannot import from**: `modules`, `ui`, `services`, `app`
-- If a helper has CashLift business meaning, it belongs in a business module instead. Example: `MoneyCents` belongs in `modules/money`, not `utilities`.
+- If a helper has Kuvro business meaning, it belongs in a business module instead. Example: `MoneyCents` belongs in `modules/money`, not `utilities`.
 
 ## Quick Reference Table
 

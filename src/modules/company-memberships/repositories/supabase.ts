@@ -1,15 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { AppError } from "@/utilities/errors/AppError";
-
-type CompanyRole = "owner-finance" | "manager" | "employee";
+import { companyMembershipSchema } from "../schemas";
+import type { CompanyMembership, CompanyRole } from "../types";
 
 type CompanyMemberRow = {
 	company_id: string;
-	role: CompanyRole;
-};
-
-export type CompanyMembership = {
-	companyId: string;
 	role: CompanyRole;
 };
 
@@ -44,10 +39,10 @@ export const selectCompanyMembership = async (client: SupabaseClient, userId: st
 		throw new CompanyMembershipNotFoundError();
 	}
 
-	return {
+	return companyMembershipSchema.parse({
 		companyId: data.company_id,
 		role: data.role,
-	};
+	});
 };
 
 export const selectCompanyId = async (client: SupabaseClient, userId: string) => {

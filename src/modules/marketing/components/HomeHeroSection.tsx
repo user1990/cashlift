@@ -21,9 +21,9 @@ export const HomeHeroSection = () => (
 		<div aria-hidden className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-shell to-transparent" />
 
 		<div className="relative mx-auto grid min-h-[82svh] max-w-[1180px] items-center gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_0.82fr] lg:px-8">
-			<div>
+			<header>
 				<Hero
-					description="CashLift ranks approvals, invoices, vendor leaks, and runway risks in one action queue."
+					description="Kuvro ranks approvals, invoices, vendor leaks, and runway risks in one action queue."
 					label="Cash-aware spend decisions"
 					title="Know which cash move to make today."
 					titleClassName="sm:text-7xl+"
@@ -39,12 +39,12 @@ export const HomeHeroSection = () => (
 						Open demo app
 					</ActionLink>
 				</div>
-			</div>
+			</header>
 
 			<div className="self-start">
 				<Panel variant="glass">
 					<div className="mb-4">
-						<p className="mb-1 text-2xs+ uppercase tracking-normal text-primary">Today&apos;s CashLift</p>
+						<p className="mb-1 text-2xs+ uppercase tracking-normal text-primary">Today&apos;s Kuvro</p>
 
 						<h2 className="text-l+ text-shell-foreground">Studio Nova action inbox</h2>
 					</div>

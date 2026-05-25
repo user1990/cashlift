@@ -1,19 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { getCashLiftAppMode, getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "./app";
+import { getKuvroAppMode, getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "./app";
 
-describe("CashLift app environment", () => {
+describe("Kuvro app environment", () => {
 	it("defaults local development to demo mode", () => {
-		expect(getCashLiftAppMode({ NODE_ENV: "development" })).toEqual("demo");
+		expect(getKuvroAppMode({ NODE_ENV: "development" })).toEqual("demo");
 		expect(workspaceDemoEnabled({ NODE_ENV: "development" })).toEqual(true);
 	});
 
 	it("defaults CI and production to production mode", () => {
-		expect(getCashLiftAppMode({ CI: "true" })).toEqual("production");
-		expect(getCashLiftAppMode({ NODE_ENV: "production" })).toEqual("production");
+		expect(getKuvroAppMode({ CI: "true" })).toEqual("production");
+		expect(getKuvroAppMode({ NODE_ENV: "production" })).toEqual("production");
 	});
 
 	it("requires production auth and Supabase keys", () => {
-		const config = getWorkspaceRuntimeConfig({ CASHLIFT_APP_MODE: "production" });
+		const config = getWorkspaceRuntimeConfig({ KUVRO_APP_MODE: "production" });
 
 		expect(config).toMatchObject({
 			configured: false,
@@ -28,7 +28,7 @@ describe("CashLift app environment", () => {
 
 	it("accepts configured production workspace environment", () => {
 		const config = getWorkspaceRuntimeConfig({
-			CASHLIFT_APP_MODE: "production",
+			KUVRO_APP_MODE: "production",
 			CLERK_SECRET_KEY: "clerk-secret",
 			NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "clerk-public",
 			NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "supabase-public",

@@ -3,7 +3,7 @@ import { ClientTelemetry } from "./ClientTelemetry";
 import "./globals.css";
 
 export const metadata: Metadata = {
-	title: "CashLift",
+	title: "Kuvro",
 	description: "A cash-aware spend decision command center for service firms.",
 };
 

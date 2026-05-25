@@ -8,8 +8,8 @@ type CheckoutRouteProps = {
 };
 
 export const metadata: Metadata = {
-	title: "Checkout — CashLift",
-	description: "Review your CashLift trial before continuing to secure checkout.",
+	title: "Checkout — Kuvro",
+	description: "Review your Kuvro trial before continuing to secure checkout.",
 };
 
 export default async function Checkout({ searchParams }: CheckoutRouteProps) {

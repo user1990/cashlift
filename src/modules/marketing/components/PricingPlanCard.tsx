@@ -17,11 +17,11 @@ export const PricingPlanCard = ({ plan }: PricingPlanCardProps) => {
 		<li className="flex">
 			<Panel as="article" variant="glass" className={getPlanClassName(highlighted)}>
 				<div className="flex items-start justify-between gap-4">
-					<div>
+					<header>
 						<h2 className="text-4xl+ tracking-normal text-shell-foreground">{plan.name}</h2>
 
 						<p className="mt-3 text-m font-medium leading-6 text-shell-muted">{plan.description}</p>
-					</div>
+					</header>
 
 					{highlighted && (
 						<span className="shrink-0 rounded-full border border-highlight/40 bg-highlight/15 px-2.5 py-1 text-2xs+ uppercase tracking-normal text-highlight">

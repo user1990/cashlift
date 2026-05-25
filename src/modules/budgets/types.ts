@@ -1,9 +1,4 @@
-import type { MoneyCents } from "@/modules/money/types";
+import type { z } from "zod";
+import type { teamBudgetSchema } from "./schemas";
 
-export type TeamBudget = {
-	approvedCents: MoneyCents;
-	committedCents: MoneyCents;
-	id: string;
-	monthlyBudgetCents: MoneyCents;
-	team: string;
-};
+export type TeamBudget = z.infer<typeof teamBudgetSchema>;
