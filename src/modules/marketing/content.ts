@@ -38,6 +38,7 @@ type PricingPlan = {
 	features: readonly string[];
 	name: string;
 	price: string;
+	slug: PricingPlanSlug;
 	highlighted?: boolean;
 };
 
@@ -49,6 +50,9 @@ type UseCase = {
 };
 
 type UseCaseSlug = "agencies" | "consulting" | "software-services";
+type PricingPlanSlug = "control" | "command" | "scale";
+
+export const DEFAULT_PRICING_PLAN_SLUG = "command" satisfies PricingPlanSlug;
 
 export const PRODUCT_NAV = [
 	{ href: "/features", label: "Features" },
@@ -103,6 +107,7 @@ export const PRICING_PLANS = [
 		features: ["Free cash leak audit", "1 company workspace", "Spend request inbox", "13-week cash outlook"],
 		name: "Control",
 		price: "$99",
+		slug: "control",
 	},
 	{
 		description: "For teams using CashLift several times a day.",
@@ -110,14 +115,21 @@ export const PRICING_PLANS = [
 		highlighted: true,
 		name: "Command",
 		price: "$199",
+		slug: "command",
 	},
 	{
 		description: "For multi-team service firms with finance support needs.",
 		features: ["Multi-company view", "Custom approval rules", "Cash scenario reviews", "Priority onboarding"],
 		name: "Scale",
 		price: "$299",
+		slug: "scale",
 	},
 ] as const satisfies readonly PricingPlan[];
+
+export const getPricingPlanBySlug = (slug: string | undefined) =>
+	PRICING_PLANS.find((plan) => plan.slug === slug) ??
+	PRICING_PLANS.find((plan) => plan.slug === DEFAULT_PRICING_PLAN_SLUG) ??
+	PRICING_PLANS[0];
 
 export const USE_CASES = {
 	agencies: {

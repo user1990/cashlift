@@ -65,7 +65,7 @@ describe("GET /api/workspace/dataset", () => {
 	])("returns %s with mapped error body", async (status, resolved, body) => {
 		mocks.resolveWorkspaceDataset.mockResolvedValue(resolved);
 		const { GET } = await import("./route");
-		const response = await GET();
+		const response = await GET(new Request("https://example.com/api/workspace/dataset"));
 
 		expect(response.status).toEqual(status);
 		await expect(response.json()).resolves.toEqual(body);
@@ -78,7 +78,7 @@ describe("GET /api/workspace/dataset", () => {
 		});
 		const { GET } = await import("./route");
 
-		const response = await GET();
+		const response = await GET(new Request("https://example.com/api/workspace/dataset"));
 
 		expect(response.status).toEqual(200);
 		await expect(response.json()).resolves.toMatchObject({ profile: { companyId: "studio-nova" } });
@@ -92,7 +92,7 @@ describe("GET /api/workspace/dataset", () => {
 		});
 		const { GET } = await import("./route");
 
-		const response = await GET();
+		const response = await GET(new Request("https://example.com/api/workspace/dataset"));
 
 		expect(response.status).toEqual(500);
 		await expect(response.json()).resolves.toEqual({
@@ -100,5 +100,30 @@ describe("GET /api/workspace/dataset", () => {
 			error: "Unable to load workspace data.",
 			requestId: "event-id",
 		});
+	});
+
+	it("passes requested scope to the workspace resolver", async () => {
+		mocks.resolveWorkspaceDataset.mockResolvedValue({
+			dataset: financialDatasetFixture,
+			kind: "success",
+		});
+		const { GET } = await import("./route");
+
+		await GET(new Request("https://example.com/api/workspace/dataset?scope=approvals"));
+
+		expect(mocks.resolveWorkspaceDataset).toHaveBeenCalledWith("approvals");
+	});
+
+	it("returns 400 when scope is invalid", async () => {
+		const { GET } = await import("./route");
+
+		const response = await GET(new Request("https://example.com/api/workspace/dataset?scope=unknown"));
+
+		expect(response.status).toEqual(400);
+		await expect(response.json()).resolves.toEqual({
+			code: "api_request_failed",
+			error: "Workspace dataset scope is invalid.",
+		});
+		expect(mocks.resolveWorkspaceDataset).not.toHaveBeenCalled();
 	});
 });

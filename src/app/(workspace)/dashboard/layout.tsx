@@ -1,6 +1,7 @@
 import { Show } from "@clerk/nextjs";
 import Link from "next/link";
 import { MainContent } from "@/modules/page-shell/components/MainContent";
+import { WorkspaceShell } from "@/modules/page-shell/components/WorkspaceShell";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
 import { WorkspaceProviders } from "./WorkspaceProviders";
 
@@ -10,19 +11,20 @@ type DashboardLayoutProps = {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
 	const config = getWorkspaceRuntimeConfig();
+	const content = <WorkspaceShell mode={config.mode}>{children}</WorkspaceShell>;
 
 	if (!config.configured) {
 		return <WorkspaceUnavailable message={config.message} />;
 	}
 
 	if (workspaceDemoEnabled()) {
-		return <WorkspaceProviders>{children}</WorkspaceProviders>;
+		return <WorkspaceProviders>{content}</WorkspaceProviders>;
 	}
 
 	return (
 		<WorkspaceProviders>
 			<Show when="signed-in" fallback={<SignedOutFallback />}>
-				{children}
+				{content}
 			</Show>
 		</WorkspaceProviders>
 	);

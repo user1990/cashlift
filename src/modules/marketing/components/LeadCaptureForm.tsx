@@ -30,7 +30,7 @@ export const LeadCaptureForm = ({ buttonLabel }: LeadCaptureFormProps) => {
 	};
 
 	return (
-		<form className="space-y-3" onSubmit={handleSubmit(submitForm)}>
+		<form className="flex flex-1 flex-col gap-3" onSubmit={handleSubmit(submitForm)}>
 			<ControlledTextField autoComplete="name" control={control} label="Name" name="name" placeholder="Maya Chen…" />
 
 			<ControlledTextField
@@ -50,7 +50,7 @@ export const LeadCaptureForm = ({ buttonLabel }: LeadCaptureFormProps) => {
 				placeholder="Studio Nova…"
 			/>
 
-			<Button type="submit" variant="primary" className="w-full">
+			<Button type="submit" variant="primary" className="mt-auto w-full">
 				{buttonLabel}
 			</Button>
 

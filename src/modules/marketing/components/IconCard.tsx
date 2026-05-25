@@ -8,7 +8,7 @@ type IconCardProps = {
 };
 
 export const IconCard = ({ description, Icon, title }: IconCardProps) => (
-	<Panel as="article">
+	<Panel as="article" className="h-full">
 		<Icon aria-hidden className="size-5 text-primary" />
 
 		<h2 className="mt-4 text-xl+ text-panel-foreground">{title}</h2>

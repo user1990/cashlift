@@ -1,4 +1,5 @@
 import { ApprovalQueue } from "@/modules/spend-requests/components/ApprovalQueue";
+import { workspaceDatasetQueryKeys } from "@/modules/workspace/query";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { Panel, PanelHeader } from "@/ui/components/Panel";
 
@@ -14,7 +15,7 @@ export const WorkspaceApprovalsSection = ({ dataset }: WorkspaceApprovalsSection
 			<Panel>
 				<PanelHeader label="Queue" title={`${pendingRequests.length} requests need review`} />
 
-				<ApprovalQueue requests={dataset.spendRequests} />
+				<ApprovalQueue datasetQueryKey={workspaceDatasetQueryKeys.all} requests={dataset.spendRequests} />
 			</Panel>
 
 			<Panel>

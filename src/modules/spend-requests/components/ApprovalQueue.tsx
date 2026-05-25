@@ -1,52 +1,59 @@
 "use client";
 
+import { type QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Check, X } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { startTransition, useOptimistic, useState } from "react";
+import { useState } from "react";
+import type { MoneyCents } from "@/modules/money/types";
 import { Button } from "@/ui/components/Button";
-import { decideSpendRequestAction } from "../actions";
-import type { SpendRequest, SpendRequestStatus } from "../types";
+import { decideSpendRequest, type SpendRequestDecisionRequest } from "../api";
+import type { SpendRequest } from "../types";
 import { RequestItem } from "./RequestItem";
 
 type ApprovalQueueProps = {
-	requests: SpendRequest[];
+	datasetQueryKey: QueryKey;
+	requests: ApprovalQueueRequest[];
 };
 
-type OptimisticDecision = {
-	id: string;
-	status: Exclude<SpendRequestStatus, "pending">;
+type ApprovalQueueRequest = SpendRequest & {
+	cashAfterApprovalCents?: MoneyCents;
 };
 
-export const ApprovalQueue = ({ requests }: ApprovalQueueProps) => {
-	const { refresh } = useRouter();
+type ApprovalQueueDataset = {
+	spendRequests: ApprovalQueueRequest[];
+};
+
+type ApprovalQueueMutationContext = {
+	snapshots: [QueryKey, ApprovalQueueDataset | undefined][];
+};
+
+export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps) => {
+	const queryClient = useQueryClient();
 	const [message, setMessage] = useState<string | null>(null);
-	const [optimisticRequests, addOptimisticDecision] = useOptimistic(
-		requests,
-		(currentRequests, decision: OptimisticDecision) =>
-			currentRequests.map((request) =>
-				request.id === decision.id ? { ...request, status: decision.status } : request,
-			),
-	);
-	const pendingRequests = optimisticRequests.filter((request) => request.status === "pending");
+	const pendingRequests = requests.filter((request) => request.status === "pending");
+	const decisionMutation = useMutation<SpendRequest, Error, SpendRequestDecisionRequest, ApprovalQueueMutationContext>({
+		mutationFn: decideSpendRequest,
+		onError: (error, _decision, context) => {
+			context?.snapshots.forEach(([queryKey, data]) => {
+				queryClient.setQueryData(queryKey, data);
+			});
+			setMessage(error.message);
+		},
+		onMutate: async (decision) => {
+			setMessage(null);
+			await queryClient.cancelQueries({ queryKey: datasetQueryKey });
+			const snapshots = queryClient.getQueriesData<ApprovalQueueDataset>({ queryKey: datasetQueryKey });
 
-	const decideRequest = (decision: OptimisticDecision) => {
-		setMessage(null);
+			queryClient.setQueriesData<ApprovalQueueDataset>({ queryKey: datasetQueryKey }, (dataset) =>
+				dataset ? updateDatasetSpendRequest(dataset, decision) : dataset,
+			);
 
-		startTransition(async () => {
-			addOptimisticDecision(decision);
-
-			const result = await decideSpendRequestAction(decision);
-
-			if (result.status === "error") {
-				setMessage(result.message);
-				return;
-			}
-
-			if (result.refresh) {
-				refresh();
-			}
-		});
-	};
+			return { snapshots };
+		},
+		onSettled: () => {
+			queryClient.invalidateQueries({ queryKey: datasetQueryKey });
+		},
+	});
+	const pendingDecision = decisionMutation.variables;
 
 	return (
 		<>
@@ -61,38 +68,43 @@ export const ApprovalQueue = ({ requests }: ApprovalQueueProps) => {
 
 			{pendingRequests.length > 0 ? (
 				<ul className="space-y-3">
-					{pendingRequests.map(({ amountCents, id, reason, requester, status, team, vendor }) => (
-						<RequestItem
-							key={id}
-							actions={
-								<div className="mt-3 flex flex-wrap gap-2">
-									<Button
-										aria-label={`Approve ${vendor}`}
-										className="h-8 px-2.5 text-s"
-										onClick={() => decideRequest({ id, status: "approved" })}
-										variant="primary"
-									>
-										<Check aria-hidden className="size-4" />
-										Approve
-									</Button>
+					{pendingRequests.map(
+						({ amountCents, cashAfterApprovalCents, id, reason, requester, status, team, vendor }) => (
+							<RequestItem
+								key={id}
+								actions={
+									<div className="mt-3 flex flex-wrap gap-2">
+										<Button
+											aria-label={`Approve ${vendor}`}
+											className="h-8 px-2.5 text-s"
+											disabled={pendingDecision?.id === id}
+											onClick={() => decisionMutation.mutate({ id, status: "approved" })}
+											variant="primary"
+										>
+											<Check aria-hidden className="size-4" />
+											{pendingDecision?.id === id && pendingDecision.status === "approved" ? "Approving" : "Approve"}
+										</Button>
 
-									<Button
-										aria-label={`Reject ${vendor}`}
-										className="h-8 px-2.5 text-s"
-										onClick={() => decideRequest({ id, status: "rejected" })}
-										variant="secondary"
-									>
-										<X aria-hidden className="size-4" />
-										Reject
-									</Button>
-								</div>
-							}
-							amountCents={amountCents}
-							meta={`${requester} · ${team} · ${status}`}
-							reason={reason}
-							vendor={vendor}
-						/>
-					))}
+										<Button
+											aria-label={`Reject ${vendor}`}
+											className="h-8 px-2.5 text-s"
+											disabled={pendingDecision?.id === id}
+											onClick={() => decisionMutation.mutate({ id, status: "rejected" })}
+											variant="secondary"
+										>
+											<X aria-hidden className="size-4" />
+											{pendingDecision?.id === id && pendingDecision.status === "rejected" ? "Rejecting" : "Reject"}
+										</Button>
+									</div>
+								}
+								amountCents={amountCents}
+								cashAfterApprovalCents={cashAfterApprovalCents}
+								meta={`${requester} · ${team} · ${status}`}
+								reason={reason}
+								vendor={vendor}
+							/>
+						),
+					)}
 				</ul>
 			) : (
 				<p className="rounded-lg border border-border bg-panel-muted p-3 text-m text-muted-foreground">
@@ -102,3 +114,15 @@ export const ApprovalQueue = ({ requests }: ApprovalQueueProps) => {
 		</>
 	);
 };
+
+function updateDatasetSpendRequest(
+	dataset: ApprovalQueueDataset,
+	decision: SpendRequestDecisionRequest,
+): ApprovalQueueDataset {
+	return {
+		...dataset,
+		spendRequests: dataset.spendRequests.map((request) =>
+			request.id === decision.id ? { ...request, status: decision.status } : request,
+		),
+	};
+}

@@ -21,7 +21,7 @@ export const TextField = ({ errorMessage, invalid, label, placeholder, className
 	<RACTextField
 		isInvalid={invalid}
 		className={cn(
-			"space-y-1.5 [&:has(input[data-invalid])_input]:border-warning [&:has(input[data-invalid])_input]:focus:border-warning [&:has(input[data-invalid])_input]:focus:ring-warning/20",
+			"space-y-1.5 [&:has(input[data-invalid])_input]:border-red-400 [&:has(input[data-invalid])_input]:focus:border-red-400 [&:has(input[data-invalid])_input]:focus:ring-red-400/20",
 			className,
 		)}
 		{...props}
@@ -34,7 +34,7 @@ export const TextField = ({ errorMessage, invalid, label, placeholder, className
 		/>
 
 		{errorMessage && (
-			<FieldError aria-live="polite" className="text-s text-red-600">
+			<FieldError aria-live="polite" className="text-s text-red-400">
 				{errorMessage}
 			</FieldError>
 		)}

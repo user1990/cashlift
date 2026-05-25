@@ -50,7 +50,7 @@ export const PricingPlanCard = ({ plan }: PricingPlanCardProps) => {
 					))}
 				</ul>
 
-				<Link href="/signup" className={getPlanLinkClassName(highlighted)}>
+				<Link href={`/checkout?plan=${plan.slug}`} className={getPlanLinkClassName(highlighted)}>
 					Start free trial
 				</Link>
 			</Panel>

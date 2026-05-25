@@ -12,6 +12,7 @@ export const DemoPage = () => (
 			<Hero
 				description="See how CashLift turns accounting-style data into approvals, collections, vendor cuts, and cash buffer decisions."
 				label="Demo"
+				labelAsHeading
 				title="Run a cash leak audit before you invite the team."
 			/>
 
@@ -28,7 +29,7 @@ export const DemoPage = () => (
 			</ActionLink>
 		</div>
 
-		<Panel>
+		<Panel className="flex flex-col">
 			<PanelHeader label="Book demo" title="Get the audit walkthrough" />
 
 			<LeadCaptureForm buttonLabel="Book demo" />

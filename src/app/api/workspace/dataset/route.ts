@@ -1,9 +1,20 @@
 import { NextResponse } from "next/server";
 import { resolveWorkspaceDataset } from "@/modules/workspace/resolveWorkspaceDataset";
+import { workspaceDatasetScopeSchema } from "@/modules/workspace/schemas";
 import { apiError } from "./errors";
 
-export const GET = async () => {
-	const result = await resolveWorkspaceDataset();
+export const GET = async (request: Request) => {
+	const scope = requestUrlScope(request);
+
+	if (!scope.success) {
+		return apiError({
+			code: "api_request_failed",
+			error: "Workspace dataset scope is invalid.",
+			status: 400,
+		});
+	}
+
+	const result = await resolveWorkspaceDataset(scope.data);
 
 	switch (result.kind) {
 		case "success":
@@ -35,3 +46,9 @@ export const GET = async () => {
 			});
 	}
 };
+
+function requestUrlScope(request: Request) {
+	const { searchParams } = new URL(request.url);
+
+	return workspaceDatasetScopeSchema.safeParse(searchParams.get("scope") ?? "overview");
+}

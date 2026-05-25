@@ -116,6 +116,16 @@ type SupabaseQueryResult<Data> = {
 	error: SupabaseQueryError | null;
 };
 
+export class SpendRequestNotFoundError extends AppError {
+	constructor() {
+		super({
+			code: "supabase_empty_row",
+			message: "Spend request was not found.",
+		});
+		this.name = "SpendRequestNotFoundError";
+	}
+}
+
 const getSupabaseQueryData = async <Data>(table: string, query: PromiseLike<SupabaseQueryResult<Data>>) => {
 	const { data, error } = await query;
 
@@ -217,6 +227,49 @@ const selectSpendRequests = async (client: SupabaseClient, companyId: string) =>
 		client.from("spend_requests").select("*").eq("company_id", companyId).order("needed_by_date"),
 	);
 
+const mapSpendRequest = (request: SpendRequestRow) => ({
+	amountCents: request.amount_cents,
+	category: request.category,
+	id: request.id,
+	neededByDate: request.needed_by_date,
+	reason: request.reason,
+	requestedDate: request.requested_date,
+	requester: request.requester,
+	status: request.status,
+	team: request.team,
+	vendor: request.vendor,
+});
+
+const updateSpendRequestStatusByCompanyId = async (
+	client: SupabaseClient,
+	companyId: string,
+	id: string,
+	status: Exclude<SpendRequestStatus, "pending">,
+) => {
+	const { data, error } = (await client
+		.from("spend_requests")
+		.update({ status, updated_at: new Date().toISOString() })
+		.eq("company_id", companyId)
+		.eq("id", id)
+		.select("*")
+		.maybeSingle<SpendRequestRow>()) as SupabaseQueryResult<SpendRequestRow>;
+
+	if (error) {
+		throw new AppError({
+			cause: error,
+			code: "supabase_query_failed",
+			details: { table: "spend_requests", supabaseCode: error.code },
+			message: "Unable to update spend request.",
+		});
+	}
+
+	if (!data) {
+		throw new SpendRequestNotFoundError();
+	}
+
+	return mapSpendRequest(data);
+};
+
 const selectTeamBudgets = async (client: SupabaseClient, companyId: string) =>
 	selectRows<TeamBudgetRow>(
 		"team_budgets",
@@ -305,18 +358,7 @@ const getDatasetByCompanyId = async (
 			monthlyPayrollCents: company.monthly_payroll_cents,
 			name: company.name,
 		},
-		spendRequests: spendRequests.map((request) => ({
-			amountCents: request.amount_cents,
-			category: request.category,
-			id: request.id,
-			neededByDate: request.needed_by_date,
-			reason: request.reason,
-			requestedDate: request.requested_date,
-			requester: request.requester,
-			status: request.status,
-			team: request.team,
-			vendor: request.vendor,
-		})),
+		spendRequests: spendRequests.map(mapSpendRequest),
 		subscriptions: subscriptions.map((subscription) => ({
 			amountCents: subscription.amount_cents,
 			id: subscription.id,
@@ -357,5 +399,11 @@ export const supabaseFinanceRepository: FinanceRepository = {
 		const companyId = await selectCompanyId(client, userId);
 
 		return getDatasetByCompanyId(client, companyId, scope);
+	},
+	async updateSpendRequestStatus(userId, accessToken, id, status) {
+		const client = createServerSupabaseClient({ accessToken });
+		const companyId = await selectCompanyId(client, userId);
+
+		return updateSpendRequestStatusByCompanyId(client, companyId, id, status);
 	},
 };
