@@ -20,7 +20,7 @@ export const workspaceDatasetScopeSchema = z.enum([
 	"vendors",
 ]);
 
-export const companyProfileSchema = z.object({
+const companyProfileSchema = z.object({
 	cashBalanceCents: moneyCentsSchema,
 	cashBufferTargetCents: moneyCentsSchema,
 	companyId: z.string(),
@@ -30,7 +30,7 @@ export const companyProfileSchema = z.object({
 	name: z.string(),
 });
 
-export const teamMemberSchema = z.object({
+const teamMemberSchema = z.object({
 	id: z.string(),
 	name: z.string(),
 	role: companyRoleSchema,

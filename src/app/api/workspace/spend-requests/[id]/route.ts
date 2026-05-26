@@ -27,8 +27,7 @@ const ERROR_CODE = {
 } as const;
 
 export const PATCH = async (request: Request, context: RouteContext) => {
-	const { id } = await context.params;
-	const body = await request.json().catch(() => null);
+	const [{ id }, body] = await Promise.all([context.params, request.json().catch(() => null)]);
 	const result = await decideSpendRequest({
 		id,
 		status: body?.status,
