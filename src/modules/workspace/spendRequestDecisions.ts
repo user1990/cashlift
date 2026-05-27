@@ -1,30 +1,20 @@
 import { auth } from "@clerk/nextjs/server";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import { CompanyMembershipNotFoundError, selectCompanyId } from "@/modules/company-memberships/repositories/supabase";
+import {
+	CompanyMembershipNotFoundError,
+	selectCompanyMembership,
+} from "@/modules/company-memberships/repositories/supabase";
+import type { SpendRequestDecisionInput } from "@/modules/spend-requests/schemas";
+import { spendRequestDecisionSchema } from "@/modules/spend-requests/schemas";
+import type { SpendRequest } from "@/modules/spend-requests/types";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
 import { captureAppException, captureAppMessage } from "@/services/platform/integrations/sentry";
 import { createServerSupabaseClient } from "@/services/supabase/server";
-import { AppError } from "@/utilities/errors/AppError";
-import type { SpendRequestDecisionInput } from "./schemas";
-import { spendRequestDecisionSchema } from "./schemas";
-
-type UpdatedSpendRequestRow = {
-	id: string;
-};
-
-type SupabaseQueryError = {
-	code?: string;
-	message: string;
-};
-
-type SupabaseQueryResult<Data> = {
-	data: Data | null;
-	error: SupabaseQueryError | null;
-};
+import { demoWorkspaceDataset } from "./demoDataset";
+import { SpendRequestNotFoundError, supabaseFinanceRepository } from "./repositories/supabase";
 
 export type SpendRequestDecisionResult =
 	| {
-			refresh: boolean;
+			request: SpendRequest;
 			status: "success";
 	  }
 	| {
@@ -34,16 +24,6 @@ export type SpendRequestDecisionResult =
 	  };
 
 type AuthSession = Awaited<ReturnType<typeof auth>>;
-
-class SpendRequestNotFoundError extends AppError {
-	constructor() {
-		super({
-			code: "supabase_empty_row",
-			message: "Spend request was not found.",
-		});
-		this.name = "SpendRequestNotFoundError";
-	}
-}
 
 const captureSpendRequestException = (error: unknown, failureKind: string, extra?: Record<string, unknown>) =>
 	captureAppException({
@@ -66,31 +46,14 @@ const captureSpendRequestMessage = (message: string, failureKind: string) =>
 		},
 	});
 
-const updateSpendRequestStatus = async (
-	client: SupabaseClient,
-	companyId: string,
-	decision: SpendRequestDecisionInput,
-) => {
-	const { data, error } = (await client
-		.from("spend_requests")
-		.update({ status: decision.status })
-		.eq("company_id", companyId)
-		.eq("id", decision.id)
-		.select("id")
-		.maybeSingle<UpdatedSpendRequestRow>()) as SupabaseQueryResult<UpdatedSpendRequestRow>;
+const decideDemoSpendRequest = ({ id, status }: SpendRequestDecisionInput): SpendRequestDecisionResult => {
+	const request = demoWorkspaceDataset.spendRequests.find((spendRequest) => spendRequest.id === id);
 
-	if (error) {
-		throw new AppError({
-			cause: error,
-			code: "supabase_query_failed",
-			details: { table: "spend_requests", supabaseCode: error.code },
-			message: "Unable to update spend request.",
-		});
+	if (!request) {
+		return { code: "not_found", message: "Spend request was not found.", status: "error" };
 	}
 
-	if (!data) {
-		throw new SpendRequestNotFoundError();
-	}
+	return { request: { ...request, status }, status: "success" };
 };
 
 export const decideSpendRequest = async (
@@ -112,7 +75,7 @@ export const decideSpendRequest = async (
 	}
 
 	if (workspaceDemoEnabled()) {
-		return { refresh: false, status: "success" };
+		return decideDemoSpendRequest(parsed.data);
 	}
 
 	try {
@@ -132,11 +95,24 @@ export const decideSpendRequest = async (
 		}
 
 		const client = createServerSupabaseClient({ accessToken });
-		const companyId = await selectCompanyId(client, session.userId);
+		const membership = await selectCompanyMembership(client, session.userId);
 
-		await updateSpendRequestStatus(client, companyId, parsed.data);
+		if (membership.role !== "owner-finance" && membership.role !== "manager") {
+			return {
+				code: "forbidden",
+				message: "Only finance leads and managers can decide spend requests.",
+				status: "error",
+			};
+		}
 
-		return { refresh: true, status: "success" };
+		const request = await supabaseFinanceRepository.updateSpendRequestStatus(
+			session.userId,
+			accessToken,
+			parsed.data.id,
+			parsed.data.status,
+		);
+
+		return { request, status: "success" };
 	} catch (error) {
 		if (error instanceof CompanyMembershipNotFoundError) {
 			return { code: "forbidden", message: "No company workspace is assigned to this user.", status: "error" };

@@ -1,19 +1,19 @@
-export type CashLiftAppMode = "demo" | "production";
+export type KuvroAppMode = "demo" | "production";
 
 /** Allows tests to pass partial env objects without satisfying full `ProcessEnv`. */
-export type CashLiftProcessEnv = Record<string, string | undefined>;
+export type KuvroProcessEnv = Record<string, string | undefined>;
 
 export type WorkspaceRuntimeConfig =
 	| {
 			configured: true;
-			mode: CashLiftAppMode;
+			mode: KuvroAppMode;
 			supabasePublishableKey: string;
 			supabaseUrl: string;
 	  }
 	| {
 			configured: false;
 			message: string;
-			mode: CashLiftAppMode;
+			mode: KuvroAppMode;
 			missingKeys: string[];
 	  };
 
@@ -24,18 +24,18 @@ const PRODUCTION_ENV_KEYS = [
 	"NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
 ] as const;
 
-export const getCashLiftAppMode = (env: CashLiftProcessEnv = process.env): CashLiftAppMode => {
-	if (env.CASHLIFT_APP_MODE === "demo" || env.CASHLIFT_APP_MODE === "production") {
-		return env.CASHLIFT_APP_MODE;
+export const getKuvroAppMode = (env: KuvroProcessEnv = process.env): KuvroAppMode => {
+	if (env.KUVRO_APP_MODE === "demo" || env.KUVRO_APP_MODE === "production") {
+		return env.KUVRO_APP_MODE;
 	}
 
 	return env.CI || env.NODE_ENV === "production" ? "production" : "demo";
 };
 
-export const workspaceDemoEnabled = (env: CashLiftProcessEnv = process.env) => getCashLiftAppMode(env) === "demo";
+export const workspaceDemoEnabled = (env: KuvroProcessEnv = process.env) => getKuvroAppMode(env) === "demo";
 
-export const getWorkspaceRuntimeConfig = (env: CashLiftProcessEnv = process.env): WorkspaceRuntimeConfig => {
-	const mode = getCashLiftAppMode(env);
+export const getWorkspaceRuntimeConfig = (env: KuvroProcessEnv = process.env): WorkspaceRuntimeConfig => {
+	const mode = getKuvroAppMode(env);
 	const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
 	const supabasePublishableKey = env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
@@ -67,4 +67,4 @@ export const getWorkspaceRuntimeConfig = (env: CashLiftProcessEnv = process.env)
 	};
 };
 
-const getMissingKeys = (env: CashLiftProcessEnv, keys: readonly string[]) => keys.filter((key) => !env[key]?.trim());
+const getMissingKeys = (env: KuvroProcessEnv, keys: readonly string[]) => keys.filter((key) => !env[key]?.trim());

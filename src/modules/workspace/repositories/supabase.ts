@@ -1,8 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { selectCompanyId } from "@/modules/company-memberships/repositories/supabase";
+import { spendRequestSchema } from "@/modules/spend-requests/schemas";
 import { createServerSupabaseClient } from "@/services/supabase/server";
 import { AppError } from "@/utilities/errors/AppError";
 import type { FinanceRepository } from "../api";
+import { financialDatasetSchema } from "../schemas";
 import type {
 	ActionPriority,
 	ActionStatus,
@@ -116,7 +118,21 @@ type SupabaseQueryResult<Data> = {
 	error: SupabaseQueryError | null;
 };
 
-const getSupabaseQueryData = async <Data>(table: string, query: PromiseLike<SupabaseQueryResult<Data>>) => {
+export class SpendRequestNotFoundError extends AppError {
+	constructor() {
+		super({
+			code: "supabase_empty_row",
+			message: "Spend request was not found.",
+		});
+		this.name = "SpendRequestNotFoundError";
+	}
+}
+
+const getSupabaseQueryData = async <Data>(
+	table: string,
+	query: PromiseLike<SupabaseQueryResult<Data>>,
+	message = `Unable to load ${table}.`,
+) => {
 	const { data, error } = await query;
 
 	if (error) {
@@ -124,7 +140,7 @@ const getSupabaseQueryData = async <Data>(table: string, query: PromiseLike<Supa
 			cause: error,
 			code: "supabase_query_failed",
 			details: { table, supabaseCode: error.code },
-			message: `Unable to load ${table}.`,
+			message,
 		});
 	}
 
@@ -217,6 +233,44 @@ const selectSpendRequests = async (client: SupabaseClient, companyId: string) =>
 		client.from("spend_requests").select("*").eq("company_id", companyId).order("needed_by_date"),
 	);
 
+const mapSpendRequest = (request: SpendRequestRow) => ({
+	amountCents: request.amount_cents,
+	category: request.category,
+	id: request.id,
+	neededByDate: request.needed_by_date,
+	reason: request.reason,
+	requestedDate: request.requested_date,
+	requester: request.requester,
+	status: request.status,
+	team: request.team,
+	vendor: request.vendor,
+});
+
+const updateSpendRequestStatusByCompanyId = async (
+	client: SupabaseClient,
+	companyId: string,
+	id: string,
+	status: Exclude<SpendRequestStatus, "pending">,
+) => {
+	const data = await getSupabaseQueryData(
+		"spend_requests",
+		client
+			.from("spend_requests")
+			.update({ status, updated_at: new Date().toISOString() })
+			.eq("company_id", companyId)
+			.eq("id", id)
+			.select("*")
+			.maybeSingle<SpendRequestRow>(),
+		"Unable to update spend request.",
+	);
+
+	if (!data) {
+		throw new SpendRequestNotFoundError();
+	}
+
+	return spendRequestSchema.parse(mapSpendRequest(data));
+};
+
 const selectTeamBudgets = async (client: SupabaseClient, companyId: string) =>
 	selectRows<TeamBudgetRow>(
 		"team_budgets",
@@ -266,7 +320,7 @@ const getDatasetByCompanyId = async (
 		shouldLoadTable(scope, "forecast") ? selectForecast(client, companyId) : EMPTY_DATASET_PARTS.forecast,
 	]);
 
-	return {
+	const dataset = {
 		cashActions: cashActions.map((action) => ({
 			description: action.description,
 			dueDate: action.due_date,
@@ -305,18 +359,7 @@ const getDatasetByCompanyId = async (
 			monthlyPayrollCents: company.monthly_payroll_cents,
 			name: company.name,
 		},
-		spendRequests: spendRequests.map((request) => ({
-			amountCents: request.amount_cents,
-			category: request.category,
-			id: request.id,
-			neededByDate: request.needed_by_date,
-			reason: request.reason,
-			requestedDate: request.requested_date,
-			requester: request.requester,
-			status: request.status,
-			team: request.team,
-			vendor: request.vendor,
-		})),
+		spendRequests: spendRequests.map(mapSpendRequest),
 		subscriptions: subscriptions.map((subscription) => ({
 			amountCents: subscription.amount_cents,
 			id: subscription.id,
@@ -349,6 +392,8 @@ const getDatasetByCompanyId = async (
 			vendor: bill.vendor,
 		})),
 	};
+
+	return financialDatasetSchema.parse(dataset);
 };
 
 export const supabaseFinanceRepository: FinanceRepository = {
@@ -357,5 +402,11 @@ export const supabaseFinanceRepository: FinanceRepository = {
 		const companyId = await selectCompanyId(client, userId);
 
 		return getDatasetByCompanyId(client, companyId, scope);
+	},
+	async updateSpendRequestStatus(userId, accessToken, id, status) {
+		const client = createServerSupabaseClient({ accessToken });
+		const companyId = await selectCompanyId(client, userId);
+
+		return updateSpendRequestStatusByCompanyId(client, companyId, id, status);
 	},
 };

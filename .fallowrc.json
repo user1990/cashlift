@@ -46,7 +46,15 @@
 			{ "from": "module-cash-outlook", "allow": ["module-money", "ui", "services", "utilities"] },
 			{
 				"from": "module-dashboard",
-				"allow": ["module-money", "module-subscriptions", "module-workspace", "ui", "services", "utilities"]
+				"allow": [
+					"module-money",
+					"module-spend-requests",
+					"module-subscriptions",
+					"module-workspace",
+					"ui",
+					"services",
+					"utilities"
+				]
 			},
 			{ "from": "module-invoices", "allow": ["module-money", "ui", "services", "utilities"] },
 			{ "from": "module-marketing", "allow": ["module-page-shell", "ui", "services", "utilities"] },

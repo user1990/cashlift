@@ -1,10 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { stubProductionWorkspaceEnv } from "@/test/workspaceEnv";
+import { stubDemoWorkspaceEnv, stubProductionWorkspaceEnv } from "@/test/workspaceEnv";
 
 const authMock = vi.hoisted(() => vi.fn());
 const captureAppExceptionMock = vi.hoisted(() => vi.fn());
 const captureAppMessageMock = vi.hoisted(() => vi.fn());
 const createServerSupabaseClientMock = vi.hoisted(() => vi.fn());
+const updateSpendRequestStatusMock = vi.hoisted(() => vi.fn());
 
 vi.mock("@clerk/nextjs/server", () => ({ auth: (...args: unknown[]) => authMock(...args) }));
 
@@ -17,46 +18,39 @@ vi.mock("@/services/supabase/server", () => ({
 	createServerSupabaseClient: createServerSupabaseClientMock,
 }));
 
+vi.mock("./repositories/supabase", async (importOriginal) => {
+	const original = await importOriginal<typeof import("./repositories/supabase")>();
+
+	return {
+		...original,
+		supabaseFinanceRepository: {
+			updateSpendRequestStatus: updateSpendRequestStatusMock,
+		},
+	};
+});
+
 const decideRequest = async (input = { id: "request-brandforge", status: "approved" as const }) => {
-	const { decideSpendRequest } = await import("./server");
+	const { decideSpendRequest } = await import("./spendRequestDecisions");
 
 	return decideSpendRequest(input);
 };
 
 const createSupabaseClient = ({
-	companyMember = { company_id: "studio-nova" },
-	updateError = null,
-	updatedRequest = { id: "request-brandforge" },
+	companyMember = { company_id: "studio-nova", role: "owner-finance" },
+	companyMemberError = null,
 }: {
-	companyMember?: { company_id: string } | null;
-	updateError?: { code?: string; message: string } | null;
-	updatedRequest?: { id: string } | null;
+	companyMember?: { company_id: string; role: "employee" | "manager" | "owner-finance" } | null;
+	companyMemberError?: { code?: string; message: string } | null;
 } = {}) => ({
-	from: vi.fn((table: string) => {
-		if (table === "company_members") {
-			return {
-				select: () => ({
-					eq: () => ({
-						limit: () => ({
-							maybeSingle: vi.fn().mockResolvedValue({ data: companyMember, error: null }),
-						}),
-					}),
+	from: vi.fn(() => ({
+		select: () => ({
+			eq: () => ({
+				limit: () => ({
+					maybeSingle: vi.fn().mockResolvedValue({ data: companyMember, error: companyMemberError }),
 				}),
-			};
-		}
-
-		return {
-			update: vi.fn(() => ({
-				eq: () => ({
-					eq: () => ({
-						select: () => ({
-							maybeSingle: vi.fn().mockResolvedValue({ data: updatedRequest, error: updateError }),
-						}),
-					}),
-				}),
-			})),
-		};
-	}),
+			}),
+		}),
+	})),
 });
 
 describe("decideSpendRequest", () => {
@@ -78,6 +72,18 @@ describe("decideSpendRequest", () => {
 		expect(authMock).not.toHaveBeenCalled();
 	});
 
+	it("returns updated fixture request in demo mode", async () => {
+		stubDemoWorkspaceEnv();
+
+		const result = await decideRequest({ id: "request-webcam", status: "approved" });
+
+		expect(result).toMatchObject({
+			request: { id: "request-webcam", status: "approved" },
+			status: "success",
+		});
+		expect(authMock).not.toHaveBeenCalled();
+	});
+
 	it("returns unauthenticated when no user is signed in", async () => {
 		stubProductionWorkspaceEnv();
 		authMock.mockResolvedValue({ getToken: vi.fn(), userId: null });
@@ -92,49 +98,51 @@ describe("decideSpendRequest", () => {
 		expect(createServerSupabaseClientMock).not.toHaveBeenCalled();
 	});
 
-	it("updates the spend request for the authenticated company", async () => {
+	it("updates the spend request when the member can approve spend", async () => {
 		stubProductionWorkspaceEnv();
-		const client = createSupabaseClient();
+		const updatedRequest = { id: "request-brandforge", status: "approved" };
 		authMock.mockResolvedValue({
 			getToken: vi.fn().mockResolvedValue("jwt"),
 			userId: "user-1",
 		});
-		createServerSupabaseClientMock.mockReturnValue(client);
+		createServerSupabaseClientMock.mockReturnValue(createSupabaseClient());
+		updateSpendRequestStatusMock.mockResolvedValue(updatedRequest);
 
 		const result = await decideRequest();
 
-		expect(result).toEqual({ refresh: true, status: "success" });
+		expect(result).toEqual({ request: updatedRequest, status: "success" });
 		expect(createServerSupabaseClientMock).toHaveBeenCalledWith({ accessToken: "jwt" });
-		expect(client.from).toHaveBeenCalledWith("company_members");
-		expect(client.from).toHaveBeenCalledWith("spend_requests");
+		expect(updateSpendRequestStatusMock).toHaveBeenCalledWith("user-1", "jwt", "request-brandforge", "approved");
 	});
 
-	it("returns forbidden when company membership is missing", async () => {
-		stubProductionWorkspaceEnv();
-		authMock.mockResolvedValue({
-			getToken: vi.fn().mockResolvedValue("jwt"),
-			userId: "user-1",
-		});
-		createServerSupabaseClientMock.mockReturnValue(createSupabaseClient({ companyMember: null }));
-
-		const result = await decideRequest();
-
-		expect(result).toEqual({
-			code: "forbidden",
-			message: "No company workspace is assigned to this user.",
-			status: "error",
-		});
-	});
-
-	it("captures Supabase write failures", async () => {
+	it("returns forbidden when the member is not an approver", async () => {
 		stubProductionWorkspaceEnv();
 		authMock.mockResolvedValue({
 			getToken: vi.fn().mockResolvedValue("jwt"),
 			userId: "user-1",
 		});
 		createServerSupabaseClientMock.mockReturnValue(
-			createSupabaseClient({ updateError: { code: "42501", message: "permission denied" } }),
+			createSupabaseClient({ companyMember: { company_id: "studio-nova", role: "employee" } }),
 		);
+
+		const result = await decideRequest();
+
+		expect(result).toEqual({
+			code: "forbidden",
+			message: "Only finance leads and managers can decide spend requests.",
+			status: "error",
+		});
+		expect(updateSpendRequestStatusMock).not.toHaveBeenCalled();
+	});
+
+	it("captures production write failures", async () => {
+		stubProductionWorkspaceEnv();
+		authMock.mockResolvedValue({
+			getToken: vi.fn().mockResolvedValue("jwt"),
+			userId: "user-1",
+		});
+		createServerSupabaseClientMock.mockReturnValue(createSupabaseClient());
+		updateSpendRequestStatusMock.mockRejectedValue(new Error("permission denied"));
 
 		const result = await decideRequest();
 

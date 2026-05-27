@@ -3,7 +3,7 @@ import { ClientTelemetry } from "./ClientTelemetry";
 import "./globals.css";
 
 export const metadata: Metadata = {
-	title: "CashLift",
+	title: "Kuvro",
 	description: "A cash-aware spend decision command center for service firms.",
 };
 
@@ -17,7 +17,7 @@ type RootLayoutProps = Readonly<{
 
 export default function RootLayout({ children }: RootLayoutProps) {
 	return (
-		<html lang="en" className="h-full">
+		<html lang="en" className="h-full" data-scroll-behavior="smooth">
 			<body className="grid min-h-full grid-cols-[1fr_0px] antialiased" id="top">
 				<a
 					href="#main-content"

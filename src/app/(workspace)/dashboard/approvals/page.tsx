@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { WorkspacePage } from "@/modules/page-shell/components/WorkspacePage";
 
 export const metadata: Metadata = {
-	title: "Approvals — CashLift",
+	title: "Approvals — Kuvro",
 };
 
 export default function Approvals() {

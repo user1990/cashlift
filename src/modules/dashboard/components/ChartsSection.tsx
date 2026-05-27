@@ -7,10 +7,9 @@ import { SpendMixChart } from "./SpendMixChart";
 
 type ChartsSectionProps = {
 	dashboard: DashboardViewModel;
-	chartsReady?: boolean;
 };
 
-export const ChartsSection = ({ chartsReady, dashboard }: ChartsSectionProps) => (
+export const ChartsSection = ({ dashboard }: ChartsSectionProps) => (
 	<div className="grid gap-4 xl:grid-cols-[0.98fr_1.03fr]">
 		<DashboardPanel
 			action={
@@ -25,11 +24,11 @@ export const ChartsSection = ({ chartsReady, dashboard }: ChartsSectionProps) =>
 			label="13-week cash outlook"
 			title="Cash outlook from accounting-style data"
 		>
-			<CashOutlookChart chartData={dashboard.forecastChartData} chartsReady={chartsReady} />
+			<CashOutlookChart chartData={dashboard.forecastChartData} />
 		</DashboardPanel>
 
 		<DashboardPanel action={<BudgetLegend />} label="Team budgets" title="Committed spend by team">
-			<SpendMixChart chartData={dashboard.spendChartData} chartsReady={chartsReady} />
+			<SpendMixChart chartData={dashboard.spendChartData} />
 		</DashboardPanel>
 	</div>
 );

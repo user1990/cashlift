@@ -5,7 +5,7 @@ description: Vercel Web Interface Guidelines for UI generation and review. Trigg
 
 # Web Interface Guidelines
 
-Apply the Vercel Web Interface Guidelines to every CashLift UI change. Use this skill with `architecture`, `guide`, and `styling`; add `testing` when behavior changes.
+Apply the Vercel Web Interface Guidelines to every Kuvro UI change. Use this skill with `architecture`, `guide`, and `styling`; add `testing` when behavior changes.
 
 Source of truth: https://vercel.com/design/guidelines. For the fuller local checklist and update notes, read `.agents/docs/web-interface-guidelines.md` only when needed.
 
@@ -58,5 +58,5 @@ Source of truth: https://vercel.com/design/guidelines. For the fuller local chec
 - Dark themes set `color-scheme: dark`; browser theme color matches the page background.
 - Touch surfaces set `touch-action: manipulation` and intentional tap highlight styling.
 - Native selects specify background and text colors for Windows dark-mode contrast.
-- Vercel-specific copy rules are product-style guidance unless they conflict with CashLift brand voice: concise active voice, specific action labels, helpful error recovery, numerals for counts, and consistent terms.
+- Vercel-specific copy rules are product-style guidance unless they conflict with Kuvro brand voice: concise active voice, specific action labels, helpful error recovery, numerals for counts, and consistent terms.
 - During UI review, group findings by file and cite `file:line`. Focus on actionable misses, not restating rules that already pass.

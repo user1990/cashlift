@@ -51,6 +51,28 @@ create policy "Members can read spend requests"
 	to authenticated
 	using (company_id in (select current_user_company_ids()));
 
+drop policy if exists "Approvers can update spend requests" on spend_requests;
+create policy "Approvers can update spend requests"
+	on spend_requests
+	for update
+	to authenticated
+	using (
+		company_id in (
+			select company_id
+			from company_members
+			where clerk_user_id = auth.jwt() ->> 'sub'
+				and role in ('owner-finance', 'manager')
+		)
+	)
+	with check (
+		company_id in (
+			select company_id
+			from company_members
+			where clerk_user_id = auth.jwt() ->> 'sub'
+				and role in ('owner-finance', 'manager')
+		)
+	);
+
 drop policy if exists "Members can read team budgets" on team_budgets;
 create policy "Members can read team budgets"
 	on team_budgets

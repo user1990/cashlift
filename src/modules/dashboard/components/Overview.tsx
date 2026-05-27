@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useState } from "react";
 import type { CompanyRole, FinancialDataset } from "@/modules/workspace/types";
 import { buildDashboardViewModel } from "../view-model";
 import { ChartsSection } from "./ChartsSection";
@@ -13,7 +13,6 @@ type OverviewProps = {
 };
 
 export const Overview = ({ dataset }: OverviewProps) => {
-	const chartsReady = useMounted();
 	const [role] = useState<CompanyRole>(() => dataset.profile.defaultRole);
 	const dashboard = buildDashboardViewModel({ dataset, role });
 
@@ -21,7 +20,7 @@ export const Overview = ({ dataset }: OverviewProps) => {
 		<div className="space-y-5">
 			<OverviewHeader dashboard={dashboard} />
 
-			<ChartsSection chartsReady={chartsReady} dashboard={dashboard} />
+			<ChartsSection dashboard={dashboard} />
 
 			<QueuesSection dashboard={dashboard} />
 
@@ -29,11 +28,3 @@ export const Overview = ({ dataset }: OverviewProps) => {
 		</div>
 	);
 };
-
-function useMounted() {
-	return useSyncExternalStore(
-		() => () => undefined,
-		() => true,
-		() => false,
-	);
-}

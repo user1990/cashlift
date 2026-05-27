@@ -1,6 +1,7 @@
 import { Show } from "@clerk/nextjs";
 import Link from "next/link";
 import { MainContent } from "@/modules/page-shell/components/MainContent";
+import { WorkspaceShell } from "@/modules/page-shell/components/WorkspaceShell";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
 import { WorkspaceProviders } from "./WorkspaceProviders";
 
@@ -10,19 +11,20 @@ type DashboardLayoutProps = {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
 	const config = getWorkspaceRuntimeConfig();
+	const content = <WorkspaceShell mode={config.mode}>{children}</WorkspaceShell>;
 
 	if (!config.configured) {
 		return <WorkspaceUnavailable message={config.message} />;
 	}
 
 	if (workspaceDemoEnabled()) {
-		return <WorkspaceProviders>{children}</WorkspaceProviders>;
+		return <WorkspaceProviders>{content}</WorkspaceProviders>;
 	}
 
 	return (
 		<WorkspaceProviders>
 			<Show when="signed-in" fallback={<SignedOutFallback />}>
-				{children}
+				{content}
 			</Show>
 		</WorkspaceProviders>
 	);
@@ -31,7 +33,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 const SignedOutFallback = () => (
 	<MainContent variant="workspace" className="flex items-center justify-center px-4">
 		<div className="max-w-md rounded-lg border border-border bg-panel p-6 text-center shadow-panel">
-			<p className="text-s+ uppercase tracking-normal text-primary">CashLift</p>
+			<p className="text-s+ uppercase tracking-normal text-primary">Kuvro</p>
 
 			<h1 className="mt-2 text-4xl+ tracking-normal text-panel-foreground">Log in to open workspace</h1>
 
@@ -52,7 +54,7 @@ const SignedOutFallback = () => (
 const WorkspaceUnavailable = ({ message }: { message: string }) => (
 	<MainContent variant="workspace" className="flex items-center justify-center px-4">
 		<div className="max-w-md rounded-lg border border-border bg-panel p-6 text-center shadow-panel">
-			<p className="text-s+ uppercase tracking-normal text-primary">CashLift</p>
+			<p className="text-s+ uppercase tracking-normal text-primary">Kuvro</p>
 
 			<h1 className="mt-2 text-4xl+ tracking-normal text-panel-foreground">Workspace unavailable</h1>
 

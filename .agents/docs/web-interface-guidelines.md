@@ -12,8 +12,8 @@ Primary sources:
 
 - Load `.agents/skills/web-interface-guidelines/SKILL.md` for all UI creation and UI review work.
 - Keep `AGENTS.md` as a routing layer only; do not paste the full upstream checklist there.
-- Treat the Vercel page as the source of truth. Refresh this doc when the upstream page changes or when CashLift intentionally diverges.
-- Use Vercel-specific copywriting rules as product-style guidance unless they conflict with CashLift brand voice.
+- Treat the Vercel page as the source of truth. Refresh this doc when the upstream page changes or when Kuvro intentionally diverges.
+- Use Vercel-specific copywriting rules as product-style guidance unless they conflict with Kuvro brand voice.
 
 ## Update Procedure
 

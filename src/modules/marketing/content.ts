@@ -38,6 +38,7 @@ type PricingPlan = {
 	features: readonly string[];
 	name: string;
 	price: string;
+	slug: PricingPlanSlug;
 	highlighted?: boolean;
 };
 
@@ -49,6 +50,9 @@ type UseCase = {
 };
 
 type UseCaseSlug = "agencies" | "consulting" | "software-services";
+type PricingPlanSlug = "control" | "command" | "scale";
+
+export const DEFAULT_PRICING_PLAN_SLUG = "command" satisfies PricingPlanSlug;
 
 export const PRODUCT_NAV = [
 	{ href: "/features", label: "Features" },
@@ -66,7 +70,7 @@ export const FEATURE_CARDS = [
 	{
 		description: "One prioritized feed for approvals, overdue invoices, vendor leaks, and cash buffer warnings.",
 		icon: ClipboardCheck,
-		title: "Today’s CashLift",
+		title: "Today’s Kuvro",
 	},
 	{
 		description:
@@ -103,21 +107,29 @@ export const PRICING_PLANS = [
 		features: ["Free cash leak audit", "1 company workspace", "Spend request inbox", "13-week cash outlook"],
 		name: "Control",
 		price: "$99",
+		slug: "control",
 	},
 	{
-		description: "For teams using CashLift several times a day.",
+		description: "For teams using Kuvro several times a day.",
 		features: ["Unlimited request-only employees", "Manager approval queues", "Team budgets", "Vendor renewal reviews"],
 		highlighted: true,
 		name: "Command",
 		price: "$199",
+		slug: "command",
 	},
 	{
 		description: "For multi-team service firms with finance support needs.",
 		features: ["Multi-company view", "Custom approval rules", "Cash scenario reviews", "Priority onboarding"],
 		name: "Scale",
 		price: "$299",
+		slug: "scale",
 	},
 ] as const satisfies readonly PricingPlan[];
+
+export const getPricingPlanBySlug = (slug: string | undefined) =>
+	PRICING_PLANS.find((plan) => plan.slug === slug) ??
+	PRICING_PLANS.find((plan) => plan.slug === DEFAULT_PRICING_PLAN_SLUG) ??
+	PRICING_PLANS[0];
 
 export const USE_CASES = {
 	agencies: {
@@ -127,7 +139,7 @@ export const USE_CASES = {
 			"What vendor spend can we cut before next month?",
 		],
 		description:
-			"Agency cash changes with project milestones, client delays, contractor bills, and tool renewals. CashLift turns those moving parts into daily actions.",
+			"Agency cash changes with project milestones, client delays, contractor bills, and tool renewals. Kuvro turns those moving parts into daily actions.",
 		headline: "Keep agency spend aligned with client cash.",
 		label: "Agencies",
 	},
@@ -138,7 +150,7 @@ export const USE_CASES = {
 			"Which team has budget room for a contractor?",
 		],
 		description:
-			"Consulting teams need fast decisions across retainers, travel, contractors, and partner tools. CashLift shows the cash impact first.",
+			"Consulting teams need fast decisions across retainers, travel, contractors, and partner tools. Kuvro shows the cash impact first.",
 		headline: "Approve consulting spend with retainer timing in view.",
 		label: "Consulting",
 	},
@@ -149,7 +161,7 @@ export const USE_CASES = {
 			"What happens if a milestone payment slips one week?",
 		],
 		description:
-			"Software service firms balance payroll, cloud costs, contractors, retainers, and client milestone risk. CashLift keeps decisions tied to runway.",
+			"Software service firms balance payroll, cloud costs, contractors, retainers, and client milestone risk. Kuvro keeps decisions tied to runway.",
 		headline: "Control project spend before cash gets tight.",
 		label: "Software Services",
 	},
@@ -207,7 +219,7 @@ export const DEMO_STEPS = [
 		title: "Connect accounting data",
 	},
 	{
-		description: "CashLift ranks approvals, collections, vendor leaks, and buffer risks.",
+		description: "Kuvro ranks approvals, collections, vendor leaks, and buffer risks.",
 		icon: ShieldCheck,
 		title: "Run the cash leak audit",
 	},

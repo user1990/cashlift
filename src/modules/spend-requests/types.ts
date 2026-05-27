@@ -1,16 +1,6 @@
-import type { MoneyCents } from "@/modules/money/types";
+import type { z } from "zod";
+import type { spendRequestSchema, spendRequestStatusSchema } from "./schemas";
 
-export type SpendRequestStatus = "pending" | "approved" | "rejected";
+export type SpendRequestStatus = z.infer<typeof spendRequestStatusSchema>;
 
-export type SpendRequest = {
-	amountCents: MoneyCents;
-	category: "software" | "travel" | "contractor" | "marketing" | "hardware";
-	id: string;
-	neededByDate: string;
-	reason: string;
-	requestedDate: string;
-	requester: string;
-	status: SpendRequestStatus;
-	team: string;
-	vendor: string;
-};
+export type SpendRequest = z.infer<typeof spendRequestSchema>;

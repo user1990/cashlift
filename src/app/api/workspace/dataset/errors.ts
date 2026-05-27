@@ -10,7 +10,7 @@ type ApiErrorBody = {
 type ApiErrorParams = {
 	code: AppErrorCode;
 	error: string;
-	status: 401 | 403 | 500 | 503;
+	status: 400 | 401 | 403 | 404 | 500 | 503;
 	requestId?: string;
 };
 

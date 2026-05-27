@@ -1,13 +1,6 @@
-import type { MoneyCents } from "@/modules/money/types";
+import type { z } from "zod";
+import type { invoiceSchema, invoiceStatusSchema } from "./schemas";
 
-export type InvoiceStatus = "sent" | "overdue" | "promised" | "paid";
+export type InvoiceStatus = z.infer<typeof invoiceStatusSchema>;
 
-export type Invoice = {
-	amountCents: MoneyCents;
-	client: string;
-	collectionProbability: number;
-	dueDate: string;
-	id: string;
-	owner: string;
-	status: InvoiceStatus;
-};
+export type Invoice = z.infer<typeof invoiceSchema>;

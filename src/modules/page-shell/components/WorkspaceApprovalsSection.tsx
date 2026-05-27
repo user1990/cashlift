@@ -1,4 +1,5 @@
 import { ApprovalQueue } from "@/modules/spend-requests/components/ApprovalQueue";
+import { workspaceDatasetQueryKeys } from "@/modules/workspace/query";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { Panel, PanelHeader } from "@/ui/components/Panel";
 
@@ -14,14 +15,14 @@ export const WorkspaceApprovalsSection = ({ dataset }: WorkspaceApprovalsSection
 			<Panel>
 				<PanelHeader label="Queue" title={`${pendingRequests.length} requests need review`} />
 
-				<ApprovalQueue requests={dataset.spendRequests} />
+				<ApprovalQueue datasetQueryKey={workspaceDatasetQueryKeys.all} requests={dataset.spendRequests} />
 			</Panel>
 
 			<Panel>
 				<PanelHeader label="Rules" title="Approval policy" />
 
 				<div className="space-y-3 text-m leading-6 text-muted-foreground">
-					<p>Managers approve team spend after CashLift shows cash impact.</p>
+					<p>Managers approve team spend after Kuvro shows cash impact.</p>
 
 					<p>Finance holds non-essential requests if buffer risk appears.</p>
 

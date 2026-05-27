@@ -1,6 +1,6 @@
-import type { FinancialDataset } from "./types";
+import { financialDatasetSchema } from "./schemas";
 
-export const demoWorkspaceDataset = {
+export const demoWorkspaceDataset = financialDatasetSchema.parse({
 	cashActions: [
 		{
 			description: "Aurora Health is below the collection confidence threshold before the June cash buffer dip.",
@@ -104,11 +104,11 @@ export const demoWorkspaceDataset = {
 	profile: {
 		cashBalanceCents: 248_000_000,
 		cashBufferTargetCents: 14_000_000,
-		companyId: "cashlift-demo",
+		companyId: "kuvro-demo",
 		defaultRole: "owner-finance",
 		industry: "consulting",
 		monthlyPayrollCents: 62_000_000,
-		name: "CashLift",
+		name: "Kuvro",
 	},
 	spendRequests: [
 		{
@@ -183,4 +183,4 @@ export const demoWorkspaceDataset = {
 			vendor: "Atlassian",
 		},
 	],
-} satisfies FinancialDataset;
+});

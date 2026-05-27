@@ -1,13 +1,6 @@
-import type { MoneyCents } from "@/modules/money/types";
+import type { z } from "zod";
+import type { subscriptionSchema, subscriptionStatusSchema } from "./schemas";
 
-export type SubscriptionStatus = "active" | "unused" | "duplicate" | "trial";
+export type SubscriptionStatus = z.infer<typeof subscriptionStatusSchema>;
 
-export type Subscription = {
-	amountCents: MoneyCents;
-	id: string;
-	owner: string;
-	renewalDate: string;
-	status: SubscriptionStatus;
-	usagePercent: number;
-	vendor: string;
-};
+export type Subscription = z.infer<typeof subscriptionSchema>;
