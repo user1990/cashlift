@@ -16,6 +16,80 @@ vi.mock("../api", () => ({
 	decideSpendRequest: mocks.decideSpendRequest,
 }));
 
+describe("ApprovalQueue", () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+		mocks.fetch.mockResolvedValue({
+			json: vi.fn().mockResolvedValue({
+				...financialDatasetFixture,
+				spendRequests: financialDatasetFixture.spendRequests.map((request) =>
+					request.id === "request-brandforge" ? { ...request, status: "approved" } : request,
+				),
+			}),
+			ok: true,
+		});
+		vi.stubGlobal("fetch", mocks.fetch);
+	});
+
+	it("removes an approved request optimistically and renders refetched workspace data after success", async () => {
+		const user = userEvent.setup();
+		let resolveDecision!: (result: { id: string; status: "approved" }) => void;
+		const decision = new Promise<{ id: string; status: "approved" }>((resolve) => {
+			resolveDecision = resolve;
+		});
+		mocks.decideSpendRequest.mockReturnValue(decision);
+		mocks.fetch.mockResolvedValueOnce({
+			json: vi.fn().mockResolvedValue({
+				...financialDatasetFixture,
+				spendRequests: financialDatasetFixture.spendRequests.map((request) => ({
+					...request,
+					status: "approved",
+				})),
+			}),
+			ok: true,
+		});
+		renderApprovalQueue();
+
+		await user.click(screen.getByRole("button", { name: "Approve BrandForge" }));
+
+		expect(screen.queryByText("BrandForge")).not.toBeInTheDocument();
+		resolveDecision({ id: "request-brandforge", status: "approved" });
+
+		await waitFor(() => {
+			expect(mocks.decideSpendRequest).toHaveBeenCalledWith(
+				{
+					id: "request-brandforge",
+					status: "approved",
+				},
+				expect.anything(),
+			);
+		});
+		expect(await screen.findByText("No pending spend requests.")).toBeInTheDocument();
+	});
+
+	it("rolls back the optimistic request when the mutation fails", async () => {
+		const user = userEvent.setup();
+		mocks.decideSpendRequest.mockRejectedValue(new Error("Unable to update spend request."));
+		renderApprovalQueue();
+
+		await user.click(screen.getByRole("button", { name: "Reject Delta" }));
+
+		expect(await screen.findByText("Unable to update spend request.")).toBeInTheDocument();
+		expect(screen.getByText("Delta")).toBeInTheDocument();
+	});
+});
+
+function ApprovalQueueHarness({ dataset }: { dataset: FinancialDataset }) {
+	const { data } = useWorkspaceDatasetQuery(dataset, "approvals");
+	const requests = data?.spendRequests;
+
+	if (!requests) {
+		throw new Error("Expected approvals dataset to be available before rendering ApprovalQueueHarness.");
+	}
+
+	return <ApprovalQueue datasetQueryKey={workspaceDatasetQueryKeys.all} requests={requests} />;
+}
+
 function renderApprovalQueue(dataset: FinancialDataset = financialDatasetFixture) {
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -33,64 +107,3 @@ function renderApprovalQueue(dataset: FinancialDataset = financialDatasetFixture
 		</QueryClientProvider>,
 	);
 }
-
-function ApprovalQueueHarness({ dataset }: { dataset: FinancialDataset }) {
-	const { data } = useWorkspaceDatasetQuery(dataset, "approvals");
-
-	return <ApprovalQueue datasetQueryKey={workspaceDatasetQueryKeys.all} requests={data.spendRequests} />;
-}
-
-describe("ApprovalQueue", () => {
-	beforeEach(() => {
-		vi.clearAllMocks();
-		mocks.fetch.mockResolvedValue({
-			json: vi.fn().mockResolvedValue({
-				...financialDatasetFixture,
-				spendRequests: financialDatasetFixture.spendRequests.map((request) =>
-					request.id === "request-brandforge" ? { ...request, status: "approved" } : request,
-				),
-			}),
-			ok: true,
-		});
-		vi.stubGlobal("fetch", mocks.fetch);
-	});
-
-	it("removes an approved request optimistically and invalidates workspace data after success", async () => {
-		const user = userEvent.setup();
-		let resolveDecision!: (result: { id: string; status: "approved" }) => void;
-		const decision = new Promise<{ id: string; status: "approved" }>((resolve) => {
-			resolveDecision = resolve;
-		});
-		mocks.decideSpendRequest.mockReturnValue(decision);
-		renderApprovalQueue();
-
-		await user.click(screen.getByRole("button", { name: "Approve BrandForge" }));
-
-		expect(screen.queryByText("BrandForge")).not.toBeInTheDocument();
-		resolveDecision({ id: "request-brandforge", status: "approved" });
-
-		await waitFor(() => {
-			expect(mocks.decideSpendRequest).toHaveBeenCalledWith(
-				{
-					id: "request-brandforge",
-					status: "approved",
-				},
-				expect.anything(),
-			);
-			expect(mocks.fetch).toHaveBeenCalledWith("/api/workspace/dataset?scope=approvals");
-		});
-	});
-
-	it("rolls back the optimistic request when the mutation fails", async () => {
-		const user = userEvent.setup();
-		mocks.decideSpendRequest.mockRejectedValue(new Error("Unable to update spend request."));
-		renderApprovalQueue();
-
-		await user.click(screen.getByRole("button", { name: "Reject Delta" }));
-
-		await waitFor(() => {
-			expect(screen.getByText("Unable to update spend request.")).toBeInTheDocument();
-		});
-		expect(screen.getByText("Delta")).toBeInTheDocument();
-	});
-});
