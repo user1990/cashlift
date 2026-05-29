@@ -51,6 +51,7 @@ Always read this file first. It defines the shared workflow for all apps and pac
 | `fallow` | Dead code, unused exports/deps, circular deps, duplication, boundary checks |
 | `react-doctor` | React/Next quality scans and diagnostics |
 | `create-pr` | Create or update PRs |
+| `get-pr-comments` | Fetch and summarize review comments from the active pull request |
 | `review-pr` | Local PR-style branch review |
 
 ## Non-Negotiables

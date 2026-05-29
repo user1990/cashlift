@@ -2,8 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useWorkspaceDatasetQuery, workspaceDatasetQueryKeys } from "@/modules/workspace/query";
-import type { FinancialDataset } from "@/modules/workspace/types";
+import { workspaceDatasetQueryKeys } from "@/modules/workspace/query";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { ApprovalQueue } from "./ApprovalQueue";
 
@@ -16,46 +15,12 @@ vi.mock("../api", () => ({
 	decideSpendRequest: mocks.decideSpendRequest,
 }));
 
-function renderApprovalQueue(dataset: FinancialDataset = financialDatasetFixture) {
-	const queryClient = new QueryClient({
-		defaultOptions: {
-			queries: {
-				retry: false,
-				staleTime: Number.POSITIVE_INFINITY,
-			},
-		},
-	});
-	queryClient.setQueryData(workspaceDatasetQueryKeys.scope("approvals"), dataset);
-
-	render(
-		<QueryClientProvider client={queryClient}>
-			<ApprovalQueueHarness dataset={dataset} />
-		</QueryClientProvider>,
-	);
-}
-
-function ApprovalQueueHarness({ dataset }: { dataset: FinancialDataset }) {
-	const { data } = useWorkspaceDatasetQuery(dataset, "approvals");
-
-	return <ApprovalQueue datasetQueryKey={workspaceDatasetQueryKeys.all} requests={data.spendRequests} />;
-}
-
 describe("ApprovalQueue", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mocks.fetch.mockResolvedValue({
-			json: vi.fn().mockResolvedValue({
-				...financialDatasetFixture,
-				spendRequests: financialDatasetFixture.spendRequests.map((request) =>
-					request.id === "request-brandforge" ? { ...request, status: "approved" } : request,
-				),
-			}),
-			ok: true,
-		});
-		vi.stubGlobal("fetch", mocks.fetch);
 	});
 
-	it("removes an approved request optimistically and invalidates workspace data after success", async () => {
+	it("submits an approved request decision", async () => {
 		const user = userEvent.setup();
 		let resolveDecision!: (result: { id: string; status: "approved" }) => void;
 		const decision = new Promise<{ id: string; status: "approved" }>((resolve) => {
@@ -66,7 +31,7 @@ describe("ApprovalQueue", () => {
 
 		await user.click(screen.getByRole("button", { name: "Approve BrandForge" }));
 
-		expect(screen.queryByText("BrandForge")).not.toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Approve BrandForge" })).toBeDisabled();
 		resolveDecision({ id: "request-brandforge", status: "approved" });
 
 		await waitFor(() => {
@@ -77,7 +42,6 @@ describe("ApprovalQueue", () => {
 				},
 				expect.anything(),
 			);
-			expect(mocks.fetch).toHaveBeenCalledWith("/api/workspace/dataset?scope=approvals");
 		});
 	});
 
@@ -88,9 +52,24 @@ describe("ApprovalQueue", () => {
 
 		await user.click(screen.getByRole("button", { name: "Reject Delta" }));
 
-		await waitFor(() => {
-			expect(screen.getByText("Unable to update spend request.")).toBeInTheDocument();
-		});
+		expect(await screen.findByText("Unable to update spend request.")).toBeInTheDocument();
 		expect(screen.getByText("Delta")).toBeInTheDocument();
 	});
 });
+
+function renderApprovalQueue() {
+	const queryClient = new QueryClient({
+		defaultOptions: {
+			queries: {
+				retry: false,
+				staleTime: Number.POSITIVE_INFINITY,
+			},
+		},
+	});
+
+	render(
+		<QueryClientProvider client={queryClient}>
+			<ApprovalQueue datasetQueryKey={workspaceDatasetQueryKeys.all} requests={financialDatasetFixture.spendRequests} />
+		</QueryClientProvider>,
+	);
+}

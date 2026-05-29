@@ -61,6 +61,7 @@ skills/
 ├── architecture/SKILL.md
 ├── create-pr/SKILL.md
 ├── fallow/SKILL.md
+├── get-pr-comments/SKILL.md
 ├── guide/SKILL.md
 ├── react-doctor/SKILL.md
 ├── review-pr/SKILL.md
