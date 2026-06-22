@@ -9,6 +9,18 @@
 		"ignoreUnknown": false
 	},
 	"plugins": ["./.biome/jsx-sibling-newlines.grit", "./.biome/security-sensitive-browser-apis.grit"],
+	"overrides": [
+		{
+			"includes": ["public/*.svg"],
+			"linter": {
+				"rules": {
+					"a11y": {
+						"noSvgWithoutTitle": "off"
+					}
+				}
+			}
+		}
+	],
 	"formatter": {
 		"lineWidth": 120
 	},
