@@ -30,6 +30,7 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 	const queryClient = useQueryClient();
 	const [message, setMessage] = useState<string | null>(null);
 	const pendingRequests = requests.filter((request) => request.status === "pending");
+
 	const decisionMutation = useMutation<SpendRequest, Error, SpendRequestDecisionRequest, ApprovalQueueMutationContext>({
 		mutationFn: decideSpendRequest,
 		onError: (error, _decision, context) => {
@@ -66,7 +67,7 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 				</p>
 			)}
 
-			{pendingRequests.length > 0 ? (
+			{!!pendingRequests.length ? (
 				<ul className="space-y-3">
 					{pendingRequests.map(
 						({ amountCents, cashAfterApprovalCents, id, reason, requester, status, team, vendor }) => (

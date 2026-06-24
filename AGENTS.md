@@ -1,6 +1,6 @@
 # Agent Orchestrator
 
-Always read this file first. It defines the shared workflow for all apps and packages in this repo. Sub-project instructions may add local commands, but do not override these rules.
+Always read this file first. It defines workflow for this repo. Do not override these rules.
 
 ## Workflow
 
