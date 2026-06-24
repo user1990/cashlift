@@ -23,6 +23,7 @@ describe("proxy security headers", () => {
 
 		expect(response.headers.get("Content-Security-Policy")).toContain("script-src 'self' 'nonce-");
 		expect(response.headers.get("Referrer-Policy")).toEqual("strict-origin-when-cross-origin");
+		expect(response.headers.get("Permissions-Policy")).toEqual("camera=(), microphone=(), geolocation=()");
 		expect(response.headers.get("X-Content-Type-Options")).toEqual("nosniff");
 		expect(response.headers.get("X-Frame-Options")).toEqual("DENY");
 		expect(response.headers.get("X-Permitted-Cross-Domain-Policies")).toEqual("none");

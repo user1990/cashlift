@@ -49,6 +49,12 @@ jobs:
       - name: Unit tests
         run: pnpm test
 
+      - name: Security check
+        run: pnpm run security:check
+
+      - name: Dependency audit
+        run: pnpm run security:audit
+
       - name: Fallow
         run: pnpm run fallow
         env:

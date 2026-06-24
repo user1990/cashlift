@@ -14,5 +14,18 @@ type ApiErrorParams = {
 	requestId?: string;
 };
 
+const WORKSPACE_API_HEADERS = {
+	"Cache-Control": "no-store",
+} as const;
+
+export const workspaceApiJson = <Body>(body: Body, init?: ResponseInit) =>
+	NextResponse.json<Body>(body, {
+		...init,
+		headers: {
+			...WORKSPACE_API_HEADERS,
+			...init?.headers,
+		},
+	});
+
 export const apiError = ({ code, error, requestId, status }: ApiErrorParams) =>
-	NextResponse.json<ApiErrorBody>({ code, error, requestId }, { status });
+	workspaceApiJson<ApiErrorBody>({ code, error, requestId }, { status });

@@ -81,6 +81,7 @@ describe("GET /api/workspace/dataset", () => {
 		const response = await GET(new Request("https://example.com/api/workspace/dataset"));
 
 		expect(response.status).toEqual(200);
+		expect(response.headers.get("Cache-Control")).toEqual("no-store");
 		await expect(response.json()).resolves.toMatchObject({ profile: { companyId: "studio-nova" } });
 	});
 
@@ -120,6 +121,7 @@ describe("GET /api/workspace/dataset", () => {
 		const response = await GET(new Request("https://example.com/api/workspace/dataset?scope=unknown"));
 
 		expect(response.status).toEqual(400);
+		expect(response.headers.get("Cache-Control")).toEqual("no-store");
 		await expect(response.json()).resolves.toEqual({
 			code: "api_request_failed",
 			error: "Workspace dataset scope is invalid.",

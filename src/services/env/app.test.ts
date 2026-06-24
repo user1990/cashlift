@@ -12,6 +12,12 @@ describe("Kuvro app environment", () => {
 		expect(getKuvroAppMode({ NODE_ENV: "production" })).toEqual("production");
 	});
 
+	it("rejects demo mode in production", () => {
+		expect(() => getKuvroAppMode({ KUVRO_APP_MODE: "demo", NODE_ENV: "production" })).toThrow(
+			"KUVRO_APP_MODE must be production in production deployments.",
+		);
+	});
+
 	it("requires production auth and Supabase keys", () => {
 		const config = getWorkspaceRuntimeConfig({ KUVRO_APP_MODE: "production" });
 

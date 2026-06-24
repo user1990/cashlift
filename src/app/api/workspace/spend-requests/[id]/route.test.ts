@@ -36,6 +36,7 @@ describe("PATCH /api/workspace/spend-requests/[id]", () => {
 		const response = await patchRequest();
 
 		expect(response.status).toEqual(200);
+		expect(response.headers.get("Cache-Control")).toEqual("no-store");
 		expect(mocks.decideSpendRequest).toHaveBeenCalledWith({ id: "request-brandforge", status: "approved" });
 		await expect(response.json()).resolves.toMatchObject({ id: "request-brandforge", status: "approved" });
 	});
@@ -58,6 +59,7 @@ describe("PATCH /api/workspace/spend-requests/[id]", () => {
 		const response = await patchRequest();
 
 		expect(response.status).toEqual(status);
+		expect(response.headers.get("Cache-Control")).toEqual("no-store");
 		await expect(response.json()).resolves.toMatchObject({ error: result.message });
 	});
 });

@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server";
 import { decideSpendRequest } from "@/modules/workspace/spendRequestDecisions";
-import { apiError } from "../../dataset/errors";
+import { apiError, workspaceApiJson } from "../../dataset/errors";
 
 type RouteContext = {
 	params: Promise<{
@@ -34,7 +33,7 @@ export const PATCH = async (request: Request, context: RouteContext) => {
 	});
 
 	if (result.status === "success") {
-		return NextResponse.json(result.request);
+		return workspaceApiJson(result.request);
 	}
 
 	return apiError({

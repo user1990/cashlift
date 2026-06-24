@@ -1,5 +1,6 @@
 overrides:
   postcss: '>=8.5.15'
+  undici: 7.27.2
 allowBuilds:
   '@clerk/shared': false
   '@parcel/watcher': false
