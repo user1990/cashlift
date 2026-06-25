@@ -25,3 +25,5 @@ jobs:
           fetch-depth: 0
 
       - uses: millionco/react-doctor@v2
+        with:
+          blocking: error

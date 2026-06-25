@@ -8,7 +8,7 @@
 		"start": "next start",
 		"lint": "biome check",
 		"lint:fix": "biome check --write src",
-		"check:react": "mv react-doctor.config.json react-doctor.config.json.bak && npx react-doctor . --offline; mv react-doctor.config.json.bak react-doctor.config.json",
+		"check:react": "npx react-doctor@latest --verbose",
 		"typecheck": "tsgo --noEmit",
 		"test": "vitest run",
 		"test:e2e": "playwright test",

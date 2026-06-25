@@ -1,6 +1,0 @@
-{
-	"verbose": true,
-	"diff": "main",
-	"failOn": "error",
-	"respectInlineDisables": true
-}

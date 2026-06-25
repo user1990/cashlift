@@ -14,7 +14,7 @@ Review the current branch locally and return PR-style findings in the chat. Do n
    - `testing` for test expectations and mocking rules
    - `guide` for repo conventions
    - `styling` for UI, Tailwind, design token, or SCSS changes
-   - `fallow` for dead code, duplication, complexity, circular dependencies, and architecture boundary checks
+   - Use `pnpm check:code` for Fallow dead-code and duplication checks
 2. Gather context in parallel:
 
 ```bash
@@ -35,7 +35,7 @@ git log main...HEAD --pretty=format:"%s" --reverse
 git rev-parse --abbrev-ref HEAD
 
 # Fallow audit
-pnpm fallow
+pnpm check:code
 ```
 
 3. Include both committed branch changes and uncommitted changes in the review unless the user asks otherwise.

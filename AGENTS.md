@@ -48,11 +48,11 @@ Always read this file first. It defines workflow for this repo. Do not override 
 | `styling` | Tailwind, `cn()`, cva, design tokens, responsive styling |
 | `web-interface-guidelines` | UI generation/review, forms, accessibility, focus, loading, motion |
 | `testing` | RTL tests, mocking boundaries, selectors, fixtures, assertions |
-| `fallow` | Dead code, unused exports/deps, circular deps, duplication, boundary checks |
-| `react-doctor` | React/Next quality scans and diagnostics |
 | `create-pr` | Create or update PRs |
 | `get-pr-comments` | Fetch and summarize review comments from the active pull request |
 | `review-pr` | Local PR-style branch review |
+
+Code diagnostics use package scripts: `pnpm check:code` for Fallow and `pnpm check:react` for React Doctor. There are no repo-local `fallow` or `react-doctor` skills.
 
 ## Non-Negotiables
 
