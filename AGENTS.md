@@ -49,10 +49,11 @@ Always read this file first. It defines workflow for this repo. Do not override 
 | `web-interface-guidelines` | UI generation/review, forms, accessibility, focus, loading, motion |
 | `testing` | RTL tests, mocking boundaries, selectors, fixtures, assertions |
 | `fallow` | Dead code, unused exports/deps, circular deps, duplication, boundary checks |
-| `react-doctor` | React/Next quality scans and diagnostics |
 | `create-pr` | Create or update PRs |
 | `get-pr-comments` | Fetch and summarize review comments from the active pull request |
 | `review-pr` | Local PR-style branch review |
+
+React/Next quality diagnostics use the package script `pnpm check:react`; there is no repo-local `react-doctor` skill.
 
 ## Non-Negotiables
 
