@@ -20,7 +20,7 @@ env:
 
 jobs:
   verify:
-    name: Lint, types, unit tests, fallow, build
+    name: Lint, types, unit tests, security, code quality, build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -36,14 +36,14 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --ignore-scripts
         env:
           NODE_ENV: development
 
-      - name: Biome
+      - name: Lint
         run: npx biome check .
 
-      - name: TypeScript
+      - name: Type check
         run: pnpm exec tsgo --noEmit
 
       - name: Unit tests
@@ -55,13 +55,8 @@ jobs:
       - name: Dependency audit
         run: pnpm run security:audit
 
-      - name: Fallow
-        run: pnpm run fallow
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: React Doctor
-        run: pnpm doctor || npx million doctor
+      - name: Code quality
+        run: pnpm run check:code
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

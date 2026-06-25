@@ -1,32 +1,17 @@
 "use client";
 
 import { ArrowUp } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { cn } from "@/ui/utils/cn";
 
 const SCROLL_TO_TOP_THRESHOLD = 560;
 
 export const ScrollToTopButton = () => {
-	const [visible, setVisible] = useState(false);
-	const visibleRef = useRef(false);
-
-	useEffect(() => {
-		const updateVisibility = () => {
-			const nextVisible = window.scrollY > SCROLL_TO_TOP_THRESHOLD;
-
-			if (visibleRef.current !== nextVisible) {
-				visibleRef.current = nextVisible;
-				setVisible(nextVisible);
-			}
-		};
-
-		updateVisibility();
-		window.addEventListener("scroll", updateVisibility, { passive: true });
-
-		return () => {
-			window.removeEventListener("scroll", updateVisibility);
-		};
-	}, []);
+	const visible = useSyncExternalStore(
+		subscribeToScrollVisibility,
+		getScrollToTopVisibility,
+		getServerScrollToTopVisibility,
+	);
 
 	return (
 		<a
@@ -50,3 +35,19 @@ export const ScrollToTopButton = () => {
 		</a>
 	);
 };
+
+function subscribeToScrollVisibility(onStoreChange: () => void) {
+	window.addEventListener("scroll", onStoreChange, { passive: true });
+
+	return () => {
+		window.removeEventListener("scroll", onStoreChange);
+	};
+}
+
+function getScrollToTopVisibility() {
+	return window.scrollY > SCROLL_TO_TOP_THRESHOLD;
+}
+
+function getServerScrollToTopVisibility() {
+	return false;
+}
