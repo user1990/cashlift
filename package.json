@@ -8,15 +8,15 @@
 		"start": "next start",
 		"lint": "biome check",
 		"lint:fix": "biome check --write src",
-		"react-doctor": "mv react-doctor.config.json react-doctor.config.json.bak && npx react-doctor . --offline; mv react-doctor.config.json.bak react-doctor.config.json",
+		"check:react": "mv react-doctor.config.json react-doctor.config.json.bak && npx react-doctor . --offline; mv react-doctor.config.json.bak react-doctor.config.json",
 		"typecheck": "tsgo --noEmit",
 		"test": "vitest run",
 		"test:e2e": "playwright test",
 		"test:e2e:install": "playwright install chromium",
 		"security:audit": "pnpm audit --prod --audit-level high",
 		"security:check": "node scripts/security-check.mjs",
-		"fallow": "fallow --only dupes && fallow --only dead-code",
-		"fallow:fix": "fallow fix --dry-run",
+		"check:code": "fallow --only dupes && fallow --only dead-code",
+		"check:code:fix": "fallow fix --dry-run",
 		"prepare": "lefthook install"
 	},
 	"dependencies": {

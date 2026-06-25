@@ -36,7 +36,7 @@ export const HomeCashFlowIllustration = () => {
 			>
 				<div
 					aria-hidden
-					className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgb(2_218_235_/_0.18),transparent_34%),radial-gradient(circle_at_72%_18%,rgb(220_22_147_/_0.14),transparent_28%)]"
+					className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgb(2_218_235/0.18),transparent_34%),radial-gradient(circle_at_72%_18%,rgb(220_22_147/0.14),transparent_28%)]"
 				/>
 
 				<div className="relative flex items-start justify-between gap-4">

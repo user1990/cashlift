@@ -32,6 +32,7 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 	const pendingRequests = requests.filter((request) => request.status === "pending");
 
 	const decisionMutation = useMutation<SpendRequest, Error, SpendRequestDecisionRequest, ApprovalQueueMutationContext>({
+		mutationKey: datasetQueryKey,
 		mutationFn: decideSpendRequest,
 		onError: (error, _decision, context) => {
 			context?.snapshots.forEach(([queryKey, data]) => {
@@ -50,9 +51,7 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 
 			return { snapshots };
 		},
-		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: datasetQueryKey });
-		},
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: datasetQueryKey }),
 	});
 	const pendingDecision = decisionMutation.variables;
 
