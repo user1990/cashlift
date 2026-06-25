@@ -25,6 +25,10 @@ const PRODUCTION_ENV_KEYS = [
 ] as const;
 
 export const getKuvroAppMode = (env: KuvroProcessEnv = process.env): KuvroAppMode => {
+	if (env.NODE_ENV === "production" && env.KUVRO_APP_MODE === "demo") {
+		throw new Error("KUVRO_APP_MODE must be production in production deployments.");
+	}
+
 	if (env.KUVRO_APP_MODE === "demo" || env.KUVRO_APP_MODE === "production") {
 		return env.KUVRO_APP_MODE;
 	}

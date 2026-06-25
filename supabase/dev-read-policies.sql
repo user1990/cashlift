@@ -1,3 +1,7 @@
+-- DEV/DEMO ONLY.
+-- Do not apply this file to production. Production policies must not grant
+-- anonymous access to workspace finance tables.
+
 drop policy if exists "Allow demo company reads" on companies;
 create policy "Allow demo company reads"
 	on companies

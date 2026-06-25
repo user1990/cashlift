@@ -1,7 +1,6 @@
-import { NextResponse } from "next/server";
 import { resolveWorkspaceDataset } from "@/modules/workspace/resolveWorkspaceDataset";
 import { workspaceDatasetScopeSchema } from "@/modules/workspace/schemas";
-import { apiError } from "./errors";
+import { apiError, workspaceApiJson } from "./errors";
 
 export const GET = async (request: Request) => {
 	const scope = requestUrlScope(request);
@@ -18,7 +17,7 @@ export const GET = async (request: Request) => {
 
 	switch (result.kind) {
 		case "success":
-			return NextResponse.json(result.dataset);
+			return workspaceApiJson(result.dataset);
 		case "config":
 			return apiError({
 				code: "workspace_config_unavailable",

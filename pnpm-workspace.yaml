@@ -1,5 +1,10 @@
+minimumReleaseAge: 10080
+minimumReleaseAgeExclude:
+  # TODO: Remove after 2026-06-29, once cnfast@0.0.8 has aged past the one-week gate.
+  - cnfast@0.0.8
 overrides:
   postcss: '>=8.5.15'
+  undici: 7.27.2
 allowBuilds:
   '@clerk/shared': false
   '@parcel/watcher': false
