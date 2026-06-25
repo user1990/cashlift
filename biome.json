@@ -26,7 +26,7 @@
 	},
 	"linter": {
 		"rules": {
-			"recommended": true,
+			"preset": "recommended",
 			"security": {
 				"noSecrets": {
 					"level": "error",
@@ -49,6 +49,8 @@
 				}
 			},
 			"suspicious": {
+				"noDuplicatedSpreadProps": "error",
+				"noUnknownAttribute": "error",
 				"noDocumentCookie": "error"
 			}
 		}
