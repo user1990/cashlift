@@ -60,7 +60,6 @@ Reference material the agent (or human) can consult for context. Each doc:
 skills/
 ├── architecture/SKILL.md
 ├── create-pr/SKILL.md
-├── fallow/SKILL.md
 ├── get-pr-comments/SKILL.md
 ├── guide/SKILL.md
 ├── review-pr/SKILL.md

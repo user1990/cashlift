@@ -21,7 +21,7 @@ Primary sources:
 2. Compare the current upstream sections with `.agents/skills/web-interface-guidelines/SKILL.md`.
 3. Keep the skill concise and actionable; move long examples or audit notes into this doc.
 4. Update the `Last reviewed` date.
-5. Run `pnpm lint`, `pnpm typecheck`, and `pnpm doctor:score` after implementation changes.
+5. Run `pnpm lint`, `pnpm typecheck`, and `pnpm check:react` after implementation changes.
 
 ## Audit Checklist
 
@@ -42,7 +42,7 @@ Verification run during setup:
 
 - `pnpm lint` passed.
 - `pnpm typecheck` passed.
-- `pnpm doctor:score` returned `100`.
+- `pnpm check:react` passed.
 
 Static checks that passed during setup:
 
