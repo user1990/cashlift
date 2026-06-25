@@ -17,7 +17,8 @@
 		"security:check": "node scripts/security-check.mjs",
 		"check:code": "fallow --only dupes && fallow --only dead-code",
 		"check:code:fix": "fallow fix --dry-run",
-		"prepare": "lefthook install"
+		"prepare": "lefthook install",
+		"doctor": "npx react-doctor@latest"
 	},
 	"dependencies": {
 		"@clerk/nextjs": "^7.3.2",
