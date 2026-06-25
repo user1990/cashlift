@@ -117,7 +117,7 @@
 			}
 		]
 	},
-	"dynamicallyLoaded": ["src/services/i18n/request.ts"],
+	"dynamicallyLoaded": ["doctor.config.ts", "src/services/i18n/request.ts"],
 	"ignoreDependencies": ["turbopack-inline-svg-loader", "babel-plugin-react-compiler"],
 	"rules": {
 		"unused-files": "error",
