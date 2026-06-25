@@ -56,12 +56,12 @@ jobs:
         run: pnpm run security:audit
 
       - name: Fallow
-        run: pnpm run fallow
+        run: pnpm run check:code
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: React Doctor
-        run: pnpm doctor || npx million doctor
+        run: pnpm run check:react
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
