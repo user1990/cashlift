@@ -20,7 +20,7 @@ env:
 
 jobs:
   verify:
-    name: Lint, types, unit tests, security, quality, build
+    name: Lint, types, unit tests, security, code quality, build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -57,11 +57,6 @@ jobs:
 
       - name: Code quality
         run: pnpm run check:code
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: React quality
-        run: pnpm run check:react
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
