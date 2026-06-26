@@ -10,7 +10,7 @@ describe("proxy security headers", () => {
 		expect(policy).toContain("script-src 'self' 'nonce-test-nonce' 'strict-dynamic'");
 		expect(policy).toContain("style-src 'self' 'nonce-test-nonce'");
 		expect(policy).toContain("style-src-elem 'self' 'unsafe-inline'");
-		expect(policy).toContain("style-src-attr 'unsafe-inline'");
+		expect(policy).toContain("style-src-attr 'none'");
 		expect(policy).toContain("https://*.ingest.us.sentry.io");
 		expect(policy).toContain("object-src 'none'");
 		expect(policy).toContain("frame-ancestors 'none'");
