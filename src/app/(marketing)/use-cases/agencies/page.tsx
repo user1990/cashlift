@@ -3,7 +3,7 @@ import { UseCasePage } from "@/modules/marketing/components/UseCasePage";
 import { USE_CASES } from "@/modules/marketing/content";
 
 export const metadata: Metadata = {
-	title: "Agencies — Kuvro",
+	title: "Agencies — CashLift",
 	description: "Cash-aware spend approvals and leak detection for agencies.",
 };
 

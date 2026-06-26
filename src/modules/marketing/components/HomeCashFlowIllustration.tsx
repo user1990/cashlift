@@ -69,7 +69,7 @@ export const HomeCashFlowIllustration = () => {
 								<ShieldCheck aria-hidden className="size-7" />
 							</div>
 
-							<p className="mt-4 text-l+ text-shell-foreground">Kuvro priority engine</p>
+							<p className="mt-4 text-l+ text-shell-foreground">CashLift priority engine</p>
 
 							<p className="mt-2 text-s leading-5 text-shell-muted">Ranks by runway, budget, due date, and owner.</p>
 						</div>

@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="./src/app/logo.svg" width="110" alt="Kuvro Logo" />
+  <img src="./src/app/logo.svg" width="110" alt="CashLift Logo" />
 </p>
 
-<h1 align="center">Kuvro</h1>
+<h1 align="center">CashLift</h1>
 
 <p align="center">
   Cash decision command center for service firms.
@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="#why-kuvro">Why Kuvro</a>
+  <a href="#why-cashlift">Why CashLift</a>
   ·
   <a href="#features">Features</a>
   ·
@@ -41,16 +41,16 @@
 ---
 
 <p align="center">
-  <img src="./src/app/dashboard.png" width="100%" alt="Kuvro Dashboard" />
+  <img src="./src/app/dashboard.png" width="100%" alt="CashLift Dashboard" />
 </p>
 
 ---
 
-# Why Kuvro
+# Why CashLift
 
-Most finance tools explain what already happened. Kuvro helps service firms decide what to do before cash gets tight.
+Most finance tools explain what already happened. CashLift helps service firms decide what to do before cash gets tight.
 
-Kuvro turns invoices, vendor renewals, spend requests, team budgets, and cash forecasts into one daily operating view. Finance leads can see which collections protect runway, which renewals should be cut, and which spend requests can be approved without breaking the buffer.
+CashLift turns invoices, vendor renewals, spend requests, team budgets, and cash forecasts into one daily operating view. Finance leads can see which collections protect runway, which renewals should be cut, and which spend requests can be approved without breaking the buffer.
 
 Built for agencies, consultancies, studios, and software service firms that need to:
 
@@ -61,7 +61,7 @@ Built for agencies, consultancies, studios, and software service firms that need
 - understand cash runway without spreadsheet work
 - give finance, managers, and employees the right workspace views
 
-The business model is a finance operations workspace for service companies: Kuvro does not move money. It helps teams make better cash decisions around approvals, collections, vendor leaks, budgets, and runway.
+The business model is a finance operations workspace for service companies: CashLift does not move money. It helps teams make better cash decisions around approvals, collections, vendor leaks, budgets, and runway.
 
 ---
 
@@ -95,7 +95,7 @@ The business model is a finance operations workspace for service companies: Kuvr
 
 # Architecture
 
-Kuvro separates public marketing, demo mode, and production workspace behavior.
+CashLift separates public marketing, demo mode, and production workspace behavior.
 
 ```text
 Public marketing routes
@@ -147,7 +147,7 @@ e2e/                    Playwright smoke tests
 
 # Validation Contracts
 
-Kuvro treats Zod schemas as the runtime contract. External input is parsed at app boundaries, and internal TypeScript types are inferred with `z.infer<typeof schema>` so object shapes and string unions stay in sync without manual duplication.
+CashLift treats Zod schemas as the runtime contract. External input is parsed at app boundaries, and internal TypeScript types are inferred with `z.infer<typeof schema>` so object shapes and string unions stay in sync without manual duplication.
 
 See [docs/validation-contracts.md](./docs/validation-contracts.md) for the working rule.
 
@@ -183,7 +183,7 @@ The configured pnpm version requires Node 22.13 or newer.
 Local development defaults to demo mode.
 
 ```bash
-KUVRO_APP_MODE=demo pnpm dev
+CASHLIFT_APP_MODE=demo pnpm dev
 ```
 
 Demo mode:
@@ -198,7 +198,7 @@ Demo mode:
 Production mode requires Clerk and Supabase configuration.
 
 ```env
-KUVRO_APP_MODE=production
+CASHLIFT_APP_MODE=production
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
 CLERK_SECRET_KEY=
 NEXT_PUBLIC_SUPABASE_URL=
@@ -234,7 +234,7 @@ pnpm test:e2e:install
 
 # Security
 
-Kuvro follows a fail-closed production model.
+CashLift follows a fail-closed production model.
 
 - Demo mode uses local fixture data and requires no secrets.
 - Production mode requires Clerk authentication.

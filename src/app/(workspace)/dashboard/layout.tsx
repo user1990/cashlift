@@ -33,7 +33,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 const SignedOutFallback = () => (
 	<MainContent variant="workspace" className="flex items-center justify-center px-4">
 		<div className="max-w-md rounded-lg border border-border bg-panel p-6 text-center shadow-panel">
-			<p className="text-s+ uppercase tracking-normal text-primary">Kuvro</p>
+			<p className="text-s+ uppercase tracking-normal text-primary">CashLift</p>
 
 			<h1 className="mt-2 text-4xl+ tracking-normal text-panel-foreground">Log in to open workspace</h1>
 
@@ -54,7 +54,7 @@ const SignedOutFallback = () => (
 const WorkspaceUnavailable = ({ message }: { message: string }) => (
 	<MainContent variant="workspace" className="flex items-center justify-center px-4">
 		<div className="max-w-md rounded-lg border border-border bg-panel p-6 text-center shadow-panel">
-			<p className="text-s+ uppercase tracking-normal text-primary">Kuvro</p>
+			<p className="text-s+ uppercase tracking-normal text-primary">CashLift</p>
 
 			<h1 className="mt-2 text-4xl+ tracking-normal text-panel-foreground">Workspace unavailable</h1>
 

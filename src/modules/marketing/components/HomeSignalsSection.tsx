@@ -9,7 +9,7 @@ const SIGNAL_GROUPS = [
 		title: "Signals",
 	},
 	{
-		description: "Kuvro ranks urgency by runway, due date, value, and owner.",
+		description: "CashLift ranks urgency by runway, due date, value, and owner.",
 		icon: ShieldCheck,
 		title: "Priority",
 	},
@@ -38,7 +38,7 @@ export const HomeSignalsSection = () => (
 					</h2>
 
 					<p className="mt-4 max-w-xl text-m leading-7 text-shell-muted">
-						Kuvro converts the work finance already tracks into a ranked queue your team can act on.
+						CashLift converts the work finance already tracks into a ranked queue your team can act on.
 					</p>
 
 					<ActionLink href="/demo" className="mt-8">

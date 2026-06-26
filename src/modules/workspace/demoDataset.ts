@@ -104,11 +104,11 @@ export const demoWorkspaceDataset = financialDatasetSchema.parse({
 	profile: {
 		cashBalanceCents: 248_000_000,
 		cashBufferTargetCents: 14_000_000,
-		companyId: "kuvro-demo",
+		companyId: "cashlift-demo",
 		defaultRole: "owner-finance",
 		industry: "consulting",
 		monthlyPayrollCents: 62_000_000,
-		name: "Kuvro",
+		name: "CashLift",
 	},
 	spendRequests: [
 		{

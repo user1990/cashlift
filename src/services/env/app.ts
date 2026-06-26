@@ -1,19 +1,19 @@
-export type KuvroAppMode = "demo" | "production";
+export type CashLiftAppMode = "demo" | "production";
 
 /** Allows tests to pass partial env objects without satisfying full `ProcessEnv`. */
-export type KuvroProcessEnv = Record<string, string | undefined>;
+export type CashLiftProcessEnv = Record<string, string | undefined>;
 
 export type WorkspaceRuntimeConfig =
 	| {
 			configured: true;
-			mode: KuvroAppMode;
+			mode: CashLiftAppMode;
 			supabasePublishableKey: string;
 			supabaseUrl: string;
 	  }
 	| {
 			configured: false;
 			message: string;
-			mode: KuvroAppMode;
+			mode: CashLiftAppMode;
 			missingKeys: string[];
 	  };
 
@@ -24,22 +24,22 @@ const PRODUCTION_ENV_KEYS = [
 	"NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
 ] as const;
 
-export const getKuvroAppMode = (env: KuvroProcessEnv = process.env): KuvroAppMode => {
-	if (env.NODE_ENV === "production" && env.KUVRO_APP_MODE === "demo") {
-		throw new Error("KUVRO_APP_MODE must be production in production deployments.");
+export const getCashLiftAppMode = (env: CashLiftProcessEnv = process.env): CashLiftAppMode => {
+	if (env.NODE_ENV === "production" && env.CASHLIFT_APP_MODE === "demo") {
+		throw new Error("CASHLIFT_APP_MODE must be production in production deployments.");
 	}
 
-	if (env.KUVRO_APP_MODE === "demo" || env.KUVRO_APP_MODE === "production") {
-		return env.KUVRO_APP_MODE;
+	if (env.CASHLIFT_APP_MODE === "demo" || env.CASHLIFT_APP_MODE === "production") {
+		return env.CASHLIFT_APP_MODE;
 	}
 
 	return env.CI || env.NODE_ENV === "production" ? "production" : "demo";
 };
 
-export const workspaceDemoEnabled = (env: KuvroProcessEnv = process.env) => getKuvroAppMode(env) === "demo";
+export const workspaceDemoEnabled = (env: CashLiftProcessEnv = process.env) => getCashLiftAppMode(env) === "demo";
 
-export const getWorkspaceRuntimeConfig = (env: KuvroProcessEnv = process.env): WorkspaceRuntimeConfig => {
-	const mode = getKuvroAppMode(env);
+export const getWorkspaceRuntimeConfig = (env: CashLiftProcessEnv = process.env): WorkspaceRuntimeConfig => {
+	const mode = getCashLiftAppMode(env);
 	const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
 	const supabasePublishableKey = env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
@@ -71,4 +71,4 @@ export const getWorkspaceRuntimeConfig = (env: KuvroProcessEnv = process.env): W
 	};
 };
 
-const getMissingKeys = (env: KuvroProcessEnv, keys: readonly string[]) => keys.filter((key) => !env[key]?.trim());
+const getMissingKeys = (env: CashLiftProcessEnv, keys: readonly string[]) => keys.filter((key) => !env[key]?.trim());

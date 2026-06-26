@@ -115,7 +115,7 @@ describe("resolveWorkspaceDataset", () => {
 	});
 
 	it("captures config failures", async () => {
-		vi.stubEnv("KUVRO_APP_MODE", "production");
+		vi.stubEnv("CASHLIFT_APP_MODE", "production");
 
 		const result = await resolveDataset();
 
