@@ -1,0 +1,56 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": ["config:recommended"],
+	"timezone": "Europe/Vilnius",
+	"labels": ["dependencies"],
+	"automerge": false,
+	"prConcurrentLimit": 5,
+	"prHourlyLimit": 2,
+	"minimumReleaseAge": "7 days",
+	"rangeStrategy": "bump",
+	"lockFileMaintenance": {
+		"enabled": true,
+		"automerge": false,
+		"schedule": ["before 5am on monday"]
+	},
+	"packageRules": [
+		{
+			"matchUpdateTypes": ["major"],
+			"dependencyDashboardApproval": true,
+			"addLabels": ["major"]
+		},
+		{
+			"matchManagers": ["github-actions"],
+			"matchUpdateTypes": ["minor", "patch"],
+			"groupName": "github actions"
+		},
+		{
+			"matchDepTypes": ["dependencies"],
+			"matchUpdateTypes": ["minor", "patch"],
+			"matchPackageNames": [
+				"!@clerk/nextjs",
+				"!@sentry/nextjs",
+				"!@supabase/ssr",
+				"!@supabase/supabase-js",
+				"!@tanstack/react-query",
+				"!next",
+				"!react",
+				"!react-dom"
+			],
+			"groupName": "production dependencies"
+		},
+		{
+			"matchDepTypes": ["devDependencies"],
+			"matchUpdateTypes": ["minor", "patch"],
+			"matchPackageNames": [
+				"!@biomejs/biome",
+				"!@playwright/test",
+				"!@testing-library/react",
+				"!@typescript/native-preview",
+				"!typescript",
+				"!vitest"
+			],
+			"groupName": "development dependencies"
+		}
+	]
+}
