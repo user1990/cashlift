@@ -8,7 +8,7 @@ describe("countCharacters", () => {
 		${"🇺🇸"}       | ${1}
 		${"👍🏾"}     | ${1}
 		${"Hello 🌍"} | ${7}
-		${"Kuvro"}    | ${5}
+		${"CashLift"} | ${8}
 	`("counts $value as $expected user-visible characters", ({ expected, value }) => {
 		expect(countCharacters(value)).toEqual(expected);
 	});

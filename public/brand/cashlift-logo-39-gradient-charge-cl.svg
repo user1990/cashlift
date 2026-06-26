@@ -1,0 +1,15 @@
+<svg aria-labelledby="title desc" fill="none" role="img" viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">CashLift Gradient Charge Variation 39 - CL Monogram</title>
+  <desc id="desc">A CL monogram integrated with the gradient charge shape.</desc>
+  <defs>
+    <linearGradient id="chargeGradient39" x1="57" x2="198" y1="174" y2="45" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00f0a8"/>
+      <stop offset=".48" stop-color="#00b8ff"/>
+      <stop offset="1" stop-color="#ff3d7f"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="220" fill="#070817" rx="34"/>
+  <path fill="url(#chargeGradient39)" d="M57 160 132 48h58l-45 62h67l-91 85H64l49-42z"/>
+  <path stroke="#ffffff" stroke-linecap="round" stroke-width="13" d="M89 124c-14-18-8-43 13-55 12-7 28-7 40 1M160 72v82h40"/>
+  <text fill="#ffffff" font-family="Arial Black, Arial, sans-serif" font-size="33" font-weight="900" letter-spacing="-1" x="202" y="132">CashLift</text>
+</svg>

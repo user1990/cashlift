@@ -1,0 +1,15 @@
+<svg aria-labelledby="title desc" fill="none" role="img" viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">CashLift Gradient Charge Variation 36 - Badge</title>
+  <desc id="desc">A rounded badge version with the gradient charge centered above the wordmark.</desc>
+  <defs>
+    <linearGradient id="chargeGradient36" x1="94" x2="214" y1="131" y2="37" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00f0a8"/>
+      <stop offset=".5" stop-color="#00b8ff"/>
+      <stop offset="1" stop-color="#ff3d7f"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="220" fill="#050611" rx="48"/>
+  <rect x="28" y="24" width="264" height="172" stroke="#1d2847" stroke-width="8" rx="36"/>
+  <path fill="url(#chargeGradient36)" d="M93 124 150 36h55l-38 54h61l-83 72H92l43-38z"/>
+  <text fill="#ffffff" font-family="Arial Black, Arial, sans-serif" font-size="38" font-weight="900" letter-spacing="-1.4" x="73" y="184">CashLift</text>
+</svg>

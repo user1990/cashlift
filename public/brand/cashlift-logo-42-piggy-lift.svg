@@ -1,0 +1,20 @@
+<svg aria-labelledby="title desc" fill="none" role="img" viewBox="0 0 420 160" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">CashLift Savings Variation 42 - Piggy Lift</title>
+  <desc id="desc">A modern piggy-bank silhouette with a lift arrow for savings growth.</desc>
+  <defs>
+    <linearGradient id="savingsGradient42" x1="33" x2="166" y1="123" y2="36" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22c77a"/>
+      <stop offset=".5" stop-color="#02daeb"/>
+      <stop offset="1" stop-color="#dc1693"/>
+    </linearGradient>
+  </defs>
+  <rect width="420" height="160" fill="#080917" rx="30"/>
+  <path fill="url(#savingsGradient42)" d="M41 93c0-29 28-52 67-52h35c19 0 35 15 35 34v36H57c-9 0-16-7-16-16z"/>
+  <circle cx="151" cy="72" r="7" fill="#080917"/>
+  <path fill="#02daeb" d="M69 42 91 24l9 28z"/>
+  <path stroke="#080917" stroke-linecap="round" stroke-width="8" d="M82 112v17M144 112v17"/>
+  <path stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="9" d="m86 78 25-25 25 25"/>
+  <path stroke="#ffffff" stroke-linecap="round" stroke-width="9" d="M111 53v47"/>
+  <text fill="#ffffff" font-family="Arial Black, Arial, sans-serif" font-size="49" font-weight="900" letter-spacing="-2" x="178" y="101">Cash</text>
+  <text fill="#02daeb" font-family="Arial Black, Arial, sans-serif" font-size="49" font-weight="900" letter-spacing="-2" x="298" y="101">Lift</text>
+</svg>

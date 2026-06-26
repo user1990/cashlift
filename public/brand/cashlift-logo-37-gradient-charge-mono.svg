@@ -1,0 +1,9 @@
+<svg aria-labelledby="title desc" fill="none" role="img" viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">CashLift Gradient Charge Variation 37 - Mono Green</title>
+  <desc id="desc">A simplified green version of the charge mark for restrained digital and print use.</desc>
+  <rect width="320" height="220" fill="#07110c" rx="34"/>
+  <path fill="#20e889" d="M49 157 130 49h62l-51 67h69L119 204h-58l52-47z"/>
+  <path fill="#b4ffd8" d="M130 49h62l-51 67h-28z" opacity=".72"/>
+  <text fill="#ffffff" font-family="Arial Black, Arial, sans-serif" font-size="37" font-weight="900" letter-spacing="-1.2" x="174" y="117">Cash</text>
+  <text fill="#20e889" font-family="Arial Black, Arial, sans-serif" font-size="37" font-weight="900" letter-spacing="-1.2" x="174" y="158">Lift</text>
+</svg>

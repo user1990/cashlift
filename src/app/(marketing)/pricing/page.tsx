@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PricingPage } from "@/modules/marketing/components/PricingPage";
 
 export const metadata: Metadata = {
-	title: "Pricing — Kuvro",
+	title: "Pricing — CashLift",
 	description: "Flat team pricing for cash-aware approvals, vendor leak detection, and daily company cash decisions.",
 };
 

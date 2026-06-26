@@ -1,0 +1,14 @@
+<svg aria-labelledby="title desc" fill="none" role="img" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">CashLift Gradient Charge Variation 40 - App Icon</title>
+  <desc id="desc">A square app icon version of the gradient charge mark.</desc>
+  <defs>
+    <linearGradient id="chargeGradient40" x1="42" x2="195" y1="183" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00f0a8"/>
+      <stop offset=".5" stop-color="#00b8ff"/>
+      <stop offset="1" stop-color="#ff3d7f"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" fill="#080917" rx="56"/>
+  <path fill="url(#chargeGradient40)" d="M42 178 112 52h67l-44 73h75L100 225H43l52-47z"/>
+  <path stroke="#ffffff" stroke-linecap="round" stroke-width="12" d="M73 53h49"/>
+</svg>

@@ -1,0 +1,17 @@
+<svg aria-labelledby="title desc" fill="none" role="img" viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">CashLift Gradient Charge Variation 33 - Ring</title>
+  <desc id="desc">A gradient charge mark inside a neon orbital ring for a stronger technology feel.</desc>
+  <defs>
+    <linearGradient id="chargeGradient33" x1="67" x2="213" y1="166" y2="51" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00f0a8"/>
+      <stop offset=".55" stop-color="#00d1ff"/>
+      <stop offset="1" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="220" fill="#080917" rx="34"/>
+  <circle cx="128" cy="110" r="76" stroke="#1b2442" stroke-width="12"/>
+  <path stroke="#00d1ff" stroke-linecap="round" stroke-width="8" d="M59 139c23 47 85 61 126 25"/>
+  <path fill="url(#chargeGradient33)" d="M66 145 127 54h58l-39 55h61l-89 75H64l47-39z"/>
+  <text fill="#ffffff" font-family="Arial Black, Arial, sans-serif" font-size="34" font-weight="900" letter-spacing="-1" x="211" y="103">Cash</text>
+  <text fill="#00f0a8" font-family="Arial Black, Arial, sans-serif" font-size="34" font-weight="900" letter-spacing="-1" x="211" y="141">Lift</text>
+</svg>

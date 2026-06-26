@@ -4,8 +4,8 @@ import { MainContent } from "@/modules/page-shell/components/MainContent";
 import { AuthProvider } from "@/services/clerk/provider";
 
 export const metadata: Metadata = {
-	title: "Sign up — Kuvro",
-	description: "Create a Kuvro company workspace.",
+	title: "Sign up — CashLift",
+	description: "Create a CashLift company workspace.",
 };
 
 export default function SignUpPage() {

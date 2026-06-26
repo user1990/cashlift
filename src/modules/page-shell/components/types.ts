@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { WorkspaceDatasetScope } from "@/modules/workspace/types";
-import type { KuvroAppMode } from "@/services/env/app";
+import type { CashLiftAppMode } from "@/services/env/app";
 
 export type WorkspacePageProps = {
 	section: WorkspaceDatasetScope;
@@ -15,4 +15,4 @@ export type WorkspaceNavItem = {
 	section: WorkspaceSection;
 };
 
-export type WorkspaceMode = KuvroAppMode;
+export type WorkspaceMode = CashLiftAppMode;

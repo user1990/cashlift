@@ -1,0 +1,19 @@
+<svg aria-labelledby="title desc" fill="none" role="img" viewBox="0 0 420 160" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">CashLift Savings Variation 44 - Wallet Rise</title>
+  <desc id="desc">A wallet icon with a rising card arrow for better cash control.</desc>
+  <defs>
+    <linearGradient id="savingsGradient44" x1="36" x2="166" y1="128" y2="32" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22c77a"/>
+      <stop offset=".5" stop-color="#02daeb"/>
+      <stop offset="1" stop-color="#dc1693"/>
+    </linearGradient>
+  </defs>
+  <rect width="420" height="160" fill="#080917" rx="30"/>
+  <rect x="36" y="61" width="132" height="72" fill="url(#savingsGradient44)" rx="22"/>
+  <path fill="#080917" d="M36 75h116c9 0 16 7 16 16v7H36z"/>
+  <circle cx="142" cy="100" r="8" fill="#ffffff"/>
+  <path stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="9" d="m76 95 29-29 29 29"/>
+  <path stroke="#ffffff" stroke-linecap="round" stroke-width="9" d="M105 66v49"/>
+  <text fill="#ffffff" font-family="Arial Black, Arial, sans-serif" font-size="49" font-weight="900" letter-spacing="-2" x="178" y="101">Cash</text>
+  <text fill="#02daeb" font-family="Arial Black, Arial, sans-serif" font-size="49" font-weight="900" letter-spacing="-2" x="298" y="101">Lift</text>
+</svg>

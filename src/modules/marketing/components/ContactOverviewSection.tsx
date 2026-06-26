@@ -2,8 +2,8 @@ import { Panel } from "@/ui/components/Panel";
 import { Hero } from "./Hero";
 
 const CONTACT_CHANNELS = [
-	["Sales", "sales@kuvro.example"],
-	["Support", "support@kuvro.example"],
+	["Sales", "sales@cashlift.example"],
+	["Support", "support@cashlift.example"],
 ] as const;
 
 export const ContactOverviewSection = () => (

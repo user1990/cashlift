@@ -47,7 +47,7 @@ export const financialDatasetFixture: FinancialDataset = {
 			dueDate: "2026-05-13",
 			id: "action-protect-buffer",
 			impactCents: 940_000,
-			owner: "Kuvro",
+			owner: "CashLift",
 			priority: "high",
 			status: "open",
 			title: "Protect the $250k cash buffer",

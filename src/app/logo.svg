@@ -1,6 +1,16 @@
-<svg fill="none" aria-hidden="true" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-  <rect width="36" height="36" fill="#0d1f16" rx="9"/>
-  <path fill="#22c77a" d="M10 8h4.4v20H10z"/>
-  <path fill="#22c77a" d="M16 18.1 26.2 8h-5.7l-8 8.3v3.6l8.5 8.1h6.1z"/>
-  <path stroke="#8cf5bd" stroke-linecap="round" stroke-width="2.2" d="M17.4 18.2h7.8"/>
+<svg aria-labelledby="title desc" fill="none" role="img" viewBox="0 0 420 160" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">CashLift Gradient Charge Variation 35 - Horizontal</title>
+  <desc id="desc">A wide horizontal lockup for headers and marketing placements.</desc>
+  <defs>
+    <linearGradient id="chargeGradient35" x1="34" x2="163" y1="123" y2="26" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00f0a8"/>
+      <stop offset=".5" stop-color="#00b8ff"/>
+      <stop offset="1" stop-color="#ff3d7f"/>
+    </linearGradient>
+  </defs>
+  <rect width="420" height="160" fill="#080917" rx="30"/>
+  <path fill="url(#chargeGradient35)" d="M34 111 91 28h50l-35 51h55l-76 66H38l39-34z"/>
+  <text fill="#ffffff" font-family="Arial Black, Arial, sans-serif" font-size="49" font-weight="900" letter-spacing="-2" x="178" y="101">Cash</text>
+  <text fill="#02daeb" font-family="Arial Black, Arial, sans-serif" font-size="49" font-weight="900" letter-spacing="-2" x="298" y="101">Lift</text>
+  <path stroke="#00f0a8" stroke-linecap="round" stroke-width="8" d="M181 119h128"/>
 </svg>

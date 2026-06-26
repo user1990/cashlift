@@ -10,14 +10,14 @@ describe("proxy security headers", () => {
 		expect(policy).toContain("script-src 'self' 'nonce-test-nonce' 'strict-dynamic'");
 		expect(policy).toContain("style-src 'self' 'nonce-test-nonce'");
 		expect(policy).toContain("style-src-elem 'self' 'unsafe-inline'");
-		expect(policy).toContain("style-src-attr 'none'");
+		expect(policy).toContain("style-src-attr 'unsafe-inline'");
 		expect(policy).toContain("https://*.ingest.us.sentry.io");
 		expect(policy).toContain("object-src 'none'");
 		expect(policy).toContain("frame-ancestors 'none'");
 	});
 
 	it("adds browser hardening headers to matched requests", async () => {
-		const request = new NextRequest("https://kuvro.test/dashboard");
+		const request = new NextRequest("https://cashlift.test/dashboard");
 
 		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
 

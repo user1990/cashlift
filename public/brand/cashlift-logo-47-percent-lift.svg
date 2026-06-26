@@ -1,0 +1,18 @@
+<svg aria-labelledby="title desc" fill="none" role="img" viewBox="0 0 420 160" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">CashLift Savings Variation 47 - Percent Lift</title>
+  <desc id="desc">A percentage savings mark rises through a gradient arrow.</desc>
+  <defs>
+    <linearGradient id="savingsGradient47" x1="42" x2="170" y1="133" y2="26" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22c77a"/>
+      <stop offset=".5" stop-color="#02daeb"/>
+      <stop offset="1" stop-color="#dc1693"/>
+    </linearGradient>
+  </defs>
+  <rect width="420" height="160" fill="#080917" rx="30"/>
+  <path fill="url(#savingsGradient47)" d="M51 125 129 38h-36l37-29 37 29h-36l-78 87z"/>
+  <circle cx="79" cy="79" r="17" stroke="#ffffff" stroke-width="8"/>
+  <circle cx="137" cy="119" r="17" stroke="#ffffff" stroke-width="8"/>
+  <path stroke="#ffffff" stroke-linecap="round" stroke-width="9" d="M139 62 77 134"/>
+  <text fill="#ffffff" font-family="Arial Black, Arial, sans-serif" font-size="49" font-weight="900" letter-spacing="-2" x="178" y="101">Cash</text>
+  <text fill="#02daeb" font-family="Arial Black, Arial, sans-serif" font-size="49" font-weight="900" letter-spacing="-2" x="298" y="101">Lift</text>
+</svg>

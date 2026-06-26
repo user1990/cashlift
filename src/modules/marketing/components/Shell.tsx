@@ -15,14 +15,14 @@ export const Shell = ({ children }: ShellProps) => (
 		<footer className="mt-auto border-t border-shell-border bg-shell-elevated">
 			<div className="mx-auto grid max-w-[1180px] gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.1fr_1.9fr] lg:px-8">
 				<section>
-					<p className="text-s+ uppercase tracking-normal text-primary">Kuvro</p>
+					<p className="text-s+ uppercase tracking-normal text-primary">CashLift</p>
 
 					<h2 className="mt-2 max-w-sm text-3xl+ tracking-normal text-shell-foreground">
 						Run your first cash leak audit in minutes.
 					</h2>
 
 					<p className="mt-3 max-w-md text-m leading-6 text-shell-muted">
-						Kuvro is a demo-first MVP for service firms that want company spend decisions tied to cash impact.
+						CashLift is a demo-first MVP for service firms that want company spend decisions tied to cash impact.
 					</p>
 				</section>
 

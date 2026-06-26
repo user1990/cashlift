@@ -19,7 +19,7 @@ export default defineConfig({
 		command: "pnpm dev",
 		env: {
 			...process.env,
-			KUVRO_APP_MODE: "demo",
+			CASHLIFT_APP_MODE: "demo",
 			NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
 				process.env.E2E_NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "e2e-placeholder-anon-key",
 			NEXT_PUBLIC_SUPABASE_URL: process.env.E2E_NEXT_PUBLIC_SUPABASE_URL ?? "https://invalid.local",

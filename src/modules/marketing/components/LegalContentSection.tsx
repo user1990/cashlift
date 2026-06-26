@@ -10,7 +10,7 @@ export const LegalContentSection = ({ title }: LegalContentSectionProps) => (
 
 		<div className="mt-6 space-y-4 text-m leading-7 text-shell-muted">
 			<p>
-				This MVP page is a placeholder for production legal copy. Kuvro does not move money, issue cards, or provide
+				This MVP page is a placeholder for production legal copy. CashLift does not move money, issue cards, or provide
 				financial, legal, or tax advice in this demo.
 			</p>
 

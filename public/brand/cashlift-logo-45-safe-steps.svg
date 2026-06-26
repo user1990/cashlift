@@ -1,0 +1,18 @@
+<svg aria-labelledby="title desc" fill="none" role="img" viewBox="0 0 420 160" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">CashLift Savings Variation 45 - Safe Steps</title>
+  <desc id="desc">A vault dial with ascending steps points to protected financial progress.</desc>
+  <defs>
+    <linearGradient id="savingsGradient45" x1="45" x2="162" y1="134" y2="29" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22c77a"/>
+      <stop offset=".5" stop-color="#02daeb"/>
+      <stop offset="1" stop-color="#dc1693"/>
+    </linearGradient>
+  </defs>
+  <rect width="420" height="160" fill="#080917" rx="30"/>
+  <rect x="38" y="35" width="132" height="98" fill="url(#savingsGradient45)" rx="26"/>
+  <circle cx="86" cy="84" r="26" fill="#080917"/>
+  <circle cx="86" cy="84" r="8" fill="#02daeb"/>
+  <path fill="#ffffff" d="M105 111h18v-18h18V75h18v36z"/>
+  <text fill="#ffffff" font-family="Arial Black, Arial, sans-serif" font-size="49" font-weight="900" letter-spacing="-2" x="178" y="101">Cash</text>
+  <text fill="#02daeb" font-family="Arial Black, Arial, sans-serif" font-size="49" font-weight="900" letter-spacing="-2" x="298" y="101">Lift</text>
+</svg>

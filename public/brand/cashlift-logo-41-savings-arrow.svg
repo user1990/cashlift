@@ -1,0 +1,19 @@
+<svg aria-labelledby="title desc" fill="none" role="img" viewBox="0 0 420 160" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">CashLift Savings Variation 41 - Savings Arrow</title>
+  <desc id="desc">A coin stack and upward arrow replace the lightning mark to suggest saving and lift.</desc>
+  <defs>
+    <linearGradient id="savingsGradient41" x1="34" x2="159" y1="124" y2="29" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22c77a"/>
+      <stop offset=".52" stop-color="#02daeb"/>
+      <stop offset="1" stop-color="#dc1693"/>
+    </linearGradient>
+  </defs>
+  <rect width="420" height="160" fill="#080917" rx="30"/>
+  <ellipse cx="83" cy="119" fill="#22c77a" rx="50" ry="15"/>
+  <path fill="#102131" d="M33 89h100v30H33z"/>
+  <ellipse cx="83" cy="89" fill="#02daeb" rx="50" ry="15"/>
+  <path fill="url(#savingsGradient41)" d="M108 117V64H82l48-43 48 43h-27v53z"/>
+  <text fill="#ffffff" font-family="Arial Black, Arial, sans-serif" font-size="49" font-weight="900" letter-spacing="-2" x="178" y="101">Cash</text>
+  <text fill="#02daeb" font-family="Arial Black, Arial, sans-serif" font-size="49" font-weight="900" letter-spacing="-2" x="298" y="101">Lift</text>
+  <path stroke="#22c77a" stroke-linecap="round" stroke-width="8" d="M181 119h128"/>
+</svg>

@@ -6,7 +6,7 @@ describe("leadCaptureSchema", () => {
 		expect(
 			leadCaptureSchema.safeParse({
 				company: "👨‍👩‍👧👨‍👩‍👧",
-				email: "finance@kuvro.test",
+				email: "finance@cashlift.test",
 				name: "👍🏾👍🏾",
 			}).success,
 		).toEqual(true);
@@ -14,7 +14,7 @@ describe("leadCaptureSchema", () => {
 		expect(
 			leadCaptureSchema.safeParse({
 				company: "👨‍👩‍👧",
-				email: "finance@kuvro.test",
+				email: "finance@cashlift.test",
 				name: "👍🏾",
 			}).success,
 		).toEqual(false);
