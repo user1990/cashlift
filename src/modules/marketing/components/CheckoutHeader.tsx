@@ -1,6 +1,6 @@
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 import Link from "next/link";
-import { Brand } from "./Brand";
+import { Logo } from "./Logo";
 
 export const CheckoutHeader = () => (
 	<header className="border-b border-shell-border bg-shell/95">
@@ -16,7 +16,7 @@ export const CheckoutHeader = () => (
 				<span className="sm:hidden">Pricing</span>
 			</Link>
 
-			<Brand />
+			<Logo />
 
 			<p className="inline-flex items-center gap-2 text-m font-medium text-shell-muted">
 				<ShieldCheck aria-hidden className="size-5 text-primary" />

@@ -16,11 +16,7 @@ type WorkspaceSidebarProps = {
 export const WorkspaceSidebar = ({ mode, section }: WorkspaceSidebarProps) => (
 	<aside className="flex min-h-[calc(100vh-2rem)] flex-col rounded-lg border border-white/5 bg-black/30 p-3 shadow-shell backdrop-blur lg:sticky lg:top-4 lg:self-start">
 		<Link href="/dashboard" className="flex items-center gap-3 px-2 py-3">
-			<Image src={logo} alt="CashLift Logo" width={40} height={40} priority className="shrink-0" />
-
-			<span className="text-2xl+ font-semibold tracking-normal text-shell-foreground">
-				Kuv<span className="text-signal">ro</span>
-			</span>
+			<Image src={logo} alt="CashLift Logo" width={140} height={40} priority className="h-10 w-auto shrink-0" />
 		</Link>
 
 		<nav className="mt-7 grid gap-2" aria-label="Workspace">
