@@ -26,6 +26,8 @@ type ApprovalQueueMutationContext = {
 	snapshots: [QueryKey, ApprovalQueueDataset | undefined][];
 };
 
+type SpendRequestStatusUpdate = Pick<SpendRequest, "id" | "status">;
+
 export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps) => {
 	const queryClient = useQueryClient();
 	const [message, setMessage] = useState<string | null>(null);
@@ -51,7 +53,11 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 
 			return { snapshots };
 		},
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: datasetQueryKey }),
+		onSuccess: (request) => {
+			queryClient.setQueriesData<ApprovalQueueDataset>({ queryKey: datasetQueryKey }, (dataset) =>
+				dataset ? updateDatasetSpendRequest(dataset, request) : dataset,
+			);
+		},
 	});
 	const pendingDecision = decisionMutation.variables;
 
@@ -117,7 +123,7 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 
 function updateDatasetSpendRequest(
 	dataset: ApprovalQueueDataset,
-	decision: SpendRequestDecisionRequest,
+	decision: SpendRequestStatusUpdate,
 ): ApprovalQueueDataset {
 	return {
 		...dataset,
