@@ -50,7 +50,7 @@ export const resolveWorkspaceDataset = async (
 	}
 
 	if (workspaceDemoEnabled()) {
-		return { dataset: reduceDatasetForScope(demoWorkspaceDataset, scope), kind: "success" };
+		return { dataset: await loadDemoWorkspaceDataset(scope), kind: "success" };
 	}
 
 	try {
@@ -88,4 +88,10 @@ export const resolveWorkspaceDataset = async (
 
 		return { kind: "service", message, requestId };
 	}
+};
+
+const loadDemoWorkspaceDataset = async (scope: WorkspaceDatasetScope): Promise<FinancialDataset> => {
+	"use cache";
+
+	return reduceDatasetForScope(demoWorkspaceDataset, scope);
 };

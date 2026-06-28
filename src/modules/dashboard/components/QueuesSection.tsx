@@ -2,7 +2,6 @@ import { FileText } from "lucide-react";
 import { formatCurrency, percentage } from "@/modules/money/format";
 import { ApprovalQueue } from "@/modules/spend-requests/components/ApprovalQueue";
 import { LeakList } from "@/modules/subscriptions/components/LeakList";
-import { workspaceDatasetQueryKeys } from "@/modules/workspace/query";
 import { ProgressBar } from "@/ui/components/ProgressBar";
 import type { DashboardViewModel } from "../types";
 import { DashboardPanel } from "./DashboardPanel";
@@ -16,7 +15,7 @@ type QueuesSectionProps = {
 export const QueuesSection = ({ dashboard }: QueuesSectionProps) => (
 	<section className="grid gap-4 xl:grid-cols-4">
 		<DashboardPanel className="min-h-88 p-5" label="Approvals" title="Spend requests to decide">
-			<ApprovalQueue datasetQueryKey={workspaceDatasetQueryKeys.all} requests={dashboard.pendingApprovals} />
+			<ApprovalQueue requests={dashboard.pendingApprovals} />
 
 			<PanelLink href="/dashboard/approvals">View all approvals</PanelLink>
 		</DashboardPanel>

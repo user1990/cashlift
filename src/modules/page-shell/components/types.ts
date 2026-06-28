@@ -12,6 +12,7 @@ export type WorkspaceNavItem = {
 	href: string;
 	icon: LucideIcon;
 	label: string;
+	priority?: boolean;
 	section: WorkspaceSection;
 };
 

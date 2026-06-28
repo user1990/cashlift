@@ -1,8 +1,6 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { workspaceDatasetQueryKeys } from "@/modules/workspace/query";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { ApprovalQueue } from "./ApprovalQueue";
 
@@ -31,17 +29,14 @@ describe("ApprovalQueue", () => {
 
 		await user.click(screen.getByRole("button", { name: "Approve BrandForge" }));
 
-		expect(screen.getByRole("button", { name: "Approve BrandForge" })).toBeDisabled();
+		expect(screen.queryByRole("button", { name: "Approve BrandForge" })).not.toBeInTheDocument();
 		resolveDecision({ id: "request-brandforge", status: "approved" });
 
 		await waitFor(() => {
-			expect(mocks.decideSpendRequest).toHaveBeenCalledWith(
-				{
-					id: "request-brandforge",
-					status: "approved",
-				},
-				expect.anything(),
-			);
+			expect(mocks.decideSpendRequest).toHaveBeenCalledWith({
+				id: "request-brandforge",
+				status: "approved",
+			});
 		});
 	});
 
@@ -58,18 +53,5 @@ describe("ApprovalQueue", () => {
 });
 
 function renderApprovalQueue() {
-	const queryClient = new QueryClient({
-		defaultOptions: {
-			queries: {
-				retry: false,
-				staleTime: Number.POSITIVE_INFINITY,
-			},
-		},
-	});
-
-	render(
-		<QueryClientProvider client={queryClient}>
-			<ApprovalQueue datasetQueryKey={workspaceDatasetQueryKeys.all} requests={financialDatasetFixture.spendRequests} />
-		</QueryClientProvider>,
-	);
+	render(<ApprovalQueue requests={financialDatasetFixture.spendRequests} />);
 }
