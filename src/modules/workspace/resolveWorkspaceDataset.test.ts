@@ -114,7 +114,7 @@ describe("resolveWorkspaceDataset", () => {
 		expect(getWorkspaceDatasetMock).toHaveBeenCalledWith("user-1", "jwt", "vendors");
 	});
 
-	it("captures config failures", async () => {
+	it("returns config failures without Sentry capture", async () => {
 		vi.stubEnv("CASHLIFT_APP_MODE", "production");
 
 		const result = await resolveDataset();
@@ -122,16 +122,8 @@ describe("resolveWorkspaceDataset", () => {
 		expect(result).toEqual({
 			kind: "config",
 			message: "Workspace production environment variables are not configured.",
-			requestId: "event-message-id",
 		});
-		expect(captureAppMessageMock).toHaveBeenCalledWith({
-			fingerprint: ["workspace-dataset", "config"],
-			message: "Workspace production environment variables are not configured.",
-			tags: {
-				failureKind: "config",
-				feature: "workspace-dataset",
-			},
-		});
+		expect(captureAppMessageMock).not.toHaveBeenCalled();
 	});
 
 	it("returns forbidden when membership is missing", async () => {
