@@ -1,11 +1,11 @@
 "use client";
 
 import { Check, X } from "lucide-react";
-import { useState } from "react";
+import { useOptimistic, useState, useTransition } from "react";
 import type { MoneyCents } from "@/modules/money/types";
 import { Button } from "@/ui/components/Button";
 import { decideSpendRequest, type SpendRequestDecisionRequest } from "../api";
-import type { SpendRequest } from "../types";
+import type { SpendRequest, SpendRequestStatus } from "../types";
 import { RequestItem } from "./RequestItem";
 
 type ApprovalQueueProps = {
@@ -16,25 +16,39 @@ type ApprovalQueueRequest = SpendRequest & {
 	cashAfterApprovalCents?: MoneyCents;
 };
 
+type ConfirmedDecisions = Record<string, SpendRequestStatus>;
+
 export const ApprovalQueue = ({ requests }: ApprovalQueueProps) => {
+	const [confirmedDecisions, setConfirmedDecisions] = useState<ConfirmedDecisions>({});
 	const [message, setMessage] = useState<string | null>(null);
-	const [optimisticRequests, setOptimisticRequests] = useState(requests);
 	const [pendingDecision, setPendingDecision] = useState<SpendRequestDecisionRequest | null>(null);
+	const [, startTransition] = useTransition();
+	const confirmedRequests = updateSpendRequests(requests, confirmedDecisions);
+	const [optimisticRequests, addOptimisticDecision] = useOptimistic(
+		confirmedRequests,
+		(currentRequests, decision: SpendRequestDecisionRequest) => updateSpendRequests(currentRequests, decision),
+	);
 	const pendingRequests = optimisticRequests.filter((request) => request.status === "pending");
 
-	const decideRequest = async (decision: SpendRequestDecisionRequest) => {
+	const decideRequest = (decision: SpendRequestDecisionRequest) => {
 		setMessage(null);
 		setPendingDecision(decision);
-		setOptimisticRequests((currentRequests) => updateSpendRequests(currentRequests, decision));
 
-		try {
-			await decideSpendRequest(decision);
-		} catch (error) {
-			setOptimisticRequests(requests);
-			setMessage(error instanceof Error ? error.message : "Unable to update spend request.");
-		} finally {
-			setPendingDecision(null);
-		}
+		startTransition(async () => {
+			addOptimisticDecision(decision);
+
+			try {
+				const result = await decideSpendRequest(decision);
+				setConfirmedDecisions((currentDecisions) => ({
+					...currentDecisions,
+					[result.id]: result.status,
+				}));
+				setPendingDecision(null);
+			} catch (error) {
+				setMessage(error instanceof Error ? error.message : "Unable to update spend request.");
+				setPendingDecision(null);
+			}
+		});
 	};
 
 	return (
@@ -60,7 +74,7 @@ export const ApprovalQueue = ({ requests }: ApprovalQueueProps) => {
 											aria-label={`Approve ${vendor}`}
 											className="h-8 px-2.5 text-s"
 											disabled={pendingDecision?.id === id}
-											onClick={() => void decideRequest({ id, status: "approved" })}
+											onClick={() => decideRequest({ id, status: "approved" })}
 											variant="primary"
 										>
 											<Check aria-hidden className="size-4" />
@@ -71,7 +85,7 @@ export const ApprovalQueue = ({ requests }: ApprovalQueueProps) => {
 											aria-label={`Reject ${vendor}`}
 											className="h-8 px-2.5 text-s"
 											disabled={pendingDecision?.id === id}
-											onClick={() => void decideRequest({ id, status: "rejected" })}
+											onClick={() => decideRequest({ id, status: "rejected" })}
 											variant="secondary"
 										>
 											<X aria-hidden className="size-4" />
@@ -99,7 +113,11 @@ export const ApprovalQueue = ({ requests }: ApprovalQueueProps) => {
 
 function updateSpendRequests(
 	requests: ApprovalQueueRequest[],
-	decision: SpendRequestDecisionRequest,
+	decisions: ConfirmedDecisions | SpendRequestDecisionRequest,
 ): ApprovalQueueRequest[] {
-	return requests.map((request) => (request.id === decision.id ? { ...request, status: decision.status } : request));
+	return requests.map((request) => {
+		const status = "id" in decisions ? decisions.id === request.id && decisions.status : decisions[request.id];
+
+		return status ? { ...request, status } : request;
+	});
 }
