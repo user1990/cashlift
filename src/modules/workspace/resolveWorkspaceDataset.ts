@@ -44,9 +44,7 @@ export const resolveWorkspaceDataset = async (
 	const config = getWorkspaceRuntimeConfig();
 
 	if (!config.configured) {
-		const requestId = captureWorkspaceDatasetMessage(config.message, "config");
-
-		return { kind: "config", message: config.message, requestId };
+		return { kind: "config", message: config.message };
 	}
 
 	if (workspaceDemoEnabled()) {
