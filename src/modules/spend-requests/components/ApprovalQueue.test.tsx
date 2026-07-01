@@ -55,6 +55,34 @@ describe("ApprovalQueue", () => {
 		expect(await screen.findByText("Unable to update spend request.")).toBeInTheDocument();
 		expect(screen.getByText("Delta")).toBeInTheDocument();
 	});
+
+	it("keeps another successful decision when a concurrent decision rolls back", async () => {
+		const user = userEvent.setup();
+		let rejectBrandForge!: (error: Error) => void;
+		let resolveDelta!: (result: { id: string; status: "approved" }) => void;
+		const brandForgeDecision = new Promise((_resolve, reject) => {
+			rejectBrandForge = reject;
+		});
+		const deltaDecision = new Promise<{ id: string; status: "approved" }>((resolve) => {
+			resolveDelta = resolve;
+		});
+		mocks.decideSpendRequest.mockReturnValueOnce(brandForgeDecision).mockReturnValueOnce(deltaDecision);
+		const queryClient = renderApprovalQueue();
+
+		await user.click(screen.getByRole("button", { name: "Approve BrandForge" }));
+		await user.click(screen.getByRole("button", { name: "Approve Delta" }));
+
+		resolveDelta({ id: "request-client-onsite", status: "approved" });
+		rejectBrandForge(new Error("Unable to update spend request."));
+
+		await waitFor(() => {
+			expect(getSpendRequestStatuses(queryClient)).toEqual({
+				"request-brandforge": "pending",
+				"request-client-onsite": "approved",
+				"request-webcam": "approved",
+			});
+		});
+	});
 });
 
 function renderApprovalQueue() {
@@ -66,10 +94,19 @@ function renderApprovalQueue() {
 			},
 		},
 	});
+	queryClient.setQueryData(workspaceDatasetQueryKeys.all, financialDatasetFixture);
 
 	render(
 		<QueryClientProvider client={queryClient}>
 			<ApprovalQueue datasetQueryKey={workspaceDatasetQueryKeys.all} requests={financialDatasetFixture.spendRequests} />
 		</QueryClientProvider>,
 	);
+
+	return queryClient;
+}
+
+function getSpendRequestStatuses(queryClient: QueryClient) {
+	const dataset = queryClient.getQueryData<typeof financialDatasetFixture>(workspaceDatasetQueryKeys.all);
+
+	return Object.fromEntries(dataset?.spendRequests.map(({ id, status }) => [id, status]) ?? []);
 }
