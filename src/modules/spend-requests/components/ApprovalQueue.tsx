@@ -36,9 +36,11 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 	const decisionMutation = useMutation<SpendRequest, Error, SpendRequestDecisionRequest, ApprovalQueueMutationContext>({
 		mutationKey: datasetQueryKey,
 		mutationFn: decideSpendRequest,
-		onError: (error, _decision, context) => {
-			context?.snapshots.forEach(([queryKey, data]) => {
-				queryClient.setQueryData(queryKey, data);
+		onError: (error, decision, context) => {
+			context?.snapshots.forEach(([queryKey, snapshot]) => {
+				queryClient.setQueryData<ApprovalQueueDataset | undefined>(queryKey, (dataset) =>
+					rollbackDatasetSpendRequest(dataset, snapshot, decision.id),
+				);
 			});
 			setMessage(error.message);
 		},
@@ -129,6 +131,29 @@ function updateDatasetSpendRequest(
 		...dataset,
 		spendRequests: dataset.spendRequests.map((request) =>
 			request.id === decision.id ? { ...request, status: decision.status } : request,
+		),
+	};
+}
+
+function rollbackDatasetSpendRequest(
+	dataset: ApprovalQueueDataset | undefined,
+	snapshot: ApprovalQueueDataset | undefined,
+	requestId: SpendRequest["id"],
+): ApprovalQueueDataset | undefined {
+	if (!dataset || !snapshot) {
+		return snapshot;
+	}
+
+	const previousRequest = snapshot.spendRequests.find((request) => request.id === requestId);
+
+	if (!previousRequest) {
+		return dataset;
+	}
+
+	return {
+		...dataset,
+		spendRequests: dataset.spendRequests.map((request) =>
+			request.id === requestId ? { ...request, status: previousRequest.status } : request,
 		),
 	};
 }

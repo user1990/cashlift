@@ -40,6 +40,9 @@ jobs:
         env:
           NODE_ENV: development
 
+      - name: Install Playwright browsers
+        run: pnpm run test:e2e:install
+
       - name: Lint
         run: npx biome check .
 
@@ -62,9 +65,6 @@ jobs:
 
       - name: Production build
         run: pnpm build
-
-      - name: Install Playwright browser
-        run: pnpm run test:e2e:install
 
       - name: E2E tests
         run: pnpm run test:e2e
