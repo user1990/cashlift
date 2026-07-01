@@ -10,7 +10,6 @@ export const metadata: Metadata = {
 	description: "Log in to a CashLift company workspace.",
 };
 
-// fallow-ignore-next-line unused-export
 export const instant = false;
 
 export default function Login() {
