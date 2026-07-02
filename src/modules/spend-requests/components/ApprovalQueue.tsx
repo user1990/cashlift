@@ -86,7 +86,7 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 											aria-label={`Approve ${vendor}`}
 											className="h-8 px-2.5 text-s"
 											disabled={pendingDecision?.id === id}
-											onClick={() => decisionMutation.mutate({ id, status: "approved" })}
+											onPress={() => decisionMutation.mutate({ id, status: "approved" })}
 											variant="primary"
 										>
 											<Check aria-hidden className="size-4" />
@@ -97,7 +97,7 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 											aria-label={`Reject ${vendor}`}
 											className="h-8 px-2.5 text-s"
 											disabled={pendingDecision?.id === id}
-											onClick={() => decisionMutation.mutate({ id, status: "rejected" })}
+											onPress={() => decisionMutation.mutate({ id, status: "rejected" })}
 											variant="secondary"
 										>
 											<X aria-hidden className="size-4" />
