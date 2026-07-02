@@ -59,7 +59,7 @@ export const ReadOnly: Story = {
 
 export const States: Story = {
 	render: () => (
-		<div className="grid w-[42rem] gap-4 sm:grid-cols-2">
+		<div className="grid w-2xl gap-4 sm:grid-cols-2">
 			<TextField label="Default" placeholder="Acme Studio" />
 
 			<TextField label="Disabled" isDisabled placeholder="Acme Studio" />
@@ -73,7 +73,7 @@ export const States: Story = {
 
 export const Sizes: Story = {
 	render: () => (
-		<div className="grid w-[42rem] gap-4">
+		<div className="grid w-2xl gap-4">
 			<TextField className="max-w-64" label="Compact" placeholder="INV-1042" />
 
 			<TextField className="max-w-80" label="Default width" placeholder="Acme Studio" />

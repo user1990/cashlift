@@ -59,7 +59,7 @@ export const Accent: Story = {
 
 export const Variants: Story = {
 	render: () => (
-		<div className="grid w-[48rem] gap-4 md:grid-cols-3">
+		<div className="grid w-3xl gap-4 md:grid-cols-3">
 			<Panel>
 				<PanelHeader label="Light" title="Baseline panel" />
 
@@ -83,7 +83,7 @@ export const Variants: Story = {
 
 export const AsElements: Story = {
 	render: () => (
-		<div className="grid w-[42rem] gap-4 sm:grid-cols-3">
+		<div className="grid w-2xl gap-4 sm:grid-cols-3">
 			<Panel as="div">
 				<PanelHeader title="Div" />
 			</Panel>
