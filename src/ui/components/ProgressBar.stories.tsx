@@ -18,7 +18,7 @@ const meta = {
 	parameters: {
 		layout: "centered",
 	},
-	title: "UI/ProgressBar",
+	title: "Feedback/ProgressBar",
 } satisfies Meta<typeof ProgressBar>;
 
 export default meta;

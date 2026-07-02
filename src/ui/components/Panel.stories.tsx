@@ -14,7 +14,7 @@ const meta = {
 	parameters: {
 		layout: "centered",
 	},
-	title: "UI/Panel",
+	title: "Layout/Panel",
 } satisfies Meta<typeof Panel>;
 
 export default meta;

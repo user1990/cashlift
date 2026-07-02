@@ -12,7 +12,7 @@ const meta = {
 	parameters: {
 		layout: "centered",
 	},
-	title: "UI/Button",
+	title: "Actions/Button",
 } satisfies Meta<typeof Button>;
 
 export default meta;

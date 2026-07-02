@@ -10,13 +10,11 @@ const preview: Preview = {
 				date: /Date$/i,
 			},
 		},
-		docs: {
-			autodocs: true,
-		},
 		nextjs: {
 			appDirectory: true,
 		},
 	},
+	tags: ["autodocs"],
 };
 
 export default preview;

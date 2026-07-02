@@ -17,7 +17,7 @@ const meta = {
 	parameters: {
 		layout: "centered",
 	},
-	title: "UI/TextField",
+	title: "Forms/TextField",
 } satisfies Meta<typeof TextField>;
 
 export default meta;

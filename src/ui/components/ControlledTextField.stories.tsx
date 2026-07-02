@@ -14,7 +14,7 @@ const meta = {
 	parameters: {
 		layout: "centered",
 	},
-	title: "UI/ControlledTextField",
+	title: "Forms/ControlledTextField",
 } satisfies Meta<typeof ControlledTextFieldDemo>;
 
 export default meta;

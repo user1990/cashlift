@@ -19,7 +19,7 @@ const meta = {
 	parameters: {
 		layout: "centered",
 	},
-	title: "UI/PanelHeader",
+	title: "Layout/PanelHeader",
 } satisfies Meta<typeof PanelHeader>;
 
 export default meta;
