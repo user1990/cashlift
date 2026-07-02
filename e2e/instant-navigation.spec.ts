@@ -6,8 +6,11 @@ test.describe("instant dashboard navigation", () => {
 		await page.goto("/dashboard");
 
 		await instant(page, async () => {
-			await page.getByRole("link", { name: "Approvals" }).click();
-			await expect(page.getByRole("heading", { name: "Spend approvals" })).toBeVisible();
+			await page
+				.getByRole("navigation", { name: "Workspace" })
+				.getByRole("link", { name: "Approvals", exact: true })
+				.click();
+			await expect(page.getByRole("heading", { name: "Spend approvals", exact: true })).toBeVisible();
 		});
 	});
 
@@ -15,8 +18,11 @@ test.describe("instant dashboard navigation", () => {
 		await page.goto("/dashboard");
 
 		await instant(page, async () => {
-			await page.getByRole("link", { name: "Vendors" }).click();
-			await expect(page.getByRole("heading", { name: "Vendor leaks" })).toBeVisible();
+			await page
+				.getByRole("navigation", { name: "Workspace" })
+				.getByRole("link", { name: "Vendors", exact: true })
+				.click();
+			await expect(page.getByRole("heading", { name: "Vendor leaks", exact: true })).toBeVisible();
 		});
 	});
 });
