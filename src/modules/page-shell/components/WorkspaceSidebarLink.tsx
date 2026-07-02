@@ -15,6 +15,7 @@ export const WorkspaceSidebarLink = ({ active = false, item }: WorkspaceSidebarL
 			aria-current={active ? "page" : undefined}
 			href={item.href}
 			className={getWorkspaceSidebarLinkClassName(active)}
+			prefetch={item.priority ? true : undefined}
 		>
 			<WorkspaceActiveIndicator active={active} />
 

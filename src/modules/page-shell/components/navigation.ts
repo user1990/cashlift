@@ -15,6 +15,7 @@ export const WORKSPACE_NAV_ITEMS = [
 		href: "/dashboard",
 		icon: Home,
 		label: "Overview",
+		priority: true,
 		section: "overview",
 	},
 	{
@@ -33,6 +34,7 @@ export const WORKSPACE_NAV_ITEMS = [
 		href: "/dashboard/vendors",
 		icon: ReceiptText,
 		label: "Vendors",
+		priority: true,
 		section: "vendors",
 	},
 	{
@@ -45,6 +47,7 @@ export const WORKSPACE_NAV_ITEMS = [
 		href: "/dashboard/approvals",
 		icon: ClipboardCheck,
 		label: "Approvals",
+		priority: true,
 		section: "approvals",
 	},
 	{

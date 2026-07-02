@@ -17,6 +17,7 @@ permissions:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  PNPM_CONFIG_MINIMUM_RELEASE_AGE: 0
 
 jobs:
   verify:
@@ -40,6 +41,9 @@ jobs:
         env:
           NODE_ENV: development
 
+      - name: Install Playwright browsers
+        run: pnpm run test:e2e:install
+
       - name: Lint
         run: npx biome check .
 
@@ -62,3 +66,6 @@ jobs:
 
       - name: Production build
         run: pnpm build
+
+      - name: E2E tests
+        run: pnpm run test:e2e

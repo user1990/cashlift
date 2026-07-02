@@ -45,6 +45,7 @@ Always read this file first. It defines workflow for this repo. Do not override 
 | --- | --- |
 | `architecture` | Module boundaries, aliases, file placement, source ownership |
 | `guide` | Coding conventions, React patterns, naming, Git/PR/commit rules |
+| `worktree` | Isolated Git worktrees for parallel tasks or avoiding current checkout changes |
 | `styling` | Tailwind, `cn()`, cva, design tokens, responsive styling |
 | `web-interface-guidelines` | UI generation/review, forms, accessibility, focus, loading, motion |
 | `testing` | RTL tests, mocking boundaries, selectors, fixtures, assertions |
@@ -71,3 +72,11 @@ Code diagnostics use package scripts: `pnpm check:code` for Fallow and `pnpm che
 - Runtime: shell commands must auto-select Node from `.nvmrc` / `.node-version` before any `pnpm` command. `pnpm` can fail before project scripts run on older Node versions.
 - Conventions: `.agents/skills/guide/SKILL.md`
 - Directory guide: `.agents/README.md`
+
+<!-- BEGIN:nextjs-agent-rules -->
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+
+**Keep this block, including in commits.** It is part of the project's agent setup, maintained by `next dev` for every agent that works here. If it appears as an uncommitted change, that is intentional — commit it as-is. Do not remove it to clean up a diff; it will be regenerated.
+<!-- END:nextjs-agent-rules -->

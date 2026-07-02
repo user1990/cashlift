@@ -27,6 +27,8 @@ type ApprovalQueueMutationContext = {
 	snapshots: [QueryKey, ApprovalQueueDataset | undefined][];
 };
 
+type SpendRequestStatusUpdate = Pick<SpendRequest, "id" | "status">;
+
 export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps) => {
 	const queryClient = useQueryClient();
 	const [message, setMessage] = useState<string | null>(null);
@@ -35,9 +37,11 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 	const decisionMutation = useMutation<SpendRequest, Error, SpendRequestDecisionRequest, ApprovalQueueMutationContext>({
 		mutationKey: datasetQueryKey,
 		mutationFn: decideSpendRequest,
-		onError: (error, _decision, context) => {
-			context?.snapshots.forEach(([queryKey, data]) => {
-				queryClient.setQueryData(queryKey, data);
+		onError: (error, decision, context) => {
+			context?.snapshots.forEach(([queryKey, snapshot]) => {
+				queryClient.setQueryData<ApprovalQueueDataset | undefined>(queryKey, (dataset) =>
+					rollbackDatasetSpendRequest(dataset, snapshot, decision.id),
+				);
 			});
 			setMessage(error.message);
 		},
@@ -52,7 +56,11 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 
 			return { snapshots };
 		},
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: datasetQueryKey }),
+		onSuccess: (request) => {
+			queryClient.setQueriesData<ApprovalQueueDataset>({ queryKey: datasetQueryKey }, (dataset) =>
+				dataset ? updateDatasetSpendRequest(dataset, request) : dataset,
+			);
+		},
 	});
 	const pendingDecision = decisionMutation.variables;
 
@@ -128,12 +136,35 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 
 function updateDatasetSpendRequest(
 	dataset: ApprovalQueueDataset,
-	decision: SpendRequestDecisionRequest,
+	decision: SpendRequestStatusUpdate,
 ): ApprovalQueueDataset {
 	return {
 		...dataset,
 		spendRequests: dataset.spendRequests.map((request) =>
 			request.id === decision.id ? { ...request, status: decision.status } : request,
+		),
+	};
+}
+
+function rollbackDatasetSpendRequest(
+	dataset: ApprovalQueueDataset | undefined,
+	snapshot: ApprovalQueueDataset | undefined,
+	requestId: SpendRequest["id"],
+): ApprovalQueueDataset | undefined {
+	if (!dataset || !snapshot) {
+		return snapshot;
+	}
+
+	const previousRequest = snapshot.spendRequests.find((request) => request.id === requestId);
+
+	if (!previousRequest) {
+		return dataset;
+	}
+
+	return {
+		...dataset,
+		spendRequests: dataset.spendRequests.map((request) =>
+			request.id === requestId ? { ...request, status: previousRequest.status } : request,
 		),
 	};
 }
