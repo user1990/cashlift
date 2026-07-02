@@ -45,6 +45,7 @@ Always read this file first. It defines workflow for this repo. Do not override 
 | --- | --- |
 | `architecture` | Module boundaries, aliases, file placement, source ownership |
 | `guide` | Coding conventions, React patterns, naming, Git/PR/commit rules |
+| `worktree` | Isolated Git worktrees for parallel tasks or avoiding current checkout changes |
 | `styling` | Tailwind, `cn()`, cva, design tokens, responsive styling |
 | `web-interface-guidelines` | UI generation/review, forms, accessibility, focus, loading, motion |
 | `testing` | RTL tests, mocking boundaries, selectors, fixtures, assertions |

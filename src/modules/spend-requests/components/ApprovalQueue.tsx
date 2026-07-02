@@ -1,14 +1,16 @@
 "use client";
 
+import { type QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Check, X } from "lucide-react";
-import { useOptimistic, useState, useTransition } from "react";
+import { useState } from "react";
 import type { MoneyCents } from "@/modules/money/types";
 import { Button } from "@/ui/components/Button";
 import { decideSpendRequest, type SpendRequestDecisionRequest } from "../api";
-import type { SpendRequest, SpendRequestStatus } from "../types";
+import type { SpendRequest } from "../types";
 import { RequestItem } from "./RequestItem";
 
 type ApprovalQueueProps = {
+	datasetQueryKey: QueryKey;
 	requests: ApprovalQueueRequest[];
 };
 
@@ -16,40 +18,50 @@ type ApprovalQueueRequest = SpendRequest & {
 	cashAfterApprovalCents?: MoneyCents;
 };
 
-type ConfirmedDecisions = Record<string, SpendRequestStatus>;
+type ApprovalQueueDataset = {
+	spendRequests: ApprovalQueueRequest[];
+};
 
-export const ApprovalQueue = ({ requests }: ApprovalQueueProps) => {
-	const [confirmedDecisions, setConfirmedDecisions] = useState<ConfirmedDecisions>({});
+type ApprovalQueueMutationContext = {
+	snapshots: [QueryKey, ApprovalQueueDataset | undefined][];
+};
+
+type SpendRequestStatusUpdate = Pick<SpendRequest, "id" | "status">;
+
+export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps) => {
+	const queryClient = useQueryClient();
 	const [message, setMessage] = useState<string | null>(null);
-	const [pendingDecision, setPendingDecision] = useState<SpendRequestDecisionRequest | null>(null);
-	const [, startTransition] = useTransition();
-	const confirmedRequests = updateSpendRequests(requests, confirmedDecisions);
-	const [optimisticRequests, addOptimisticDecision] = useOptimistic(
-		confirmedRequests,
-		(currentRequests, decision: SpendRequestDecisionRequest) => updateSpendRequests(currentRequests, decision),
-	);
-	const pendingRequests = optimisticRequests.filter((request) => request.status === "pending");
+	const pendingRequests = requests.filter((request) => request.status === "pending");
 
-	const decideRequest = (decision: SpendRequestDecisionRequest) => {
-		setMessage(null);
-		setPendingDecision(decision);
+	const decisionMutation = useMutation<SpendRequest, Error, SpendRequestDecisionRequest, ApprovalQueueMutationContext>({
+		mutationKey: datasetQueryKey,
+		mutationFn: decideSpendRequest,
+		onError: (error, decision, context) => {
+			context?.snapshots.forEach(([queryKey, snapshot]) => {
+				queryClient.setQueryData<ApprovalQueueDataset | undefined>(queryKey, (dataset) =>
+					rollbackDatasetSpendRequest(dataset, snapshot, decision.id),
+				);
+			});
+			setMessage(error.message);
+		},
+		onMutate: async (decision) => {
+			setMessage(null);
+			await queryClient.cancelQueries({ queryKey: datasetQueryKey });
+			const snapshots = queryClient.getQueriesData<ApprovalQueueDataset>({ queryKey: datasetQueryKey });
 
-		startTransition(async () => {
-			addOptimisticDecision(decision);
+			queryClient.setQueriesData<ApprovalQueueDataset>({ queryKey: datasetQueryKey }, (dataset) =>
+				dataset ? updateDatasetSpendRequest(dataset, decision) : dataset,
+			);
 
-			try {
-				const result = await decideSpendRequest(decision);
-				setConfirmedDecisions((currentDecisions) => ({
-					...currentDecisions,
-					[result.id]: result.status,
-				}));
-				setPendingDecision(null);
-			} catch (error) {
-				setMessage(error instanceof Error ? error.message : "Unable to update spend request.");
-				setPendingDecision(null);
-			}
-		});
-	};
+			return { snapshots };
+		},
+		onSuccess: (request) => {
+			queryClient.setQueriesData<ApprovalQueueDataset>({ queryKey: datasetQueryKey }, (dataset) =>
+				dataset ? updateDatasetSpendRequest(dataset, request) : dataset,
+			);
+		},
+	});
+	const pendingDecision = decisionMutation.variables;
 
 	return (
 		<>
@@ -74,7 +86,7 @@ export const ApprovalQueue = ({ requests }: ApprovalQueueProps) => {
 											aria-label={`Approve ${vendor}`}
 											className="h-8 px-2.5 text-s"
 											disabled={pendingDecision?.id === id}
-											onClick={() => decideRequest({ id, status: "approved" })}
+											onClick={() => decisionMutation.mutate({ id, status: "approved" })}
 											variant="primary"
 										>
 											<Check aria-hidden className="size-4" />
@@ -85,7 +97,7 @@ export const ApprovalQueue = ({ requests }: ApprovalQueueProps) => {
 											aria-label={`Reject ${vendor}`}
 											className="h-8 px-2.5 text-s"
 											disabled={pendingDecision?.id === id}
-											onClick={() => decideRequest({ id, status: "rejected" })}
+											onClick={() => decisionMutation.mutate({ id, status: "rejected" })}
 											variant="secondary"
 										>
 											<X aria-hidden className="size-4" />
@@ -111,13 +123,37 @@ export const ApprovalQueue = ({ requests }: ApprovalQueueProps) => {
 	);
 };
 
-function updateSpendRequests(
-	requests: ApprovalQueueRequest[],
-	decisions: ConfirmedDecisions | SpendRequestDecisionRequest,
-): ApprovalQueueRequest[] {
-	return requests.map((request) => {
-		const status = "id" in decisions ? decisions.id === request.id && decisions.status : decisions[request.id];
+function updateDatasetSpendRequest(
+	dataset: ApprovalQueueDataset,
+	decision: SpendRequestStatusUpdate,
+): ApprovalQueueDataset {
+	return {
+		...dataset,
+		spendRequests: dataset.spendRequests.map((request) =>
+			request.id === decision.id ? { ...request, status: decision.status } : request,
+		),
+	};
+}
 
-		return status ? { ...request, status } : request;
-	});
+function rollbackDatasetSpendRequest(
+	dataset: ApprovalQueueDataset | undefined,
+	snapshot: ApprovalQueueDataset | undefined,
+	requestId: SpendRequest["id"],
+): ApprovalQueueDataset | undefined {
+	if (!dataset || !snapshot) {
+		return snapshot;
+	}
+
+	const previousRequest = snapshot.spendRequests.find((request) => request.id === requestId);
+
+	if (!previousRequest) {
+		return dataset;
+	}
+
+	return {
+		...dataset,
+		spendRequests: dataset.spendRequests.map((request) =>
+			request.id === requestId ? { ...request, status: previousRequest.status } : request,
+		),
+	};
 }
