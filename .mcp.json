@@ -3,9 +3,6 @@
 		"next-devtools": {
 			"command": "npx",
 			"args": ["next-devtools-mcp@latest"]
-		},
-		"Sentry": {
-			"url": "https://mcp.sentry.dev/mcp/dev-experts/cash-lift"
 		}
 	}
 }

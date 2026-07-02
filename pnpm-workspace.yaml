@@ -2,6 +2,18 @@ minimumReleaseAge: 10080
 minimumReleaseAgeExclude:
   # TODO: Remove after 2026-06-29, once cnfast@0.0.8 has aged past the one-week gate.
   - cnfast@0.0.8
+  # TODO: Remove after 2026-07-03, once Next.js 16.3 preview packages have aged past the one-week gate.
+  - next@16.3.0-preview.5
+  - '@next/env'
+  - '@next/playwright'
+  - '@next/swc-darwin-arm64'
+  - '@next/swc-darwin-x64'
+  - '@next/swc-linux-arm64-gnu'
+  - '@next/swc-linux-arm64-musl'
+  - '@next/swc-linux-x64-gnu'
+  - '@next/swc-linux-x64-musl'
+  - '@next/swc-win32-arm64-msvc'
+  - '@next/swc-win32-x64-msvc'
 overrides:
   postcss: '>=8.5.15'
   undici: 7.27.2

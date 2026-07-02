@@ -44,13 +44,11 @@ export const resolveWorkspaceDataset = async (
 	const config = getWorkspaceRuntimeConfig();
 
 	if (!config.configured) {
-		const requestId = captureWorkspaceDatasetMessage(config.message, "config");
-
-		return { kind: "config", message: config.message, requestId };
+		return { kind: "config", message: config.message };
 	}
 
 	if (workspaceDemoEnabled()) {
-		return { dataset: reduceDatasetForScope(demoWorkspaceDataset, scope), kind: "success" };
+		return { dataset: await loadDemoWorkspaceDataset(scope), kind: "success" };
 	}
 
 	try {
@@ -88,4 +86,10 @@ export const resolveWorkspaceDataset = async (
 
 		return { kind: "service", message, requestId };
 	}
+};
+
+const loadDemoWorkspaceDataset = async (scope: WorkspaceDatasetScope): Promise<FinancialDataset> => {
+	"use cache";
+
+	return reduceDatasetForScope(demoWorkspaceDataset, scope);
 };

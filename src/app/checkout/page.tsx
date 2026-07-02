@@ -12,6 +12,8 @@ export const metadata: Metadata = {
 	description: "Review your CashLift trial before continuing to secure checkout.",
 };
 
+export const instant = false;
+
 export default async function Checkout({ searchParams }: CheckoutRouteProps) {
 	const { plan } = await searchParams;
 
