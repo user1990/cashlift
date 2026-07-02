@@ -117,7 +117,7 @@
 			}
 		]
 	},
-	"dynamicallyLoaded": ["doctor.config.ts", "src/services/i18n/request.ts"],
+	"dynamicallyLoaded": ["doctor.config.ts", "src/services/i18n/request.ts", "src/ui/components/DesignSystem.mdx"],
 	"framework": [
 		{
 			"name": "next-16-3-route-segment-config",
