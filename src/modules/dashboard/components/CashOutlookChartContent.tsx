@@ -1,5 +1,6 @@
 import { formatCurrencyDollars } from "@/modules/money/format";
 import type { ForecastChartDataPoint } from "../types";
+import { ChartFrame } from "./ChartFrame";
 import {
 	RechartsArea,
 	RechartsAreaChart,
@@ -20,7 +21,7 @@ export const CashOutlookChartContent = ({ chartData }: CashOutlookChartContentPr
 	const maximumBalance = Math.max(...balances);
 
 	return (
-		<div aria-hidden="true" className="h-60 w-full">
+		<ChartFrame>
 			<RechartsResponsiveContainer>
 				<RechartsAreaChart data={chartData}>
 					<defs>
@@ -51,7 +52,7 @@ export const CashOutlookChartContent = ({ chartData }: CashOutlookChartContentPr
 					/>
 				</RechartsAreaChart>
 			</RechartsResponsiveContainer>
-		</div>
+		</ChartFrame>
 	);
 };
 

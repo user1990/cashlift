@@ -3,6 +3,7 @@ import { formatCurrency, percentage } from "@/modules/money/format";
 import { ApprovalQueue } from "@/modules/spend-requests/components/ApprovalQueue";
 import { LeakList } from "@/modules/subscriptions/components/LeakList";
 import { workspaceDatasetQueryKeys } from "@/modules/workspace/query";
+import { Badge } from "@/ui/components/Badge";
 import { ProgressBar } from "@/ui/components/ProgressBar";
 import type { DashboardViewModel } from "../types";
 import { DashboardPanel } from "./DashboardPanel";
@@ -31,7 +32,15 @@ export const QueuesSection = ({ dashboard }: QueuesSectionProps) => (
 								<FileText aria-hidden className="size-5" />
 							</span>
 						}
-						meta={`Owner: ${owner} • Probability ${percentage(collectionProbability)}`}
+						meta={
+							<span className="flex flex-wrap items-center gap-1.5">
+								<Badge variant="warning">Overdue</Badge>
+
+								<span>Owner: {owner}</span>
+
+								<span>Probability {percentage(collectionProbability)}</span>
+							</span>
+						}
 						title={client}
 						value={formatCurrency(amountCents)}
 						variant="primary"

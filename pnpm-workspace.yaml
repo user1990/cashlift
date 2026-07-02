@@ -22,6 +22,7 @@ allowBuilds:
   '@parcel/watcher': false
   '@sentry/cli': false
   '@swc/core': false
+  esbuild: true
   fallow: true
   lefthook: true
   sharp: false

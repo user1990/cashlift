@@ -4,6 +4,7 @@ import { type QueryKey, useMutation, useQueryClient } from "@tanstack/react-quer
 import { Check, X } from "lucide-react";
 import { useState } from "react";
 import type { MoneyCents } from "@/modules/money/types";
+import { Badge } from "@/ui/components/Badge";
 import { Button } from "@/ui/components/Button";
 import { decideSpendRequest, type SpendRequestDecisionRequest } from "../api";
 import type { SpendRequest } from "../types";
@@ -107,7 +108,17 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 								}
 								amountCents={amountCents}
 								cashAfterApprovalCents={cashAfterApprovalCents}
-								meta={`${requester} · ${team} · ${status}`}
+								meta={
+									<span className="flex flex-wrap items-center gap-1.5">
+										<Badge variant={status === "approved" ? "success" : status === "rejected" ? "danger" : "warning"}>
+											{status}
+										</Badge>
+
+										<span>{requester}</span>
+
+										<span>{team}</span>
+									</span>
+								}
 								reason={reason}
 								vendor={vendor}
 							/>

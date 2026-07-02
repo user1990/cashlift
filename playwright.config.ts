@@ -1,5 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
+if (process.env.FORCE_COLOR) {
+	delete process.env.NO_COLOR;
+}
+
 const localBaseUrl = "http://127.0.0.1:3000";
 
 export default defineConfig({

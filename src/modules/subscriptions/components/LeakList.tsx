@@ -1,5 +1,6 @@
 import { AmountItem } from "@/modules/money/components/AmountItem";
 import { percentage } from "@/modules/money/format";
+import { Badge } from "@/ui/components/Badge";
 
 type SubscriptionLeakRow = {
 	amountCents: number;
@@ -21,7 +22,13 @@ export const LeakList = ({ items, className }: LeakListProps) => (
 				key={id}
 				title={vendor}
 				amountCents={amountCents}
-				meta={`${status} · usage ${percentage(usagePercent)}`}
+				meta={
+					<span className="flex flex-wrap items-center gap-1.5">
+						<Badge variant={status === "trial" ? "warning" : "danger"}>{status}</Badge>
+
+						<span>Usage {percentage(usagePercent)}</span>
+					</span>
+				}
 			/>
 		))}
 	</ul>

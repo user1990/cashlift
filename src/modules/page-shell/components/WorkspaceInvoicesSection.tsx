@@ -2,6 +2,7 @@ import { AmountItem } from "@/modules/money/components/AmountItem";
 import { formatCurrency, percentage } from "@/modules/money/format";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { getInvoiceRiskTotal } from "@/modules/workspace/utils";
+import { Badge } from "@/ui/components/Badge";
 import { Panel, PanelHeader } from "@/ui/components/Panel";
 
 type WorkspaceInvoicesSectionProps = {
@@ -22,7 +23,17 @@ export const WorkspaceInvoicesSection = ({ dataset }: WorkspaceInvoicesSectionPr
 				<AmountItem
 					key={id}
 					amountCents={amountCents}
-					meta={`${status} · ${percentage(collectionProbability)} · ${owner}`}
+					meta={
+						<span className="flex flex-wrap items-center gap-1.5">
+							<Badge variant={status === "paid" ? "success" : status === "overdue" ? "warning" : "primary"}>
+								{status}
+							</Badge>
+
+							<span>{percentage(collectionProbability)}</span>
+
+							<span>{owner}</span>
+						</span>
+					}
 					title={client}
 				/>
 			))}

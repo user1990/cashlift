@@ -1,0 +1,22 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Design System/Overview" />
+
+# CashLift Design System
+
+CashLift UI primitives are organized by job, not by implementation detail. Use this overview as the entry point for choosing the smallest shared component that fits the interface.
+
+## Categories
+
+- **Actions**: commands users can trigger, such as `Button`.
+- **Forms**: input controls and form-bound fields, such as `TextField` and `ControlledTextField`.
+- **Layout**: containers and section headers, such as `Panel` and `PanelHeader`.
+- **Feedback**: progress and transient state indicators, such as `ProgressBar`.
+- **Data**: compact metadata and status treatments, such as `Badge`.
+
+## Usage principles
+
+- Prefer shared primitives before adding one-off styles to product modules.
+- Use `Badge` for short status, category, and metadata labels instead of repeated uppercase text.
+- Keep product-specific meaning in modules; keep `src/ui` primitives generic.
+- Add new stories when a component gains a meaningful variant, state, or layout constraint.
