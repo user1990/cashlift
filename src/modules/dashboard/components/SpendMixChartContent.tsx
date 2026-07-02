@@ -1,5 +1,6 @@
 import { formatCurrencyDollars } from "@/modules/money/format";
 import type { SpendChartDataPoint } from "../types";
+import { ChartFrame } from "./ChartFrame";
 import {
 	RechartsBar,
 	RechartsBarChart,
@@ -18,7 +19,7 @@ export const SpendMixChartContent = ({ chartData }: SpendMixChartContentProps) =
 	const maximumValue = Math.max(...chartData.flatMap(({ remaining, used }) => [remaining, used]), 1);
 
 	return (
-		<div aria-hidden="true" className="h-60 w-full">
+		<ChartFrame>
 			<RechartsResponsiveContainer>
 				<RechartsBarChart data={chartData}>
 					<defs>
@@ -53,7 +54,7 @@ export const SpendMixChartContent = ({ chartData }: SpendMixChartContentProps) =
 					/>
 				</RechartsBarChart>
 			</RechartsResponsiveContainer>
-		</div>
+		</ChartFrame>
 	);
 };
 

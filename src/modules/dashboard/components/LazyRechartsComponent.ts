@@ -47,7 +47,13 @@ export const RechartsCartesianGrid = (props: RechartsComponentProps) =>
 	});
 
 export const RechartsResponsiveContainer = (props: RechartsComponentProps) =>
-	createElement(LazyRechartsResponsiveContainer, { height: "100%", width: "100%", ...props });
+	createElement(LazyRechartsResponsiveContainer, {
+		height: "100%",
+		minHeight: 0,
+		minWidth: 0,
+		width: "100%",
+		...props,
+	});
 
 export const RechartsTooltip = (props: RechartsComponentProps) =>
 	createElement(LazyRechartsTooltip, { contentStyle: DEFAULT_TOOLTIP_CONTENT_STYLE, ...props });
