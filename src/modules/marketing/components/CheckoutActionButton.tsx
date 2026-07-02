@@ -28,7 +28,7 @@ export const CheckoutActionButton = ({ planName }: CheckoutActionButtonProps) =>
 				aria-describedby={message ? "checkout-action-message" : undefined}
 				className="h-14 w-full text-m+"
 				disabled={submitting}
-				onClick={startCheckout}
+				onPress={startCheckout}
 				variant="primary"
 			>
 				{submitting ? "Opening secure checkout..." : "Continue to secure checkout"}
