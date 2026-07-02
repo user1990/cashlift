@@ -1,3 +1,5 @@
+import { Badge } from "@/ui/components/Badge";
+
 type PanelHeaderProps = {
 	title: string;
 	action?: React.ReactNode;
@@ -7,7 +9,7 @@ type PanelHeaderProps = {
 export const PanelHeader = ({ action, label, title }: PanelHeaderProps) => (
 	<div className="mb-4 flex items-start justify-between gap-4">
 		<div>
-			{label && <p className="mb-1 text-2xs+ uppercase tracking-normal text-muted-foreground">{label}</p>}
+			{label && <Badge className="mb-1">{label}</Badge>}
 
 			<h2 className="text-l+ text-panel-foreground">{title}</h2>
 		</div>

@@ -1,6 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
+import { Badge } from "@/ui/components/Badge";
 import { ProgressBar } from "@/ui/components/ProgressBar";
+
+const PROGRESS_STATES = [
+	{ label: "Not started", value: 0, variant: "neutral" },
+	{ label: "In progress", value: 42, variant: "primary" },
+	{ label: "Complete", value: 100, variant: "success" },
+	{ label: "Clamped low", value: -12, variant: "warning" },
+	{ label: "Clamped high", value: 148, variant: "danger" },
+] as const;
 
 const meta = {
 	args: {
@@ -56,15 +65,13 @@ export const ClampedHigh: Story = {
 export const States: Story = {
 	render: () => (
 		<div className="grid w-96 gap-4">
-			<ProgressBar label="Not started" value={0} />
+			{PROGRESS_STATES.map(({ label, value, variant }) => (
+				<div className="space-y-2" key={label}>
+					<Badge variant={variant}>{label}</Badge>
 
-			<ProgressBar label="In progress" value={42} />
-
-			<ProgressBar label="Complete" value={100} />
-
-			<ProgressBar label="Clamped low" value={-12} />
-
-			<ProgressBar label="Clamped high" value={148} />
+					<ProgressBar label={label} value={value} />
+				</div>
+			))}
 		</div>
 	),
 };

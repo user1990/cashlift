@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
+import { Badge } from "@/ui/components/Badge";
 import { Button } from "@/ui/components/Button";
 import { Panel, PanelHeader } from "@/ui/components/Panel";
 import { ProgressBar } from "@/ui/components/ProgressBar";
@@ -39,6 +40,12 @@ export const Glass: Story = {
 		<Panel {...args} className="w-96">
 			<PanelHeader label="Workspace" title="Approval queue" />
 
+			<div className="mb-3 flex flex-wrap gap-2">
+				<Badge variant="warning">Pending</Badge>
+
+				<Badge variant="primary">Finance</Badge>
+			</div>
+
 			<ProgressBar label="Reviewed requests" value={68} />
 		</Panel>
 	),
@@ -51,6 +58,12 @@ export const Accent: Story = {
 	render: (args) => (
 		<Panel {...args} className="w-96">
 			<PanelHeader label="Opportunity" title="Vendor savings" />
+
+			<div className="mb-3 flex flex-wrap gap-2">
+				<Badge variant="accent">Renewal</Badge>
+
+				<Badge variant="success">Ready</Badge>
+			</div>
 
 			<p className="text-m text-panel-foreground">Three contracts are ready for renewal review this month.</p>
 		</Panel>
