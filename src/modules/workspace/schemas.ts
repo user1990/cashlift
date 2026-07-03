@@ -20,6 +20,18 @@ export const workspaceDatasetScopeSchema = z.enum([
 	"vendors",
 ]);
 
+const isoDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+
+export const workspaceDatasetDateRangeSchema = z
+	.object({
+		endDate: isoDateSchema,
+		startDate: isoDateSchema,
+	})
+	.refine(({ endDate, startDate }) => startDate <= endDate, {
+		message: "Start date must be before or equal to end date.",
+		path: ["endDate"],
+	});
+
 const companyProfileSchema = z.object({
 	cashBalanceCents: moneyCentsSchema,
 	cashBufferTargetCents: moneyCentsSchema,
