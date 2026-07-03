@@ -137,13 +137,7 @@ describe("GET /api/workspace/dataset", () => {
 
 		const response = await GET(new Request("https://example.com/api/workspace/dataset?scope=unknown"));
 
-		expect(response.status).toEqual(400);
-		expect(response.headers.get("Cache-Control")).toEqual("no-store");
-		await expect(response.json()).resolves.toEqual({
-			code: "api_request_failed",
-			error: "Workspace dataset scope is invalid.",
-		});
-		expect(mocks.resolveWorkspaceDataset).not.toHaveBeenCalled();
+		await expectApiRequestFailure(response, "Workspace dataset scope is invalid.");
 	});
 
 	it("returns 400 when date range is invalid", async () => {
@@ -153,12 +147,16 @@ describe("GET /api/workspace/dataset", () => {
 			new Request("https://example.com/api/workspace/dataset?startDate=2024-05-27&endDate=2024-05-20"),
 		);
 
-		expect(response.status).toEqual(400);
-		expect(response.headers.get("Cache-Control")).toEqual("no-store");
-		await expect(response.json()).resolves.toEqual({
-			code: "api_request_failed",
-			error: "Workspace dataset date range is invalid.",
-		});
-		expect(mocks.resolveWorkspaceDataset).not.toHaveBeenCalled();
+		await expectApiRequestFailure(response, "Workspace dataset date range is invalid.");
 	});
 });
+
+async function expectApiRequestFailure(response: Response, error: string) {
+	expect(response.status).toEqual(400);
+	expect(response.headers.get("Cache-Control")).toEqual("no-store");
+	await expect(response.json()).resolves.toEqual({
+		code: "api_request_failed",
+		error,
+	});
+	expect(mocks.resolveWorkspaceDataset).not.toHaveBeenCalled();
+}

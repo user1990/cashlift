@@ -21,7 +21,7 @@ import type { WorkspaceDatasetDateRange } from "@/modules/workspace/types";
 import { cn } from "@/ui/utils/cn";
 import { getOverviewDateRangeLabel } from "./overviewDateRangeLabel";
 
-export type OverviewDateRangePickerProps = {
+type OverviewDateRangePickerClientProps = {
 	dateRange?: WorkspaceDatasetDateRange;
 	fallbackLabel: string;
 	onDateRangeChange?: (dateRange: WorkspaceDatasetDateRange) => void;
@@ -31,7 +31,7 @@ export const OverviewDateRangePickerClient = ({
 	dateRange,
 	fallbackLabel,
 	onDateRangeChange,
-}: OverviewDateRangePickerProps) => {
+}: OverviewDateRangePickerClientProps) => {
 	const value = dateRange ? { end: parseDate(dateRange.endDate), start: parseDate(dateRange.startDate) } : null;
 
 	return (
