@@ -25,6 +25,7 @@
 	"dependencies": {
 		"@clerk/nextjs": "^7.3.2",
 		"@hookform/resolvers": "^5.4.0",
+		"@internationalized/date": "3.12.2",
 		"@sentry/nextjs": "^10",
 		"@supabase/ssr": "^0.12.0",
 		"@supabase/supabase-js": "^2.108.2",

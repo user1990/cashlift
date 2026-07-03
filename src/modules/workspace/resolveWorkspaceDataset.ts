@@ -1,8 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import { CompanyMembershipNotFoundError } from "@/modules/company-memberships/repositories/supabase";
-import { reduceDatasetForScope } from "@/modules/workspace/read-models";
+import { reduceDatasetForDateRange, reduceDatasetForScope } from "@/modules/workspace/read-models";
 import { supabaseFinanceRepository } from "@/modules/workspace/repositories/supabase";
-import type { FinancialDataset, WorkspaceDatasetScope } from "@/modules/workspace/types";
+import type { FinancialDataset, WorkspaceDatasetDateRange, WorkspaceDatasetScope } from "@/modules/workspace/types";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
 import { captureAppException, captureAppMessage } from "@/services/platform/integrations/sentry";
 import { demoWorkspaceDataset } from "./demoDataset";
@@ -40,6 +40,7 @@ const captureWorkspaceDatasetMessage = (message: string, failureKind: string) =>
 
 export const resolveWorkspaceDataset = async (
 	scope: WorkspaceDatasetScope = "overview",
+	dateRange?: WorkspaceDatasetDateRange,
 ): Promise<ResolveWorkspaceDatasetResult> => {
 	const config = getWorkspaceRuntimeConfig();
 
@@ -48,7 +49,7 @@ export const resolveWorkspaceDataset = async (
 	}
 
 	if (workspaceDemoEnabled()) {
-		return { dataset: await loadDemoWorkspaceDataset(scope), kind: "success" };
+		return { dataset: reduceDatasetForDateRange(await loadDemoWorkspaceDataset(scope), dateRange), kind: "success" };
 	}
 
 	try {
@@ -70,7 +71,7 @@ export const resolveWorkspaceDataset = async (
 		try {
 			const dataset = await supabaseFinanceRepository.getWorkspaceDataset(session.userId, accessToken, scope);
 
-			return { dataset, kind: "success" };
+			return { dataset: reduceDatasetForDateRange(dataset, dateRange), kind: "success" };
 		} catch (error) {
 			if (error instanceof CompanyMembershipNotFoundError) {
 				return { kind: "forbidden", message: "No company workspace is assigned to this user." };

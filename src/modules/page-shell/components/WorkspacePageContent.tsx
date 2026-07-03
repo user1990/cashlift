@@ -1,9 +1,10 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { Overview } from "@/modules/dashboard/components/Overview";
 import { useWorkspaceDatasetQuery } from "@/modules/workspace/query";
-import type { FinancialDataset } from "@/modules/workspace/types";
+import { reduceDatasetForDateRange } from "@/modules/workspace/read-models";
+import type { FinancialDataset, WorkspaceDatasetDateRange } from "@/modules/workspace/types";
 import type { WorkspacePageProps } from "./types";
 import { WorkspaceSectionPage } from "./WorkspaceSectionPage";
 
@@ -26,15 +27,37 @@ export const WorkspacePageContent = ({ dataset, section }: WorkspacePageContentP
 };
 
 const WorkspacePageQueryContent = ({ dataset, section }: WorkspacePageContentProps) => {
-	const { data: workspaceDataset } = useWorkspaceDatasetQuery(dataset, section);
+	const [overviewDateRange, setOverviewDateRange] = useState<WorkspaceDatasetDateRange | undefined>(() =>
+		getForecastDateRange(dataset),
+	);
+	const dateRange = section === "overview" ? overviewDateRange : undefined;
+	const { data: workspaceDataset } = useWorkspaceDatasetQuery(dataset, section, dateRange);
+	const visibleDataset =
+		section === "overview" ? reduceDatasetForDateRange(workspaceDataset, dateRange) : workspaceDataset;
 
-	return <WorkspacePageView dataset={workspaceDataset} section={section} />;
+	return (
+		<WorkspacePageView
+			dataset={visibleDataset}
+			dateRange={dateRange}
+			onDateRangeChange={setOverviewDateRange}
+			section={section}
+		/>
+	);
 };
 
-const WorkspacePageView = ({ dataset, section }: WorkspacePageContentProps) => {
+type WorkspacePageViewProps = WorkspacePageContentProps & {
+	dateRange?: WorkspaceDatasetDateRange;
+	onDateRangeChange?: (dateRange: WorkspaceDatasetDateRange) => void;
+};
+
+const WorkspacePageView = ({ dataset, dateRange, onDateRangeChange, section }: WorkspacePageViewProps) => {
 	const overview = section === "overview";
 
-	return overview ? <Overview dataset={dataset} /> : <WorkspaceSectionPage dataset={dataset} section={section} />;
+	return overview ? (
+		<Overview dataset={dataset} dateRange={dateRange} onDateRangeChange={onDateRangeChange} />
+	) : (
+		<WorkspaceSectionPage dataset={dataset} section={section} />
+	);
 };
 
 let browserHydrated = false;
@@ -54,4 +77,11 @@ function getBrowserHydrationSnapshot() {
 
 function getServerHydrationSnapshot() {
 	return false;
+}
+
+function getForecastDateRange(dataset: FinancialDataset): WorkspaceDatasetDateRange | undefined {
+	const startDate = dataset.forecast[0]?.date;
+	const endDate = dataset.forecast.at(-1)?.date;
+
+	return startDate && endDate ? { endDate, startDate } : undefined;
 }

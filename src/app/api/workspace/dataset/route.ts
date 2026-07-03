@@ -1,9 +1,10 @@
 import { resolveWorkspaceDataset } from "@/modules/workspace/resolveWorkspaceDataset";
-import { workspaceDatasetScopeSchema } from "@/modules/workspace/schemas";
+import { workspaceDatasetDateRangeSchema, workspaceDatasetScopeSchema } from "@/modules/workspace/schemas";
 import { apiError, workspaceApiJson } from "./errors";
 
 export const GET = async (request: Request) => {
 	const scope = requestUrlScope(request);
+	const dateRange = requestUrlDateRange(request);
 
 	if (!scope.success) {
 		return apiError({
@@ -13,7 +14,15 @@ export const GET = async (request: Request) => {
 		});
 	}
 
-	const result = await resolveWorkspaceDataset(scope.data);
+	if (!dateRange.success) {
+		return apiError({
+			code: "api_request_failed",
+			error: "Workspace dataset date range is invalid.",
+			status: 400,
+		});
+	}
+
+	const result = await resolveWorkspaceDataset(scope.data, dateRange.data);
 
 	switch (result.kind) {
 		case "success":
@@ -50,4 +59,16 @@ function requestUrlScope(request: Request) {
 	const { searchParams } = new URL(request.url);
 
 	return workspaceDatasetScopeSchema.safeParse(searchParams.get("scope") ?? "overview");
+}
+
+function requestUrlDateRange(request: Request) {
+	const { searchParams } = new URL(request.url);
+	const endDate = searchParams.get("endDate");
+	const startDate = searchParams.get("startDate");
+
+	if (!endDate && !startDate) {
+		return { data: undefined, success: true } as const;
+	}
+
+	return workspaceDatasetDateRangeSchema.safeParse({ endDate, startDate });
 }

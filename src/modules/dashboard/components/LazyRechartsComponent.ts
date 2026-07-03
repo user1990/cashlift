@@ -8,6 +8,7 @@ type RechartsComponentProps = Record<string, unknown> & {
 
 const DEFAULT_AXIS_TICK = { fill: "var(--muted-foreground)", fontSize: 12 } as const;
 const DEFAULT_CHART_MARGIN = { bottom: 0, left: 4, right: 8, top: 12 } as const;
+const DEFAULT_RESPONSIVE_CONTAINER_INITIAL_DIMENSION = { height: 240, width: 1 } as const;
 const DEFAULT_TICK_COUNT = 4;
 const DEFAULT_TOOLTIP_CONTENT_STYLE = {
 	background: "var(--panel)",
@@ -49,6 +50,7 @@ export const RechartsCartesianGrid = (props: RechartsComponentProps) =>
 export const RechartsResponsiveContainer = (props: RechartsComponentProps) =>
 	createElement(LazyRechartsResponsiveContainer, {
 		height: "100%",
+		initialDimension: DEFAULT_RESPONSIVE_CONTAINER_INITIAL_DIMENSION,
 		minHeight: 0,
 		minWidth: 0,
 		width: "100%",
