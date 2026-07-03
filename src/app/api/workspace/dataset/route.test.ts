@@ -112,7 +112,24 @@ describe("GET /api/workspace/dataset", () => {
 
 		await GET(new Request("https://example.com/api/workspace/dataset?scope=approvals"));
 
-		expect(mocks.resolveWorkspaceDataset).toHaveBeenCalledWith("approvals");
+		expect(mocks.resolveWorkspaceDataset).toHaveBeenCalledWith("approvals", undefined);
+	});
+
+	it("passes requested date range to the workspace resolver", async () => {
+		mocks.resolveWorkspaceDataset.mockResolvedValue({
+			dataset: financialDatasetFixture,
+			kind: "success",
+		});
+		const { GET } = await import("./route");
+
+		await GET(
+			new Request("https://example.com/api/workspace/dataset?scope=overview&startDate=2024-05-20&endDate=2024-05-27"),
+		);
+
+		expect(mocks.resolveWorkspaceDataset).toHaveBeenCalledWith("overview", {
+			endDate: "2024-05-27",
+			startDate: "2024-05-20",
+		});
 	});
 
 	it("returns 400 when scope is invalid", async () => {
@@ -125,6 +142,22 @@ describe("GET /api/workspace/dataset", () => {
 		await expect(response.json()).resolves.toEqual({
 			code: "api_request_failed",
 			error: "Workspace dataset scope is invalid.",
+		});
+		expect(mocks.resolveWorkspaceDataset).not.toHaveBeenCalled();
+	});
+
+	it("returns 400 when date range is invalid", async () => {
+		const { GET } = await import("./route");
+
+		const response = await GET(
+			new Request("https://example.com/api/workspace/dataset?startDate=2024-05-27&endDate=2024-05-20"),
+		);
+
+		expect(response.status).toEqual(400);
+		expect(response.headers.get("Cache-Control")).toEqual("no-store");
+		await expect(response.json()).resolves.toEqual({
+			code: "api_request_failed",
+			error: "Workspace dataset date range is invalid.",
 		});
 		expect(mocks.resolveWorkspaceDataset).not.toHaveBeenCalled();
 	});
