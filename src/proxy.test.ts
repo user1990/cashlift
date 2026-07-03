@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { describe, expect, it } from "vitest";
-import proxy, { createContentSecurityPolicy } from "./proxy";
+import proxy, { config, createContentSecurityPolicy } from "./proxy";
 
 describe("proxy security headers", () => {
 	it("builds a strict nonce-based content security policy", () => {
@@ -27,5 +27,9 @@ describe("proxy security headers", () => {
 		expect(response.headers.get("X-Content-Type-Options")).toEqual("nosniff");
 		expect(response.headers.get("X-Frame-Options")).toEqual("DENY");
 		expect(response.headers.get("X-Permitted-Cross-Domain-Policies")).toEqual("none");
+	});
+
+	it("keeps prefetch requests covered by the proxy matcher", () => {
+		expect(config.matcher).toEqual(["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
 	});
 });
