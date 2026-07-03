@@ -9,7 +9,11 @@ type PanelHeaderProps = {
 export const PanelHeader = ({ action, label, title }: PanelHeaderProps) => (
 	<div className="mb-4 flex items-start justify-between gap-4">
 		<div>
-			{label && <Badge className="mb-1">{label}</Badge>}
+			{label && (
+				<Badge className="mb-1" variant="primary">
+					{label}
+				</Badge>
+			)}
 
 			<h2 className="text-l+ text-panel-foreground">{title}</h2>
 		</div>

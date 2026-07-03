@@ -85,10 +85,10 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 									<div className="mt-3 flex flex-wrap gap-2">
 										<Button
 											aria-label={`Approve ${vendor}`}
-											className="h-8 px-2.5 text-s"
 											disabled={pendingDecision?.id === id}
 											onPress={() => decisionMutation.mutate({ id, status: "approved" })}
-											variant="primary"
+											size="small"
+											variant="success"
 										>
 											<Check aria-hidden className="size-4" />
 											{pendingDecision?.id === id && pendingDecision.status === "approved" ? "Approving" : "Approve"}
@@ -96,9 +96,9 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 
 										<Button
 											aria-label={`Reject ${vendor}`}
-											className="h-8 px-2.5 text-s"
 											disabled={pendingDecision?.id === id}
 											onPress={() => decisionMutation.mutate({ id, status: "rejected" })}
+											size="small"
 											variant="secondary"
 										>
 											<X aria-hidden className="size-4" />
