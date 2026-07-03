@@ -33,6 +33,13 @@ export const Secondary: Story = {
 	},
 };
 
+export const Success: Story = {
+	args: {
+		children: "Approve request",
+		variant: "success",
+	},
+};
+
 export const Ghost: Story = {
 	args: {
 		children: "Dismiss",
@@ -55,6 +62,8 @@ export const Variants: Story = {
 
 			<Button variant="secondary">Secondary</Button>
 
+			<Button variant="success">Success</Button>
+
 			<Button variant="ghost">Ghost</Button>
 		</div>
 	),
@@ -63,13 +72,13 @@ export const Variants: Story = {
 export const Sizes: Story = {
 	render: () => (
 		<div className="flex flex-wrap items-center gap-3">
-			<Button className="h-8 px-2.5 text-s" variant="secondary">
+			<Button size="small" variant="secondary">
 				Small
 			</Button>
 
 			<Button variant="secondary">Default</Button>
 
-			<Button className="h-11 px-4 text-m+" variant="secondary">
+			<Button size="large" variant="secondary">
 				Large
 			</Button>
 		</div>
