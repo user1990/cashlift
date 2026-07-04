@@ -1,5 +1,4 @@
 import { MainContent } from "@/modules/page-shell/components/MainContent";
-import { ScrollToTopButton } from "@/modules/page-shell/components/ScrollToTopButton";
 import { HomeAuditSection } from "./HomeAuditSection";
 import { HomeHeroSection } from "./HomeHeroSection";
 import { HomeProductSection } from "./HomeProductSection";
@@ -20,7 +19,5 @@ export const HomePage = () => (
 		<HomeWorkflowSection />
 
 		<HomeAuditSection />
-
-		<ScrollToTopButton />
 	</MainContent>
 );
