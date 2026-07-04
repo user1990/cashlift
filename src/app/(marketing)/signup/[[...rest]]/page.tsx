@@ -1,9 +1,9 @@
 import { SignUp } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import { AuthCardFallback } from "@/modules/marketing/components/AuthCardFallback";
+import { connection } from "next/server";
+import { AuthUnavailableCard } from "@/modules/marketing/components/AuthUnavailableCard";
 import { MainContent } from "@/modules/page-shell/components/MainContent";
-import { AuthProvider } from "@/services/clerk/provider";
+import { clerkPublishableKeyConfigured, ServerAuthProvider } from "@/services/clerk/serverProvider";
 
 export const metadata: Metadata = {
 	title: "Sign up — CashLift",
@@ -12,14 +12,18 @@ export const metadata: Metadata = {
 
 export const instant = false;
 
-export default function SignUpPage() {
+export default async function SignUpPage() {
+	await connection();
+
 	return (
 		<MainContent variant="workspace" className="flex justify-center px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-			<Suspense fallback={<AuthCardFallback title="Loading sign up" />}>
-				<AuthProvider>
+			{clerkPublishableKeyConfigured() ? (
+				<ServerAuthProvider>
 					<SignUp fallbackRedirectUrl="/dashboard" signInUrl="/login" />
-				</AuthProvider>
-			</Suspense>
+				</ServerAuthProvider>
+			) : (
+				<AuthUnavailableCard />
+			)}
 		</MainContent>
 	);
 }
