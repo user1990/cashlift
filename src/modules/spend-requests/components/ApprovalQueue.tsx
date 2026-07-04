@@ -2,7 +2,7 @@
 
 import { type QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Check, X } from "lucide-react";
-import { useState } from "react";
+import { toast } from "sonner";
 import type { MoneyCents } from "@/modules/money/types";
 import { Badge } from "@/ui/components/Badge";
 import { Button } from "@/ui/components/Button";
@@ -31,7 +31,6 @@ type SpendRequestStatusUpdate = Pick<SpendRequest, "id" | "status">;
 
 export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps) => {
 	const queryClient = useQueryClient();
-	const [message, setMessage] = useState<string | null>(null);
 	const pendingRequests = requests.filter((request) => request.status === "pending");
 
 	const decisionMutation = useMutation<SpendRequest, Error, SpendRequestDecisionRequest, ApprovalQueueMutationContext>({
@@ -43,10 +42,11 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 					rollbackDatasetSpendRequest(dataset, snapshot, decision.id),
 				);
 			});
-			setMessage(error.message);
+			toast.error("Spend update failed", {
+				description: error.message,
+			});
 		},
 		onMutate: async (decision) => {
-			setMessage(null);
 			await queryClient.cancelQueries({ queryKey: datasetQueryKey });
 			const snapshots = queryClient.getQueriesData<ApprovalQueueDataset>({ queryKey: datasetQueryKey });
 
@@ -60,21 +60,15 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 			queryClient.setQueriesData<ApprovalQueueDataset>({ queryKey: datasetQueryKey }, (dataset) =>
 				dataset ? updateDatasetSpendRequest(dataset, request) : dataset,
 			);
+			toast.success(request.status === "approved" ? "Spend approved" : "Spend rejected", {
+				description: request.vendor,
+			});
 		},
 	});
 	const pendingDecision = decisionMutation.variables;
 
 	return (
 		<>
-			{message && (
-				<p
-					aria-live="polite"
-					className="mb-3 rounded-md border border-warning/30 bg-warning/10 px-3 py-2 text-s text-warning"
-				>
-					{message}
-				</p>
-			)}
-
 			{!!pendingRequests.length ? (
 				<ul className="space-y-3">
 					{pendingRequests.map(

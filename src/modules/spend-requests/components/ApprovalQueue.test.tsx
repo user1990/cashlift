@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { workspaceDatasetQueryKeys } from "@/modules/workspace/query";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
+import { Toaster } from "@/ui/components/Toaster";
 import { ApprovalQueue } from "./ApprovalQueue";
 
 const mocks = vi.hoisted(() => ({
@@ -34,6 +35,8 @@ describe("ApprovalQueue", () => {
 		expect(screen.getByRole("button", { name: "Approve BrandForge" })).toBeDisabled();
 		resolveDecision({ id: "request-brandforge", status: "approved" });
 
+		expect(await screen.findByText("Spend approved")).toBeInTheDocument();
+
 		await waitFor(() => {
 			expect(mocks.decideSpendRequest).toHaveBeenCalledWith(
 				{
@@ -52,6 +55,7 @@ describe("ApprovalQueue", () => {
 
 		await user.click(screen.getByRole("button", { name: "Reject Delta" }));
 
+		expect(await screen.findByText("Spend update failed")).toBeInTheDocument();
 		expect(await screen.findByText("Unable to update spend request.")).toBeInTheDocument();
 		expect(screen.getByText("Delta")).toBeInTheDocument();
 	});
@@ -99,6 +103,8 @@ function renderApprovalQueue() {
 	render(
 		<QueryClientProvider client={queryClient}>
 			<ApprovalQueue datasetQueryKey={workspaceDatasetQueryKeys.all} requests={financialDatasetFixture.spendRequests} />
+
+			<Toaster />
 		</QueryClientProvider>,
 	);
 

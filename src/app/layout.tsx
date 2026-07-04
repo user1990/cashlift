@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { MAIN_CONTENT_ID } from "@/modules/page-shell/components/MainContent";
+import { Toaster } from "@/ui/components/Toaster";
 import { ClientTelemetry } from "./ClientTelemetry";
 import "./globals.css";
 
@@ -28,6 +29,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
 				</a>
 
 				{children}
+
+				<Toaster />
 
 				<ClientTelemetry />
 			</body>
