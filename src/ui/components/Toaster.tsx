@@ -4,7 +4,6 @@ import { Toaster as SonnerToaster } from "sonner";
 
 export const Toaster = () => (
 	<SonnerToaster
-		closeButton
 		duration={5_000}
 		expand
 		gap={12}
@@ -23,6 +22,5 @@ export const Toaster = () => (
 				warning: "border-warning/60",
 			},
 		}}
-		visibleToasts={4}
 	/>
 );
