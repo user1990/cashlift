@@ -30,6 +30,6 @@ describe("proxy security headers", () => {
 	});
 
 	it("keeps prefetch requests covered by the proxy matcher", () => {
-		expect(config.matcher).toEqual(["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
+		expect(config.matcher).toEqual(["/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
 	});
 });
