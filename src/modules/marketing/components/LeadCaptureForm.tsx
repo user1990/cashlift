@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/ui/components/Button";
+import { ControlledEmailAutocompleteField } from "@/ui/components/ControlledEmailAutocompleteField";
 import { ControlledTextField } from "@/ui/components/ControlledTextField";
 import { type LeadCaptureFormValues, leadCaptureSchema } from "../schemas";
 
@@ -33,13 +34,11 @@ export const LeadCaptureForm = ({ buttonLabel }: LeadCaptureFormProps) => {
 		<form className="flex flex-1 flex-col gap-3" onSubmit={handleSubmit(submitForm)}>
 			<ControlledTextField autoComplete="name" control={control} label="Name" name="name" placeholder="Maya Chen…" />
 
-			<ControlledTextField
-				autoComplete="email"
+			<ControlledEmailAutocompleteField
 				control={control}
 				label="Work email"
 				name="email"
 				placeholder="maya@company.com…"
-				type="email"
 			/>
 
 			<ControlledTextField
