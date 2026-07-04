@@ -4,9 +4,9 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const HOME_CONTENT_SECURITY_POLICY = [
 	"default-src 'self'",
-	`script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
+	`script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
 	"style-src 'self' 'unsafe-inline'",
-	"style-src-attr 'none'",
+	`style-src-attr ${process.env.NODE_ENV === "development" ? "'unsafe-inline'" : "'none'"}`,
 	"img-src 'self' blob: data: https:",
 	"font-src 'self'",
 	"connect-src 'self' https://vercel-insights.com https://*.vercel-insights.com https://*.ingest.sentry.io https://*.ingest.us.sentry.io",
