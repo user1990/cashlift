@@ -1,13 +1,18 @@
 import { loadWorkspaceDataset } from "@/modules/workspace/server";
+import type { WorkspaceDatasetDateRange } from "@/modules/workspace/types";
 import type { WorkspacePageProps } from "./types";
 import { WorkspaceLoadState } from "./WorkspaceLoadState";
 import { WorkspacePageContent } from "./WorkspacePageContent";
 
-export const WorkspacePage = async ({ section }: WorkspacePageProps) => {
+type WorkspacePageComponentProps = WorkspacePageProps & {
+	initialDateRange?: WorkspaceDatasetDateRange;
+};
+
+export const WorkspacePage = async ({ initialDateRange, section }: WorkspacePageComponentProps) => {
 	const result = await loadWorkspaceDataset(section);
 
 	if (result.status === "success") {
-		return <WorkspacePageContent dataset={result.dataset} section={section} />;
+		return <WorkspacePageContent dataset={result.dataset} initialDateRange={initialDateRange} section={section} />;
 	}
 
 	if (result.status === "unauthenticated") {
