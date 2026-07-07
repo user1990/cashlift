@@ -11,7 +11,7 @@ const meta = {
 	component: EmailAutocompleteField,
 	decorators: [
 		(Story) => (
-			<div className="w-80">
+			<div className="size-80">
 				<Story />
 			</div>
 		),
