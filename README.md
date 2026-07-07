@@ -275,4 +275,4 @@ CashLift follows a fail-closed production model.
 
 # License
 
-MIT
+[MIT](./LICENSE)

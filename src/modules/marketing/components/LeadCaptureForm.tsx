@@ -4,14 +4,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/ui/components/Button";
+import { ControlledEmailAutocompleteField } from "@/ui/components/ControlledEmailAutocompleteField";
 import { ControlledTextField } from "@/ui/components/ControlledTextField";
 import { type LeadCaptureFormValues, leadCaptureSchema } from "../schemas";
+import { LeadCaptureSuccessState } from "./LeadCaptureSuccessState";
 
 type LeadCaptureFormProps = {
 	buttonLabel: string;
+	successDescription: string;
+	successTitle: string;
 };
 
-export const LeadCaptureForm = ({ buttonLabel }: LeadCaptureFormProps) => {
+export const LeadCaptureForm = ({ buttonLabel, successDescription, successTitle }: LeadCaptureFormProps) => {
 	const [submitted, setSubmitted] = useState(false);
 	const form = useForm<LeadCaptureFormValues>({
 		defaultValues: {
@@ -29,17 +33,24 @@ export const LeadCaptureForm = ({ buttonLabel }: LeadCaptureFormProps) => {
 		reset();
 	};
 
+	const resetForm = () => {
+		setSubmitted(false);
+		reset();
+	};
+
+	if (submitted) {
+		return <LeadCaptureSuccessState description={successDescription} onReset={resetForm} title={successTitle} />;
+	}
+
 	return (
 		<form className="flex flex-1 flex-col gap-3" onSubmit={handleSubmit(submitForm)}>
 			<ControlledTextField autoComplete="name" control={control} label="Name" name="name" placeholder="Maya Chen…" />
 
-			<ControlledTextField
-				autoComplete="email"
+			<ControlledEmailAutocompleteField
 				control={control}
 				label="Work email"
 				name="email"
 				placeholder="maya@company.com…"
-				type="email"
 			/>
 
 			<ControlledTextField
@@ -53,12 +64,6 @@ export const LeadCaptureForm = ({ buttonLabel }: LeadCaptureFormProps) => {
 			<Button type="submit" variant="primary" className="mt-auto w-full">
 				{buttonLabel}
 			</Button>
-
-			{submitted && (
-				<p aria-live="polite" className="text-s leading-5 text-signal">
-					Demo request captured. No private company data was sent.
-				</p>
-			)}
 		</form>
 	);
 };
