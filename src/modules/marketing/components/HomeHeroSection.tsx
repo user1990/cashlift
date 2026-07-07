@@ -1,4 +1,5 @@
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
 import { Panel } from "@/ui/components/Panel";
 import { ActionLink } from "./ActionLink";
 import { Hero } from "./Hero";
@@ -11,9 +12,16 @@ const CASH_ACTION_PREVIEW_ITEMS = [
 
 export const HomeHeroSection = () => (
 	<section className="relative isolate overflow-hidden border-b border-shell-border bg-shell">
-		<div
+		<Image
 			aria-hidden
-			className="hero-ambient absolute inset-0 bg-[url('/brand/hero-finance-command.svg')] bg-cover bg-center opacity-80"
+			alt=""
+			className="hero-ambient absolute inset-0 object-cover object-center opacity-80"
+			fetchPriority="high"
+			fill
+			loading="eager"
+			sizes="100vw"
+			src="/brand/hero-finance-command.svg"
+			unoptimized
 		/>
 
 		<div aria-hidden className="absolute inset-0 bg-shell/72" />
