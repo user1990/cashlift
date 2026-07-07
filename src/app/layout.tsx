@@ -17,6 +17,8 @@ type RootLayoutProps = Readonly<{
 	children: React.ReactNode;
 }>;
 
+const TELEMETRY_ENABLED = Boolean(process.env.VERCEL_ENV);
+
 export default function RootLayout({ children }: RootLayoutProps) {
 	return (
 		<html lang="en" className="h-full" data-scroll-behavior="smooth">
@@ -32,7 +34,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
 				<Toaster />
 
-				<ClientTelemetry />
+				{TELEMETRY_ENABLED ? <ClientTelemetry /> : null}
 			</body>
 		</html>
 	);

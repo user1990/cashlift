@@ -10,7 +10,7 @@ describe("proxy security headers", () => {
 		expect(policy).toContain("script-src 'self' 'nonce-test-nonce' 'strict-dynamic'");
 		expect(policy).toContain("style-src 'self' 'nonce-test-nonce'");
 		expect(policy).toContain("style-src-elem 'self' 'unsafe-inline'");
-		expect(policy).toContain("style-src-attr 'none'");
+		expect(policy).toContain("style-src-attr 'unsafe-hashes' 'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='");
 		expect(policy).toContain("https://*.ingest.us.sentry.io");
 		expect(policy).toContain("object-src 'none'");
 		expect(policy).toContain("frame-ancestors 'none'");
@@ -22,6 +22,7 @@ describe("proxy security headers", () => {
 		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
 
 		expect(response.headers.get("Content-Security-Policy")).toContain("script-src 'self' 'nonce-");
+		expect(response.headers.get("Cross-Origin-Opener-Policy")).toEqual("same-origin");
 		expect(response.headers.get("Referrer-Policy")).toEqual("strict-origin-when-cross-origin");
 		expect(response.headers.get("Permissions-Policy")).toEqual("camera=(), microphone=(), geolocation=()");
 		expect(response.headers.get("X-Content-Type-Options")).toEqual("nosniff");

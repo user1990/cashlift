@@ -2,11 +2,13 @@ import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
+const NEXT_IMAGE_FILL_STYLE_HASH = "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='";
+
 const HOME_CONTENT_SECURITY_POLICY = [
 	"default-src 'self'",
 	`script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
 	"style-src 'self' 'unsafe-inline'",
-	`style-src-attr ${process.env.NODE_ENV === "development" ? "'unsafe-inline'" : "'none'"}`,
+	`style-src-attr ${process.env.NODE_ENV === "development" ? "'unsafe-inline'" : `'unsafe-hashes' ${NEXT_IMAGE_FILL_STYLE_HASH}`}`,
 	"img-src 'self' blob: data: https:",
 	"font-src 'self'",
 	"connect-src 'self' https://vercel-insights.com https://*.vercel-insights.com https://*.ingest.sentry.io https://*.ingest.us.sentry.io",
@@ -32,6 +34,10 @@ const nextConfig: NextConfig = {
 				{
 					key: "Content-Security-Policy",
 					value: HOME_CONTENT_SECURITY_POLICY,
+				},
+				{
+					key: "Cross-Origin-Opener-Policy",
+					value: "same-origin",
 				},
 				{
 					key: "Referrer-Policy",
