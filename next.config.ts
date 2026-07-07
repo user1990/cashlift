@@ -22,6 +22,9 @@ const HOME_CONTENT_SECURITY_POLICY = [
 const nextConfig: NextConfig = {
 	allowedDevOrigins: ["127.0.0.1"],
 	cacheComponents: true,
+	experimental: {
+		inlineCss: true,
+	},
 	headers: async () => [
 		{
 			source: "/",
@@ -65,6 +68,10 @@ const nextConfig: NextConfig = {
 	poweredByHeader: false,
 	reactCompiler: true,
 	turbopack: {
+		resolveAlias: {
+			"../build/polyfills/polyfill-module": "./src/services/next/emptyPolyfillModule.ts",
+			"next/dist/build/polyfills/polyfill-module": "./src/services/next/emptyPolyfillModule.ts",
+		},
 		rules: {
 			"*.svg": {
 				loaders: ["turbopack-inline-svg-loader"],
