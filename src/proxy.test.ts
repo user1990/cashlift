@@ -30,6 +30,19 @@ describe("proxy security headers", () => {
 		expect(response.headers.get("X-Permitted-Cross-Domain-Policies")).toEqual("none");
 	});
 
+	it.each([
+		"/login",
+		"/login/sso-callback",
+		"/signup",
+		"/signup/continue",
+	])("allows opener access for Clerk popup auth on %s", async (pathname) => {
+		const request = new NextRequest(`https://cashlift.test${pathname}`);
+
+		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
+
+		expect(response.headers.get("Cross-Origin-Opener-Policy")).toEqual("same-origin-allow-popups");
+	});
+
 	it("keeps prefetch requests covered by the proxy matcher", () => {
 		expect(config.matcher).toEqual(["/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
 	});

@@ -4,6 +4,10 @@ import { Toaster } from "@/ui/components/Toaster";
 import { ClientTelemetry } from "./ClientTelemetry";
 import "./globals.css";
 
+type RootLayoutProps = {
+	children: React.ReactNode;
+};
+
 export const metadata: Metadata = {
 	title: "CashLift",
 	description: "A cash-aware spend decision command center for service firms.",
@@ -12,12 +16,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
 	themeColor: "#040a12",
 };
-
-type RootLayoutProps = Readonly<{
-	children: React.ReactNode;
-}>;
-
-const TELEMETRY_ENABLED = Boolean(process.env.VERCEL_ENV);
 
 export default function RootLayout({ children }: RootLayoutProps) {
 	return (
@@ -34,7 +32,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
 				<Toaster />
 
-				{TELEMETRY_ENABLED ? <ClientTelemetry /> : null}
+				{!!process.env.VERCEL_ENV && <ClientTelemetry />}
 			</body>
 		</html>
 	);
