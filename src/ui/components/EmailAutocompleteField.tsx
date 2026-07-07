@@ -28,25 +28,37 @@ type EmailAutocompleteFieldProps = Omit<RACTextFieldProps, "className" | "onChan
 };
 
 export const EmailAutocompleteField = ({
+	defaultValue,
 	errorMessage,
 	invalid,
 	label,
 	onChange,
 	placeholder,
-	value = "",
+	value,
 	className,
 	...props
 }: EmailAutocompleteFieldProps) => {
 	const listboxId = useId();
 	const optionIdPrefix = useId();
 	const [activeSuggestionIndex, setActiveSuggestionIndex] = useState<number | null>(null);
+	const [uncontrolledValue, setUncontrolledValue] = useState(String(defaultValue ?? ""));
 	const [open, setOpen] = useState(false);
-	const suggestions = getEmailSuggestions(value);
+	const fieldValue = value ?? uncontrolledValue;
+	const suggestions = getEmailSuggestions(fieldValue);
 	const openSuggestions = open && suggestions.length > 0;
 	const activeSuggestion = activeSuggestionIndex === null ? null : suggestions[activeSuggestionIndex];
 
+	const closeSuggestions = () => {
+		setOpen(false);
+		setActiveSuggestionIndex(null);
+	};
+
 	const updateValue = (nextValue: string) => {
 		const nextSuggestions = getEmailSuggestions(nextValue);
+
+		if (value === undefined) {
+			setUncontrolledValue(nextValue);
+		}
 
 		onChange?.(nextValue);
 		setOpen(nextSuggestions.length > 0);
@@ -54,9 +66,12 @@ export const EmailAutocompleteField = ({
 	};
 
 	const selectSuggestion = (suggestion: string) => {
+		if (value === undefined) {
+			setUncontrolledValue(suggestion);
+		}
+
 		onChange?.(suggestion);
-		setOpen(false);
-		setActiveSuggestionIndex(null);
+		closeSuggestions();
 	};
 
 	return (
@@ -66,6 +81,7 @@ export const EmailAutocompleteField = ({
 				"relative space-y-1.5 [&:has(input[data-invalid])_input]:border-red-400 [&:has(input[data-invalid])_input]:focus:border-red-400 [&:has(input[data-invalid])_input]:focus:ring-red-400/20",
 				className,
 			)}
+			defaultValue={defaultValue}
 			onChange={updateValue}
 			value={value}
 			{...props}
@@ -102,8 +118,12 @@ export const EmailAutocompleteField = ({
 					}
 
 					if (event.key === "Escape") {
-						setOpen(false);
-						setActiveSuggestionIndex(null);
+						closeSuggestions();
+					}
+				}}
+				onBlur={(event) => {
+					if (!event.currentTarget.parentElement?.contains(event.relatedTarget)) {
+						closeSuggestions();
 					}
 				}}
 				placeholder={placeholder}

@@ -42,6 +42,43 @@ describe("EmailAutocompleteField", () => {
 		expect(input).toHaveValue("ma@gmail.com");
 	});
 
+	it("closes suggestions when focus leaves the field", async () => {
+		const user = userEvent.setup();
+
+		render(
+			<>
+				<ControlledEmailAutocompleteField />
+
+				<label>
+					Company
+					<input type="text" />
+				</label>
+			</>,
+		);
+
+		const input = screen.getByRole("combobox", { name: "Work email" });
+
+		await typeUsernameAndFindGmailOption(user, input);
+		await user.click(screen.getByRole("textbox", { name: "Company" }));
+
+		expect(screen.queryByRole("option", { name: "ma@gmail.com" })).not.toBeInTheDocument();
+	});
+
+	it("supports direct uncontrolled usage with a default value", async () => {
+		const user = userEvent.setup();
+
+		render(<EmailAutocompleteField defaultValue="ma" label="Work email" />);
+
+		const input = screen.getByRole("combobox", { name: "Work email" });
+
+		expect(input).toHaveValue("ma");
+
+		await user.type(input, "y");
+
+		expect(input).toHaveValue("may");
+		expect(await screen.findByRole("option", { name: "may@gmail.com" })).toBeInTheDocument();
+	});
+
 	it("moves through suggestions with arrow keys", async () => {
 		const { input, user } = setupEmailAutocomplete();
 
