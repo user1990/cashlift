@@ -13,9 +13,7 @@ type EmailFormValues = {
 describe("ControlledEmailAutocompleteField", () => {
 	it("submits the selected suggestion", async () => {
 		const user = userEvent.setup();
-		render(<EmailForm />);
-
-		const input = screen.getByRole("combobox", { name: "Work email" });
+		const input = renderEmailForm();
 
 		await user.type(input, "ma");
 		await user.click(await screen.findByRole("option", { name: "ma@gmail.com" }));
@@ -26,6 +24,12 @@ describe("ControlledEmailAutocompleteField", () => {
 		});
 	});
 });
+
+function renderEmailForm() {
+	render(<EmailForm />);
+
+	return screen.getByRole("combobox", { name: "Work email" });
+}
 
 function EmailForm() {
 	const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);

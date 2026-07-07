@@ -85,10 +85,7 @@ describe("EmailAutocompleteField", () => {
 	it("closes suggestions with escape without changing the input", async () => {
 		const { input, user } = setupEmailAutocomplete();
 
-		await user.type(input, "ma");
-
-		expect(await screen.findByRole("option", { name: "ma@gmail.com" })).toBeInTheDocument();
-
+		await typeUsernameAndFindGmailOption(user, input);
 		await user.keyboard("{Escape}");
 
 		expect(input).toHaveValue("ma");
@@ -115,10 +112,7 @@ describe("EmailAutocompleteField", () => {
 	it("hides suggestions after an at sign", async () => {
 		const { input, user } = setupEmailAutocomplete();
 
-		await user.type(input, "ma");
-
-		expect(await screen.findByRole("option", { name: "ma@gmail.com" })).toBeInTheDocument();
-
+		await typeUsernameAndFindGmailOption(user, input);
 		await user.type(input, "@");
 
 		expect(screen.queryByRole("option", { name: "ma@gmail.com" })).not.toBeInTheDocument();
@@ -146,6 +140,12 @@ function setupEmailAutocomplete(props: ControlledEmailAutocompleteFieldProps = {
 		input: screen.getByRole("combobox", { name: "Work email" }),
 		user,
 	};
+}
+
+async function typeUsernameAndFindGmailOption(user: ReturnType<typeof userEvent.setup>, input: HTMLElement) {
+	await user.type(input, "ma");
+
+	return screen.findByRole("option", { name: "ma@gmail.com" });
 }
 
 function ControlledEmailAutocompleteField({ onChange, placeholder }: ControlledEmailAutocompleteFieldProps) {
