@@ -1,8 +1,6 @@
 "use client";
 
-import { Download } from "lucide-react";
 import type { WorkspaceDatasetDateRange } from "@/modules/workspace/types";
-import { Button } from "@/ui/components/Button";
 import type { DashboardViewModel } from "../types";
 import { OverviewDateRangePicker } from "./OverviewDateRangePicker";
 
@@ -22,17 +20,10 @@ export const OverviewHeader = ({ dashboard, dateRange, onDateRangeChange }: Over
 			<p className="mt-1 text-m+ text-shell-muted">Here’s your cash and spend overview.</p>
 		</div>
 
-		<div className="flex flex-wrap items-center gap-3">
-			<OverviewDateRangePicker
-				dateRange={dateRange}
-				fallbackLabel={dashboard.dateRangeLabel}
-				onDateRangeChange={onDateRangeChange}
-			/>
-
-			<Button variant="primary" className="h-11 px-4">
-				<Download aria-hidden className="size-4" />
-				Export report
-			</Button>
-		</div>
+		<OverviewDateRangePicker
+			dateRange={dateRange}
+			fallbackLabel={dashboard.dateRangeLabel}
+			onDateRangeChange={onDateRangeChange}
+		/>
 	</header>
 );
