@@ -9,6 +9,7 @@ import type { FinancialDataset, WorkspaceDatasetDateRange } from "@/modules/work
 import { getOverviewDateRangeHref } from "./overviewDateRangeUrl";
 import type { WorkspacePageProps } from "./types";
 import { WorkspaceSectionPage } from "./WorkspaceSectionPage";
+import { getForecastDateRange, getWorkspacePageQueryKey } from "./workspacePageQueryKey";
 
 type WorkspacePageContentProps = WorkspacePageProps & {
 	dataset: FinancialDataset;
@@ -29,7 +30,14 @@ export const WorkspacePageContent = ({ dataset, initialDateRange, section }: Wor
 		return <WorkspacePageView dataset={visibleDataset} dateRange={dateRange} section={section} />;
 	}
 
-	return <WorkspacePageQueryContent dataset={dataset} initialDateRange={initialDateRange} section={section} />;
+	return (
+		<WorkspacePageQueryContent
+			key={getWorkspacePageQueryKey({ dataset, initialDateRange, section })}
+			dataset={dataset}
+			initialDateRange={initialDateRange}
+			section={section}
+		/>
+	);
 };
 
 const WorkspacePageQueryContent = ({ dataset, initialDateRange, section }: WorkspacePageContentProps) => {
@@ -89,13 +97,6 @@ function getBrowserHydrationSnapshot() {
 
 function getServerHydrationSnapshot() {
 	return false;
-}
-
-function getForecastDateRange(dataset: FinancialDataset): WorkspaceDatasetDateRange | undefined {
-	const startDate = dataset.forecast[0]?.date;
-	const endDate = dataset.forecast.at(-1)?.date;
-
-	return startDate && endDate ? { endDate, startDate } : undefined;
 }
 
 function getInitialDateRange(dataset: FinancialDataset, initialDateRange: WorkspaceDatasetDateRange | undefined) {

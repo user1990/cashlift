@@ -69,6 +69,36 @@ describe("overview CSV report", () => {
 		expect(report.filename).toEqual("studio-nova-overview-current-period.csv");
 	});
 
+	it("neutralizes formula-leading string cells", () => {
+		const dataset = {
+			...financialDatasetFixture,
+			profile: {
+				...financialDatasetFixture.profile,
+				name: "@Studio Nova",
+			},
+			spendRequests: [
+				{
+					...financialDatasetFixture.spendRequests[0],
+					reason: '+cmd|"/C calc"!A0',
+					vendor: "=BrandForge",
+				},
+			],
+		};
+		const dashboard = buildDashboard(dataset);
+
+		const report = buildOverviewCsvReport({
+			dashboard,
+			dataset,
+			generatedAt: GENERATED_AT,
+		});
+
+		expect(report.content).toContain("Company,'@Studio Nova");
+		expect(report.content).toContain(
+			"Vendor,Requester,Team,Category,Status,Needed by,Amount,Amount cents,Reason\n'=BrandForge,",
+		);
+		expect(report.content).toContain(`"'+cmd|""/C calc""!A0"`);
+	});
+
 	it("keeps sparse reports valid", () => {
 		const dataset = getSparseDataset();
 		const dashboard = buildDashboard(dataset);

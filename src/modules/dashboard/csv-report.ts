@@ -11,6 +11,8 @@ type BuildOverviewCsvReportParams = {
 
 type CsvRow = (number | string | undefined)[];
 
+const FORMULA_LEADING_CHARACTERS = /^[=+\-@\t]/;
+
 const generatedAtFormatter = new Intl.DateTimeFormat("en-US", {
 	dateStyle: "medium",
 	timeStyle: "short",
@@ -199,11 +201,15 @@ function formatCsvCell(value: number | string | undefined) {
 		return "";
 	}
 
-	const text = String(value);
+	const text = typeof value === "string" ? neutralizeFormulaCell(value) : String(value);
 
 	if (!/[",\n\r]/.test(text)) {
 		return text;
 	}
 
 	return `"${text.replaceAll('"', '""')}"`;
+}
+
+function neutralizeFormulaCell(value: string) {
+	return FORMULA_LEADING_CHARACTERS.test(value) ? `'${value}` : value;
 }
