@@ -18,7 +18,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 	}
 
 	if (workspaceDemoEnabled()) {
-		return <WorkspaceProviders>{content}</WorkspaceProviders>;
+		return <WorkspaceProviders authEnabled={false}>{content}</WorkspaceProviders>;
 	}
 
 	return (

@@ -1,8 +1,11 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
+import { getRequiredClerkPublishableKey } from "@/services/clerk/config";
+import { getRequiredClerkSecretKey } from "@/services/clerk/serverConfig";
+import { workspaceDemoEnabled } from "@/services/env/app";
 import { updateSupabaseSession } from "@/services/supabase/proxy";
 
-const CLERK_CONFIGURED = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+const CLERK_FRONTEND_API_PROXY_PATH = "/__clerk";
 const AUTH_PATH_PREFIXES = ["/login", "/signup"] as const;
 const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard", "/api/workspace"] as const;
 const NEXT_IMAGE_FILL_STYLE_HASH = "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='";
@@ -82,23 +85,35 @@ const handleSupabaseSession = async (request: NextRequest) => {
 	return applySecurityResponseHeaders(request, response, contentSecurityPolicy);
 };
 
-const workspaceMiddleware = clerkMiddleware(async (_auth, request) => handleSupabaseSession(request));
+const clerkSessionMiddleware = clerkMiddleware(
+	async (_auth, request) => handleSupabaseSession(request),
+	() => ({
+		frontendApiProxy: {
+			enabled: true,
+		},
+		publishableKey: getRequiredClerkPublishableKey(),
+		secretKey: getRequiredClerkSecretKey(),
+	}),
+);
 
-const needsWorkspaceSession = (request: NextRequest) =>
-	WORKSPACE_SESSION_PATH_PREFIXES.some((prefix) => {
-		const pathname = request.nextUrl.pathname;
+const matchesPathPrefix = (pathname: string, prefix: string) =>
+	pathname === prefix || pathname.startsWith(`${prefix}/`);
 
-		return pathname === prefix || pathname.startsWith(`${prefix}/`);
-	});
+export const needsWorkspaceSession = (pathname: string) =>
+	WORKSPACE_SESSION_PATH_PREFIXES.some((prefix) => matchesPathPrefix(pathname, prefix));
+
+export const needsClerkMiddleware = (pathname: string, workspaceAuthEnabled = !workspaceDemoEnabled()) =>
+	matchesPathPrefix(pathname, CLERK_FRONTEND_API_PROXY_PATH) ||
+	(workspaceAuthEnabled && needsWorkspaceSession(pathname));
 
 export default function proxy(request: NextRequest, event: NextFetchEvent) {
-	if (CLERK_CONFIGURED && needsWorkspaceSession(request)) {
-		return workspaceMiddleware(request, event);
+	if (needsClerkMiddleware(request.nextUrl.pathname)) {
+		return clerkSessionMiddleware(request, event);
 	}
 
 	return handleSecurityHeaders(request);
 }
 
 export const config = {
-	matcher: ["/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)"],
+	matcher: ["/__clerk/(.*)", "/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };

@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { describe, expect, it } from "vitest";
-import proxy, { config, createContentSecurityPolicy } from "./proxy";
+import proxy, { config, createContentSecurityPolicy, needsClerkMiddleware, needsWorkspaceSession } from "./proxy";
 
 describe("proxy security headers", () => {
 	it("builds a strict nonce-based content security policy", () => {
@@ -17,7 +17,7 @@ describe("proxy security headers", () => {
 	});
 
 	it("adds browser hardening headers to matched requests", async () => {
-		const request = new NextRequest("https://cashlift.test/dashboard");
+		const request = new NextRequest("https://cashlift.test/features");
 
 		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
 
@@ -44,6 +44,58 @@ describe("proxy security headers", () => {
 	});
 
 	it("keeps prefetch requests covered by the proxy matcher", () => {
-		expect(config.matcher).toEqual(["/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
+		expect(config.matcher).toEqual(["/__clerk/(.*)", "/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
+	});
+
+	it.each([
+		"/__clerk/npm/@clerk/clerk-js@6/dist/clerk.browser.js",
+		"/__clerk/npm/@clerk/ui@1/dist/ui.browser.js",
+	])("always routes Clerk frontend proxy middleware for %s", (pathname) => {
+		expect(needsClerkMiddleware(pathname)).toEqual(true);
+	});
+
+	it.each([
+		"/dashboard",
+		"/dashboard/spend",
+		"/api/workspace",
+		"/api/workspace/decisions",
+	])("routes Clerk middleware for production workspace path %s", (pathname) => {
+		expect(needsClerkMiddleware(pathname, true)).toEqual(true);
+	});
+
+	it.each([
+		"/dashboard",
+		"/dashboard/spend",
+		"/api/workspace",
+		"/api/workspace/decisions",
+	])("keeps demo workspace path %s on security-header middleware", (pathname) => {
+		expect(needsClerkMiddleware(pathname, false)).toEqual(false);
+	});
+
+	it.each([
+		"/login",
+		"/signup",
+		"/features",
+		"/pricing",
+		"/demo",
+	])("keeps marketing path %s on security-header middleware", (pathname) => {
+		expect(needsClerkMiddleware(pathname)).toEqual(false);
+	});
+
+	it.each([
+		"/dashboard",
+		"/dashboard/spend",
+		"/api/workspace",
+		"/api/workspace/decisions",
+	])("requires workspace session for %s", (pathname) => {
+		expect(needsWorkspaceSession(pathname)).toEqual(true);
+	});
+
+	it.each([
+		"/__clerk/npm/@clerk/clerk-js@6/dist/clerk.browser.js",
+		"/login",
+		"/api/workspaces",
+	])("does not treat %s as a workspace session path", (pathname) => {
+		expect(needsWorkspaceSession(pathname)).toEqual(false);
 	});
 });

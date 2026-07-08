@@ -24,6 +24,9 @@ export default defineConfig({
 		env: {
 			...process.env,
 			CASHLIFT_APP_MODE: "demo",
+			CLERK_SECRET_KEY: process.env.E2E_CLERK_SECRET_KEY ?? "e2e-placeholder-secret-key",
+			NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
+				process.env.E2E_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? "pk_test_Y2xlcmsuZXhhbXBsZSQ",
 			NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
 				process.env.E2E_NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "e2e-placeholder-anon-key",
 			NEXT_PUBLIC_SUPABASE_URL: process.env.E2E_NEXT_PUBLIC_SUPABASE_URL ?? "https://invalid.local",
