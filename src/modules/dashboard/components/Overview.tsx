@@ -20,12 +20,7 @@ export const Overview = ({ dataset, dateRange, onDateRangeChange }: OverviewProp
 
 	return (
 		<div className="space-y-5">
-			<OverviewHeader
-				dashboard={dashboard}
-				dataset={dataset}
-				dateRange={dateRange}
-				onDateRangeChange={onDateRangeChange}
-			/>
+			<OverviewHeader dashboard={dashboard} dateRange={dateRange} onDateRangeChange={onDateRangeChange} />
 
 			<ChartsSection dashboard={dashboard} />
 

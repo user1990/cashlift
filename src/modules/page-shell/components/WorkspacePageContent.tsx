@@ -1,22 +1,18 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState, useSyncExternalStore } from "react";
 import { Overview } from "@/modules/dashboard/components/Overview";
 import { useWorkspaceDatasetQuery } from "@/modules/workspace/query";
 import { reduceDatasetForDateRange } from "@/modules/workspace/read-models";
 import type { FinancialDataset, WorkspaceDatasetDateRange } from "@/modules/workspace/types";
-import { getOverviewDateRangeHref } from "./overviewDateRangeUrl";
 import type { WorkspacePageProps } from "./types";
 import { WorkspaceSectionPage } from "./WorkspaceSectionPage";
-import { getForecastDateRange, getWorkspacePageQueryKey } from "./workspacePageQueryKey";
 
 type WorkspacePageContentProps = WorkspacePageProps & {
 	dataset: FinancialDataset;
-	initialDateRange?: WorkspaceDatasetDateRange;
 };
 
-export const WorkspacePageContent = ({ dataset, initialDateRange, section }: WorkspacePageContentProps) => {
+export const WorkspacePageContent = ({ dataset, section }: WorkspacePageContentProps) => {
 	const browserHydrated = useSyncExternalStore(
 		subscribeToBrowserHydration,
 		getBrowserHydrationSnapshot,
@@ -24,42 +20,26 @@ export const WorkspacePageContent = ({ dataset, initialDateRange, section }: Wor
 	);
 
 	if (!browserHydrated) {
-		const dateRange = section === "overview" ? getInitialDateRange(dataset, initialDateRange) : undefined;
-		const visibleDataset = section === "overview" ? reduceDatasetForDateRange(dataset, dateRange) : dataset;
-
-		return <WorkspacePageView dataset={visibleDataset} dateRange={dateRange} section={section} />;
+		return <WorkspacePageView dataset={dataset} section={section} />;
 	}
 
-	return (
-		<WorkspacePageQueryContent
-			key={getWorkspacePageQueryKey({ dataset, initialDateRange, section })}
-			dataset={dataset}
-			initialDateRange={initialDateRange}
-			section={section}
-		/>
-	);
+	return <WorkspacePageQueryContent dataset={dataset} section={section} />;
 };
 
-const WorkspacePageQueryContent = ({ dataset, initialDateRange, section }: WorkspacePageContentProps) => {
-	const router = useRouter();
-	const defaultDateRange = getForecastDateRange(dataset);
+const WorkspacePageQueryContent = ({ dataset, section }: WorkspacePageContentProps) => {
 	const [overviewDateRange, setOverviewDateRange] = useState<WorkspaceDatasetDateRange | undefined>(() =>
-		getInitialDateRange(dataset, initialDateRange),
+		getForecastDateRange(dataset),
 	);
 	const dateRange = section === "overview" ? overviewDateRange : undefined;
 	const { data: workspaceDataset } = useWorkspaceDatasetQuery(dataset, section, dateRange);
 	const visibleDataset =
 		section === "overview" ? reduceDatasetForDateRange(workspaceDataset, dateRange) : workspaceDataset;
-	const updateOverviewDateRange = (nextDateRange: WorkspaceDatasetDateRange) => {
-		setOverviewDateRange(nextDateRange);
-		replaceOverviewDateRangeUrl(router.replace, nextDateRange, defaultDateRange);
-	};
 
 	return (
 		<WorkspacePageView
 			dataset={visibleDataset}
 			dateRange={dateRange}
-			onDateRangeChange={updateOverviewDateRange}
+			onDateRangeChange={setOverviewDateRange}
 			section={section}
 		/>
 	);
@@ -99,16 +79,9 @@ function getServerHydrationSnapshot() {
 	return false;
 }
 
-function getInitialDateRange(dataset: FinancialDataset, initialDateRange: WorkspaceDatasetDateRange | undefined) {
-	return initialDateRange ?? getForecastDateRange(dataset);
-}
+function getForecastDateRange(dataset: FinancialDataset): WorkspaceDatasetDateRange | undefined {
+	const startDate = dataset.forecast[0]?.date;
+	const endDate = dataset.forecast.at(-1)?.date;
 
-function replaceOverviewDateRangeUrl(
-	replace: (href: string, options?: { scroll?: boolean }) => void,
-	dateRange: WorkspaceDatasetDateRange,
-	defaultDateRange: WorkspaceDatasetDateRange | undefined,
-) {
-	replace(getOverviewDateRangeHref({ currentHref: window.location.href, dateRange, defaultDateRange }), {
-		scroll: false,
-	});
+	return startDate && endDate ? { endDate, startDate } : undefined;
 }
