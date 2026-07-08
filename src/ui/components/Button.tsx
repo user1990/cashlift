@@ -22,7 +22,7 @@ export const Button = ({
 }: ButtonProps) => (
 	<RACButton
 		className={cn(
-			"inline-flex items-center justify-center gap-2 rounded-md font-semibold outline-none transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease active:scale-[0.98] motion-reduce:active:scale-100",
+			"inline-flex cursor-pointer items-center justify-center gap-2 rounded-md font-semibold outline-none transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease active:scale-[0.98] motion-reduce:active:scale-100",
 			size === "small" && "h-8 px-2.5 text-[0.75rem] leading-4",
 			size === "default" && "h-9 px-3 text-[0.875rem] leading-5",
 			size === "large" && "h-11 px-4 text-[0.875rem] leading-5",

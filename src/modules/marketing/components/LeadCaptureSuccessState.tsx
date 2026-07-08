@@ -46,7 +46,7 @@ export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCap
 						<ArrowRight aria-hidden className="size-4" />
 					</ActionLink>
 
-					<Button className="w-full" onPress={onReset} size="small" type="button" variant="secondary">
+					<Button className="w-full" onPress={onReset} size="large" type="button" variant="secondary">
 						<RotateCcw aria-hidden className="size-3.5" />
 						Send another request
 					</Button>
