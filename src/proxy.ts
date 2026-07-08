@@ -3,7 +3,9 @@ import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server
 import { updateSupabaseSession } from "@/services/supabase/proxy";
 
 const CLERK_CONFIGURED = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+const AUTH_PATH_PREFIXES = ["/login", "/signup"] as const;
 const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard", "/api/workspace"] as const;
+const NEXT_IMAGE_FILL_STYLE_HASH = "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='";
 const isDevelopment = () => process.env.NODE_ENV === "development";
 
 export const createContentSecurityPolicy = (nonce: string) =>
@@ -12,7 +14,7 @@ export const createContentSecurityPolicy = (nonce: string) =>
 		`script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDevelopment() ? " 'unsafe-eval'" : ""}`,
 		`style-src 'self' 'nonce-${nonce}'`,
 		"style-src-elem 'self' 'unsafe-inline'",
-		"style-src-attr 'none'",
+		`style-src-attr 'unsafe-hashes' ${NEXT_IMAGE_FILL_STYLE_HASH}`,
 		"img-src 'self' blob: data: https:",
 		"font-src 'self'",
 		"connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.supabase.co https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.vercel-insights.com",
@@ -36,8 +38,19 @@ const createSecurityRequestHeaders = (request: NextRequest) => {
 	return { contentSecurityPolicy, headers };
 };
 
-const applySecurityResponseHeaders = (response: Response, contentSecurityPolicy: string) => {
+const usesPopupAuthFlow = (request: NextRequest) =>
+	AUTH_PATH_PREFIXES.some((prefix) => {
+		const pathname = request.nextUrl.pathname;
+
+		return pathname === prefix || pathname.startsWith(`${prefix}/`);
+	});
+
+const applySecurityResponseHeaders = (request: NextRequest, response: Response, contentSecurityPolicy: string) => {
 	response.headers.set("Content-Security-Policy", contentSecurityPolicy);
+	response.headers.set(
+		"Cross-Origin-Opener-Policy",
+		usesPopupAuthFlow(request) ? "same-origin-allow-popups" : "same-origin",
+	);
 	response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
 	response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
 	response.headers.set("X-Content-Type-Options", "nosniff");
@@ -59,14 +72,14 @@ const handleSecurityHeaders = (request: NextRequest) => {
 		},
 	});
 
-	return applySecurityResponseHeaders(response, contentSecurityPolicy);
+	return applySecurityResponseHeaders(request, response, contentSecurityPolicy);
 };
 
 const handleSupabaseSession = async (request: NextRequest) => {
 	const { contentSecurityPolicy, headers } = createSecurityRequestHeaders(request);
 	const response = await updateSupabaseSession(request, headers);
 
-	return applySecurityResponseHeaders(response, contentSecurityPolicy);
+	return applySecurityResponseHeaders(request, response, contentSecurityPolicy);
 };
 
 const workspaceMiddleware = clerkMiddleware(async (_auth, request) => handleSupabaseSession(request));
