@@ -47,7 +47,6 @@
 				"!@biomejs/biome",
 				"!@playwright/test",
 				"!@testing-library/react",
-				"!@typescript/native-preview",
 				"!typescript",
 				"!vitest"
 			],

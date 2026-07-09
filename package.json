@@ -11,7 +11,7 @@
 		"lint": "biome check",
 		"lint:fix": "biome check --write src",
 		"check:react": "npx react-doctor@latest --verbose",
-		"typecheck": "tsgo --noEmit",
+		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
 		"test:e2e": "env -u NO_COLOR playwright test",
 		"test:e2e:install": "playwright install chromium --with-deps",
@@ -61,7 +61,7 @@
 		"@types/node": "^22.20.0",
 		"@types/react": "^19.2.17",
 		"@types/react-dom": "^19.2.3",
-		"@typescript/native-preview": "7.0.0-dev.20260421.2",
+		"@typescript/native": "npm:typescript@^7.0.2",
 		"babel-plugin-react-compiler": "^1.0.0",
 		"fallow": "^2.102.0",
 		"jsdom": "^29.1.1",
@@ -69,7 +69,7 @@
 		"storybook": "^10.4.6",
 		"tailwindcss": "^4.3.1",
 		"turbopack-inline-svg-loader": "^1.0.3",
-		"typescript": "^6.0.3",
+		"typescript": "npm:@typescript/typescript6@^6.0.2",
 		"vitest": "^4.1.9"
 	},
 	"engines": {

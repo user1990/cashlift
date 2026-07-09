@@ -48,7 +48,7 @@ jobs:
         run: npx biome check .
 
       - name: Type check
-        run: pnpm exec tsgo --noEmit
+        run: pnpm exec tsc --noEmit
 
       - name: Unit tests
         run: pnpm test
