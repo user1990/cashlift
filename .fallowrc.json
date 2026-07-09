@@ -130,7 +130,7 @@
 			"usedExports": [{ "pattern": "src/app/**/page.{ts,tsx}", "exports": ["instant"] }]
 		}
 	],
-	"ignoreDependencies": ["turbopack-inline-svg-loader", "babel-plugin-react-compiler"],
+	"ignoreDependencies": ["turbopack-inline-svg-loader", "babel-plugin-react-compiler", "@typescript/native"],
 	"rules": {
 		"unused-files": "error",
 		"unused-exports": "error",
