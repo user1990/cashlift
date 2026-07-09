@@ -1,6 +1,7 @@
 export const CLERK_SIGN_IN_URL = "/login";
 export const CLERK_SIGN_UP_URL = "/signup";
 export const CLERK_WORKSPACE_REDIRECT_URL = "/dashboard";
+export const CLERK_FRONTEND_API_PROXY_URL = "/__clerk";
 
 export const getRequiredClerkPublishableKey = (value = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) =>
 	getRequiredClerkValue("NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY", value);

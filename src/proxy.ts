@@ -1,11 +1,10 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
-import { getRequiredClerkPublishableKey } from "@/services/clerk/config";
+import { CLERK_FRONTEND_API_PROXY_URL, getRequiredClerkPublishableKey } from "@/services/clerk/config";
 import { getRequiredClerkSecretKey } from "@/services/clerk/serverConfig";
 import { workspaceDemoEnabled } from "@/services/env/app";
 import { updateSupabaseSession } from "@/services/supabase/proxy";
 
-const CLERK_FRONTEND_API_PROXY_PATH = "/__clerk";
 const AUTH_PATH_PREFIXES = ["/login", "/signup"] as const;
 const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard", "/api/workspace"] as const;
 const NEXT_IMAGE_FILL_STYLE_HASH = "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='";
@@ -90,6 +89,7 @@ const clerkSessionMiddleware = clerkMiddleware(
 	() => ({
 		frontendApiProxy: {
 			enabled: true,
+			path: CLERK_FRONTEND_API_PROXY_URL,
 		},
 		publishableKey: getRequiredClerkPublishableKey(),
 		secretKey: getRequiredClerkSecretKey(),
@@ -103,7 +103,7 @@ export const needsWorkspaceSession = (pathname: string) =>
 	WORKSPACE_SESSION_PATH_PREFIXES.some((prefix) => matchesPathPrefix(pathname, prefix));
 
 export const needsClerkMiddleware = (pathname: string, workspaceAuthEnabled = !workspaceDemoEnabled()) =>
-	matchesPathPrefix(pathname, CLERK_FRONTEND_API_PROXY_PATH) ||
+	matchesPathPrefix(pathname, CLERK_FRONTEND_API_PROXY_URL) ||
 	(workspaceAuthEnabled && needsWorkspaceSession(pathname));
 
 export default function proxy(request: NextRequest, event: NextFetchEvent) {

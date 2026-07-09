@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { describe, expect, it } from "vitest";
+import { CLERK_FRONTEND_API_PROXY_URL } from "@/services/clerk/config";
 import proxy, { config, createContentSecurityPolicy, needsClerkMiddleware, needsWorkspaceSession } from "./proxy";
 
 describe("proxy security headers", () => {
@@ -44,7 +45,10 @@ describe("proxy security headers", () => {
 	});
 
 	it("keeps prefetch requests covered by the proxy matcher", () => {
-		expect(config.matcher).toEqual(["/__clerk/(.*)", "/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
+		expect(config.matcher).toEqual([
+			`${CLERK_FRONTEND_API_PROXY_URL}/(.*)`,
+			"/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)",
+		]);
 	});
 
 	it.each([

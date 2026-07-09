@@ -1,8 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { getRequiredClerkPublishableKey } from "./config";
+import { CLERK_FRONTEND_API_PROXY_URL, getRequiredClerkPublishableKey } from "./config";
 import { getRequiredClerkSecretKey } from "./serverConfig";
 
 describe("Clerk config", () => {
+	it("uses the app Clerk frontend API proxy path", () => {
+		expect(CLERK_FRONTEND_API_PROXY_URL).toEqual("/__clerk");
+	});
+
 	it("returns configured Clerk keys", () => {
 		expect(getRequiredClerkPublishableKey(" pk_live_test ")).toEqual("pk_live_test");
 		expect(getRequiredClerkSecretKey(" sk_live_test ")).toEqual("sk_live_test");
