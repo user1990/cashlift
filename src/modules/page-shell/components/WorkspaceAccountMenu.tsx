@@ -1,12 +1,8 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { ProductionAccountMenu } from "./ProductionAccountMenu";
 import type { WorkspaceMode } from "./types";
 import { AccountMenuShell } from "./WorkspaceAccountMenuShell";
-
-const ProductionAccountMenu = dynamic(() =>
-	import("./ProductionAccountMenu").then((module) => module.ProductionAccountMenu),
-);
 
 type WorkspaceAccountMenuProps = {
 	mode: WorkspaceMode;

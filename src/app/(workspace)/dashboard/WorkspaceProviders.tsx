@@ -1,12 +1,10 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { NextIntlClientProvider } from "next-intl";
 import { type ReactNode, Suspense } from "react";
+import { AuthProvider } from "@/services/clerk/provider";
 import messages from "@/services/i18n/messages/en.json";
 import { QueryProvider } from "@/services/query/provider";
-
-const AuthProvider = dynamic(() => import("@/services/clerk/provider").then((module) => module.AuthProvider));
 
 type WorkspaceProvidersProps = {
 	authEnabled?: boolean;

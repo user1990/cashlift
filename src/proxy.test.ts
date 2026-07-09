@@ -1,7 +1,13 @@
 import { NextRequest } from "next/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { CLERK_FRONTEND_API_PROXY_URL } from "@/services/clerk/config";
-import proxy, { config, createContentSecurityPolicy, needsClerkMiddleware, needsWorkspaceSession } from "./proxy";
+import proxy, {
+	config,
+	createClerkMiddlewareOptions,
+	createContentSecurityPolicy,
+	needsClerkMiddleware,
+	needsWorkspaceSession,
+} from "./proxy";
 
 describe("proxy security headers", () => {
 	it("builds a strict nonce-based content security policy", () => {
@@ -15,6 +21,13 @@ describe("proxy security headers", () => {
 		expect(policy).toContain("https://*.ingest.us.sentry.io");
 		expect(policy).toContain("object-src 'none'");
 		expect(policy).toContain("frame-ancestors 'none'");
+		expect(policy).not.toContain("upgrade-insecure-requests");
+	});
+
+	it("upgrades insecure requests in production", () => {
+		vi.stubEnv("NODE_ENV", "production");
+
+		expect(createContentSecurityPolicy("test-nonce")).toContain("upgrade-insecure-requests");
 	});
 
 	it("adds browser hardening headers to matched requests", async () => {
@@ -49,6 +62,33 @@ describe("proxy security headers", () => {
 			`${CLERK_FRONTEND_API_PROXY_URL}/(.*)`,
 			"/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)",
 		]);
+	});
+
+	it("uses app auth URLs for Clerk middleware redirects", () => {
+		vi.stubEnv("NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY", "pk_test_example");
+		vi.stubEnv("CLERK_SECRET_KEY", "sk_test_example");
+
+		expect(createClerkMiddlewareOptions()).toMatchObject({
+			frontendApiProxy: {
+				enabled: false,
+				path: "/__clerk",
+			},
+			signInUrl: "/login",
+			signUpUrl: "/signup",
+		});
+	});
+
+	it("enables Clerk frontend API proxy in production", () => {
+		vi.stubEnv("NODE_ENV", "production");
+		vi.stubEnv("NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY", "pk_live_example");
+		vi.stubEnv("CLERK_SECRET_KEY", "sk_live_example");
+
+		expect(createClerkMiddlewareOptions()).toMatchObject({
+			frontendApiProxy: {
+				enabled: true,
+				path: "/__clerk",
+			},
+		});
 	});
 
 	it.each([

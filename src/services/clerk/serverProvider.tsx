@@ -1,9 +1,9 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import {
-	CLERK_FRONTEND_API_PROXY_URL,
 	CLERK_SIGN_IN_URL,
 	CLERK_SIGN_UP_URL,
 	CLERK_WORKSPACE_REDIRECT_URL,
+	getClerkFrontendApiProxyUrl,
 	getRequiredClerkPublishableKey,
 } from "./config";
 
@@ -18,7 +18,7 @@ export const ServerAuthProvider = ({ children }: ServerAuthProviderProps) => {
 		<ClerkProvider
 			dynamic
 			publishableKey={publishableKey}
-			proxyUrl={CLERK_FRONTEND_API_PROXY_URL}
+			proxyUrl={getClerkFrontendApiProxyUrl()}
 			signInUrl={CLERK_SIGN_IN_URL}
 			signUpUrl={CLERK_SIGN_UP_URL}
 			signInFallbackRedirectUrl={CLERK_WORKSPACE_REDIRECT_URL}

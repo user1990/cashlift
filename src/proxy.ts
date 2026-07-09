@@ -1,6 +1,12 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
-import { CLERK_FRONTEND_API_PROXY_URL, getRequiredClerkPublishableKey } from "@/services/clerk/config";
+import {
+	CLERK_FRONTEND_API_PROXY_URL,
+	CLERK_SIGN_IN_URL,
+	CLERK_SIGN_UP_URL,
+	clerkFrontendApiProxyEnabled,
+	getRequiredClerkPublishableKey,
+} from "@/services/clerk/config";
 import { getRequiredClerkSecretKey } from "@/services/clerk/serverConfig";
 import { workspaceDemoEnabled } from "@/services/env/app";
 import { updateSupabaseSession } from "@/services/supabase/proxy";
@@ -26,7 +32,7 @@ export const createContentSecurityPolicy = (nonce: string) =>
 		"base-uri 'self'",
 		"form-action 'self'",
 		"frame-ancestors 'none'",
-		"upgrade-insecure-requests",
+		...(process.env.NODE_ENV === "production" ? ["upgrade-insecure-requests"] : []),
 	].join("; ");
 
 const createSecurityRequestHeaders = (request: NextRequest) => {
@@ -84,16 +90,20 @@ const handleSupabaseSession = async (request: NextRequest) => {
 	return applySecurityResponseHeaders(request, response, contentSecurityPolicy);
 };
 
+export const createClerkMiddlewareOptions = () => ({
+	frontendApiProxy: {
+		enabled: clerkFrontendApiProxyEnabled(),
+		path: CLERK_FRONTEND_API_PROXY_URL,
+	},
+	publishableKey: getRequiredClerkPublishableKey(),
+	secretKey: getRequiredClerkSecretKey(),
+	signInUrl: CLERK_SIGN_IN_URL,
+	signUpUrl: CLERK_SIGN_UP_URL,
+});
+
 const clerkSessionMiddleware = clerkMiddleware(
 	async (_auth, request) => handleSupabaseSession(request),
-	() => ({
-		frontendApiProxy: {
-			enabled: true,
-			path: CLERK_FRONTEND_API_PROXY_URL,
-		},
-		publishableKey: getRequiredClerkPublishableKey(),
-		secretKey: getRequiredClerkSecretKey(),
-	}),
+	() => createClerkMiddlewareOptions(),
 );
 
 const matchesPathPrefix = (pathname: string, prefix: string) =>
