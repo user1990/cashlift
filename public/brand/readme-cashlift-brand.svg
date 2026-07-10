@@ -1,0 +1,80 @@
+<svg aria-labelledby="title desc" fill="none" role="img" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">CashLift brand banner</title>
+  <desc id="desc">CashLift wordmark with finance command center brand artwork.</desc>
+  <defs>
+    <radialGradient id="green-glow" cx="24%" cy="21%" r="62%">
+      <stop offset="0%" stop-color="#22c77a" stop-opacity="0.38"/>
+      <stop offset="48%" stop-color="#22c77a" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#020407" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cyan-glow" cx="78%" cy="28%" r="58%">
+      <stop offset="0%" stop-color="#02daeb" stop-opacity="0.36"/>
+      <stop offset="48%" stop-color="#02daeb" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#020407" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0b1a20" stop-opacity="0.96"/>
+      <stop offset="100%" stop-color="#05080c" stop-opacity="0.98"/>
+    </linearGradient>
+    <linearGradient id="cash-line" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#22c77a"/>
+      <stop offset="100%" stop-color="#02daeb"/>
+    </linearGradient>
+    <filter id="soft-glow" color-interpolation-filters="sRGB" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="grid" width="56" height="56" patternUnits="userSpaceOnUse">
+      <path d="M56 0H0V56" stroke="#ffffff" stroke-opacity="0.06"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="900" fill="#020407"/>
+  <rect width="1600" height="900" fill="url(#green-glow)"/>
+  <rect width="1600" height="900" fill="url(#cyan-glow)"/>
+  <rect width="1600" height="900" fill="url(#grid)" opacity="0.58"/>
+
+  <path d="M0 690C206 590 376 610 536 518C724 410 840 244 1048 232C1240 220 1392 320 1600 244V900H0Z" fill="#061014" opacity="0.84"/>
+  <path d="M0 724C226 610 388 638 566 532C748 424 854 302 1058 286C1248 270 1396 362 1600 300" stroke="url(#cash-line)" stroke-linecap="round" stroke-width="6" opacity="0.82" filter="url(#soft-glow)"/>
+
+  <g transform="translate(108 168)">
+    <text fill="#22c77a" font-family="Arial Black, Arial, sans-serif" font-size="116" font-weight="900" letter-spacing="-4" x="0" y="96">Cash</text>
+    <text fill="#02daeb" font-family="Arial Black, Arial, sans-serif" font-size="116" font-weight="900" letter-spacing="-4" x="300" y="96">Lift</text>
+    <text fill="#f5fbff" font-family="Inter, Arial, sans-serif" font-size="39" font-weight="700" x="2" y="172">Cash decision command center</text>
+    <text fill="#9fb5b8" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="500" x="2" y="224">Approve spend. Recover receivables. Protect runway.</text>
+  </g>
+
+  <g transform="translate(908 154) rotate(-4)">
+    <rect width="520" height="330" rx="28" fill="url(#panel)" stroke="#02daeb" stroke-opacity="0.38" stroke-width="2"/>
+    <rect x="36" y="40" width="132" height="70" rx="16" fill="#22c77a" fill-opacity="0.13" stroke="#22c77a" stroke-opacity="0.42"/>
+    <rect x="194" y="40" width="132" height="70" rx="16" fill="#02daeb" fill-opacity="0.11" stroke="#02daeb" stroke-opacity="0.42"/>
+    <rect x="352" y="40" width="132" height="70" rx="16" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.18"/>
+    <path d="M48 236C100 184 144 206 188 166C244 114 288 206 340 154C394 100 438 136 478 96" stroke="#02daeb" stroke-linecap="round" stroke-width="7" filter="url(#soft-glow)"/>
+    <path d="M50 272C122 250 174 286 238 242C314 190 374 238 478 202" stroke="#22c77a" stroke-linecap="round" stroke-width="5" opacity="0.76"/>
+    <g fill="#f5fbff" opacity="0.74">
+      <circle cx="48" cy="236" r="7"/>
+      <circle cx="188" cy="166" r="7"/>
+      <circle cx="340" cy="154" r="7"/>
+      <circle cx="478" cy="96" r="7"/>
+    </g>
+  </g>
+
+  <g transform="translate(184 548) rotate(3)">
+    <rect width="360" height="218" rx="24" fill="#071016" stroke="#ffffff" stroke-opacity="0.14"/>
+    <circle cx="86" cy="104" r="48" stroke="#02daeb" stroke-width="15" opacity="0.92"/>
+    <path d="M86 56A48 48 0 0 1 132 118" stroke="#22c77a" stroke-linecap="round" stroke-width="15"/>
+    <rect x="172" y="64" width="128" height="15" rx="8" fill="#02daeb" opacity="0.76"/>
+    <rect x="172" y="106" width="154" height="15" rx="8" fill="#22c77a" opacity="0.74"/>
+    <rect x="172" y="148" width="102" height="15" rx="8" fill="#f5fbff" opacity="0.32"/>
+  </g>
+
+  <g filter="url(#soft-glow)">
+    <circle cx="660" cy="574" r="7" fill="#02daeb"/>
+    <circle cx="1324" cy="560" r="7" fill="#22c77a"/>
+    <path d="M660 574C782 500 876 514 992 464" stroke="#02daeb" stroke-opacity="0.46" stroke-width="3"/>
+    <path d="M1160 386C1280 426 1342 474 1324 560" stroke="#22c77a" stroke-opacity="0.42" stroke-width="3"/>
+  </g>
+</svg>
