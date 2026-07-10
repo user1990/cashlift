@@ -41,7 +41,7 @@
 ---
 
 <p align="center">
-  <img src="./src/app/dashboard.png" width="100%" alt="CashLift Dashboard" />
+  <img src="./public/brand/readme-cashlift-brand.svg" width="100%" alt="CashLift brand banner" />
 </p>
 
 ---
