@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { MainContent } from "@/modules/page-shell/components/MainContent";
 import { WorkspaceShell } from "@/modules/page-shell/components/WorkspaceShell";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
@@ -19,8 +18,6 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
 	if (workspaceDemoEnabled()) {
 		return <WorkspaceProviders authEnabled={false}>{content}</WorkspaceProviders>;
 	}
-
-	await auth.protect();
 
 	return <WorkspaceProviders>{content}</WorkspaceProviders>;
 }

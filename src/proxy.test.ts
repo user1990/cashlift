@@ -76,6 +76,7 @@ describe("proxy security headers", () => {
 			signInUrl: "/login",
 			signUpUrl: "/signup",
 		});
+		expect(createClerkMiddlewareOptions()).not.toHaveProperty("secretKey");
 	});
 
 	it("enables Clerk frontend API proxy in production", () => {

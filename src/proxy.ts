@@ -90,21 +90,27 @@ const handleSupabaseSession = async (request: NextRequest) => {
 	return applySecurityResponseHeaders(request, response, contentSecurityPolicy);
 };
 
-export const createClerkMiddlewareOptions = () => ({
-	frontendApiProxy: {
-		enabled: clerkFrontendApiProxyEnabled(),
-		path: CLERK_FRONTEND_API_PROXY_URL,
-	},
-	publishableKey: getRequiredClerkPublishableKey(),
-	secretKey: getRequiredClerkSecretKey(),
-	signInUrl: CLERK_SIGN_IN_URL,
-	signUpUrl: CLERK_SIGN_UP_URL,
-});
+export const createClerkMiddlewareOptions = () => {
+	getRequiredClerkSecretKey();
 
-const clerkSessionMiddleware = clerkMiddleware(
-	async (_auth, request) => handleSupabaseSession(request),
-	() => createClerkMiddlewareOptions(),
-);
+	return {
+		frontendApiProxy: {
+			enabled: clerkFrontendApiProxyEnabled(),
+			path: CLERK_FRONTEND_API_PROXY_URL,
+		},
+		publishableKey: getRequiredClerkPublishableKey(),
+		signInUrl: CLERK_SIGN_IN_URL,
+		signUpUrl: CLERK_SIGN_UP_URL,
+	};
+};
+
+const clerkSessionMiddleware = clerkMiddleware(async (auth, request) => {
+	if (needsWorkspaceSession(request.nextUrl.pathname)) {
+		await auth.protect();
+	}
+
+	return handleSupabaseSession(request);
+}, createClerkMiddlewareOptions);
 
 const matchesPathPrefix = (pathname: string, prefix: string) =>
 	pathname === prefix || pathname.startsWith(`${prefix}/`);
