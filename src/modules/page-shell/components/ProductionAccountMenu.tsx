@@ -1,24 +1,20 @@
 "use client";
 
 import { useClerk, useUser } from "@clerk/nextjs";
-import { AccountMenuShell } from "./WorkspaceAccountMenuShell";
+import { AccountMenuShell, AccountStatus } from "./WorkspaceAccountMenuShell";
 
 type ClerkUser = NonNullable<ReturnType<typeof useUser>["user"]>;
 
 export const ProductionAccountMenu = () => {
 	const { signOut } = useClerk();
-	const { user } = useUser();
+	const { isLoaded, isSignedIn, user } = useUser();
 
-	if (!user) {
-		return (
-			<AccountMenuShell
-				avatar="AC"
-				description="Workspace user"
-				items={[{ href: "/dashboard/settings", label: "Workspace settings" }]}
-				name="Account"
-				signOut={() => signOut({ redirectUrl: "/login" })}
-			/>
-		);
+	if (!isLoaded) {
+		return <AccountStatus description="Loading account…" name="Account" />;
+	}
+
+	if (!isSignedIn || !user) {
+		return <AccountStatus description="Account unavailable" name="Account" />;
 	}
 
 	return <SignedInAccountMenu signOut={() => signOut({ redirectUrl: "/login" })} user={user} />;

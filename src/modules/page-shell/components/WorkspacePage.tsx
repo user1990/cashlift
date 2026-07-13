@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { loadWorkspaceDataset } from "@/modules/workspace/server";
 import type { WorkspacePageProps } from "./types";
 import { WorkspaceLoadState } from "./WorkspaceLoadState";
@@ -15,7 +16,7 @@ export const WorkspacePage = async ({ section }: WorkspacePageProps) => {
 	}
 
 	if (result.status === "forbidden") {
-		return <WorkspaceLoadState message={result.message} section={section} title="No company workspace" />;
+		redirect("/onboarding/recover");
 	}
 
 	return <WorkspaceLoadState message={result.message} section={section} title="Workspace data unavailable" />;

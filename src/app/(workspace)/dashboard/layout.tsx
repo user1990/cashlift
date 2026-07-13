@@ -7,7 +7,7 @@ type DashboardLayoutProps = {
 	children: React.ReactNode;
 };
 
-export default async function DashboardLayout({ children }: DashboardLayoutProps) {
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
 	const config = getWorkspaceRuntimeConfig();
 	const content = <WorkspaceShell mode={config.mode}>{children}</WorkspaceShell>;
 
@@ -16,7 +16,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
 	}
 
 	if (workspaceDemoEnabled()) {
-		return <WorkspaceProviders authEnabled={false}>{content}</WorkspaceProviders>;
+		return <WorkspaceProviders>{content}</WorkspaceProviders>;
 	}
 
 	return <WorkspaceProviders>{content}</WorkspaceProviders>;

@@ -1,16 +1,16 @@
+// @vitest-environment node
+
 import { NextRequest } from "next/server";
-import { describe, expect, it, vi } from "vitest";
-import { CLERK_FRONTEND_API_PROXY_URL } from "@/services/clerk/config";
-import proxy, {
-	config,
-	createClerkMiddlewareOptions,
-	createContentSecurityPolicy,
-	needsClerkMiddleware,
-	needsWorkspaceSession,
-} from "./proxy";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import proxy, { config, createContentSecurityPolicy, guestRouteRedirectPath } from "./proxy";
 
 describe("proxy security headers", () => {
+	afterEach(() => {
+		vi.unstubAllEnvs();
+	});
+
 	it("builds a strict nonce-based content security policy", () => {
+		vi.stubEnv("NODE_ENV", "development");
 		const policy = createContentSecurityPolicy("test-nonce");
 
 		expect(policy).toContain("default-src 'self'");
@@ -31,7 +31,7 @@ describe("proxy security headers", () => {
 	});
 
 	it("adds browser hardening headers to matched requests", async () => {
-		const request = new NextRequest("https://cashlift.test/features");
+		const request = new NextRequest("https://cashlift.test/dashboard");
 
 		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
 
@@ -58,89 +58,20 @@ describe("proxy security headers", () => {
 	});
 
 	it("keeps prefetch requests covered by the proxy matcher", () => {
-		expect(config.matcher).toEqual([
-			`${CLERK_FRONTEND_API_PROXY_URL}/(.*)`,
-			"/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)",
-		]);
+		expect(config.matcher).toEqual(["/__clerk/(.*)", "/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
 	});
 
-	it("uses app auth URLs for Clerk middleware redirects", () => {
-		vi.stubEnv("NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY", "pk_test_example");
-		vi.stubEnv("CLERK_SECRET_KEY", "sk_test_example");
+	it("returns signed-in visitors to their requested dashboard route", () => {
+		const request = new NextRequest(
+			"https://cashlift.test/login?redirect_url=https%3A%2F%2Fcashlift.test%2Fdashboard%2Fapprovals",
+		);
 
-		expect(createClerkMiddlewareOptions()).toMatchObject({
-			frontendApiProxy: {
-				enabled: false,
-				path: "/__clerk",
-			},
-			signInUrl: "/login",
-			signUpUrl: "/signup",
-		});
-		expect(createClerkMiddlewareOptions()).not.toHaveProperty("secretKey");
+		expect(guestRouteRedirectPath(request)).toBe("/dashboard/approvals");
 	});
 
-	it("enables Clerk frontend API proxy in production", () => {
-		vi.stubEnv("NODE_ENV", "production");
-		vi.stubEnv("NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY", "pk_live_example");
-		vi.stubEnv("CLERK_SECRET_KEY", "sk_live_example");
+	it("rejects external return URLs", () => {
+		const request = new NextRequest("https://cashlift.test/login?redirect_url=https://attacker.test");
 
-		expect(createClerkMiddlewareOptions()).toMatchObject({
-			frontendApiProxy: {
-				enabled: true,
-				path: "/__clerk",
-			},
-		});
-	});
-
-	it.each([
-		"/__clerk/npm/@clerk/clerk-js@6/dist/clerk.browser.js",
-		"/__clerk/npm/@clerk/ui@1/dist/ui.browser.js",
-	])("always routes Clerk frontend proxy middleware for %s", (pathname) => {
-		expect(needsClerkMiddleware(pathname)).toEqual(true);
-	});
-
-	it.each([
-		"/dashboard",
-		"/dashboard/spend",
-		"/api/workspace",
-		"/api/workspace/decisions",
-	])("routes Clerk middleware for production workspace path %s", (pathname) => {
-		expect(needsClerkMiddleware(pathname, true)).toEqual(true);
-	});
-
-	it.each([
-		"/dashboard",
-		"/dashboard/spend",
-		"/api/workspace",
-		"/api/workspace/decisions",
-	])("keeps demo workspace path %s on security-header middleware", (pathname) => {
-		expect(needsClerkMiddleware(pathname, false)).toEqual(false);
-	});
-
-	it.each([
-		"/login",
-		"/signup",
-		"/features",
-		"/pricing",
-		"/demo",
-	])("keeps marketing path %s on security-header middleware", (pathname) => {
-		expect(needsClerkMiddleware(pathname)).toEqual(false);
-	});
-
-	it.each([
-		"/dashboard",
-		"/dashboard/spend",
-		"/api/workspace",
-		"/api/workspace/decisions",
-	])("requires workspace session for %s", (pathname) => {
-		expect(needsWorkspaceSession(pathname)).toEqual(true);
-	});
-
-	it.each([
-		"/__clerk/npm/@clerk/clerk-js@6/dist/clerk.browser.js",
-		"/login",
-		"/api/workspaces",
-	])("does not treat %s as a workspace session path", (pathname) => {
-		expect(needsWorkspaceSession(pathname)).toEqual(false);
+		expect(guestRouteRedirectPath(request)).toBe("/dashboard");
 	});
 });

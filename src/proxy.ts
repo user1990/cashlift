@@ -1,20 +1,16 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
-import {
-	CLERK_FRONTEND_API_PROXY_URL,
-	CLERK_SIGN_IN_URL,
-	CLERK_SIGN_UP_URL,
-	clerkFrontendApiProxyEnabled,
-	getRequiredClerkPublishableKey,
-} from "@/services/clerk/config";
-import { getRequiredClerkSecretKey } from "@/services/clerk/serverConfig";
-import { workspaceDemoEnabled } from "@/services/env/app";
 import { updateSupabaseSession } from "@/services/supabase/proxy";
 
+const CLERK_CONFIGURED = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+const CLERK_FRONTEND_API_PROXY_URL = "/__clerk";
+const CLERK_SIGN_IN_URL = "/login";
+const CLERK_SIGN_UP_URL = "/signup";
 const AUTH_PATH_PREFIXES = ["/login", "/signup"] as const;
-const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard", "/api/workspace"] as const;
 const NEXT_IMAGE_FILL_STYLE_HASH = "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='";
 const isDevelopment = () => process.env.NODE_ENV === "development";
+const isGuestOnlyRoute = createRouteMatcher(["/login(.*)", "/signup(.*)"]);
+const isWorkspaceRoute = createRouteMatcher(["/dashboard(.*)", "/api/workspace(.*)", "/onboarding(.*)"]);
 
 export const createContentSecurityPolicy = (nonce: string) =>
 	[
@@ -90,40 +86,61 @@ const handleSupabaseSession = async (request: NextRequest) => {
 	return applySecurityResponseHeaders(request, response, contentSecurityPolicy);
 };
 
-export const createClerkMiddlewareOptions = () => {
-	getRequiredClerkSecretKey();
+const clerkSessionMiddleware = clerkMiddleware(
+	async (auth, request) => {
+		const session = await auth();
 
-	return {
+		if (isGuestOnlyRoute(request) && session.isAuthenticated) {
+			return NextResponse.redirect(new URL(guestRouteRedirectPath(request), request.url));
+		}
+
+		if (isWorkspaceRoute(request) && !session.isAuthenticated) {
+			if (request.nextUrl.pathname.startsWith("/api/")) {
+				return NextResponse.json({ error: "Sign in to access this resource." }, { status: 401 });
+			}
+
+			return session.redirectToSignIn({ returnBackUrl: request.url });
+		}
+
+		return handleSupabaseSession(request);
+	},
+	{
 		frontendApiProxy: {
-			enabled: clerkFrontendApiProxyEnabled(),
+			enabled: process.env.NODE_ENV === "production",
 			path: CLERK_FRONTEND_API_PROXY_URL,
 		},
-		publishableKey: getRequiredClerkPublishableKey(),
 		signInUrl: CLERK_SIGN_IN_URL,
 		signUpUrl: CLERK_SIGN_UP_URL,
-	};
-};
+	},
+);
 
-const clerkSessionMiddleware = clerkMiddleware(async (auth, request) => {
-	if (needsWorkspaceSession(request.nextUrl.pathname)) {
-		await auth.protect();
+export const guestRouteRedirectPath = (request: NextRequest) => {
+	const redirectUrl = request.nextUrl.searchParams.get("redirect_url");
+
+	if (!redirectUrl) {
+		return "/dashboard";
 	}
 
-	return handleSupabaseSession(request);
-}, createClerkMiddlewareOptions);
+	try {
+		const requestedUrl = new URL(redirectUrl, request.url);
+		const dashboardPathRequested =
+			requestedUrl.pathname === "/dashboard" || requestedUrl.pathname.startsWith("/dashboard/");
 
-const matchesPathPrefix = (pathname: string, prefix: string) =>
-	pathname === prefix || pathname.startsWith(`${prefix}/`);
-
-export const needsWorkspaceSession = (pathname: string) =>
-	WORKSPACE_SESSION_PATH_PREFIXES.some((prefix) => matchesPathPrefix(pathname, prefix));
-
-export const needsClerkMiddleware = (pathname: string, workspaceAuthEnabled = !workspaceDemoEnabled()) =>
-	matchesPathPrefix(pathname, CLERK_FRONTEND_API_PROXY_URL) ||
-	(workspaceAuthEnabled && needsWorkspaceSession(pathname));
+		return requestedUrl.origin === request.nextUrl.origin && dashboardPathRequested
+			? `${requestedUrl.pathname}${requestedUrl.search}${requestedUrl.hash}`
+			: "/dashboard";
+	} catch {
+		return "/dashboard";
+	}
+};
 
 export default function proxy(request: NextRequest, event: NextFetchEvent) {
-	if (needsClerkMiddleware(request.nextUrl.pathname)) {
+	if (
+		CLERK_CONFIGURED &&
+		(request.nextUrl.pathname.startsWith(`${CLERK_FRONTEND_API_PROXY_URL}/`) ||
+			isGuestOnlyRoute(request) ||
+			isWorkspaceRoute(request))
+	) {
 		return clerkSessionMiddleware(request, event);
 	}
 
