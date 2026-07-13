@@ -14,7 +14,10 @@ export const WorkspaceAccountMenu = ({ mode }: WorkspaceAccountMenuProps) => {
 			<AccountMenuShell
 				avatar="SC"
 				description="Finance Lead"
-				items={[{ href: "/dashboard/settings", label: "Workspace settings" }]}
+				items={[
+					{ href: "/dashboard/settings", label: "Workspace settings" },
+					{ href: "/login", label: "Log in" },
+				]}
 				name="Samira Chen"
 			/>
 		);

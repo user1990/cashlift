@@ -11,23 +11,6 @@ type AccountMenuShellProps = {
 	signOut?: () => void;
 };
 
-export const AccountStatus = ({ description, name }: { description: string; name: string }) => (
-	<div
-		aria-live="polite"
-		className="flex w-full items-center gap-3 rounded-lg px-2 py-3 text-left text-shell-foreground"
-	>
-		<span className="grid size-10 shrink-0 place-items-center rounded-full bg-panel-muted text-s+ font-semibold text-shell-foreground">
-			AC
-		</span>
-
-		<span className="min-w-0 flex-1">
-			<span className="block truncate text-m+ font-semibold">{name}</span>
-
-			<span className="block truncate text-s text-shell-muted">{description}</span>
-		</span>
-	</div>
-);
-
 export const AccountMenuShell = ({ avatar, description, items, name, signOut }: AccountMenuShellProps) => (
 	<details className="relative">
 		<summary className="flex w-full cursor-pointer list-none items-center gap-3 rounded-lg px-2 py-3 text-left text-shell-foreground transition-colors duration-150 ease hover:bg-white/5 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">

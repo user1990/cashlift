@@ -12,14 +12,6 @@ _Avoid_: account, tenant
 A person assigned to a company workspace with a CashLift role.
 _Avoid_: user, seat
 
-**Authentication Identity**:
-A person who has completed authentication but may not yet belong to a company workspace.
-_Avoid_: company member, account
-
-**Workspace Provisioning**:
-The creation of a new company workspace and its initial owner company member after a self-service signup.
-_Avoid_: signup
-
 **Cash Action**:
 A prioritized piece of daily finance work tied to a cash impact.
 _Avoid_: task, notification
@@ -51,7 +43,6 @@ _Avoid_: overspend
 ## Relationships
 
 - A **Company Workspace** has one or more **Company Members**.
-- An **Authentication Identity** becomes a **Company Member** through **Workspace Provisioning** or an invitation.
 - A **Company Workspace** owns many **Cash Actions**, **Spend Requests**, **Vendor Bills**, **Subscriptions**, and forecast points for the **13-week Cash Outlook**.
 - A **Cash Action** can point at approval, collection, vendor leak, cash buffer, or forecast work.
 - A **Vendor Leak** is detected from a **Subscription**.
@@ -66,4 +57,3 @@ _Avoid_: overspend
 
 - “Account” is avoided because it can mean auth identity, customer, or tenant. Use **Company Workspace** for CashLift data scope.
 - “User” is avoided in domain language when role and company scope matter. Use **Company Member**.
-- An **Authentication Identity** is not necessarily a **Company Member**. It has no company data access until provisioning or invitation succeeds.

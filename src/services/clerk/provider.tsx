@@ -2,11 +2,11 @@
 
 import { ClerkProvider } from "@clerk/nextjs";
 import {
-	CLERK_SIGN_IN_REDIRECT_URL,
 	CLERK_SIGN_IN_URL,
-	CLERK_SIGN_UP_REDIRECT_URL,
 	CLERK_SIGN_UP_URL,
+	CLERK_WORKSPACE_REDIRECT_URL,
 	getClerkFrontendApiProxyUrl,
+	getRequiredClerkPublishableKey,
 } from "./config";
 
 type AuthProviderProps = {
@@ -14,11 +14,7 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-	const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-
-	if (!publishableKey) {
-		return children;
-	}
+	const publishableKey = getRequiredClerkPublishableKey();
 
 	return (
 		<ClerkProvider
@@ -26,8 +22,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			proxyUrl={getClerkFrontendApiProxyUrl()}
 			signInUrl={CLERK_SIGN_IN_URL}
 			signUpUrl={CLERK_SIGN_UP_URL}
-			signInFallbackRedirectUrl={CLERK_SIGN_IN_REDIRECT_URL}
-			signUpFallbackRedirectUrl={CLERK_SIGN_UP_REDIRECT_URL}
+			signInFallbackRedirectUrl={CLERK_WORKSPACE_REDIRECT_URL}
+			signUpFallbackRedirectUrl={CLERK_WORKSPACE_REDIRECT_URL}
 		>
 			{children}
 		</ClerkProvider>
