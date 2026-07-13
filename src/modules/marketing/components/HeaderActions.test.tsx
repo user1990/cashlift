@@ -11,6 +11,7 @@ describe("HeaderActions", () => {
 
 		for (const link of logInLinks) {
 			expect(link).toHaveAttribute("href", "/login");
+			expect(link).toHaveAttribute("target", "_top");
 		}
 
 		const signUpLinks = screen.getAllByRole("link", { name: "Sign up" });
@@ -18,6 +19,7 @@ describe("HeaderActions", () => {
 
 		for (const link of signUpLinks) {
 			expect(link).toHaveAttribute("href", "/signup");
+			expect(link).toHaveAttribute("target", "_top");
 		}
 
 		expect(screen.queryByRole("link", { name: "Run leak audit" })).not.toBeInTheDocument();
