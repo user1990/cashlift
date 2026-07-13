@@ -6,11 +6,17 @@ describe("HeaderActions", () => {
 	it("links desktop and mobile visitors to the authentication routes", () => {
 		render(<HeaderActions />);
 
-		for (const link of screen.getAllByRole("link", { name: "Log in" })) {
+		const logInLinks = screen.getAllByRole("link", { name: "Log in" });
+		expect(logInLinks).toHaveLength(2);
+
+		for (const link of logInLinks) {
 			expect(link).toHaveAttribute("href", "/login");
 		}
 
-		for (const link of screen.getAllByRole("link", { name: "Sign up" })) {
+		const signUpLinks = screen.getAllByRole("link", { name: "Sign up" });
+		expect(signUpLinks).toHaveLength(2);
+
+		for (const link of signUpLinks) {
 			expect(link).toHaveAttribute("href", "/signup");
 		}
 
