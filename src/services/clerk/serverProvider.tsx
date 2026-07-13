@@ -8,8 +8,6 @@ const SIGN_IN_URL = "/login";
 const SIGN_UP_URL = "/signup";
 const WORKSPACE_REDIRECT_URL = "/dashboard";
 
-export const clerkPublishableKeyConfigured = () => Boolean(getClerkPublishableKey());
-
 export const ServerAuthProvider = ({ children }: ServerAuthProviderProps) => {
 	const publishableKey = getClerkPublishableKey();
 

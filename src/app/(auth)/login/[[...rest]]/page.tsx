@@ -1,8 +1,7 @@
 import { SignIn } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { connection } from "next/server";
-import { AuthUnavailableCard } from "@/modules/marketing/components/AuthUnavailableCard";
-import { clerkPublishableKeyConfigured, ServerAuthProvider } from "@/services/clerk/serverProvider";
+import { ServerAuthProvider } from "@/services/clerk/serverProvider";
 
 export const metadata: Metadata = {
 	title: "Login — CashLift",
@@ -14,11 +13,9 @@ export const instant = false;
 export default async function Login() {
 	await connection();
 
-	return clerkPublishableKeyConfigured() ? (
+	return (
 		<ServerAuthProvider>
 			<SignIn fallbackRedirectUrl="/dashboard" signUpUrl="/signup" />
 		</ServerAuthProvider>
-	) : (
-		<AuthUnavailableCard />
 	);
 }
