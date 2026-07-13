@@ -7,14 +7,14 @@ export const HeaderActions = () => (
 			href="/login"
 			className="hidden h-9 items-center rounded-md px-3 text-m font-medium text-shell-muted transition-colors duration-150 hover:text-primary sm:inline-flex"
 		>
-			Login
+			Log in
 		</Link>
 
 		<Link
-			href="/demo"
+			href="/signup"
 			className="inline-flex h-9 items-center justify-center rounded-md border border-primary bg-primary px-3 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
 		>
-			Run leak audit
+			Sign up
 		</Link>
 
 		<MobileNav />
