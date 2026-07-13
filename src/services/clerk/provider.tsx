@@ -5,7 +5,6 @@ import {
 	CLERK_SIGN_IN_URL,
 	CLERK_SIGN_UP_URL,
 	CLERK_WORKSPACE_REDIRECT_URL,
-	getClerkFrontendApiProxyUrl,
 	getRequiredClerkPublishableKey,
 } from "./config";
 
@@ -19,7 +18,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	return (
 		<ClerkProvider
 			publishableKey={publishableKey}
-			proxyUrl={getClerkFrontendApiProxyUrl()}
 			signInUrl={CLERK_SIGN_IN_URL}
 			signUpUrl={CLERK_SIGN_UP_URL}
 			signInFallbackRedirectUrl={CLERK_WORKSPACE_REDIRECT_URL}

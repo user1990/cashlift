@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
 import { describe, expect, it, vi } from "vitest";
-import { CLERK_FRONTEND_API_PROXY_URL } from "@/services/clerk/config";
 import proxy, {
 	config,
 	createClerkMiddlewareOptions,
@@ -58,10 +57,7 @@ describe("proxy security headers", () => {
 	});
 
 	it("keeps prefetch requests covered by the proxy matcher", () => {
-		expect(config.matcher).toEqual([
-			`${CLERK_FRONTEND_API_PROXY_URL}/(.*)`,
-			"/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)",
-		]);
+		expect(config.matcher).toEqual(["/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
 	});
 
 	it("uses app auth URLs for Clerk middleware redirects", () => {
@@ -69,34 +65,10 @@ describe("proxy security headers", () => {
 		vi.stubEnv("CLERK_SECRET_KEY", "sk_test_example");
 
 		expect(createClerkMiddlewareOptions()).toMatchObject({
-			frontendApiProxy: {
-				enabled: false,
-				path: "/__clerk",
-			},
 			signInUrl: "/login",
 			signUpUrl: "/signup",
 		});
 		expect(createClerkMiddlewareOptions()).not.toHaveProperty("secretKey");
-	});
-
-	it("enables Clerk frontend API proxy in production", () => {
-		vi.stubEnv("NODE_ENV", "production");
-		vi.stubEnv("NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY", "pk_live_example");
-		vi.stubEnv("CLERK_SECRET_KEY", "sk_live_example");
-
-		expect(createClerkMiddlewareOptions()).toMatchObject({
-			frontendApiProxy: {
-				enabled: true,
-				path: "/__clerk",
-			},
-		});
-	});
-
-	it.each([
-		"/__clerk/npm/@clerk/clerk-js@6/dist/clerk.browser.js",
-		"/__clerk/npm/@clerk/ui@1/dist/ui.browser.js",
-	])("always routes Clerk frontend proxy middleware for %s", (pathname) => {
-		expect(needsClerkMiddleware(pathname)).toEqual(true);
 	});
 
 	it.each([
@@ -136,11 +108,7 @@ describe("proxy security headers", () => {
 		expect(needsWorkspaceSession(pathname)).toEqual(true);
 	});
 
-	it.each([
-		"/__clerk/npm/@clerk/clerk-js@6/dist/clerk.browser.js",
-		"/login",
-		"/api/workspaces",
-	])("does not treat %s as a workspace session path", (pathname) => {
+	it.each(["/login", "/api/workspaces"])("does not treat %s as a workspace session path", (pathname) => {
 		expect(needsWorkspaceSession(pathname)).toEqual(false);
 	});
 });
