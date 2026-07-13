@@ -145,6 +145,28 @@ describe("resolveWorkspaceDataset", () => {
 		expect(captureAppMessageMock).not.toHaveBeenCalled();
 	});
 
+	it("reports an unavailable data token when the Clerk Supabase template fails", async () => {
+		stubProductionWorkspaceEnv();
+		const error = new Error("JWT template supabase is not configured");
+		authMock.mockResolvedValue({
+			getToken: vi.fn().mockRejectedValue(error),
+			userId: "user-1",
+		});
+
+		const result = await resolveDataset();
+
+		expect(result).toEqual({
+			kind: "service",
+			message: "Workspace data token is unavailable.",
+			requestId: "event-exception-id",
+		});
+		expectWorkspaceExceptionCaptured({
+			error,
+			extra: { userId: "user-1" },
+			failureKind: "data-token-error",
+		});
+	});
+
 	it("captures authenticated data failures", async () => {
 		stubProductionWorkspaceEnv();
 		const error = new Error("Supabase failed");

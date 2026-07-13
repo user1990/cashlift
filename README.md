@@ -208,9 +208,11 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 Production mode:
 
 - requires an authenticated Clerk user
-- requests a Supabase JWT from Clerk
+- requires Clerk's **Supabase** integration to be enabled, which provides the `supabase` JWT template requested by the app
 - loads the user’s company dataset from Supabase
 - fails closed when required environment variables are missing
+
+Before testing a Vercel preview in production mode, configure the same Clerk instance used by the preview under **Configure → Developers → Integrations → Supabase**, then add the signed-in Clerk user to `company_members` in Supabase. Without those two prerequisites, sign-in succeeds but workspace data cannot load.
 
 ---
 
