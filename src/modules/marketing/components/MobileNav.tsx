@@ -28,13 +28,13 @@ export const MobileNav = () => (
 				<div className="grid gap-1 border-t border-shell-border pt-4">
 					<MobileNavLink href="/customers">Customers</MobileNavLink>
 
-					<MobileNavLink href="/login">Login</MobileNavLink>
+					<MobileNavLink href="/login">Log in</MobileNavLink>
 
 					<Link
-						href="/demo"
+						href="/signup"
 						className="mt-2 inline-flex h-10 items-center justify-center rounded-md border border-primary bg-primary px-3 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
 					>
-						Run leak audit
+						Sign up
 					</Link>
 				</div>
 			</div>
