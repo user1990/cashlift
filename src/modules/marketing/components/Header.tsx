@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { DesktopNav } from "./DesktopNav";
 import { HeaderActions } from "./HeaderActions";
 import { Logo } from "./Logo";
@@ -10,9 +9,7 @@ export const Header = () => (
 
 			<DesktopNav />
 
-			<Suspense fallback={<div aria-hidden className="h-9 w-28 sm:w-44 lg:w-36" />}>
-				<HeaderActions />
-			</Suspense>
+			<HeaderActions />
 		</div>
 	</header>
 );

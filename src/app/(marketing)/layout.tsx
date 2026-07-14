@@ -1,5 +1,7 @@
 import { Shell } from "@/modules/marketing/components/Shell";
 
+export const instant = false;
+
 type MarketingRouteLayoutProps = {
 	children: React.ReactNode;
 };
