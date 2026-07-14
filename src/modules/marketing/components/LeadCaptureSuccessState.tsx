@@ -3,7 +3,6 @@
 import { ArrowRight, CheckCircle2, RotateCcw } from "lucide-react";
 import { domAnimation, LazyMotion, useReducedMotion } from "motion/react";
 import * as m from "motion/react-m";
-import { useEffect, useRef } from "react";
 import { Button } from "@/ui/components/Button";
 import { ActionLink } from "./ActionLink";
 
@@ -20,33 +19,22 @@ type LeadCaptureSuccessStateProps = {
 
 export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCaptureSuccessStateProps) => {
 	const reducedMotion = useReducedMotion();
-	const headingRef = useRef<HTMLHeadingElement>(null);
-
-	useEffect(() => {
-		headingRef.current?.focus({ preventScroll: true });
-	}, []);
 
 	return (
 		<LazyMotion features={domAnimation}>
 			<m.div
 				animate="visible"
-				className="flex min-h-72 flex-1 flex-col justify-between rounded-lg border border-signal/40 bg-panel p-4 shadow-panel"
+				className="flex min-h-72 flex-1 flex-col justify-between rounded-lg border-2 border-signal bg-signal/5 p-4 shadow-panel"
 				initial={reducedMotion ? "visible" : "hidden"}
 				transition={{ duration: reducedMotion ? 0 : 0.18, ease: [0.16, 1, 0.3, 1] }}
 				variants={SUCCESS_ANIMATION}
 			>
-				<div>
+				<div aria-atomic="true" aria-live="polite" role="status">
 					<div className="flex size-10 items-center justify-center rounded-full bg-signal text-primary-foreground">
 						<CheckCircle2 aria-hidden className="size-5" />
 					</div>
 
-					<h3
-						className="mt-4 rounded-sm text-l+ font-semibold text-panel-foreground outline-none focus:ring-[3px] focus:ring-primary/20"
-						ref={headingRef}
-						tabIndex={-1}
-					>
-						{title}
-					</h3>
+					<h3 className="mt-4 text-l+ font-semibold text-panel-foreground">{title}</h3>
 
 					<p className="mt-2 text-m leading-6 text-panel-foreground">{description}</p>
 				</div>

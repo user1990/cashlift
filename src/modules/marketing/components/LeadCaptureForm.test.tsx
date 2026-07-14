@@ -24,7 +24,9 @@ describe("LeadCaptureForm", () => {
 		expect(screen.queryByRole("button", { name: "Book demo" })).not.toBeInTheDocument();
 		const successHeading = screen.getByRole("heading", { name: "Demo request received" });
 
-		expect(successHeading).toHaveFocus();
+		expect(screen.getByRole("status")).toContainElement(successHeading);
+		expect(successHeading).not.toHaveAttribute("tabindex");
+		expect(document.body).toHaveFocus();
 		expect(
 			screen.getByText("We'll follow up with the audit walkthrough. You can explore the sample workspace now."),
 		).toBeInTheDocument();
