@@ -4,8 +4,10 @@ test("keeps the static tour public and production workspace routes protected", a
 	await page.goto("/demo/workspace");
 	await expect(page.getByText("Read-only demo").first()).toBeVisible();
 
-	await page.goto("/dashboard");
-	await expect(page).toHaveURL(/\/login(?:\?|$)/);
+	const dashboardResponse = await request.get("/dashboard", { maxRedirects: 0 });
+
+	expect(dashboardResponse.status()).toBe(307);
+	expect(dashboardResponse.headers().location).toContain("/login");
 
 	const apiResponse = await request.get("/api/workspace/dataset", {
 		headers: { Accept: "application/json" },
