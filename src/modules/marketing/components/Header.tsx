@@ -10,7 +10,7 @@ export const Header = () => (
 
 			<DesktopNav />
 
-			<Suspense fallback={null}>
+			<Suspense fallback={<div aria-hidden className="h-9 w-28 sm:w-44 lg:w-36" />}>
 				<HeaderActions />
 			</Suspense>
 		</div>
