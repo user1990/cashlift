@@ -24,7 +24,7 @@ export const HeaderActions = async () => {
 						href="/login"
 						prefetch={false}
 						target="_top"
-						className="hidden h-9 items-center rounded-md px-3 text-m font-medium text-shell-muted transition-colors duration-150 hover:text-primary sm:inline-flex"
+						className="inline-flex h-9 items-center rounded-md px-3 text-m font-medium text-shell-muted transition-colors duration-150 hover:text-primary"
 					>
 						Log in
 					</Link>
