@@ -54,7 +54,7 @@ Incorrect shapes include `jest.mock("./useAuthSession")`, `useAuthStore.setState
 - Prefer existing handlers before writing inline `http.get()`/`http.post()` mocks.
 - Override cases with `server.use(createHandler(resolve))`.
 - For error cases, pass a resolver returning `HttpResponse.json(..., { status })`.
-- Use `ENV.authApi.baseUrl` for auth endpoints and `ENV.api.baseUrl` for main API endpoints.
+- Use relative paths for same-origin app routes. For external APIs, use the existing environment-backed base URL instead of hardcoding an origin.
 - Extract `server.use()` calls into `mock[Feature][Scenario]()` helpers below the describe block.
 
 ## Selectors

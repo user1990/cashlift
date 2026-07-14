@@ -66,6 +66,7 @@
 		"fallow": "^2.104.0",
 		"jsdom": "^29.1.1",
 		"lefthook": "^2.1.9",
+		"msw": "^2.14.6",
 		"storybook": "^10.4.6",
 		"tailwindcss": "^4.3.2",
 		"turbopack-inline-svg-loader": "^1.0.3",
