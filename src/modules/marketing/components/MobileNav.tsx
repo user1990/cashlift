@@ -1,4 +1,4 @@
-import { ChevronDown, MenuIcon, X } from "lucide-react";
+import { MenuIcon, X } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { NavGroup } from "./marketingHeaderNavigation";
@@ -30,12 +30,10 @@ export const MobileNav = () => (
 );
 
 const MobileNavGroup = ({ group }: { group: NavGroup }) => (
-	<details className="group/nav-section" open>
-		<summary className="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-md px-3 text-s+ uppercase tracking-normal text-primary outline-none transition-colors duration-150 hover:bg-panel/10 focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
+	<section aria-labelledby={`mobile-nav-${group.label.toLowerCase()}`}>
+		<h2 className="px-3 text-s+ uppercase tracking-normal text-primary" id={`mobile-nav-${group.label.toLowerCase()}`}>
 			{group.label}
-
-			<ChevronDown aria-hidden className="size-4 transition-transform duration-150 group-open/nav-section:rotate-180" />
-		</summary>
+		</h2>
 
 		<div className="mt-2 grid gap-1 pl-3">
 			{group.items.map(({ href, label }) => (
@@ -44,7 +42,7 @@ const MobileNavGroup = ({ group }: { group: NavGroup }) => (
 				</MobileNavLink>
 			))}
 		</div>
-	</details>
+	</section>
 );
 
 const MobileNavLink = ({ children, href }: { children: ReactNode; href: string }) => (
