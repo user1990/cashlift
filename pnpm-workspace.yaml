@@ -39,6 +39,7 @@ allowBuilds:
   esbuild: true
   fallow: true
   lefthook: true
+  msw: false
   sharp: false
 ignoredBuiltDependencies:
   - sharp

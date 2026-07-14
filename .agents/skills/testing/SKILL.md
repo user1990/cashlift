@@ -40,7 +40,7 @@ Use this skill for test changes. Read `.agents/docs/testing.md` only when you ne
 - Handler factories follow `create[Action]Handler(resolve?)` and default success handlers belong in `DEFAULT_[MODULE]_API_HANDLERS`.
 - In tests, override with `server.use(createHandler(resolve))`.
 - Extract `server.use()` setups into descriptive `mock[Feature][Scenario]()` helpers below the test suite.
-- For auth endpoints use `ENV.authApi.baseUrl`; for main API use `ENV.api.baseUrl`.
+- Use relative paths for same-origin app routes. For external APIs, use the existing environment-backed base URL instead of hardcoding an origin.
 
 ## Queries And Interactions
 

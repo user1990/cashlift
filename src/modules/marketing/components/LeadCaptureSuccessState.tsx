@@ -24,13 +24,12 @@ export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCap
 		<LazyMotion features={domAnimation}>
 			<m.div
 				animate="visible"
-				aria-live="polite"
-				className="flex min-h-72 flex-1 flex-col justify-between rounded-lg border border-signal/40 bg-panel p-4 shadow-panel"
+				className="flex min-h-72 flex-1 flex-col justify-between rounded-lg border-2 border-signal bg-signal/5 p-4 shadow-panel"
 				initial={reducedMotion ? "visible" : "hidden"}
 				transition={{ duration: reducedMotion ? 0 : 0.18, ease: [0.16, 1, 0.3, 1] }}
 				variants={SUCCESS_ANIMATION}
 			>
-				<div>
+				<div aria-atomic="true" aria-live="polite" role="status">
 					<div className="flex size-10 items-center justify-center rounded-full bg-signal text-primary-foreground">
 						<CheckCircle2 aria-hidden className="size-5" />
 					</div>

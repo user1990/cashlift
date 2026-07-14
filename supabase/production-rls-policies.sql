@@ -9,6 +9,21 @@ as $$
 	where clerk_user_id = auth.jwt() ->> 'sub'
 $$;
 
+create or replace function current_user_company_roles()
+returns table(company_id text, role text)
+language sql
+stable
+security definer
+set search_path = public
+as $$
+	select company_members.company_id, company_members.role
+	from company_members
+	where company_members.clerk_user_id = auth.jwt() ->> 'sub'
+$$;
+
+revoke all on function current_user_company_roles() from public;
+grant execute on function current_user_company_roles() to authenticated;
+
 drop policy if exists "Members can read own company" on companies;
 create policy "Members can read own company"
 	on companies
@@ -81,11 +96,19 @@ create policy "Members can read team budgets"
 	using (company_id in (select current_user_company_ids()));
 
 drop policy if exists "Members can read cash actions" on cash_actions;
-create policy "Members can read cash actions"
+drop policy if exists "Members can read visible cash actions" on cash_actions;
+create policy "Members can read visible cash actions"
 	on cash_actions
 	for select
 	to authenticated
-	using (company_id in (select current_user_company_ids()));
+	using (
+		exists (
+			select 1
+			from current_user_company_roles() as membership
+			where membership.company_id = cash_actions.company_id
+				and membership.role = any(cash_actions.visible_to)
+		)
+	);
 
 drop policy if exists "Members can read forecast points" on forecast_points;
 create policy "Members can read forecast points"
