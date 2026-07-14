@@ -5,14 +5,23 @@ import { Overview } from "@/modules/dashboard/components/Overview";
 import { useWorkspaceDatasetQuery } from "@/modules/workspace/query";
 import { reduceDatasetForDateRange } from "@/modules/workspace/read-models";
 import type { FinancialDataset, WorkspaceDatasetDateRange } from "@/modules/workspace/types";
-import type { WorkspacePageProps } from "./types";
+import type { WorkspaceExperience, WorkspacePageProps } from "./types";
 import { WorkspaceSectionPage } from "./WorkspaceSectionPage";
 
 type WorkspacePageContentProps = WorkspacePageProps & {
 	dataset: FinancialDataset;
+	experience?: WorkspaceExperience;
 };
 
-export const WorkspacePageContent = ({ dataset, section }: WorkspacePageContentProps) => {
+export const WorkspacePageContent = ({ dataset, experience = "production", section }: WorkspacePageContentProps) => {
+	if (experience === "public-demo") {
+		return <PublicDemoWorkspacePageContent dataset={dataset} experience={experience} section={section} />;
+	}
+
+	return <AuthenticatedWorkspacePageContent dataset={dataset} experience={experience} section={section} />;
+};
+
+const AuthenticatedWorkspacePageContent = ({ dataset, experience, section }: WorkspacePageContentProps) => {
 	const browserHydrated = useSyncExternalStore(
 		subscribeToBrowserHydration,
 		getBrowserHydrationSnapshot,
@@ -20,13 +29,31 @@ export const WorkspacePageContent = ({ dataset, section }: WorkspacePageContentP
 	);
 
 	if (!browserHydrated) {
-		return <WorkspacePageView dataset={dataset} section={section} />;
+		return <WorkspacePageView dataset={dataset} experience={experience} section={section} />;
 	}
 
-	return <WorkspacePageQueryContent dataset={dataset} section={section} />;
+	return <WorkspacePageQueryContent dataset={dataset} experience={experience} section={section} />;
 };
 
-const WorkspacePageQueryContent = ({ dataset, section }: WorkspacePageContentProps) => {
+const PublicDemoWorkspacePageContent = ({ dataset, experience, section }: WorkspacePageContentProps) => {
+	const [overviewDateRange, setOverviewDateRange] = useState<WorkspaceDatasetDateRange | undefined>(() =>
+		getForecastDateRange(dataset),
+	);
+	const dateRange = section === "overview" ? overviewDateRange : undefined;
+	const visibleDataset = section === "overview" ? reduceDatasetForDateRange(dataset, dateRange) : dataset;
+
+	return (
+		<WorkspacePageView
+			dataset={visibleDataset}
+			dateRange={dateRange}
+			experience={experience}
+			onDateRangeChange={setOverviewDateRange}
+			section={section}
+		/>
+	);
+};
+
+const WorkspacePageQueryContent = ({ dataset, experience, section }: WorkspacePageContentProps) => {
 	const [overviewDateRange, setOverviewDateRange] = useState<WorkspaceDatasetDateRange | undefined>(() =>
 		getForecastDateRange(dataset),
 	);
@@ -39,6 +66,7 @@ const WorkspacePageQueryContent = ({ dataset, section }: WorkspacePageContentPro
 		<WorkspacePageView
 			dataset={visibleDataset}
 			dateRange={dateRange}
+			experience={experience}
 			onDateRangeChange={setOverviewDateRange}
 			section={section}
 		/>
@@ -50,13 +78,21 @@ type WorkspacePageViewProps = WorkspacePageContentProps & {
 	onDateRangeChange?: (dateRange: WorkspaceDatasetDateRange) => void;
 };
 
-const WorkspacePageView = ({ dataset, dateRange, onDateRangeChange, section }: WorkspacePageViewProps) => {
+const WorkspacePageView = ({ dataset, dateRange, experience, onDateRangeChange, section }: WorkspacePageViewProps) => {
 	const overview = section === "overview";
+	const publicDemo = experience === "public-demo";
+	const basePath = publicDemo ? "/demo/workspace" : "/dashboard";
 
 	return overview ? (
-		<Overview dataset={dataset} dateRange={dateRange} onDateRangeChange={onDateRangeChange} />
+		<Overview
+			basePath={basePath}
+			dataset={dataset}
+			dateRange={dateRange}
+			onDateRangeChange={onDateRangeChange}
+			readOnly={publicDemo}
+		/>
 	) : (
-		<WorkspaceSectionPage dataset={dataset} section={section} />
+		<WorkspaceSectionPage dataset={dataset} readOnly={publicDemo} section={section} />
 	);
 };
 

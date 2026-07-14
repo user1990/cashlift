@@ -16,4 +16,4 @@ export type WorkspaceNavItem = {
 	section: WorkspaceSection;
 };
 
-export type WorkspaceMode = CashLiftAppMode;
+export type WorkspaceExperience = CashLiftAppMode | "public-demo";

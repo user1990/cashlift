@@ -2,6 +2,7 @@
 
 import { type QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Check, X } from "lucide-react";
+import type { ReactNode } from "react";
 import { toast } from "sonner";
 import type { MoneyCents } from "@/modules/money/types";
 import { Badge } from "@/ui/components/Badge";
@@ -12,6 +13,7 @@ import { RequestItem } from "./RequestItem";
 
 type ApprovalQueueProps = {
 	datasetQueryKey: QueryKey;
+	readOnly?: boolean;
 	requests: ApprovalQueueRequest[];
 };
 
@@ -29,10 +31,15 @@ type ApprovalQueueMutationContext = {
 
 type SpendRequestStatusUpdate = Pick<SpendRequest, "id" | "status">;
 
-export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps) => {
-	const queryClient = useQueryClient();
-	const pendingRequests = requests.filter((request) => request.status === "pending");
+export const ApprovalQueue = ({ datasetQueryKey, readOnly = false, requests }: ApprovalQueueProps) =>
+	readOnly ? (
+		<ApprovalRequestList requests={requests} />
+	) : (
+		<InteractiveApprovalQueue datasetQueryKey={datasetQueryKey} requests={requests} />
+	);
 
+const InteractiveApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps) => {
+	const queryClient = useQueryClient();
 	const decisionMutation = useMutation<SpendRequest, Error, SpendRequestDecisionRequest, ApprovalQueueMutationContext>({
 		mutationKey: datasetQueryKey,
 		mutationFn: decideSpendRequest,
@@ -68,63 +75,77 @@ export const ApprovalQueue = ({ datasetQueryKey, requests }: ApprovalQueueProps)
 	const pendingDecision = decisionMutation.variables;
 
 	return (
-		<>
-			{!!pendingRequests.length ? (
-				<ul className="space-y-3">
-					{pendingRequests.map(
-						({ amountCents, cashAfterApprovalCents, id, reason, requester, status, team, vendor }) => (
-							<RequestItem
-								key={id}
-								actions={
-									<div className="mt-3 flex flex-wrap gap-2">
-										<Button
-											aria-label={`Approve ${vendor}`}
-											disabled={pendingDecision?.id === id}
-											onPress={() => decisionMutation.mutate({ id, status: "approved" })}
-											size="small"
-											variant="success"
-										>
-											<Check aria-hidden className="size-4" />
-											{pendingDecision?.id === id && pendingDecision.status === "approved" ? "Approving" : "Approve"}
-										</Button>
+		<ApprovalRequestList
+			requests={requests}
+			renderActions={({ id, vendor }) => (
+				<div className="mt-3 flex flex-wrap gap-2">
+					<Button
+						aria-label={`Approve ${vendor}`}
+						disabled={pendingDecision?.id === id}
+						onPress={() => decisionMutation.mutate({ id, status: "approved" })}
+						size="small"
+						variant="success"
+					>
+						<Check aria-hidden className="size-4" />
+						{pendingDecision?.id === id && pendingDecision.status === "approved" ? "Approving" : "Approve"}
+					</Button>
 
-										<Button
-											aria-label={`Reject ${vendor}`}
-											disabled={pendingDecision?.id === id}
-											onPress={() => decisionMutation.mutate({ id, status: "rejected" })}
-											size="small"
-											variant="secondary"
-										>
-											<X aria-hidden className="size-4" />
-											{pendingDecision?.id === id && pendingDecision.status === "rejected" ? "Rejecting" : "Reject"}
-										</Button>
-									</div>
-								}
-								amountCents={amountCents}
-								cashAfterApprovalCents={cashAfterApprovalCents}
-								meta={
-									<span className="flex flex-wrap items-center gap-1.5">
-										<Badge variant={status === "approved" ? "success" : status === "rejected" ? "danger" : "warning"}>
-											{status}
-										</Badge>
-
-										<span>{requester}</span>
-
-										<span>{team}</span>
-									</span>
-								}
-								reason={reason}
-								vendor={vendor}
-							/>
-						),
-					)}
-				</ul>
-			) : (
-				<p className="rounded-lg border border-border bg-panel-muted p-3 text-m text-muted-foreground">
-					No pending spend requests.
-				</p>
+					<Button
+						aria-label={`Reject ${vendor}`}
+						disabled={pendingDecision?.id === id}
+						onPress={() => decisionMutation.mutate({ id, status: "rejected" })}
+						size="small"
+						variant="secondary"
+					>
+						<X aria-hidden className="size-4" />
+						{pendingDecision?.id === id && pendingDecision.status === "rejected" ? "Rejecting" : "Reject"}
+					</Button>
+				</div>
 			)}
-		</>
+		/>
+	);
+};
+
+type ApprovalRequestListProps = {
+	requests: ApprovalQueueRequest[];
+	renderActions?: (request: ApprovalQueueRequest) => ReactNode;
+};
+
+const ApprovalRequestList = ({ renderActions, requests }: ApprovalRequestListProps) => {
+	const pendingRequests = requests.filter((request) => request.status === "pending");
+
+	return pendingRequests.length ? (
+		<ul className="space-y-3">
+			{pendingRequests.map((request) => {
+				const { amountCents, cashAfterApprovalCents, id, reason, requester, status, team, vendor } = request;
+
+				return (
+					<RequestItem
+						key={id}
+						actions={renderActions?.(request)}
+						amountCents={amountCents}
+						cashAfterApprovalCents={cashAfterApprovalCents}
+						meta={
+							<span className="flex flex-wrap items-center gap-1.5">
+								<Badge variant={status === "approved" ? "success" : status === "rejected" ? "danger" : "warning"}>
+									{status}
+								</Badge>
+
+								<span>{requester}</span>
+
+								<span>{team}</span>
+							</span>
+						}
+						reason={reason}
+						vendor={vendor}
+					/>
+				);
+			})}
+		</ul>
+	) : (
+		<p className="rounded-lg border border-border bg-panel-muted p-3 text-m text-muted-foreground">
+			No pending spend requests.
+		</p>
 	);
 };
 

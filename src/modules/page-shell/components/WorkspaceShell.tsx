@@ -3,22 +3,23 @@
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { MainContent } from "./MainContent";
-import { WORKSPACE_NAV_ITEMS } from "./navigation";
-import type { WorkspaceMode, WorkspaceSection } from "./types";
+import { getWorkspaceNavItems } from "./navigation";
+import type { WorkspaceExperience, WorkspaceSection } from "./types";
 import { WorkspaceSidebar } from "./WorkspaceSidebar";
 
 type WorkspaceShellProps = {
 	children: ReactNode;
-	mode: WorkspaceMode;
+	experience: WorkspaceExperience;
 };
 
-export const WorkspaceShell = ({ children, mode }: WorkspaceShellProps) => {
-	const section = useActiveWorkspaceSection();
+export const WorkspaceShell = ({ children, experience }: WorkspaceShellProps) => {
+	const basePath = experience === "public-demo" ? "/demo/workspace" : "/dashboard";
+	const section = useActiveWorkspaceSection(basePath);
 
 	return (
 		<MainContent variant="workspace">
 			<div className="mx-auto grid w-full max-w-[1600px] gap-6 p-4 lg:grid-cols-[236px_1fr]">
-				<WorkspaceSidebar mode={mode} section={section} />
+				<WorkspaceSidebar basePath={basePath} experience={experience} section={section} />
 
 				<section className="min-w-0 space-y-5">{children}</section>
 			</div>
@@ -26,10 +27,10 @@ export const WorkspaceShell = ({ children, mode }: WorkspaceShellProps) => {
 	);
 };
 
-function useActiveWorkspaceSection(): WorkspaceSection {
+function useActiveWorkspaceSection(basePath: string): WorkspaceSection {
 	const pathname = usePathname();
-	const activeItem = WORKSPACE_NAV_ITEMS.find(
-		({ href }) => pathname === href || (href !== "/dashboard" && pathname.startsWith(`${href}/`)),
+	const activeItem = getWorkspaceNavItems(basePath).find(
+		({ href }) => pathname === href || (href !== basePath && pathname.startsWith(`${href}/`)),
 	);
 
 	return activeItem?.section ?? "overview";

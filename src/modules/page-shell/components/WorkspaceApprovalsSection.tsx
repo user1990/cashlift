@@ -5,9 +5,10 @@ import { Panel, PanelHeader } from "@/ui/components/Panel";
 
 type WorkspaceApprovalsSectionProps = {
 	dataset: FinancialDataset;
+	readOnly?: boolean;
 };
 
-export const WorkspaceApprovalsSection = ({ dataset }: WorkspaceApprovalsSectionProps) => {
+export const WorkspaceApprovalsSection = ({ dataset, readOnly }: WorkspaceApprovalsSectionProps) => {
 	const pendingRequests = dataset.spendRequests.filter((request) => request.status === "pending");
 
 	return (
@@ -15,7 +16,11 @@ export const WorkspaceApprovalsSection = ({ dataset }: WorkspaceApprovalsSection
 			<Panel>
 				<PanelHeader label="Queue" title={`${pendingRequests.length} requests need review`} />
 
-				<ApprovalQueue datasetQueryKey={workspaceDatasetQueryKeys.all} requests={dataset.spendRequests} />
+				<ApprovalQueue
+					datasetQueryKey={workspaceDatasetQueryKeys.all}
+					readOnly={readOnly}
+					requests={dataset.spendRequests}
+				/>
 			</Panel>
 
 			<Panel>

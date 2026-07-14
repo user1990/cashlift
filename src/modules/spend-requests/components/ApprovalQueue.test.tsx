@@ -11,6 +11,20 @@ import { createDecideSpendRequestHandler } from "../fixtures";
 import { ApprovalQueue } from "./ApprovalQueue";
 
 describe("ApprovalQueue", () => {
+	it("shows request context without mutation controls in read-only mode", () => {
+		render(
+			<ApprovalQueue
+				datasetQueryKey={workspaceDatasetQueryKeys.all}
+				readOnly
+				requests={financialDatasetFixture.spendRequests}
+			/>,
+		);
+
+		expect(screen.getByText("BrandForge")).toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: /approve/i })).not.toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: /reject/i })).not.toBeInTheDocument();
+	});
+
 	it("submits an approved request decision", async () => {
 		const user = userEvent.setup();
 		const { resolveDecision } = mockSpendRequestDecisionPending();

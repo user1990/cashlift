@@ -3,18 +3,27 @@
 import { useState } from "react";
 import type { CompanyRole, FinancialDataset, WorkspaceDatasetDateRange } from "@/modules/workspace/types";
 import { buildDashboardViewModel } from "../view-model";
+import { ActionInbox } from "./ActionInbox";
 import { ChartsSection } from "./ChartsSection";
 import { MetricsSection } from "./MetricsSection";
 import { OverviewHeader } from "./OverviewHeader";
 import { QueuesSection } from "./QueuesSection";
 
 type OverviewProps = {
+	basePath?: string;
 	dataset: FinancialDataset;
 	dateRange?: WorkspaceDatasetDateRange;
 	onDateRangeChange?: (dateRange: WorkspaceDatasetDateRange) => void;
+	readOnly?: boolean;
 };
 
-export const Overview = ({ dataset, dateRange, onDateRangeChange }: OverviewProps) => {
+export const Overview = ({
+	basePath = "/dashboard",
+	dataset,
+	dateRange,
+	onDateRangeChange,
+	readOnly,
+}: OverviewProps) => {
 	const [role] = useState<CompanyRole>(() => dataset.profile.defaultRole);
 	const dashboard = buildDashboardViewModel({ dataset, date: getDashboardDate(dateRange, dataset), role });
 
@@ -22,9 +31,11 @@ export const Overview = ({ dataset, dateRange, onDateRangeChange }: OverviewProp
 		<div className="space-y-5">
 			<OverviewHeader dashboard={dashboard} dateRange={dateRange} onDateRangeChange={onDateRangeChange} />
 
+			<ActionInbox actions={dashboard.actionInbox} basePath={basePath} />
+
 			<ChartsSection dashboard={dashboard} />
 
-			<QueuesSection dashboard={dashboard} />
+			<QueuesSection basePath={basePath} dashboard={dashboard} readOnly={readOnly} />
 
 			<MetricsSection dashboard={dashboard} />
 		</div>
