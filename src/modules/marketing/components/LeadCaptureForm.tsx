@@ -17,6 +17,7 @@ type LeadCaptureFormProps = {
 
 export const LeadCaptureForm = ({ buttonLabel, successDescription, successTitle }: LeadCaptureFormProps) => {
 	const [submitted, setSubmitted] = useState(false);
+	const [nameAutoFocus, setNameAutoFocus] = useState(false);
 	const form = useForm<LeadCaptureFormValues>({
 		defaultValues: {
 			company: "",
@@ -34,6 +35,7 @@ export const LeadCaptureForm = ({ buttonLabel, successDescription, successTitle 
 	};
 
 	const resetForm = () => {
+		setNameAutoFocus(true);
 		setSubmitted(false);
 		reset();
 	};
@@ -44,7 +46,14 @@ export const LeadCaptureForm = ({ buttonLabel, successDescription, successTitle 
 
 	return (
 		<form className="flex flex-1 flex-col gap-3" onSubmit={handleSubmit(submitForm)}>
-			<ControlledTextField autoComplete="name" control={control} label="Name" name="name" placeholder="Maya Chen…" />
+			<ControlledTextField
+				autoComplete="name"
+				autoFocus={nameAutoFocus}
+				control={control}
+				label="Name"
+				name="name"
+				placeholder="Maya Chen…"
+			/>
 
 			<ControlledEmailAutocompleteField
 				control={control}
