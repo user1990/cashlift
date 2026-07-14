@@ -30,7 +30,6 @@ export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCap
 		<LazyMotion features={domAnimation}>
 			<m.div
 				animate="visible"
-				aria-live="polite"
 				className="flex min-h-72 flex-1 flex-col justify-between rounded-lg border border-signal/40 bg-panel p-4 shadow-panel"
 				initial={reducedMotion ? "visible" : "hidden"}
 				transition={{ duration: reducedMotion ? 0 : 0.18, ease: [0.16, 1, 0.3, 1] }}
@@ -42,7 +41,7 @@ export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCap
 					</div>
 
 					<h3
-						className="mt-4 rounded-sm text-l+ font-semibold text-panel-foreground outline-none focus-visible:ring-[3px] focus-visible:ring-primary/20"
+						className="mt-4 rounded-sm text-l+ font-semibold text-panel-foreground outline-none focus:ring-[3px] focus:ring-primary/20"
 						ref={headingRef}
 						tabIndex={-1}
 					>
