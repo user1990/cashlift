@@ -34,7 +34,6 @@ export const useWorkspaceDatasetQuery = (
 ) =>
 	useQuery({
 		initialData: initialDataset,
-		initialDataUpdatedAt: 0,
 		queryFn: () => fetchWorkspaceDataset(scope, dateRange),
 		queryKey: workspaceDatasetQueryKeys.scope(scope, dateRange),
 	});
