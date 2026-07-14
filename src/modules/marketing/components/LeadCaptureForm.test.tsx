@@ -22,7 +22,9 @@ describe("LeadCaptureForm", () => {
 
 		expect(screen.queryByRole("textbox", { name: "Name" })).not.toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: "Book demo" })).not.toBeInTheDocument();
-		expect(screen.getByRole("heading", { name: "Demo request received" })).toBeInTheDocument();
+		const successHeading = screen.getByRole("heading", { name: "Demo request received" });
+
+		expect(successHeading).toHaveFocus();
 		expect(
 			screen.getByText("We'll follow up with the audit walkthrough. You can explore the sample workspace now."),
 		).toBeInTheDocument();
@@ -31,7 +33,10 @@ describe("LeadCaptureForm", () => {
 
 		await user.click(screen.getByRole("button", { name: /Send another request/i }));
 
-		expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue("");
+		const nameField = screen.getByRole("textbox", { name: "Name" });
+
+		expect(nameField).toHaveFocus();
+		expect(nameField).toHaveValue("");
 		expect(screen.getByRole("combobox", { name: "Work email" })).toHaveValue("");
 		expect(screen.getByRole("textbox", { name: "Company" })).toHaveValue("");
 		expect(screen.getByRole("button", { name: "Book demo" })).toBeInTheDocument();

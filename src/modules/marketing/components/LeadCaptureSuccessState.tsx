@@ -3,6 +3,7 @@
 import { ArrowRight, CheckCircle2, RotateCcw } from "lucide-react";
 import { domAnimation, LazyMotion, useReducedMotion } from "motion/react";
 import * as m from "motion/react-m";
+import { useEffect, useRef } from "react";
 import { Button } from "@/ui/components/Button";
 import { ActionLink } from "./ActionLink";
 
@@ -19,6 +20,11 @@ type LeadCaptureSuccessStateProps = {
 
 export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCaptureSuccessStateProps) => {
 	const reducedMotion = useReducedMotion();
+	const headingRef = useRef<HTMLHeadingElement>(null);
+
+	useEffect(() => {
+		headingRef.current?.focus({ preventScroll: true });
+	}, []);
 
 	return (
 		<LazyMotion features={domAnimation}>
@@ -35,7 +41,13 @@ export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCap
 						<CheckCircle2 aria-hidden className="size-5" />
 					</div>
 
-					<h3 className="mt-4 text-l+ font-semibold text-panel-foreground">{title}</h3>
+					<h3
+						className="mt-4 rounded-sm text-l+ font-semibold text-panel-foreground outline-none focus-visible:ring-[3px] focus-visible:ring-primary/20"
+						ref={headingRef}
+						tabIndex={-1}
+					>
+						{title}
+					</h3>
 
 					<p className="mt-2 text-m leading-6 text-panel-foreground">{description}</p>
 				</div>
