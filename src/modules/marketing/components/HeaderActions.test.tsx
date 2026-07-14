@@ -7,7 +7,7 @@ describe("HeaderActions", () => {
 		render(await HeaderActions());
 
 		const logInLinks = screen.getAllByRole("link", { name: "Log in" });
-		expect(logInLinks).toHaveLength(2);
+		expect(logInLinks).toHaveLength(1);
 
 		for (const link of logInLinks) {
 			expect(link).toHaveAttribute("href", "/login");
@@ -15,7 +15,7 @@ describe("HeaderActions", () => {
 		}
 
 		const signUpLinks = screen.getAllByRole("link", { name: "Sign up" });
-		expect(signUpLinks).toHaveLength(2);
+		expect(signUpLinks).toHaveLength(1);
 
 		for (const link of signUpLinks) {
 			expect(link).toHaveAttribute("href", "/signup");

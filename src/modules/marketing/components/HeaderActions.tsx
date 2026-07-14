@@ -40,7 +40,7 @@ export const HeaderActions = async () => {
 				</>
 			)}
 
-			<MobileNav signedIn={signedIn} />
+			<MobileNav />
 		</div>
 	);
 };

@@ -4,11 +4,7 @@ import type { ReactNode } from "react";
 import type { NavGroup } from "./marketingHeaderNavigation";
 import { MARKETING_NAV_GROUPS } from "./marketingHeaderNavigation";
 
-type MobileNavProps = {
-	signedIn: boolean;
-};
-
-export const MobileNav = ({ signedIn }: MobileNavProps) => (
+export const MobileNav = () => (
 	<details className="group/nav lg:hidden">
 		<summary
 			aria-label="Toggle navigation"
@@ -28,48 +24,13 @@ export const MobileNav = ({ signedIn }: MobileNavProps) => (
 				{MARKETING_NAV_GROUPS.map((group) => (
 					<MobileNavGroup key={group.label} group={group} />
 				))}
-
-				<div className="grid gap-1 border-t border-shell-border pt-4">
-					<MobileNavLink href="/customers">Customers</MobileNavLink>
-
-					{signedIn ? (
-						<Link
-							href="/dashboard"
-							prefetch={false}
-							target="_top"
-							className="mt-2 inline-flex h-10 items-center justify-center rounded-md border border-primary bg-primary px-3 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
-						>
-							Open workspace
-						</Link>
-					) : (
-						<>
-							<Link
-								href="/login"
-								prefetch={false}
-								target="_top"
-								className="rounded-md px-3 py-2 text-m font-medium text-shell-muted transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground"
-							>
-								Log in
-							</Link>
-
-							<Link
-								href="/signup"
-								prefetch={false}
-								target="_top"
-								className="mt-2 inline-flex h-10 items-center justify-center rounded-md border border-primary bg-primary px-3 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
-							>
-								Sign up
-							</Link>
-						</>
-					)}
-				</div>
 			</div>
 		</nav>
 	</details>
 );
 
 const MobileNavGroup = ({ group }: { group: NavGroup }) => (
-	<details className="group/nav-section">
+	<details className="group/nav-section" open>
 		<summary className="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-md px-3 text-s+ uppercase tracking-normal text-primary outline-none transition-colors duration-150 hover:bg-panel/10 focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
 			{group.label}
 
