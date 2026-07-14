@@ -6,6 +6,7 @@ import { MainContent } from "./MainContent";
 import { getWorkspaceNavItems } from "./navigation";
 import type { WorkspaceExperience, WorkspaceSection } from "./types";
 import { WorkspaceSidebar } from "./WorkspaceSidebar";
+import { getWorkspaceExperienceContract } from "./workspaceExperience";
 
 type WorkspaceShellProps = {
 	children: ReactNode;
@@ -13,13 +14,13 @@ type WorkspaceShellProps = {
 };
 
 export const WorkspaceShell = ({ children, experience }: WorkspaceShellProps) => {
-	const basePath = experience === "public-demo" ? "/demo/workspace" : "/dashboard";
-	const section = useActiveWorkspaceSection(basePath);
+	const workspace = getWorkspaceExperienceContract(experience);
+	const section = useActiveWorkspaceSection(workspace.basePath);
 
 	return (
 		<MainContent variant="workspace">
 			<div className="mx-auto grid w-full max-w-[1600px] gap-6 p-4 lg:grid-cols-[236px_1fr]">
-				<WorkspaceSidebar basePath={basePath} experience={experience} section={section} />
+				<WorkspaceSidebar section={section} workspace={workspace} />
 
 				<section className="min-w-0 space-y-5">{children}</section>
 			</div>

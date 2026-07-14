@@ -1,7 +1,9 @@
 # Homepage decision story performance
 
-Measured against a local production build on 2026-07-14 with Chrome mobile
-Lighthouse and DevTools throttling. Each run used a fresh Lighthouse session.
+Measured on 2026-07-14 with local production builds, Chrome mobile Lighthouse,
+and DevTools throttling. The `origin/main` baseline (`739570e`) and final branch
+used the same browser, audit command, environment, and network-transfer fields.
+Each run used a fresh Lighthouse session.
 
 ## Lighthouse
 
@@ -13,13 +15,15 @@ Lighthouse and DevTools throttling. Each run used a fresh Lighthouse session.
 
 ## Homepage payload comparison
 
-The comparison sums the uncompressed JavaScript referenced by the production
-homepage HTML, the HTML response, and the eager hero visual in each build.
+Lighthouse's network-request records provide the actual transferred script
+bytes. Total transfer is Lighthouse's full page-weight measurement, including
+scripts, styles, fonts, images, and document requests. The final value below is
+the largest of the three final runs.
 
-| Build | JavaScript | HTML | Hero visual | Combined |
-| --- | ---: | ---: | ---: | ---: |
-| Previous homepage | 1,014,639 B | 400,234 B | 5,943 B | 1,420,816 B |
-| Decision story | 939,917 B | 246,541 B | 44,914 B | 1,231,372 B |
+| Build | Initial script transfer | Total transfer |
+| --- | ---: | ---: |
+| `origin/main` | 411,947 B | 514,917 B |
+| Decision story | 256,249 B | 354,291 B |
 
-The decision story is 189,444 B (13.3%) smaller by this comparison. Lighthouse
-reported between 354,269 B and 354,291 B total transferred in the final audits.
+The decision story transfers 155,698 B (37.8%) less initial JavaScript and
+160,626 B (31.2%) less overall than the baseline.

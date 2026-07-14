@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, type Locator, type Page, test } from "@playwright/test";
 
 test.describe("homepage decision story", () => {
 	test("opens the public demo and booking form from truthful calls to action", async ({ page }) => {
@@ -65,6 +65,23 @@ test.describe("homepage decision story", () => {
 
 		await context.close();
 	});
+
+	test("supports keyboard navigation through the header and homepage calls to action", async ({ page }) => {
+		await page.goto("/");
+		await focusWithTab(page, page.getByRole("banner").getByRole("link", { name: "Open live demo" }));
+		await page.keyboard.press("Enter");
+		await expect(page).toHaveURL(/\/demo\/workspace$/);
+
+		await page.goto("/");
+		await focusWithTab(page, page.locator("main").getByRole("link", { name: "Open live demo" }));
+		await page.keyboard.press("Enter");
+		await expect(page).toHaveURL(/\/demo\/workspace$/);
+
+		await page.goto("/");
+		await focusWithTab(page, page.getByRole("link", { name: "Book an audit walkthrough" }));
+		await page.keyboard.press("Enter");
+		await expect(page).toHaveURL(/\/demo$/);
+	});
 });
 
 test.describe("public read-only workspace", () => {
@@ -91,3 +108,15 @@ test.describe("public read-only workspace", () => {
 		await expect(page.getByRole("button", { name: /Reject/ })).toHaveCount(0);
 	});
 });
+
+async function focusWithTab(page: Page, target: Locator) {
+	for (let attempt = 0; attempt < 50; attempt += 1) {
+		await page.keyboard.press("Tab");
+
+		if (await target.evaluate((element) => element === document.activeElement)) {
+			return;
+		}
+	}
+
+	throw new Error("Keyboard focus did not reach the expected link.");
+}

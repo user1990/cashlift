@@ -1,16 +1,15 @@
 "use client";
 
 import { ProductionAccountMenu } from "./ProductionAccountMenu";
-import type { WorkspaceExperience } from "./types";
 import { AccountMenuShell } from "./WorkspaceAccountMenuShell";
+import type { WorkspaceExperienceContract } from "./workspaceExperience";
 
 type WorkspaceAccountMenuProps = {
-	basePath: string;
-	experience: WorkspaceExperience;
+	workspace: WorkspaceExperienceContract;
 };
 
-export const WorkspaceAccountMenu = ({ basePath, experience }: WorkspaceAccountMenuProps) => {
-	if (experience === "public-demo") {
+export const WorkspaceAccountMenu = ({ workspace }: WorkspaceAccountMenuProps) => {
+	if (workspace.readOnly) {
 		return (
 			<AccountMenuShell
 				avatar="SN"
@@ -24,13 +23,13 @@ export const WorkspaceAccountMenu = ({ basePath, experience }: WorkspaceAccountM
 		);
 	}
 
-	if (experience === "demo") {
+	if (workspace.experience === "demo") {
 		return (
 			<AccountMenuShell
 				avatar="SC"
 				description="Finance Lead"
 				items={[
-					{ href: `${basePath}/settings`, label: "Workspace settings" },
+					{ href: `${workspace.basePath}/settings`, label: "Workspace settings" },
 					{ href: "/login", label: "Log in" },
 				]}
 				name="Samira Chen"

@@ -10,8 +10,8 @@ import { OverviewHeader } from "./OverviewHeader";
 import { QueuesSection } from "./QueuesSection";
 
 type OverviewProps = {
-	basePath?: string;
 	dataset: FinancialDataset;
+	basePath?: string;
 	dateRange?: WorkspaceDatasetDateRange;
 	onDateRangeChange?: (dateRange: WorkspaceDatasetDateRange) => void;
 	readOnly?: boolean;

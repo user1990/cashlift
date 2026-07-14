@@ -8,9 +8,9 @@ import { QueryProvider } from "@/services/query/provider";
 import { Toaster } from "@/ui/components/Toaster";
 
 type WorkspaceProvidersProps = {
+	children: ReactNode;
 	authEnabled?: boolean;
 	authFallback?: ReactNode;
-	children: ReactNode;
 };
 
 export const WorkspaceProviders = ({ authEnabled = true, authFallback, children }: WorkspaceProvidersProps) => {

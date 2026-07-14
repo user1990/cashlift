@@ -11,8 +11,8 @@ import { WorkspaceVendorsSection } from "./WorkspaceVendorsSection";
 
 type WorkspaceSectionPageProps = {
 	dataset: FinancialDataset;
-	readOnly?: boolean;
 	section: Exclude<WorkspaceSection, "overview">;
+	readOnly?: boolean;
 };
 
 export const WorkspaceSectionPage = ({ dataset, readOnly, section }: WorkspaceSectionPageProps) => (

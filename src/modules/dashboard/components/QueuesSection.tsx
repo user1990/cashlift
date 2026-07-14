@@ -11,8 +11,8 @@ import { PanelLink } from "./PanelLink";
 import { QueueRow } from "./QueueRow";
 
 type QueuesSectionProps = {
-	basePath?: string;
 	dashboard: DashboardViewModel;
+	basePath?: string;
 	readOnly?: boolean;
 };
 
