@@ -10,7 +10,9 @@ describe("useWorkspaceDatasetQuery", () => {
 		vi.restoreAllMocks();
 	});
 
-	it("keeps server data fresh on mount and refetches after invalidation", async () => {
+	it("keeps the hydrated range fresh and refetches another range", async () => {
+		const hydratedDateRange = { endDate: "2026-06-17", startDate: "2026-05-06" };
+		const selectedDateRange = { endDate: "2026-05-20", startDate: "2026-05-06" };
 		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
 			new Response(JSON.stringify(financialDatasetFixture), {
 				headers: { "Content-Type": "application/json" },
@@ -28,17 +30,26 @@ describe("useWorkspaceDatasetQuery", () => {
 		const wrapper = ({ children }: { children: ReactNode }) => (
 			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 		);
-
-		const { result } = renderHook(() => useWorkspaceDatasetQuery(financialDatasetFixture, "overview"), { wrapper });
+		const { result, rerender } = renderHook(
+			({ dateRange }: { dateRange: typeof hydratedDateRange }) =>
+				useWorkspaceDatasetQuery(financialDatasetFixture, "overview", dateRange),
+			{ initialProps: { dateRange: hydratedDateRange }, wrapper },
+		);
 
 		expect(result.current.data).toEqual(financialDatasetFixture);
 		expect(result.current.fetchStatus).toBe("idle");
 		expect(fetchMock).not.toHaveBeenCalled();
 
-		await queryClient.invalidateQueries({ queryKey: workspaceDatasetQueryKeys.scope("overview") });
+		await queryClient.invalidateQueries({ queryKey: workspaceDatasetQueryKeys.scope("overview", hydratedDateRange) });
 
 		await waitFor(() => {
 			expect(fetchMock).toHaveBeenCalledOnce();
+		});
+
+		rerender({ dateRange: selectedDateRange });
+
+		await waitFor(() => {
+			expect(fetchMock).toHaveBeenCalledTimes(2);
 		});
 	});
 });
