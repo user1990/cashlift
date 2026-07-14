@@ -29,10 +29,10 @@ describe("GET /api/workspace/dataset", () => {
 		],
 		[
 			503,
-			{ kind: "service" as const, message: "Workspace data token is not configured." },
+			{ kind: "service" as const, message: "Workspace data token is unavailable." },
 			{
 				code: "workspace_service_unavailable",
-				error: "Workspace data token is not configured.",
+				error: "Workspace data token is unavailable.",
 			},
 		],
 		[

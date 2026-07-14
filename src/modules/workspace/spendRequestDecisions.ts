@@ -85,10 +85,10 @@ export const decideSpendRequest = async (
 			return { code: "unauthenticated", message: "Sign in to update spend requests.", status: "error" };
 		}
 
-		const accessToken = await session.getToken({ template: "supabase" });
+		const accessToken = await session.getToken();
 
 		if (!accessToken) {
-			const message = "Workspace data token is not configured.";
+			const message = "Workspace data token is unavailable.";
 			captureSpendRequestMessage(message, "missing-data-token");
 
 			return { code: "service", message, status: "error" };

@@ -208,7 +208,7 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 Production mode:
 
 - requires an authenticated Clerk user
-- requires Clerk's **Supabase** integration to be enabled, which provides the `supabase` JWT template requested by the app
+- requires Clerk's **Supabase** integration and the matching Clerk domain to be configured in Supabase Third-Party Auth
 - loads the user’s company dataset from Supabase
 - fails closed when required environment variables are missing
 

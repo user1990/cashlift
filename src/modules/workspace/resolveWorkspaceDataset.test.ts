@@ -102,8 +102,9 @@ describe("resolveWorkspaceDataset", () => {
 
 	it("passes the requested scope to production data loading", async () => {
 		stubProductionWorkspaceEnv();
+		const getToken = vi.fn().mockResolvedValue("jwt");
 		authMock.mockResolvedValue({
-			getToken: vi.fn().mockResolvedValue("jwt"),
+			getToken,
 			userId: "user-1",
 		});
 		getWorkspaceDatasetMock.mockResolvedValue(demoWorkspaceDataset);
@@ -111,6 +112,7 @@ describe("resolveWorkspaceDataset", () => {
 		const result = await resolveVendorsDataset();
 
 		expect(result).toEqual({ dataset: demoWorkspaceDataset, kind: "success" });
+		expect(getToken).toHaveBeenCalledWith();
 		expect(getWorkspaceDatasetMock).toHaveBeenCalledWith("user-1", "jwt", "vendors");
 	});
 
@@ -145,9 +147,9 @@ describe("resolveWorkspaceDataset", () => {
 		expect(captureAppMessageMock).not.toHaveBeenCalled();
 	});
 
-	it("reports an unavailable data token when the Clerk Supabase template fails", async () => {
+	it("reports an unavailable data token when Clerk token retrieval fails", async () => {
 		stubProductionWorkspaceEnv();
-		const error = new Error("JWT template supabase is not configured");
+		const error = new Error("Clerk session token is unavailable");
 		authMock.mockResolvedValue({
 			getToken: vi.fn().mockRejectedValue(error),
 			userId: "user-1",

@@ -70,7 +70,7 @@ export const resolveWorkspaceDataset = async (
 	let accessToken: string | null;
 
 	try {
-		accessToken = await session.getToken({ template: "supabase" });
+		accessToken = await session.getToken();
 	} catch (error) {
 		const message = "Workspace data token is unavailable.";
 		const requestId = captureWorkspaceDatasetException(error, "data-token-error", { userId: session.userId });
@@ -79,7 +79,7 @@ export const resolveWorkspaceDataset = async (
 	}
 
 	if (!accessToken) {
-		const message = "Workspace data token is not configured.";
+		const message = "Workspace data token is unavailable.";
 		const requestId = captureWorkspaceDatasetMessage(message, "missing-data-token");
 
 		return { kind: "service", message, requestId };
