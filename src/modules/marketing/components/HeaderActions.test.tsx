@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { HeaderActions } from "./HeaderActions";
 
 describe("HeaderActions", () => {
-	it("links signed-out visitors to the authentication routes", async () => {
+	it("keeps login and the public demo available to signed-out visitors", async () => {
 		render(await HeaderActions());
 
 		const logInLinks = screen.getAllByRole("link", { name: "Log in" });
@@ -14,14 +14,7 @@ describe("HeaderActions", () => {
 			expect(link).toHaveAttribute("target", "_top");
 		}
 
-		const signUpLinks = screen.getAllByRole("link", { name: "Sign up" });
-		expect(signUpLinks).toHaveLength(1);
-
-		for (const link of signUpLinks) {
-			expect(link).toHaveAttribute("href", "/signup");
-			expect(link).toHaveAttribute("target", "_top");
-		}
-
-		expect(screen.queryByRole("link", { name: "Run leak audit" })).not.toBeInTheDocument();
+		const demoLink = screen.getByRole("link", { name: "Open live demo" });
+		expect(demoLink).toHaveAttribute("href", "/demo/workspace");
 	});
 });

@@ -134,7 +134,12 @@ describe("proxy security headers", () => {
 		expect(needsWorkspaceSession(pathname)).toEqual(true);
 	});
 
-	it.each(["/login", "/api/workspaces"])("does not treat %s as a workspace session path", (pathname) => {
+	it.each([
+		"/login",
+		"/demo/workspace",
+		"/demo/workspace/approvals",
+		"/api/workspaces",
+	])("does not treat %s as a workspace session path", (pathname) => {
 		expect(needsWorkspaceSession(pathname)).toEqual(false);
 	});
 });

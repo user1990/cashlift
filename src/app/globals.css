@@ -120,150 +120,42 @@ textarea,
 	background: color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
-.hero-ambient {
-	transform: scale(1.03);
-	transform-origin: center;
-}
-
-.cashflow-surface,
-.cashflow-card,
-.cashflow-engine,
-.cashflow-action {
-	opacity: 0;
-}
-
-.cashflow-engine {
-	transform: scale(0.96) translateY(12px);
-}
-
-.cashflow-card,
-.cashflow-surface {
-	transform: translateY(14px);
-}
-
-.cashflow-action {
-	transform: translateX(18px);
-}
-
-.cashflow-visible,
-.cashflow-visible .cashflow-card,
-.cashflow-visible .cashflow-engine,
-.cashflow-visible .cashflow-action {
-	animation: cashflow-enter-y 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.cashflow-visible .cashflow-card:nth-child(1) {
-	animation-delay: 0.05s;
-}
-
-.cashflow-visible .cashflow-card:nth-child(2) {
-	animation-delay: 0.13s;
-}
-
-.cashflow-visible .cashflow-card:nth-child(3) {
-	animation-delay: 0.21s;
-}
-
-.cashflow-visible .cashflow-engine {
-	animation-delay: 0.28s;
-	animation-name: cashflow-engine-enter;
-}
-
-.cashflow-visible .cashflow-action {
-	animation-name: cashflow-enter-x;
-}
-
-.cashflow-visible .cashflow-action:nth-child(1) {
-	animation-delay: 0.45s;
-}
-
-.cashflow-visible .cashflow-action:nth-child(2) {
-	animation-delay: 0.54s;
-}
-
-.cashflow-visible .cashflow-action:nth-child(3) {
-	animation-delay: 0.63s;
-}
-
-.cashflow-route {
-	opacity: 0;
-	stroke-dasharray: 1;
-	stroke-dashoffset: 1;
-}
-
-.cashflow-visible .cashflow-route {
-	animation: cashflow-route-draw 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.cashflow-visible .cashflow-route:nth-child(1) {
-	animation-delay: 0.3s;
-}
-
-.cashflow-visible .cashflow-route:nth-child(2) {
-	animation-delay: 0.4s;
-}
-
-.cashflow-visible .cashflow-route:nth-child(3) {
-	animation-delay: 0.5s;
-}
-
-.cashflow-visible .cashflow-route:nth-child(4) {
-	animation-delay: 0.62s;
-}
-
-.cashflow-visible .cashflow-route:nth-child(5) {
-	animation-delay: 0.72s;
-}
-
-.cashflow-visible .cashflow-route:nth-child(6) {
-	animation-delay: 0.82s;
-}
-
-@keyframes cashflow-enter-y {
-	from {
-		opacity: 0;
-		transform: translateY(14px);
+@media (width >= 64rem) {
+	.home-story[data-enhanced="true"] .home-story-stage {
+		align-self: start;
+		display: block;
+		height: calc(100vh - 8rem);
+		position: sticky;
+		top: 6rem;
 	}
 
-	to {
+	.home-story[data-enhanced="true"] .home-story-media {
+		inset: 50% 0 auto;
+		opacity: 0;
+		pointer-events: none;
+		position: absolute;
+		transform: translateY(calc(-50% + 1rem)) scale(0.985);
+		transition:
+			opacity 240ms ease,
+			transform 240ms ease;
+	}
+
+	.home-story[data-enhanced="true"] .home-story-chapter {
+		opacity: 0.46;
+		transition: opacity 180ms ease;
+	}
+
+	.home-story[data-active-chapter="approve"] [data-story-chapter="approve"],
+	.home-story[data-active-chapter="recover"] [data-story-chapter="recover"],
+	.home-story[data-active-chapter="cut"] [data-story-chapter="cut"] {
 		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-@keyframes cashflow-engine-enter {
-	from {
-		opacity: 0;
-		transform: scale(0.96) translateY(12px);
 	}
 
-	to {
+	.home-story[data-active-chapter="approve"] [data-story-media="approve"],
+	.home-story[data-active-chapter="recover"] [data-story-media="recover"],
+	.home-story[data-active-chapter="cut"] [data-story-media="cut"] {
 		opacity: 1;
-		transform: scale(1) translateY(0);
-	}
-}
-
-@keyframes cashflow-enter-x {
-	from {
-		opacity: 0;
-		transform: translateX(18px);
-	}
-
-	to {
-		opacity: 1;
-		transform: translateX(0);
-	}
-}
-
-@keyframes cashflow-route-draw {
-	from {
-		opacity: 0;
-		stroke-dashoffset: 1;
-	}
-
-	to {
-		opacity: 0.82;
-		stroke-dashoffset: 0;
+		transform: translateY(-50%) scale(1);
 	}
 }
 
@@ -281,18 +173,12 @@ textarea,
 		transition-duration: 0.01ms;
 	}
 
-	.hero-ambient {
-		transform: none;
+	.home-story[data-enhanced="true"] .home-story-media,
+	.home-story[data-enhanced="true"] .home-story-chapter {
+		transition: none;
 	}
 
-	.cashflow-surface,
-	.cashflow-card,
-	.cashflow-engine,
-	.cashflow-action,
-	.cashflow-route {
-		animation: none;
-		opacity: 1;
-		stroke-dashoffset: 0;
-		transform: none;
+	.home-story[data-enhanced="true"] .home-story-media {
+		transform: translateY(-50%);
 	}
 }

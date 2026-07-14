@@ -1,83 +1,47 @@
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { Panel } from "@/ui/components/Panel";
 import { ActionLink } from "./ActionLink";
-import { Hero } from "./Hero";
-
-const CASH_ACTION_PREVIEW_ITEMS = [
-	["Critical", "Chase Northstar invoice", "$18.4k"],
-	["Critical", "Decide on BrandForge renewal", "$6.8k"],
-	["High", "Hold non-essential buys", "$9.4k"],
-] as const;
 
 export const HomeHeroSection = () => (
 	<section className="relative isolate overflow-hidden border-b border-shell-border bg-shell">
-		<Image
+		<div
 			aria-hidden
-			alt=""
-			className="hero-ambient absolute inset-0 object-cover object-center opacity-80"
-			fetchPriority="high"
-			fill
-			loading="eager"
-			sizes="100vw"
-			src="/brand/hero-finance-command.svg"
-			unoptimized
+			className="absolute inset-0 bg-[radial-gradient(circle_at_50%_12%,rgb(2_218_235/0.16),transparent_32%),radial-gradient(circle_at_82%_36%,rgb(220_22_147/0.12),transparent_28%)]"
 		/>
 
-		<div aria-hidden className="absolute inset-0 bg-shell/72" />
+		<div className="relative mx-auto max-w-[1180px] px-4 pb-14 pt-20 sm:px-6 sm:pt-24 lg:px-8 lg:pb-20 lg:pt-28">
+			<header className="mx-auto max-w-4xl text-center">
+				<p className="text-s+ font-semibold uppercase tracking-normal text-primary">Cash action inbox</p>
 
-		<div aria-hidden className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-shell to-transparent" />
+				<h1 className="mt-4 text-5xl+ tracking-normal text-shell-foreground sm:text-7xl+">
+					See what to collect, approve, or cut today.
+				</h1>
 
-		<div className="relative mx-auto grid min-h-[82svh] max-w-[1180px] items-center gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_0.82fr] lg:px-8">
-			<header>
-				<Hero
-					description="CashLift ranks approvals, invoices, vendor leaks, and runway risks in one action queue."
-					label="Cash-aware spend decisions"
-					title="Know which cash move to make today."
-					titleClassName="sm:text-7xl+"
-				/>
+				<p className="mx-auto mt-6 max-w-2xl text-l leading-8 text-shell-muted">
+					CashLift ranks the cash actions that matter now in one daily inbox.
+				</p>
 
-				<div className="mt-8 flex flex-wrap items-center gap-3">
-					<ActionLink href="/demo">
-						Run leak audit
-						<ArrowRight aria-hidden className="size-4" />
-					</ActionLink>
-
-					<ActionLink href="/dashboard" variant="secondary" className="bg-shell-elevated/80">
-						Open demo app
-					</ActionLink>
-				</div>
+				<ActionLink href="/demo/workspace" prefetch={false} className="mt-8">
+					Open live demo
+					<ArrowRight aria-hidden className="size-4" />
+				</ActionLink>
 			</header>
 
-			<div className="self-start">
-				<Panel variant="glass">
-					<div className="mb-4">
-						<p className="mb-1 text-2xs+ uppercase tracking-normal text-primary">Today&apos;s CashLift</p>
+			<div className="relative mt-14 overflow-hidden rounded-xl border border-shell-border bg-shell-elevated shadow-shell sm:mt-16">
+				<div
+					aria-hidden
+					className="absolute inset-x-0 top-0 z-10 h-px bg-linear-to-r from-transparent via-primary to-transparent"
+				/>
 
-						<h2 className="text-l+ text-shell-foreground">Studio Nova action inbox</h2>
-					</div>
-
-					<ul className="space-y-3">
-						{CASH_ACTION_PREVIEW_ITEMS.map(([priority, title, value]) => (
-							<li
-								key={title}
-								className="flex items-center justify-between gap-4 rounded-lg border border-shell-border bg-white/10 p-3"
-							>
-								<div className="flex items-center gap-3">
-									<CheckCircle2 aria-hidden className="size-5 shrink-0 text-signal" />
-
-									<div>
-										<p className="text-m+ text-shell-foreground">{title}</p>
-
-										<p className="text-s text-shell-muted">{priority}</p>
-									</div>
-								</div>
-
-								<span className="font-mono text-m+ text-primary">{value}</span>
-							</li>
-						))}
-					</ul>
-				</Panel>
+				<Image
+					alt="Studio Nova's CashLift inbox ranking collection, approval, and vendor actions"
+					className="h-auto w-full"
+					height={712}
+					priority
+					sizes="(min-width: 1180px) 1120px, calc(100vw - 2rem)"
+					src="/marketing/studio-nova-inbox.webp"
+					width={1265}
+				/>
 			</div>
 		</div>
 	</section>

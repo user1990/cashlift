@@ -3,12 +3,12 @@ import { LeadCaptureForm } from "./LeadCaptureForm";
 
 export const DemoLeadCaptureSection = () => (
 	<Panel className="flex flex-col">
-		<PanelHeader label="Book demo" title="Get the audit walkthrough" />
+		<PanelHeader label="Book walkthrough" title="Choose who we should contact" />
 
 		<LeadCaptureForm
-			buttonLabel="Book demo"
-			successDescription="We'll follow up with the audit walkthrough. You can explore the sample workspace now."
-			successTitle="Demo request received"
+			buttonLabel="Book an audit walkthrough"
+			successDescription="We'll follow up to arrange the audit walkthrough. You can explore the read-only workspace now."
+			successTitle="Walkthrough request received"
 		/>
 	</Panel>
 );
