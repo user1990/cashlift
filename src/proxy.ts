@@ -4,15 +4,25 @@ import { updateSupabaseSession } from "@/services/supabase/proxy";
 
 const CLERK_CONFIGURED = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 const AUTH_PATH_PREFIXES = ["/login", "/signup"] as const;
+const STATIC_MARKETING_PATH_PREFIXES = [
+	"/contact",
+	"/customers",
+	"/demo",
+	"/features",
+	"/pricing",
+	"/privacy",
+	"/terms",
+	"/use-cases",
+] as const;
 const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard", "/api/workspace"] as const;
 const NEXT_IMAGE_FILL_STYLE_HASH = "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='";
 const isDevelopment = () => process.env.NODE_ENV === "development";
 
-export const createContentSecurityPolicy = (nonce: string) =>
+const createSecurityPolicy = (scriptSource: string, styleSource: string) =>
 	[
 		"default-src 'self'",
-		`script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDevelopment() ? " 'unsafe-eval'" : ""}`,
-		`style-src 'self' 'nonce-${nonce}'`,
+		`script-src ${scriptSource}${isDevelopment() ? " 'unsafe-eval'" : ""}`,
+		`style-src ${styleSource}`,
 		"style-src-elem 'self' 'unsafe-inline'",
 		`style-src-attr 'unsafe-hashes' ${NEXT_IMAGE_FILL_STYLE_HASH}`,
 		"img-src 'self' blob: data: https:",
@@ -27,10 +37,32 @@ export const createContentSecurityPolicy = (nonce: string) =>
 		"upgrade-insecure-requests",
 	].join("; ");
 
+export const createContentSecurityPolicy = (nonce: string) =>
+	createSecurityPolicy(`'self' 'nonce-${nonce}' 'strict-dynamic'`, `'self' 'nonce-${nonce}'`);
+
+export const createStaticContentSecurityPolicy = () => createSecurityPolicy("'self' 'unsafe-inline'", "'self'");
+
+const usesStaticContentSecurityPolicy = (request: NextRequest) =>
+	STATIC_MARKETING_PATH_PREFIXES.some((prefix) => {
+		const pathname = request.nextUrl.pathname;
+
+		return pathname === prefix || pathname.startsWith(`${prefix}/`);
+	});
+
 const createSecurityRequestHeaders = (request: NextRequest) => {
+	const headers = new Headers(request.headers);
+
+	if (usesStaticContentSecurityPolicy(request)) {
+		const contentSecurityPolicy = createStaticContentSecurityPolicy();
+
+		headers.delete("x-nonce");
+		headers.set("Content-Security-Policy", contentSecurityPolicy);
+
+		return { contentSecurityPolicy, headers };
+	}
+
 	const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
 	const contentSecurityPolicy = createContentSecurityPolicy(nonce);
-	const headers = new Headers(request.headers);
 
 	headers.set("x-nonce", nonce);
 	headers.set("Content-Security-Policy", contentSecurityPolicy);

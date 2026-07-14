@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { describe, expect, it } from "vitest";
-import proxy, { config, createContentSecurityPolicy } from "./proxy";
+import proxy, { config, createContentSecurityPolicy, createStaticContentSecurityPolicy } from "./proxy";
 
 describe("proxy security headers", () => {
 	it("builds a strict nonce-based content security policy", () => {
@@ -14,6 +14,26 @@ describe("proxy security headers", () => {
 		expect(policy).toContain("https://*.ingest.us.sentry.io");
 		expect(policy).toContain("object-src 'none'");
 		expect(policy).toContain("frame-ancestors 'none'");
+	});
+
+	it("builds a static-compatible content security policy", () => {
+		const policy = createStaticContentSecurityPolicy();
+
+		expect(policy).toContain("script-src 'self' 'unsafe-inline'");
+		expect(policy).toContain("style-src 'self'");
+		expect(policy).not.toContain("nonce-");
+		expect(policy).not.toContain("strict-dynamic");
+	});
+
+	it("allows prerendered marketing pages to hydrate", async () => {
+		const request = new NextRequest("https://cashlift.test/demo");
+
+		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
+		const policy = response.headers.get("Content-Security-Policy");
+
+		expect(policy).toContain("script-src 'self' 'unsafe-inline'");
+		expect(policy).not.toContain("nonce-");
+		expect(policy).not.toContain("strict-dynamic");
 	});
 
 	it("adds browser hardening headers to matched requests", async () => {
