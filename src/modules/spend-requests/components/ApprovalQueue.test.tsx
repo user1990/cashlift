@@ -1,56 +1,56 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { HttpResponse } from "msw";
+import { describe, expect, it } from "vitest";
 import { workspaceDatasetQueryKeys } from "@/modules/workspace/query";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
+import { server } from "@/test/server";
 import { Toaster } from "@/ui/components/Toaster";
+import { createDecideSpendRequestHandler } from "../fixtures";
 import { ApprovalQueue } from "./ApprovalQueue";
 
-const mocks = vi.hoisted(() => ({
-	decideSpendRequest: vi.fn(),
-	fetch: vi.fn(),
-}));
-
-vi.mock("../api", () => ({
-	decideSpendRequest: mocks.decideSpendRequest,
-}));
-
 describe("ApprovalQueue", () => {
-	beforeEach(() => {
-		vi.clearAllMocks();
-	});
-
 	it("submits an approved request decision", async () => {
 		const user = userEvent.setup();
-		let resolveDecision!: (result: { id: string; status: "approved" }) => void;
-		const decision = new Promise<{ id: string; status: "approved" }>((resolve) => {
+		let resolveDecision!: () => void;
+		const decision = new Promise<void>((resolve) => {
 			resolveDecision = resolve;
 		});
-		mocks.decideSpendRequest.mockReturnValue(decision);
-		renderApprovalQueue();
+		server.use(
+			createDecideSpendRequestHandler(async ({ params, request }) => {
+				const { status } = await request.json();
+				await decision;
+
+				return HttpResponse.json({
+					...financialDatasetFixture.spendRequests[0],
+					id: params.id,
+					status,
+				});
+			}),
+		);
+		const queryClient = renderApprovalQueue();
 
 		await user.click(screen.getByRole("button", { name: "Approve BrandForge" }));
 
 		expect(screen.getByRole("button", { name: "Approve BrandForge" })).toBeDisabled();
-		resolveDecision({ id: "request-brandforge", status: "approved" });
+		resolveDecision();
 
 		expect(await screen.findByText("Spend approved")).toBeInTheDocument();
-
-		await waitFor(() => {
-			expect(mocks.decideSpendRequest).toHaveBeenCalledWith(
-				{
-					id: "request-brandforge",
-					status: "approved",
-				},
-				expect.anything(),
-			);
+		expect(getSpendRequestStatuses(queryClient)).toEqual({
+			"request-brandforge": "approved",
+			"request-client-onsite": "pending",
+			"request-webcam": "approved",
 		});
 	});
 
 	it("rolls back the optimistic request when the mutation fails", async () => {
 		const user = userEvent.setup();
-		mocks.decideSpendRequest.mockRejectedValue(new Error("Unable to update spend request."));
+		server.use(
+			createDecideSpendRequestHandler(() =>
+				HttpResponse.json({ error: "Unable to update spend request." }, { status: 500 }),
+			),
+		);
 		renderApprovalQueue();
 
 		await user.click(screen.getByRole("button", { name: "Reject Delta" }));
@@ -62,22 +62,40 @@ describe("ApprovalQueue", () => {
 
 	it("keeps another successful decision when a concurrent decision rolls back", async () => {
 		const user = userEvent.setup();
-		let rejectBrandForge!: (error: Error) => void;
-		let resolveDelta!: (result: { id: string; status: "approved" }) => void;
-		const brandForgeDecision = new Promise((_resolve, reject) => {
-			rejectBrandForge = reject;
+		let rejectBrandForge!: () => void;
+		let resolveDelta!: () => void;
+		const brandForgeDecision = new Promise<void>((_resolve, reject) => {
+			rejectBrandForge = () => reject(new Error("Unable to update spend request."));
 		});
-		const deltaDecision = new Promise<{ id: string; status: "approved" }>((resolve) => {
+		const deltaDecision = new Promise<void>((resolve) => {
 			resolveDelta = resolve;
 		});
-		mocks.decideSpendRequest.mockReturnValueOnce(brandForgeDecision).mockReturnValueOnce(deltaDecision);
+		server.use(
+			createDecideSpendRequestHandler(async ({ params, request }) => {
+				const { status } = await request.json();
+
+				if (params.id === "request-brandforge") {
+					await brandForgeDecision;
+				} else {
+					await deltaDecision;
+				}
+
+				const requestFixture = financialDatasetFixture.spendRequests.find(({ id }) => id === params.id);
+
+				if (!requestFixture) {
+					return HttpResponse.json({ error: "Spend request not found." }, { status: 404 });
+				}
+
+				return HttpResponse.json({ ...requestFixture, status });
+			}),
+		);
 		const queryClient = renderApprovalQueue();
 
 		await user.click(screen.getByRole("button", { name: "Approve BrandForge" }));
 		await user.click(screen.getByRole("button", { name: "Approve Delta" }));
 
-		resolveDelta({ id: "request-client-onsite", status: "approved" });
-		rejectBrandForge(new Error("Unable to update spend request."));
+		resolveDelta();
+		rejectBrandForge();
 
 		await waitFor(() => {
 			expect(getSpendRequestStatuses(queryClient)).toEqual({
