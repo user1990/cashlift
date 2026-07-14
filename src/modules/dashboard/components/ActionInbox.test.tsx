@@ -1,8 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { demoWorkspaceDataset } from "@/modules/workspace/demoDataset";
+import { getCashActionDestination } from "../cashActionDestination";
 import { buildDashboardViewModel } from "../view-model";
-import { ActionInbox, getCashActionDestination } from "./ActionInbox";
+import { ActionInbox } from "./ActionInbox";
 
 describe("ActionInbox", () => {
 	it("renders ranked actions with destinations for their decision type", () => {

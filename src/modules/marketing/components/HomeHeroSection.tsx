@@ -10,7 +10,7 @@ export const HomeHeroSection = () => (
 		/>
 
 		<div className="relative mx-auto max-w-[1180px] px-4 pb-14 pt-20 sm:px-6 sm:pt-24 lg:px-8 lg:pb-20 lg:pt-28">
-			<header className="mx-auto max-w-4xl text-center">
+			<header className="mx-auto flex min-h-[calc(100svh-8rem)] max-w-4xl flex-col items-center justify-center text-center">
 				<p className="text-s+ font-semibold uppercase tracking-normal text-primary">Cash action inbox</p>
 
 				<h1 className="mt-4 text-5xl+ tracking-normal text-shell-foreground sm:text-7xl+">
@@ -36,6 +36,7 @@ export const HomeHeroSection = () => (
 				<Image
 					alt="Studio Nova's CashLift inbox ranking collection, approval, and vendor actions"
 					className="h-auto w-full"
+					fetchPriority="high"
 					height={712}
 					priority
 					sizes="(min-width: 1180px) 1120px, calc(100vw - 2rem)"

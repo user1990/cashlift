@@ -119,6 +119,7 @@
 	},
 	"dynamicallyLoaded": [
 		"doctor.config.ts",
+		"public/marketing/home-story.js",
 		"src/services/i18n/request.ts",
 		"src/services/next/emptyPolyfillModule.ts",
 		"src/ui/components/DesignSystem.mdx"

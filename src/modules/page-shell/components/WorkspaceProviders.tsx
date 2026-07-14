@@ -5,6 +5,7 @@ import { type ReactNode, Suspense } from "react";
 import { AuthProvider } from "@/services/clerk/provider";
 import messages from "@/services/i18n/messages/en.json";
 import { QueryProvider } from "@/services/query/provider";
+import { Toaster } from "@/ui/components/Toaster";
 
 type WorkspaceProvidersProps = {
 	authEnabled?: boolean;
@@ -24,6 +25,8 @@ export const WorkspaceProviders = ({ authEnabled = true, authFallback, children 
 	return (
 		<NextIntlClientProvider locale="en" messages={messages}>
 			<QueryProvider>{content}</QueryProvider>
+
+			<Toaster />
 		</NextIntlClientProvider>
 	);
 };

@@ -25,6 +25,7 @@ describe("proxy security headers", () => {
 		expect(policy).toContain("style-src 'self' 'nonce-test-nonce'");
 		expect(policy).toContain("style-src-elem 'self' 'unsafe-inline'");
 		expect(policy).toContain("style-src-attr 'unsafe-hashes' 'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='");
+		expect(policy).toContain("'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk='");
 		expect(policy).toContain("https://clerk-telemetry.com");
 		expect(policy).toContain("https://*.ingest.us.sentry.io");
 		expect(policy).toContain("object-src 'none'");
@@ -58,12 +59,12 @@ describe("proxy security headers", () => {
 		expect(policy).not.toContain("strict-dynamic");
 	});
 
-	it("adds browser hardening headers to matched requests", async () => {
+	it("adds browser hardening headers to the static homepage", async () => {
 		const request = new NextRequest("https://cashlift.test/");
 
 		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
 
-		expect(response.headers.get("Content-Security-Policy")).toContain("script-src 'self' 'nonce-");
+		expect(response.headers.get("Content-Security-Policy")).toContain("script-src 'self' 'unsafe-inline'");
 		expect(response.headers.get("Cross-Origin-Opener-Policy")).toEqual("same-origin");
 		expect(response.headers.get("Referrer-Policy")).toEqual("strict-origin-when-cross-origin");
 		expect(response.headers.get("Permissions-Policy")).toEqual("camera=(), microphone=(), geolocation=()");
@@ -115,14 +116,17 @@ describe("proxy security headers", () => {
 		expect(needsClerkMiddleware(pathname, false)).toEqual(false);
 	});
 
+	it.each(["/login", "/signup"])("routes Clerk middleware for production auth path %s", (pathname) => {
+		expect(needsClerkMiddleware(pathname, true)).toEqual(true);
+	});
+
 	it.each([
-		"/login",
-		"/signup",
 		"/features",
 		"/pricing",
 		"/demo",
-	])("routes Clerk middleware for production marketing path %s", (pathname) => {
-		expect(needsClerkMiddleware(pathname, true)).toEqual(true);
+		"/demo/workspace",
+	])("keeps public marketing path %s off Clerk middleware", (pathname) => {
+		expect(needsClerkMiddleware(pathname, true)).toEqual(false);
 	});
 
 	it.each([

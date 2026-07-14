@@ -1,5 +1,5 @@
+import Script from "next/script";
 import { HomeDecisionStoryChapter } from "./HomeDecisionStoryChapter";
-import { HomeDecisionStoryController } from "./HomeDecisionStoryController";
 import { HomeDecisionStoryImage } from "./HomeDecisionStoryImage";
 
 const DECISION_CHAPTERS = [
@@ -36,7 +36,7 @@ export const HomeDecisionStorySection = () => (
 		data-active-chapter="approve"
 		data-home-story
 	>
-		<HomeDecisionStoryController />
+		<Script src="/marketing/home-story.js" strategy="afterInteractive" />
 
 		<header className="mx-auto max-w-[1180px] px-4 pb-8 pt-20 sm:px-6 lg:px-8 lg:pt-28">
 			<p className="text-s+ font-semibold uppercase tracking-normal text-primary">From inbox to decision</p>

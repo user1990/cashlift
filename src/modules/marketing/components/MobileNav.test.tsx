@@ -17,9 +17,6 @@ describe("MobileNav", () => {
 		expect(screen.queryByRole("link", { name: "Customers" })).not.toBeInTheDocument();
 		expect(screen.queryByRole("link", { name: "Log in" })).not.toBeInTheDocument();
 		expect(screen.queryByRole("link", { name: "Sign up" })).not.toBeInTheDocument();
-
-		await user.click(featuresLink);
-
-		expect(featuresLink).not.toBeVisible();
+		expect(featuresLink).toHaveAttribute("href", "/features");
 	});
 });

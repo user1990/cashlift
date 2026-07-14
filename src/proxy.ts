@@ -18,6 +18,7 @@ const STATIC_MARKETING_PATH_PREFIXES = [
 ] as const;
 const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard", "/api/workspace"] as const;
 const NEXT_IMAGE_FILL_STYLE_HASH = "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='";
+const NEXT_IMAGE_COLOR_STYLE_HASH = "'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk='";
 const isDevelopment = () => process.env.NODE_ENV === "development";
 
 const createSecurityPolicy = (scriptSource: string, styleSource: string) =>
@@ -26,7 +27,7 @@ const createSecurityPolicy = (scriptSource: string, styleSource: string) =>
 		`script-src ${scriptSource}${isDevelopment() ? " 'unsafe-eval'" : ""}`,
 		`style-src ${styleSource}`,
 		"style-src-elem 'self' 'unsafe-inline'",
-		`style-src-attr 'unsafe-hashes' ${NEXT_IMAGE_FILL_STYLE_HASH}`,
+		`style-src-attr 'unsafe-hashes' ${NEXT_IMAGE_FILL_STYLE_HASH} ${NEXT_IMAGE_COLOR_STYLE_HASH}`,
 		"img-src 'self' blob: data: https:",
 		"font-src 'self'",
 		"connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://clerk-telemetry.com https://challenges.cloudflare.com https://*.supabase.co https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.vercel-insights.com",
@@ -45,6 +46,7 @@ export const createContentSecurityPolicy = (nonce: string) =>
 export const createStaticContentSecurityPolicy = () => createSecurityPolicy("'self' 'unsafe-inline'", "'self'");
 
 const usesStaticContentSecurityPolicy = (request: NextRequest) =>
+	request.nextUrl.pathname === "/" ||
 	STATIC_MARKETING_PATH_PREFIXES.some((prefix) => {
 		const pathname = request.nextUrl.pathname;
 
@@ -142,8 +144,9 @@ const matchesPathPrefix = (pathname: string, prefix: string) =>
 export const needsWorkspaceSession = (pathname: string) =>
 	WORKSPACE_SESSION_PATH_PREFIXES.some((prefix) => matchesPathPrefix(pathname, prefix));
 
-export const needsClerkMiddleware = (_pathname: string, workspaceAuthEnabled = !workspaceDemoEnabled()) =>
-	workspaceAuthEnabled;
+export const needsClerkMiddleware = (pathname: string, workspaceAuthEnabled = !workspaceDemoEnabled()) =>
+	workspaceAuthEnabled &&
+	(AUTH_PATH_PREFIXES.some((prefix) => matchesPathPrefix(pathname, prefix)) || needsWorkspaceSession(pathname));
 
 export default function proxy(request: NextRequest, event: NextFetchEvent) {
 	if (needsClerkMiddleware(request.nextUrl.pathname)) {

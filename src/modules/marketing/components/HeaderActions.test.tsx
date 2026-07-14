@@ -4,7 +4,7 @@ import { HeaderActions } from "./HeaderActions";
 
 describe("HeaderActions", () => {
 	it("keeps login and the public demo available to signed-out visitors", async () => {
-		render(await HeaderActions());
+		render(<HeaderActions />);
 
 		const logInLinks = screen.getAllByRole("link", { name: "Log in" });
 		expect(logInLinks).toHaveLength(1);

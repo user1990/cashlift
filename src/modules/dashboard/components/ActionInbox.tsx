@@ -1,8 +1,8 @@
 import { ArrowRight, CircleDollarSign, ReceiptText, ShieldCheck, TrendingUp } from "lucide-react";
 import Link from "next/link";
-import type { CashActionType } from "@/modules/cash-actions/types";
 import { formatCurrency } from "@/modules/money/format";
 import { Badge } from "@/ui/components/Badge";
+import { getCashActionDestination } from "../cashActionDestination";
 import type { DashboardViewModel } from "../types";
 import { DashboardPanel } from "./DashboardPanel";
 
@@ -11,13 +11,7 @@ type ActionInboxProps = {
 	basePath: string;
 };
 
-const ACTION_DESTINATIONS = {
-	approval: "approvals",
-	"cash-buffer": "cash",
-	collection: "invoices",
-	forecast: "cash",
-	"vendor-leak": "vendors",
-} as const satisfies Record<CashActionType, string>;
+type CashActionType = DashboardViewModel["actionInbox"][number]["type"];
 
 const ACTION_LABELS = {
 	approval: "Approve spend",
@@ -26,9 +20,6 @@ const ACTION_LABELS = {
 	forecast: "Review forecast",
 	"vendor-leak": "Cut waste",
 } as const satisfies Record<CashActionType, string>;
-
-export const getCashActionDestination = (type: CashActionType, basePath: string) =>
-	`${basePath}/${ACTION_DESTINATIONS[type]}`;
 
 export const ActionInbox = ({ actions, basePath }: ActionInboxProps) => (
 	<DashboardPanel label="Today's inbox" title="Ranked by cash impact and urgency">

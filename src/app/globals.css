@@ -140,17 +140,6 @@ textarea,
 			transform 240ms ease;
 	}
 
-	.home-story[data-enhanced="true"] .home-story-chapter {
-		opacity: 0.46;
-		transition: opacity 180ms ease;
-	}
-
-	.home-story[data-active-chapter="approve"] [data-story-chapter="approve"],
-	.home-story[data-active-chapter="recover"] [data-story-chapter="recover"],
-	.home-story[data-active-chapter="cut"] [data-story-chapter="cut"] {
-		opacity: 1;
-	}
-
 	.home-story[data-active-chapter="approve"] [data-story-media="approve"],
 	.home-story[data-active-chapter="recover"] [data-story-media="recover"],
 	.home-story[data-active-chapter="cut"] [data-story-media="cut"] {
@@ -173,8 +162,7 @@ textarea,
 		transition-duration: 0.01ms;
 	}
 
-	.home-story[data-enhanced="true"] .home-story-media,
-	.home-story[data-enhanced="true"] .home-story-chapter {
+	.home-story[data-enhanced="true"] .home-story-media {
 		transition: none;
 	}
 
