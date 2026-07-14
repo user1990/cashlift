@@ -17,6 +17,7 @@ describe("proxy security headers", () => {
 		expect(policy).toContain("style-src 'self' 'nonce-test-nonce'");
 		expect(policy).toContain("style-src-elem 'self' 'unsafe-inline'");
 		expect(policy).toContain("style-src-attr 'unsafe-hashes' 'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='");
+		expect(policy).toContain("https://clerk-telemetry.com");
 		expect(policy).toContain("https://*.ingest.us.sentry.io");
 		expect(policy).toContain("object-src 'none'");
 		expect(policy).toContain("frame-ancestors 'none'");
@@ -57,7 +58,7 @@ describe("proxy security headers", () => {
 	});
 
 	it("keeps prefetch requests covered by the proxy matcher", () => {
-		expect(config.matcher).toEqual(["/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
+		expect(config.matcher).toEqual(["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
 	});
 
 	it("uses app auth URLs for Clerk middleware redirects", () => {
@@ -95,8 +96,8 @@ describe("proxy security headers", () => {
 		"/features",
 		"/pricing",
 		"/demo",
-	])("keeps marketing path %s on security-header middleware", (pathname) => {
-		expect(needsClerkMiddleware(pathname)).toEqual(false);
+	])("routes Clerk middleware for production marketing path %s", (pathname) => {
+		expect(needsClerkMiddleware(pathname, true)).toEqual(true);
 	});
 
 	it.each([

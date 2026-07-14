@@ -19,7 +19,7 @@ export const createContentSecurityPolicy = (nonce: string) =>
 		`style-src-attr 'unsafe-hashes' ${NEXT_IMAGE_FILL_STYLE_HASH}`,
 		"img-src 'self' blob: data: https:",
 		"font-src 'self'",
-		"connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.supabase.co https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.vercel-insights.com",
+		"connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://clerk-telemetry.com https://challenges.cloudflare.com https://*.supabase.co https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.vercel-insights.com",
 		"frame-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com",
 		"worker-src 'self' blob:",
 		"object-src 'none'",
@@ -97,9 +97,11 @@ export const createClerkMiddlewareOptions = () => {
 const clerkSessionMiddleware = clerkMiddleware(async (auth, request) => {
 	if (needsWorkspaceSession(request.nextUrl.pathname)) {
 		await auth.protect();
+
+		return handleSupabaseSession(request);
 	}
 
-	return handleSupabaseSession(request);
+	return handleSecurityHeaders(request);
 }, createClerkMiddlewareOptions);
 
 const matchesPathPrefix = (pathname: string, prefix: string) =>
@@ -108,8 +110,8 @@ const matchesPathPrefix = (pathname: string, prefix: string) =>
 export const needsWorkspaceSession = (pathname: string) =>
 	WORKSPACE_SESSION_PATH_PREFIXES.some((prefix) => matchesPathPrefix(pathname, prefix));
 
-export const needsClerkMiddleware = (pathname: string, workspaceAuthEnabled = !workspaceDemoEnabled()) =>
-	workspaceAuthEnabled && needsWorkspaceSession(pathname);
+export const needsClerkMiddleware = (_pathname: string, workspaceAuthEnabled = !workspaceDemoEnabled()) =>
+	workspaceAuthEnabled;
 
 export default function proxy(request: NextRequest, event: NextFetchEvent) {
 	if (needsClerkMiddleware(request.nextUrl.pathname)) {
@@ -120,5 +122,5 @@ export default function proxy(request: NextRequest, event: NextFetchEvent) {
 }
 
 export const config = {
-	matcher: ["/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)"],
+	matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };

@@ -3,8 +3,8 @@ import { describe, expect, it } from "vitest";
 import { HeaderActions } from "./HeaderActions";
 
 describe("HeaderActions", () => {
-	it("links desktop and mobile visitors to the authentication routes", () => {
-		render(<HeaderActions />);
+	it("links signed-out visitors to the authentication routes", async () => {
+		render(await HeaderActions());
 
 		const logInLinks = screen.getAllByRole("link", { name: "Log in" });
 		expect(logInLinks).toHaveLength(2);

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { DesktopNav } from "./DesktopNav";
 import { HeaderActions } from "./HeaderActions";
 import { Logo } from "./Logo";
@@ -9,7 +10,9 @@ export const Header = () => (
 
 			<DesktopNav />
 
-			<HeaderActions />
+			<Suspense fallback={null}>
+				<HeaderActions />
+			</Suspense>
 		</div>
 	</header>
 );
