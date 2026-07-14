@@ -11,10 +11,15 @@ describe("MobileNav", () => {
 
 		await user.click(screen.getByLabelText("Toggle navigation"));
 
-		expect(screen.getByRole("link", { name: "Features" })).toBeVisible();
+		const featuresLink = screen.getByRole("link", { name: "Features" });
+		expect(featuresLink).toBeVisible();
 		expect(screen.getByRole("link", { name: "Software Services" })).toBeVisible();
 		expect(screen.queryByRole("link", { name: "Customers" })).not.toBeInTheDocument();
 		expect(screen.queryByRole("link", { name: "Log in" })).not.toBeInTheDocument();
 		expect(screen.queryByRole("link", { name: "Sign up" })).not.toBeInTheDocument();
+
+		await user.click(featuresLink);
+
+		expect(featuresLink).not.toBeVisible();
 	});
 });
