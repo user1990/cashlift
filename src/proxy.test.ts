@@ -1,5 +1,12 @@
 import { NextRequest } from "next/server";
 import { describe, expect, it, vi } from "vitest";
+
+vi.hoisted(() => {
+	process.env.CASHLIFT_APP_MODE = "production";
+	process.env.CLERK_SECRET_KEY = "sk_test_example";
+	process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = "pk_test_dGVzdC1jbGVyay5jbGVyay5hY2NvdW50cy5kZXYk";
+});
+
 import proxy, {
 	config,
 	createClerkMiddlewareOptions,
@@ -62,9 +69,6 @@ describe("proxy security headers", () => {
 	});
 
 	it("uses app auth URLs for Clerk middleware redirects", () => {
-		vi.stubEnv("NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY", "pk_test_example");
-		vi.stubEnv("CLERK_SECRET_KEY", "sk_test_example");
-
 		expect(createClerkMiddlewareOptions()).toMatchObject({
 			signInUrl: "/login",
 			signUpUrl: "/signup",
