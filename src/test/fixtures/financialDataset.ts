@@ -1,3 +1,4 @@
+import { BRAND_FORGE_SPEND_REQUEST_FIXTURE } from "@/modules/spend-requests/fixtures";
 import type { FinancialDataset } from "@/modules/workspace/types";
 
 export const financialDatasetFixture: FinancialDataset = {
@@ -173,18 +174,7 @@ export const financialDatasetFixture: FinancialDataset = {
 		name: "Studio Nova",
 	},
 	spendRequests: [
-		{
-			amountCents: 680_000,
-			category: "software",
-			id: "request-brandforge",
-			neededByDate: "2026-05-09",
-			reason: "Annual creative suite for retained client work",
-			requestedDate: "2026-05-07",
-			requester: "Leo",
-			status: "pending",
-			team: "Creative",
-			vendor: "BrandForge",
-		},
+		BRAND_FORGE_SPEND_REQUEST_FIXTURE,
 		{
 			amountCents: 240_000,
 			category: "travel",

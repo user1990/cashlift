@@ -18,20 +18,26 @@ type SpendRequestDecisionResolver = HttpResponseResolver<
 	SpendRequestDecisionResponse
 >;
 
+export const BRAND_FORGE_SPEND_REQUEST_FIXTURE: SpendRequest = {
+	amountCents: 680_000,
+	category: "software",
+	id: "request-brandforge",
+	neededByDate: "2026-05-09",
+	reason: "Annual creative suite for retained client work",
+	requestedDate: "2026-05-07",
+	requester: "Leo",
+	status: "pending",
+	team: "Creative",
+	vendor: "BrandForge",
+};
+
 const defaultSpendRequestDecisionResolver: SpendRequestDecisionResolver = async ({ params, request }) => {
 	const { status } = await request.json();
 
 	return HttpResponse.json({
-		amountCents: 680_000,
-		category: "software",
+		...BRAND_FORGE_SPEND_REQUEST_FIXTURE,
 		id: params.id,
-		neededByDate: "2026-05-09",
-		reason: "Annual creative suite for retained client work",
-		requestedDate: "2026-05-07",
-		requester: "Leo",
 		status,
-		team: "Creative",
-		vendor: "BrandForge",
 	});
 };
 
