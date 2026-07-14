@@ -102,8 +102,9 @@ describe("resolveWorkspaceDataset", () => {
 
 	it("passes the requested scope to production data loading", async () => {
 		stubProductionWorkspaceEnv();
+		const getToken = vi.fn().mockResolvedValue("jwt");
 		authMock.mockResolvedValue({
-			getToken: vi.fn().mockResolvedValue("jwt"),
+			getToken,
 			userId: "user-1",
 		});
 		getWorkspaceDatasetMock.mockResolvedValue(demoWorkspaceDataset);
@@ -111,6 +112,7 @@ describe("resolveWorkspaceDataset", () => {
 		const result = await resolveVendorsDataset();
 
 		expect(result).toEqual({ dataset: demoWorkspaceDataset, kind: "success" });
+		expect(getToken).toHaveBeenCalledWith();
 		expect(getWorkspaceDatasetMock).toHaveBeenCalledWith("user-1", "jwt", "vendors");
 	});
 
@@ -143,6 +145,28 @@ describe("resolveWorkspaceDataset", () => {
 		});
 		expect(captureAppExceptionMock).not.toHaveBeenCalled();
 		expect(captureAppMessageMock).not.toHaveBeenCalled();
+	});
+
+	it("reports an unavailable data token when Clerk token retrieval fails", async () => {
+		stubProductionWorkspaceEnv();
+		const error = new Error("Clerk session token is unavailable");
+		authMock.mockResolvedValue({
+			getToken: vi.fn().mockRejectedValue(error),
+			userId: "user-1",
+		});
+
+		const result = await resolveDataset();
+
+		expect(result).toEqual({
+			kind: "service",
+			message: "Workspace data token is unavailable.",
+			requestId: "event-exception-id",
+		});
+		expectWorkspaceExceptionCaptured({
+			error,
+			extra: { userId: "user-1" },
+			failureKind: "data-token-error",
+		});
 	});
 
 	it("captures authenticated data failures", async () => {

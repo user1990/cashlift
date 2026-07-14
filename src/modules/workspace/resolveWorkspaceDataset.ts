@@ -52,40 +52,51 @@ export const resolveWorkspaceDataset = async (
 		return { dataset: reduceDatasetForDateRange(await loadDemoWorkspaceDataset(scope), dateRange), kind: "success" };
 	}
 
+	let session: Awaited<ReturnType<typeof auth>>;
+
 	try {
-		const session = await auth();
-
-		if (!session.userId) {
-			return { kind: "unauthenticated", message: "Sign in to load workspace data." };
-		}
-
-		const accessToken = await session.getToken({ template: "supabase" });
-
-		if (!accessToken) {
-			const message = "Workspace data token is not configured.";
-			const requestId = captureWorkspaceDatasetMessage(message, "missing-data-token");
-
-			return { kind: "service", message, requestId };
-		}
-
-		try {
-			const dataset = await supabaseFinanceRepository.getWorkspaceDataset(session.userId, accessToken, scope);
-
-			return { dataset: reduceDatasetForDateRange(dataset, dateRange), kind: "success" };
-		} catch (error) {
-			if (error instanceof CompanyMembershipNotFoundError) {
-				return { kind: "forbidden", message: "No company workspace is assigned to this user." };
-			}
-
-			const requestId = captureWorkspaceDatasetException(error, "data-error", { userId: session.userId });
-
-			return { kind: "data_error", message: GENERIC_DATA_MESSAGE, requestId };
-		}
+		session = await auth();
 	} catch (error) {
-		const message = "Workspace auth is not configured.";
+		const message = "Workspace authentication is unavailable.";
 		const requestId = captureWorkspaceDatasetException(error, "auth-service-error");
 
 		return { kind: "service", message, requestId };
+	}
+
+	if (!session.userId) {
+		return { kind: "unauthenticated", message: "Sign in to load workspace data." };
+	}
+
+	let accessToken: string | null;
+
+	try {
+		accessToken = await session.getToken();
+	} catch (error) {
+		const message = "Workspace data token is unavailable.";
+		const requestId = captureWorkspaceDatasetException(error, "data-token-error", { userId: session.userId });
+
+		return { kind: "service", message, requestId };
+	}
+
+	if (!accessToken) {
+		const message = "Workspace data token is unavailable.";
+		const requestId = captureWorkspaceDatasetMessage(message, "missing-data-token");
+
+		return { kind: "service", message, requestId };
+	}
+
+	try {
+		const dataset = await supabaseFinanceRepository.getWorkspaceDataset(session.userId, accessToken, scope);
+
+		return { dataset: reduceDatasetForDateRange(dataset, dateRange), kind: "success" };
+	} catch (error) {
+		if (error instanceof CompanyMembershipNotFoundError) {
+			return { kind: "forbidden", message: "No company workspace is assigned to this user." };
+		}
+
+		const requestId = captureWorkspaceDatasetException(error, "data-error", { userId: session.userId });
+
+		return { kind: "data_error", message: GENERIC_DATA_MESSAGE, requestId };
 	}
 };
 

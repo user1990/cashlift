@@ -101,8 +101,9 @@ describe("decideSpendRequest", () => {
 	it("updates the spend request when the member can approve spend", async () => {
 		stubProductionWorkspaceEnv();
 		const updatedRequest = { id: "request-brandforge", status: "approved" };
+		const getToken = vi.fn().mockResolvedValue("jwt");
 		authMock.mockResolvedValue({
-			getToken: vi.fn().mockResolvedValue("jwt"),
+			getToken,
 			userId: "user-1",
 		});
 		createServerSupabaseClientMock.mockReturnValue(createSupabaseClient());
@@ -111,6 +112,7 @@ describe("decideSpendRequest", () => {
 		const result = await decideRequest();
 
 		expect(result).toEqual({ request: updatedRequest, status: "success" });
+		expect(getToken).toHaveBeenCalledWith();
 		expect(createServerSupabaseClientMock).toHaveBeenCalledWith({ accessToken: "jwt" });
 		expect(updateSpendRequestStatusMock).toHaveBeenCalledWith("user-1", "jwt", "request-brandforge", "approved");
 	});

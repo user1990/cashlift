@@ -1,8 +1,10 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
+import { CLERK_SIGN_IN_URL, CLERK_SIGN_UP_URL, getRequiredClerkPublishableKey } from "@/services/clerk/config";
+import { getRequiredClerkSecretKey } from "@/services/clerk/serverConfig";
+import { workspaceDemoEnabled } from "@/services/env/app";
 import { updateSupabaseSession } from "@/services/supabase/proxy";
 
-const CLERK_CONFIGURED = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 const AUTH_PATH_PREFIXES = ["/login", "/signup"] as const;
 const STATIC_MARKETING_PATH_PREFIXES = [
 	"/contact",
@@ -27,14 +29,14 @@ const createSecurityPolicy = (scriptSource: string, styleSource: string) =>
 		`style-src-attr 'unsafe-hashes' ${NEXT_IMAGE_FILL_STYLE_HASH}`,
 		"img-src 'self' blob: data: https:",
 		"font-src 'self'",
-		"connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.supabase.co https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.vercel-insights.com",
+		"connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://clerk-telemetry.com https://challenges.cloudflare.com https://*.supabase.co https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.vercel-insights.com",
 		"frame-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com",
 		"worker-src 'self' blob:",
 		"object-src 'none'",
 		"base-uri 'self'",
 		"form-action 'self'",
 		"frame-ancestors 'none'",
-		"upgrade-insecure-requests",
+		...(process.env.NODE_ENV === "production" ? ["upgrade-insecure-requests"] : []),
 	].join("; ");
 
 export const createContentSecurityPolicy = (nonce: string) =>
@@ -114,23 +116,43 @@ const handleSupabaseSession = async (request: NextRequest) => {
 	return applySecurityResponseHeaders(request, response, contentSecurityPolicy);
 };
 
-const workspaceMiddleware = clerkMiddleware(async (_auth, request) => handleSupabaseSession(request));
+export const createClerkMiddlewareOptions = () => {
+	getRequiredClerkSecretKey();
 
-const needsWorkspaceSession = (request: NextRequest) =>
-	WORKSPACE_SESSION_PATH_PREFIXES.some((prefix) => {
-		const pathname = request.nextUrl.pathname;
+	return {
+		publishableKey: getRequiredClerkPublishableKey(),
+		signInUrl: CLERK_SIGN_IN_URL,
+		signUpUrl: CLERK_SIGN_UP_URL,
+	};
+};
 
-		return pathname === prefix || pathname.startsWith(`${prefix}/`);
-	});
+const clerkSessionMiddleware = clerkMiddleware(async (auth, request) => {
+	if (needsWorkspaceSession(request.nextUrl.pathname)) {
+		await auth.protect();
+
+		return handleSupabaseSession(request);
+	}
+
+	return handleSecurityHeaders(request);
+}, createClerkMiddlewareOptions);
+
+const matchesPathPrefix = (pathname: string, prefix: string) =>
+	pathname === prefix || pathname.startsWith(`${prefix}/`);
+
+export const needsWorkspaceSession = (pathname: string) =>
+	WORKSPACE_SESSION_PATH_PREFIXES.some((prefix) => matchesPathPrefix(pathname, prefix));
+
+export const needsClerkMiddleware = (_pathname: string, workspaceAuthEnabled = !workspaceDemoEnabled()) =>
+	workspaceAuthEnabled;
 
 export default function proxy(request: NextRequest, event: NextFetchEvent) {
-	if (CLERK_CONFIGURED && needsWorkspaceSession(request)) {
-		return workspaceMiddleware(request, event);
+	if (needsClerkMiddleware(request.nextUrl.pathname)) {
+		return clerkSessionMiddleware(request, event);
 	}
 
 	return handleSecurityHeaders(request);
 }
 
 export const config = {
-	matcher: ["/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)"],
+	matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };

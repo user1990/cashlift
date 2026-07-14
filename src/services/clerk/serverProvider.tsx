@@ -1,32 +1,28 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import {
+	CLERK_SIGN_IN_URL,
+	CLERK_SIGN_UP_URL,
+	CLERK_WORKSPACE_REDIRECT_URL,
+	getRequiredClerkPublishableKey,
+} from "./config";
 
 type ServerAuthProviderProps = {
 	children: React.ReactNode;
 };
 
-const SIGN_IN_URL = "/login";
-const SIGN_UP_URL = "/signup";
-const WORKSPACE_REDIRECT_URL = "/dashboard";
-
 export const ServerAuthProvider = ({ children }: ServerAuthProviderProps) => {
-	const publishableKey = getClerkPublishableKey();
-
-	if (!publishableKey) {
-		return children;
-	}
+	const publishableKey = getRequiredClerkPublishableKey();
 
 	return (
 		<ClerkProvider
 			dynamic
 			publishableKey={publishableKey}
-			signInUrl={SIGN_IN_URL}
-			signUpUrl={SIGN_UP_URL}
-			signInFallbackRedirectUrl={WORKSPACE_REDIRECT_URL}
-			signUpFallbackRedirectUrl={WORKSPACE_REDIRECT_URL}
+			signInUrl={CLERK_SIGN_IN_URL}
+			signUpUrl={CLERK_SIGN_UP_URL}
+			signInFallbackRedirectUrl={CLERK_WORKSPACE_REDIRECT_URL}
+			signUpFallbackRedirectUrl={CLERK_WORKSPACE_REDIRECT_URL}
 		>
 			{children}
 		</ClerkProvider>
 	);
 };
-
-const getClerkPublishableKey = () => process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim();

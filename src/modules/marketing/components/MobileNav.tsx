@@ -1,6 +1,5 @@
-import { ChevronDown, MenuIcon, X } from "lucide-react";
-import Link from "next/link";
-import type { ReactNode } from "react";
+import { MenuIcon, X } from "lucide-react";
+import { MobileNavLink } from "./MobileNavLink";
 import type { NavGroup } from "./marketingHeaderNavigation";
 import { MARKETING_NAV_GROUPS } from "./marketingHeaderNavigation";
 
@@ -24,31 +23,16 @@ export const MobileNav = () => (
 				{MARKETING_NAV_GROUPS.map((group) => (
 					<MobileNavGroup key={group.label} group={group} />
 				))}
-
-				<div className="grid gap-1 border-t border-shell-border pt-4">
-					<MobileNavLink href="/customers">Customers</MobileNavLink>
-
-					<MobileNavLink href="/login">Log in</MobileNavLink>
-
-					<Link
-						href="/signup"
-						className="mt-2 inline-flex h-10 items-center justify-center rounded-md border border-primary bg-primary px-3 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
-					>
-						Sign up
-					</Link>
-				</div>
 			</div>
 		</nav>
 	</details>
 );
 
 const MobileNavGroup = ({ group }: { group: NavGroup }) => (
-	<details className="group/nav-section">
-		<summary className="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-md px-3 text-s+ uppercase tracking-normal text-primary outline-none transition-colors duration-150 hover:bg-panel/10 focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
+	<section aria-labelledby={`mobile-nav-${group.label.toLowerCase()}`}>
+		<h2 className="px-3 text-s+ uppercase tracking-normal text-primary" id={`mobile-nav-${group.label.toLowerCase()}`}>
 			{group.label}
-
-			<ChevronDown aria-hidden className="size-4 transition-transform duration-150 group-open/nav-section:rotate-180" />
-		</summary>
+		</h2>
 
 		<div className="mt-2 grid gap-1 pl-3">
 			{group.items.map(({ href, label }) => (
@@ -57,14 +41,5 @@ const MobileNavGroup = ({ group }: { group: NavGroup }) => (
 				</MobileNavLink>
 			))}
 		</div>
-	</details>
-);
-
-const MobileNavLink = ({ children, href }: { children: ReactNode; href: string }) => (
-	<Link
-		href={href}
-		className="rounded-md px-3 py-2 text-m font-medium text-shell-muted transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground"
-	>
-		{children}
-	</Link>
+	</section>
 );

@@ -1,6 +1,20 @@
 import { NextRequest } from "next/server";
-import { describe, expect, it } from "vitest";
-import proxy, { config, createContentSecurityPolicy, createStaticContentSecurityPolicy } from "./proxy";
+import { describe, expect, it, vi } from "vitest";
+
+vi.hoisted(() => {
+	process.env.CASHLIFT_APP_MODE = "production";
+	process.env.CLERK_SECRET_KEY = "sk_test_example";
+	process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = "pk_test_dGVzdC1jbGVyay5jbGVyay5hY2NvdW50cy5kZXYk";
+});
+
+import proxy, {
+	config,
+	createClerkMiddlewareOptions,
+	createContentSecurityPolicy,
+	createStaticContentSecurityPolicy,
+	needsClerkMiddleware,
+	needsWorkspaceSession,
+} from "./proxy";
 
 describe("proxy security headers", () => {
 	it("builds a strict nonce-based content security policy", () => {
@@ -11,9 +25,17 @@ describe("proxy security headers", () => {
 		expect(policy).toContain("style-src 'self' 'nonce-test-nonce'");
 		expect(policy).toContain("style-src-elem 'self' 'unsafe-inline'");
 		expect(policy).toContain("style-src-attr 'unsafe-hashes' 'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='");
+		expect(policy).toContain("https://clerk-telemetry.com");
 		expect(policy).toContain("https://*.ingest.us.sentry.io");
 		expect(policy).toContain("object-src 'none'");
 		expect(policy).toContain("frame-ancestors 'none'");
+		expect(policy).not.toContain("upgrade-insecure-requests");
+	});
+
+	it("upgrades insecure requests in production", () => {
+		vi.stubEnv("NODE_ENV", "production");
+
+		expect(createContentSecurityPolicy("test-nonce")).toContain("upgrade-insecure-requests");
 	});
 
 	it("builds a static-compatible content security policy", () => {
@@ -37,7 +59,7 @@ describe("proxy security headers", () => {
 	});
 
 	it("adds browser hardening headers to matched requests", async () => {
-		const request = new NextRequest("https://cashlift.test/dashboard");
+		const request = new NextRequest("https://cashlift.test/");
 
 		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
 
@@ -64,6 +86,55 @@ describe("proxy security headers", () => {
 	});
 
 	it("keeps prefetch requests covered by the proxy matcher", () => {
-		expect(config.matcher).toEqual(["/((?!$|_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
+		expect(config.matcher).toEqual(["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
+	});
+
+	it("uses app auth URLs for Clerk middleware redirects", () => {
+		expect(createClerkMiddlewareOptions()).toMatchObject({
+			signInUrl: "/login",
+			signUpUrl: "/signup",
+		});
+		expect(createClerkMiddlewareOptions()).not.toHaveProperty("secretKey");
+	});
+
+	it.each([
+		"/dashboard",
+		"/dashboard/spend",
+		"/api/workspace",
+		"/api/workspace/decisions",
+	])("routes Clerk middleware for production workspace path %s", (pathname) => {
+		expect(needsClerkMiddleware(pathname, true)).toEqual(true);
+	});
+
+	it.each([
+		"/dashboard",
+		"/dashboard/spend",
+		"/api/workspace",
+		"/api/workspace/decisions",
+	])("keeps demo workspace path %s on security-header middleware", (pathname) => {
+		expect(needsClerkMiddleware(pathname, false)).toEqual(false);
+	});
+
+	it.each([
+		"/login",
+		"/signup",
+		"/features",
+		"/pricing",
+		"/demo",
+	])("routes Clerk middleware for production marketing path %s", (pathname) => {
+		expect(needsClerkMiddleware(pathname, true)).toEqual(true);
+	});
+
+	it.each([
+		"/dashboard",
+		"/dashboard/spend",
+		"/api/workspace",
+		"/api/workspace/decisions",
+	])("requires workspace session for %s", (pathname) => {
+		expect(needsWorkspaceSession(pathname)).toEqual(true);
+	});
+
+	it.each(["/login", "/api/workspaces"])("does not treat %s as a workspace session path", (pathname) => {
+		expect(needsWorkspaceSession(pathname)).toEqual(false);
 	});
 });

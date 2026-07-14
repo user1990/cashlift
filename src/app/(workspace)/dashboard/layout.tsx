@@ -1,5 +1,3 @@
-import { Show } from "@clerk/nextjs";
-import Link from "next/link";
 import { MainContent } from "@/modules/page-shell/components/MainContent";
 import { WorkspaceShell } from "@/modules/page-shell/components/WorkspaceShell";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
@@ -9,7 +7,7 @@ type DashboardLayoutProps = {
 	children: React.ReactNode;
 };
 
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
+export default async function DashboardLayout({ children }: DashboardLayoutProps) {
 	const config = getWorkspaceRuntimeConfig();
 	const content = <WorkspaceShell mode={config.mode}>{children}</WorkspaceShell>;
 
@@ -18,38 +16,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 	}
 
 	if (workspaceDemoEnabled()) {
-		return <WorkspaceProviders>{content}</WorkspaceProviders>;
+		return <WorkspaceProviders authEnabled={false}>{content}</WorkspaceProviders>;
 	}
 
-	return (
-		<WorkspaceProviders>
-			<Show when="signed-in" fallback={<SignedOutFallback />}>
-				{content}
-			</Show>
-		</WorkspaceProviders>
-	);
+	return <WorkspaceProviders>{content}</WorkspaceProviders>;
 }
-
-const SignedOutFallback = () => (
-	<MainContent variant="workspace" className="flex items-center justify-center px-4">
-		<div className="max-w-md rounded-lg border border-border bg-panel p-6 text-center shadow-panel">
-			<p className="text-s+ uppercase tracking-normal text-primary">CashLift</p>
-
-			<h1 className="mt-2 text-4xl+ tracking-normal text-panel-foreground">Log in to open workspace</h1>
-
-			<p className="mt-3 text-m leading-6 text-muted-foreground">
-				Protected company routes use Clerk when auth keys are configured.
-			</p>
-
-			<Link
-				href="/login"
-				className="mt-6 inline-flex h-10 items-center justify-center rounded-md border border-primary bg-primary px-4 text-m font-medium text-primary-foreground"
-			>
-				Log in
-			</Link>
-		</div>
-	</MainContent>
-);
 
 const WorkspaceUnavailable = ({ message }: { message: string }) => (
 	<MainContent variant="workspace" className="flex items-center justify-center px-4">
