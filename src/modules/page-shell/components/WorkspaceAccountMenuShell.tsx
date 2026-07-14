@@ -11,6 +11,9 @@ type AccountMenuShellProps = {
 	signOut?: () => void;
 };
 
+const MENU_ITEM_CLASS_NAME =
+	"flex cursor-pointer items-center rounded-md px-3 py-2 text-left text-m font-medium text-shell-muted outline-none transition-colors duration-150 hover:bg-panel-muted hover:text-shell-foreground focus-visible:bg-panel-muted focus-visible:text-shell-foreground";
+
 export const AccountMenuShell = ({ avatar, description, items, name, signOut }: AccountMenuShellProps) => (
 	<details className="relative">
 		<summary className="flex w-full cursor-pointer list-none items-center gap-3 rounded-lg px-2 py-3 text-left text-shell-foreground transition-colors duration-150 ease hover:bg-white/5 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
@@ -29,19 +32,16 @@ export const AccountMenuShell = ({ avatar, description, items, name, signOut }: 
 
 		<div className="absolute bottom-full left-0 z-20 mb-2 grid w-56 gap-1 rounded-lg border border-shell-border bg-shell-elevated p-1 shadow-shell">
 			{items.map(({ href, label }) => (
-				<Link key={href} href={href} className={menuItemClassName}>
+				<Link key={href} href={href} className={MENU_ITEM_CLASS_NAME}>
 					{label}
 				</Link>
 			))}
 
 			{signOut && (
-				<button className={menuItemClassName} onClick={signOut} type="button">
+				<button className={MENU_ITEM_CLASS_NAME} onClick={signOut} type="button">
 					Sign out
 				</button>
 			)}
 		</div>
 	</details>
 );
-
-const menuItemClassName =
-	"flex cursor-pointer items-center rounded-md px-3 py-2 text-left text-m font-medium text-shell-muted outline-none transition-colors duration-150 hover:bg-panel-muted hover:text-shell-foreground focus-visible:bg-panel-muted focus-visible:text-shell-foreground";
