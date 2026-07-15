@@ -2,10 +2,11 @@
 
 Status: accepted
 
-CashLift keeps marketing demo flows public while production workspace routes and workspace data APIs are protected by Clerk. This preserves a low-friction product demo without allowing missing auth configuration to expose `/app` or `/api/workspace/dataset` in production.
+CashLift keeps an isolated, static product tour public while production workspace routes and workspace data APIs are protected by Clerk. This preserves a low-friction product demo without allowing missing auth configuration to expose `/dashboard/**` or `/api/workspace/**` in production.
 
 ## Consequences
 
-- `/demo` is public and can describe or preview the product.
-- `/app/**` and workspace data APIs fail closed when production auth or data config is missing.
-- Demo workspace data is only available when `CASHLIFT_APP_MODE=demo`.
+- `/demo` is public and contains the audit walkthrough form.
+- `/demo/workspace/**` is a public, read-only tour rendered only from the checked-in Studio Nova fixture. It makes no protected workspace requests and exposes no mutation controls.
+- `/dashboard/**` and `/api/workspace/**` remain protected and fail closed when production auth or data config is missing.
+- The public tour does not change the local `CASHLIFT_APP_MODE=demo` workspace used for development.

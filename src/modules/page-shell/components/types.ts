@@ -12,8 +12,8 @@ export type WorkspaceNavItem = {
 	href: string;
 	icon: LucideIcon;
 	label: string;
-	priority?: boolean;
 	section: WorkspaceSection;
+	priority?: boolean;
 };
 
-export type WorkspaceMode = CashLiftAppMode;
+export type WorkspaceExperience = CashLiftAppMode | "public-demo";

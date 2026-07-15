@@ -1,21 +1,35 @@
 "use client";
 
 import { ProductionAccountMenu } from "./ProductionAccountMenu";
-import type { WorkspaceMode } from "./types";
 import { AccountMenuShell } from "./WorkspaceAccountMenuShell";
+import type { WorkspaceExperienceContract } from "./workspaceExperience";
 
 type WorkspaceAccountMenuProps = {
-	mode: WorkspaceMode;
+	workspace: WorkspaceExperienceContract;
 };
 
-export const WorkspaceAccountMenu = ({ mode }: WorkspaceAccountMenuProps) => {
-	if (mode === "demo") {
+export const WorkspaceAccountMenu = ({ workspace }: WorkspaceAccountMenuProps) => {
+	if (workspace.readOnly) {
+		return (
+			<AccountMenuShell
+				avatar="SN"
+				description="Read-only demo"
+				items={[
+					{ href: "/", label: "Return home" },
+					{ href: "/demo", label: "Book walkthrough" },
+				]}
+				name="Studio Nova"
+			/>
+		);
+	}
+
+	if (workspace.experience === "demo") {
 		return (
 			<AccountMenuShell
 				avatar="SC"
 				description="Finance Lead"
 				items={[
-					{ href: "/dashboard/settings", label: "Workspace settings" },
+					{ href: `${workspace.basePath}/settings`, label: "Workspace settings" },
 					{ href: "/login", label: "Log in" },
 				]}
 				name="Samira Chen"

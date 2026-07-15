@@ -1,7 +1,7 @@
 import { MainContent } from "@/modules/page-shell/components/MainContent";
+import { WorkspaceProviders } from "@/modules/page-shell/components/WorkspaceProviders";
 import { WorkspaceShell } from "@/modules/page-shell/components/WorkspaceShell";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
-import { WorkspaceProviders } from "./WorkspaceProviders";
 
 type DashboardLayoutProps = {
 	children: React.ReactNode;
@@ -9,7 +9,7 @@ type DashboardLayoutProps = {
 
 export default async function DashboardLayout({ children }: DashboardLayoutProps) {
 	const config = getWorkspaceRuntimeConfig();
-	const content = <WorkspaceShell mode={config.mode}>{children}</WorkspaceShell>;
+	const content = <WorkspaceShell experience={config.mode}>{children}</WorkspaceShell>;
 
 	if (!config.configured) {
 		return <WorkspaceUnavailable message={config.message} />;

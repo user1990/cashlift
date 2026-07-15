@@ -1,10 +1,12 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { extname } from "node:path";
 
 const failures = [];
 
-const trackedFiles = execFileSync("git", ["ls-files"], { encoding: "utf8" }).split("\n").filter(Boolean);
+const trackedFiles = execFileSync("git", ["ls-files"], { encoding: "utf8" })
+	.split("\n")
+	.filter((file) => file && existsSync(file));
 
 const textExtensions = new Set([".css", ".env", ".js", ".json", ".md", ".mjs", ".sql", ".ts", ".tsx", ".yaml", ".yml"]);
 

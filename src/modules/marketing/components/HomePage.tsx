@@ -1,23 +1,17 @@
 import { MainContent } from "@/modules/page-shell/components/MainContent";
-import { HomeAuditSection } from "./HomeAuditSection";
+import { HomeDecisionStorySection } from "./HomeDecisionStorySection";
+import { HomeDemoOutcomesSection } from "./HomeDemoOutcomesSection";
+import { HomeFinalCtaSection } from "./HomeFinalCtaSection";
 import { HomeHeroSection } from "./HomeHeroSection";
-import { HomeProductSection } from "./HomeProductSection";
-import { HomeProofSection } from "./HomeProofSection";
-import { HomeSignalsSection } from "./HomeSignalsSection";
-import { HomeWorkflowSection } from "./HomeWorkflowSection";
 
 export const HomePage = () => (
 	<MainContent variant="plain">
 		<HomeHeroSection />
 
-		<HomeProofSection />
+		<HomeDemoOutcomesSection />
 
-		<HomeSignalsSection />
+		<HomeDecisionStorySection />
 
-		<HomeProductSection />
-
-		<HomeWorkflowSection />
-
-		<HomeAuditSection />
+		<HomeFinalCtaSection />
 	</MainContent>
 );

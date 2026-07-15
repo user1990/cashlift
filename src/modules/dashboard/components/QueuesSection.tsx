@@ -12,14 +12,20 @@ import { QueueRow } from "./QueueRow";
 
 type QueuesSectionProps = {
 	dashboard: DashboardViewModel;
+	basePath?: string;
+	readOnly?: boolean;
 };
 
-export const QueuesSection = ({ dashboard }: QueuesSectionProps) => (
+export const QueuesSection = ({ basePath = "/dashboard", dashboard, readOnly }: QueuesSectionProps) => (
 	<section className="grid gap-4 xl:grid-cols-4">
 		<DashboardPanel className="min-h-88 p-5" label="Approvals" title="Spend requests to decide">
-			<ApprovalQueue datasetQueryKey={workspaceDatasetQueryKeys.all} requests={dashboard.pendingApprovals} />
+			<ApprovalQueue
+				datasetQueryKey={workspaceDatasetQueryKeys.all}
+				readOnly={readOnly}
+				requests={dashboard.pendingApprovals}
+			/>
 
-			<PanelLink href="/dashboard/approvals">View all approvals</PanelLink>
+			<PanelLink href={`${basePath}/approvals`}>View all approvals</PanelLink>
 		</DashboardPanel>
 
 		<DashboardPanel className="min-h-88 p-5" label="Invoices" title="Collection queue before buffer risk">
@@ -48,13 +54,13 @@ export const QueuesSection = ({ dashboard }: QueuesSectionProps) => (
 				))}
 			</ul>
 
-			<PanelLink href="/dashboard/invoices">View all invoices</PanelLink>
+			<PanelLink href={`${basePath}/invoices`}>View all invoices</PanelLink>
 		</DashboardPanel>
 
 		<DashboardPanel className="min-h-88 p-5" label="Vendor leaks" title="Renewals to cut first">
 			<LeakList items={dashboard.vendorLeaks.slice(0, 2)} className="space-y-3" />
 
-			<PanelLink href="/dashboard/vendors">View all vendor leaks</PanelLink>
+			<PanelLink href={`${basePath}/vendors`}>View all vendor leaks</PanelLink>
 		</DashboardPanel>
 
 		<DashboardPanel className="min-h-88 p-5" label="Budget guardrails" title="Team limits">
@@ -72,7 +78,7 @@ export const QueuesSection = ({ dashboard }: QueuesSectionProps) => (
 				))}
 			</ul>
 
-			<PanelLink href="/dashboard/budgets">Manage guardrails</PanelLink>
+			<PanelLink href={`${basePath}/budgets`}>Manage guardrails</PanelLink>
 		</DashboardPanel>
 	</section>
 );

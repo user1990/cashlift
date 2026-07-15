@@ -14,6 +14,7 @@ export default defineConfig({
 	reporter: process.env.CI ? "github" : "list",
 	retries: process.env.CI ? 1 : 0,
 	testDir: "./e2e",
+	testIgnore: "production/**",
 	timeout: 60_000,
 	use: {
 		baseURL: process.env.E2E_BASE_URL ?? localBaseUrl,

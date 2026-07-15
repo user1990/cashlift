@@ -12,20 +12,21 @@ import { WorkspaceVendorsSection } from "./WorkspaceVendorsSection";
 type WorkspaceSectionPageProps = {
 	dataset: FinancialDataset;
 	section: Exclude<WorkspaceSection, "overview">;
+	readOnly?: boolean;
 };
 
-export const WorkspaceSectionPage = ({ dataset, section }: WorkspaceSectionPageProps) => (
+export const WorkspaceSectionPage = ({ dataset, readOnly, section }: WorkspaceSectionPageProps) => (
 	<>
 		<WorkspaceSectionHeader section={section} />
 
-		<WorkspaceSectionContent dataset={dataset} section={section} />
+		<WorkspaceSectionContent dataset={dataset} readOnly={readOnly} section={section} />
 	</>
 );
 
-function WorkspaceSectionContent({ dataset, section }: WorkspaceSectionPageProps) {
+function WorkspaceSectionContent({ dataset, readOnly, section }: WorkspaceSectionPageProps) {
 	switch (section) {
 		case "approvals":
-			return <WorkspaceApprovalsSection dataset={dataset} />;
+			return <WorkspaceApprovalsSection dataset={dataset} readOnly={readOnly} />;
 		case "budgets":
 			return <WorkspaceBudgetsSection dataset={dataset} />;
 		case "cash":

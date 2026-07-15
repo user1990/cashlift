@@ -7,7 +7,7 @@ export const MobileNav = () => (
 	<details className="group/nav lg:hidden">
 		<summary
 			aria-label="Toggle navigation"
-			className="inline-flex size-9 cursor-pointer list-none items-center justify-center rounded-md border border-shell-border bg-shell-elevated text-shell-foreground outline-none transition-[border-color,color] duration-150 hover:border-primary-subtle-border hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden"
+			className="inline-flex size-11 cursor-pointer list-none items-center justify-center rounded-md border border-shell-border bg-shell-elevated text-shell-foreground outline-none transition-[border-color,color] duration-150 hover:border-primary-subtle-border hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden"
 		>
 			<MenuIcon aria-hidden className="size-4 group-open/nav:hidden" />
 
@@ -16,13 +16,15 @@ export const MobileNav = () => (
 
 		<nav
 			aria-label="Mobile navigation"
-			className="absolute inset-x-0 top-16 border-t border-shell-border bg-shell px-4 py-4 shadow-shell sm:px-6"
+			className="fixed inset-x-0 top-16 hidden border-t border-shell-border bg-shell px-4 py-4 shadow-shell group-open/nav:block sm:px-6"
 			id="marketing-mobile-nav"
 		>
 			<div className="mx-auto grid max-w-[1180px] gap-5">
 				{MARKETING_NAV_GROUPS.map((group) => (
 					<MobileNavGroup key={group.label} group={group} />
 				))}
+
+				<MobileNavLink href="/customers">Customers</MobileNavLink>
 			</div>
 		</nav>
 	</details>

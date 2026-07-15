@@ -6,10 +6,10 @@ import { IconCard } from "./IconCard";
 export const DemoOverviewSection = () => (
 	<section>
 		<Hero
-			description="See how CashLift turns accounting-style data into approvals, collections, vendor cuts, and cash buffer decisions."
-			label="Demo"
+			description="Share your approval, collection, and renewal questions. We’ll use the Studio Nova workspace to show how CashLift would rank them."
+			label="Audit walkthrough"
 			labelAsHeading
-			title="Run a cash leak audit before you invite the team."
+			title="Book an audit walkthrough."
 		/>
 
 		<ol className="mt-10 grid gap-4 md:grid-cols-3">
@@ -20,8 +20,8 @@ export const DemoOverviewSection = () => (
 			))}
 		</ol>
 
-		<ActionLink href="/dashboard" variant="secondary" className="mt-8">
-			Open interactive demo app
+		<ActionLink href="/demo/workspace" prefetch={false} variant="secondary" className="mt-8">
+			Open live demo
 		</ActionLink>
 	</section>
 );

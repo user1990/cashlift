@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { HomePage } from "@/modules/marketing/components/HomePage";
 
 export const metadata: Metadata = {
-	title: "CashLift — Cash-aware spend decisions for service teams",
-	description:
-		"CashLift helps service firms approve spend, chase cash, and prevent financial leaks before money leaves.",
+	title: "CashLift — See what to collect, approve, or cut today",
+	description: "CashLift ranks the cash actions that matter now in one daily inbox for service firms.",
 };
 
 export default function Home() {
