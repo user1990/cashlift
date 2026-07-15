@@ -176,7 +176,7 @@ Open:
 http://localhost:3000
 ```
 
-The configured pnpm version requires Node 22.13 or newer.
+This project requires Node 24.
 
 ## Demo Mode
 
