@@ -86,8 +86,8 @@ describe("proxy security headers", () => {
 		expect(response.headers.get("Cross-Origin-Opener-Policy")).toEqual("same-origin-allow-popups");
 	});
 
-	it("keeps prefetch requests covered by the proxy matcher", () => {
-		expect(config.matcher).toEqual(["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
+	it("keeps prefetch and Clerk asset requests covered by the proxy matcher", () => {
+		expect(config.matcher).toEqual(["/__clerk/(.*)", "/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
 	});
 
 	it("uses app auth URLs for Clerk middleware redirects", () => {
@@ -118,6 +118,10 @@ describe("proxy security headers", () => {
 
 	it.each(["/login", "/signup"])("routes Clerk middleware for production auth path %s", (pathname) => {
 		expect(needsClerkMiddleware(pathname, true)).toEqual(true);
+	});
+
+	it("routes Clerk proxy assets through Clerk middleware in production", () => {
+		expect(needsClerkMiddleware("/__clerk/clerk.browser.js", true)).toEqual(true);
 	});
 
 	it.each([

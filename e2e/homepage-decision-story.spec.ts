@@ -58,8 +58,12 @@ test.describe("homepage decision story", () => {
 		const header = page.getByRole("banner");
 		await expect(header.getByRole("link", { name: "Log in" })).toBeVisible();
 		await expect(header.getByRole("link", { name: "Open live demo" })).toHaveCount(0);
+		const menuButton = page.getByLabel("Toggle navigation");
+		const menuButtonBox = await menuButton.boundingBox();
+		expect(menuButtonBox?.height).toBeGreaterThanOrEqual(44);
+		expect(menuButtonBox?.width).toBeGreaterThanOrEqual(44);
 
-		await page.getByLabel("Toggle navigation").click();
+		await menuButton.click();
 		await expect(page.getByLabel("Mobile navigation").getByRole("link", { name: "Customers" })).toHaveAttribute(
 			"href",
 			"/customers",

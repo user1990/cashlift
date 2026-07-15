@@ -6,6 +6,7 @@ import { workspaceDemoEnabled } from "@/services/env/app";
 import { updateSupabaseSession } from "@/services/supabase/proxy";
 
 const AUTH_PATH_PREFIXES = ["/login", "/signup"] as const;
+const CLERK_ASSET_PATH_PREFIX = "/__clerk";
 const STATIC_MARKETING_PATH_PREFIXES = [
 	"/contact",
 	"/customers",
@@ -146,7 +147,9 @@ export const needsWorkspaceSession = (pathname: string) =>
 
 export const needsClerkMiddleware = (pathname: string, workspaceAuthEnabled = !workspaceDemoEnabled()) =>
 	workspaceAuthEnabled &&
-	(AUTH_PATH_PREFIXES.some((prefix) => matchesPathPrefix(pathname, prefix)) || needsWorkspaceSession(pathname));
+	(matchesPathPrefix(pathname, CLERK_ASSET_PATH_PREFIX) ||
+		AUTH_PATH_PREFIXES.some((prefix) => matchesPathPrefix(pathname, prefix)) ||
+		needsWorkspaceSession(pathname));
 
 export default function proxy(request: NextRequest, event: NextFetchEvent) {
 	if (needsClerkMiddleware(request.nextUrl.pathname)) {
@@ -157,5 +160,5 @@ export default function proxy(request: NextRequest, event: NextFetchEvent) {
 }
 
 export const config = {
-	matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
+	matcher: ["/__clerk/(.*)", "/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };
