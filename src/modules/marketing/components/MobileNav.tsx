@@ -23,6 +23,8 @@ export const MobileNav = () => (
 				{MARKETING_NAV_GROUPS.map((group) => (
 					<MobileNavGroup key={group.label} group={group} />
 				))}
+
+				<MobileNavLink href="/customers">Customers</MobileNavLink>
 			</div>
 		</nav>
 	</details>

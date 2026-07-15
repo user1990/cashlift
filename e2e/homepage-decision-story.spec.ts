@@ -55,6 +55,16 @@ test.describe("homepage decision story", () => {
 		await page.setViewportSize({ height: 844, width: 390 });
 		await page.goto("/");
 
+		const header = page.getByRole("banner");
+		await expect(header.getByRole("link", { name: "Log in" })).toBeVisible();
+		await expect(header.getByRole("link", { name: "Open live demo" })).toHaveCount(0);
+
+		await page.getByLabel("Toggle navigation").click();
+		await expect(page.getByLabel("Mobile navigation").getByRole("link", { name: "Customers" })).toHaveAttribute(
+			"href",
+			"/customers",
+		);
+
 		await expect(page.locator(".home-story-stage")).toBeHidden();
 		await expect(page.locator("[data-story-chapter] img")).toHaveCount(3);
 		expect(

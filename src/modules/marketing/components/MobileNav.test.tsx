@@ -14,7 +14,7 @@ describe("MobileNav", () => {
 		const featuresLink = screen.getByRole("link", { name: "Features" });
 		expect(featuresLink).toBeVisible();
 		expect(screen.getByRole("link", { name: "Software Services" })).toBeVisible();
-		expect(screen.queryByRole("link", { name: "Customers" })).not.toBeInTheDocument();
+		expect(screen.getByRole("link", { name: "Customers" })).toHaveAttribute("href", "/customers");
 		expect(screen.queryByRole("link", { name: "Log in" })).not.toBeInTheDocument();
 		expect(screen.queryByRole("link", { name: "Sign up" })).not.toBeInTheDocument();
 		expect(featuresLink).toHaveAttribute("href", "/features");

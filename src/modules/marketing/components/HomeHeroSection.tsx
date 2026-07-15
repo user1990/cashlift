@@ -36,6 +36,7 @@ export const HomeHeroSection = () => (
 				<Image
 					alt="Studio Nova overview with ranked cash actions, 13-week cash outlook, and team budget charts"
 					className="h-auto w-full"
+					decoding="sync"
 					fetchPriority="high"
 					height={1800}
 					priority

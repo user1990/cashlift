@@ -15,7 +15,7 @@ export const HeaderActions = () => (
 		<Link
 			href="/demo/workspace"
 			prefetch={false}
-			className="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border border-primary bg-primary px-2 text-s font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow sm:px-3 sm:text-m"
+			className="hidden h-9 items-center justify-center whitespace-nowrap rounded-md border border-primary bg-primary px-3 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow sm:inline-flex"
 		>
 			Open live demo
 		</Link>
