@@ -16,7 +16,7 @@ export const MobileNav = () => (
 
 		<nav
 			aria-label="Mobile navigation"
-			className="fixed inset-x-0 top-16 border-t border-shell-border bg-shell px-4 py-4 shadow-shell sm:px-6"
+			className="fixed inset-x-0 top-16 hidden border-t border-shell-border bg-shell px-4 py-4 shadow-shell group-open/nav:block sm:px-6"
 			id="marketing-mobile-nav"
 		>
 			<div className="mx-auto grid max-w-[1180px] gap-5">

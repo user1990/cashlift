@@ -1,6 +1,4 @@
-import Script from "next/script";
 import { HomeDecisionStoryChapter } from "./HomeDecisionStoryChapter";
-import { HomeDecisionStoryImage } from "./HomeDecisionStoryImage";
 
 const DECISION_CHAPTERS = [
 	{
@@ -30,15 +28,8 @@ const DECISION_CHAPTERS = [
 ] as const;
 
 export const HomeDecisionStorySection = () => (
-	<section
-		aria-labelledby="decision-story-title"
-		className="home-story border-b border-shell-border"
-		data-active-chapter="approve"
-		data-home-story
-	>
-		<Script src="/marketing/home-story.js" strategy="afterInteractive" />
-
-		<header className="mx-auto max-w-[1180px] px-4 pb-8 pt-20 sm:px-6 lg:px-8 lg:pt-28">
+	<section aria-labelledby="decision-story-title" className="border-b border-shell-border">
+		<header className="mx-auto max-w-[1180px] px-4 pb-10 pt-16 sm:px-6 lg:px-8 lg:pt-20">
 			<p className="text-s+ font-semibold uppercase tracking-normal text-primary">From inbox to decision</p>
 
 			<h2
@@ -49,20 +40,12 @@ export const HomeDecisionStorySection = () => (
 			</h2>
 		</header>
 
-		<div className="mx-auto grid max-w-[1180px] gap-12 px-4 pb-20 sm:px-6 lg:grid-cols-[0.78fr_1.22fr] lg:gap-16 lg:px-8 lg:pb-28">
-			<ol>
+		<div className="mx-auto max-w-[1180px] px-4 pb-20 sm:px-6 lg:px-8 lg:pb-24">
+			<ol className="space-y-16 lg:space-y-20">
 				{DECISION_CHAPTERS.map((chapter, index) => (
 					<HomeDecisionStoryChapter key={chapter.chapter} {...chapter} index={index + 1} />
 				))}
 			</ol>
-
-			<div className="home-story-stage hidden lg:grid lg:gap-6">
-				{DECISION_CHAPTERS.map(({ chapter, imageAlt, imageSrc }) => (
-					<figure className="home-story-media" data-story-media={chapter} key={chapter}>
-						<HomeDecisionStoryImage alt={imageAlt} src={imageSrc} />
-					</figure>
-				))}
-			</div>
 		</div>
 	</section>
 );

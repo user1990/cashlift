@@ -5,7 +5,12 @@ test.describe("homepage decision story", () => {
 		await page.goto("/");
 
 		await expect(page.getByRole("heading", { level: 1 })).toHaveText("See what to collect, approve, or cut today.");
-		await expect(page.getByText("Studio Nova demo outcomes · illustrative")).toBeVisible();
+		await expect(page.getByRole("heading", { name: "Meet Studio Nova" })).toBeVisible();
+		await expect(
+			page.getByText(
+				"Studio Nova is a fictional services company used to demonstrate CashLift with realistic, illustrative data.",
+			),
+		).toBeVisible();
 
 		await page.locator("main").getByRole("link", { name: "Open live demo" }).click();
 		await expect(page).toHaveURL(/\/demo\/workspace$/);
@@ -17,22 +22,32 @@ test.describe("homepage decision story", () => {
 		await expect(page.getByText("Book an audit walkthrough.", { exact: true })).toBeVisible();
 	});
 
-	test("progresses through one sticky product chapter at a time", async ({ page }) => {
+	test("pairs every decision with its product view through normal scrolling", async ({ page }) => {
 		await page.setViewportSize({ height: 900, width: 1280 });
 		await page.goto("/");
 
-		const story = page.locator("[data-home-story]");
-		const stage = page.locator(".home-story-stage");
+		for (const { alt, chapter, title } of [
+			{
+				alt: "Studio Nova approval queue showing the cash remaining after a hardware request",
+				chapter: "approve",
+				title: "Know the cash impact before saying yes.",
+			},
+			{
+				alt: "Studio Nova invoice view highlighting overdue collection risk",
+				chapter: "recover",
+				title: "Chase the invoice that protects the buffer.",
+			},
+			{
+				alt: "Studio Nova vendor view showing low-use and duplicate subscriptions",
+				chapter: "cut",
+				title: "Stop low-use renewals before they hit cash.",
+			},
+		]) {
+			const decision = page.locator(`[data-story-chapter="${chapter}"]`);
 
-		await expect(story).toHaveAttribute("data-enhanced", "true");
-		await expect(stage).toHaveCSS("position", "sticky");
-
-		for (const chapter of ["approve", "recover", "cut"]) {
-			await page
-				.locator(`[data-story-chapter="${chapter}"]`)
-				.evaluate((element) => element.scrollIntoView({ block: "center" }));
-			await expect(story).toHaveAttribute("data-active-chapter", chapter);
-			await expect(page.locator(`[data-story-media="${chapter}"]`)).toHaveCSS("opacity", "1");
+			await decision.scrollIntoViewIfNeeded();
+			await expect(decision.getByRole("heading", { name: title })).toBeVisible();
+			await expect(decision.getByRole("img", { name: alt })).toBeVisible();
 		}
 	});
 
@@ -47,13 +62,6 @@ test.describe("homepage decision story", () => {
 		).toBe(true);
 	});
 
-	test("keeps the scroll story still when reduced motion is requested", async ({ page }) => {
-		await page.emulateMedia({ reducedMotion: "reduce" });
-		await page.goto("/");
-
-		await expect(page.locator('[data-story-media="approve"]')).toHaveCSS("transition-duration", "0s");
-	});
-
 	test("keeps every chapter readable when JavaScript is disabled", async ({ browser, baseURL }) => {
 		const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
 		const page = await context.newPage();
@@ -61,7 +69,7 @@ test.describe("homepage decision story", () => {
 		await page.goto("/");
 		await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 		await expect(page.locator("[data-story-chapter]")).toHaveCount(3);
-		await expect(page.locator(".home-story-stage")).toHaveCSS("position", "static");
+		await expect(page.locator("[data-story-chapter] img")).toHaveCount(3);
 
 		await context.close();
 	});

@@ -120,34 +120,6 @@ textarea,
 	background: color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
-@media (width >= 64rem) {
-	.home-story[data-enhanced="true"] .home-story-stage {
-		align-self: start;
-		display: block;
-		height: calc(100vh - 8rem);
-		position: sticky;
-		top: 6rem;
-	}
-
-	.home-story[data-enhanced="true"] .home-story-media {
-		inset: 50% 0 auto;
-		opacity: 0;
-		pointer-events: none;
-		position: absolute;
-		transform: translateY(calc(-50% + 1rem)) scale(0.985);
-		transition:
-			opacity 240ms ease,
-			transform 240ms ease;
-	}
-
-	.home-story[data-active-chapter="approve"] [data-story-media="approve"],
-	.home-story[data-active-chapter="recover"] [data-story-media="recover"],
-	.home-story[data-active-chapter="cut"] [data-story-media="cut"] {
-		opacity: 1;
-		transform: translateY(-50%) scale(1);
-	}
-}
-
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;
@@ -160,13 +132,5 @@ textarea,
 		animation-iteration-count: 1;
 		scroll-behavior: auto;
 		transition-duration: 0.01ms;
-	}
-
-	.home-story[data-enhanced="true"] .home-story-media {
-		transition: none;
-	}
-
-	.home-story[data-enhanced="true"] .home-story-media {
-		transform: translateY(-50%);
 	}
 }

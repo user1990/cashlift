@@ -7,7 +7,7 @@ type ShellProps = {
 };
 
 export const Shell = ({ children }: ShellProps) => (
-	<div className="flex min-h-screen flex-col bg-shell text-shell-foreground">
+	<div className="flex min-h-screen w-full min-w-0 flex-col bg-shell text-shell-foreground">
 		<Header />
 
 		{children}
