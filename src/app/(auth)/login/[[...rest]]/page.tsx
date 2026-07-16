@@ -1,7 +1,8 @@
-import { SignIn } from "@clerk/nextjs";
+import { ClerkLoaded, ClerkLoading, SignIn } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { ServerAuthProvider } from "@/services/clerk/serverProvider";
+import { AuthFormLoading } from "../../_components/AuthFormLoading";
 
 export const metadata: Metadata = {
 	title: "Login — CashLift",
@@ -15,7 +16,13 @@ export default async function Login() {
 
 	return (
 		<ServerAuthProvider>
-			<SignIn fallbackRedirectUrl="/dashboard" signUpUrl="/signup" />
+			<ClerkLoading>
+				<AuthFormLoading title="Sign in to CashLift" />
+			</ClerkLoading>
+
+			<ClerkLoaded>
+				<SignIn fallbackRedirectUrl="/dashboard" signUpUrl="/signup" />
+			</ClerkLoaded>
 		</ServerAuthProvider>
 	);
 }
