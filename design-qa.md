@@ -34,7 +34,7 @@
 
 ## Full-view checks
 
-- The auth card remains centered and retains the same 392 x 408 geometry before and after the reveal.
+- The auth cards remain centered and retain route-specific stable footprints before and after reveal: 392 x 438 for login and 392 x 522 for signup.
 - The rails stop well inside the viewport and remain behind the card without overlapping form content.
 - The layout has no footer and keeps focus on the authentication card.
 - The header wordmark is reused directly from the CashLift marketing header.
@@ -96,6 +96,7 @@
 24. Set the primary Continue button to a uniform 12px radius and verified its computed overflow clips the fill cleanly at every corner.
 25. Reserved the email input's 1px border footprint and changed only its inset ring color on focus, keeping all four edges visible without moving the Continue button.
 26. Removed the production backdrop image, overlay, outer border, and rounded frame while retaining the static rails and animated dots.
+27. Applied the shared glass shell and Clerk appearance to signup, then reserved responsive route-specific card footprints so neither auth form changes height when loading completes.
 
 ## Final result
 

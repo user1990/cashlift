@@ -2,7 +2,9 @@ import { ClerkLoaded, ClerkLoading, SignUp } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { ServerAuthProvider } from "@/services/clerk/serverProvider";
-import { AuthFormLoading } from "../../_components/AuthFormLoading";
+import { AuthGlassLoading } from "../../_components/AuthGlassLoading";
+import { AuthGlassShell } from "../../_components/AuthGlassShell";
+import { AUTH_APPEARANCE } from "../../_lib/authAppearance";
 
 export const metadata: Metadata = {
 	title: "Sign up — CashLift",
@@ -15,14 +17,16 @@ export default async function SignUpPage() {
 	await connection();
 
 	return (
-		<ServerAuthProvider>
-			<ClerkLoading>
-				<AuthFormLoading title="Create your CashLift account" />
-			</ClerkLoading>
+		<AuthGlassShell action={{ href: "/login", label: "Sign in", prompt: "Already have an account?" }} size="expanded">
+			<ServerAuthProvider>
+				<ClerkLoading>
+					<AuthGlassLoading />
+				</ClerkLoading>
 
-			<ClerkLoaded>
-				<SignUp fallbackRedirectUrl="/dashboard" signInUrl="/login" />
-			</ClerkLoaded>
-		</ServerAuthProvider>
+				<ClerkLoaded>
+					<SignUp appearance={AUTH_APPEARANCE} fallbackRedirectUrl="/dashboard" signInUrl="/login" />
+				</ClerkLoaded>
+			</ServerAuthProvider>
+		</AuthGlassShell>
 	);
 }
