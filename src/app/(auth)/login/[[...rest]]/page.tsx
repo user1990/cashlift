@@ -56,7 +56,7 @@ export default async function Login() {
 	await connection();
 
 	return (
-		<AuthGlassShell>
+		<AuthGlassShell signUpHref="/signup">
 			<ServerAuthProvider>
 				<ClerkLoading>
 					<AuthGlassLoading />
