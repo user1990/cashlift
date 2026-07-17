@@ -54,16 +54,50 @@ Workspace pages resolve data on the server. In demo mode, the resolver returns t
 
 ## Technology stack
 
-| Area | Technology |
-| --- | --- |
-| Runtime and language | [Node.js](https://nodejs.org/), [pnpm](https://pnpm.io/), [React](https://react.dev/), [Next.js](https://nextjs.org/), and [TypeScript](https://www.typescriptlang.org/). |
-| UI | [Tailwind CSS](https://tailwindcss.com/), [React Aria Components](https://react-spectrum.adobe.com/react-aria/components.html), [Lucide](https://lucide.dev/), [Motion](https://motion.dev/), [Sonner](https://sonner.emilkowal.ski/), [Recharts](https://recharts.org/), [date-fns](https://date-fns.org/), and [cnfast](https://github.com/aidenybai/cnfast). |
-| Forms and validation | [React Hook Form](https://react-hook-form.com/), [resolvers](https://github.com/react-hook-form/resolvers), [Zod](https://zod.dev/), and [React Spectrum internationalized date](https://react-spectrum.adobe.com/internationalized/date/index.html). |
-| Data and auth | [Clerk](https://clerk.com/), [Supabase](https://supabase.com/), and [TanStack Query](https://tanstack.com/query). |
-| Product operations | [Sentry](https://sentry.io/), [Vercel Analytics](https://vercel.com/analytics), [Vercel Speed Insights](https://vercel.com/docs/speed-insights), and [next-intl](https://next-intl.dev/). |
-| Documentation | [Blume](https://useblume.dev/), [Astro](https://astro.build/), [MDX](https://mdxjs.com/), [Astro React](https://docs.astro.build/en/guides/integrations-guide/react/), [Tailwind Vite](https://tailwindcss.com/docs/installation/using-vite), and [Shiki Twoslash](https://shiki.style/packages/twoslash). |
-| Testing and quality | [Vitest](https://vitest.dev/), [Testing Library](https://testing-library.com/), [Playwright](https://playwright.dev/), [axe-core](https://github.com/dequelabs/axe-core-npm), [MSW](https://mswjs.io/), [Biome](https://biomejs.dev/), [Fallow](https://docs.fallow.tools/), [React Doctor](https://www.npmjs.com/package/react-doctor), and [Lefthook](https://lefthook.dev/). |
-| Component workbench | [Storybook](https://storybook.js.org/), [Next.js Vite framework](https://storybook.js.org/docs/get-started/frameworks/nextjs), [Docs addon](https://storybook.js.org/docs/writing-docs), and [MCP addon](https://www.npmjs.com/package/@storybook/addon-mcp). |
+<div class="tech-stack-table" role="region" aria-label="CashLift technology stack">
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Area</th>
+        <th scope="col">Tools and documentation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row"><span>Runtime</span><small>Language and framework</small></th>
+        <td><a href="https://nodejs.org/docs/latest/api/">Node.js</a><a href="https://pnpm.io/motivation">pnpm</a><a href="https://react.dev/learn">React</a><a href="https://nextjs.org/docs">Next.js</a><a href="https://www.typescriptlang.org/docs/">TypeScript</a></td>
+      </tr>
+      <tr>
+        <th scope="row"><span>Interface</span><small>UI, motion, and data display</small></th>
+        <td><a href="https://tailwindcss.com/docs">Tailwind CSS</a><a href="https://react-spectrum.adobe.com/react-aria/components.html">React Aria</a><a href="https://lucide.dev/guide/">Lucide</a><a href="https://motion.dev/docs/react">Motion</a><a href="https://sonner.emilkowal.ski/">Sonner</a><a href="https://recharts.github.io/en-US/">Recharts</a><a href="https://date-fns.org/docs/Getting-Started">date-fns</a><a href="https://github.com/aidenybai/cnfast">cnfast</a></td>
+      </tr>
+      <tr>
+        <th scope="row"><span>Forms</span><small>Input and validation</small></th>
+        <td><a href="https://react-hook-form.com/docs">React Hook Form</a><a href="https://github.com/react-hook-form/resolvers">Resolvers</a><a href="https://zod.dev/">Zod</a><a href="https://react-spectrum.adobe.com/internationalized/date/index.html">Internationalized Date</a></td>
+      </tr>
+      <tr>
+        <th scope="row"><span>Data</span><small>Identity, database, and cache</small></th>
+        <td><a href="https://clerk.com/docs">Clerk</a><a href="https://supabase.com/docs">Supabase</a><a href="https://tanstack.com/query/latest/docs/framework/react/overview">TanStack Query</a></td>
+      </tr>
+      <tr>
+        <th scope="row"><span>Operations</span><small>Observability and product insight</small></th>
+        <td><a href="https://docs.sentry.io/platforms/javascript/guides/nextjs/">Sentry for Next.js</a><a href="https://vercel.com/docs/analytics">Vercel Analytics</a><a href="https://vercel.com/docs/speed-insights">Speed Insights</a><a href="https://next-intl.dev/docs">next-intl</a></td>
+      </tr>
+      <tr>
+        <th scope="row"><span>Documentation</span><small>Authoring and rendering</small></th>
+        <td><a href="https://useblume.dev/docs">Blume</a><a href="https://docs.astro.build/">Astro</a><a href="https://mdxjs.com/docs/">MDX</a><a href="https://docs.astro.build/en/guides/integrations-guide/react/">Astro React</a><a href="https://tailwindcss.com/docs/installation/using-vite">Tailwind Vite</a><a href="https://shiki.style/packages/twoslash">Shiki Twoslash</a></td>
+      </tr>
+      <tr>
+        <th scope="row"><span>Quality</span><small>Testing and code health</small></th>
+        <td><a href="https://vitest.dev/guide/">Vitest</a><a href="https://testing-library.com/docs/">Testing Library</a><a href="https://playwright.dev/docs/intro">Playwright</a><a href="https://github.com/dequelabs/axe-core-npm">axe-core</a><a href="https://mswjs.io/docs/">MSW</a><a href="https://biomejs.dev/guides/getting-started/">Biome</a><a href="https://docs.fallow.tools/">Fallow</a><a href="https://react.doctor/docs">React Doctor</a><a href="https://lefthook.dev/">Lefthook</a></td>
+      </tr>
+      <tr>
+        <th scope="row"><span>Workbench</span><small>Component development</small></th>
+        <td><a href="https://storybook.js.org/docs">Storybook</a><a href="https://storybook.js.org/docs/get-started/frameworks/nextjs">Next.js framework</a><a href="https://storybook.js.org/docs/writing-docs">Docs addon</a><a href="https://storybook.js.org/docs/ai/mcp/overview">MCP addon</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 For exact versions and the full direct dependency manifest, see [`package.json`](https://github.com/user1990/cashlift/blob/main/package.json).
 
