@@ -5,13 +5,38 @@ description: Route composition, module boundaries, workspace data flow, and the 
 
 CashLift separates public marketing, public demo, and authenticated workspace concerns.
 
-```text
-Marketing routes → public product information
-Public demo routes → static read-only fixture tour
-Dashboard routes → Clerk-authenticated company workspace
-                         ↓
-                 Server repository → Supabase RLS
-```
+<div class="route-flow" role="group" aria-label="CashLift route and data flow">
+  <div class="route-flow-routes">
+    <section class="route-flow-card route-flow-marketing">
+      <span>Public</span>
+      <h3>Marketing routes</h3>
+      <p>Product information, pricing, use cases, and legal pages.</p>
+    </section>
+    <section class="route-flow-card route-flow-demo">
+      <span>Public demo</span>
+      <h3>Fixture tour</h3>
+      <p>A static, read-only Studio Nova workspace experience.</p>
+    </section>
+    <section class="route-flow-card route-flow-workspace">
+      <span>Protected</span>
+      <h3>Dashboard routes</h3>
+      <p>A Clerk-authenticated workspace for a company and its members.</p>
+    </section>
+  </div>
+  <div class="route-flow-connector" aria-hidden="true"><span>Authenticated data path</span></div>
+  <section class="route-flow-data">
+    <div>
+      <span>Server boundary</span>
+      <h3>Server repository</h3>
+      <p>Resolves the current session and loads company-scoped financial data.</p>
+    </div>
+    <div class="route-flow-steps">
+      <span>Clerk session</span>
+      <b>→</b>
+      <span>Supabase RLS</span>
+    </div>
+  </section>
+</div>
 
 ## Source ownership
 
@@ -19,23 +44,36 @@ Dashboard routes → Clerk-authenticated company workspace
 
 - **src/**
   - **app/**
-    - Route wrappers, layouts, metadata, auth gates, and composition.
+    - Route groups, layouts, metadata, API handlers, auth gates, and route composition.
+    - **(marketing)/** — public product, legal, and demo-entry pages.
+    - **(public-demo)/** — static read-only workspace tour.
+    - **(workspace)/** — Clerk-protected dashboard pages.
+    - **api/** — server-only HTTP boundaries for workspace operations.
   - **modules/**
-    - Product capabilities and workspace data.
+    - Product capabilities, schemas, repository contracts, and feature-specific UI.
+    - **workspace/**, **dashboard/**, **spend-requests/**, **invoices/**, **vendors/**, **budgets/**, **cash-actions/**, and **subscriptions/**.
   - **ui/**
-    - Generic reusable UI primitives.
+    - Generic reusable UI primitives, controlled fields, stories, and styling utilities.
   - **services/**
-    - Clerk, Supabase, Sentry, environment configuration, and i18n.
+    - Clerk, Supabase, Sentry, React Query, environment configuration, i18n, and platform integrations.
   - **utilities/**
     - Domain-agnostic helpers.
+  - **test/**
+    - Shared test setup and feature fixtures.
 - **supabase/**
   - Schema and row-level security policies.
 - **e2e/**
-  - Playwright end-to-end tests.
+  - Playwright journeys for demo and production behavior.
 - **.storybook/**
   - Storybook configuration.
 - **docs/**
   - Blume documentation source.
+- **public/**
+  - Static product, marketing, and brand assets.
+- **scripts/**
+  - Repository automation and security checks.
+- **.github/workflows/**
+  - CI checks and scheduled repository automation.
 
 </FileTree>
 
