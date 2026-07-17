@@ -32,14 +32,17 @@ const SIGN_IN_APPEARANCE = {
 		cardBox: { boxShadow: "none", width: "100%" },
 		footer: { display: "none" },
 		formFieldInput: {
+			border: "1px solid transparent !important",
+			boxShadow: "inset 0 0 0 1px var(--border-strong) !important",
+			boxSizing: "border-box",
 			"&:focus": {
-				border: "1px solid var(--primary) !important",
-				boxShadow: "none !important",
+				borderColor: "transparent !important",
+				boxShadow: "inset 0 0 0 1px var(--primary) !important",
 				outline: "none !important",
 			},
 			"&:focus-visible": {
-				border: "1px solid var(--primary) !important",
-				boxShadow: "none !important",
+				borderColor: "transparent !important",
+				boxShadow: "inset 0 0 0 1px var(--primary) !important",
 				outline: "none !important",
 			},
 		},

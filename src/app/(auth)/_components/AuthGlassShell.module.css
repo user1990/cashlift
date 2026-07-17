@@ -1,14 +1,4 @@
 .backdrop {
-	background-image:
-		linear-gradient(
-			color-mix(in srgb, var(--shell) 18%, transparent),
-			color-mix(in srgb, var(--shell) 18%, transparent)
-		),
-		url("/brand/hero-finance-command.png");
-	background-position: center;
-	background-size: cover;
-	border: 1px solid var(--shell-border);
-	border-radius: 1.25rem;
 	display: grid;
 	min-height: calc(100dvh - 4rem);
 	overflow: hidden;
