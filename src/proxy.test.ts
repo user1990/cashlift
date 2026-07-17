@@ -48,6 +48,17 @@ describe("proxy security headers", () => {
 		expect(policy).not.toContain("strict-dynamic");
 	});
 
+	it("allows the Vercel toolbar frame only in preview deployments", () => {
+		vi.stubEnv("VERCEL_ENV", "preview");
+
+		expect(createContentSecurityPolicy("test-nonce")).toContain("frame-src 'self'");
+		expect(createContentSecurityPolicy("test-nonce")).toContain("https://vercel.live");
+
+		vi.stubEnv("VERCEL_ENV", "production");
+
+		expect(createContentSecurityPolicy("test-nonce")).not.toContain("https://vercel.live");
+	});
+
 	it("allows prerendered marketing pages to hydrate", async () => {
 		const request = new NextRequest("https://cashlift.test/demo");
 

@@ -26,7 +26,7 @@ export const AuthGlassShell = ({ action, children, size = "default" }: AuthGlass
 
 				<div className={styles.content}>{children}</div>
 
-				<Link className={styles.authAction} href={action.href}>
+				<Link className={styles.authAction} href={action.href} prefetch={false}>
 					{action.prompt} <span>{action.label}</span>
 				</Link>
 			</div>

@@ -32,7 +32,7 @@ export const AUTH_APPEARANCE = {
 				outline: "none !important",
 			},
 		},
-		formButtonPrimary: { borderRadius: "0.75rem !important", overflow: "hidden" },
+		formButtonPrimary: { borderRadius: "9999px !important", overflow: "hidden" },
 		rootBox: { width: "100%" },
 		socialButtonsBlockButton: {
 			background: "color-mix(in srgb, var(--shell-elevated) 50%, transparent)",
