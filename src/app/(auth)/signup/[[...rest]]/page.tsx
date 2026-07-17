@@ -1,10 +1,10 @@
 import { ClerkLoaded, ClerkLoading, SignUp } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { connection } from "next/server";
+import { AuthGlassLoading } from "@/app/(auth)/_components/AuthGlassLoading";
+import { AuthGlassShell } from "@/app/(auth)/_components/AuthGlassShell";
+import { AUTH_APPEARANCE } from "@/app/(auth)/_lib/authAppearance";
 import { ServerAuthProvider } from "@/services/clerk/serverProvider";
-import { AuthGlassLoading } from "../../_components/AuthGlassLoading";
-import { AuthGlassShell } from "../../_components/AuthGlassShell";
-import { AUTH_APPEARANCE } from "../../_lib/authAppearance";
 
 export const metadata: Metadata = {
 	title: "Sign up — CashLift",
