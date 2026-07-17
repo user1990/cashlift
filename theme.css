@@ -1,0 +1,24 @@
+article h2:has(> a[href="#source-ownership"]) + div {
+	background: color-mix(in oklab, var(--blume-muted) 45%, transparent);
+}
+
+article h2:has(> a[href="#source-ownership"]) + div li {
+	color: var(--blume-muted-foreground);
+}
+
+article h2:has(> a[href="#source-ownership"]) + div strong {
+	color: var(--blume-foreground);
+	font-family: var(--blume-font-mono);
+	font-weight: 600;
+}
+
+article h2:has(> a[href="#source-ownership"]) + div strong::before {
+	content: "";
+	display: inline-block;
+	width: 0.9rem;
+	height: 0.7rem;
+	margin-right: 0.45rem;
+	background: #facc15;
+	clip-path: polygon(0 18%, 42% 18%, 53% 0, 100% 0, 100% 100%, 0 100%);
+	vertical-align: -0.05rem;
+}
