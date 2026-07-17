@@ -72,6 +72,29 @@
 	--font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
 }
 
+@theme {
+	--animate-auth-reveal: auth-reveal 220ms cubic-bezier(0.22, 1, 0.36, 1);
+	--animate-auth-skeleton-pulse: auth-skeleton-pulse 1.6s ease-in-out infinite;
+
+	@keyframes auth-reveal {
+		from {
+			opacity: 0;
+			transform: translateY(0.4rem) scale(0.994);
+		}
+
+		to {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
+	}
+
+	@keyframes auth-skeleton-pulse {
+		50% {
+			opacity: 0.58;
+		}
+	}
+}
+
 html {
 	background: var(--shell);
 	color-scheme: dark;

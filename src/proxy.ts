@@ -21,6 +21,7 @@ const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard", "/api/workspace"] as cons
 const NEXT_IMAGE_FILL_STYLE_HASH = "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='";
 const NEXT_IMAGE_COLOR_STYLE_HASH = "'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk='";
 const isDevelopment = () => process.env.NODE_ENV === "development";
+const isVercelPreview = () => process.env.VERCEL_ENV === "preview";
 
 const createSecurityPolicy = (scriptSource: string, styleSource: string) =>
 	[
@@ -32,7 +33,7 @@ const createSecurityPolicy = (scriptSource: string, styleSource: string) =>
 		"img-src 'self' blob: data: https:",
 		"font-src 'self'",
 		"connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://clerk-telemetry.com https://challenges.cloudflare.com https://*.supabase.co https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.vercel-insights.com",
-		"frame-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com",
+		`frame-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com${isVercelPreview() ? " https://vercel.live" : ""}`,
 		"worker-src 'self' blob:",
 		"object-src 'none'",
 		"base-uri 'self'",

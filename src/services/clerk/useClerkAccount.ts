@@ -3,17 +3,34 @@
 import { useClerk, useUser } from "@clerk/nextjs";
 import { CLERK_SIGN_IN_URL } from "./config";
 
+type ClerkAccountUser = {
+	fullName: string | null;
+	primaryEmailAddress: { emailAddress: string } | null;
+};
+
+type GetClerkAccountDetailsOptions = {
+	loaded: boolean;
+	user: ClerkAccountUser | null | undefined;
+};
+
 export const useClerkAccount = () => {
 	const { signOut } = useClerk();
-	const { user } = useUser();
+	const { isLoaded, user } = useUser();
+	const account = getClerkAccountDetails({ loaded: isLoaded, user });
 
-	if (!user) {
-		return {
-			avatar: "AC",
-			description: "Workspace user",
-			name: "Account",
-			signOut: () => signOut({ redirectUrl: CLERK_SIGN_IN_URL }),
-		};
+	if (!account) {
+		return null;
+	}
+
+	return {
+		...account,
+		signOut: () => signOut({ redirectUrl: CLERK_SIGN_IN_URL }),
+	};
+};
+
+export const getClerkAccountDetails = ({ loaded, user }: GetClerkAccountDetailsOptions) => {
+	if (!loaded || !user) {
+		return null;
 	}
 
 	const emailAddress = user.primaryEmailAddress?.emailAddress;
@@ -23,7 +40,6 @@ export const useClerkAccount = () => {
 		avatar: getInitials(name),
 		description: emailAddress ?? "Workspace user",
 		name,
-		signOut: () => signOut({ redirectUrl: CLERK_SIGN_IN_URL }),
 	};
 };
 
