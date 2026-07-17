@@ -1,4 +1,7 @@
-# Public demo, protected workspace
+---
+title: Public demo, protected workspace
+description: Keep the product tour public without exposing production workspace data.
+---
 
 Status: accepted
 

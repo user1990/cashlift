@@ -133,7 +133,16 @@
 			]
 		}
 	],
-	"ignoreDependencies": ["turbopack-inline-svg-loader", "babel-plugin-react-compiler", "@typescript/native"],
+	"ignorePatterns": ["docs/**", "blume.config.ts"],
+	"ignoreDependencies": [
+		"turbopack-inline-svg-loader",
+		"babel-plugin-react-compiler",
+		"@typescript/native",
+		"@astrojs/mdx",
+		"@astrojs/react",
+		"@shikijs/twoslash",
+		"@tailwindcss/vite"
+	],
 	"rules": {
 		"unused-files": "error",
 		"unused-exports": "error",

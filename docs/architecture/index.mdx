@@ -1,0 +1,76 @@
+---
+title: Architecture overview
+description: Route composition, module boundaries, workspace data flow, and the CashLift technology stack.
+---
+
+CashLift separates public marketing, public demo, and authenticated workspace concerns.
+
+```text
+Marketing routes → public product information
+Public demo routes → static read-only fixture tour
+Dashboard routes → Clerk-authenticated company workspace
+                         ↓
+                 Server repository → Supabase RLS
+```
+
+## Source ownership
+
+<FileTree>
+
+- 📁 **src/**
+  - 📁 **app/**
+    - Route wrappers, layouts, metadata, auth gates, and composition.
+  - 📁 **modules/**
+    - Product capabilities and workspace data.
+  - 📁 **ui/**
+    - Generic reusable UI primitives.
+  - 📁 **services/**
+    - Clerk, Supabase, Sentry, environment configuration, and i18n.
+  - 📁 **utilities/**
+    - Domain-agnostic helpers.
+- 📁 **supabase/**
+  - Schema and row-level security policies.
+- 📁 **e2e/**
+  - Playwright end-to-end tests.
+- 📁 **.storybook/**
+  - Storybook configuration.
+- 📁 **docs/**
+  - Blume documentation source.
+
+</FileTree>
+
+Business modules should not casually import other business modules. Routes compose them, while explicit composition modules such as `dashboard`, `workspace`, and `page-shell` own their documented cross-module relationships.
+
+## Data boundary
+
+Workspace pages resolve data on the server. In demo mode, the resolver returns the typed Studio Nova fixture. In production, it requires Clerk and Supabase configuration, authenticates the user, and uses company-scoped row-level security. Browser code does not query finance tables directly.
+
+## Route groups
+
+- `(marketing)` contains public marketing, use-case, legal, and demo-entry routes.
+- `(public-demo)` contains the public read-only workspace tour.
+- `(workspace)` contains authenticated dashboard routes for overview, approvals, budgets, cash, invoices, vendors, team, and settings.
+- `(auth)` contains sign-in and sign-up routes.
+
+## Technology stack
+
+| Area | Technology |
+| --- | --- |
+| Runtime and language | [Node.js](https://nodejs.org/), [pnpm](https://pnpm.io/), [React](https://react.dev/), [Next.js](https://nextjs.org/), and [TypeScript](https://www.typescriptlang.org/). |
+| UI | [Tailwind CSS](https://tailwindcss.com/), [React Aria Components](https://react-spectrum.adobe.com/react-aria/components.html), [Lucide](https://lucide.dev/), [Motion](https://motion.dev/), [Sonner](https://sonner.emilkowal.ski/), [Recharts](https://recharts.org/), [date-fns](https://date-fns.org/), and [cnfast](https://github.com/aidenybai/cnfast). |
+| Forms and validation | [React Hook Form](https://react-hook-form.com/), [resolvers](https://github.com/react-hook-form/resolvers), [Zod](https://zod.dev/), and [React Spectrum internationalized date](https://react-spectrum.adobe.com/internationalized/date/index.html). |
+| Data and auth | [Clerk](https://clerk.com/), [Supabase](https://supabase.com/), and [TanStack Query](https://tanstack.com/query). |
+| Product operations | [Sentry](https://sentry.io/), [Vercel Analytics](https://vercel.com/analytics), [Vercel Speed Insights](https://vercel.com/docs/speed-insights), and [next-intl](https://next-intl.dev/). |
+| Documentation | [Blume](https://useblume.dev/), [Astro](https://astro.build/), [MDX](https://mdxjs.com/), [Astro React](https://docs.astro.build/en/guides/integrations-guide/react/), [Tailwind Vite](https://tailwindcss.com/docs/installation/using-vite), and [Shiki Twoslash](https://shiki.style/packages/twoslash). |
+| Testing and quality | [Vitest](https://vitest.dev/), [Testing Library](https://testing-library.com/), [Playwright](https://playwright.dev/), [axe-core](https://github.com/dequelabs/axe-core-npm), [MSW](https://mswjs.io/), [Biome](https://biomejs.dev/), [Fallow](https://docs.fallow.tools/), [React Doctor](https://www.npmjs.com/package/react-doctor), and [Lefthook](https://lefthook.dev/). |
+| Component workbench | [Storybook](https://storybook.js.org/), [Next.js Vite framework](https://storybook.js.org/docs/get-started/frameworks/nextjs), [Docs addon](https://storybook.js.org/docs/writing-docs), and [MCP addon](https://www.npmjs.com/package/@storybook/addon-mcp). |
+
+For exact versions and the full direct dependency manifest, see [`package.json`](https://github.com/user1990/cashlift/blob/main/package.json).
+
+## Storybook
+
+Storybook is the component workbench for reusable UI states and generated component documentation.
+
+- [Open the deployed Storybook](https://cashlift-storybook.vercel.app/)
+- Run `pnpm storybook` for local development on port 6006.
+- Run `pnpm build-storybook` to produce the static site.

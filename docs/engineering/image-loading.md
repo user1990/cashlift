@@ -1,4 +1,7 @@
-# Image Loading
+---
+title: Image loading
+description: Use responsive image selection without compromising LCP or layout stability.
+---
 
 Use browser-native responsive image selection whenever an image is lazy-loaded and its rendered layout size is known before request time.
 
