@@ -6,7 +6,7 @@ type LegalPageProps = {
 };
 
 export const LegalPage = ({ title }: LegalPageProps) => (
-	<MainContent variant="marketing" className="max-w-[820px]">
+	<MainContent variant="marketing">
 		<LegalContentSection title={title} />
 	</MainContent>
 );
