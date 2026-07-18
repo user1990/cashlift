@@ -34,6 +34,8 @@ type MarketingNavItem = {
 };
 
 type PricingPlan = {
+	annualPrice: string;
+	annualTotal: string;
 	description: string;
 	features: readonly string[];
 	name: string;
@@ -51,6 +53,7 @@ type UseCase = {
 
 type UseCaseSlug = "agencies" | "consulting" | "software-services";
 type PricingPlanSlug = "control" | "command" | "scale";
+export type PricingBilling = "annual" | "monthly";
 
 export const DEFAULT_PRICING_PLAN_SLUG = "command" satisfies PricingPlanSlug;
 
@@ -103,6 +106,8 @@ export const FEATURE_CARDS = [
 
 export const PRICING_PLANS = [
 	{
+		annualPrice: "$79",
+		annualTotal: "$948",
 		description: "For owners cleaning up cash leaks and approvals.",
 		features: ["Free cash leak audit", "1 company workspace", "Spend request inbox", "13-week cash outlook"],
 		name: "Control",
@@ -110,6 +115,8 @@ export const PRICING_PLANS = [
 		slug: "control",
 	},
 	{
+		annualPrice: "$159",
+		annualTotal: "$1,908",
 		description: "For teams using CashLift several times a day.",
 		features: ["Unlimited request-only employees", "Manager approval queues", "Team budgets", "Vendor renewal reviews"],
 		highlighted: true,
@@ -118,6 +125,8 @@ export const PRICING_PLANS = [
 		slug: "command",
 	},
 	{
+		annualPrice: "$239",
+		annualTotal: "$2,868",
 		description: "For multi-team service firms with finance support needs.",
 		features: ["Multi-company view", "Custom approval rules", "Cash scenario reviews", "Priority onboarding"],
 		name: "Scale",
@@ -125,6 +134,34 @@ export const PRICING_PLANS = [
 		slug: "scale",
 	},
 ] as const satisfies readonly PricingPlan[];
+
+export const PRICING_COMPARISON_GROUPS = [
+	{
+		features: [
+			{ name: "Free cash leak audit", values: [true, true, true] },
+			{ name: "Company workspaces", values: ["1", "1", "Multiple"] },
+			{ name: "13-week cash outlook", values: [true, true, true] },
+			{ name: "Vendor renewal reviews", values: [false, true, true] },
+		],
+		name: "Cash visibility",
+	},
+	{
+		features: [
+			{ name: "Spend request inbox", values: [true, true, true] },
+			{ name: "Manager approval queues", values: [false, true, true] },
+			{ name: "Team budgets", values: [false, true, true] },
+			{ name: "Custom approval rules", values: [false, false, true] },
+		],
+		name: "Approvals and budgets",
+	},
+	{
+		features: [
+			{ name: "Cash scenario reviews", values: [false, false, true] },
+			{ name: "Priority onboarding", values: [false, false, true] },
+		],
+		name: "Finance support",
+	},
+] as const;
 
 export const getPricingPlanBySlug = (slug: string | undefined) =>
 	PRICING_PLANS.find((plan) => plan.slug === slug) ??

@@ -3,6 +3,7 @@ import { CheckoutPage } from "@/modules/marketing/components/CheckoutPage";
 
 type CheckoutRouteProps = {
 	searchParams: Promise<{
+		billing?: string;
 		plan?: string;
 	}>;
 };
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 export const instant = false;
 
 export default async function Checkout({ searchParams }: CheckoutRouteProps) {
-	const { plan } = await searchParams;
+	const { billing, plan } = await searchParams;
 
-	return <CheckoutPage planSlug={plan} />;
+	return <CheckoutPage billing={billing === "annual" ? "annual" : "monthly"} planSlug={plan} />;
 }

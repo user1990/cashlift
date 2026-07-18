@@ -1,11 +1,13 @@
 import { MainContent } from "@/modules/page-shell/components/MainContent";
-import { PricingHeroSection } from "./PricingHeroSection";
-import { PricingPlansSection } from "./PricingPlansSection";
+import type { PricingBilling } from "../content";
+import { PricingPageContent } from "./PricingPageContent";
 
-export const PricingPage = () => (
-	<MainContent variant="marketing">
-		<PricingHeroSection />
+type PricingPageProps = {
+	initialBilling?: PricingBilling;
+};
 
-		<PricingPlansSection />
+export const PricingPage = ({ initialBilling = "annual" }: PricingPageProps) => (
+	<MainContent variant="marketing" className="w-full min-w-0 max-w-[1240px] lg:py-10">
+		<PricingPageContent initialBilling={initialBilling} />
 	</MainContent>
 );

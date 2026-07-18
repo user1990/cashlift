@@ -1,12 +1,18 @@
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import type { PricingBilling } from "../content";
 import { Logo } from "./Logo";
 
-export const CheckoutHeader = () => (
+type CheckoutHeaderProps = {
+	billing: PricingBilling;
+};
+
+export const CheckoutHeader = ({ billing }: CheckoutHeaderProps) => (
 	<header className="border-b border-shell-border bg-shell/95">
 		<div className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-8">
 			<Link
-				href="/pricing"
+				aria-label="Back to pricing"
+				href={`/pricing?billing=${billing}`}
 				className="inline-flex items-center gap-2 text-m font-medium text-shell-muted transition-colors duration-150 hover:text-primary"
 			>
 				<ArrowLeft aria-hidden className="size-5" />
