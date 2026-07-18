@@ -106,7 +106,7 @@ export const PRICING_PLANS = [
 		description: "For owners cleaning up cash leaks and approvals.",
 		features: ["Free cash leak audit", "1 company workspace", "Spend request inbox", "13-week cash outlook"],
 		name: "Control",
-		price: "$99",
+		price: "$49",
 		slug: "control",
 	},
 	{
@@ -114,14 +114,14 @@ export const PRICING_PLANS = [
 		features: ["Unlimited request-only employees", "Manager approval queues", "Team budgets", "Vendor renewal reviews"],
 		highlighted: true,
 		name: "Command",
-		price: "$199",
+		price: "$99",
 		slug: "command",
 	},
 	{
 		description: "For multi-team service firms with finance support needs.",
 		features: ["Multi-company view", "Custom approval rules", "Cash scenario reviews", "Priority onboarding"],
 		name: "Scale",
-		price: "$299",
+		price: "$199",
 		slug: "scale",
 	},
 ] as const satisfies readonly PricingPlan[];
