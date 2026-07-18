@@ -25,7 +25,7 @@ export const Hero = ({
 			<>
 				<Component
 					className={cn(
-						"max-w-3xl text-4xl font-semibold tracking-normal sm:text-6xl",
+						"max-w-3xl text-4xl font-semibold tracking-normal sm:text-6xl+",
 						Component === "h1" ? "text-primary" : "text-shell-foreground",
 						titleClassName,
 					)}
