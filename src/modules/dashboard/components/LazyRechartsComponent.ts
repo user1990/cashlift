@@ -31,13 +31,13 @@ export const RechartsArea = (props: RechartsComponentProps) =>
 	createElement(LazyRechartsArea, { isAnimationActive: true, ...props });
 
 export const RechartsAreaChart = (props: RechartsComponentProps) =>
-	createElement(LazyRechartsAreaChart, { margin: DEFAULT_CHART_MARGIN, ...props });
+	createElement(LazyRechartsAreaChart, { accessibilityLayer: false, margin: DEFAULT_CHART_MARGIN, ...props });
 
 export const RechartsBar = (props: RechartsComponentProps) =>
 	createElement(LazyRechartsBar, { isAnimationActive: true, radius: [6, 6, 0, 0], ...props });
 
 export const RechartsBarChart = (props: RechartsComponentProps) =>
-	createElement(LazyRechartsBarChart, { margin: DEFAULT_CHART_MARGIN, ...props });
+	createElement(LazyRechartsBarChart, { accessibilityLayer: false, margin: DEFAULT_CHART_MARGIN, ...props });
 
 export const RechartsCartesianGrid = (props: RechartsComponentProps) =>
 	createElement(LazyRechartsCartesianGrid, {

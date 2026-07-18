@@ -22,7 +22,12 @@ export const ChartFrame = ({ children }: ChartFrameProps) => {
 	);
 
 	return (
-		<div ref={(frame) => setChartFrameElement(store, frame)} aria-hidden="true" className="h-60 min-w-0">
+		<div
+			ref={(frame) => setChartFrameElement(store, frame)}
+			aria-hidden="true"
+			className="h-60 min-w-0"
+			onMouseDown={(event) => event.preventDefault()}
+		>
 			{ready ? children : null}
 		</div>
 	);
