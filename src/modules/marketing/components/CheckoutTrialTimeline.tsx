@@ -17,7 +17,7 @@ const REMINDER_DAY = 13;
 
 export const CheckoutTrialTimeline = ({ planPrice }: CheckoutTrialTimelineProps) => (
 	<section>
-		<h1 className="max-w-2xl text-5xl+ tracking-normal text-shell-foreground sm:text-6xl+">Start your 14-day trial</h1>
+		<h1 className="max-w-2xl text-5xl+ tracking-normal text-primary sm:text-6xl+">Start your 14-day trial</h1>
 
 		<p className="mt-5 max-w-xl text-xl leading-8 text-shell-muted">Card required. No charge today.</p>
 
