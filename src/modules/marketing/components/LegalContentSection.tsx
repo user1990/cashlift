@@ -1,12 +1,6 @@
-type LegalContentSectionProps = {
-	title: string;
-};
-
-export const LegalContentSection = ({ title }: LegalContentSectionProps) => (
+export const LegalContentSection = () => (
 	<>
 		<p className="text-s+ uppercase tracking-normal text-primary">Legal</p>
-
-		<h1 className="mt-4 max-w-3xl text-4xl font-semibold tracking-normal text-primary sm:text-6xl">{title}</h1>
 
 		<div className="mt-6 space-y-4 text-m leading-7 text-shell-muted">
 			<p>

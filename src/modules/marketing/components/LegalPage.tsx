@@ -1,12 +1,8 @@
 import { MainContent } from "@/modules/page-shell/components/MainContent";
 import { LegalContentSection } from "./LegalContentSection";
 
-type LegalPageProps = {
-	title: string;
-};
-
-export const LegalPage = ({ title }: LegalPageProps) => (
+export const LegalPage = () => (
 	<MainContent variant="marketing">
-		<LegalContentSection title={title} />
+		<LegalContentSection />
 	</MainContent>
 );
