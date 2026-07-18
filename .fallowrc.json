@@ -133,7 +133,7 @@
 			]
 		}
 	],
-	"ignorePatterns": ["docs/**", "blume.config.ts"],
+	"ignorePatterns": ["docs/**", "blume.config.ts", "theme.css"],
 	"ignoreDependencies": [
 		"turbopack-inline-svg-loader",
 		"babel-plugin-react-compiler",
