@@ -1,6 +1,7 @@
 "use client";
 
 import { NextIntlClientProvider } from "next-intl";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode, Suspense } from "react";
 import { AuthProvider } from "@/services/clerk/provider";
 import messages from "@/services/i18n/messages/en.json";
@@ -23,10 +24,12 @@ export const WorkspaceProviders = ({ authEnabled = true, authFallback, children 
 	);
 
 	return (
-		<NextIntlClientProvider locale="en" messages={messages}>
-			<QueryProvider>{content}</QueryProvider>
+		<NuqsAdapter>
+			<NextIntlClientProvider locale="en" messages={messages}>
+				<QueryProvider>{content}</QueryProvider>
 
-			<Toaster />
-		</NextIntlClientProvider>
+				<Toaster />
+			</NextIntlClientProvider>
+		</NuqsAdapter>
 	);
 };
