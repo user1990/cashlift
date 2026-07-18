@@ -1,4 +1,7 @@
-# Clerk-authenticated Supabase RLS via server repository
+---
+title: Clerk-authenticated Supabase RLS
+description: Enforce company-scoped access through the server repository and Supabase RLS.
+---
 
 Status: accepted
 

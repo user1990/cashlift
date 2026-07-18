@@ -1,4 +1,7 @@
-# Validation Contracts
+---
+title: Validation contracts
+description: Treat runtime schemas as the source of truth at every data boundary.
+---
 
 Runtime schemas are the source of truth for data that crosses a boundary. TypeScript types inside the app should be inferred from those schemas so the contract stays in sync automatically.
 

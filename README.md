@@ -15,19 +15,15 @@
 <p align="center">
   <a href="#why-cashlift">Why CashLift</a>
   ·
+  <a href="#quick-access">Quick Access</a>
+  ·
   <a href="#features">Features</a>
   ·
   <a href="#architecture">Architecture</a>
   ·
-  <a href="#validation-contracts">Validation Contracts</a>
-  ·
-  <a href="#image-loading">Image Loading</a>
-  ·
   <a href="#getting-started">Getting Started</a>
   ·
   <a href="#security">Security</a>
-  ·
-  <a href="#roadmap">Roadmap</a>
 </p>
 
 <p align="center">
@@ -62,6 +58,14 @@ Built for agencies, consultancies, studios, and software service firms that need
 - give finance, managers, and employees the right workspace views
 
 The business model is a finance operations workspace for service companies: CashLift does not move money. It helps teams make better cash decisions around approvals, collections, vendor leaks, budgets, and runway.
+
+---
+
+# Quick Access
+
+- [Try the live demo](https://cashlift.vercel.app/)
+- [Read the Blume documentation](https://cashlift-docs.vercel.app/)
+- [Browse the component Storybook](https://cashlift-storybook.vercel.app/)
 
 ---
 
@@ -145,22 +149,6 @@ e2e/                    Playwright smoke tests
 
 ---
 
-# Validation Contracts
-
-CashLift treats Zod schemas as the runtime contract. External input is parsed at app boundaries, and internal TypeScript types are inferred with `z.infer<typeof schema>` so object shapes and string unions stay in sync without manual duplication.
-
-See [docs/validation-contracts.md](./docs/validation-contracts.md) for the working rule.
-
----
-
-# Image Loading
-
-Lazy responsive images use `loading="lazy"` with `sizes="auto, ...fallback"` so the browser can select the right source from the rendered size. Hero and LCP images are not lazy-loaded and keep explicit `sizes` values.
-
-See [docs/image-loading.md](./docs/image-loading.md) for the working rule.
-
----
-
 # Getting Started
 
 This repo pins Node in `.nvmrc` and `.node-version`. Shells should auto-select that version before pnpm runs, because pnpm can fail before project scripts run on older runtimes.
@@ -177,6 +165,28 @@ http://localhost:3000
 ```
 
 This project requires Node 24.
+
+## Documentation
+
+Run the Blume docs locally:
+
+```bash
+pnpm docs:dev
+```
+
+Build the static documentation site:
+
+```bash
+pnpm docs:build
+```
+
+## Storybook
+
+Use Storybook to browse and test reusable UI states and generated component documentation.
+
+- [Open the deployed Storybook](https://cashlift-storybook.vercel.app/)
+- Run it locally with `pnpm storybook` at `http://localhost:6006`.
+- Build the static site with `pnpm build-storybook`.
 
 ## Demo Mode
 
@@ -222,7 +232,7 @@ Before testing a Vercel preview in production mode, configure the same Clerk ins
 pnpm lint
 pnpm typecheck
 pnpm test
-pnpm fallow
+pnpm check:code
 pnpm test:e2e
 ```
 
@@ -244,34 +254,6 @@ CashLift follows a fail-closed production model.
 - Supabase RLS policies enforce company-level isolation.
 - Secrets must stay in environment variables.
 - No service role keys or database passwords should be exposed to the browser.
-
----
-
-# Roadmap
-
-## Platform
-
-- [ ] Multi-workspace support
-- [ ] Audit timelines
-- [ ] Approval escalation chains
-- [ ] Role-based permissions
-- [ ] Activity feeds
-
-## Finance Intelligence
-
-- [ ] Cash forecasting engine
-- [ ] Vendor exposure analytics
-- [ ] Aging receivable automation
-- [ ] Payment anomaly detection
-- [ ] Liquidity trend analysis
-
-## Integrations
-
-- [ ] Slack approvals
-- [ ] QuickBooks sync
-- [ ] Stripe reconciliation
-- [ ] Banking integrations
-- [ ] Webhook platform
 
 ---
 
