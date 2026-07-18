@@ -28,7 +28,7 @@ export const ChartFrame = ({ children }: ChartFrameProps) => {
 			className="h-60 min-w-0"
 			onMouseDown={(event) => event.preventDefault()}
 		>
-			{ready ? children : null}
+			{ready && children}
 		</div>
 	);
 };
