@@ -13,7 +13,7 @@ type OverviewHeaderProps = {
 export const OverviewHeader = ({ dashboard, dateRange, onDateRangeChange }: OverviewHeaderProps) => (
 	<header className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
 		<div>
-			<h1 className="text-3xl+ font-semibold tracking-normal text-shell-foreground">
+			<h1 className="text-3xl+ font-semibold tracking-normal text-primary">
 				Good morning, {dashboard.greetingName} <span aria-hidden>👋</span>
 			</h1>
 

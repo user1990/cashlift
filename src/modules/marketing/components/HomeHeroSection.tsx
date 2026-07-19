@@ -13,7 +13,7 @@ export const HomeHeroSection = () => (
 			<header className="mx-auto max-w-4xl text-center">
 				<p className="text-s+ font-semibold uppercase tracking-normal text-primary">Cash action inbox</p>
 
-				<h1 className="mt-4 text-5xl+ tracking-normal text-shell-foreground sm:text-7xl+">
+				<h1 className="mt-4 text-5xl+ tracking-normal text-primary sm:text-7xl+">
 					See what to collect, approve, or cut today.
 				</h1>
 

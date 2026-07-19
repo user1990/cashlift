@@ -10,7 +10,7 @@ export const WorkspaceSectionHeader = ({ section }: WorkspaceSectionHeaderProps)
 		<div>
 			<p className="text-s+ uppercase tracking-normal text-primary">Workspace</p>
 
-			<h1 className="text-4xl+ tracking-normal text-shell-foreground">{getSectionTitle(section)}</h1>
+			<h1 className="text-4xl+ tracking-normal text-primary">{getSectionTitle(section)}</h1>
 		</div>
 
 		<Link

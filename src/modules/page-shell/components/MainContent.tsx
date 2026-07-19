@@ -12,7 +12,7 @@ type MainContentProps = {
 const MAIN_CONTENT_VARIANTS = {
 	plain: "",
 	workspace: "min-h-dvh bg-shell text-shell-foreground",
-	marketing: "mx-auto max-w-[1180px] px-4 py-14 sm:px-6 lg:px-8 lg:py-20",
+	marketing: "mx-auto w-full max-w-[1180px] px-4 py-14 sm:px-6 lg:px-8 lg:py-20",
 } as const satisfies Record<MainContentVariant, string>;
 
 export const MAIN_CONTENT_ID = "main-content";

@@ -23,7 +23,13 @@ export const Hero = ({
 	<div className={className}>
 		{labelAsHeading ? (
 			<>
-				<Component className={cn("max-w-3xl text-6xl+ tracking-normal text-shell-foreground", titleClassName)}>
+				<Component
+					className={cn(
+						"max-w-3xl text-4xl font-semibold tracking-normal sm:text-6xl+",
+						Component === "h1" ? "text-primary" : "text-shell-foreground",
+						titleClassName,
+					)}
+				>
 					{label}
 				</Component>
 
@@ -33,7 +39,13 @@ export const Hero = ({
 			<>
 				<p className="text-s+ uppercase tracking-normal text-primary">{label}</p>
 
-				<Component className={cn("mt-4 max-w-3xl text-6xl+ tracking-normal text-shell-foreground", titleClassName)}>
+				<Component
+					className={cn(
+						"mt-4 max-w-3xl text-6xl+ tracking-normal",
+						Component === "h1" ? "text-primary" : "text-shell-foreground",
+						titleClassName,
+					)}
+				>
 					{title}
 				</Component>
 			</>
