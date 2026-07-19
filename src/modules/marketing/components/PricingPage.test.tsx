@@ -7,12 +7,12 @@ describe("PricingPage", () => {
 		render(<PricingPage billing="annual" />);
 
 		expect(screen.getByRole("link", { name: "Yearly" })).toHaveAttribute("aria-current", "page");
+		expect(screen.getByRole("link", { name: "Monthly" })).toHaveAttribute("href", "/pricing?billing=monthly");
 		expect(screen.getByText("$79")).toBeInTheDocument();
 		expect(screen.getByRole("link", { name: "Start with Control" })).toHaveAttribute(
 			"href",
 			"/checkout?plan=control&billing=annual",
 		);
-		expect(screen.getByRole("link", { name: "Monthly" })).toHaveAttribute("href", "/pricing?billing=monthly");
 		expect(screen.getAllByText("Save 20%")).toHaveLength(3);
 	});
 
@@ -28,6 +28,7 @@ describe("PricingPage", () => {
 		render(<PricingPage billing="monthly" />);
 
 		expect(screen.getByRole("link", { name: "Monthly" })).toHaveAttribute("aria-current", "page");
+		expect(screen.getByRole("link", { name: "Yearly" })).toHaveAttribute("href", "/pricing?billing=annual");
 		expect(screen.getByText("$99")).toBeInTheDocument();
 		expect(screen.getByRole("link", { name: "Start with Control" })).toHaveAttribute(
 			"href",
