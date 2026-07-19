@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { PricingBilling } from "../content";
 import { PricingComparisonSection } from "./PricingComparisonSection";
 import { PricingHeroSection } from "./PricingHeroSection";
@@ -13,6 +13,10 @@ type PricingPageContentProps = {
 
 export const PricingPageContent = ({ initialBilling }: PricingPageContentProps) => {
 	const [billing, setBilling] = useState<PricingBilling>(initialBilling);
+
+	useEffect(() => {
+		setBilling(initialBilling);
+	}, [initialBilling]);
 
 	const changeBilling = (value: PricingBilling) => {
 		const params = new URLSearchParams(window.location.search);

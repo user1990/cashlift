@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { PricingPage } from "./PricingPage";
@@ -35,5 +35,24 @@ describe("PricingPage", () => {
 		expect(screen.getByRole("region", { name: "Compare plans in full" })).toBeInTheDocument();
 		expect(screen.getByRole("table")).toBeInTheDocument();
 		expect(screen.getByRole("row", { name: "Company workspaces 1 1 Multiple" })).toBeInTheDocument();
+	});
+
+	it("syncs the displayed billing interval after pricing navigation", async () => {
+		const { rerender } = render(<PricingPage initialBilling="monthly" />);
+
+		expect(screen.getByRole("button", { name: "monthly" })).toHaveAttribute("aria-pressed", "true");
+		expect(screen.getByText("$99")).toBeInTheDocument();
+
+		rerender(<PricingPage initialBilling="annual" />);
+
+		await waitFor(() => {
+			expect(screen.getByRole("button", { name: "annual" })).toHaveAttribute("aria-pressed", "true");
+		});
+
+		expect(screen.getByText("$79")).toBeInTheDocument();
+		expect(screen.getByRole("link", { name: "Start with Control" })).toHaveAttribute(
+			"href",
+			"/checkout?plan=control&billing=annual",
+		);
 	});
 });
