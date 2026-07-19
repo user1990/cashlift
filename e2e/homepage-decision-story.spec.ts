@@ -19,7 +19,12 @@ test.describe("homepage decision story", () => {
 		await page.goto("/");
 		await page.getByRole("link", { name: "Book an audit walkthrough" }).click();
 		await expect(page).toHaveURL(/\/demo$/);
-		await expect(page.getByText("Book an audit walkthrough.", { exact: true })).toBeVisible();
+		await expect(
+			page.getByRole("heading", {
+				level: 1,
+				name: "See the cash leak. Understand the impact. Know what to do next.",
+			}),
+		).toBeVisible();
 	});
 
 	test("pairs every decision with its product view through normal scrolling", async ({ page }) => {
