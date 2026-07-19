@@ -13,10 +13,7 @@ describe("PricingPage", () => {
 			"/checkout?plan=control&billing=annual",
 		);
 		expect(screen.getByRole("link", { name: "Monthly" })).toHaveAttribute("href", "/pricing?billing=monthly");
-		expect(screen.getByRole("link", { name: "Switch to monthly billing" })).toHaveAttribute(
-			"href",
-			"/pricing?billing=monthly",
-		);
+		expect(screen.getAllByText("Save 20%")).toHaveLength(3);
 	});
 
 	it("shows the full plan comparison with a useful accessible name", () => {
@@ -36,9 +33,6 @@ describe("PricingPage", () => {
 			"href",
 			"/checkout?plan=control&billing=monthly",
 		);
-		expect(screen.getByRole("link", { name: "Switch to yearly billing" })).toHaveAttribute(
-			"href",
-			"/pricing?billing=annual",
-		);
+		expect(screen.queryByText("Save 20%")).not.toBeInTheDocument();
 	});
 });

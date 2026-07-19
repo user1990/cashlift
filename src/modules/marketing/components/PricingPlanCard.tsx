@@ -26,7 +26,15 @@ export const PricingPlanCard = ({ billing, plan }: PricingPlanCardProps) => {
 
 			<Panel as="article" variant="glass" className={getPlanClassName(highlighted)}>
 				<header>
-					<h2 className="text-4xl+ tracking-normal text-shell-foreground">{plan.name}</h2>
+					<div className="flex items-start justify-between gap-3">
+						<h2 className="text-4xl+ tracking-normal text-shell-foreground">{plan.name}</h2>
+
+						{billing === "annual" && (
+							<span className="shrink-0 rounded-sm bg-signal-subtle px-2 py-1 text-s font-semibold text-signal">
+								Save 20%
+							</span>
+						)}
+					</div>
 
 					<p className="mt-3 min-h-12 text-l font-medium leading-6 text-shell-muted">{plan.description}</p>
 				</header>
