@@ -70,7 +70,7 @@ export const LeadCaptureForm = ({ buttonLabel, successDescription, successTitle 
 				placeholder="Studio Nova…"
 			/>
 
-			<Button type="submit" variant="primary" className="mt-auto w-full">
+			<Button type="submit" variant="primary" size="large" className="mt-auto w-full">
 				{buttonLabel}
 			</Button>
 		</form>
