@@ -6,7 +6,7 @@ type PricingHeroSectionProps = {
 };
 
 export const PricingHeroSection = ({ billing }: PricingHeroSectionProps) => (
-	<div className="grid items-end gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
+	<div>
 		<header>
 			<p className="text-m text-shell-muted">Pricing</p>
 
@@ -18,6 +18,8 @@ export const PricingHeroSection = ({ billing }: PricingHeroSectionProps) => (
 			</h1>
 		</header>
 
-		<PricingBillingToggle billing={billing} />
+		<div className="mt-8">
+			<PricingBillingToggle billing={billing} />
+		</div>
 	</div>
 );

@@ -6,13 +6,17 @@ describe("PricingPage", () => {
 	it("renders the annual billing interval from the URL state", () => {
 		render(<PricingPage billing="annual" />);
 
-		expect(screen.getByRole("link", { name: "annual" })).toHaveAttribute("aria-current", "page");
+		expect(screen.getByRole("link", { name: "Yearly" })).toHaveAttribute("aria-current", "page");
 		expect(screen.getByText("$79")).toBeInTheDocument();
 		expect(screen.getByRole("link", { name: "Start with Control" })).toHaveAttribute(
 			"href",
 			"/checkout?plan=control&billing=annual",
 		);
-		expect(screen.getByRole("link", { name: "monthly" })).toHaveAttribute("href", "/pricing?billing=monthly");
+		expect(screen.getByRole("link", { name: "Monthly" })).toHaveAttribute("href", "/pricing?billing=monthly");
+		expect(screen.getByRole("link", { name: "Switch to monthly billing" })).toHaveAttribute(
+			"href",
+			"/pricing?billing=monthly",
+		);
 	});
 
 	it("shows the full plan comparison with a useful accessible name", () => {
@@ -26,11 +30,15 @@ describe("PricingPage", () => {
 	it("renders the monthly billing interval from the URL state", () => {
 		render(<PricingPage billing="monthly" />);
 
-		expect(screen.getByRole("link", { name: "monthly" })).toHaveAttribute("aria-current", "page");
+		expect(screen.getByRole("link", { name: "Monthly" })).toHaveAttribute("aria-current", "page");
 		expect(screen.getByText("$99")).toBeInTheDocument();
 		expect(screen.getByRole("link", { name: "Start with Control" })).toHaveAttribute(
 			"href",
 			"/checkout?plan=control&billing=monthly",
+		);
+		expect(screen.getByRole("link", { name: "Switch to yearly billing" })).toHaveAttribute(
+			"href",
+			"/pricing?billing=annual",
 		);
 	});
 });
