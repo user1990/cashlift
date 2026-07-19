@@ -3,11 +3,11 @@ import type { PricingBilling } from "../content";
 import { PricingPageContent } from "./PricingPageContent";
 
 type PricingPageProps = {
-	initialBilling?: PricingBilling;
+	billing?: PricingBilling;
 };
 
-export const PricingPage = ({ initialBilling = "annual" }: PricingPageProps) => (
+export const PricingPage = ({ billing = "annual" }: PricingPageProps) => (
 	<MainContent variant="marketing" className="w-full min-w-0 max-w-[1240px] lg:py-10">
-		<PricingPageContent initialBilling={initialBilling} />
+		<PricingPageContent billing={billing} />
 	</MainContent>
 );

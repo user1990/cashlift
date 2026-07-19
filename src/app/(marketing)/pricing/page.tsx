@@ -24,5 +24,5 @@ export default function Pricing({ searchParams }: PricingRouteProps) {
 const PricingWithBilling = async ({ searchParams }: PricingRouteProps) => {
 	const { billing } = await searchParams;
 
-	return <PricingPage initialBilling={billing === "monthly" ? "monthly" : "annual"} />;
+	return <PricingPage billing={billing === "monthly" ? "monthly" : "annual"} />;
 };

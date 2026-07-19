@@ -3,10 +3,9 @@ import { PricingBillingToggle } from "./PricingBillingToggle";
 
 type PricingHeroSectionProps = {
 	billing: PricingBilling;
-	onBillingChange: (billing: PricingBilling) => void;
 };
 
-export const PricingHeroSection = ({ billing, onBillingChange }: PricingHeroSectionProps) => (
+export const PricingHeroSection = ({ billing }: PricingHeroSectionProps) => (
 	<div className="grid items-end gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
 		<header>
 			<p className="text-m text-shell-muted">Pricing</p>
@@ -19,6 +18,6 @@ export const PricingHeroSection = ({ billing, onBillingChange }: PricingHeroSect
 			</h1>
 		</header>
 
-		<PricingBillingToggle billing={billing} onChange={onBillingChange} />
+		<PricingBillingToggle billing={billing} />
 	</div>
 );
