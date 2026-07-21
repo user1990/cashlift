@@ -31,10 +31,8 @@ export const MobileNav = () => (
 );
 
 const MobileNavGroup = ({ group }: { group: NavGroup }) => (
-	<section aria-labelledby={`mobile-nav-${group.label.toLowerCase()}`}>
-		<h2 className="px-3 text-s+ uppercase tracking-normal text-primary" id={`mobile-nav-${group.label.toLowerCase()}`}>
-			{group.label}
-		</h2>
+	<div>
+		<p className="px-3 text-s+ uppercase tracking-normal text-primary">{group.label}</p>
 
 		<div className="mt-2 grid gap-1 pl-3">
 			{group.items.map(({ href, label }) => (
@@ -43,5 +41,5 @@ const MobileNavGroup = ({ group }: { group: NavGroup }) => (
 				</MobileNavLink>
 			))}
 		</div>
-	</section>
+	</div>
 );
