@@ -33,7 +33,7 @@ export const AuthGlassShell = ({ action, children, size = "default" }: AuthGlass
 				</div>
 
 				<Link
-					className="inline-flex min-h-8 self-center rounded-md px-2 text-sm text-muted-foreground no-underline outline-none transition-[color] duration-150 ease hover:text-panel-foreground focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--primary)_20%,transparent)] max-[28rem]:min-h-11"
+					className="inline-flex min-h-8 self-center rounded-md px-2 text-sm text-muted-foreground no-underline outline-none transition-[color] duration-150 ease hover:text-panel-foreground focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--primary)_20%,transparent)] max-[28rem]:mt-3 max-[28rem]:min-h-11"
 					href={action.href}
 					prefetch={false}
 				>
