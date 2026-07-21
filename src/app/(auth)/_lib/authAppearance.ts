@@ -21,7 +21,7 @@ export const AUTH_APPEARANCE = {
 			border: "1px solid transparent !important",
 			boxShadow: "inset 0 0 0 1px var(--border-strong) !important",
 			boxSizing: "border-box",
-			"@media (max-width: 28rem)": { fontSize: "1rem", minHeight: "2.75rem" },
+			"@media (max-width: 48rem)": { fontSize: "1rem", minHeight: "2.75rem" },
 			"&:focus": {
 				borderColor: "transparent !important",
 				boxShadow: "inset 0 0 0 1px var(--primary) !important",
@@ -35,10 +35,9 @@ export const AUTH_APPEARANCE = {
 		},
 		formButtonPrimary: {
 			borderRadius: "9999px !important",
-			boxShadow:
-				"inset 0 0 0 1px var(--primary), inset 0 1px 1px rgb(255 255 255 / 0.07), 0 2px 3px rgb(34 42 53 / 0.2), 0 1px 1px rgb(0 0 0 / 0.24) !important",
+			boxShadow: "inset 0 0 0 1px var(--primary) !important",
 			overflow: "hidden",
-			"@media (max-width: 28rem)": { minHeight: "2.75rem" },
+			"@media (max-width: 48rem)": { minHeight: "2.75rem" },
 		},
 		rootBox: { width: "100%" },
 		socialButtonsBlockButton: {
