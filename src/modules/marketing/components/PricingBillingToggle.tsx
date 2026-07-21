@@ -1,60 +1,111 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { startTransition, useOptimistic } from "react";
 import type { PricingBilling } from "../content";
 
 type PricingBillingToggleProps = {
 	billing: PricingBilling;
 };
 
-export const PricingBillingToggle = ({ billing }: PricingBillingToggleProps) => (
-	<div className="space-y-3">
-		<nav
-			aria-label="Billing interval"
-			className="mx-auto grid w-full max-w-64 grid-cols-2 rounded-full border border-border-strong bg-shell-band p-1 shadow-shell"
-		>
-			<BillingLink billing={billing} value="annual">
-				Yearly
-			</BillingLink>
+export const PricingBillingToggle = ({ billing }: PricingBillingToggleProps) => {
+	const router = useRouter();
+	const [selectedBilling, setSelectedBilling] = useOptimistic(billing);
 
-			<BillingLink billing={billing} value="monthly">
-				Monthly
-			</BillingLink>
-		</nav>
+	const selectBilling = (nextBilling: PricingBilling) => {
+		if (nextBilling === selectedBilling) {
+			return;
+		}
 
-		<p className="text-center text-s text-shell-muted">
-			{billing === "annual" ? "Billed annually. Cancel anytime." : "Billed monthly. Cancel anytime."}
-		</p>
-	</div>
-);
+		startTransition(() => {
+			setSelectedBilling(nextBilling);
+			router.replace(`/pricing?billing=${nextBilling}`, { scroll: false });
+		});
+	};
 
-type BillingLinkProps = {
+	return (
+		<div className="space-y-3">
+			<fieldset className="relative isolate mx-auto grid h-10 w-full max-w-64 grid-cols-2 rounded-full border border-border-strong bg-shell-band p-1 shadow-shell">
+				<legend className="sr-only">Billing interval</legend>
+
+				<span
+					aria-hidden
+					className={`pointer-events-none absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-full bg-primary shadow-primary-glow transition-transform duration-200 ease-out motion-reduce:transition-none ${selectedBilling === "monthly" ? "translate-x-full" : ""}`}
+				/>
+
+				<BillingOption billing={selectedBilling} onChange={selectBilling} value="annual">
+					Yearly
+				</BillingOption>
+
+				<BillingOption billing={selectedBilling} onChange={selectBilling} value="monthly">
+					Monthly
+				</BillingOption>
+			</fieldset>
+
+			<p className="text-center text-s text-shell-muted">
+				{selectedBilling === "annual" ? "Billed annually. Cancel anytime." : "Billed monthly. Cancel anytime."}
+			</p>
+		</div>
+	);
+};
+
+type BillingOptionProps = {
 	billing: PricingBilling;
 	children: string;
+	onChange: (billing: PricingBilling) => void;
 	value: PricingBilling;
 };
 
-const BillingLink = ({ billing, children, value }: BillingLinkProps) => (
-	<Link
-		aria-current={billing === value ? "page" : undefined}
-		className="inline-flex min-h-11 items-center justify-center rounded-full px-4 text-s font-semibold text-shell-muted outline-none transition-[background-color,color,box-shadow] duration-150 hover:text-shell-foreground focus-visible:ring-[3px] focus-visible:ring-primary/25 aria-[current=page]:bg-primary/20 aria-[current=page]:text-shell-foreground aria-[current=page]:shadow-primary-glow aria-[current=page]:ring-1 aria-[current=page]:ring-primary/60"
-		href={`/pricing?billing=${value}`}
-		onKeyDown={(event) => handleBillingKeyDown(event, billing)}
-		scroll={false}
-	>
-		{children}
-	</Link>
-);
+const BillingOption = ({ billing, children, onChange, value }: BillingOptionProps) => {
+	const active = billing === value;
 
-const handleBillingKeyDown = (event: React.KeyboardEvent<HTMLAnchorElement>, billing: PricingBilling) => {
-	if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
+	return (
+		<label className="relative z-10 min-h-8 cursor-pointer">
+			<input
+				checked={active}
+				className="peer sr-only"
+				name="pricing-billing"
+				onChange={() => onChange(value)}
+				onKeyDown={(event) => handleBillingKeyDown(event, billing, onChange)}
+				type="radio"
+				value={value}
+			/>
+
+			<span className="flex min-h-8 items-center justify-center rounded-full px-4 text-s font-semibold text-shell-muted transition-colors duration-150 hover:text-shell-foreground peer-checked:text-primary-foreground peer-focus-visible:ring-[3px] peer-focus-visible:ring-primary/25">
+				{children}
+			</span>
+		</label>
+	);
+};
+
+const handleBillingKeyDown = (
+	event: React.KeyboardEvent<HTMLInputElement>,
+	billing: PricingBilling,
+	onChange: (billing: PricingBilling) => void,
+) => {
+	const nextBilling = getNextBilling(event.key, billing);
+
+	if (!nextBilling || nextBilling === billing) {
 		return;
 	}
 
 	event.preventDefault();
-	const nextBilling = billing === "annual" ? "monthly" : "annual";
+	onChange(nextBilling);
+	event.currentTarget.closest("fieldset")?.querySelector<HTMLInputElement>(`input[value="${nextBilling}"]`)?.focus();
+};
 
-	if (nextBilling !== billing) {
-		window.location.assign(`/pricing?billing=${nextBilling}`);
+const getNextBilling = (key: string, billing: PricingBilling): PricingBilling | undefined => {
+	if (key === "Home") {
+		return "annual";
 	}
+
+	if (key === "End") {
+		return "monthly";
+	}
+
+	if (key === "ArrowLeft" || key === "ArrowRight") {
+		return billing === "annual" ? "monthly" : "annual";
+	}
+
+	return undefined;
 };
