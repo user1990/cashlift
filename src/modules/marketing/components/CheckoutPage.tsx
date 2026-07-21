@@ -1,9 +1,10 @@
-import { getPricingPlanBySlug } from "../content";
+import { getPricingPlanBySlug, type PricingBilling } from "../content";
 import { CheckoutHeader } from "./CheckoutHeader";
 import { CheckoutPlanSummary } from "./CheckoutPlanSummary";
 import { CheckoutTrialTimeline } from "./CheckoutTrialTimeline";
 
 type CheckoutPageProps = {
+	billing?: PricingBilling;
 	planSlug?: string;
 };
 
@@ -14,22 +15,28 @@ const TRIAL_END_DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
 	year: "numeric",
 });
 
-export const CheckoutPage = ({ planSlug }: CheckoutPageProps) => {
+export const CheckoutPage = ({ billing = "monthly", planSlug }: CheckoutPageProps) => {
 	const plan = getPricingPlanBySlug(planSlug);
+	const price = billing === "annual" ? plan.annualPrice : plan.price;
+	const billingDescription = billing === "annual" ? `${plan.annualTotal} billed annually` : "Billed monthly";
 	const trialEndDate = getTrialEndDate();
 	const trialEndLabel = formatTrialEndDate(trialEndDate);
 
 	return (
 		<main className="min-h-screen bg-shell text-shell-foreground">
-			<CheckoutHeader />
+			<CheckoutHeader billing={billing} />
 
 			<div className="mx-auto grid max-w-[1180px] gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_420px] lg:px-8 lg:py-20">
-				<CheckoutTrialTimeline planPrice={plan.price} />
+				<CheckoutTrialTimeline
+					planPriceLabel={billing === "annual" ? `${plan.annualTotal}/year` : `${plan.price}/month`}
+				/>
 
 				<CheckoutPlanSummary
+					billing={billing}
+					billingDescription={billingDescription}
 					features={plan.features}
 					name={plan.name}
-					price={plan.price}
+					price={price}
 					trialEndLabel={trialEndLabel}
 				/>
 			</div>

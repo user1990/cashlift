@@ -1,16 +1,26 @@
 import { CheckCircle2, CreditCard } from "lucide-react";
 import Link from "next/link";
 import { Panel } from "@/ui/components/Panel";
+import type { PricingBilling } from "../content";
 import { CheckoutActionButton } from "./CheckoutActionButton";
 
 type CheckoutPlanSummaryProps = {
+	billing: PricingBilling;
+	billingDescription: string;
 	features: readonly string[];
 	name: string;
 	price: string;
 	trialEndLabel: string;
 };
 
-export const CheckoutPlanSummary = ({ features, name, price, trialEndLabel }: CheckoutPlanSummaryProps) => (
+export const CheckoutPlanSummary = ({
+	billing,
+	billingDescription,
+	features,
+	name,
+	price,
+	trialEndLabel,
+}: CheckoutPlanSummaryProps) => (
 	<Panel
 		as="section"
 		variant="glass"
@@ -26,6 +36,8 @@ export const CheckoutPlanSummary = ({ features, name, price, trialEndLabel }: Ch
 			{price}
 			<span className="ml-2 font-sans text-l font-medium text-shell-muted">/mo</span>
 		</p>
+
+		<p className="mt-2 text-s text-shell-muted">{billingDescription}</p>
 
 		<p className="mt-8 text-m+ font-medium text-shell-muted">Includes:</p>
 
@@ -58,7 +70,7 @@ export const CheckoutPlanSummary = ({ features, name, price, trialEndLabel }: Ch
 		<CheckoutActionButton planName={name} />
 
 		<Link
-			href="/pricing"
+			href={`/pricing?billing=${billing}`}
 			className="mt-5 block text-center text-m font-medium text-shell-muted transition-colors duration-150 hover:text-primary"
 		>
 			Change plan

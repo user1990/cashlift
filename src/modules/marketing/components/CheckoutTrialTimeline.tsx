@@ -2,7 +2,7 @@ import { CalendarClock, CreditCard, Sparkles } from "lucide-react";
 import { cn } from "@/ui/utils/cn";
 
 type CheckoutTrialTimelineProps = {
-	planPrice: string;
+	planPriceLabel: string;
 };
 
 type TrialStepProps = {
@@ -15,7 +15,7 @@ type TrialStepProps = {
 const TRIAL_DAYS = 14;
 const REMINDER_DAY = 13;
 
-export const CheckoutTrialTimeline = ({ planPrice }: CheckoutTrialTimelineProps) => (
+export const CheckoutTrialTimeline = ({ planPriceLabel }: CheckoutTrialTimelineProps) => (
 	<section>
 		<h1 className="max-w-2xl text-5xl+ tracking-normal text-primary sm:text-6xl+">Start your 14-day trial</h1>
 
@@ -28,7 +28,7 @@ export const CheckoutTrialTimeline = ({ planPrice }: CheckoutTrialTimelineProps)
 
 			<TrialStep description="Reminder before trial ends" icon={CalendarClock} title={`Day ${REMINDER_DAY}`} />
 
-			<TrialStep description={`Plan starts at ${planPrice}/mo`} icon={CreditCard} title={`Day ${TRIAL_DAYS}`} />
+			<TrialStep description={`Plan starts at ${planPriceLabel}`} icon={CreditCard} title={`Day ${TRIAL_DAYS}`} />
 		</ol>
 	</section>
 );
