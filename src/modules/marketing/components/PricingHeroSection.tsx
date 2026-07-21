@@ -1,4 +1,5 @@
 import type { PricingBilling } from "../content";
+import { Hero } from "./Hero";
 import { PricingBillingToggle } from "./PricingBillingToggle";
 
 type PricingHeroSectionProps = {
@@ -7,16 +8,12 @@ type PricingHeroSectionProps = {
 
 export const PricingHeroSection = ({ billing }: PricingHeroSectionProps) => (
 	<div>
-		<header>
-			<p className="text-m text-shell-muted">Pricing</p>
-
-			<h1
-				className="mt-4 max-w-[40rem] text-5xl+ leading-[1.03] tracking-normal text-shell-foreground sm:text-[3.25rem]"
-				id="pricing-heading"
-			>
-				Choose the control level your cash decisions need.
-			</h1>
-		</header>
+		<Hero
+			description="Start with a free cash leak audit, then use one plan for owners, finance, managers, and request-only employees."
+			label="Pricing"
+			labelAsHeading
+			title="Flat team plans. Invite every employee without seat anxiety."
+		/>
 
 		<div className="mt-8">
 			<PricingBillingToggle billing={billing} />

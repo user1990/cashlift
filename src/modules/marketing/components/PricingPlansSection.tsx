@@ -6,7 +6,7 @@ type PricingPlansSectionProps = {
 };
 
 export const PricingPlansSection = ({ billing }: PricingPlansSectionProps) => (
-	<ul className="mt-8 grid items-stretch gap-4 lg:grid-cols-3">
+	<ul className="mt-10 grid auto-rows-fr items-stretch gap-4 lg:grid-cols-3">
 		{PRICING_PLANS.map((plan) => (
 			<PricingPlanCard billing={billing} key={plan.name} plan={plan} />
 		))}
