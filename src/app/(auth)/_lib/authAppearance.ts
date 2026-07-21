@@ -38,6 +38,10 @@ export const AUTH_APPEARANCE = {
 			boxShadow: "inset 0 0 0 1px var(--primary) !important",
 			overflow: "hidden",
 			"@media (max-width: 48rem)": { minHeight: "2.75rem" },
+			"&:focus-visible": {
+				outline: "2px solid color-mix(in srgb, var(--primary) 72%, white) !important",
+				outlineOffset: "2px !important",
+			},
 		},
 		rootBox: { width: "100%" },
 		socialButtonsBlockButton: {
