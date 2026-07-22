@@ -74,7 +74,7 @@ describe("company finance calculations", () => {
 	});
 
 	it("sorts visible cash actions by priority for finance users", () => {
-		const actions = getVisibleCashActions(financialDatasetFixture, "owner-finance");
+		const actions = getVisibleCashActions(financialDatasetFixture.cashActions, "owner-finance");
 
 		expect(actions[0].priority).toEqual("critical");
 		expect(actions[0].id).toEqual("action-approval-design-suite");

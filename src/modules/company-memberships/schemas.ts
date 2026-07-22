@@ -1,6 +1,5 @@
 import { z } from "zod";
-
-export const companyRoleSchema = z.enum(["owner-finance", "manager", "employee"]);
+import { companyRoleSchema } from "@/modules/company-roles/schemas";
 
 export const companyMembershipSchema = z.object({
 	companyId: z.string(),

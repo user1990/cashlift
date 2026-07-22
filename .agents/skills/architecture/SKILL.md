@@ -51,6 +51,7 @@ Business/product capabilities under `src/modules/*`.
 - API/data code stays colocated with the module that owns the business concept.
 - Business modules should not import other business modules by default. Compose multiple modules in `src/app`, or extract a shared business primitive into its own module such as `modules/money`.
 - Current explicit composition modules, such as `workspace`, `dashboard`, and `page-shell`, may import the business modules they intentionally compose.
+- Import types and utilities from their owning module. Do not recreate cross-module re-export barrels to shorten import paths.
 
 ### 3. UI
 
@@ -115,3 +116,4 @@ Protected workspace routes default to server-first data loading. Client Componen
 4. Generic UI primitives live in `src/ui`.
 5. Business modules communicate through route-level composition or explicit, documented dependencies.
 6. Prefer explicit file imports over broad module-root barrels.
+7. When adding a business module or an explicit cross-module dependency, update `.fallowrc.json` in the same change with the narrowest zone and allowlist, then run `pnpm check:code`. Do not widen an allowlist to make an unrelated import pass.
