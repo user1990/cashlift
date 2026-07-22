@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { demoWorkspaceDataset } from "@/modules/workspace/demoDataset";
+import { reduceDatasetForDateRange } from "@/modules/workspace/read-models";
+import { getCashBufferRisk } from "@/modules/workspace/utils";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { buildDashboardViewModel } from "./view-model";
 
@@ -28,6 +30,27 @@ describe("dashboard view model", () => {
 
 		expect(dashboard.actionInbox[0].priority).toEqual("critical");
 		expect(dashboard.actionInbox[0].title).toEqual("Decide on BrandForge annual renewal");
+	});
+
+	it("keeps the 14-day buffer risk when the overview range is shorter", () => {
+		const riskDataset = {
+			...financialDatasetFixture,
+			invoices: [],
+			profile: {
+				...financialDatasetFixture.profile,
+				cashBalanceCents: 26_000_000,
+			},
+		};
+		const date = new Date("2026-05-09");
+		const dashboard = buildDashboardViewModel({
+			bufferDataset: riskDataset,
+			dataset: reduceDatasetForDateRange(riskDataset, { endDate: "2026-05-09", startDate: "2026-05-09" }),
+			date,
+			role: "owner-finance",
+		});
+
+		expect(dashboard.cashAtRiskCents).toEqual(getCashBufferRisk(riskDataset, date));
+		expect(dashboard.cashAtRiskCents).toBeGreaterThan(0);
 	});
 
 	it("returns stable fallbacks when company activity is empty", () => {

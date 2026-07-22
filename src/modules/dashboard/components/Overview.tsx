@@ -10,6 +10,7 @@ import { QueuesSection } from "./QueuesSection";
 
 type OverviewProps = {
 	dataset: FinancialDataset;
+	bufferDataset?: FinancialDataset;
 	basePath?: string;
 	dateRange?: WorkspaceDatasetDateRange;
 	onDateRangeChange?: (dateRange: WorkspaceDatasetDateRange) => void;
@@ -18,12 +19,14 @@ type OverviewProps = {
 
 export const Overview = ({
 	basePath = "/dashboard",
+	bufferDataset,
 	dataset,
 	dateRange,
 	onDateRangeChange,
 	readOnly,
 }: OverviewProps) => {
 	const dashboard = buildDashboardViewModel({
+		bufferDataset,
 		dataset,
 		date: getDashboardDate(dateRange, dataset),
 		role: dataset.profile.defaultRole,

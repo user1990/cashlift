@@ -20,12 +20,14 @@ import {
 
 type BuildDashboardViewModelParams = {
 	dataset: FinancialDataset;
+	bufferDataset?: FinancialDataset;
 	date?: Date;
 	role?: CompanyRole;
 };
 
 export const buildDashboardViewModel = ({
 	dataset,
+	bufferDataset = dataset,
 	date = getDefaultDashboardDate(dataset),
 	role = dataset.profile.defaultRole,
 }: BuildDashboardViewModelParams) => {
@@ -69,7 +71,7 @@ export const buildDashboardViewModel = ({
 	return {
 		actionInbox: getVisibleCashActions(dataset, role),
 		budgetRows,
-		cashAtRiskCents: getCashBufferRisk(dataset, date) + getInvoiceRiskTotal(dataset.invoices, date),
+		cashAtRiskCents: getCashBufferRisk(bufferDataset, date) + getInvoiceRiskTotal(dataset.invoices, date),
 		cashAvailableCents: dataset.profile.cashBalanceCents,
 		companyName: dataset.profile.name,
 		dateRangeLabel: getDateRangeLabel(dataset.forecast),
