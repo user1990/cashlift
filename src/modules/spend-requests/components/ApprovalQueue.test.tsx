@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { HttpResponse } from "msw";
 import { describe, expect, it } from "vitest";
@@ -55,24 +55,15 @@ describe("ApprovalQueue", () => {
 		expect(screen.getByText("Delta")).toBeInTheDocument();
 	});
 
-	it("keeps another successful decision when a concurrent decision rolls back", async () => {
+	it("disables every decision control while a decision is pending", async () => {
 		const user = userEvent.setup();
-		const { rejectBrandForge, resolveDelta } = mockSpendRequestDecisionsConcurrent();
-		const queryClient = renderApprovalQueue();
+		mockSpendRequestDecisionPending();
+		renderApprovalQueue();
 
 		await user.click(screen.getByRole("button", { name: "Approve BrandForge" }));
-		await user.click(screen.getByRole("button", { name: "Approve Delta" }));
 
-		resolveDelta();
-		rejectBrandForge();
-
-		await waitFor(() => {
-			expect(getSpendRequestStatuses(queryClient)).toEqual({
-				"request-brandforge": "pending",
-				"request-client-onsite": "approved",
-				"request-webcam": "approved",
-			});
-		});
+		expect(screen.getByRole("button", { name: "Approve Delta" })).toBeDisabled();
+		expect(screen.getByRole("button", { name: "Reject Delta" })).toBeDisabled();
 	});
 });
 
@@ -104,39 +95,6 @@ function mockSpendRequestDecisionFailure() {
 			HttpResponse.json({ error: "Unable to update spend request." }, { status: 500 }),
 		),
 	);
-}
-
-function mockSpendRequestDecisionsConcurrent() {
-	let rejectBrandForge!: () => void;
-	let resolveDelta!: () => void;
-	const brandForgeDecision = new Promise<void>((_resolve, reject) => {
-		rejectBrandForge = () => reject(new Error("Unable to update spend request."));
-	});
-	const deltaDecision = new Promise<void>((resolve) => {
-		resolveDelta = resolve;
-	});
-
-	server.use(
-		createDecideSpendRequestHandler(async ({ params, request }) => {
-			const { status } = await request.json();
-
-			if (params.id === "request-brandforge") {
-				await brandForgeDecision;
-			} else {
-				await deltaDecision;
-			}
-
-			const requestFixture = financialDatasetFixture.spendRequests.find(({ id }) => id === params.id);
-
-			if (!requestFixture) {
-				return HttpResponse.json({ error: "Spend request not found." }, { status: 404 });
-			}
-
-			return HttpResponse.json({ ...requestFixture, status });
-		}),
-	);
-
-	return { rejectBrandForge, resolveDelta };
 }
 
 function renderApprovalQueue() {
