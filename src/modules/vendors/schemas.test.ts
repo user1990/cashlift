@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { vendorBillSchema } from "./schemas";
 
-const vendorBill = {
+const VENDOR_BILL_MOCK = {
 	amountCents: 120_000,
 	category: "software",
 	dueDate: "2026-05-14",
@@ -13,10 +13,10 @@ const vendorBill = {
 
 describe("vendorBillSchema", () => {
 	it.each([
-		["valid values", vendorBill, true],
-		["negative cents", { ...vendorBill, amountCents: -1 }, false],
-		["fractional cents", { ...vendorBill, amountCents: 1.5 }, false],
-		["invalid due date", { ...vendorBill, dueDate: "14/05/2026" }, false],
+		["valid values", VENDOR_BILL_MOCK, true],
+		["negative cents", { ...VENDOR_BILL_MOCK, amountCents: -1 }, false],
+		["fractional cents", { ...VENDOR_BILL_MOCK, amountCents: 1.5 }, false],
+		["invalid due date", { ...VENDOR_BILL_MOCK, dueDate: "14/05/2026" }, false],
 	])("%s", (_, value, valid) => {
 		expect(vendorBillSchema.safeParse(value).success).toBe(valid);
 	});
