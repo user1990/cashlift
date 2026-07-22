@@ -1,10 +1,21 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const assertNoCriticalViolations = (violations: Array<{ impact?: string | null }>) => {
+type AccessibilityViolation = {
+	id: string;
+	impact?: string | null;
+};
+
+const assertNoCriticalViolations = (violations: AccessibilityViolation[]) => {
 	const critical = violations.filter((violation) => violation.impact === "critical" || violation.impact === "serious");
 
 	expect(critical, JSON.stringify(critical, null, 2)).toEqual([]);
+};
+
+const assertNoUnnamedLinks = (violations: AccessibilityViolation[]) => {
+	const unnamedLinks = violations.filter((violation) => violation.id === "link-name");
+
+	expect(unnamedLinks, JSON.stringify(unnamedLinks, null, 2)).toEqual([]);
 };
 
 test.describe("axe smoke", () => {
@@ -15,6 +26,7 @@ test.describe("axe smoke", () => {
 		const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 
 		assertNoCriticalViolations(accessibilityScanResults.violations);
+		assertNoUnnamedLinks(accessibilityScanResults.violations);
 	});
 
 	test("demo page has no serious or critical axe violations", async ({ page }) => {
@@ -23,6 +35,7 @@ test.describe("axe smoke", () => {
 		const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 
 		assertNoCriticalViolations(accessibilityScanResults.violations);
+		assertNoUnnamedLinks(accessibilityScanResults.violations);
 	});
 
 	test("app shell renders for axe (demo mode)", async ({ page }) => {
@@ -31,5 +44,6 @@ test.describe("axe smoke", () => {
 		const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 
 		assertNoCriticalViolations(accessibilityScanResults.violations);
+		assertNoUnnamedLinks(accessibilityScanResults.violations);
 	});
 });
