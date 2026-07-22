@@ -27,6 +27,7 @@ Node.js 22.13+, pnpm 11, TypeScript, React, Next.js App Router, React Compiler, 
 - Type properties: required first, optional second; alphabetize within each group.
 - Prefer `T[]` over `Array<T>` for inline array types; extract named types for reused object shapes.
 - Use numeric separators for large numeric literals with four or more digits.
+- Use explicit absence checks for optional numeric values when `0` is meaningful; do not use truthiness to distinguish a missing value from zero.
 - For user-visible character counts, use `utilities/text/countCharacters`; do not use `.length` or inline `Intl.Segmenter`.
 - Boolean names prefer adjective form (`active`, `selected`) unless `is/has` is clearer. With nouns, put the noun first (`modalVisible`).
 - Function names should describe behavior. Reserve `handleX` for functions that directly receive an event object.
