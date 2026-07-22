@@ -5,11 +5,13 @@ import { getWorkspaceExperienceContract } from "./workspaceExperience";
 import type { WorkspacePageRendererProps } from "./workspacePageContentTypes";
 
 type WorkspacePageViewProps = WorkspacePageRendererProps & {
+	bufferDataset?: WorkspacePageRendererProps["dataset"];
 	dateRange?: WorkspaceDatasetDateRange;
 	onDateRangeChange?: (dateRange: WorkspaceDatasetDateRange) => void;
 };
 
 export const WorkspacePageView = ({
+	bufferDataset,
 	dataset,
 	dateRange,
 	experience,
@@ -22,6 +24,7 @@ export const WorkspacePageView = ({
 	return overview ? (
 		<Overview
 			basePath={workspace.basePath}
+			bufferDataset={bufferDataset}
 			dataset={dataset}
 			dateRange={dateRange}
 			onDateRangeChange={onDateRangeChange}
