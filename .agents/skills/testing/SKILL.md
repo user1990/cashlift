@@ -21,6 +21,9 @@ Use this skill for test changes. Read `.agents/docs/testing.md` only when you ne
 - Test business behavior and user outcomes, not implementation details.
 - Prefer top-level components/pages/screens when that best captures the workflow.
 - Test component-specific data transformation, state, integration, and feature-flag behavior.
+- For derived UI, cover the supplied data that proves each displayed amount, comparison, and label; do not lock invented copy into a snapshot.
+- For a shared mutation, keep it pending in the test and assert every conflicting action is disabled.
+- For time-sensitive UI, test the client-visible date/state and preserve a deterministic server-safe fallback.
 - Avoid testing TypeScript guarantees, library behavior, class names, HTML structure, default setup, or unrelated initial states.
 - Group related assertions in one `it` when they describe one behavior.
 - Use `it.each` for repetitive cases.
@@ -55,6 +58,7 @@ Use this skill for test changes. Read `.agents/docs/testing.md` only when you ne
 
 - Keep fixtures realistic and minimal.
 - Use typed mock data where possible.
+- Name constant fixture/mock values in `UPPER_SNAKE_CASE` with a `_MOCK` suffix.
 - Always use global `chance` for generated string/ID values instead of hardcoded tokens or IDs.
 - Assert business outcomes and semantic values.
 - Use snapshots only for stable data structures.

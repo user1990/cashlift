@@ -64,7 +64,7 @@ export const InteractiveApprovalQueue = ({ datasetQueryKey, requests }: Interact
 				<div className="mt-3 flex flex-wrap gap-2">
 					<Button
 						aria-label={`Approve ${vendor}`}
-						disabled={pendingDecision?.id === id}
+						disabled={decisionMutation.isPending}
 						onPress={() => decisionMutation.mutate({ id, status: "approved" })}
 						size="small"
 						variant="success"
@@ -75,7 +75,7 @@ export const InteractiveApprovalQueue = ({ datasetQueryKey, requests }: Interact
 
 					<Button
 						aria-label={`Reject ${vendor}`}
-						disabled={pendingDecision?.id === id}
+						disabled={decisionMutation.isPending}
 						onPress={() => decisionMutation.mutate({ id, status: "rejected" })}
 						size="small"
 						variant="secondary"

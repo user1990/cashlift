@@ -76,6 +76,7 @@ Incorrect shapes include `jest.mock("./useAuthSession")`, `useAuthStore.setState
 ## Test Data
 
 - Keep fixtures realistic, minimal, and typed.
+- Name constant fixture/mock values in `UPPER_SNAKE_CASE` with a `_MOCK` suffix.
 - Use global `chance` for generated string and ID values such as tokens, user IDs, GUIDs, and arbitrary labels.
 - Avoid hardcoded placeholder IDs such as `"token1"` or `"user-id"` unless the literal value is itself meaningful.
 
