@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { companyRoleSchema } from "@/modules/company-memberships/schemas";
+import { companyRoleSchema } from "@/modules/company-roles/schemas";
 import { moneyCentsSchema } from "@/modules/money/schemas";
 
 export const actionPrioritySchema = z.enum(["critical", "high", "medium", "low"]);
