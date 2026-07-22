@@ -1,23 +1,18 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
 import { AmountItem } from "@/modules/money/components/AmountItem";
 import { formatCurrency, percentage } from "@/modules/money/format";
 import type { FinancialDataset } from "@/modules/workspace/types";
-import { getInvoiceRiskTotal } from "@/modules/workspace/utils";
 import { Badge } from "@/ui/components/Badge";
 import { Panel, PanelHeader } from "@/ui/components/Panel";
+import { useInvoiceRiskTotal } from "./useInvoiceRiskTotal";
 
 type WorkspaceInvoicesSectionProps = {
 	dataset: FinancialDataset;
 };
 
 export const WorkspaceInvoicesSection = ({ dataset }: WorkspaceInvoicesSectionProps) => {
-	const invoiceRiskTotal = useSyncExternalStore(
-		subscribeToBrowserTime,
-		() => getInvoiceRiskTotal(dataset.invoices, new Date()),
-		getServerInvoiceRiskTotal,
-	);
+	const invoiceRiskTotal = useInvoiceRiskTotal(dataset.invoices);
 
 	return (
 		<Panel className="@container">
@@ -53,26 +48,3 @@ export const WorkspaceInvoicesSection = ({ dataset }: WorkspaceInvoicesSectionPr
 		</Panel>
 	);
 };
-
-function subscribeToBrowserTime(onStoreChange: () => void) {
-	let timeoutId: ReturnType<typeof setTimeout>;
-
-	function scheduleNextMidnight() {
-		const now = new Date();
-		const nextMidnight = new Date(now);
-		nextMidnight.setHours(24, 0, 0, 0);
-
-		timeoutId = setTimeout(() => {
-			onStoreChange();
-			scheduleNextMidnight();
-		}, nextMidnight.getTime() - now.getTime());
-	}
-
-	scheduleNextMidnight();
-
-	return () => clearTimeout(timeoutId);
-}
-
-function getServerInvoiceRiskTotal() {
-	return undefined;
-}
