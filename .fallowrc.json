@@ -56,6 +56,10 @@
 			{
 				"from": "module-dashboard",
 				"allow": [
+					"module-budgets",
+					"module-cash-actions",
+					"module-cash-outlook",
+					"module-invoices",
 					"module-money",
 					"module-spend-requests",
 					"module-subscriptions",
@@ -71,7 +75,9 @@
 			{
 				"from": "module-page-shell",
 				"allow": [
+					"module-budgets",
 					"module-dashboard",
+					"module-invoices",
 					"module-money",
 					"module-spend-requests",
 					"module-subscriptions",

@@ -106,7 +106,7 @@ export const decideSpendRequest = async (
 		}
 
 		const request = await supabaseFinanceRepository.updateSpendRequestStatus(
-			session.userId,
+			membership.companyId,
 			accessToken,
 			parsed.data.id,
 			parsed.data.status,

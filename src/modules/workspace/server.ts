@@ -9,6 +9,7 @@ export type WorkspaceDatasetLoadResult =
 	  }
 	| {
 			message: string;
+			requestId?: string;
 			status: "forbidden" | "unauthenticated" | "unavailable";
 	  };
 
@@ -23,7 +24,7 @@ const mapFailure = (
 		return { message: result.message, status: "forbidden" };
 	}
 
-	return { message: result.message, status: "unavailable" };
+	return { message: result.message, requestId: result.requestId, status: "unavailable" };
 };
 
 export const loadWorkspaceDataset = async (
