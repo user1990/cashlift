@@ -9,6 +9,6 @@ export const subscriptionSchema = z.object({
 	owner: z.string(),
 	renewalDate: z.iso.date(),
 	status: subscriptionStatusSchema,
-	usagePercent: z.number().min(0).max(100),
+	usagePercent: z.number().int().min(0).max(100),
 	vendor: z.string(),
 });
