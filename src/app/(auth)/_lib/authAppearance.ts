@@ -14,13 +14,14 @@ export const AUTH_APPEARANCE = {
 		colorRing: "var(--primary)",
 	},
 	elements: {
-		card: { background: "transparent", border: 0, boxShadow: "none", padding: 0 },
+		card: { background: "transparent", border: 0, boxShadow: "none", margin: 0, padding: 0 },
 		cardBox: { boxShadow: "none", width: "100%" },
 		footer: { display: "none" },
 		formFieldInput: {
 			border: "1px solid transparent !important",
 			boxShadow: "inset 0 0 0 1px var(--border-strong) !important",
 			boxSizing: "border-box",
+			"@media (max-width: 48rem)": { fontSize: "1rem", minHeight: "2.75rem" },
 			"&:focus": {
 				borderColor: "transparent !important",
 				boxShadow: "inset 0 0 0 1px var(--primary) !important",
@@ -32,11 +33,25 @@ export const AUTH_APPEARANCE = {
 				outline: "none !important",
 			},
 		},
-		formButtonPrimary: { borderRadius: "9999px !important", overflow: "hidden" },
+		formButtonPrimary: {
+			borderRadius: "9999px !important",
+			boxShadow: "inset 0 0 0 1px var(--primary) !important",
+			overflow: "hidden",
+			"@media (max-width: 48rem)": { minHeight: "2.75rem" },
+			"&:focus-visible": {
+				boxShadow: "inset 0 0 0 2px color-mix(in srgb, var(--primary) 35%, white) !important",
+				outline: "none !important",
+			},
+		},
 		rootBox: { width: "100%" },
 		socialButtonsBlockButton: {
-			background: "color-mix(in srgb, var(--shell-elevated) 50%, transparent)",
+			background: "color-mix(in srgb, var(--shell-elevated) 82%, var(--panel-muted))",
 			borderColor: "var(--shell-border)",
+			boxShadow: "inset 0 0 0 1px color-mix(in srgb, var(--shell-border) 70%, transparent)",
+			"&:focus-visible": {
+				boxShadow: "inset 0 0 0 2px var(--primary) !important",
+				outline: "none !important",
+			},
 		},
 	},
 } as const;

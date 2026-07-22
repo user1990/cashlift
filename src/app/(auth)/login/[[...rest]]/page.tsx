@@ -23,7 +23,7 @@ export default async function Login() {
 				<ClerkSignInPasswordAutocomplete />
 
 				<ClerkLoading>
-					<AuthGlassLoading />
+					<AuthGlassLoading fieldCount={1} />
 				</ClerkLoading>
 
 				<ClerkLoaded>

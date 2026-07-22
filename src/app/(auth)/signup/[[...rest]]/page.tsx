@@ -20,7 +20,7 @@ export default async function SignUpPage() {
 		<AuthGlassShell action={{ href: "/login", label: "Sign in", prompt: "Already have an account?" }} size="expanded">
 			<ServerAuthProvider>
 				<ClerkLoading>
-					<AuthGlassLoading />
+					<AuthGlassLoading fieldCount={2} />
 				</ClerkLoading>
 
 				<ClerkLoaded>
