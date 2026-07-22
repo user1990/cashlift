@@ -14,7 +14,7 @@ export const AUTH_APPEARANCE = {
 		colorRing: "var(--primary)",
 	},
 	elements: {
-		card: { background: "transparent", border: 0, boxShadow: "none", padding: 0 },
+		card: { background: "transparent", border: 0, boxShadow: "none", margin: 0, padding: 0 },
 		cardBox: { boxShadow: "none", width: "100%" },
 		footer: { display: "none" },
 		formFieldInput: {
