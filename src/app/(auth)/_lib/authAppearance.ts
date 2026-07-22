@@ -45,8 +45,9 @@ export const AUTH_APPEARANCE = {
 		},
 		rootBox: { width: "100%" },
 		socialButtonsBlockButton: {
-			background: "color-mix(in srgb, var(--shell-elevated) 50%, transparent)",
+			background: "color-mix(in srgb, var(--shell-elevated) 82%, var(--panel-muted))",
 			borderColor: "var(--shell-border)",
+			boxShadow: "inset 0 0 0 1px color-mix(in srgb, var(--shell-border) 70%, transparent)",
 			"&:focus-visible": {
 				boxShadow: "inset 0 0 0 2px var(--primary) !important",
 				outline: "none !important",
