@@ -1,5 +1,7 @@
 minimumReleaseAge: 10080
 minimumReleaseAgeExclude:
+  # Security exception: required to remediate GHSA-v2hh-gcrm-f6hx before its one-week age gate.
+  - fast-uri@3.1.4
   # TODO: Remove after 2026-07-13, once the TypeScript 6 compatibility package has aged past the one-week gate.
   - '@typescript/typescript6@6.0.2'
   # TODO: Remove after 2026-07-15, once TypeScript 7.0.2 packages have aged past the one-week gate.
@@ -26,7 +28,9 @@ minimumReleaseAgeExclude:
   - '@typescript/typescript-win32-x64@7.0.2'
 overrides:
   '@vercel/routing-utils>path-to-regexp': 6.3.0
+  fast-uri: 3.1.4
   postcss: '>=8.5.15'
+  sharp: 0.35.0
   undici: 7.28.0
   valibot: 1.4.1
 peerDependencyRules:
