@@ -1,5 +1,5 @@
 import { execFile } from "node:child_process";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
@@ -8,6 +8,7 @@ const execFileAsync = promisify(execFile);
 const chromePath = process.env.LIGHTHOUSE_CHROME_PATH;
 const maxMedianLcp = Number(process.env.LCP_MAX_MEDIAN_MS);
 const runCount = Number(process.env.LCP_RUNS ?? 5);
+const summaryPath = process.env.LCP_SUMMARY_PATH;
 const url = process.env.LCP_URL ?? "https://cashlift.vercel.app/";
 
 if (!Number.isInteger(runCount) || runCount < 5) {
@@ -52,6 +53,10 @@ try {
 		})),
 	);
 	console.log(`Median mobile LCP: ${Math.round(medianLcp)} ms`);
+
+	if (summaryPath) {
+		await writeFile(summaryPath, JSON.stringify({ medianLcp, runs: lcpValues, url }, null, 2));
+	}
 
 	if (Number.isFinite(maxMedianLcp) && medianLcp > maxMedianLcp) {
 		throw new Error(`Median LCP ${Math.round(medianLcp)} ms exceeds LCP_MAX_MEDIAN_MS=${maxMedianLcp}.`);
