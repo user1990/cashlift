@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import type { CompanyRole, FinancialDataset, WorkspaceDatasetDateRange } from "@/modules/workspace/types";
+import type { FinancialDataset, WorkspaceDatasetDateRange } from "@/modules/workspace/types";
 import { buildDashboardViewModel } from "../view-model";
 import { ActionInbox } from "./ActionInbox";
 import { ChartsSection } from "./ChartsSection";
@@ -24,8 +23,11 @@ export const Overview = ({
 	onDateRangeChange,
 	readOnly,
 }: OverviewProps) => {
-	const [role] = useState<CompanyRole>(() => dataset.profile.defaultRole);
-	const dashboard = buildDashboardViewModel({ dataset, date: getDashboardDate(dateRange, dataset), role });
+	const dashboard = buildDashboardViewModel({
+		dataset,
+		date: getDashboardDate(dateRange, dataset),
+		role: dataset.profile.defaultRole,
+	});
 
 	return (
 		<div className="space-y-5">

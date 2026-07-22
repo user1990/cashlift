@@ -14,7 +14,7 @@ export const MetricsSection = ({ dashboard }: MetricsSectionProps) => (
 			direction="up"
 			icon={<Wallet aria-hidden className="size-5" />}
 			label="Cash on hand"
-			trend="8.2% vs last 7 days"
+			trend="Current balance"
 			value={formatPreciseCompactCurrency(dashboard.cashAvailableCents)}
 			variant="primary"
 		/>
@@ -23,7 +23,7 @@ export const MetricsSection = ({ dashboard }: MetricsSectionProps) => (
 			direction="up"
 			icon={<WalletCards aria-hidden className="size-5" />}
 			label="Committed spend"
-			trend="12.4% vs last 7 days"
+			trend="Current commitments"
 			value={formatPreciseCompactCurrency(dashboard.totalCommittedSpendCents)}
 			variant="highlight"
 		/>
@@ -32,7 +32,7 @@ export const MetricsSection = ({ dashboard }: MetricsSectionProps) => (
 			direction="down"
 			icon={<WalletCards aria-hidden className="size-5" />}
 			label="Uncommitted"
-			trend="4.6% vs last 7 days"
+			trend="Available after commitments"
 			value={formatPreciseCompactCurrency(dashboard.totalUncommittedCents)}
 			variant="violet"
 		/>
@@ -41,8 +41,8 @@ export const MetricsSection = ({ dashboard }: MetricsSectionProps) => (
 			direction="up"
 			icon={<ShieldCheck aria-hidden className="size-5" />}
 			label="At risk"
-			trend="5.1% vs last 7 days"
-			value={formatPreciseCompactCurrency(dashboard.invoiceRiskCents)}
+			trend="Invoice and buffer exposure"
+			value={formatPreciseCompactCurrency(dashboard.cashAtRiskCents)}
 			variant="warning"
 		/>
 	</Panel>
