@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { invoiceSchema } from "./schemas";
 
-const invoice = {
+const INVOICE_MOCK = {
 	amountCents: 120_000,
 	client: "Northstar Labs",
 	collectionProbability: 62,
@@ -13,7 +13,7 @@ const invoice = {
 
 describe("invoiceSchema", () => {
 	it("accepts valid persisted invoice values", () => {
-		expect(invoiceSchema.parse(invoice)).toEqual(invoice);
+		expect(invoiceSchema.parse(INVOICE_MOCK)).toEqual(INVOICE_MOCK);
 	});
 
 	it.each([
@@ -23,6 +23,6 @@ describe("invoiceSchema", () => {
 		["probability below zero", { collectionProbability: -1 }],
 		["probability above one hundred", { collectionProbability: 101 }],
 	])("rejects %s", (_, override) => {
-		expect(invoiceSchema.safeParse({ ...invoice, ...override }).success).toBe(false);
+		expect(invoiceSchema.safeParse({ ...INVOICE_MOCK, ...override }).success).toBe(false);
 	});
 });
