@@ -45,6 +45,8 @@ pnpm check:code
    - Risky behavior changes
    - Security or privacy issues
    - Violations of `AGENTS.md`
+   - Cross-module imports, re-export barrels, and Fallow allowlist changes that weaken ownership
+   - Leaf components receiving aggregate datasets, UI claims unsupported by their input, stale browser-time labels, or mutations that leave conflicting controls enabled
 5. Prioritize real bugs and user-visible risks over style feedback.
 6. Do not edit files, stage changes, commit, push, create or update PRs, comment on GitHub, or resolve review threads.
 
