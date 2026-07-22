@@ -13,6 +13,7 @@
 		"build-storybook": "storybook build",
 		"lint": "biome check",
 		"lint:fix": "biome check --write src",
+		"measure:lcp": "node scripts/measure-home-lcp.mjs",
 		"check:react": "npx react-doctor@latest --verbose",
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
