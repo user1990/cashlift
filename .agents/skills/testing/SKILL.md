@@ -58,6 +58,7 @@ Use this skill for test changes. Read `.agents/docs/testing.md` only when you ne
 
 - Keep fixtures realistic and minimal.
 - Use typed mock data where possible.
+- Name constant fixture/mock values in `UPPER_SNAKE_CASE` with a `_MOCK` suffix.
 - Always use global `chance` for generated string/ID values instead of hardcoded tokens or IDs.
 - Assert business outcomes and semantic values.
 - Use snapshots only for stable data structures.

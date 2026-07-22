@@ -10,9 +10,9 @@ export const cashActionTypeSchema = z.enum(["approval", "collection", "vendor-le
 
 export const cashActionSchema = z.object({
 	description: z.string(),
-	dueDate: z.string(),
+	dueDate: z.iso.date(),
 	id: z.string(),
-	impactCents: moneyCentsSchema,
+	impactCents: moneyCentsSchema.nonnegative(),
 	owner: z.string(),
 	priority: actionPrioritySchema,
 	status: actionStatusSchema,
