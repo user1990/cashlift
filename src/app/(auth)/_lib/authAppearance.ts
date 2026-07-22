@@ -1,8 +1,3 @@
-const AUTH_FOCUS_OUTLINE = {
-	outline: "2px solid color-mix(in srgb, var(--primary) 72%, white) !important",
-	outlineOffset: "2px !important",
-} as const;
-
 export const AUTH_APPEARANCE = {
 	options: { logoPlacement: "none" },
 	variables: {
@@ -35,13 +30,7 @@ export const AUTH_APPEARANCE = {
 			"&:focus-visible": {
 				borderColor: "transparent !important",
 				boxShadow: "inset 0 0 0 1px var(--primary) !important",
-				...AUTH_FOCUS_OUTLINE,
-			},
-		},
-		formFieldInputShowPasswordButton: {
-			"&:focus-visible": {
-				boxShadow: "none !important",
-				...AUTH_FOCUS_OUTLINE,
+				outline: "none !important",
 			},
 		},
 		formButtonPrimary: {
@@ -49,15 +38,18 @@ export const AUTH_APPEARANCE = {
 			boxShadow: "inset 0 0 0 1px var(--primary) !important",
 			overflow: "hidden",
 			"@media (max-width: 48rem)": { minHeight: "2.75rem" },
-			"&:focus-visible": AUTH_FOCUS_OUTLINE,
+			"&:focus-visible": {
+				boxShadow: "inset 0 0 0 2px color-mix(in srgb, var(--primary) 35%, white) !important",
+				outline: "none !important",
+			},
 		},
 		rootBox: { width: "100%" },
 		socialButtonsBlockButton: {
 			background: "color-mix(in srgb, var(--shell-elevated) 50%, transparent)",
 			borderColor: "var(--shell-border)",
 			"&:focus-visible": {
-				boxShadow: "none !important",
-				...AUTH_FOCUS_OUTLINE,
+				boxShadow: "inset 0 0 0 2px var(--primary) !important",
+				outline: "none !important",
 			},
 		},
 	},

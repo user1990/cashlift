@@ -1,10 +1,7 @@
 import Link from "next/link";
 
 export const Logo = () => (
-	<Link
-		href="/"
-		className="shrink-0 rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-primary"
-	>
+	<Link href="/" className="shrink-0">
 		<svg
 			aria-labelledby="cashlift-logo-title cashlift-logo-desc"
 			className="h-7 w-auto shrink-0"
