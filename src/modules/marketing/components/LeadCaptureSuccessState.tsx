@@ -40,8 +40,8 @@ export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCap
 				</div>
 
 				<div className="mt-6 grid gap-2">
-					<ActionLink href="/dashboard" className="w-full" variant="primary">
-						Explore dashboard
+					<ActionLink href="/demo/workspace" className="w-full" variant="primary">
+						Explore live demo
 						<ArrowRight aria-hidden className="size-4" />
 					</ActionLink>
 

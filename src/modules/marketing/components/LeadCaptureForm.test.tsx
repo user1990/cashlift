@@ -31,7 +31,7 @@ describe("LeadCaptureForm", () => {
 			screen.getByText("We'll follow up with the audit walkthrough. You can explore the sample workspace now."),
 		).toBeInTheDocument();
 		expect(screen.queryByText("Demo request captured. No private company data was sent.")).not.toBeInTheDocument();
-		expect(screen.getByRole("link", { name: /Explore dashboard/i })).toHaveAttribute("href", "/dashboard");
+		expect(screen.getByRole("link", { name: /Explore live demo/i })).toHaveAttribute("href", "/demo/workspace");
 
 		await user.click(screen.getByRole("button", { name: /Send another request/i }));
 
