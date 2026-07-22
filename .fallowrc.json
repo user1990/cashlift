@@ -120,7 +120,6 @@
 	"dynamicallyLoaded": [
 		"doctor.config.ts",
 		"src/services/i18n/request.ts",
-		"src/services/next/imageLoader.ts",
 		"src/services/next/emptyPolyfillModule.ts",
 		"src/ui/components/DesignSystem.mdx"
 	],

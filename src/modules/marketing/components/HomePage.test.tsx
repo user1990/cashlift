@@ -29,11 +29,11 @@ describe("HomePage", () => {
 		expect(
 			screen.getByRole("img", { name: "Studio Nova vendor view showing low-use and duplicate subscriptions" }),
 		).toBeInTheDocument();
-		const heroImage = screen.getByRole("img", {
-			name: "Studio Nova overview with ranked cash actions, 13-week cash outlook, and team budget charts",
-		});
-
-		expect(heroImage).toHaveAttribute("decoding", "async");
+		expect(
+			screen.getByRole("img", {
+				name: "Studio Nova overview with ranked cash actions, 13-week cash outlook, and team budget charts",
+			}),
+		).toHaveAttribute("decoding", "sync");
 
 		for (const link of screen.getAllByRole("link", { name: "Open live demo" })) {
 			expect(link).toHaveAttribute("href", "/demo/workspace");
