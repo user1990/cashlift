@@ -8,6 +8,7 @@ import {
 	getRunwayDays,
 	getSpendRequestCashImpact,
 	getTeamBudgetRemaining,
+	getTeamBudgetUsage,
 	getVendorLeakSavings,
 	getVisibleCashActions,
 	isInvoiceOverdue,
@@ -60,6 +61,13 @@ describe("company finance calculations", () => {
 
 	it("calculates team budget remaining", () => {
 		expect(getTeamBudgetRemaining(financialDatasetFixture.teamBudgets[0])).toEqual(940_000);
+	});
+
+	it("preserves over-budget and zero-budget semantics", () => {
+		expect(getTeamBudgetRemaining({ committedCents: 120_000, monthlyBudgetCents: 100_000 })).toEqual(-20_000);
+		expect(
+			getTeamBudgetUsage({ ...financialDatasetFixture.teamBudgets[0], committedCents: 1, monthlyBudgetCents: 0 }),
+		).toEqual(0);
 	});
 
 	it("calculates spend request cash impact", () => {
