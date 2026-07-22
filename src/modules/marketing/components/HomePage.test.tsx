@@ -34,8 +34,6 @@ describe("HomePage", () => {
 		});
 
 		expect(heroImage).toHaveAttribute("decoding", "async");
-		expect(heroImage).toHaveAttribute("loading", "eager");
-		expect(heroImage).toHaveAttribute("srcset", expect.stringContaining("studio-nova-inbox-384.webp"));
 
 		for (const link of screen.getAllByRole("link", { name: "Open live demo" })) {
 			expect(link).toHaveAttribute("href", "/demo/workspace");

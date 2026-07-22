@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
 	experimental: {
 		inlineCss: true,
 	},
+	images: {
+		loader: "custom",
+		loaderFile: "./src/services/next/imageLoader.ts",
+	},
 	partialPrefetching: true,
 	poweredByHeader: false,
 	reactCompiler: true,
