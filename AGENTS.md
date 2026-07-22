@@ -39,6 +39,12 @@ Always read this file first. It defines workflow for this repo. Do not override 
    - Do not paste full guides or long command output into the conversation unless asked.
    - For long work, restate the durable summary before pausing or finishing.
 
+7. Prevent known review regressions.
+   - Give presentational components the smallest owning model or primitive props they render; pass an aggregate dataset only at an explicit composition or view-model boundary.
+   - Do not invent trends, comparisons, dates, or monetary values. Derive each displayed value from the current input, or omit the claim.
+   - A mutation that can conflict with another control must lock every conflicting control until it settles, and its pending-state behavior needs a test.
+   - Treat browser time as client state. Do not bake a build-time date into a current-status label; preserve the server render and test the client behavior when time affects a decision.
+
 ## Skill Routing
 
 | Skill | Use for |
@@ -65,6 +71,7 @@ Code diagnostics use package scripts: `pnpm check:code` for Fallow and `pnpm che
 - Validate server-boundary input with Zod or equivalent, authorize before data access, and avoid SQL/query string concatenation.
 - Do not store auth/session tokens in localStorage or sessionStorage.
 - Do not commit secrets or telemetry that captures PII.
+- Keep telemetry identifiers to request/correlation IDs; do not attach Clerk user IDs or other direct identifiers unless a documented, approved need requires it.
 
 ## Quick Reference
 

@@ -27,6 +27,7 @@ Node.js 22.13+, pnpm 11, TypeScript, React, Next.js App Router, React Compiler, 
 - Type properties: required first, optional second; alphabetize within each group.
 - Prefer `T[]` over `Array<T>` for inline array types; extract named types for reused object shapes.
 - Use numeric separators for large numeric literals with four or more digits.
+- Use explicit absence checks for optional numeric values when `0` is meaningful; do not use truthiness to distinguish a missing value from zero.
 - For user-visible character counts, use `utilities/text/countCharacters`; do not use `.length` or inline `Intl.Segmenter`.
 - Boolean names prefer adjective form (`active`, `selected`) unless `is/has` is clearer. With nouns, put the noun first (`modalVisible`).
 - Function names should describe behavior. Reserve `handleX` for functions that directly receive an event object.
@@ -37,6 +38,7 @@ Node.js 22.13+, pnpm 11, TypeScript, React, Next.js App Router, React Compiler, 
 - Put blank lines between distinct JSX blocks.
 - In JSX maps, destructure item properties in the callback and put `key` first on the rendered element.
 - Inline trivial one-off formatting. For non-trivial repeated logic, prefer `function helperName(...) {}` near the bottom of the file.
+- Component props expose only the data the component renders. Aggregate datasets belong at page, composition, query, or view-model boundaries—not leaf components.
 - Derive stable unique list keys alongside data when natural fields can repeat.
 - Use `key` for intentional component state resets when switching entity identity; avoid it when preserving local state or avoiding expensive remounts matters.
 - Extract and export React Query query keys so mutations can invalidate them.
@@ -53,6 +55,9 @@ Node.js 22.13+, pnpm 11, TypeScript, React, Next.js App Router, React Compiler, 
 - Prefer native View Transitions for snapshot-based page/UI transitions before adding animation dependencies.
 - Declare `children` explicitly in props; avoid `React.PropsWithChildren`.
 - Component boolean props should be optional by default and default to `false` in the component unless the boolean is truly required domain data.
+- Do not present a trend, comparison, date, or financial amount unless it is derived from the current input. Prefer a truthful neutral label to fabricated precision.
+- For browser-current labels, keep the server snapshot deterministic and derive the browser value after hydration with the established `useSyncExternalStore` pattern.
+- If one mutation can create a conflicting decision, disable every conflicting action while it is pending; do not lock only the clicked control.
 - Avoid `returnObjects: true` for object-shaped translations; it is acceptable for translated arrays.
 
 ## Security

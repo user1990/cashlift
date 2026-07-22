@@ -1,9 +1,9 @@
 import { instant } from "@next/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 test.describe("instant dashboard navigation", () => {
 	test("shows the approvals shell immediately from the dashboard", async ({ page }) => {
-		await page.goto("/dashboard");
+		await visitDashboard(page);
 
 		await instant(page, async () => {
 			await page
@@ -15,7 +15,7 @@ test.describe("instant dashboard navigation", () => {
 	});
 
 	test("shows the vendors shell immediately from the dashboard", async ({ page }) => {
-		await page.goto("/dashboard");
+		await visitDashboard(page);
 
 		await instant(page, async () => {
 			await page
@@ -26,3 +26,8 @@ test.describe("instant dashboard navigation", () => {
 		});
 	});
 });
+
+async function visitDashboard(page: Page) {
+	await page.goto("/dashboard");
+	await page.waitForLoadState("networkidle");
+}

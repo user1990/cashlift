@@ -67,7 +67,7 @@ export const buildDashboardViewModel = ({
 		dataset.teamMembers.find((member) => member.role === "owner-finance") ?? dataset.teamMembers[0];
 
 	return {
-		actionInbox: getVisibleCashActions(dataset, role),
+		actionInbox: getVisibleCashActions(dataset.cashActions, role),
 		budgetRows,
 		cashAtRiskCents: getCashBufferRisk(dataset, date) + getInvoiceRiskTotal(dataset.invoices, date),
 		cashAvailableCents: dataset.profile.cashBalanceCents,
