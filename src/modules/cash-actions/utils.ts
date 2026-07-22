@@ -1,6 +1,6 @@
 import { parseISO } from "date-fns";
-import type { CompanyRole, FinancialDataset } from "@/modules/workspace/types";
-import type { ActionPriority } from "./types";
+import type { CompanyRole } from "@/modules/company-roles/types";
+import type { ActionPriority, CashAction } from "./types";
 
 const ACTION_PRIORITY_WEIGHTS = {
 	critical: 4,
@@ -9,8 +9,8 @@ const ACTION_PRIORITY_WEIGHTS = {
 	low: 1,
 } as const satisfies Record<ActionPriority, number>;
 
-export const getVisibleCashActions = (dataset: FinancialDataset, role: CompanyRole) =>
-	dataset.cashActions
+export const getVisibleCashActions = (cashActions: CashAction[], role: CompanyRole) =>
+	cashActions
 		.filter((action) => action.status === "open" && action.visibleTo.includes(role))
 		.toSorted((left, right) => {
 			const priorityDelta = ACTION_PRIORITY_WEIGHTS[right.priority] - ACTION_PRIORITY_WEIGHTS[left.priority];

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { teamBudgetSchema } from "@/modules/budgets/schemas";
 import { cashActionSchema } from "@/modules/cash-actions/schemas";
 import { forecastPointSchema } from "@/modules/cash-outlook/schemas";
-import { companyRoleSchema } from "@/modules/company-memberships/schemas";
+import { companyRoleSchema } from "@/modules/company-roles/schemas";
 import { invoiceSchema } from "@/modules/invoices/schemas";
 import { moneyCentsSchema } from "@/modules/money/schemas";
 import { spendRequestSchema } from "@/modules/spend-requests/schemas";
