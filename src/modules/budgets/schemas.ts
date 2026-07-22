@@ -2,9 +2,9 @@ import { z } from "zod";
 import { moneyCentsSchema } from "@/modules/money/schemas";
 
 export const teamBudgetSchema = z.object({
-	approvedCents: moneyCentsSchema,
-	committedCents: moneyCentsSchema,
+	approvedCents: moneyCentsSchema.nonnegative(),
+	committedCents: moneyCentsSchema.nonnegative(),
 	id: z.string(),
-	monthlyBudgetCents: moneyCentsSchema,
+	monthlyBudgetCents: moneyCentsSchema.nonnegative(),
 	team: z.string(),
 });
