@@ -70,10 +70,15 @@ export const QueuesSection = ({ basePath = "/dashboard", dashboard, readOnly }: 
 						<div className="mb-2 flex items-center justify-between gap-3">
 							<p className="text-m+ font-semibold text-panel-foreground">{team}</p>
 
-							<span className="font-mono text-s text-shell-muted">{formatCurrency(remainingCents)} left</span>
+							<span className="font-mono text-s text-shell-muted">
+								{formatCurrency(Math.abs(remainingCents))} {remainingCents < 0 ? "over budget" : "left"}
+							</span>
 						</div>
 
-						<ProgressBar label={`${team} budget used`} value={usagePercent} />
+						<ProgressBar
+							label={`${team} budget used${remainingCents < 0 ? " (over budget)" : ""}`}
+							value={usagePercent}
+						/>
 					</li>
 				))}
 			</ul>
