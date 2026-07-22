@@ -1,5 +1,5 @@
 import { parseISO } from "date-fns";
-import type { CompanyRole } from "@/modules/company-memberships/types";
+import type { CompanyRole } from "@/modules/company-roles/types";
 import type { ActionPriority, CashAction } from "./types";
 
 const ACTION_PRIORITY_WEIGHTS = {
