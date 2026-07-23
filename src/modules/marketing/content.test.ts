@@ -3,12 +3,12 @@ import { DEFAULT_PRICING_PLAN_SLUG, getPricingPlanBySlug } from "./content";
 
 describe("getPricingPlanBySlug", () => {
 	it("returns matching pricing plans and prices", () => {
-		expect(getPricingPlanBySlug("control").name).toEqual("Control");
-		expect(getPricingPlanBySlug("control").price).toEqual("$49");
-		expect(getPricingPlanBySlug("command").name).toEqual("Command");
-		expect(getPricingPlanBySlug("command").price).toEqual("$99");
-		expect(getPricingPlanBySlug("scale").name).toEqual("Scale");
-		expect(getPricingPlanBySlug("scale").price).toEqual("$199");
+		expect(getPricingPlanBySlug("starter").name).toEqual("Starter");
+		expect(getPricingPlanBySlug("starter").price).toEqual("$8");
+		expect(getPricingPlanBySlug("professional").name).toEqual("Professional");
+		expect(getPricingPlanBySlug("professional").price).toEqual("$25");
+		expect(getPricingPlanBySlug("enterprise").name).toEqual("Enterprise");
+		expect(getPricingPlanBySlug("enterprise").price).toEqual("$99");
 	});
 
 	it("falls back to the default pricing plan", () => {

@@ -52,10 +52,10 @@ type UseCase = {
 };
 
 type UseCaseSlug = "agencies" | "consulting" | "software-services";
-type PricingPlanSlug = "control" | "command" | "scale";
+type PricingPlanSlug = "enterprise" | "professional" | "starter";
 export type PricingBilling = "annual" | "monthly";
 
-export const DEFAULT_PRICING_PLAN_SLUG = "command" satisfies PricingPlanSlug;
+export const DEFAULT_PRICING_PLAN_SLUG = "professional" satisfies PricingPlanSlug;
 
 export const PRODUCT_NAV = [
 	{ href: "/features", label: "Features" },
@@ -106,32 +106,32 @@ export const FEATURE_CARDS = [
 
 export const PRICING_PLANS = [
 	{
-		annualPrice: "$79",
-		annualTotal: "$948",
+		annualPrice: "$6",
+		annualTotal: "$72",
 		description: "For owners cleaning up cash leaks and approvals.",
 		features: ["Free cash leak audit", "1 company workspace", "Spend request inbox", "13-week cash outlook"],
-		name: "Control",
-		price: "$49",
-		slug: "control",
+		name: "Starter",
+		price: "$8",
+		slug: "starter",
 	},
 	{
-		annualPrice: "$159",
-		annualTotal: "$1,908",
+		annualPrice: "$20",
+		annualTotal: "$240",
 		description: "For teams using CashLift several times a day.",
 		features: ["Unlimited request-only employees", "Manager approval queues", "Team budgets", "Vendor renewal reviews"],
 		highlighted: true,
-		name: "Command",
-		price: "$99",
-		slug: "command",
+		name: "Professional",
+		price: "$25",
+		slug: "professional",
 	},
 	{
-		annualPrice: "$239",
-		annualTotal: "$2,868",
+		annualPrice: "$79",
+		annualTotal: "$948",
 		description: "For multi-team service firms with finance support needs.",
 		features: ["Multi-company view", "Custom approval rules", "Cash scenario reviews", "Priority onboarding"],
-		name: "Scale",
-		price: "$199",
-		slug: "scale",
+		name: "Enterprise",
+		price: "$99",
+		slug: "enterprise",
 	},
 ] as const satisfies readonly PricingPlan[];
 
