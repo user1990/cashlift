@@ -59,6 +59,7 @@
 					"module-budgets",
 					"module-cash-actions",
 					"module-cash-outlook",
+					"module-company-roles",
 					"module-invoices",
 					"module-money",
 					"module-spend-requests",
