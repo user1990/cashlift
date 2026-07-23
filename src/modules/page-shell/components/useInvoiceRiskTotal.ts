@@ -1,8 +1,8 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { getInvoiceRiskTotal } from "@/modules/invoices/utils";
 import type { FinancialDataset } from "@/modules/workspace/types";
-import { getInvoiceRiskTotal } from "@/modules/workspace/utils";
 
 export const useInvoiceRiskTotal = (invoices: FinancialDataset["invoices"]) =>
 	useSyncExternalStore(

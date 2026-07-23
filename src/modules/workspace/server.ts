@@ -9,10 +9,11 @@ export type WorkspaceDatasetLoadResult =
 	  }
 	| {
 			message: string;
+			requestId?: string;
 			status: "forbidden" | "unauthenticated" | "unavailable";
 	  };
 
-const mapFailure = (
+export const mapWorkspaceDatasetFailure = (
 	result: Exclude<ResolveWorkspaceDatasetResult, { kind: "success" }>,
 ): Extract<WorkspaceDatasetLoadResult, { status: "forbidden" | "unauthenticated" | "unavailable" }> => {
 	if (result.kind === "unauthenticated") {
@@ -23,7 +24,7 @@ const mapFailure = (
 		return { message: result.message, status: "forbidden" };
 	}
 
-	return { message: result.message, status: "unavailable" };
+	return { message: result.message, requestId: result.requestId, status: "unavailable" };
 };
 
 export const loadWorkspaceDataset = async (
@@ -31,5 +32,7 @@ export const loadWorkspaceDataset = async (
 ): Promise<WorkspaceDatasetLoadResult> => {
 	const result = await resolveWorkspaceDataset(scope);
 
-	return result.kind === "success" ? { dataset: result.dataset, status: "success" } : mapFailure(result);
+	return result.kind === "success"
+		? { dataset: result.dataset, status: "success" }
+		: mapWorkspaceDatasetFailure(result);
 };

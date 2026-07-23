@@ -114,7 +114,7 @@ describe("decideSpendRequest", () => {
 		expect(result).toEqual({ request: updatedRequest, status: "success" });
 		expect(getToken).toHaveBeenCalledWith();
 		expect(createServerSupabaseClientMock).toHaveBeenCalledWith({ accessToken: "jwt" });
-		expect(updateSpendRequestStatusMock).toHaveBeenCalledWith("user-1", "jwt", "request-brandforge", "approved");
+		expect(updateSpendRequestStatusMock).toHaveBeenCalledWith("studio-nova", "jwt", "request-brandforge", "approved");
 	});
 
 	it("returns forbidden when the member is not an approver", async () => {

@@ -48,7 +48,7 @@ const expectWorkspaceExceptionCaptured = ({
 	failureKind,
 }: {
 	error: Error;
-	extra: Record<string, string>;
+	extra?: Record<string, string>;
 	failureKind: string;
 }) => {
 	expect(captureAppExceptionMock).toHaveBeenCalledWith({
@@ -164,7 +164,7 @@ describe("resolveWorkspaceDataset", () => {
 		});
 		expectWorkspaceExceptionCaptured({
 			error,
-			extra: { userId: "user-1" },
+			extra: undefined,
 			failureKind: "data-token-error",
 		});
 	});
@@ -183,7 +183,7 @@ describe("resolveWorkspaceDataset", () => {
 		expectDataErrorResult(result);
 		expectWorkspaceExceptionCaptured({
 			error,
-			extra: { userId: "user-1" },
+			extra: undefined,
 			failureKind: "data-error",
 		});
 	});

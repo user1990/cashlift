@@ -1,22 +1,15 @@
+import { getRemainingTeamBudget, getTeamBudgetUsage } from "@/modules/budgets/utils";
+import { getVisibleCashActions } from "@/modules/cash-actions/utils";
+import { getEndingBalance } from "@/modules/cash-outlook/utils";
+import type { CompanyRole } from "@/modules/company-roles/types";
+import { getInvoiceRiskTotal, getUpcomingInvoiceTotal, isInvoiceOverdue } from "@/modules/invoices/utils";
 import { centsToDollars } from "@/modules/money/format";
-import type { CompanyRole, FinancialDataset, SpendRequest } from "@/modules/workspace/types";
-import {
-	getCashBufferRisk,
-	getDueVendorBills,
-	getEndingBalance,
-	getInvoiceRiskTotal,
-	getPendingApprovalCount,
-	getRemainingTeamBudget,
-	getRunwayDays,
-	getSpendRequestCashImpact,
-	getTeamBudgetUsage,
-	getUpcomingInvoiceTotal,
-	getUpcomingOutflowTotal,
-	getVendorLeakSavings,
-	getVisibleCashActions,
-	isInvoiceOverdue,
-	isVendorLeak,
-} from "@/modules/workspace/utils";
+import type { SpendRequest } from "@/modules/spend-requests/types";
+import { getPendingApprovalCount, getSpendRequestCashImpact } from "@/modules/spend-requests/utils";
+import { getVendorLeakSavings, isVendorLeak } from "@/modules/subscriptions/utils";
+import { getCashBufferRisk, getRunwayDays } from "@/modules/workspace/cash";
+import { getDueVendorBills, getUpcomingOutflowTotal } from "@/modules/workspace/outflows";
+import type { FinancialDataset } from "@/modules/workspace/types";
 
 type BuildDashboardViewModelParams = {
 	dataset: FinancialDataset;

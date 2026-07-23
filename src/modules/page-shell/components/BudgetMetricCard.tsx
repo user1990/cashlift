@@ -1,5 +1,5 @@
+import { getRemainingTeamBudget } from "@/modules/budgets/utils";
 import { formatCurrency } from "@/modules/money/format";
-import { getRemainingTeamBudget } from "@/modules/workspace/utils";
 import { WorkspaceMetricCard } from "./WorkspaceMetricCard";
 
 type BudgetMetricCardProps = {

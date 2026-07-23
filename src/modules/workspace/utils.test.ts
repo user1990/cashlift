@@ -1,19 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { getRemainingTeamBudget, getTeamBudgetUsage } from "@/modules/budgets/utils";
+import { getVisibleCashActions } from "@/modules/cash-actions/utils";
+import { getInvoiceRiskTotal, isInvoiceOverdue } from "@/modules/invoices/utils";
+import { getPendingApprovalCount, getSpendRequestCashImpact } from "@/modules/spend-requests/utils";
+import { getVendorLeakSavings, isVendorLeak } from "@/modules/subscriptions/utils";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { dueWithinWindow } from "@/utilities/dates/dueWithinWindow";
-import {
-	getCashBufferRisk,
-	getInvoiceRiskTotal,
-	getPendingApprovalCount,
-	getRemainingTeamBudget,
-	getRunwayDays,
-	getSpendRequestCashImpact,
-	getTeamBudgetUsage,
-	getVendorLeakSavings,
-	getVisibleCashActions,
-	isInvoiceOverdue,
-	isVendorLeak,
-} from "./utils";
+import { getCashBufferRisk, getRunwayDays } from "./cash";
 
 describe("company finance calculations", () => {
 	it("counts pending approvals", () => {

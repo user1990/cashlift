@@ -11,6 +11,28 @@ const EMPTY_DATASET_PARTS = {
 	vendorBills: [],
 } as const satisfies Omit<FinancialDataset, "profile">;
 
+type DatasetTable = keyof Omit<FinancialDataset, "profile">;
+
+export const WORKSPACE_SCOPE_TABLES = {
+	approvals: ["spendRequests"],
+	budgets: ["teamBudgets"],
+	cash: [],
+	invoices: ["invoices"],
+	overview: [
+		"cashActions",
+		"forecast",
+		"invoices",
+		"spendRequests",
+		"subscriptions",
+		"teamBudgets",
+		"teamMembers",
+		"vendorBills",
+	],
+	settings: [],
+	team: ["teamMembers"],
+	vendors: ["subscriptions"],
+} as const satisfies Record<WorkspaceDatasetScope, readonly DatasetTable[]>;
+
 export const reduceDatasetForScope = (dataset: FinancialDataset, scope: WorkspaceDatasetScope): FinancialDataset => {
 	if (scope === "overview") {
 		return dataset;
@@ -26,19 +48,8 @@ export const reduceDatasetForScope = (dataset: FinancialDataset, scope: Workspac
 const getScopedDatasetParts = (
 	dataset: FinancialDataset,
 	scope: Exclude<WorkspaceDatasetScope, "overview">,
-): Partial<Omit<FinancialDataset, "profile">> => {
-	const scopedParts = {
-		approvals: { spendRequests: dataset.spendRequests },
-		budgets: { teamBudgets: dataset.teamBudgets },
-		cash: {},
-		invoices: { invoices: dataset.invoices },
-		settings: {},
-		team: { teamMembers: dataset.teamMembers },
-		vendors: { subscriptions: dataset.subscriptions },
-	} as const satisfies Record<Exclude<WorkspaceDatasetScope, "overview">, Partial<Omit<FinancialDataset, "profile">>>;
-
-	return scopedParts[scope];
-};
+): Partial<Omit<FinancialDataset, "profile">> =>
+	Object.fromEntries(WORKSPACE_SCOPE_TABLES[scope].map((table) => [table, dataset[table]]));
 
 export const reduceDatasetForDateRange = (
 	dataset: FinancialDataset,

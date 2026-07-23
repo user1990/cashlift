@@ -1,14 +1,10 @@
-import type {
-	ActionPriority,
-	ActionStatus,
-	CashActionType,
-	CompanyRole,
-	FinancialDataset,
-	InvoiceStatus,
-	SpendRequestStatus,
-	SubscriptionStatus,
-	VendorBillStatus,
-} from "../types";
+import type { ActionPriority, ActionStatus, CashActionType } from "@/modules/cash-actions/types";
+import type { CompanyRole } from "@/modules/company-memberships/types";
+import type { InvoiceStatus } from "@/modules/invoices/types";
+import type { SpendRequestStatus } from "@/modules/spend-requests/types";
+import type { SubscriptionStatus } from "@/modules/subscriptions/types";
+import type { VendorBillStatus } from "@/modules/vendors/types";
+import type { FinancialDataset } from "../types";
 
 export type CompanyRow = {
 	cash_balance_cents: number;

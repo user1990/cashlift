@@ -1,11 +1,13 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { selectCompanyId } from "@/modules/company-memberships/repositories/supabase";
 import { spendRequestSchema } from "@/modules/spend-requests/schemas";
+import type { SpendRequestStatus } from "@/modules/spend-requests/types";
 import { createServerSupabaseClient } from "@/services/supabase/server";
 import { AppError } from "@/utilities/errors/AppError";
 import type { FinanceRepository } from "../api";
+import { WORKSPACE_SCOPE_TABLES } from "../read-models";
 import { financialDatasetSchema } from "../schemas";
-import type { FinancialDataset, SpendRequestStatus, WorkspaceDatasetScope } from "../types";
+import type { FinancialDataset, WorkspaceDatasetScope } from "../types";
 import {
 	type CashActionRow,
 	type CompanyRow,
@@ -92,28 +94,8 @@ const EMPTY_DATASET_PARTS = {
 
 type DatasetTable = keyof Omit<FinancialDataset, "profile">;
 
-const SCOPE_TABLES = {
-	approvals: ["spendRequests"],
-	budgets: ["teamBudgets"],
-	cash: [],
-	invoices: ["invoices"],
-	overview: [
-		"cashActions",
-		"forecast",
-		"invoices",
-		"spendRequests",
-		"subscriptions",
-		"teamBudgets",
-		"teamMembers",
-		"vendorBills",
-	],
-	settings: [],
-	team: ["teamMembers"],
-	vendors: ["subscriptions"],
-} as const satisfies Record<WorkspaceDatasetScope, readonly DatasetTable[]>;
-
 const shouldLoadTable = (scope: WorkspaceDatasetScope, table: DatasetTable) =>
-	(SCOPE_TABLES[scope] as readonly DatasetTable[]).includes(table);
+	(WORKSPACE_SCOPE_TABLES[scope] as readonly DatasetTable[]).includes(table);
 
 const selectCompany = async (client: SupabaseClient, companyId: string) =>
 	selectSingleRow<CompanyRow>("companies", client.from("companies").select("*").eq("id", companyId).single());
@@ -241,9 +223,8 @@ export const supabaseFinanceRepository: FinanceRepository = {
 
 		return getDatasetByCompanyId(client, companyId, scope);
 	},
-	async updateSpendRequestStatus(userId, accessToken, id, status) {
+	async updateSpendRequestStatus(companyId, accessToken, id, status) {
 		const client = createServerSupabaseClient({ accessToken });
-		const companyId = await selectCompanyId(client, userId);
 
 		return updateSpendRequestStatusByCompanyId(client, companyId, id, status);
 	},

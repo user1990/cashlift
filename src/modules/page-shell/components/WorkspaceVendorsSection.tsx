@@ -1,7 +1,7 @@
 import { formatCurrency } from "@/modules/money/format";
 import { LeakList } from "@/modules/subscriptions/components/LeakList";
+import { getVendorLeakSavings } from "@/modules/subscriptions/utils";
 import type { FinancialDataset } from "@/modules/workspace/types";
-import { getVendorLeakSavings } from "@/modules/workspace/utils";
 import { Panel, PanelHeader } from "@/ui/components/Panel";
 
 type WorkspaceVendorsSectionProps = {

@@ -65,17 +65,15 @@ describe("supabaseFinanceRepository", () => {
 		const { supabaseFinanceRepository } = await import("./supabase");
 
 		const request = await supabaseFinanceRepository.updateSpendRequestStatus(
-			"user-1",
+			"studio-nova",
 			"jwt",
 			"request-brandforge",
 			"approved",
 		);
 
 		expect(createServerSupabaseClientMock).toHaveBeenCalledWith({ accessToken: "jwt" });
-		expect(client.from).toHaveBeenCalledWith("company_members");
 		expect(client.from).toHaveBeenCalledWith("spend_requests");
 		expect(client.updateMock).toHaveBeenCalledWith(expect.objectContaining({ status: "approved" }));
-		expect(client.eqMock).toHaveBeenCalledWith("clerk_user_id", "user-1");
 		expect(client.eqMock).toHaveBeenCalledWith("company_id", "studio-nova");
 		expect(client.eqMock).toHaveBeenCalledWith("id", "request-brandforge");
 		expect(request).toEqual({
@@ -99,7 +97,7 @@ describe("supabaseFinanceRepository", () => {
 		const { supabaseFinanceRepository } = await import("./supabase");
 
 		await expect(
-			supabaseFinanceRepository.updateSpendRequestStatus("user-1", "jwt", "request-brandforge", "approved"),
+			supabaseFinanceRepository.updateSpendRequestStatus("studio-nova", "jwt", "request-brandforge", "approved"),
 		).rejects.toMatchObject({
 			code: "supabase_query_failed",
 			message: "Unable to update spend request.",

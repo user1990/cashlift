@@ -73,7 +73,7 @@ export const resolveWorkspaceDataset = async (
 		accessToken = await session.getToken();
 	} catch (error) {
 		const message = "Workspace data token is unavailable.";
-		const requestId = captureWorkspaceDatasetException(error, "data-token-error", { userId: session.userId });
+		const requestId = captureWorkspaceDatasetException(error, "data-token-error");
 
 		return { kind: "service", message, requestId };
 	}
@@ -94,7 +94,7 @@ export const resolveWorkspaceDataset = async (
 			return { kind: "forbidden", message: "No company workspace is assigned to this user." };
 		}
 
-		const requestId = captureWorkspaceDatasetException(error, "data-error", { userId: session.userId });
+		const requestId = captureWorkspaceDatasetException(error, "data-error");
 
 		return { kind: "data_error", message: GENERIC_DATA_MESSAGE, requestId };
 	}
