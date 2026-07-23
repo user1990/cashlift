@@ -16,6 +16,7 @@ type SpendMixChartContentProps = {
 };
 
 export const SpendMixChartContent = ({ chartData }: SpendMixChartContentProps) => {
+	const minimumValue = Math.min(...chartData.map(({ remaining }) => remaining), 0);
 	const maximumValue = Math.max(...chartData.flatMap(({ remaining, used }) => [remaining, used]), 1);
 
 	return (
@@ -40,7 +41,7 @@ export const SpendMixChartContent = ({ chartData }: SpendMixChartContentProps) =
 
 					<RechartsXAxis dataKey="team" />
 
-					<RechartsYAxis domain={[0, maximumValue]} tickFormatter={formatThousands} />
+					<RechartsYAxis domain={[minimumValue, maximumValue]} tickFormatter={formatThousands} />
 
 					<RechartsTooltip formatter={formatTooltipCurrency} />
 
@@ -50,7 +51,7 @@ export const SpendMixChartContent = ({ chartData }: SpendMixChartContentProps) =
 						animationDuration={650}
 						dataKey="remaining"
 						fill="url(#budgetRemainingFill)"
-						name="Remaining budget"
+						name="Remaining budget (negative = over budget)"
 					/>
 				</RechartsBarChart>
 			</RechartsResponsiveContainer>

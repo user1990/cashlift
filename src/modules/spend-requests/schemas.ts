@@ -4,12 +4,12 @@ import { moneyCentsSchema } from "@/modules/money/schemas";
 export const spendRequestStatusSchema = z.enum(["pending", "approved", "rejected"]);
 
 export const spendRequestSchema = z.object({
-	amountCents: moneyCentsSchema,
+	amountCents: moneyCentsSchema.nonnegative(),
 	category: z.enum(["software", "travel", "contractor", "marketing", "hardware"]),
 	id: z.string(),
-	neededByDate: z.string(),
+	neededByDate: z.iso.date(),
 	reason: z.string(),
-	requestedDate: z.string(),
+	requestedDate: z.iso.date(),
 	requester: z.string(),
 	status: spendRequestStatusSchema,
 	team: z.string(),

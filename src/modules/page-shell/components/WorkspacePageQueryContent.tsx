@@ -15,6 +15,7 @@ export const WorkspacePageQueryContent = ({ dataset, experience, section }: Work
 
 	return (
 		<WorkspacePageView
+			bufferDataset={dataset}
 			dataset={visibleDataset}
 			dateRange={dateRange}
 			experience={experience}

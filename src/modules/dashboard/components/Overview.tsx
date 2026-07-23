@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import type { CompanyRole, FinancialDataset, WorkspaceDatasetDateRange } from "@/modules/workspace/types";
+import type { FinancialDataset, WorkspaceDatasetDateRange } from "@/modules/workspace/types";
 import { buildDashboardViewModel } from "../view-model";
 import { ActionInbox } from "./ActionInbox";
 import { ChartsSection } from "./ChartsSection";
@@ -11,6 +10,7 @@ import { QueuesSection } from "./QueuesSection";
 
 type OverviewProps = {
 	dataset: FinancialDataset;
+	bufferDataset?: FinancialDataset;
 	basePath?: string;
 	dateRange?: WorkspaceDatasetDateRange;
 	onDateRangeChange?: (dateRange: WorkspaceDatasetDateRange) => void;
@@ -19,13 +19,18 @@ type OverviewProps = {
 
 export const Overview = ({
 	basePath = "/dashboard",
+	bufferDataset,
 	dataset,
 	dateRange,
 	onDateRangeChange,
 	readOnly,
 }: OverviewProps) => {
-	const [role] = useState<CompanyRole>(() => dataset.profile.defaultRole);
-	const dashboard = buildDashboardViewModel({ dataset, date: getDashboardDate(dateRange, dataset), role });
+	const dashboard = buildDashboardViewModel({
+		bufferDataset,
+		dataset,
+		date: getDashboardDate(dateRange, dataset),
+		role: dataset.profile.defaultRole,
+	});
 
 	return (
 		<div className="space-y-5">

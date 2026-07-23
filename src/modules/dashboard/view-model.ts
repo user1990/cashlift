@@ -6,9 +6,9 @@ import {
 	getEndingBalance,
 	getInvoiceRiskTotal,
 	getPendingApprovalCount,
+	getRemainingTeamBudget,
 	getRunwayDays,
 	getSpendRequestCashImpact,
-	getTeamBudgetRemaining,
 	getTeamBudgetUsage,
 	getUpcomingInvoiceTotal,
 	getUpcomingOutflowTotal,
@@ -20,12 +20,14 @@ import {
 
 type BuildDashboardViewModelParams = {
 	dataset: FinancialDataset;
+	bufferDataset?: FinancialDataset;
 	date?: Date;
 	role?: CompanyRole;
 };
 
 export const buildDashboardViewModel = ({
 	dataset,
+	bufferDataset = dataset,
 	date = getDefaultDashboardDate(dataset),
 	role = dataset.profile.defaultRole,
 }: BuildDashboardViewModelParams) => {
@@ -39,7 +41,7 @@ export const buildDashboardViewModel = ({
 	const dueVendorBills = getDueVendorBills(dataset.vendorBills, date);
 	const budgetRows = dataset.teamBudgets.map((budget) => ({
 		...budget,
-		remainingCents: getTeamBudgetRemaining(budget),
+		remainingCents: getRemainingTeamBudget(budget),
 		usagePercent: getTeamBudgetUsage(budget),
 	}));
 	const forecastChartData = dataset.forecast.map((point, rowIndex) => ({
@@ -69,7 +71,7 @@ export const buildDashboardViewModel = ({
 	return {
 		actionInbox: getVisibleCashActions(dataset.cashActions, role),
 		budgetRows,
-		cashAtRiskCents: getCashBufferRisk(dataset, date) + getInvoiceRiskTotal(dataset.invoices, date),
+		cashAtRiskCents: getCashBufferRisk(bufferDataset, date) + getInvoiceRiskTotal(dataset.invoices, date),
 		cashAvailableCents: dataset.profile.cashBalanceCents,
 		companyName: dataset.profile.name,
 		dateRangeLabel: getDateRangeLabel(dataset.forecast),

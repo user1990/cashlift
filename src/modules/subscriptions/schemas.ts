@@ -4,11 +4,11 @@ import { moneyCentsSchema } from "@/modules/money/schemas";
 export const subscriptionStatusSchema = z.enum(["active", "unused", "duplicate", "trial"]);
 
 export const subscriptionSchema = z.object({
-	amountCents: moneyCentsSchema,
+	amountCents: moneyCentsSchema.nonnegative(),
 	id: z.string(),
 	owner: z.string(),
-	renewalDate: z.string(),
+	renewalDate: z.iso.date(),
 	status: subscriptionStatusSchema,
-	usagePercent: z.number(),
+	usagePercent: z.number().int().min(0).max(100),
 	vendor: z.string(),
 });
