@@ -34,8 +34,23 @@ describe("LeakList", () => {
 	});
 
 	it("explains when there are no leak candidates", () => {
-		render(<LeakList items={[]} />);
+		render(
+			<LeakList
+				items={[
+					{
+						amountCents: 100,
+						id: "active",
+						owner: "Iris",
+						renewalDate: "2026-05-14",
+						status: "active",
+						usagePercent: 80,
+						vendor: "Active tool",
+					},
+				]}
+			/>,
+		);
 
 		expect(screen.getByText("No vendor leaks need action.")).toBeInTheDocument();
+		expect(screen.queryByText("Active tool")).not.toBeInTheDocument();
 	});
 });
