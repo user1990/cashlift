@@ -6,9 +6,9 @@ import {
 	getEndingBalance,
 	getInvoiceRiskTotal,
 	getPendingApprovalCount,
+	getRemainingTeamBudget,
 	getRunwayDays,
 	getSpendRequestCashImpact,
-	getTeamBudgetRemaining,
 	getTeamBudgetUsage,
 	getUpcomingInvoiceTotal,
 	getUpcomingOutflowTotal,
@@ -39,7 +39,7 @@ export const buildDashboardViewModel = ({
 	const dueVendorBills = getDueVendorBills(dataset.vendorBills, date);
 	const budgetRows = dataset.teamBudgets.map((budget) => ({
 		...budget,
-		remainingCents: getTeamBudgetRemaining(budget),
+		remainingCents: getRemainingTeamBudget(budget),
 		usagePercent: getTeamBudgetUsage(budget),
 	}));
 	const forecastChartData = dataset.forecast.map((point, rowIndex) => ({

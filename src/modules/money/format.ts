@@ -14,7 +14,7 @@ const COMPACT_CURRENCY_UNITS = [
 	{ suffix: "K", value: 1_000 },
 ] as const;
 
-export const formatCurrency = (cents: MoneyCents) => currencyFormatter.format(cents / CENTS_IN_DOLLAR);
+export const formatCurrency = (cents: MoneyCents) => currencyFormatter.format(Math.abs(cents) / CENTS_IN_DOLLAR);
 
 export const formatCurrencyDollars = (dollars: number) => currencyFormatter.format(dollars);
 
@@ -35,7 +35,7 @@ export const formatPreciseCompactCurrency = (cents: MoneyCents) => {
 
 export const centsToDollars = (cents: MoneyCents) => Math.round(cents / CENTS_IN_DOLLAR);
 
-export const percentage = (value: number) => `${Math.round(value)}%`;
+export const getPercentage = (value: number) => `${Math.round(value)}%`;
 
 function trimTrailingZeros(value: number) {
 	return value.toFixed(2).replace(/\.?0+$/, "");

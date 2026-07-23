@@ -1,6 +1,6 @@
 import type { TeamBudget } from "./types";
 
-export const getTeamBudgetRemaining = ({
+export const getRemainingTeamBudget = ({
 	committedCents,
 	monthlyBudgetCents,
 }: Pick<TeamBudget, "committedCents" | "monthlyBudgetCents">) => monthlyBudgetCents - committedCents;

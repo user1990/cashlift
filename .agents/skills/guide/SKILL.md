@@ -31,6 +31,9 @@ Node.js 22.13+, pnpm 11, TypeScript, React, Next.js App Router, React Compiler, 
 - For user-visible character counts, use `utilities/text/countCharacters`; do not use `.length` or inline `Intl.Segmenter`.
 - Boolean names prefer adjective form (`active`, `selected`) unless `is/has` is clearer. With nouns, put the noun first (`modalVisible`).
 - Function names should describe behavior. Reserve `handleX` for functions that directly receive an event object.
+- Getter utilities name the measured result before scope: `getRemainingTeamBudget`, `getInvoiceRiskTotal`; avoid scope-first names like `getTeamBudgetRemaining`.
+- Display formatters accept raw domain values and own rounding/sign handling. Pass raw cents to `formatCurrency`; do not wrap values in `Math.abs` at call sites.
+- Percent strings come from `getPercentage`, not `percentage`.
 
 ## React
 
@@ -54,6 +57,7 @@ Node.js 22.13+, pnpm 11, TypeScript, React, Next.js App Router, React Compiler, 
 - Prefer CSS `:has()` over React state/handlers/props when the state only exists to style a parent based on descendant structure/native state.
 - Prefer native View Transitions for snapshot-based page/UI transitions before adding animation dependencies.
 - Declare `children` explicitly in props; avoid `React.PropsWithChildren`.
+- Prefer `{!items.length && <li>…</li>}` over `{items.length === 0 ? <li>…</li> : null}` for empty-state JSX.
 - Component boolean props should be optional by default and default to `false` in the component unless the boolean is truly required domain data.
 - Do not present a trend, comparison, date, or financial amount unless it is derived from the current input. Prefer a truthful neutral label to fabricated precision.
 - For browser-current labels, keep the server snapshot deterministic and derive the browser value after hydration with the established `useSyncExternalStore` pattern.

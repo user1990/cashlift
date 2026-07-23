@@ -1,5 +1,5 @@
 import { formatCurrency } from "@/modules/money/format";
-import { getTeamBudgetRemaining } from "@/modules/workspace/utils";
+import { getRemainingTeamBudget } from "@/modules/workspace/utils";
 import { WorkspaceMetricCard } from "./WorkspaceMetricCard";
 
 type BudgetMetricCardProps = {
@@ -9,16 +9,15 @@ type BudgetMetricCardProps = {
 };
 
 export const BudgetMetricCard = ({ committedCents, monthlyBudgetCents, team }: BudgetMetricCardProps) => {
-	const remainingCents = getTeamBudgetRemaining({ committedCents, monthlyBudgetCents });
-	const overBudget = remainingCents < 0;
+	const remainingCents = getRemainingTeamBudget({ committedCents, monthlyBudgetCents });
 
 	return (
 		<WorkspaceMetricCard
 			as="article"
-			description={overBudget ? "over budget" : "remaining this month"}
+			description={remainingCents >= 0 ? "remaining this month" : "over budget"}
 			label="Team"
 			title={team}
-			value={formatCurrency(Math.abs(remainingCents))}
+			value={formatCurrency(remainingCents)}
 			valueClassName="font-mono text-4xl+ text-panel-foreground"
 		/>
 	);
