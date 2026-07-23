@@ -1,5 +1,5 @@
 import { FileText } from "lucide-react";
-import { formatCurrency, percentage } from "@/modules/money/format";
+import { formatCurrency, getPercentage } from "@/modules/money/format";
 import { ApprovalQueue } from "@/modules/spend-requests/components/ApprovalQueue";
 import { LeakList } from "@/modules/subscriptions/components/LeakList";
 import { workspaceDatasetQueryKeys } from "@/modules/workspace/query";
@@ -44,7 +44,7 @@ export const QueuesSection = ({ basePath = "/dashboard", dashboard, readOnly }: 
 
 								<span>Owner: {owner}</span>
 
-								<span>Probability {percentage(collectionProbability)}</span>
+								<span>Probability {getPercentage(collectionProbability)}</span>
 							</span>
 						}
 						title={client}
