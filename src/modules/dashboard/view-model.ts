@@ -1,7 +1,7 @@
 import { getRemainingTeamBudget, getTeamBudgetUsage } from "@/modules/budgets/utils";
 import { getVisibleCashActions } from "@/modules/cash-actions/utils";
 import { getEndingBalance } from "@/modules/cash-outlook/utils";
-import type { CompanyRole } from "@/modules/company-memberships/types";
+import type { CompanyRole } from "@/modules/company-roles/types";
 import { getInvoiceRiskTotal, getUpcomingInvoiceTotal, isInvoiceOverdue } from "@/modules/invoices/utils";
 import { centsToDollars } from "@/modules/money/format";
 import type { SpendRequest } from "@/modules/spend-requests/types";
