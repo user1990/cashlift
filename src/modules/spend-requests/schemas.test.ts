@@ -24,7 +24,11 @@ describe("spend request schemas", () => {
 		expect(spendRequestSchema.safeParse(value).success).toBe(valid);
 	});
 
-	it("limits decision input to final statuses", () => {
-		expect(spendRequestDecisionSchema.safeParse({ id: REQUEST_MOCK.id, status: "pending" }).success).toBe(false);
+	it.each([
+		["approved", true],
+		["rejected", true],
+		["pending", false],
+	])("limits decision input to final statuses", (status, valid) => {
+		expect(spendRequestDecisionSchema.safeParse({ id: REQUEST_MOCK.id, status }).success).toBe(valid);
 	});
 });
