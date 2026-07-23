@@ -1,35 +1,35 @@
 import { AmountItem } from "@/modules/money/components/AmountItem";
 import { getPercentage } from "@/modules/money/format";
 import { Badge } from "@/ui/components/Badge";
-
-type SubscriptionLeakRow = {
-	amountCents: number;
-	id: string;
-	status: string;
-	usagePercent: number;
-	vendor: string;
-};
+import type { Subscription } from "../types";
+import { isVendorLeak } from "../utils";
 
 type LeakListProps = {
-	items: SubscriptionLeakRow[];
+	items: Subscription[];
 	className?: string;
 };
 
-export const LeakList = ({ items, className }: LeakListProps) => (
-	<ul className={className}>
-		{items.map(({ amountCents, id, status, usagePercent, vendor }) => (
-			<AmountItem
-				key={id}
-				title={vendor}
-				amountCents={amountCents}
-				meta={
-					<span className="flex flex-wrap items-center gap-1.5">
-						<Badge variant={status === "trial" ? "warning" : "danger"}>{status}</Badge>
+export const LeakList = ({ items, className }: LeakListProps) => {
+	const leaks = items.filter(isVendorLeak);
 
-						<span>Usage {getPercentage(usagePercent)}</span>
-					</span>
-				}
-			/>
-		))}
-	</ul>
-);
+	return (
+		<ul className={className}>
+			{!leaks.length && <li>No vendor leaks need action.</li>}
+
+			{leaks.map(({ amountCents, id, status, usagePercent, vendor }) => (
+				<AmountItem
+					key={id}
+					title={vendor}
+					amountCents={amountCents}
+					meta={
+						<span className="flex flex-wrap items-center gap-1.5">
+							<Badge variant={status === "trial" ? "warning" : "danger"}>{status}</Badge>
+
+							<span>Usage {getPercentage(usagePercent)}</span>
+						</span>
+					}
+				/>
+			))}
+		</ul>
+	);
+};
