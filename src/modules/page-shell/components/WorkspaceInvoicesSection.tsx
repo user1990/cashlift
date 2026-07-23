@@ -1,7 +1,7 @@
 "use client";
 
 import { AmountItem } from "@/modules/money/components/AmountItem";
-import { formatCurrency, percentage } from "@/modules/money/format";
+import { formatCurrency, getPercentage } from "@/modules/money/format";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { Badge } from "@/ui/components/Badge";
 import { Panel, PanelHeader } from "@/ui/components/Panel";
@@ -36,7 +36,7 @@ export const WorkspaceInvoicesSection = ({ dataset }: WorkspaceInvoicesSectionPr
 									{status}
 								</Badge>
 
-								<span>{percentage(collectionProbability)}</span>
+								<span>{getPercentage(collectionProbability)}</span>
 
 								<span>{owner}</span>
 							</span>
