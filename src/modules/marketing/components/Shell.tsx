@@ -13,7 +13,7 @@ export const Shell = ({ children }: ShellProps) => (
 		{children}
 
 		<footer className="mt-auto border-t border-shell-border bg-shell-elevated">
-			<div className="mx-auto grid max-w-[1180px] gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.1fr_1.9fr] lg:px-8">
+			<div className="mx-auto grid max-w-295 gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.1fr_1.9fr] lg:px-8">
 				<section>
 					<p className="text-s+ uppercase tracking-normal text-primary">CashLift</p>
 
