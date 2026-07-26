@@ -8,7 +8,7 @@ export const HomeFinalCtaSection = () => (
 			className="absolute inset-0 bg-[radial-gradient(circle_at_50%_100%,color-mix(in_srgb,var(--highlight)_15%,transparent),transparent_42%)]"
 		/>
 
-		<div className="relative mx-auto max-w-[1180px] px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-28">
+		<div className="relative mx-auto max-w-295 px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-28">
 			<p className="text-s+ font-semibold uppercase tracking-normal text-primary">Your cash decisions</p>
 
 			<h2 className="mx-auto mt-3 max-w-3xl text-4xl+ tracking-normal text-shell-foreground sm:text-6xl+">

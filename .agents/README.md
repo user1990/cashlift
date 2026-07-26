@@ -60,12 +60,12 @@ Reference material the agent (or human) can consult for context. Each doc:
 skills/
 ├── architecture/SKILL.md
 ├── create-pr/SKILL.md
-├── get-pr-comments/SKILL.md
 ├── guide/SKILL.md
 ├── review-pr/SKILL.md
 ├── styling/SKILL.md
 ├── testing/SKILL.md
-└── web-interface-guidelines/SKILL.md
+├── web-interface-guidelines/SKILL.md
+└── worktree/SKILL.md
 
 docs/
 ├── guide.md

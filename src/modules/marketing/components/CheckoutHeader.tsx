@@ -9,7 +9,7 @@ type CheckoutHeaderProps = {
 
 export const CheckoutHeader = ({ billing }: CheckoutHeaderProps) => (
 	<header className="border-b border-shell-border bg-shell/95">
-		<div className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-8">
+		<div className="mx-auto flex max-w-295 items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-8">
 			<Link
 				aria-label="Back to pricing"
 				href={`/pricing?billing=${billing}`}

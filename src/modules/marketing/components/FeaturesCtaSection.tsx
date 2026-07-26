@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { ActionLink } from "./ActionLink";
 
 export const FeaturesCtaSection = () => (
-	<section className="mx-auto flex max-w-[1180px] flex-col gap-4 px-4 py-12 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+	<section className="mx-auto flex max-w-295 flex-col gap-4 px-4 py-12 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
 		<header>
 			<p className="text-s+ uppercase tracking-normal text-primary">Get started</p>
 

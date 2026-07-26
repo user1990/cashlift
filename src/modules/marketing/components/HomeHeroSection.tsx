@@ -9,11 +9,9 @@ export const HomeHeroSection = () => (
 			className="absolute inset-0 bg-[radial-gradient(circle_at_50%_12%,color-mix(in_srgb,var(--primary)_16%,transparent),transparent_32%),radial-gradient(circle_at_82%_36%,color-mix(in_srgb,var(--highlight)_12%,transparent),transparent_28%)]"
 		/>
 
-		<div className="relative mx-auto max-w-[1180px] px-4 pb-12 pt-16 sm:px-6 sm:pt-20 lg:px-8 lg:pb-16 lg:pt-24">
+		<div className="relative mx-auto max-w-295 px-4 pb-12 pt-16 sm:px-6 sm:pt-20 lg:px-8 lg:pb-16 lg:pt-24">
 			<header className="mx-auto max-w-4xl text-center">
-				<p className="text-s+ font-semibold uppercase tracking-normal text-primary">Cash action inbox</p>
-
-				<h1 className="mt-4 text-5xl+ tracking-normal text-primary sm:text-7xl+">
+				<h1 className="text-5xl+ tracking-normal text-primary sm:text-7xl+">
 					See what to collect, approve, or cut today.
 				</h1>
 
@@ -35,14 +33,14 @@ export const HomeHeroSection = () => (
 
 				<Image
 					alt="Studio Nova overview with ranked cash actions, 13-week cash outlook, and team budget charts"
-					className="h-auto w-full"
+					src="/marketing/studio-nova-inbox.webp"
 					decoding="sync"
 					fetchPriority="high"
-					height={1800}
 					priority
-					sizes="(min-width: 1180px) 1120px, calc(100vw - 2rem)"
-					src="/marketing/studio-nova-inbox.webp"
 					width={2880}
+					height={1800}
+					sizes="(min-width: 1180px) 1120px, calc(100vw - 2rem)"
+					className="h-auto w-full"
 				/>
 			</div>
 		</div>

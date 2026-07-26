@@ -5,11 +5,11 @@ description: Coding conventions, file structure, Git/PR/commit rules, React/Zod/
 
 # Frontend Guide
 
-Use this skill for implementation conventions. For deeper rationale, extended examples, and historical workflow details, read `.agents/docs/guide.md` only when needed.
+Use this skill for implementation conventions. For code examples and deeper rationale, read `.agents/docs/guide.md` only when needed.
 
 ## Stack
 
-Node.js 22.13+, pnpm 11, TypeScript, React, Next.js App Router, React Compiler, Turbopack, Clerk, Supabase, TanStack Query, React Hook Form, Zod, Tailwind CSS v4, react-aria-components, lucide-react, motion, next-intl, Recharts, Vitest, Testing Library, Playwright, Biome, Sentry, Vercel Analytics/Speed Insights, Fallow, React Doctor, Lefthook.
+See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow, React Doctor, next-intl, react-aria-components.
 
 ## File And Module Conventions
 
@@ -54,7 +54,7 @@ Node.js 22.13+, pnpm 11, TypeScript, React, Next.js App Router, React Compiler, 
 - Trust React Compiler by default; add `useMemo`/`useCallback` only for semantic stability or measured need.
 - Zod schemas: constants for static schemas, functions for dynamic schemas, hooks only when schema construction needs hooks/translations.
 - `cn()` conditions use logical expressions, not object syntax.
-- Prefer CSS `:has()` over React state/handlers/props when the state only exists to style a parent based on descendant structure/native state.
+- Prefer CSS `:has()` over React state/handlers/props when the state only exists to style a parent based on descendant structure/native state. See `styling/SKILL.md` for details.
 - Prefer native View Transitions for snapshot-based page/UI transitions before adding animation dependencies.
 - Declare `children` explicitly in props; avoid `React.PropsWithChildren`.
 - Prefer `{!items.length && <li>…</li>}` over `{items.length === 0 ? <li>…</li> : null}` for empty-state JSX.
@@ -79,6 +79,6 @@ Node.js 22.13+, pnpm 11, TypeScript, React, Next.js App Router, React Compiler, 
 - PR titles use `Scope: Description`.
 - Commit messages are imperative, capitalized, no trailing period, and at most 72 characters.
 
-## Testing Pointer
+## Testing
 
-For tests, load `.agents/skills/testing/SKILL.md`. Core reminders: test behavior, use accessible queries, prefer top-level components, group related assertions, use real services over mocks where possible, use `it.each` for repetitive cases, and assert translated content rather than keys.
+For tests, load `.agents/skills/testing/SKILL.md`.

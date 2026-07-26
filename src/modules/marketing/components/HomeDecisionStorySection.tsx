@@ -29,7 +29,7 @@ const DECISION_CHAPTERS = [
 
 export const HomeDecisionStorySection = () => (
 	<section aria-labelledby="decision-story-title" className="border-b border-shell-border">
-		<header className="mx-auto max-w-[1180px] px-4 pb-10 pt-16 sm:px-6 lg:px-8 lg:pt-20">
+		<header className="mx-auto max-w-295 px-4 pb-10 pt-16 sm:px-6 lg:px-8 lg:pt-20">
 			<p className="text-s+ font-semibold uppercase tracking-normal text-primary">From inbox to decision</p>
 
 			<h2
@@ -40,7 +40,7 @@ export const HomeDecisionStorySection = () => (
 			</h2>
 		</header>
 
-		<div className="mx-auto max-w-[1180px] px-4 pb-20 sm:px-6 lg:px-8 lg:pb-24">
+		<div className="mx-auto max-w-295 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-24">
 			<ol className="space-y-16 lg:space-y-20">
 				{DECISION_CHAPTERS.map((chapter, index) => (
 					<HomeDecisionStoryChapter key={chapter.chapter} {...chapter} index={index + 1} />
