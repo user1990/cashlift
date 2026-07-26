@@ -75,6 +75,7 @@
 		"astro": "7.0.7",
 		"babel-plugin-react-compiler": "^1.0.0",
 		"blume": "0.7.0",
+		"class-variance-authority": "^0.7.1",
 		"fallow": "^2.104.0",
 		"jsdom": "^29.1.1",
 		"lefthook": "^2.1.9",
