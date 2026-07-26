@@ -5,30 +5,6 @@ minimumReleaseAgeExclude:
   # Security exceptions: required to remediate GHSA-r28c-9q8g-f849 and GHSA-mh99-v99m-4gvg before their one-week age gate.
   - postcss@8.5.18
   - brace-expansion@5.0.8
-  # TODO: Remove after 2026-07-13, once the TypeScript 6 compatibility package has aged past the one-week gate.
-  - '@typescript/typescript6@6.0.2'
-  # TODO: Remove after 2026-07-15, once TypeScript 7.0.2 packages have aged past the one-week gate.
-  - typescript@7.0.2
-  - '@typescript/typescript-aix-ppc64@7.0.2'
-  - '@typescript/typescript-darwin-arm64@7.0.2'
-  - '@typescript/typescript-darwin-x64@7.0.2'
-  - '@typescript/typescript-freebsd-arm64@7.0.2'
-  - '@typescript/typescript-freebsd-x64@7.0.2'
-  - '@typescript/typescript-linux-arm@7.0.2'
-  - '@typescript/typescript-linux-arm64@7.0.2'
-  - '@typescript/typescript-linux-loong64@7.0.2'
-  - '@typescript/typescript-linux-mips64el@7.0.2'
-  - '@typescript/typescript-linux-ppc64@7.0.2'
-  - '@typescript/typescript-linux-riscv64@7.0.2'
-  - '@typescript/typescript-linux-s390x@7.0.2'
-  - '@typescript/typescript-linux-x64@7.0.2'
-  - '@typescript/typescript-netbsd-arm64@7.0.2'
-  - '@typescript/typescript-netbsd-x64@7.0.2'
-  - '@typescript/typescript-openbsd-arm64@7.0.2'
-  - '@typescript/typescript-openbsd-x64@7.0.2'
-  - '@typescript/typescript-sunos-x64@7.0.2'
-  - '@typescript/typescript-win32-arm64@7.0.2'
-  - '@typescript/typescript-win32-x64@7.0.2'
 overrides:
   '@vercel/routing-utils>path-to-regexp': 6.3.0
   fast-uri: 3.1.4
