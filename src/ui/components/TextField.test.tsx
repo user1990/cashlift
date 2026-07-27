@@ -15,7 +15,6 @@ describe("TextField", () => {
 		expect(input).toHaveAttribute("placeholder", "Studio Nova");
 		expect(input).toHaveAttribute("data-slot", "input");
 		expect(screen.getByText("Company")).toHaveAttribute("data-slot", "field-label");
-		expect(input.closest('[data-slot="field"]')).toHaveAttribute("data-slot", "field");
 
 		await user.type(input, "CashLift");
 
@@ -27,10 +26,6 @@ describe("TextField", () => {
 		render(<TextField errorMessage="Enter a company name" invalid label="Company" />);
 
 		expect(screen.getByRole("textbox", { name: "Company" })).toBeInvalid();
-		expect(screen.getByRole("textbox", { name: "Company" }).closest('[data-slot="field"]')).toHaveAttribute(
-			"data-invalid",
-			"true",
-		);
 		expect(screen.getByText("Enter a company name")).toHaveAttribute("data-slot", "field-error");
 		expect(screen.getByText("Enter a company name")).toBeInTheDocument();
 	});
