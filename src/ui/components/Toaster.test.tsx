@@ -6,7 +6,10 @@ describe("Toaster", () => {
 	it("exposes the shadcn Sonner slot", () => {
 		render(<Toaster />);
 
-		expect(document.querySelector('[data-slot="sonner"]')).toBeInTheDocument();
+		const slot = document.querySelector('[data-slot="sonner"]');
+
+		expect(slot).toBeInTheDocument();
+		expect(slot).toHaveClass("contents");
 		expect(screen.getByRole("region")).toBeInTheDocument();
 	});
 });

@@ -3,7 +3,7 @@
 import { Toaster as SonnerToaster } from "sonner";
 
 export const Toaster = () => (
-	<div data-slot="sonner">
+	<div className="contents" data-slot="sonner">
 		<SonnerToaster
 			duration={5_000}
 			expand
