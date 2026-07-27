@@ -50,6 +50,7 @@
 		"react-hook-form": "^7.82.0",
 		"recharts": "^3.9.1",
 		"sonner": "^2.0.7",
+		"tailwind-variants": "^3.2.2",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
