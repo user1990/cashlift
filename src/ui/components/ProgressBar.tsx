@@ -29,11 +29,23 @@ export const ProgressBar = ({ label, value, className }: ProgressBarProps) => {
 					</div>
 
 					<div className="h-2 w-full overflow-hidden rounded-full bg-panel-muted" data-slot="progress-track">
-						<div
-							className="h-full rounded-full bg-primary"
-							data-slot="progress-indicator"
-							style={{ width: `${percentage ?? 0}%` }}
-						/>
+						<svg
+							aria-hidden="true"
+							className="block h-full w-full"
+							focusable="false"
+							preserveAspectRatio="none"
+							viewBox="0 0 100 1"
+						>
+							<rect
+								className="fill-primary"
+								data-slot="progress-indicator"
+								height="1"
+								rx="0.5"
+								width={percentage ?? 0}
+								x="0"
+								y="0"
+							/>
+						</svg>
 					</div>
 				</>
 			)}
