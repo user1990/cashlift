@@ -17,24 +17,16 @@ const badgeVariants = tv({
 	},
 });
 
-const DEFAULT_BADGE_VARIANT = "neutral";
+type BadgeVariant = "accent" | "danger" | "neutral" | "primary" | "success" | "warning";
 
 type BadgeProps = Omit<VariantProps<typeof badgeVariants>, "variant"> & {
 	children: React.ReactNode;
 	className?: string;
-	variant?: "accent" | "danger" | "neutral" | "primary" | "success" | "warning";
+	variant?: BadgeVariant;
 };
 
-export const Badge = ({ children, className, variant }: BadgeProps) => {
-	const selectedVariant = variant ?? DEFAULT_BADGE_VARIANT;
-
-	return (
-		<span
-			className={badgeVariants({ className, variant: selectedVariant })}
-			data-slot="badge"
-			data-variant={selectedVariant}
-		>
-			{children}
-		</span>
-	);
-};
+export const Badge = ({ children, className, variant = "neutral" }: BadgeProps) => (
+	<span className={badgeVariants({ className, variant })} data-slot="badge" data-variant={variant}>
+		{children}
+	</span>
+);
