@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { connection } from "next/server";
 import { MAIN_CONTENT_ID } from "@/modules/page-shell/components/MainContent";
 import { ClientTelemetry } from "./ClientTelemetry";
 import "./globals.css";
@@ -16,7 +17,11 @@ export const viewport: Viewport = {
 	themeColor: "#040a12",
 };
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export const instant = false;
+
+export default async function RootLayout({ children }: RootLayoutProps) {
+	await connection();
+
 	return (
 		<html lang="en" className="h-full" data-scroll-behavior="smooth">
 			<body className="grid min-h-full grid-cols-[1fr_0px] antialiased" id="top">

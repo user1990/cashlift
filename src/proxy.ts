@@ -7,16 +7,6 @@ import { updateSupabaseSession } from "@/services/supabase/proxy";
 
 const AUTH_PATH_PREFIXES = ["/login", "/signup"] as const;
 const CLERK_ASSET_PATH_PREFIX = "/__clerk";
-const STATIC_MARKETING_PATH_PREFIXES = [
-	"/contact",
-	"/customers",
-	"/demo",
-	"/features",
-	"/pricing",
-	"/privacy",
-	"/terms",
-	"/use-cases",
-] as const;
 const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard", "/api/workspace"] as const;
 const NEXT_IMAGE_FILL_STYLE_HASH = "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='";
 const NEXT_IMAGE_COLOR_STYLE_HASH = "'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk='";
@@ -45,30 +35,10 @@ const createSecurityPolicy = (scriptSource: string, styleSource: string) =>
 export const createContentSecurityPolicy = (nonce: string) =>
 	createSecurityPolicy(`'self' 'nonce-${nonce}' 'strict-dynamic'`, `'self' 'nonce-${nonce}'`);
 
-export const createStaticContentSecurityPolicy = () => createSecurityPolicy("'self' 'unsafe-inline'", "'self'");
-
-const usesStaticContentSecurityPolicy = (request: NextRequest) =>
-	request.nextUrl.pathname === "/" ||
-	STATIC_MARKETING_PATH_PREFIXES.some((prefix) => {
-		const pathname = request.nextUrl.pathname;
-
-		return pathname === prefix || pathname.startsWith(`${prefix}/`);
-	});
-
 const createSecurityRequestHeaders = (request: NextRequest) => {
-	const headers = new Headers(request.headers);
-
-	if (usesStaticContentSecurityPolicy(request)) {
-		const contentSecurityPolicy = createStaticContentSecurityPolicy();
-
-		headers.delete("x-nonce");
-		headers.set("Content-Security-Policy", contentSecurityPolicy);
-
-		return { contentSecurityPolicy, headers };
-	}
-
 	const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
 	const contentSecurityPolicy = createContentSecurityPolicy(nonce);
+	const headers = new Headers(request.headers);
 
 	headers.set("x-nonce", nonce);
 	headers.set("Content-Security-Policy", contentSecurityPolicy);
@@ -89,6 +59,7 @@ const applySecurityResponseHeaders = (request: NextRequest, response: Response, 
 		"Cross-Origin-Opener-Policy",
 		usesPopupAuthFlow(request) ? "same-origin-allow-popups" : "same-origin",
 	);
+	response.headers.set("Cross-Origin-Resource-Policy", "same-origin");
 	response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
 	response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
 	response.headers.set("X-Content-Type-Options", "nosniff");
