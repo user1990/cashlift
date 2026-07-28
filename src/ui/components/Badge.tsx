@@ -1,6 +1,6 @@
 import { tv, type VariantProps } from "tailwind-variants";
 
-const badgeVariants = tv({
+const BADGE_VARIANTS = tv({
 	base: "inline-flex h-6 max-w-full items-center rounded-full px-2.5 text-2xs+ font-semibold uppercase tracking-normal ring-1 ring-inset",
 	defaultVariants: {
 		variant: "neutral",
@@ -19,14 +19,14 @@ const badgeVariants = tv({
 
 type BadgeVariant = "accent" | "danger" | "neutral" | "primary" | "success" | "warning";
 
-type BadgeProps = Omit<VariantProps<typeof badgeVariants>, "variant"> & {
+type BadgeProps = Omit<VariantProps<typeof BADGE_VARIANTS>, "variant"> & {
 	children: React.ReactNode;
 	className?: string;
 	variant?: BadgeVariant;
 };
 
 export const Badge = ({ children, className, variant = "neutral" }: BadgeProps) => (
-	<span className={badgeVariants({ className, variant })} data-slot="badge" data-variant={variant}>
+	<span className={BADGE_VARIANTS({ className, variant })} data-slot="badge" data-variant={variant}>
 		{children}
 	</span>
 );

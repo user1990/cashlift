@@ -18,6 +18,7 @@ See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow
 - Do not repeat module names in filenames: prefer `api.ts` over `payments.api.ts`.
 - Hook files use suffixes: `useThingQuery.ts`, `useThingMutation.ts`, `useThingStore.ts`, or `useThing.ts`.
 - Keep Zod schemas in `schemas.ts` and models/types in `types.ts` unless local convention says otherwise.
+- Keep `components/` limited to components and their colocated tests. Place reusable module hooks in `hooks/`; keep module-wide types and schemas in root `types.ts` and `schemas.ts`; use a nested feature subtree only when it owns a cohesive feature, with the same layout inside it.
 - Use the existing `@/*` alias; confirm paths in the local `tsconfig.json` before importing.
 
 ## TypeScript And JavaScript
@@ -25,6 +26,7 @@ See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow
 - Static module constants use `UPPER_SNAKE_CASE`; runtime locals use `camelCase`.
 - Avoid single-letter variables except `i` in loops.
 - Type properties: required first, optional second; alphabetize within each group.
+- Use `property?: T` when absence is valid; reserve `property: T | undefined` for required keys/arguments that must be supplied explicitly.
 - Prefer `T[]` over `Array<T>` for inline array types; extract named types for reused object shapes.
 - Use numeric separators for large numeric literals with four or more digits.
 - Use explicit absence checks for optional numeric values when `0` is meaningful; do not use truthiness to distinguish a missing value from zero.
@@ -38,8 +40,11 @@ See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow
 ## React
 
 - Use the shortest component name that gives enough context; avoid collisions with primitives such as `Icon` or `Dropdown`.
+- Put the exported component at the top of the file. Keep file-private helpers below it: `function getThingClassName(...)` for class/logic helpers and `function renderThing(...)` or `function thingPart(...)` for single-use JSX slices.
+- Split a helper into its own file only when it is reused, exported as a composable unit, or owns a distinct subtree with its own imports. Otherwise keep it in the parent file as a bottom-of-file helper.
 - Put blank lines between distinct JSX blocks.
-- In JSX maps, destructure item properties in the callback and put `key` first on the rendered element.
+- Extract a repeated static JSX value (such as an ID used by `aria-labelledby` and `id`) into a named module constant.
+- In JSX maps, destructure item properties in the callback. When `key` is present, put `key` first; when `className` is present, put `className` last.
 - Inline trivial one-off formatting. For non-trivial repeated logic, prefer `function helperName(...) {}` near the bottom of the file.
 - Component props expose only the data the component renders. Aggregate datasets belong at page, composition, query, or view-model boundaries—not leaf components.
 - Derive stable unique list keys alongside data when natural fields can repeat.

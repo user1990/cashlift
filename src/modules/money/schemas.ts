@@ -1,3 +1,3 @@
 import { z } from "zod";
 
-export const moneyCentsSchema = z.number().int();
+export const MONEY_CENTS_SCHEMA = z.number().int();

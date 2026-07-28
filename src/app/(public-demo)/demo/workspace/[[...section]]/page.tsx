@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { WorkspacePageContent } from "@/modules/page-shell/components/WorkspacePageContent";
-import { demoWorkspaceDataset } from "@/modules/workspace/demoDataset";
+import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
 import { reduceDatasetForScope } from "@/modules/workspace/read-models";
-import { workspaceDatasetScopeSchema } from "@/modules/workspace/schemas";
+import { WORKSPACE_DATASET_SCOPE_SCHEMA } from "@/modules/workspace/schemas";
 import type { WorkspaceDatasetScope } from "@/modules/workspace/types";
 
 const DEMO_SECTIONS = ["cash", "invoices", "vendors", "budgets", "approvals", "team", "settings"] as const;
@@ -25,7 +25,7 @@ export default async function DemoWorkspacePage({ params }: DemoWorkspacePagePro
 
 	return (
 		<WorkspacePageContent
-			dataset={reduceDatasetForScope(demoWorkspaceDataset, section)}
+			dataset={reduceDatasetForScope(DEMO_WORKSPACE_DATASET, section)}
 			experience="public-demo"
 			section={section}
 		/>
@@ -41,7 +41,7 @@ function resolveDemoSection(sectionSegments?: string[]): WorkspaceDatasetScope |
 		return undefined;
 	}
 
-	const result = workspaceDatasetScopeSchema.safeParse(sectionSegments[0]);
+	const result = WORKSPACE_DATASET_SCOPE_SCHEMA.safeParse(sectionSegments[0]);
 
 	return result.success && result.data !== "overview" ? result.data : undefined;
 }

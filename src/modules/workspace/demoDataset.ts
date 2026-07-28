@@ -1,6 +1,6 @@
-import { financialDatasetSchema } from "./schemas";
+import { FINANCIAL_DATASET_SCHEMA } from "./schemas";
 
-export const demoWorkspaceDataset = financialDatasetSchema.parse({
+export const DEMO_WORKSPACE_DATASET = FINANCIAL_DATASET_SCHEMA.parse({
 	cashActions: [
 		{
 			description: "Aurora Health is below the collection confidence threshold before the June cash buffer dip.",

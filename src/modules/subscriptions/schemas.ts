@@ -1,14 +1,14 @@
 import { z } from "zod";
-import { moneyCentsSchema } from "@/modules/money/schemas";
+import { MONEY_CENTS_SCHEMA } from "@/modules/money/schemas";
 
-export const subscriptionStatusSchema = z.enum(["active", "unused", "duplicate", "trial"]);
+export const SUBSCRIPTION_STATUS_SCHEMA = z.enum(["active", "unused", "duplicate", "trial"]);
 
-export const subscriptionSchema = z.object({
-	amountCents: moneyCentsSchema.nonnegative(),
+export const SUBSCRIPTION_SCHEMA = z.object({
+	amountCents: MONEY_CENTS_SCHEMA.nonnegative(),
 	id: z.string(),
 	owner: z.string(),
 	renewalDate: z.iso.date(),
-	status: subscriptionStatusSchema,
+	status: SUBSCRIPTION_STATUS_SCHEMA,
 	usagePercent: z.number().int().min(0).max(100),
 	vendor: z.string(),
 });

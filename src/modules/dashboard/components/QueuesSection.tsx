@@ -2,7 +2,7 @@ import { FileText } from "lucide-react";
 import { formatCurrency, getPercentage } from "@/modules/money/format";
 import { ApprovalQueue } from "@/modules/spend-requests/components/ApprovalQueue";
 import { LeakList } from "@/modules/subscriptions/components/LeakList";
-import { workspaceDatasetQueryKeys } from "@/modules/workspace/query";
+import { WORKSPACE_DATASET_QUERY_KEYS } from "@/modules/workspace/query";
 import { Badge } from "@/ui/components/Badge";
 import { ProgressBar } from "@/ui/components/ProgressBar";
 import type { DashboardViewModel } from "../types";
@@ -16,11 +16,11 @@ type QueuesSectionProps = {
 	readOnly?: boolean;
 };
 
-export const QueuesSection = ({ basePath = "/dashboard", dashboard, readOnly }: QueuesSectionProps) => (
+export const QueuesSection = ({ basePath = "/dashboard", dashboard, readOnly = false }: QueuesSectionProps) => (
 	<section className="grid gap-4 xl:grid-cols-4">
 		<DashboardPanel className="min-h-88 p-5" label="Approvals" title="Spend requests to decide">
 			<ApprovalQueue
-				datasetQueryKey={workspaceDatasetQueryKeys.all}
+				datasetQueryKey={WORKSPACE_DATASET_QUERY_KEYS.all}
 				readOnly={readOnly}
 				requests={dashboard.pendingApprovals}
 			/>

@@ -1,12 +1,12 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { selectCompanyId } from "@/modules/company-memberships/repositories/supabase";
-import { spendRequestSchema } from "@/modules/spend-requests/schemas";
+import { SPEND_REQUEST_SCHEMA } from "@/modules/spend-requests/schemas";
 import type { SpendRequestStatus } from "@/modules/spend-requests/types";
 import { createServerSupabaseClient } from "@/services/supabase/server";
 import { AppError } from "@/utilities/errors/AppError";
 import type { FinanceRepository } from "../api";
 import { WORKSPACE_SCOPE_TABLES } from "../read-models";
-import { financialDatasetSchema } from "../schemas";
+import { FINANCIAL_DATASET_SCHEMA } from "../schemas";
 import type { FinancialDataset, WorkspaceDatasetScope } from "../types";
 import {
 	type CashActionRow,
@@ -23,8 +23,8 @@ import {
 } from "./supabaseMappers";
 
 type SupabaseQueryError = {
-	code?: string;
 	message: string;
+	code?: string;
 };
 
 type SupabaseQueryResult<Data> = {
@@ -149,7 +149,7 @@ const updateSpendRequestStatusByCompanyId = async (
 		throw new SpendRequestNotFoundError();
 	}
 
-	return spendRequestSchema.parse(mapSpendRequest(data));
+	return SPEND_REQUEST_SCHEMA.parse(mapSpendRequest(data));
 };
 
 const selectTeamBudgets = async (client: SupabaseClient, companyId: string) =>
@@ -213,7 +213,7 @@ const getDatasetByCompanyId = async (
 		vendorBills,
 	});
 
-	return financialDatasetSchema.parse(dataset);
+	return FINANCIAL_DATASET_SCHEMA.parse(dataset);
 };
 
 export const supabaseFinanceRepository: FinanceRepository = {

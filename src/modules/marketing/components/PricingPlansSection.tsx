@@ -24,9 +24,11 @@ export const PricingPlansSection = ({ billing }: PricingPlansSectionProps) => (
 		</div>
 
 		<ul className="mt-10 grid auto-rows-fr items-stretch gap-4 lg:grid-cols-3">
-			{PRICING_PLANS.map((plan) => (
-				<PricingPlanCard key={plan.name} billing={billing} plan={plan} />
-			))}
+			{PRICING_PLANS.map((plan) => {
+				const { name } = plan;
+
+				return <PricingPlanCard key={name} billing={billing} plan={plan} />;
+			})}
 		</ul>
 
 		<div className="mt-8 grid gap-4 border-b border-shell-border pb-6 text-m text-shell-muted sm:grid-cols-2">

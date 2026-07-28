@@ -1,5 +1,7 @@
 import { HomeDecisionStoryChapter } from "./HomeDecisionStoryChapter";
 
+const DECISION_STORY_TITLE_ID = "decision-story-title";
+
 const DECISION_CHAPTERS = [
 	{
 		chapter: "approve",
@@ -28,12 +30,12 @@ const DECISION_CHAPTERS = [
 ] as const;
 
 export const HomeDecisionStorySection = () => (
-	<section aria-labelledby="decision-story-title" className="border-b border-shell-border">
+	<section aria-labelledby={DECISION_STORY_TITLE_ID} className="border-b border-shell-border">
 		<header className="mx-auto max-w-295 px-4 pb-10 pt-16 sm:px-6 lg:px-8 lg:pt-20">
 			<p className="text-s+ font-semibold uppercase tracking-normal text-primary">From inbox to decision</p>
 
 			<h2
-				id="decision-story-title"
+				id={DECISION_STORY_TITLE_ID}
 				className="mt-3 max-w-3xl text-4xl+ tracking-normal text-shell-foreground sm:text-6xl+"
 			>
 				Three decisions. One daily view.
@@ -42,8 +44,17 @@ export const HomeDecisionStorySection = () => (
 
 		<div className="mx-auto max-w-295 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-24">
 			<ol className="space-y-16 lg:space-y-20">
-				{DECISION_CHAPTERS.map((chapter, index) => (
-					<HomeDecisionStoryChapter key={chapter.chapter} {...chapter} index={index + 1} />
+				{DECISION_CHAPTERS.map(({ chapter, description, eyebrow, imageAlt, imageSrc, title }, index) => (
+					<HomeDecisionStoryChapter
+						key={chapter}
+						chapter={chapter}
+						description={description}
+						eyebrow={eyebrow}
+						imageAlt={imageAlt}
+						imageSrc={imageSrc}
+						index={index + 1}
+						title={title}
+					/>
 				))}
 			</ol>
 		</div>

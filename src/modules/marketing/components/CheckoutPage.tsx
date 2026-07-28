@@ -44,11 +44,13 @@ export const CheckoutPage = ({ billing = "monthly", planSlug }: CheckoutPageProp
 	);
 };
 
-const getTrialEndDate = () => {
+function getTrialEndDate() {
 	const date = new Date();
 	date.setDate(date.getDate() + TRIAL_DAYS);
 
 	return date;
-};
+}
 
-const formatTrialEndDate = (date: Date) => TRIAL_END_DATE_FORMATTER.format(date);
+function formatTrialEndDate(date: Date) {
+	return TRIAL_END_DATE_FORMATTER.format(date);
+}

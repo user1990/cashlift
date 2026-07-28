@@ -4,8 +4,8 @@ import dynamic from "next/dynamic";
 import type { WorkspaceDatasetDateRange } from "@/modules/workspace/types";
 
 export type OverviewDateRangePickerProps = {
-	dateRange?: WorkspaceDatasetDateRange;
 	fallbackLabel: string;
+	dateRange?: WorkspaceDatasetDateRange;
 	onDateRangeChange?: (dateRange: WorkspaceDatasetDateRange) => void;
 };
 

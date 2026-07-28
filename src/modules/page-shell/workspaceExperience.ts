@@ -1,10 +1,4 @@
-import type { WorkspaceExperience } from "./types";
-
-export type WorkspaceExperienceContract = {
-	basePath: "/dashboard" | "/demo/workspace";
-	experience: WorkspaceExperience;
-	readOnly: boolean;
-};
+import type { WorkspaceExperience, WorkspaceExperienceContract } from "./types";
 
 const WORKSPACE_EXPERIENCES = {
 	demo: {

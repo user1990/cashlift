@@ -1,7 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import type { CompanyRole } from "@/modules/company-roles/types";
 import { AppError } from "@/utilities/errors/AppError";
-import { companyMembershipSchema } from "../schemas";
-import type { CompanyMembership, CompanyRole } from "../types";
+import { COMPANY_MEMBERSHIP_SCHEMA } from "../schemas";
+import type { CompanyMembership } from "../types";
 
 type CompanyMemberRow = {
 	company_id: string;
@@ -39,7 +40,7 @@ export const selectCompanyMembership = async (client: SupabaseClient, userId: st
 		throw new CompanyMembershipNotFoundError();
 	}
 
-	return companyMembershipSchema.parse({
+	return COMPANY_MEMBERSHIP_SCHEMA.parse({
 		companyId: data.company_id,
 		role: data.role,
 	});

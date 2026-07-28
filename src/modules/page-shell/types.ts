@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import type { WorkspaceDatasetScope } from "@/modules/workspace/types";
+import type { FinancialDataset, WorkspaceDatasetScope } from "@/modules/workspace/types";
 import type { CashLiftAppMode } from "@/services/env/app";
 
 export type WorkspacePageProps = {
@@ -17,3 +17,15 @@ export type WorkspaceNavItem = {
 };
 
 export type WorkspaceExperience = CashLiftAppMode | "public-demo";
+
+export type WorkspaceExperienceContract = {
+	basePath: "/dashboard" | "/demo/workspace";
+	experience: WorkspaceExperience;
+	readOnly: boolean;
+};
+
+export type WorkspacePageRendererProps = {
+	dataset: FinancialDataset;
+	experience: WorkspaceExperience;
+	section: WorkspaceSection;
+};

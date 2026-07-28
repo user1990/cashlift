@@ -5,7 +5,7 @@ import { formatCurrency, getPercentage } from "@/modules/money/format";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { Badge } from "@/ui/components/Badge";
 import { Panel, PanelHeader } from "@/ui/components/Panel";
-import { useInvoiceRiskTotal } from "./useInvoiceRiskTotal";
+import { useInvoiceRiskTotal } from "../hooks/useInvoiceRiskTotal";
 
 type WorkspaceInvoicesSectionProps = {
 	dataset: FinancialDataset;

@@ -1,0 +1,14 @@
+language js(typescript, jsx)
+
+or {
+	JsxAttribute($name, $value) as $attr where {
+		$name <: `key`,
+		$attr <: after JsxAttribute(),
+		register_diagnostic(span=$attr, message="Put key first on JSX elements.", severity="error")
+	},
+	JsxAttribute($name, $value) as $attr where {
+		$name <: `className`,
+		$attr <: before JsxAttribute(),
+		register_diagnostic(span=$attr, message="Put className last on JSX elements.", severity="error")
+	}
+}

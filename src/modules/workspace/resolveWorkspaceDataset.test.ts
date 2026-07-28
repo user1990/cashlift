@@ -1,24 +1,24 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { stubDemoWorkspaceEnv, stubProductionWorkspaceEnv } from "@/test/workspaceEnv";
-import { demoWorkspaceDataset } from "./demoDataset";
+import { DEMO_WORKSPACE_DATASET } from "./demoDataset";
 
-const authMock = vi.hoisted(() => vi.fn());
-const captureAppExceptionMock = vi.hoisted(() => vi.fn(() => "event-exception-id"));
-const captureAppMessageMock = vi.hoisted(() => vi.fn(() => "event-message-id"));
-const getWorkspaceDatasetMock = vi.hoisted(() => vi.fn());
+const AUTH_MOCK = vi.hoisted(() => vi.fn());
+const CAPTURE_APP_EXCEPTION_MOCK = vi.hoisted(() => vi.fn(() => "event-exception-id"));
+const CAPTURE_APP_MESSAGE_MOCK = vi.hoisted(() => vi.fn(() => "event-message-id"));
+const GET_WORKSPACE_DATASET_MOCK = vi.hoisted(() => vi.fn());
 
 vi.mock("@clerk/nextjs/server", () => ({
-	auth: authMock,
+	auth: AUTH_MOCK,
 }));
 
 vi.mock("@/services/platform/integrations/sentry", () => ({
-	captureAppException: captureAppExceptionMock,
-	captureAppMessage: captureAppMessageMock,
+	captureAppException: CAPTURE_APP_EXCEPTION_MOCK,
+	captureAppMessage: CAPTURE_APP_MESSAGE_MOCK,
 }));
 
 vi.mock("@/modules/workspace/repositories/supabase", () => ({
 	supabaseFinanceRepository: {
-		getWorkspaceDataset: getWorkspaceDatasetMock,
+		getWorkspaceDataset: GET_WORKSPACE_DATASET_MOCK,
 	},
 }));
 
@@ -44,14 +44,14 @@ const expectDataErrorResult = (result: unknown) => {
 
 const expectWorkspaceExceptionCaptured = ({
 	error,
-	extra,
 	failureKind,
+	extra,
 }: {
 	error: Error;
-	extra?: Record<string, string>;
 	failureKind: string;
+	extra?: Record<string, string>;
 }) => {
-	expect(captureAppExceptionMock).toHaveBeenCalledWith({
+	expect(CAPTURE_APP_EXCEPTION_MOCK).toHaveBeenCalledWith({
 		error,
 		extra,
 		fingerprint: ["workspace-dataset", failureKind],
@@ -73,11 +73,11 @@ describe("resolveWorkspaceDataset", () => {
 
 		const result = await resolveDataset();
 
-		expect(result).toEqual({ dataset: demoWorkspaceDataset, kind: "success" });
-		expect(getWorkspaceDatasetMock).not.toHaveBeenCalled();
-		expect(captureAppExceptionMock).not.toHaveBeenCalled();
-		expect(captureAppMessageMock).not.toHaveBeenCalled();
-		expect(authMock).not.toHaveBeenCalled();
+		expect(result).toEqual({ dataset: DEMO_WORKSPACE_DATASET, kind: "success" });
+		expect(GET_WORKSPACE_DATASET_MOCK).not.toHaveBeenCalled();
+		expect(CAPTURE_APP_EXCEPTION_MOCK).not.toHaveBeenCalled();
+		expect(CAPTURE_APP_MESSAGE_MOCK).not.toHaveBeenCalled();
+		expect(AUTH_MOCK).not.toHaveBeenCalled();
 	});
 
 	it("returns scoped demo data for non-overview pages", async () => {
@@ -87,7 +87,7 @@ describe("resolveWorkspaceDataset", () => {
 
 		expect(result).toEqual({
 			dataset: {
-				...demoWorkspaceDataset,
+				...DEMO_WORKSPACE_DATASET,
 				cashActions: [],
 				forecast: [],
 				invoices: [],
@@ -103,17 +103,17 @@ describe("resolveWorkspaceDataset", () => {
 	it("passes the requested scope to production data loading", async () => {
 		stubProductionWorkspaceEnv();
 		const getToken = vi.fn().mockResolvedValue("jwt");
-		authMock.mockResolvedValue({
+		AUTH_MOCK.mockResolvedValue({
 			getToken,
 			userId: "user-1",
 		});
-		getWorkspaceDatasetMock.mockResolvedValue(demoWorkspaceDataset);
+		GET_WORKSPACE_DATASET_MOCK.mockResolvedValue(DEMO_WORKSPACE_DATASET);
 
 		const result = await resolveVendorsDataset();
 
-		expect(result).toEqual({ dataset: demoWorkspaceDataset, kind: "success" });
+		expect(result).toEqual({ dataset: DEMO_WORKSPACE_DATASET, kind: "success" });
 		expect(getToken).toHaveBeenCalledWith();
-		expect(getWorkspaceDatasetMock).toHaveBeenCalledWith("user-1", "jwt", "vendors");
+		expect(GET_WORKSPACE_DATASET_MOCK).toHaveBeenCalledWith("user-1", "jwt", "vendors");
 	});
 
 	it("returns config failures without Sentry capture", async () => {
@@ -125,17 +125,17 @@ describe("resolveWorkspaceDataset", () => {
 			kind: "config",
 			message: "Workspace production environment variables are not configured.",
 		});
-		expect(captureAppMessageMock).not.toHaveBeenCalled();
+		expect(CAPTURE_APP_MESSAGE_MOCK).not.toHaveBeenCalled();
 	});
 
 	it("returns forbidden when membership is missing", async () => {
 		stubProductionWorkspaceEnv();
 		const { CompanyMembershipNotFoundError } = await import("@/modules/company-memberships/repositories/supabase");
-		authMock.mockResolvedValue({
+		AUTH_MOCK.mockResolvedValue({
 			getToken: vi.fn().mockResolvedValue("jwt"),
 			userId: "user-1",
 		});
-		getWorkspaceDatasetMock.mockRejectedValue(new CompanyMembershipNotFoundError());
+		GET_WORKSPACE_DATASET_MOCK.mockRejectedValue(new CompanyMembershipNotFoundError());
 
 		const result = await resolveDataset();
 
@@ -143,14 +143,14 @@ describe("resolveWorkspaceDataset", () => {
 			kind: "forbidden",
 			message: "No company workspace is assigned to this user.",
 		});
-		expect(captureAppExceptionMock).not.toHaveBeenCalled();
-		expect(captureAppMessageMock).not.toHaveBeenCalled();
+		expect(CAPTURE_APP_EXCEPTION_MOCK).not.toHaveBeenCalled();
+		expect(CAPTURE_APP_MESSAGE_MOCK).not.toHaveBeenCalled();
 	});
 
 	it("reports an unavailable data token when Clerk token retrieval fails", async () => {
 		stubProductionWorkspaceEnv();
 		const error = new Error("Clerk session token is unavailable");
-		authMock.mockResolvedValue({
+		AUTH_MOCK.mockResolvedValue({
 			getToken: vi.fn().mockRejectedValue(error),
 			userId: "user-1",
 		});
@@ -172,11 +172,11 @@ describe("resolveWorkspaceDataset", () => {
 	it("captures authenticated data failures", async () => {
 		stubProductionWorkspaceEnv();
 		const error = new Error("Supabase failed");
-		authMock.mockResolvedValue({
+		AUTH_MOCK.mockResolvedValue({
 			getToken: vi.fn().mockResolvedValue("jwt"),
 			userId: "user-1",
 		});
-		getWorkspaceDatasetMock.mockRejectedValue(error);
+		GET_WORKSPACE_DATASET_MOCK.mockRejectedValue(error);
 
 		const result = await resolveDataset();
 

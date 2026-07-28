@@ -1,9 +1,9 @@
 "use client";
 
 import { reduceDatasetForDateRange } from "@/modules/workspace/read-models";
-import { useOverviewDateRangeQueryState } from "./useOverviewDateRangeQueryState";
+import { useOverviewDateRangeQueryState } from "../hooks/useOverviewDateRangeQueryState";
+import type { WorkspacePageRendererProps } from "../types";
 import { WorkspacePageView } from "./WorkspacePageView";
-import type { WorkspacePageRendererProps } from "./workspacePageContentTypes";
 
 export const PublicDemoWorkspacePageContent = ({ dataset, experience, section }: WorkspacePageRendererProps) => {
 	const { dateRange: overviewDateRange, setDateRange } = useOverviewDateRangeQueryState(dataset);

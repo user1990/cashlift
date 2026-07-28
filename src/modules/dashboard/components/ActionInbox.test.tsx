@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { demoWorkspaceDataset } from "@/modules/workspace/demoDataset";
+import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
 import { getCashActionDestination } from "../cashActionDestination";
 import { buildDashboardViewModel } from "../view-model";
 import { ActionInbox } from "./ActionInbox";
@@ -8,7 +8,7 @@ import { ActionInbox } from "./ActionInbox";
 describe("ActionInbox", () => {
 	it("renders ranked actions with destinations for their decision type", () => {
 		const dashboard = buildDashboardViewModel({
-			dataset: demoWorkspaceDataset,
+			dataset: DEMO_WORKSPACE_DATASET,
 			date: new Date("2024-05-20T00:00:00"),
 			role: "owner-finance",
 		});

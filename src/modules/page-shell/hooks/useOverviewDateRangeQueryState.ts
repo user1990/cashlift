@@ -1,9 +1,9 @@
 "use client";
 
 import { parseAsString, useQueryStates } from "nuqs";
-import { workspaceDatasetDateRangeSchema } from "@/modules/workspace/schemas";
+import { WORKSPACE_DATASET_DATE_RANGE_SCHEMA } from "@/modules/workspace/schemas";
 import type { FinancialDataset, WorkspaceDatasetDateRange } from "@/modules/workspace/types";
-import { getForecastDateRange } from "./workspacePageDateRange";
+import { getForecastDateRange } from "../utils";
 
 const OVERVIEW_DATE_RANGE_QUERY_PARAMS = {
 	endDate: parseAsString,
@@ -25,7 +25,7 @@ export const useOverviewDateRangeQueryState = (dataset: FinancialDataset) => {
 };
 
 function getDateRange(queryDateRange: { endDate: string | null; startDate: string | null }) {
-	const result = workspaceDatasetDateRangeSchema.safeParse(queryDateRange);
+	const result = WORKSPACE_DATASET_DATE_RANGE_SCHEMA.safeParse(queryDateRange);
 
 	return result.success ? result.data : undefined;
 }

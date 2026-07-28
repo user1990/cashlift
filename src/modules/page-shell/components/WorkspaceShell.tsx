@@ -2,11 +2,11 @@
 
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { getWorkspaceNavItems } from "../navigation";
+import type { WorkspaceExperience, WorkspaceSection } from "../types";
+import { getWorkspaceExperienceContract } from "../workspaceExperience";
 import { MainContent } from "./MainContent";
-import { getWorkspaceNavItems } from "./navigation";
-import type { WorkspaceExperience, WorkspaceSection } from "./types";
 import { WorkspaceSidebar } from "./WorkspaceSidebar";
-import { getWorkspaceExperienceContract } from "./workspaceExperience";
 
 type WorkspaceShellProps = {
 	children: ReactNode;

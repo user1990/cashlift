@@ -11,13 +11,15 @@ const FEATURE_CELL_CLASS = "px-1.5 py-2 @sm:px-3 @sm:py-2.5 @md:px-5 @md:py-3.5"
 const PLAN_CELL_CLASS = "px-1 py-2 text-center @sm:px-2 @sm:py-2.5 @md:px-5 @md:py-3.5 @md:text-left";
 const HEADER_CELL_CLASS = "border-b border-shell-border bg-shell-elevated";
 const ROW_BORDER_CLASS = "border-t border-shell-border";
+const COMPARE_PLANS_HEADING_ID = "compare-plans-heading";
+const COMPARISON_TABLE_ID = "comparison-table";
 
 export const PricingComparisonSection = () => (
-	<section className="min-w-0 scroll-mt-24 pt-4" aria-labelledby="compare-plans-heading">
-		<h2 id="compare-plans-heading">
+	<section aria-labelledby={COMPARE_PLANS_HEADING_ID} className="min-w-0 scroll-mt-24 pt-4">
+		<h2 id={COMPARE_PLANS_HEADING_ID}>
 			<a
+				href={`#${COMPARISON_TABLE_ID}`}
 				className="mx-auto flex w-fit items-center gap-2 text-xl font-semibold text-primary outline-none transition-colors duration-150 hover:text-primary-hover focus-visible:ring-[3px] focus-visible:ring-primary/20"
-				href="#comparison-table"
 			>
 				Compare plans in full
 				<ChevronDown aria-hidden className="size-6" />
@@ -25,7 +27,7 @@ export const PricingComparisonSection = () => (
 		</h2>
 
 		<div
-			id="comparison-table"
+			id={COMPARISON_TABLE_ID}
 			className="@container mt-10 max-w-full scroll-mt-24 overflow-hidden rounded-lg border border-shell-border"
 		>
 			<table className="w-full table-fixed border-separate border-spacing-0 text-left text-2xs leading-tight @sm:text-s @md:text-m">
@@ -39,10 +41,10 @@ export const PricingComparisonSection = () => (
 
 						{PRICING_PLANS.map(({ name, slug }, index) => (
 							<th
-								className={`${PLAN_CELL_CLASS} ${HEADER_CELL_CLASS} text-2xs+ font-semibold leading-tight text-shell-foreground @sm:text-s+ @md:text-l ${index === PRICING_PLANS.length - 1 ? "rounded-tr-lg" : ""}`}
 								key={slug}
 								scope="col"
 								title={name}
+								className={`${PLAN_CELL_CLASS} ${HEADER_CELL_CLASS} text-2xs+ font-semibold leading-tight text-shell-foreground @sm:text-s+ @md:text-l ${index === PRICING_PLANS.length - 1 ? "rounded-tr-lg" : ""}`}
 							>
 								<span className="@md:hidden">{PLAN_SHORT_NAMES[slug]}</span>
 
@@ -53,8 +55,8 @@ export const PricingComparisonSection = () => (
 				</thead>
 
 				<tbody>
-					{PRICING_COMPARISON_GROUPS.map((group) => (
-						<ComparisonGroup group={group} key={group.name} />
+					{PRICING_COMPARISON_GROUPS.map(({ features, name }) => (
+						<ComparisonGroupRows key={name} features={features} name={name} />
 					))}
 				</tbody>
 			</table>
@@ -63,43 +65,46 @@ export const PricingComparisonSection = () => (
 );
 
 type ComparisonGroupProps = {
-	group: (typeof PRICING_COMPARISON_GROUPS)[number];
+	features: (typeof PRICING_COMPARISON_GROUPS)[number]["features"];
+	name: (typeof PRICING_COMPARISON_GROUPS)[number]["name"];
 };
 
-const ComparisonGroup = ({ group }: ComparisonGroupProps) => (
-	<>
-		<tr>
-			<th
-				className={`${FEATURE_CELL_CLASS} ${ROW_BORDER_CLASS} bg-primary/5 text-s+ font-semibold text-primary @md:text-m+`}
-				colSpan={4}
-				scope="rowgroup"
-			>
-				{group.name}
-			</th>
-		</tr>
-
-		{group.features.map((feature) => (
-			<tr key={feature.name}>
+function ComparisonGroupRows({ features, name }: ComparisonGroupProps) {
+	return (
+		<>
+			<tr>
 				<th
-					scope="row"
-					className={`${FEATURE_CELL_CLASS} ${ROW_BORDER_CLASS} wrap-break-word font-medium text-shell-foreground`}
+					colSpan={4}
+					scope="rowgroup"
+					className={`${FEATURE_CELL_CLASS} ${ROW_BORDER_CLASS} bg-primary/5 text-s+ font-semibold text-primary @md:text-m+`}
 				>
-					{feature.name}
+					{name}
 				</th>
-
-				{feature.values.map((value, index) => (
-					<td
-						key={PRICING_PLANS[index]?.slug}
-						className={`${PLAN_CELL_CLASS} ${ROW_BORDER_CLASS} wrap-break-word text-shell-muted`}
-					>
-						{value ? (
-							<Check aria-label="Included" className="mx-auto size-3.5 text-primary @md:mx-0 @md:size-5" />
-						) : (
-							<Minus aria-label="Not included" className="mx-auto size-3.5 text-shell-muted @md:mx-0 @md:size-5" />
-						)}
-					</td>
-				))}
 			</tr>
-		))}
-	</>
-);
+
+			{features.map(({ name: featureName, values }) => (
+				<tr key={featureName}>
+					<th
+						scope="row"
+						className={`${FEATURE_CELL_CLASS} ${ROW_BORDER_CLASS} wrap-break-word font-medium text-shell-foreground`}
+					>
+						{featureName}
+					</th>
+
+					{values.map((value, index) => (
+						<td
+							key={PRICING_PLANS[index]?.slug}
+							className={`${PLAN_CELL_CLASS} ${ROW_BORDER_CLASS} wrap-break-word text-shell-muted`}
+						>
+							{value ? (
+								<Check aria-label="Included" className="mx-auto size-3.5 text-primary @md:mx-0 @md:size-5" />
+							) : (
+								<Minus aria-label="Not included" className="mx-auto size-3.5 text-shell-muted @md:mx-0 @md:size-5" />
+							)}
+						</td>
+					))}
+				</tr>
+			))}
+		</>
+	);
+}

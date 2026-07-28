@@ -1,11 +1,11 @@
 import { z } from "zod";
-import { moneyCentsSchema } from "@/modules/money/schemas";
+import { MONEY_CENTS_SCHEMA } from "@/modules/money/schemas";
 
-export const forecastPointSchema = z.object({
+export const FORECAST_POINT_SCHEMA = z.object({
 	date: z.iso.date(),
 	id: z.string(),
-	inflowCents: moneyCentsSchema.nonnegative(),
-	openingBalanceCents: moneyCentsSchema.nonnegative(),
-	outflowCents: moneyCentsSchema.nonnegative(),
+	inflowCents: MONEY_CENTS_SCHEMA.nonnegative(),
+	openingBalanceCents: MONEY_CENTS_SCHEMA.nonnegative(),
+	outflowCents: MONEY_CENTS_SCHEMA.nonnegative(),
 	scenario: z.enum(["base", "delayed-client", "approved-spend"]),
 });

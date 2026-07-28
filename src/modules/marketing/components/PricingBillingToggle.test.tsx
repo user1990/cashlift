@@ -3,17 +3,17 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PricingBillingToggle } from "./PricingBillingToggle";
 
-const replaceMock = vi.fn();
+const REPLACE_MOCK = vi.fn();
 
 vi.mock("next/navigation", () => ({
 	useRouter: () => ({
-		replace: replaceMock,
+		replace: REPLACE_MOCK,
 	}),
 }));
 
 describe("PricingBillingToggle", () => {
 	beforeEach(() => {
-		replaceMock.mockReset();
+		REPLACE_MOCK.mockReset();
 	});
 
 	it("exposes a labeled radiogroup and updates billing from click and arrow keys", async () => {
@@ -27,7 +27,7 @@ describe("PricingBillingToggle", () => {
 
 		await user.click(screen.getByRole("radio", { name: "Monthly" }));
 
-		expect(replaceMock).toHaveBeenCalledWith("/pricing?billing=monthly", { scroll: false });
+		expect(REPLACE_MOCK).toHaveBeenCalledWith("/pricing?billing=monthly", { scroll: false });
 
 		rerender(<PricingBillingToggle billing="monthly" />);
 
@@ -36,7 +36,7 @@ describe("PricingBillingToggle", () => {
 
 		await user.keyboard("{ArrowLeft}");
 
-		expect(replaceMock).toHaveBeenCalledWith("/pricing?billing=annual", { scroll: false });
+		expect(REPLACE_MOCK).toHaveBeenCalledWith("/pricing?billing=annual", { scroll: false });
 
 		rerender(<PricingBillingToggle billing="annual" />);
 

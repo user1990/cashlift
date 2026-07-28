@@ -1,5 +1,5 @@
 import { ApprovalQueue } from "@/modules/spend-requests/components/ApprovalQueue";
-import { workspaceDatasetQueryKeys } from "@/modules/workspace/query";
+import { WORKSPACE_DATASET_QUERY_KEYS } from "@/modules/workspace/query";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { Panel, PanelHeader } from "@/ui/components/Panel";
 
@@ -8,7 +8,7 @@ type WorkspaceApprovalsSectionProps = {
 	readOnly?: boolean;
 };
 
-export const WorkspaceApprovalsSection = ({ dataset, readOnly }: WorkspaceApprovalsSectionProps) => {
+export const WorkspaceApprovalsSection = ({ dataset, readOnly = false }: WorkspaceApprovalsSectionProps) => {
 	const pendingRequests = dataset.spendRequests.filter((request) => request.status === "pending");
 
 	return (
@@ -17,7 +17,7 @@ export const WorkspaceApprovalsSection = ({ dataset, readOnly }: WorkspaceApprov
 				<PanelHeader label="Queue" title={`${pendingRequests.length} requests need review`} />
 
 				<ApprovalQueue
-					datasetQueryKey={workspaceDatasetQueryKeys.all}
+					datasetQueryKey={WORKSPACE_DATASET_QUERY_KEYS.all}
 					readOnly={readOnly}
 					requests={dataset.spendRequests}
 				/>

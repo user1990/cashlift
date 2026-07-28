@@ -1,5 +1,5 @@
 import type { ActionPriority, ActionStatus, CashActionType } from "@/modules/cash-actions/types";
-import type { CompanyRole } from "@/modules/company-memberships/types";
+import type { CompanyRole } from "@/modules/company-roles/types";
 import type { InvoiceStatus } from "@/modules/invoices/types";
 import type { SpendRequestStatus } from "@/modules/spend-requests/types";
 import type { SubscriptionStatus } from "@/modules/subscriptions/types";

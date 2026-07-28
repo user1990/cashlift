@@ -9,10 +9,10 @@ type CaptureAppExceptionParams = {
 };
 
 type CaptureAppMessageParams = {
+	message: string;
 	extra?: Record<string, unknown>;
 	fingerprint?: string[];
 	level?: "debug" | "error" | "fatal" | "info" | "log" | "warning";
-	message: string;
 	tags?: Record<string, string>;
 };
 

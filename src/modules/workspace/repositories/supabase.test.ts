@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const createServerSupabaseClientMock = vi.hoisted(() => vi.fn());
+const CREATE_SERVER_SUPABASE_CLIENT_MOCK = vi.hoisted(() => vi.fn());
 
 vi.mock("@/services/supabase/server", () => ({
-	createServerSupabaseClient: createServerSupabaseClientMock,
+	createServerSupabaseClient: CREATE_SERVER_SUPABASE_CLIENT_MOCK,
 }));
 
-const updatedSpendRequestRow = {
+const UPDATED_SPEND_REQUEST_ROW_MOCK = {
 	amount_cents: 680_000,
 	category: "software",
 	id: "request-brandforge",
@@ -21,10 +21,10 @@ const updatedSpendRequestRow = {
 
 const createSupabaseClient = ({
 	updateError = null,
-	updatedRequest = updatedSpendRequestRow,
+	updatedRequest = UPDATED_SPEND_REQUEST_ROW_MOCK,
 }: {
 	updateError?: { code?: string; message: string } | null;
-	updatedRequest?: typeof updatedSpendRequestRow | null;
+	updatedRequest?: typeof UPDATED_SPEND_REQUEST_ROW_MOCK | null;
 } = {}) => {
 	const eqMock = vi.fn(() => ({
 		eq: eqMock,
@@ -61,7 +61,7 @@ describe("supabaseFinanceRepository", () => {
 
 	it("updates a spend request only inside the authenticated company", async () => {
 		const client = createSupabaseClient();
-		createServerSupabaseClientMock.mockReturnValue(client);
+		CREATE_SERVER_SUPABASE_CLIENT_MOCK.mockReturnValue(client);
 		const { supabaseFinanceRepository } = await import("./supabase");
 
 		const request = await supabaseFinanceRepository.updateSpendRequestStatus(
@@ -71,7 +71,7 @@ describe("supabaseFinanceRepository", () => {
 			"approved",
 		);
 
-		expect(createServerSupabaseClientMock).toHaveBeenCalledWith({ accessToken: "jwt" });
+		expect(CREATE_SERVER_SUPABASE_CLIENT_MOCK).toHaveBeenCalledWith({ accessToken: "jwt" });
 		expect(client.from).toHaveBeenCalledWith("spend_requests");
 		expect(client.updateMock).toHaveBeenCalledWith(expect.objectContaining({ status: "approved" }));
 		expect(client.eqMock).toHaveBeenCalledWith("company_id", "studio-nova");
@@ -91,7 +91,7 @@ describe("supabaseFinanceRepository", () => {
 	});
 
 	it("maps Supabase update failures to AppError", async () => {
-		createServerSupabaseClientMock.mockReturnValue(
+		CREATE_SERVER_SUPABASE_CLIENT_MOCK.mockReturnValue(
 			createSupabaseClient({ updateError: { code: "42501", message: "permission denied" } }),
 		);
 		const { supabaseFinanceRepository } = await import("./supabase");

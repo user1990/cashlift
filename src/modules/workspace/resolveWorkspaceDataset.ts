@@ -5,7 +5,7 @@ import { supabaseFinanceRepository } from "@/modules/workspace/repositories/supa
 import type { FinancialDataset, WorkspaceDatasetDateRange, WorkspaceDatasetScope } from "@/modules/workspace/types";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
 import { captureAppException, captureAppMessage } from "@/services/platform/integrations/sentry";
-import { demoWorkspaceDataset } from "./demoDataset";
+import { DEMO_WORKSPACE_DATASET } from "./demoDataset";
 
 export type ResolveWorkspaceDatasetResult =
 	| { dataset: FinancialDataset; kind: "success" }
@@ -103,5 +103,5 @@ export const resolveWorkspaceDataset = async (
 const loadDemoWorkspaceDataset = async (scope: WorkspaceDatasetScope): Promise<FinancialDataset> => {
 	"use cache";
 
-	return reduceDatasetForScope(demoWorkspaceDataset, scope);
+	return reduceDatasetForScope(DEMO_WORKSPACE_DATASET, scope);
 };

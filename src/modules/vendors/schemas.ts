@@ -1,14 +1,14 @@
 import { z } from "zod";
-import { moneyCentsSchema } from "@/modules/money/schemas";
+import { MONEY_CENTS_SCHEMA } from "@/modules/money/schemas";
 
-export const vendorBillStatusSchema = z.enum(["scheduled", "needs-review", "approved"]);
+export const VENDOR_BILL_STATUS_SCHEMA = z.enum(["scheduled", "needs-review", "approved"]);
 
-export const vendorBillSchema = z.object({
-	amountCents: moneyCentsSchema.nonnegative(),
+export const VENDOR_BILL_SCHEMA = z.object({
+	amountCents: MONEY_CENTS_SCHEMA.nonnegative(),
 	category: z.enum(["software", "contractor", "operations", "tax", "payroll"]),
 	dueDate: z.iso.date(),
 	essential: z.boolean(),
 	id: z.string(),
-	status: vendorBillStatusSchema,
+	status: VENDOR_BILL_STATUS_SCHEMA,
 	vendor: z.string(),
 });

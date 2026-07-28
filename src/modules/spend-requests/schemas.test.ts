@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { spendRequestDecisionSchema, spendRequestSchema } from "./schemas";
+import { SPEND_REQUEST_DECISION_SCHEMA, SPEND_REQUEST_SCHEMA } from "./schemas";
 
 const REQUEST_MOCK = {
 	amountCents: 120_000,
@@ -21,7 +21,7 @@ describe("spend request schemas", () => {
 		[{ ...REQUEST_MOCK, neededByDate: "14/05/2026" }, false],
 		[{ ...REQUEST_MOCK, requestedDate: "01/05/2026" }, false],
 	])("validates persisted request values", (value, valid) => {
-		expect(spendRequestSchema.safeParse(value).success).toBe(valid);
+		expect(SPEND_REQUEST_SCHEMA.safeParse(value).success).toBe(valid);
 	});
 
 	it.each([
@@ -29,6 +29,6 @@ describe("spend request schemas", () => {
 		["rejected", true],
 		["pending", false],
 	])("limits decision input to final statuses", (status, valid) => {
-		expect(spendRequestDecisionSchema.safeParse({ id: REQUEST_MOCK.id, status }).success).toBe(valid);
+		expect(SPEND_REQUEST_DECISION_SCHEMA.safeParse({ id: REQUEST_MOCK.id, status }).success).toBe(valid);
 	});
 });

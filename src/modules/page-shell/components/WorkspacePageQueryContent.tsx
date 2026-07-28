@@ -2,9 +2,9 @@
 
 import { useWorkspaceDatasetQuery } from "@/modules/workspace/query";
 import { reduceDatasetForDateRange } from "@/modules/workspace/read-models";
-import { useOverviewDateRangeQueryState } from "./useOverviewDateRangeQueryState";
+import { useOverviewDateRangeQueryState } from "../hooks/useOverviewDateRangeQueryState";
+import type { WorkspacePageRendererProps } from "../types";
 import { WorkspacePageView } from "./WorkspacePageView";
-import type { WorkspacePageRendererProps } from "./workspacePageContentTypes";
 
 export const WorkspacePageQueryContent = ({ dataset, experience, section }: WorkspacePageRendererProps) => {
 	const { dateRange: overviewDateRange, setDateRange } = useOverviewDateRangeQueryState(dataset);

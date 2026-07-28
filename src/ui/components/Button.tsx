@@ -3,7 +3,7 @@
 import { Button as RACButton, type ButtonProps as RACButtonProps } from "react-aria-components";
 import { tv, type VariantProps } from "tailwind-variants";
 
-const buttonVariants = tv({
+const BUTTON_VARIANTS = tv({
 	base: "inline-flex cursor-pointer items-center justify-center gap-2 rounded-md font-semibold outline-none transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease active:scale-[0.98] motion-reduce:active:scale-100 data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20 data-disabled:cursor-not-allowed data-disabled:opacity-50 data-pressed:scale-[0.98] motion-reduce:data-pressed:scale-100",
 	defaultVariants: {
 		size: "default",
@@ -28,7 +28,7 @@ const buttonVariants = tv({
 });
 
 type ButtonProps = Omit<RACButtonProps, "className" | "isDisabled"> &
-	VariantProps<typeof buttonVariants> & {
+	VariantProps<typeof BUTTON_VARIANTS> & {
 		variant: "ghost" | "primary" | "secondary" | "success";
 		className?: string;
 		disabled?: boolean;
@@ -45,7 +45,7 @@ export const Button = ({
 	...props
 }: ButtonProps) => (
 	<RACButton
-		className={buttonVariants({ className, size, variant })}
+		className={BUTTON_VARIANTS({ className, size, variant })}
 		data-slot="button"
 		isDisabled={isDisabled ?? disabled}
 		type={type}

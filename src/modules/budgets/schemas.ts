@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { moneyCentsSchema } from "@/modules/money/schemas";
+import { MONEY_CENTS_SCHEMA } from "@/modules/money/schemas";
 
-export const teamBudgetSchema = z.object({
-	approvedCents: moneyCentsSchema.nonnegative(),
-	committedCents: moneyCentsSchema.nonnegative(),
+export const TEAM_BUDGET_SCHEMA = z.object({
+	approvedCents: MONEY_CENTS_SCHEMA.nonnegative(),
+	committedCents: MONEY_CENTS_SCHEMA.nonnegative(),
 	id: z.string(),
-	monthlyBudgetCents: moneyCentsSchema.nonnegative(),
+	monthlyBudgetCents: MONEY_CENTS_SCHEMA.nonnegative(),
 	team: z.string(),
 });

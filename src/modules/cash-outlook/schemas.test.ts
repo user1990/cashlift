@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { forecastPointSchema } from "./schemas";
+import { FORECAST_POINT_SCHEMA } from "./schemas";
 
 const FORECAST_POINT_MOCK = {
 	date: "2026-05-14",
@@ -10,13 +10,13 @@ const FORECAST_POINT_MOCK = {
 	scenario: "base",
 };
 
-describe("forecastPointSchema", () => {
+describe("FORECAST_POINT_SCHEMA", () => {
 	it.each([
 		[FORECAST_POINT_MOCK, true],
 		[{ ...FORECAST_POINT_MOCK, date: "14/05/2026" }, false],
 		[{ ...FORECAST_POINT_MOCK, inflowCents: -1 }, false],
 		[{ ...FORECAST_POINT_MOCK, openingBalanceCents: 1.5 }, false],
 	])("validates persisted forecast values", (value, valid) => {
-		expect(forecastPointSchema.safeParse(value).success).toBe(valid);
+		expect(FORECAST_POINT_SCHEMA.safeParse(value).success).toBe(valid);
 	});
 });

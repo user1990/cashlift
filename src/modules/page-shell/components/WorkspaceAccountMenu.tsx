@@ -1,8 +1,8 @@
 "use client";
 
+import type { WorkspaceExperienceContract } from "../types";
 import { ProductionAccountMenu } from "./ProductionAccountMenu";
 import { AccountMenuShell } from "./WorkspaceAccountMenuShell";
-import type { WorkspaceExperienceContract } from "./workspaceExperience";
 
 type WorkspaceAccountMenuProps = {
 	workspace: WorkspaceExperienceContract;

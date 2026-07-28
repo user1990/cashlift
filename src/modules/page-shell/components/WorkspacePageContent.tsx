@@ -2,9 +2,9 @@
 
 import { Suspense } from "react";
 import type { FinancialDataset } from "@/modules/workspace/types";
+import type { WorkspaceExperience, WorkspaceSection } from "../types";
 import { AuthenticatedWorkspacePageContent } from "./AuthenticatedWorkspacePageContent";
 import { PublicDemoWorkspacePageContent } from "./PublicDemoWorkspacePageContent";
-import type { WorkspaceExperience, WorkspaceSection } from "./types";
 import { WorkspacePageView } from "./WorkspacePageView";
 
 type WorkspacePageContentProps = {

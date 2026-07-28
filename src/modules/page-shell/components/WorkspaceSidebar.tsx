@@ -3,11 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/app/logo.svg";
-import { getWorkspaceNavItems } from "./navigation";
-import type { WorkspaceSection } from "./types";
+import { getWorkspaceNavItems } from "../navigation";
+import type { WorkspaceExperienceContract, WorkspaceSection } from "../types";
 import { WorkspaceAccountMenu } from "./WorkspaceAccountMenu";
 import { WorkspaceSidebarLink } from "./WorkspaceSidebarLink";
-import type { WorkspaceExperienceContract } from "./workspaceExperience";
 
 type WorkspaceSidebarProps = {
 	section: WorkspaceSection;
@@ -27,8 +26,12 @@ export const WorkspaceSidebar = ({ section, workspace }: WorkspaceSidebarProps) 
 		)}
 
 		<nav className="mt-7 grid gap-2" aria-label="Workspace">
-			{getWorkspaceNavItems(workspace.basePath).map((item) => (
-				<WorkspaceSidebarLink key={item.section} active={item.section === section} item={item} />
+			{getWorkspaceNavItems(workspace.basePath).map(({ section: itemSection, ...item }) => (
+				<WorkspaceSidebarLink
+					key={itemSection}
+					active={itemSection === section}
+					item={{ section: itemSection, ...item }}
+				/>
 			))}
 		</nav>
 

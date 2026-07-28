@@ -11,10 +11,10 @@ import { cn } from "@/ui/utils/cn";
 
 type TextFieldProps = Omit<RACTextFieldProps, "className"> & {
 	label: string;
+	className?: string;
 	errorMessage?: string;
 	invalid?: boolean;
 	placeholder?: string;
-	className?: string;
 };
 
 export const TextField = ({ errorMessage, invalid, label, placeholder, className, ...props }: TextFieldProps) => (

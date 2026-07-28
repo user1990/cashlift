@@ -19,11 +19,11 @@ import {
 } from "react-aria-components";
 import type { WorkspaceDatasetDateRange } from "@/modules/workspace/types";
 import { cn } from "@/ui/utils/cn";
-import { getOverviewDateRangeLabel } from "./overviewDateRangeLabel";
+import { getOverviewDateRangeLabel } from "../overviewDateRangeLabel";
 
 type OverviewDateRangePickerClientProps = {
-	dateRange?: WorkspaceDatasetDateRange;
 	fallbackLabel: string;
+	dateRange?: WorkspaceDatasetDateRange;
 	onDateRangeChange?: (dateRange: WorkspaceDatasetDateRange) => void;
 };
 

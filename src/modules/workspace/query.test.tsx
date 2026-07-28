@@ -3,7 +3,7 @@ import { renderHook, waitFor } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
-import { useWorkspaceDatasetQuery, workspaceDatasetQueryKeys } from "./query";
+import { useWorkspaceDatasetQuery, WORKSPACE_DATASET_QUERY_KEYS } from "./query";
 
 describe("useWorkspaceDatasetQuery", () => {
 	afterEach(() => {
@@ -40,7 +40,9 @@ describe("useWorkspaceDatasetQuery", () => {
 		expect(result.current.fetchStatus).toBe("idle");
 		expect(fetchMock).not.toHaveBeenCalled();
 
-		await queryClient.invalidateQueries({ queryKey: workspaceDatasetQueryKeys.scope("overview", hydratedDateRange) });
+		await queryClient.invalidateQueries({
+			queryKey: WORKSPACE_DATASET_QUERY_KEYS.scope("overview", hydratedDateRange),
+		});
 
 		await waitFor(() => {
 			expect(fetchMock).toHaveBeenCalledOnce();

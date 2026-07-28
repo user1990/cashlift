@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { DisclosureGroup } from "react-aria-components";
+import { MARKETING_NAV_GROUPS } from "../navigation";
 import { DesktopNavGroup } from "./DesktopNavGroup";
-import { MARKETING_NAV_GROUPS } from "./marketingHeaderNavigation";
 
 export const DesktopNav = () => {
 	const pathname = usePathname();
@@ -42,7 +42,6 @@ export const DesktopNav = () => {
 	return (
 		<nav
 			aria-label="Main navigation"
-			className="hidden items-center gap-2 text-m font-medium text-shell-muted lg:flex"
 			onBlur={(event) => {
 				if (!event.currentTarget.contains(event.relatedTarget)) {
 					close();
@@ -61,9 +60,9 @@ export const DesktopNav = () => {
 				}
 			}}
 			ref={navRef}
+			className="hidden items-center gap-2 text-m font-medium text-shell-muted lg:flex"
 		>
 			<DisclosureGroup
-				className="flex items-center gap-2"
 				expandedKeys={expandedKeys}
 				onExpandedChange={(keys) => {
 					if (keys.size === 0 && hoveredGroupRef.current) {
@@ -72,16 +71,17 @@ export const DesktopNav = () => {
 
 					setExpandedKeys(new Set([...keys].filter((key): key is string => typeof key === "string")));
 				}}
+				className="flex items-center gap-2"
 			>
-				{MARKETING_NAV_GROUPS.map((group) => (
+				{MARKETING_NAV_GROUPS.map(({ label, items }) => (
 					<DesktopNavGroup
-						group={group}
-						key={group.label}
+						key={label}
+						group={{ items, label }}
 						onClose={close}
-						onHoverEnd={() => closeOnHoverExit(group.label)}
-						onHoverStart={() => expandOnHover(group.label)}
+						onHoverEnd={() => closeOnHoverExit(label)}
+						onHoverStart={() => expandOnHover(label)}
 						onTriggerFocus={(trigger) => {
-							triggerRefs.current[group.label] = trigger;
+							triggerRefs.current[label] = trigger;
 						}}
 						pathname={pathname}
 					/>

@@ -2,7 +2,7 @@ import { tv, type VariantProps } from "tailwind-variants";
 
 export { PanelHeader } from "@/ui/components/PanelHeader";
 
-const panelVariants = tv({
+const PANEL_VARIANTS = tv({
 	base: "rounded-lg border p-4 transition-[border-color,box-shadow] duration-150 ease",
 	defaultVariants: {
 		variant: "light",
@@ -18,7 +18,7 @@ const panelVariants = tv({
 
 type PanelVariant = "accent" | "glass" | "light";
 
-type PanelProps = Omit<VariantProps<typeof panelVariants>, "variant"> & {
+type PanelProps = Omit<VariantProps<typeof PANEL_VARIANTS>, "variant"> & {
 	children: React.ReactNode;
 	as?: "article" | "div" | "section";
 	className?: string;
@@ -27,7 +27,7 @@ type PanelProps = Omit<VariantProps<typeof panelVariants>, "variant"> & {
 
 export const Panel = ({ as = "div", children, variant = "light", className }: PanelProps) => {
 	const panelProps = {
-		className: panelVariants({ className, variant }),
+		className: PANEL_VARIANTS({ className, variant }),
 		"data-slot": "card",
 		"data-variant": variant,
 	};
