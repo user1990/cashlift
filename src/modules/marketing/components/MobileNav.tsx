@@ -1,7 +1,7 @@
 import { MenuIcon, X } from "lucide-react";
+import type { NavGroup } from "../navigation";
+import { MARKETING_NAV_GROUPS } from "../navigation";
 import { MobileNavLink } from "./MobileNavLink";
-import type { NavGroup } from "./marketingHeaderNavigation";
-import { MARKETING_NAV_GROUPS } from "./marketingHeaderNavigation";
 
 export const MobileNav = () => (
 	<details className="group/nav lg:hidden">

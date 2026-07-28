@@ -2,7 +2,7 @@ import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { Button, Disclosure, DisclosurePanel } from "react-aria-components";
 import { cn } from "@/ui/utils/cn";
-import type { NavGroup } from "./marketingHeaderNavigation";
+import type { NavGroup } from "../navigation";
 
 type DesktopNavGroupProps = {
 	group: NavGroup;

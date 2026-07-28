@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { DisclosureGroup } from "react-aria-components";
+import { MARKETING_NAV_GROUPS } from "../navigation";
 import { DesktopNavGroup } from "./DesktopNavGroup";
-import { MARKETING_NAV_GROUPS } from "./marketingHeaderNavigation";
 
 export const DesktopNav = () => {
 	const pathname = usePathname();

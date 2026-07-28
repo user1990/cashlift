@@ -1,4 +1,4 @@
-import { PRODUCT_NAV, SOLUTION_NAV } from "../content";
+import { PRODUCT_NAV, SOLUTION_NAV } from "./content";
 
 type NavItem = {
 	href: string;
