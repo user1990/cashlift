@@ -3,8 +3,8 @@ import { formatCurrency } from "@/modules/money/format";
 import type { MoneyCents } from "@/modules/money/types";
 
 type AmountItemProps = {
-	title: string;
 	amountCents: MoneyCents;
+	title: string;
 	description?: ReactNode;
 	footer?: ReactNode;
 	meta?: ReactNode;

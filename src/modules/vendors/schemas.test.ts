@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { vendorBillSchema } from "./schemas";
+import { VENDOR_BILL_SCHEMA } from "./schemas";
 
 const VENDOR_BILL_MOCK = {
 	amountCents: 120_000,
@@ -11,13 +11,13 @@ const VENDOR_BILL_MOCK = {
 	vendor: "Northstar",
 };
 
-describe("vendorBillSchema", () => {
+describe("VENDOR_BILL_SCHEMA", () => {
 	it.each([
 		["valid values", VENDOR_BILL_MOCK, true],
 		["negative cents", { ...VENDOR_BILL_MOCK, amountCents: -1 }, false],
 		["fractional cents", { ...VENDOR_BILL_MOCK, amountCents: 1.5 }, false],
 		["invalid due date", { ...VENDOR_BILL_MOCK, dueDate: "14/05/2026" }, false],
 	])("%s", (_, value, valid) => {
-		expect(vendorBillSchema.safeParse(value).success).toBe(valid);
+		expect(VENDOR_BILL_SCHEMA.safeParse(value).success).toBe(valid);
 	});
 });

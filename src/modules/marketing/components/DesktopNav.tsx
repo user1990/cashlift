@@ -73,15 +73,15 @@ export const DesktopNav = () => {
 				}}
 				className="flex items-center gap-2"
 			>
-				{MARKETING_NAV_GROUPS.map((group) => (
+				{MARKETING_NAV_GROUPS.map(({ label, items }) => (
 					<DesktopNavGroup
-						key={group.label}
-						group={group}
+						key={label}
+						group={{ items, label }}
 						onClose={close}
-						onHoverEnd={() => closeOnHoverExit(group.label)}
-						onHoverStart={() => expandOnHover(group.label)}
+						onHoverEnd={() => closeOnHoverExit(label)}
+						onHoverStart={() => expandOnHover(label)}
 						onTriggerFocus={(trigger) => {
-							triggerRefs.current[group.label] = trigger;
+							triggerRefs.current[label] = trigger;
 						}}
 						pathname={pathname}
 					/>

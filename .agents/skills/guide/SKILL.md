@@ -18,6 +18,7 @@ See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow
 - Do not repeat module names in filenames: prefer `api.ts` over `payments.api.ts`.
 - Hook files use suffixes: `useThingQuery.ts`, `useThingMutation.ts`, `useThingStore.ts`, or `useThing.ts`.
 - Keep Zod schemas in `schemas.ts` and models/types in `types.ts` unless local convention says otherwise.
+- Keep `components/` limited to components and their colocated tests. Place reusable module hooks in `hooks/`; keep module-wide types and schemas in root `types.ts` and `schemas.ts`; use a nested feature subtree only when it owns a cohesive feature, with the same layout inside it.
 - Use the existing `@/*` alias; confirm paths in the local `tsconfig.json` before importing.
 
 ## TypeScript And JavaScript

@@ -1,6 +1,4 @@
 import type { z } from "zod";
-import type { companyMembershipSchema } from "./schemas";
+import type { COMPANY_MEMBERSHIP_SCHEMA } from "./schemas";
 
-export type { CompanyRole } from "@/modules/company-roles/types";
-
-export type CompanyMembership = z.infer<typeof companyMembershipSchema>;
+export type CompanyMembership = z.infer<typeof COMPANY_MEMBERSHIP_SCHEMA>;

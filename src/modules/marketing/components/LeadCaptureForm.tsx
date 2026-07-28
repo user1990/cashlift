@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/ui/components/Button";
 import { ControlledEmailAutocompleteField } from "@/ui/components/ControlledEmailAutocompleteField";
 import { ControlledTextField } from "@/ui/components/ControlledTextField";
-import { type LeadCaptureFormValues, leadCaptureSchema } from "../schemas";
+import { LEAD_CAPTURE_SCHEMA, type LeadCaptureFormValues } from "../schemas";
 import { LeadCaptureSuccessState } from "./LeadCaptureSuccessState";
 
 type LeadCaptureFormProps = {
@@ -24,7 +24,7 @@ export const LeadCaptureForm = ({ buttonLabel, successDescription, successTitle 
 			email: "",
 			name: "",
 		},
-		resolver: zodResolver(leadCaptureSchema),
+		resolver: zodResolver(LEAD_CAPTURE_SCHEMA),
 	});
 
 	const { control, handleSubmit, reset } = form;

@@ -1,5 +1,5 @@
 import { Panel, PanelHeader } from "@/ui/components/Panel";
-import type { WorkspaceSection } from "./types";
+import type { WorkspaceSection } from "../types";
 import { WorkspaceSectionHeader } from "./WorkspaceSectionHeader";
 
 type WorkspacePageLoadingProps = {

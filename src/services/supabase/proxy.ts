@@ -1,8 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
 export const updateSupabaseSession = async (request: NextRequest, requestHeaders = request.headers) => {
 	let response = NextResponse.next({
@@ -11,11 +11,11 @@ export const updateSupabaseSession = async (request: NextRequest, requestHeaders
 		},
 	});
 
-	if (!supabaseUrl || !supabasePublishableKey) {
+	if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
 		return response;
 	}
 
-	const supabase = createServerClient(supabaseUrl, supabasePublishableKey, {
+	const supabase = createServerClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
 		cookies: {
 			getAll() {
 				return request.cookies.getAll();

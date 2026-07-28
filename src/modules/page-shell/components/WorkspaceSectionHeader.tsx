@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { WorkspaceSection } from "./types";
+import type { WorkspaceSection } from "../types";
 
 type WorkspaceSectionHeaderProps = {
 	section: WorkspaceSection;

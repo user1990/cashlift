@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { cn } from "@/ui/utils/cn";
-import type { WorkspaceNavItem } from "./types";
+import type { WorkspaceNavItem } from "../types";
 
 type WorkspaceSidebarLinkProps = {
 	item: WorkspaceNavItem;

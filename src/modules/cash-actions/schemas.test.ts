@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cashActionSchema } from "./schemas";
+import { CASH_ACTION_SCHEMA } from "./schemas";
 
 const ACTION_MOCK = {
 	description: "Collect the overdue invoice.",
@@ -14,13 +14,13 @@ const ACTION_MOCK = {
 	visibleTo: ["owner-finance"],
 };
 
-describe("cashActionSchema", () => {
+describe("CASH_ACTION_SCHEMA", () => {
 	it.each([
 		[ACTION_MOCK, true],
 		[{ ...ACTION_MOCK, dueDate: "14/05/2026" }, false],
 		[{ ...ACTION_MOCK, impactCents: -1 }, false],
 		[{ ...ACTION_MOCK, impactCents: 1.5 }, false],
 	])("validates persisted action values", (value, valid) => {
-		expect(cashActionSchema.safeParse(value).success).toBe(valid);
+		expect(CASH_ACTION_SCHEMA.safeParse(value).success).toBe(valid);
 	});
 });

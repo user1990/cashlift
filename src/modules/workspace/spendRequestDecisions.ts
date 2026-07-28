@@ -4,12 +4,12 @@ import {
 	selectCompanyMembership,
 } from "@/modules/company-memberships/repositories/supabase";
 import type { SpendRequestDecisionInput } from "@/modules/spend-requests/schemas";
-import { spendRequestDecisionSchema } from "@/modules/spend-requests/schemas";
+import { SPEND_REQUEST_DECISION_SCHEMA } from "@/modules/spend-requests/schemas";
 import type { SpendRequest } from "@/modules/spend-requests/types";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
 import { captureAppException, captureAppMessage } from "@/services/platform/integrations/sentry";
 import { createServerSupabaseClient } from "@/services/supabase/server";
-import { demoWorkspaceDataset } from "./demoDataset";
+import { DEMO_WORKSPACE_DATASET } from "./demoDataset";
 import { SpendRequestNotFoundError, supabaseFinanceRepository } from "./repositories/supabase";
 
 export type SpendRequestDecisionResult =
@@ -47,7 +47,7 @@ const captureSpendRequestMessage = (message: string, failureKind: string) =>
 	});
 
 const decideDemoSpendRequest = ({ id, status }: SpendRequestDecisionInput): SpendRequestDecisionResult => {
-	const request = demoWorkspaceDataset.spendRequests.find((spendRequest) => spendRequest.id === id);
+	const request = DEMO_WORKSPACE_DATASET.spendRequests.find((spendRequest) => spendRequest.id === id);
 
 	if (!request) {
 		return { code: "not_found", message: "Spend request was not found.", status: "error" };
@@ -60,7 +60,7 @@ export const decideSpendRequest = async (
 	input: SpendRequestDecisionInput,
 	authSession?: AuthSession,
 ): Promise<SpendRequestDecisionResult> => {
-	const parsed = spendRequestDecisionSchema.safeParse(input);
+	const parsed = SPEND_REQUEST_DECISION_SCHEMA.safeParse(input);
 
 	if (!parsed.success) {
 		return { code: "invalid", message: "Spend request decision is invalid.", status: "error" };

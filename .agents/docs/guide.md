@@ -38,6 +38,8 @@ Related references:
     └── test/
 ```
 
+`components/` contains React components and their tests only. A module-wide hook belongs in `hooks/`; shared module models and schemas belong in root `types.ts` and `schemas.ts`. Create a nested feature subtree only when the feature owns several cohesive files; it may use the same `components/`, `hooks/`, `types.ts`, `schemas.ts`, and `utils.ts` categories rather than mixing support files into `components/`.
+
 ```bash
   ├── module
   │   ├── payments

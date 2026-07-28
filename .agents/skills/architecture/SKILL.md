@@ -48,6 +48,8 @@ Route files under `src/app/**` orchestrate modules and support layers.
 Business/product capabilities under `src/modules/*`.
 
 - Own their local `components`, `hooks`, `api.ts`, `server.ts`, `schemas.ts`, `types.ts`, `utils.ts`, and `assets` when useful.
+- Keep `components/` for React components and their colocated component tests only. Put module-wide hooks in `hooks/`, shared module models in `types.ts`, schemas in `schemas.ts`, and non-component helpers or configuration at the module root (or `utils.ts` when it is a utility).
+- A nested feature directory is appropriate only when its files form one cohesive feature subtree. Within it, use the same categories (`components/`, `hooks/`, `types.ts`, `schemas.ts`, `utils.ts`) rather than placing hooks, types, or constants in `components/`.
 - API/data code stays colocated with the module that owns the business concept.
 - Business modules should not import other business modules by default. Compose multiple modules in `src/app`, or extract a shared business primitive into its own module such as `modules/money`.
 - Current explicit composition modules, such as `workspace`, `dashboard`, and `page-shell`, may import the business modules they intentionally compose.

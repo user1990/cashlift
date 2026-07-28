@@ -1,5 +1,5 @@
 import { resolveWorkspaceDataset } from "@/modules/workspace/resolveWorkspaceDataset";
-import { workspaceDatasetDateRangeSchema, workspaceDatasetScopeSchema } from "@/modules/workspace/schemas";
+import { WORKSPACE_DATASET_DATE_RANGE_SCHEMA, WORKSPACE_DATASET_SCOPE_SCHEMA } from "@/modules/workspace/schemas";
 import { apiError, workspaceApiJson } from "./errors";
 
 export const GET = async (request: Request) => {
@@ -58,7 +58,7 @@ export const GET = async (request: Request) => {
 function requestUrlScope(request: Request) {
 	const { searchParams } = new URL(request.url);
 
-	return workspaceDatasetScopeSchema.safeParse(searchParams.get("scope") ?? "overview");
+	return WORKSPACE_DATASET_SCOPE_SCHEMA.safeParse(searchParams.get("scope") ?? "overview");
 }
 
 function requestUrlDateRange(request: Request) {
@@ -70,5 +70,5 @@ function requestUrlDateRange(request: Request) {
 		return { data: undefined, success: true } as const;
 	}
 
-	return workspaceDatasetDateRangeSchema.safeParse({ endDate, startDate });
+	return WORKSPACE_DATASET_DATE_RANGE_SCHEMA.safeParse({ endDate, startDate });
 }

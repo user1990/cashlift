@@ -93,7 +93,7 @@ const withCashImpact = (request: SpendRequest, dataset: FinancialDataset) => ({
 	cashAfterApprovalCents: getSpendRequestCashImpact(request, dataset),
 });
 
-const dateRangeFormatter = new Intl.DateTimeFormat("en-US", { day: "numeric", month: "short" });
+const DATE_RANGE_FORMATTER = new Intl.DateTimeFormat("en-US", { day: "numeric", month: "short" });
 
 function getDateRangeLabel(forecast: FinancialDataset["forecast"]) {
 	if (forecast.length === 0) {
@@ -103,7 +103,7 @@ function getDateRangeLabel(forecast: FinancialDataset["forecast"]) {
 	const startDate = new Date(`${forecast[0].date}T00:00:00`);
 	const endDate = new Date(`${forecast[forecast.length - 1].date}T00:00:00`);
 
-	return `${dateRangeFormatter.format(startDate)} - ${dateRangeFormatter.format(endDate)}, ${endDate.getFullYear()}`;
+	return `${DATE_RANGE_FORMATTER.format(startDate)} - ${DATE_RANGE_FORMATTER.format(endDate)}, ${endDate.getFullYear()}`;
 }
 
 function getDefaultDashboardDate(dataset: FinancialDataset) {

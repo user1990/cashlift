@@ -55,8 +55,8 @@ export const PricingComparisonSection = () => (
 				</thead>
 
 				<tbody>
-					{PRICING_COMPARISON_GROUPS.map((group) => (
-						<ComparisonGroupRows key={group.name} group={group} />
+					{PRICING_COMPARISON_GROUPS.map(({ features, name }) => (
+						<ComparisonGroupRows key={name} features={features} name={name} />
 					))}
 				</tbody>
 			</table>
@@ -65,10 +65,11 @@ export const PricingComparisonSection = () => (
 );
 
 type ComparisonGroupProps = {
-	group: (typeof PRICING_COMPARISON_GROUPS)[number];
+	features: (typeof PRICING_COMPARISON_GROUPS)[number]["features"];
+	name: (typeof PRICING_COMPARISON_GROUPS)[number]["name"];
 };
 
-function ComparisonGroupRows({ group }: ComparisonGroupProps) {
+function ComparisonGroupRows({ features, name }: ComparisonGroupProps) {
 	return (
 		<>
 			<tr>
@@ -77,20 +78,20 @@ function ComparisonGroupRows({ group }: ComparisonGroupProps) {
 					scope="rowgroup"
 					className={`${FEATURE_CELL_CLASS} ${ROW_BORDER_CLASS} bg-primary/5 text-s+ font-semibold text-primary @md:text-m+`}
 				>
-					{group.name}
+					{name}
 				</th>
 			</tr>
 
-			{group.features.map((feature) => (
-				<tr key={feature.name}>
+			{features.map(({ name: featureName, values }) => (
+				<tr key={featureName}>
 					<th
 						scope="row"
 						className={`${FEATURE_CELL_CLASS} ${ROW_BORDER_CLASS} wrap-break-word font-medium text-shell-foreground`}
 					>
-						{feature.name}
+						{featureName}
 					</th>
 
-					{feature.values.map((value, index) => (
+					{values.map((value, index) => (
 						<td
 							key={PRICING_PLANS[index]?.slug}
 							className={`${PLAN_CELL_CLASS} ${ROW_BORDER_CLASS} wrap-break-word text-shell-muted`}

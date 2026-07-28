@@ -22,8 +22,8 @@ import { cn } from "@/ui/utils/cn";
 import { getOverviewDateRangeLabel } from "./overviewDateRangeLabel";
 
 type OverviewDateRangePickerClientProps = {
-	dateRange?: WorkspaceDatasetDateRange;
 	fallbackLabel: string;
+	dateRange?: WorkspaceDatasetDateRange;
 	onDateRangeChange?: (dateRange: WorkspaceDatasetDateRange) => void;
 };
 

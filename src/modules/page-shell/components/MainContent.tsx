@@ -5,8 +5,8 @@ type MainContentVariant = "marketing" | "plain" | "workspace";
 
 type MainContentProps = {
 	children: ReactNode;
-	variant?: MainContentVariant;
 	className?: string;
+	variant?: MainContentVariant;
 };
 
 const MAIN_CONTENT_VARIANTS = {

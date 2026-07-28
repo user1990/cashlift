@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { spendRequestSchema } from "./schemas";
+import { SPEND_REQUEST_SCHEMA } from "./schemas";
 
-describe("spendRequestSchema", () => {
+describe("SPEND_REQUEST_SCHEMA", () => {
 	it("validates text lengths with user-visible characters", () => {
 		expect(
-			spendRequestSchema.safeParse({
+			SPEND_REQUEST_SCHEMA.safeParse({
 				amount: 1,
 				reason: "👍🏾👍🏾👍🏾👍🏾👍🏾👍🏾👍🏾👍🏾",
 				vendor: "🇺🇸🇺🇸",
@@ -12,7 +12,7 @@ describe("spendRequestSchema", () => {
 		).toEqual(true);
 
 		expect(
-			spendRequestSchema.safeParse({
+			SPEND_REQUEST_SCHEMA.safeParse({
 				amount: 1,
 				reason: "👍🏾👍🏾👍🏾👍🏾👍🏾👍🏾👍🏾",
 				vendor: "🇺🇸",

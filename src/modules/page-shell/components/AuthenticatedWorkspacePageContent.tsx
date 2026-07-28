@@ -1,9 +1,9 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import type { WorkspacePageRendererProps } from "../types";
 import { WorkspacePageQueryContent } from "./WorkspacePageQueryContent";
 import { WorkspacePageView } from "./WorkspacePageView";
-import type { WorkspacePageRendererProps } from "./workspacePageContentTypes";
 
 export const AuthenticatedWorkspacePageContent = ({ dataset, experience, section }: WorkspacePageRendererProps) => {
 	const browserHydrated = useSyncExternalStore(

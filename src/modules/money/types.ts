@@ -1,4 +1,4 @@
 import type { z } from "zod";
-import type { moneyCentsSchema } from "./schemas";
+import type { MONEY_CENTS_SCHEMA } from "./schemas";
 
-export type MoneyCents = z.infer<typeof moneyCentsSchema>;
+export type MoneyCents = z.infer<typeof MONEY_CENTS_SCHEMA>;

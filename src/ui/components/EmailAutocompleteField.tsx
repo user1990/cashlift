@@ -19,12 +19,12 @@ type EmailSuggestion = {
 
 type EmailAutocompleteFieldProps = Omit<RACTextFieldProps, "className" | "onChange"> & {
 	label: string;
-	onChange?: (value: string) => void;
-	value?: string;
+	className?: string;
 	errorMessage?: string;
 	invalid?: boolean;
+	onChange?: (value: string) => void;
 	placeholder?: string;
-	className?: string;
+	value?: string;
 };
 
 export const EmailAutocompleteField = ({

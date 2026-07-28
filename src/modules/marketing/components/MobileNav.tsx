@@ -20,8 +20,8 @@ export const MobileNav = () => (
 			className="fixed inset-x-0 top-16 hidden border-t border-shell-border bg-shell px-4 py-4 shadow-shell group-open/nav:block sm:px-6"
 		>
 			<div className="mx-auto grid max-w-295 gap-5">
-				{MARKETING_NAV_GROUPS.map((group) => (
-					<MobileNavGroupSection key={group.label} group={group} />
+				{MARKETING_NAV_GROUPS.map(({ items, label }) => (
+					<MobileNavGroupSection key={label} group={{ items, label }} />
 				))}
 
 				<MobileNavLink href="/customers">Customers</MobileNavLink>

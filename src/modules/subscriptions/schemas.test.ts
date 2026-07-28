@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { subscriptionSchema } from "./schemas";
+import { SUBSCRIPTION_SCHEMA } from "./schemas";
 
 const SUBSCRIPTION_MOCK = {
 	amountCents: 120_000,
@@ -11,7 +11,7 @@ const SUBSCRIPTION_MOCK = {
 	vendor: "Northstar",
 };
 
-describe("subscriptionSchema", () => {
+describe("SUBSCRIPTION_SCHEMA", () => {
 	it.each([
 		[SUBSCRIPTION_MOCK, true],
 		[{ ...SUBSCRIPTION_MOCK, amountCents: -1 }, false],
@@ -21,6 +21,6 @@ describe("subscriptionSchema", () => {
 		[{ ...SUBSCRIPTION_MOCK, usagePercent: 62.5 }, false],
 		[{ ...SUBSCRIPTION_MOCK, usagePercent: 101 }, false],
 	])("validates persisted subscription values", (value, valid) => {
-		expect(subscriptionSchema.safeParse(value).success).toBe(valid);
+		expect(SUBSCRIPTION_SCHEMA.safeParse(value).success).toBe(valid);
 	});
 });

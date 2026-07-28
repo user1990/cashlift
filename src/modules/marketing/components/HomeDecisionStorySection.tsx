@@ -44,8 +44,17 @@ export const HomeDecisionStorySection = () => (
 
 		<div className="mx-auto max-w-295 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-24">
 			<ol className="space-y-16 lg:space-y-20">
-				{DECISION_CHAPTERS.map((chapter, index) => (
-					<HomeDecisionStoryChapter key={chapter.chapter} {...chapter} index={index + 1} />
+				{DECISION_CHAPTERS.map(({ chapter, description, eyebrow, imageAlt, imageSrc, title }, index) => (
+					<HomeDecisionStoryChapter
+						key={chapter}
+						chapter={chapter}
+						description={description}
+						eyebrow={eyebrow}
+						imageAlt={imageAlt}
+						imageSrc={imageSrc}
+						index={index + 1}
+						title={title}
+					/>
 				))}
 			</ol>
 		</div>

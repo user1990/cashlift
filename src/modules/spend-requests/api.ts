@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { spendRequestSchema } from "./schemas";
+import { SPEND_REQUEST_SCHEMA } from "./schemas";
 import type { SpendRequestStatus } from "./types";
 
 export type SpendRequestDecisionStatus = Exclude<SpendRequestStatus, "pending">;
@@ -9,7 +9,7 @@ export type SpendRequestDecisionRequest = {
 	status: SpendRequestDecisionStatus;
 };
 
-const apiErrorSchema = z.object({
+const API_ERROR_SCHEMA = z.object({
 	error: z.string().optional(),
 });
 
@@ -23,12 +23,12 @@ export const decideSpendRequest = async ({ id, status }: SpendRequestDecisionReq
 	});
 
 	if (!response.ok) {
-		const body = apiErrorSchema.safeParse(await response.json().catch(() => null));
+		const body = API_ERROR_SCHEMA.safeParse(await response.json().catch(() => null));
 
 		throw new Error(
 			body.success ? (body.data.error ?? "Unable to update spend request.") : "Unable to update spend request.",
 		);
 	}
 
-	return spendRequestSchema.parse(await response.json());
+	return SPEND_REQUEST_SCHEMA.parse(await response.json());
 };

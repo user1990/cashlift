@@ -9,8 +9,8 @@ export type WorkspaceDatasetLoadResult =
 	  }
 	| {
 			message: string;
-			requestId?: string;
 			status: "forbidden" | "unauthenticated" | "unavailable";
+			requestId?: string;
 	  };
 
 export const mapWorkspaceDatasetFailure = (

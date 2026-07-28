@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { leadCaptureSchema } from "./schemas";
+import { LEAD_CAPTURE_SCHEMA } from "./schemas";
 
-describe("leadCaptureSchema", () => {
+describe("LEAD_CAPTURE_SCHEMA", () => {
 	it("validates name and company lengths with user-visible characters", () => {
 		expect(
-			leadCaptureSchema.safeParse({
+			LEAD_CAPTURE_SCHEMA.safeParse({
 				company: "👨‍👩‍👧👨‍👩‍👧",
 				email: "finance@cashlift.test",
 				name: "👍🏾👍🏾",
@@ -12,7 +12,7 @@ describe("leadCaptureSchema", () => {
 		).toEqual(true);
 
 		expect(
-			leadCaptureSchema.safeParse({
+			LEAD_CAPTURE_SCHEMA.safeParse({
 				company: "👨‍👩‍👧",
 				email: "finance@cashlift.test",
 				name: "👍🏾",

@@ -1,13 +1,13 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { financialDatasetSchema } from "./schemas";
+import { FINANCIAL_DATASET_SCHEMA } from "./schemas";
 import type { FinancialDataset, WorkspaceDatasetDateRange, WorkspaceDatasetScope } from "./types";
 
-export const workspaceDatasetQueryKeys = {
+export const WORKSPACE_DATASET_QUERY_KEYS = {
 	all: ["workspace", "dataset"] as const,
 	scope: (scope: WorkspaceDatasetScope, dateRange?: WorkspaceDatasetDateRange) =>
-		[...workspaceDatasetQueryKeys.all, scope, dateRange ?? null] as const,
+		[...WORKSPACE_DATASET_QUERY_KEYS.all, scope, dateRange ?? null] as const,
 };
 
 const fetchWorkspaceDataset = async (scope: WorkspaceDatasetScope, dateRange?: WorkspaceDatasetDateRange) => {
@@ -24,7 +24,7 @@ const fetchWorkspaceDataset = async (scope: WorkspaceDatasetScope, dateRange?: W
 		throw new Error("Unable to load workspace data.");
 	}
 
-	return financialDatasetSchema.parse(await response.json());
+	return FINANCIAL_DATASET_SCHEMA.parse(await response.json());
 };
 
 export const useWorkspaceDatasetQuery = (
@@ -41,5 +41,5 @@ export const useWorkspaceDatasetQuery = (
 				? 0
 				: undefined,
 		queryFn: () => fetchWorkspaceDataset(scope, dateRange),
-		queryKey: workspaceDatasetQueryKeys.scope(scope, dateRange),
+		queryKey: WORKSPACE_DATASET_QUERY_KEYS.scope(scope, dateRange),
 	});

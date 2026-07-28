@@ -1,6 +1,6 @@
 import type { MoneyCents } from "./types";
 
-const currencyFormatter = new Intl.NumberFormat("en-US", {
+const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
 	currency: "USD",
 	maximumFractionDigits: 0,
 	style: "currency",
@@ -14,9 +14,9 @@ const COMPACT_CURRENCY_UNITS = [
 	{ suffix: "K", value: 1_000 },
 ] as const;
 
-export const formatCurrency = (cents: MoneyCents) => currencyFormatter.format(Math.abs(cents) / CENTS_IN_DOLLAR);
+export const formatCurrency = (cents: MoneyCents) => CURRENCY_FORMATTER.format(Math.abs(cents) / CENTS_IN_DOLLAR);
 
-export const formatCurrencyDollars = (dollars: number) => currencyFormatter.format(dollars);
+export const formatCurrencyDollars = (dollars: number) => CURRENCY_FORMATTER.format(dollars);
 
 export const formatPreciseCompactCurrency = (cents: MoneyCents) => {
 	const dollars = cents / CENTS_IN_DOLLAR;
@@ -24,7 +24,7 @@ export const formatPreciseCompactCurrency = (cents: MoneyCents) => {
 	const unit = COMPACT_CURRENCY_UNITS.find(({ value }) => absoluteDollars >= value);
 
 	if (!unit) {
-		return currencyFormatter.format(dollars);
+		return CURRENCY_FORMATTER.format(dollars);
 	}
 
 	const compactValue = trimTrailingZeros(absoluteDollars / unit.value);

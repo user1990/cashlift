@@ -13,8 +13,8 @@ export type WorkspaceRuntimeConfig =
 	| {
 			configured: false;
 			message: string;
-			mode: CashLiftAppMode;
 			missingKeys: string[];
+			mode: CashLiftAppMode;
 	  };
 
 const PRODUCTION_ENV_KEYS = [

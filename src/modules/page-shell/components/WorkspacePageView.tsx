@@ -1,8 +1,8 @@
 import { Overview } from "@/modules/dashboard/components/Overview";
 import type { WorkspaceDatasetDateRange } from "@/modules/workspace/types";
+import type { WorkspacePageRendererProps } from "../types";
+import { getWorkspaceExperienceContract } from "../workspaceExperience";
 import { WorkspaceSectionPage } from "./WorkspaceSectionPage";
-import { getWorkspaceExperienceContract } from "./workspaceExperience";
-import type { WorkspacePageRendererProps } from "./workspacePageContentTypes";
 
 type WorkspacePageViewProps = WorkspacePageRendererProps & {
 	bufferDataset?: WorkspacePageRendererProps["dataset"];

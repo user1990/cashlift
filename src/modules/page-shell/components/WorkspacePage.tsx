@@ -1,5 +1,5 @@
 import { loadWorkspaceDataset } from "@/modules/workspace/server";
-import type { WorkspacePageProps } from "./types";
+import type { WorkspacePageProps } from "../types";
 import { WorkspaceLoadState } from "./WorkspaceLoadState";
 import { WorkspacePageContent } from "./WorkspacePageContent";
 

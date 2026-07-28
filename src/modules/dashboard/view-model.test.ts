@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { demoWorkspaceDataset } from "@/modules/workspace/demoDataset";
+import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
 import { reduceDatasetForDateRange } from "@/modules/workspace/read-models";
 import { getCashBufferRisk } from "@/modules/workspace/utils";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
@@ -89,7 +89,7 @@ describe("dashboard view model", () => {
 
 	it("builds reference demo dashboard fields", () => {
 		const dashboard = buildDashboardViewModel({
-			dataset: demoWorkspaceDataset,
+			dataset: DEMO_WORKSPACE_DATASET,
 			date: new Date("2024-05-18"),
 			role: "owner-finance",
 		});

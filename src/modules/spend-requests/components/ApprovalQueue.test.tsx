@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { HttpResponse } from "msw";
 import { describe, expect, it } from "vitest";
-import { workspaceDatasetQueryKeys } from "@/modules/workspace/query";
+import { WORKSPACE_DATASET_QUERY_KEYS } from "@/modules/workspace/query";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { server } from "@/test/server";
 import { Toaster } from "@/ui/components/Toaster";
@@ -14,7 +14,7 @@ describe("ApprovalQueue", () => {
 	it("shows request context without mutation controls in read-only mode", () => {
 		render(
 			<ApprovalQueue
-				datasetQueryKey={workspaceDatasetQueryKeys.all}
+				datasetQueryKey={WORKSPACE_DATASET_QUERY_KEYS.all}
 				readOnly
 				requests={financialDatasetFixture.spendRequests}
 			/>,
@@ -106,11 +106,14 @@ function renderApprovalQueue() {
 			},
 		},
 	});
-	queryClient.setQueryData(workspaceDatasetQueryKeys.all, financialDatasetFixture);
+	queryClient.setQueryData(WORKSPACE_DATASET_QUERY_KEYS.all, financialDatasetFixture);
 
 	render(
 		<QueryClientProvider client={queryClient}>
-			<ApprovalQueue datasetQueryKey={workspaceDatasetQueryKeys.all} requests={financialDatasetFixture.spendRequests} />
+			<ApprovalQueue
+				datasetQueryKey={WORKSPACE_DATASET_QUERY_KEYS.all}
+				requests={financialDatasetFixture.spendRequests}
+			/>
 
 			<Toaster />
 		</QueryClientProvider>,
@@ -120,7 +123,7 @@ function renderApprovalQueue() {
 }
 
 function getSpendRequestStatuses(queryClient: QueryClient) {
-	const dataset = queryClient.getQueryData<typeof financialDatasetFixture>(workspaceDatasetQueryKeys.all);
+	const dataset = queryClient.getQueryData<typeof financialDatasetFixture>(WORKSPACE_DATASET_QUERY_KEYS.all);
 
 	return Object.fromEntries(dataset?.spendRequests.map(({ id, status }) => [id, status]) ?? []);
 }

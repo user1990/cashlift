@@ -1,5 +1,5 @@
 import type { FinancialDataset } from "@/modules/workspace/types";
-import type { WorkspaceSection } from "./types";
+import type { WorkspaceSection } from "../types";
 import { WorkspaceApprovalsSection } from "./WorkspaceApprovalsSection";
 import { WorkspaceBudgetsSection } from "./WorkspaceBudgetsSection";
 import { WorkspaceCashSection } from "./WorkspaceCashSection";
@@ -15,7 +15,7 @@ type WorkspaceSectionPageProps = {
 	readOnly?: boolean;
 };
 
-export const WorkspaceSectionPage = ({ dataset, readOnly, section }: WorkspaceSectionPageProps) => (
+export const WorkspaceSectionPage = ({ dataset, readOnly = false, section }: WorkspaceSectionPageProps) => (
 	<>
 		<WorkspaceSectionHeader section={section} />
 

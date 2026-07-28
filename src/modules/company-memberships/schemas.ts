@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { companyRoleSchema } from "@/modules/company-roles/schemas";
+import { COMPANY_ROLE_SCHEMA } from "@/modules/company-roles/schemas";
 
-export const companyMembershipSchema = z.object({
+export const COMPANY_MEMBERSHIP_SCHEMA = z.object({
 	companyId: z.string(),
-	role: companyRoleSchema,
+	role: COMPANY_ROLE_SCHEMA,
 });
