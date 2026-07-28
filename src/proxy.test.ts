@@ -84,18 +84,16 @@ describe("proxy security headers", () => {
 		expect(response.headers.get("X-Permitted-Cross-Domain-Policies")).toEqual("none");
 	});
 
-	it.each([
-		"/login",
-		"/login/sso-callback",
-		"/signup",
-		"/signup/continue",
-	])("allows opener access for Clerk popup auth on %s", async (pathname) => {
-		const request = new NextRequest(`https://cashlift.test${pathname}`);
+	it.each(["/login", "/login/sso-callback", "/signup", "/signup/continue"])(
+		"allows opener access for Clerk popup auth on %s",
+		async (pathname) => {
+			const request = new NextRequest(`https://cashlift.test${pathname}`);
 
-		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
+			const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
 
-		expect(response.headers.get("Cross-Origin-Opener-Policy")).toEqual("same-origin-allow-popups");
-	});
+			expect(response.headers.get("Cross-Origin-Opener-Policy")).toEqual("same-origin-allow-popups");
+		},
+	);
 
 	it("keeps prefetch and Clerk asset requests covered by the proxy matcher", () => {
 		expect(config.matcher).toEqual(["/__clerk/(.*)", "/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
@@ -109,23 +107,19 @@ describe("proxy security headers", () => {
 		expect(createClerkMiddlewareOptions()).not.toHaveProperty("secretKey");
 	});
 
-	it.each([
-		"/dashboard",
-		"/dashboard/spend",
-		"/api/workspace",
-		"/api/workspace/decisions",
-	])("routes Clerk middleware for production workspace path %s", (pathname) => {
-		expect(needsClerkMiddleware(pathname, true)).toEqual(true);
-	});
+	it.each(["/dashboard", "/dashboard/spend", "/api/workspace", "/api/workspace/decisions"])(
+		"routes Clerk middleware for production workspace path %s",
+		(pathname) => {
+			expect(needsClerkMiddleware(pathname, true)).toEqual(true);
+		},
+	);
 
-	it.each([
-		"/dashboard",
-		"/dashboard/spend",
-		"/api/workspace",
-		"/api/workspace/decisions",
-	])("keeps demo workspace path %s on security-header middleware", (pathname) => {
-		expect(needsClerkMiddleware(pathname, false)).toEqual(false);
-	});
+	it.each(["/dashboard", "/dashboard/spend", "/api/workspace", "/api/workspace/decisions"])(
+		"keeps demo workspace path %s on security-header middleware",
+		(pathname) => {
+			expect(needsClerkMiddleware(pathname, false)).toEqual(false);
+		},
+	);
 
 	it.each(["/login", "/signup"])("routes Clerk middleware for production auth path %s", (pathname) => {
 		expect(needsClerkMiddleware(pathname, true)).toEqual(true);
@@ -135,30 +129,24 @@ describe("proxy security headers", () => {
 		expect(needsClerkMiddleware("/__clerk/clerk.browser.js", true)).toEqual(true);
 	});
 
-	it.each([
-		"/features",
-		"/pricing",
-		"/demo",
-		"/demo/workspace",
-	])("keeps public marketing path %s off Clerk middleware", (pathname) => {
-		expect(needsClerkMiddleware(pathname, true)).toEqual(false);
-	});
+	it.each(["/features", "/pricing", "/demo", "/demo/workspace"])(
+		"keeps public marketing path %s off Clerk middleware",
+		(pathname) => {
+			expect(needsClerkMiddleware(pathname, true)).toEqual(false);
+		},
+	);
 
-	it.each([
-		"/dashboard",
-		"/dashboard/spend",
-		"/api/workspace",
-		"/api/workspace/decisions",
-	])("requires workspace session for %s", (pathname) => {
-		expect(needsWorkspaceSession(pathname)).toEqual(true);
-	});
+	it.each(["/dashboard", "/dashboard/spend", "/api/workspace", "/api/workspace/decisions"])(
+		"requires workspace session for %s",
+		(pathname) => {
+			expect(needsWorkspaceSession(pathname)).toEqual(true);
+		},
+	);
 
-	it.each([
-		"/login",
-		"/demo/workspace",
-		"/demo/workspace/approvals",
-		"/api/workspaces",
-	])("does not treat %s as a workspace session path", (pathname) => {
-		expect(needsWorkspaceSession(pathname)).toEqual(false);
-	});
+	it.each(["/login", "/demo/workspace", "/demo/workspace/approvals", "/api/workspaces"])(
+		"does not treat %s as a workspace session path",
+		(pathname) => {
+			expect(needsWorkspaceSession(pathname)).toEqual(false);
+		},
+	);
 });
