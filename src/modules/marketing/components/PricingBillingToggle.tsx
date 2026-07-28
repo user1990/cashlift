@@ -30,7 +30,6 @@ export const PricingBillingToggle = ({ billing }: PricingBillingToggleProps) => 
 		<div className="space-y-3">
 			<RadioGroup
 				aria-label="Billing interval"
-				className="relative isolate mx-auto grid h-10 w-full max-w-64 grid-cols-2 rounded-full border border-border-strong bg-shell-band p-1 shadow-shell"
 				onChange={(nextBilling) => {
 					if (nextBilling === "annual" || nextBilling === "monthly") {
 						selectBilling(nextBilling);
@@ -38,6 +37,7 @@ export const PricingBillingToggle = ({ billing }: PricingBillingToggleProps) => 
 				}}
 				orientation="horizontal"
 				value={selectedBilling}
+				className="relative isolate mx-auto grid h-10 w-full max-w-64 grid-cols-2 rounded-full border border-border-strong bg-shell-band p-1 shadow-shell"
 			>
 				<span
 					aria-hidden

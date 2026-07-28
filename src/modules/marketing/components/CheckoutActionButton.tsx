@@ -26,10 +26,10 @@ export const CheckoutActionButton = ({ planName }: CheckoutActionButtonProps) =>
 		<div className="mt-8">
 			<Button
 				aria-describedby={message ? "checkout-action-message" : undefined}
-				className="h-14 w-full text-m+"
 				disabled={submitting}
 				onPress={startCheckout}
 				variant="primary"
+				className="h-14 w-full text-m+"
 			>
 				{submitting ? "Opening secure checkout..." : "Continue to secure checkout"}
 				<ArrowRight aria-hidden className="size-5" />
@@ -38,8 +38,8 @@ export const CheckoutActionButton = ({ planName }: CheckoutActionButtonProps) =>
 			{message && (
 				<p
 					aria-live="polite"
-					className="mt-3 rounded-md border border-primary-subtle-border bg-primary-subtle px-3 py-2 text-s leading-5 text-primary"
 					id="checkout-action-message"
+					className="mt-3 rounded-md border border-primary-subtle-border bg-primary-subtle px-3 py-2 text-s leading-5 text-primary"
 				>
 					{message}
 				</p>

@@ -45,7 +45,7 @@ export const LeadCaptureForm = ({ buttonLabel, successDescription, successTitle 
 	}
 
 	return (
-		<form className="flex flex-1 flex-col gap-3" onSubmit={handleSubmit(submitForm)}>
+		<form onSubmit={handleSubmit(submitForm)} className="flex flex-1 flex-col gap-3">
 			<ControlledTextField
 				autoComplete="name"
 				autoFocus={nameAutoFocus}

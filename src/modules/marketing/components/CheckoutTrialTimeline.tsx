@@ -33,25 +33,27 @@ export const CheckoutTrialTimeline = ({ planPriceLabel }: CheckoutTrialTimelineP
 	</section>
 );
 
-const TrialStep = ({ active, description, icon: Icon, title }: TrialStepProps) => (
-	<li className="grid grid-cols-[3rem_minmax(0,1fr)] gap-5">
-		<div className="relative flex justify-center">
-			<span
-				className={cn(
-					"flex size-12 items-center justify-center rounded-full border",
-					active
-						? "border-primary-subtle-border bg-primary-subtle text-primary shadow-primary-glow"
-						: "border-shell-border bg-shell-elevated text-shell-muted",
-				)}
-			>
-				<Icon aria-hidden className="size-5" />
-			</span>
-		</div>
+function TrialStep({ active, description, icon: Icon, title }: TrialStepProps) {
+	return (
+		<li className="grid grid-cols-[3rem_minmax(0,1fr)] gap-5">
+			<div className="relative flex justify-center">
+				<span
+					className={cn(
+						"flex size-12 items-center justify-center rounded-full border",
+						active
+							? "border-primary-subtle-border bg-primary-subtle text-primary shadow-primary-glow"
+							: "border-shell-border bg-shell-elevated text-shell-muted",
+					)}
+				>
+					<Icon aria-hidden className="size-5" />
+				</span>
+			</div>
 
-		<div className="min-w-0 pt-1">
-			<h3 className="text-m+ font-semibold text-shell-foreground">{title}</h3>
+			<div className="min-w-0 pt-1">
+				<h3 className="text-m+ font-semibold text-shell-foreground">{title}</h3>
 
-			<p className="mt-1 text-m leading-6 text-shell-muted">{description}</p>
-		</div>
-	</li>
-);
+				<p className="mt-1 text-m leading-6 text-shell-muted">{description}</p>
+			</div>
+		</li>
+	);
+}

@@ -26,7 +26,7 @@ Always read this file first. It defines workflow for this repo. Do not override 
 5. Match local conventions before editing.
    - Read 2-3 nearby files of the same kind before writing code.
    - Replicate local export style, type placement, function style, test shape, file naming, import ordering, and component structure.
-   - Keep page and parent components lean. When a TSX file defines nontrivial child components, cards, list items, legends, menus, summaries, or repeated UI blocks inline, extract each one into its own colocated component file without asking first.
+   - Keep page and parent components lean. Put the exported component first and file-private helpers at the bottom of the same file. Split into a colocated component file only when the helper is reused, exported, or owns its own subtree/imports.
    - Confirm aliases in the local `tsconfig.json`; this app uses `@/*` to `src/*`.
 
 6. Keep context compact.
@@ -41,7 +41,7 @@ Always read this file first. It defines workflow for this repo. Do not override 
 
 - Never guess imports or duplicate existing helpers/components.
 - Never import across feature/module boundaries casually.
-- Do not leave nontrivial child components inline inside page or parent TSX files. Split them into separate colocated component files by default so the parent stays focused on composition.
+- Keep exported components focused on composition. File-private JSX and class-name helpers belong at the bottom of the same file unless they are reused, exported, or own a distinct subtree.
 - Do not invent trends, comparisons, dates, or monetary values. Derive each displayed value from the current input, or omit the claim.
 - A mutation that can conflict with another control must lock every conflicting control until it settles, and its pending-state behavior needs a test.
 - Treat browser time as client state. Do not bake a build-time date into a current-status label; preserve the server render and test the client behavior when time affects a decision.

@@ -71,16 +71,18 @@ export const PricingPlanCard = ({ billing, plan }: PricingPlanCardProps) => {
 	);
 };
 
-const getPlanClassName = (highlighted: boolean | undefined) =>
-	cn(
+function getPlanClassName(highlighted?: boolean) {
+	return cn(
 		"flex w-full flex-col overflow-hidden bg-shell-elevated/65 p-6 shadow-none lg:min-h-[34rem]",
 		highlighted && "border-primary bg-linear-to-br from-primary/15 via-shell-elevated to-shell shadow-primary-glow",
 	);
+}
 
-const getPlanLinkClassName = (highlighted: boolean | undefined) =>
-	cn(
+function getPlanLinkClassName(highlighted?: boolean) {
+	return cn(
 		"mt-7 inline-flex min-h-11 items-center justify-center rounded-md border px-4 text-m+ outline-none transition-[background-color,border-color,box-shadow,color] duration-150 ease focus-visible:ring-[3px] focus-visible:ring-primary/20",
 		highlighted
 			? "border-primary bg-primary text-primary-foreground shadow-primary-glow hover:bg-primary-hover"
 			: "border-shell-border text-shell-foreground hover:border-primary hover:text-primary",
 	);
+}

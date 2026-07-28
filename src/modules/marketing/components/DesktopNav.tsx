@@ -42,7 +42,6 @@ export const DesktopNav = () => {
 	return (
 		<nav
 			aria-label="Main navigation"
-			className="hidden items-center gap-2 text-m font-medium text-shell-muted lg:flex"
 			onBlur={(event) => {
 				if (!event.currentTarget.contains(event.relatedTarget)) {
 					close();
@@ -61,9 +60,9 @@ export const DesktopNav = () => {
 				}
 			}}
 			ref={navRef}
+			className="hidden items-center gap-2 text-m font-medium text-shell-muted lg:flex"
 		>
 			<DisclosureGroup
-				className="flex items-center gap-2"
 				expandedKeys={expandedKeys}
 				onExpandedChange={(keys) => {
 					if (keys.size === 0 && hoveredGroupRef.current) {
@@ -72,11 +71,12 @@ export const DesktopNav = () => {
 
 					setExpandedKeys(new Set([...keys].filter((key): key is string => typeof key === "string")));
 				}}
+				className="flex items-center gap-2"
 			>
 				{MARKETING_NAV_GROUPS.map((group) => (
 					<DesktopNavGroup
-						group={group}
 						key={group.label}
+						group={group}
 						onClose={close}
 						onHoverEnd={() => closeOnHoverExit(group.label)}
 						onHoverStart={() => expandOnHover(group.label)}

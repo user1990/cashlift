@@ -22,7 +22,6 @@ export const DesktopNavGroup = ({
 	pathname,
 }: DesktopNavGroupProps) => (
 	<Disclosure
-		className="group relative"
 		id={group.label}
 		onPointerEnter={(event) => {
 			if (event.pointerType === "mouse") {
@@ -34,11 +33,12 @@ export const DesktopNavGroup = ({
 				onHoverEnd();
 			}
 		}}
+		className="group relative"
 	>
 		<Button
-			className="flex h-9 cursor-pointer items-center gap-1 rounded-md px-3 text-m font-medium text-shell-muted outline-none transition-colors duration-150 hover:text-primary data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20"
 			onFocus={(event) => onTriggerFocus(event.currentTarget as HTMLButtonElement)}
 			slot="trigger"
+			className="flex h-9 cursor-pointer items-center gap-1 rounded-md px-3 text-m font-medium text-shell-muted outline-none transition-colors duration-150 hover:text-primary data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20"
 		>
 			{group.label}
 
@@ -55,12 +55,12 @@ export const DesktopNavGroup = ({
 							<li key={href}>
 								<Link
 									aria-current={active ? "page" : undefined}
+									href={href}
+									onClick={onClose}
 									className={cn(
 										"block rounded-md px-3 py-2 text-m font-medium text-shell-muted outline-none transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground focus-visible:ring-[3px] focus-visible:ring-primary/20",
 										active && "bg-primary/10 text-primary",
 									)}
-									href={href}
-									onClick={onClose}
 								>
 									{label}
 								</Link>

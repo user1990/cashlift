@@ -24,10 +24,10 @@ export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCap
 		<LazyMotion features={domAnimation}>
 			<m.div
 				animate="visible"
-				className="flex min-h-72 flex-1 flex-col justify-between rounded-lg border-2 border-signal bg-signal/5 p-4 shadow-panel"
 				initial={reducedMotion ? "visible" : "hidden"}
 				transition={{ duration: reducedMotion ? 0 : 0.18, ease: [0.16, 1, 0.3, 1] }}
 				variants={SUCCESS_ANIMATION}
+				className="flex min-h-72 flex-1 flex-col justify-between rounded-lg border-2 border-signal bg-signal/5 p-4 shadow-panel"
 			>
 				<div aria-atomic="true" aria-live="polite" role="status">
 					<div className="flex size-10 items-center justify-center rounded-full bg-signal text-primary-foreground">
@@ -40,12 +40,12 @@ export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCap
 				</div>
 
 				<div className="mt-6 grid gap-2">
-					<ActionLink href="/demo/workspace" className="w-full" variant="primary">
+					<ActionLink href="/demo/workspace" variant="primary" className="w-full">
 						Explore live demo
 						<ArrowRight aria-hidden className="size-4" />
 					</ActionLink>
 
-					<Button className="w-full" onPress={onReset} size="large" type="button" variant="secondary">
+					<Button onPress={onReset} size="large" type="button" variant="secondary" className="w-full">
 						<RotateCcw aria-hidden className="size-3.5" />
 						Send another request
 					</Button>

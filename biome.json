@@ -8,7 +8,14 @@
 	"files": {
 		"ignoreUnknown": false
 	},
-	"plugins": ["./.biome/jsx-sibling-newlines.grit", "./.biome/security-sensitive-browser-apis.grit"],
+	"plugins": [
+		"./.biome/jsx-sibling-newlines.grit",
+		{
+			"path": "./.biome/jsx-prop-order.grit",
+			"includes": ["**/modules/marketing/**/*.tsx"]
+		},
+		"./.biome/security-sensitive-browser-apis.grit"
+	],
 	"overrides": [
 		{
 			"includes": ["public/*.svg"],

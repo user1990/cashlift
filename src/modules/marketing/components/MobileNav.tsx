@@ -3,6 +3,8 @@ import { MobileNavLink } from "./MobileNavLink";
 import type { NavGroup } from "./marketingHeaderNavigation";
 import { MARKETING_NAV_GROUPS } from "./marketingHeaderNavigation";
 
+const MOBILE_NAV_ID = "marketing-mobile-nav";
+
 export const MobileNav = () => (
 	<details className="group/nav lg:hidden">
 		<summary
@@ -16,12 +18,12 @@ export const MobileNav = () => (
 
 		<nav
 			aria-label="Mobile navigation"
+			id={MOBILE_NAV_ID}
 			className="fixed inset-x-0 top-16 hidden border-t border-shell-border bg-shell px-4 py-4 shadow-shell group-open/nav:block sm:px-6"
-			id="marketing-mobile-nav"
 		>
 			<div className="mx-auto grid max-w-295 gap-5">
 				{MARKETING_NAV_GROUPS.map((group) => (
-					<MobileNavGroup key={group.label} group={group} />
+					<MobileNavGroupSection key={group.label} group={group} />
 				))}
 
 				<MobileNavLink href="/customers">Customers</MobileNavLink>
@@ -30,18 +32,22 @@ export const MobileNav = () => (
 	</details>
 );
 
-const MobileNavGroup = ({ group }: { group: NavGroup }) => (
-	<section aria-labelledby={`mobile-nav-${group.label.toLowerCase()}`}>
-		<p className="px-3 text-s+ uppercase tracking-normal text-primary" id={`mobile-nav-${group.label.toLowerCase()}`}>
-			{group.label}
-		</p>
+function MobileNavGroupSection({ group }: { group: NavGroup }) {
+	const headingId = `mobile-nav-${group.label.toLowerCase()}`;
 
-		<div className="mt-2 grid gap-1 pl-3">
-			{group.items.map(({ href, label }) => (
-				<MobileNavLink key={href} href={href}>
-					{label}
-				</MobileNavLink>
-			))}
-		</div>
-	</section>
-);
+	return (
+		<section aria-labelledby={headingId}>
+			<p id={headingId} className="px-3 text-s+ uppercase tracking-normal text-primary">
+				{group.label}
+			</p>
+
+			<div className="mt-2 grid gap-1 pl-3">
+				{group.items.map(({ href, label }) => (
+					<MobileNavLink key={href} href={href}>
+						{label}
+					</MobileNavLink>
+				))}
+			</div>
+		</section>
+	);
+}

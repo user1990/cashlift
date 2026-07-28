@@ -11,7 +11,7 @@ type MetricItemProps = {
 };
 
 export const MetricItem = ({ direction, icon, label, trend, value, variant }: MetricItemProps) => (
-	<article className="flex gap-4 border-shell-border/60 p-6 md:[&:nth-child(even)]:border-l xl:border-l xl:first:border-l-0">
+	<article className="flex gap-4 border-shell-border/60 p-6 md:even:border-l xl:border-l xl:first:border-l-0">
 		<div className={getMetricIconClassName(variant)}>{icon}</div>
 
 		<div>

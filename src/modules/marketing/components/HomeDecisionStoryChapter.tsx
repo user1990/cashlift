@@ -24,7 +24,7 @@ export const HomeDecisionStoryChapter = ({
 	const imageFirst = index % 2 === 0;
 
 	return (
-		<li className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12" data-story-chapter={chapter}>
+		<li data-story-chapter={chapter} className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
 			<article className={cn("max-w-xl", imageFirst && "lg:order-2 lg:pl-6")}>
 				<p className="flex items-center gap-3 text-s+ font-semibold uppercase tracking-normal text-primary">
 					<span className="font-mono text-shell-muted">0{index}</span>
