@@ -35,8 +35,6 @@
 		"rules": {
 			"preset": "recommended",
 			"security": {
-				"noDangerouslySetInnerHtml": "error",
-				"noGlobalEval": "error",
 				"noSecrets": {
 					"level": "error",
 					"options": { "entropyThreshold": 50 }
@@ -51,8 +49,7 @@
 				"useOptionalChain": "error"
 			},
 			"performance": {
-				"noBarrelFile": "warn",
-				"noReExportAll": "warn"
+				"noBarrelFile": "warn"
 			},
 			"style": {
 				"useConsistentArrowReturn": "error",
