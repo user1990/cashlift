@@ -44,12 +44,17 @@
 				"useExhaustiveDependencies": "error"
 			},
 			"complexity": {
+				"noExcessiveCognitiveComplexity": "warn",
 				"noExtraBooleanCast": "off",
 				"useOptionalChain": "error"
+			},
+			"performance": {
+				"noBarrelFile": "warn"
 			},
 			"style": {
 				"useConsistentArrowReturn": "error",
 				"noNonNullAssertion": "error",
+				"useImportType": "error",
 				"useConsistentArrayType": {
 					"level": "error",
 					"options": { "syntax": "shorthand" }
@@ -57,8 +62,15 @@
 			},
 			"suspicious": {
 				"noDuplicatedSpreadProps": "error",
+				"noDuplicateTestHooks": "error",
+				"noFocusedTests": "error",
+				"noSkippedTests": "error",
 				"noUnknownAttribute": "error",
 				"noDocumentCookie": "error"
+			},
+			"nursery": {
+				"noInlineStyles": "warn",
+				"useSortedClasses": "warn"
 			}
 		}
 	},
