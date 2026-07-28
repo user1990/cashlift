@@ -11,7 +11,6 @@ import proxy, {
 	config,
 	createClerkMiddlewareOptions,
 	createContentSecurityPolicy,
-	createStaticContentSecurityPolicy,
 	needsClerkMiddleware,
 	needsWorkspaceSession,
 } from "./proxy";
@@ -22,6 +21,7 @@ describe("proxy security headers", () => {
 
 		expect(policy).toContain("default-src 'self'");
 		expect(policy).toContain("script-src 'self' 'nonce-test-nonce' 'strict-dynamic'");
+		expect(policy).not.toContain("script-src 'self' 'unsafe-inline'");
 		expect(policy).toContain("style-src 'self' 'nonce-test-nonce'");
 		expect(policy).toContain("style-src-elem 'self' 'unsafe-inline'");
 		expect(policy).toContain("style-src-attr 'unsafe-hashes' 'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='");
@@ -39,15 +39,6 @@ describe("proxy security headers", () => {
 		expect(createContentSecurityPolicy("test-nonce")).toContain("upgrade-insecure-requests");
 	});
 
-	it("builds a static-compatible content security policy", () => {
-		const policy = createStaticContentSecurityPolicy();
-
-		expect(policy).toContain("script-src 'self' 'unsafe-inline'");
-		expect(policy).toContain("style-src 'self'");
-		expect(policy).not.toContain("nonce-");
-		expect(policy).not.toContain("strict-dynamic");
-	});
-
 	it("allows the Vercel toolbar frame only in preview deployments", () => {
 		vi.stubEnv("VERCEL_ENV", "preview");
 
@@ -59,24 +50,14 @@ describe("proxy security headers", () => {
 		expect(createContentSecurityPolicy("test-nonce")).not.toContain("https://vercel.live");
 	});
 
-	it("allows prerendered marketing pages to hydrate", async () => {
-		const request = new NextRequest("https://cashlift.test/demo");
-
-		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
-		const policy = response.headers.get("Content-Security-Policy");
-
-		expect(policy).toContain("script-src 'self' 'unsafe-inline'");
-		expect(policy).not.toContain("nonce-");
-		expect(policy).not.toContain("strict-dynamic");
-	});
-
-	it("adds browser hardening headers to the static homepage", async () => {
+	it("adds browser hardening headers to the homepage", async () => {
 		const request = new NextRequest("https://cashlift.test/");
 
 		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
 
-		expect(response.headers.get("Content-Security-Policy")).toContain("script-src 'self' 'unsafe-inline'");
+		expect(response.headers.get("Content-Security-Policy")).toContain("script-src 'self' 'nonce-");
 		expect(response.headers.get("Cross-Origin-Opener-Policy")).toEqual("same-origin");
+		expect(response.headers.get("Cross-Origin-Resource-Policy")).toEqual("same-origin");
 		expect(response.headers.get("Referrer-Policy")).toEqual("strict-origin-when-cross-origin");
 		expect(response.headers.get("Permissions-Policy")).toEqual("camera=(), microphone=(), geolocation=()");
 		expect(response.headers.get("X-Content-Type-Options")).toEqual("nosniff");
