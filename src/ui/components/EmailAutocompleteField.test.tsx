@@ -13,6 +13,8 @@ describe("EmailAutocompleteField", () => {
 		});
 
 		expect(input).toHaveAttribute("placeholder", "maya@company.com…");
+		expect(input).toHaveAttribute("data-slot", "combobox-input");
+		expect(input.closest('[data-slot="field"]')).toHaveAttribute("data-slot", "field");
 
 		await user.type(input, "m");
 
@@ -30,6 +32,8 @@ describe("EmailAutocompleteField", () => {
 		await user.type(input, "a");
 
 		expect(await screen.findByRole("option", { name: "ma@gmail.com" })).toBeInTheDocument();
+		expect(screen.getByRole("option", { name: "ma@gmail.com" })).toHaveAttribute("data-slot", "combobox-item");
+		expect(screen.getByRole("listbox")).toHaveAttribute("data-slot", "combobox-list");
 		expect(screen.getByRole("option", { name: "ma@outlook.com" })).toBeInTheDocument();
 	});
 
@@ -159,6 +163,11 @@ describe("EmailAutocompleteField", () => {
 		render(<EmailAutocompleteField errorMessage="Enter a work email" invalid label="Work email" />);
 
 		expect(screen.getByRole("combobox", { name: "Work email" })).toBeInvalid();
+		expect(screen.getByRole("combobox", { name: "Work email" }).closest('[data-slot="field"]')).toHaveAttribute(
+			"data-invalid",
+			"true",
+		);
+		expect(screen.getByText("Enter a work email")).toHaveAttribute("data-slot", "field-error");
 		expect(screen.getByText("Enter a work email")).toBeInTheDocument();
 	});
 });
