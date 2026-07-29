@@ -7,6 +7,13 @@ const config: StorybookConfig = {
 		options: {},
 	},
 	stories: ["../src/**/*.mdx", "../src/**/*.stories.@(ts|tsx)"],
+	viteFinal: async (viteConfig) => ({
+		...viteConfig,
+		build: {
+			...viteConfig.build,
+			chunkSizeWarningLimit: 1_400, // The Storybook preview runtime is 1.35 MB before app stories load.
+		},
+	}),
 };
 
 export default config;
