@@ -29,6 +29,7 @@ type EmailAutocompleteFieldProps = Omit<RACTextFieldProps, "className" | "onChan
 export const EmailAutocompleteField = ({
 	defaultValue,
 	errorMessage,
+	id,
 	invalid,
 	label,
 	onChange,
@@ -37,6 +38,8 @@ export const EmailAutocompleteField = ({
 	className,
 	...props
 }: EmailAutocompleteFieldProps) => {
+	const generatedFieldId = useId();
+	const fieldId = id ?? generatedFieldId;
 	const listboxId = useId();
 	const optionIdPrefix = useId();
 	const [activeSuggestionIndex, setActiveSuggestionIndex] = useState<number | null>(null);
@@ -84,13 +87,14 @@ export const EmailAutocompleteField = ({
 			data-invalid={invalid || undefined}
 			data-slot="field"
 			defaultValue={defaultValue}
+			id={fieldId}
 			onChange={updateValue}
 			value={value}
 			{...props}
 		>
-			<span className="text-s font-medium text-panel-foreground" data-slot="field-label">
+			<label className="font-medium text-panel-foreground text-s" data-slot="field-label" htmlFor={fieldId}>
 				{label}
-			</span>
+			</label>
 
 			<Input
 				aria-activedescendant={

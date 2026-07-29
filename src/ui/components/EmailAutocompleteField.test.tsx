@@ -17,6 +17,10 @@ describe("EmailAutocompleteField", () => {
 		expect(input).toHaveAttribute("data-slot", "combobox-input");
 		expect(input.closest('[data-slot="field"]')).toHaveAttribute("data-slot", "field");
 
+		await user.click(screen.getByText("Work email"));
+
+		expect(input).toHaveFocus();
+
 		await user.type(input, "m");
 
 		expect(input).toHaveValue("m");
