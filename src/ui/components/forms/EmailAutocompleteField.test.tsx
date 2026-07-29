@@ -15,6 +15,13 @@ describe("EmailAutocompleteField", () => {
 		});
 
 		expect(input).toHaveAttribute("placeholder", "maya@company.com…");
+		expect(input).toHaveAttribute("aria-label", "Work email");
+		expect(input).toHaveAttribute("data-slot", "combobox-input");
+		expect(input.closest('[data-slot="field"]')).toHaveAttribute("data-slot", "field");
+
+		await user.click(screen.getByText("Work email"));
+
+		expect(input).toHaveFocus();
 
 		await pasteValue(user, input, "m");
 
