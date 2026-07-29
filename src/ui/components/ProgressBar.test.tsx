@@ -7,13 +7,22 @@ describe("ProgressBar", () => {
 		render(<ProgressBar label="Budget used" value={42.4} />);
 
 		expect(screen.getByText("42%")).toBeInTheDocument();
-		expect(screen.getByRole("progressbar", { name: "Budget used" })).toHaveValue(42.4);
+		expect(screen.getByRole("progressbar", { name: "Budget used" })).toHaveAttribute("aria-valuenow", "42.4");
+		expect(
+			screen.getByRole("progressbar", { name: "Budget used" }).querySelector('[data-slot="progress-indicator"]'),
+		).toHaveAttribute("width", "42.4");
+		expect(
+			screen.getByRole("progressbar", { name: "Budget used" }).querySelector('[data-slot="progress-indicator"]'),
+		).not.toHaveAttribute("style");
 	});
 
 	it("clamps progress values to the supported range", () => {
 		render(<ProgressBar label="Over target" value={132} />);
 
 		expect(screen.getByText("100%")).toBeInTheDocument();
-		expect(screen.getByRole("progressbar", { name: "Over target" })).toHaveValue(100);
+		expect(screen.getByRole("progressbar", { name: "Over target" })).toHaveAttribute("aria-valuenow", "100");
+		expect(
+			screen.getByRole("progressbar", { name: "Over target" }).querySelector('[data-slot="progress-indicator"]'),
+		).toHaveAttribute("width", "100");
 	});
 });
