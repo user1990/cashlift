@@ -93,7 +93,7 @@ Domain-agnostic helpers under `src/utilities`.
 Use the existing `@/*` alias from `tsconfig.json`.
 
 ```ts
-import { Button } from "@/ui/components/Button";
+import { Button } from "@/ui/components/actions/Button";
 import { formatCurrency } from "@/modules/money/format";
 import { loadWorkspaceDataset } from "@/modules/workspace/server";
 ```
