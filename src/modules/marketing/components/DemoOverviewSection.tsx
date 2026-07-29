@@ -3,11 +3,11 @@ import { ActionLink } from "./ActionLink";
 
 export const DemoOverviewSection = () => (
 	<section className="min-w-0">
-		<p className="text-xl+ uppercase tracking-normal text-primary">Audit walkthrough</p>
+		<p className="text-primary text-xl+ uppercase tracking-normal">Audit walkthrough</p>
 
 		<h1
 			aria-label="See the cash leak. Understand the impact. Know what to do next."
-			className="mt-4 text-4xl+ tracking-[-0.035em] text-shell-foreground sm:text-5xl+ lg:text-6xl+ xl:text-7xl+"
+			className="mt-4 text-4xl+ text-shell-foreground tracking-[-0.035em] sm:text-5xl+ lg:text-6xl+ xl:text-7xl+"
 		>
 			<span className="block">See the cash leak. </span>
 
@@ -16,7 +16,7 @@ export const DemoOverviewSection = () => (
 			<span className="mt-3 block">Know what to do next.</span>
 		</h1>
 
-		<p className="mt-8 max-w-2xl text-l leading-7 text-shell-muted">
+		<p className="mt-8 max-w-2xl text-l text-shell-muted leading-7">
 			We’ll use the Studio Nova workspace to turn approval, collection, and renewal questions into a ranked action plan.
 		</p>
 

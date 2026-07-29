@@ -42,7 +42,7 @@ export const AuthDotRail = ({ side }: AuthDotRailProps) => {
 			viewBox="0 0 360 220"
 		>
 			<path
-				className="fill-none stroke-current stroke-[1.5] [stroke-linecap:round] [stroke-linejoin:round] [stroke-opacity:0.24]"
+				className="fill-none stroke-[1.5] stroke-current [stroke-linecap:round] [stroke-linejoin:round] [stroke-opacity:0.24]"
 				d={RAIL_PATH}
 			/>
 

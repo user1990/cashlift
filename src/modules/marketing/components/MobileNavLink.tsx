@@ -8,7 +8,7 @@ type MobileNavLinkProps = {
 export const MobileNavLink = ({ children, href }: MobileNavLinkProps) => (
 	<a
 		href={href}
-		className="rounded-md px-3 py-2 text-m font-medium text-shell-muted transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground"
+		className="rounded-md px-3 py-2 font-medium text-m text-shell-muted transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground"
 	>
 		{children}
 	</a>

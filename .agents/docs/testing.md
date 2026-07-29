@@ -9,6 +9,12 @@ This reference preserves the detailed testing guidance while keeping the hot-pat
 - Avoid redundant tests for behavior already guaranteed by TypeScript, accessible selectors, framework/library behavior, parent/child tests, or global setup.
 - Prefer top-level component/page tests when they capture the user workflow without excessive setup.
 
+### Zod Schemas
+
+- Test schema behavior when it owns a business rule, refinement, transform, coercion, default, conditional validation, or externally significant error contract.
+- Prefer an existing form, route, or integration test when it already proves ordinary required, primitive, enum, date, and numeric validation.
+- Do not repeat shared primitive schema behavior in every persisted-record schema. Test a shared primitive directly only when its domain rule needs standalone protection.
+
 ## Organization
 
 - Use direct RTL queries and `user-event` in the test body for simple cases.

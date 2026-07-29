@@ -1,4 +1,5 @@
-import { Panel, PanelHeader } from "@/ui/components/Panel";
+import { Panel } from "@/ui/components/layout/Panel";
+import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 import type { WorkspaceSection } from "../types";
 import { WorkspaceSectionHeader } from "./WorkspaceSectionHeader";
 
@@ -15,7 +16,7 @@ export const WorkspaceLoadState = ({ message, section, title }: WorkspaceLoadSta
 		<Panel>
 			<PanelHeader label="Status" title={title} />
 
-			<p className="text-m leading-6 text-muted-foreground">{message}</p>
+			<p className="text-m text-muted-foreground leading-6">{message}</p>
 		</Panel>
 	</>
 );

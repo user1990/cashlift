@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-import { TextField } from "@/ui/components/TextField";
+import { TextField } from "@/ui/components/forms/TextField";
 
 const meta = {
 	args: {

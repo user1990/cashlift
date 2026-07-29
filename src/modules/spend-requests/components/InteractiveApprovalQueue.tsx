@@ -3,7 +3,7 @@
 import { type QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Check, X } from "lucide-react";
 import { toast } from "sonner";
-import { Button } from "@/ui/components/Button";
+import { Button } from "@/ui/components/actions/Button";
 import { decideSpendRequest, type SpendRequestDecisionRequest } from "../api";
 import type { SpendRequest } from "../types";
 import { type ApprovalQueueRequest, ApprovalRequestList } from "./ApprovalRequestList";

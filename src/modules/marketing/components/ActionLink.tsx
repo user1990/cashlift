@@ -9,7 +9,7 @@ type ActionLinkProps = ComponentProps<typeof Link> & {
 export const ActionLink = ({ children, className, variant = "primary", ...props }: ActionLinkProps) => (
 	<Link
 		className={cn(
-			"inline-flex h-11 items-center justify-center rounded-md border px-4 text-m font-medium transition-[background-color,border-color,box-shadow,color] duration-150 ease",
+			"ease inline-flex h-11 items-center justify-center rounded-md border px-4 font-medium text-m transition-[background-color,border-color,box-shadow,color] duration-150",
 			variant === "primary" &&
 				"gap-2 border-primary bg-primary text-primary-foreground hover:bg-primary-hover hover:shadow-primary-glow",
 			variant === "secondary" &&

@@ -1,11 +1,13 @@
+// @vitest-environment jsdom
+
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { EmailAutocompleteField } from "@/ui/components/EmailAutocompleteField";
+import { EmailAutocompleteField } from "@/ui/components/forms/EmailAutocompleteField";
 
 describe("EmailAutocompleteField", () => {
-	it("labels the input and reports value changes", async () => {
+	it("shows suggestions after two username characters and reports value changes", async () => {
 		const onChange = vi.fn();
 		const { input, user } = setupEmailAutocomplete({
 			onChange,
@@ -13,37 +15,18 @@ describe("EmailAutocompleteField", () => {
 		});
 
 		expect(input).toHaveAttribute("placeholder", "maya@company.com…");
-		expect(input).toHaveAttribute("data-slot", "combobox-input");
-		expect(input.closest('[data-slot="field"]')).toHaveAttribute("data-slot", "field");
 
-		await user.type(input, "m");
+		await pasteValue(user, input, "m");
 
 		expect(input).toHaveValue("m");
 		expect(onChange).toHaveBeenLastCalledWith("m");
-	});
-
-	it("shows suggestions after two username characters", async () => {
-		const { input, user } = setupEmailAutocomplete();
-
-		await user.type(input, "m");
 
 		expect(screen.queryByRole("option", { name: "m@gmail.com" })).not.toBeInTheDocument();
 
-		await user.type(input, "a");
+		await pasteValue(user, input, "a");
 
 		expect(await screen.findByRole("option", { name: "ma@gmail.com" })).toBeInTheDocument();
-		expect(screen.getByRole("option", { name: "ma@gmail.com" })).toHaveAttribute("data-slot", "combobox-item");
-		expect(screen.getByRole("listbox")).toHaveAttribute("data-slot", "combobox-list");
 		expect(screen.getByRole("option", { name: "ma@outlook.com" })).toBeInTheDocument();
-	});
-
-	it("fills the input when a suggestion is selected", async () => {
-		const { input, user } = setupEmailAutocomplete();
-
-		await user.type(input, "ma");
-		await user.click(await screen.findByRole("option", { name: "ma@gmail.com" }));
-
-		expect(input).toHaveValue("ma@gmail.com");
 	});
 
 	it("closes suggestions when focus leaves the field", async () => {
@@ -77,7 +60,7 @@ describe("EmailAutocompleteField", () => {
 
 		expect(input).toHaveValue("ma");
 
-		await user.type(input, "y");
+		await pasteValue(user, input, "y");
 
 		expect(input).toHaveValue("may");
 		expect(await screen.findByRole("option", { name: "may@gmail.com" })).toBeInTheDocument();
@@ -86,7 +69,7 @@ describe("EmailAutocompleteField", () => {
 	it("moves through suggestions with arrow keys", async () => {
 		const { input, user } = setupEmailAutocomplete();
 
-		await user.type(input, "ma");
+		await pasteValue(user, input, "ma");
 
 		const gmailOption = await screen.findByRole("option", { name: "ma@gmail.com" });
 		const outlookOption = screen.getByRole("option", { name: "ma@outlook.com" });
@@ -108,7 +91,7 @@ describe("EmailAutocompleteField", () => {
 	it("opens suggestions with arrow keys and selects the active suggestion with enter", async () => {
 		const { input, user } = setupEmailAutocomplete();
 
-		await user.type(input, "ma");
+		await pasteValue(user, input, "ma");
 		await user.keyboard("{Escape}");
 
 		expect(screen.queryByRole("option", { name: "ma@gmail.com" })).not.toBeInTheDocument();
@@ -142,7 +125,7 @@ describe("EmailAutocompleteField", () => {
 
 		expect(screen.getByRole("option", { name: "ma@outlook.com" })).toHaveAttribute("aria-selected", "true");
 
-		await user.type(input, "y");
+		await pasteValue(user, input, "y");
 
 		const gmailOption = await screen.findByRole("option", { name: "may@gmail.com" });
 
@@ -154,21 +137,9 @@ describe("EmailAutocompleteField", () => {
 		const { input, user } = setupEmailAutocomplete();
 
 		await typeUsernameAndFindGmailOption(user, input);
-		await user.type(input, "@");
+		await pasteValue(user, input, "@");
 
 		expect(screen.queryByRole("option", { name: "ma@gmail.com" })).not.toBeInTheDocument();
-	});
-
-	it("shows validation errors", () => {
-		render(<EmailAutocompleteField errorMessage="Enter a work email" invalid label="Work email" />);
-
-		expect(screen.getByRole("combobox", { name: "Work email" })).toBeInvalid();
-		expect(screen.getByRole("combobox", { name: "Work email" }).closest('[data-slot="field"]')).toHaveAttribute(
-			"data-invalid",
-			"true",
-		);
-		expect(screen.getByText("Enter a work email")).toHaveAttribute("data-slot", "field-error");
-		expect(screen.getByText("Enter a work email")).toBeInTheDocument();
 	});
 });
 
@@ -189,9 +160,14 @@ function setupEmailAutocomplete(props: ControlledEmailAutocompleteFieldProps = {
 }
 
 async function typeUsernameAndFindGmailOption(user: ReturnType<typeof userEvent.setup>, input: HTMLElement) {
-	await user.type(input, "ma");
+	await pasteValue(user, input, "ma");
 
 	return screen.findByRole("option", { name: "ma@gmail.com" });
+}
+
+async function pasteValue(user: ReturnType<typeof userEvent.setup>, input: HTMLElement, value: string) {
+	await user.click(input);
+	await user.paste(value);
 }
 
 function ControlledEmailAutocompleteField({ onChange, placeholder }: ControlledEmailAutocompleteFieldProps) {

@@ -2,8 +2,8 @@
 
 import type { ComponentProps } from "react";
 import type { FieldPath, FieldValues } from "react-hook-form";
-import { ControlledField, type ControlledFieldProps } from "@/ui/components/ControlledField";
-import { EmailAutocompleteField } from "@/ui/components/EmailAutocompleteField";
+import { ControlledField, type ControlledFieldProps } from "@/ui/components/forms/ControlledField";
+import { EmailAutocompleteField } from "@/ui/components/forms/EmailAutocompleteField";
 
 type ControlledEmailAutocompleteFieldProps<
 	TFieldValues extends FieldValues,

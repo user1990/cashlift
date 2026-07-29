@@ -9,13 +9,13 @@ export const HomeFinalCtaSection = () => (
 		/>
 
 		<div className="relative mx-auto max-w-295 px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-28">
-			<p className="text-s+ font-semibold uppercase tracking-normal text-primary">Your cash decisions</p>
+			<p className="font-semibold text-primary text-s+ uppercase tracking-normal">Your cash decisions</p>
 
-			<h2 className="mx-auto mt-3 max-w-3xl text-4xl+ tracking-normal text-shell-foreground sm:text-6xl+">
+			<h2 className="mx-auto mt-3 max-w-3xl text-4xl+ text-shell-foreground tracking-normal sm:text-6xl+">
 				See what CashLift would put first.
 			</h2>
 
-			<p className="mx-auto mt-5 max-w-xl text-l leading-8 text-shell-muted">
+			<p className="mx-auto mt-5 max-w-xl text-l text-shell-muted leading-8">
 				Walk through the Studio Nova demo with your own approval, collection, and renewal questions in mind.
 			</p>
 

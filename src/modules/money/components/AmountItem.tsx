@@ -16,13 +16,13 @@ export const AmountItem = ({ amountCents, description, footer, meta, title }: Am
 			<div>
 				<p className="text-m+ text-panel-foreground">{title}</p>
 
-				{meta && <p className="mt-1 text-s leading-5 text-muted-foreground">{meta}</p>}
+				{meta && <p className="mt-1 text-muted-foreground text-s leading-5">{meta}</p>}
 			</div>
 
 			<span className="font-mono text-m+">{formatCurrency(amountCents)}</span>
 		</div>
 
-		{description && <p className="mt-3 text-s leading-5 text-muted-foreground">{description}</p>}
+		{description && <p className="mt-3 text-muted-foreground text-s leading-5">{description}</p>}
 
 		{footer}
 	</li>

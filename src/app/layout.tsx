@@ -27,7 +27,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 			<body className="grid min-h-full grid-cols-[1fr_0px] antialiased" id="top">
 				<a
 					href={`#${MAIN_CONTENT_ID}`}
-					className="fixed left-4 top-4 z-50 -translate-y-24 rounded-md border border-primary bg-shell-elevated px-3 py-2 text-m font-medium text-shell-foreground shadow-shell outline-none transition-transform duration-150 focus-visible:translate-y-0 focus-visible:ring-[3px] focus-visible:ring-primary/20"
+					className="fixed top-4 left-4 z-50 -translate-y-24 rounded-md border border-primary bg-shell-elevated px-3 py-2 font-medium text-m text-shell-foreground shadow-shell outline-none transition-transform duration-150 focus-visible:translate-y-0 focus-visible:ring-[3px] focus-visible:ring-primary/20"
 				>
 					Skip to content
 				</a>

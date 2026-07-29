@@ -1,4 +1,4 @@
-import { Badge } from "@/ui/components/Badge";
+import { Badge } from "@/ui/components/data/Badge";
 
 type PanelHeaderProps = {
 	title: string;

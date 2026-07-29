@@ -26,14 +26,14 @@ export const HomeDecisionStoryChapter = ({
 	return (
 		<li data-story-chapter={chapter} className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
 			<article className={cn("max-w-xl", imageFirst && "lg:order-2 lg:pl-6")}>
-				<p className="flex items-center gap-3 text-s+ font-semibold uppercase tracking-normal text-primary">
+				<p className="flex items-center gap-3 font-semibold text-primary text-s+ uppercase tracking-normal">
 					<span className="font-mono text-shell-muted">0{index}</span>
 					{eyebrow}
 				</p>
 
-				<h3 className="mt-4 text-4xl+ tracking-normal text-shell-foreground sm:text-5xl+">{title}</h3>
+				<h3 className="mt-4 text-4xl+ text-shell-foreground tracking-normal sm:text-5xl+">{title}</h3>
 
-				<p className="mt-5 text-l leading-8 text-shell-muted">{description}</p>
+				<p className="mt-5 text-l text-shell-muted leading-8">{description}</p>
 			</article>
 
 			<div className={cn(imageFirst && "lg:order-1")}>

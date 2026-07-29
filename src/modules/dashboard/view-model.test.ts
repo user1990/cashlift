@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { getCashBufferRisk } from "@/modules/workspace/cash";
 import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
 import { reduceDatasetForDateRange } from "@/modules/workspace/read-models";
-import { getCashBufferRisk } from "@/modules/workspace/utils";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { buildDashboardViewModel } from "./view-model";
 

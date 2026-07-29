@@ -17,11 +17,11 @@ const REMINDER_DAY = 13;
 
 export const CheckoutTrialTimeline = ({ planPriceLabel }: CheckoutTrialTimelineProps) => (
 	<section>
-		<h1 className="max-w-2xl text-5xl+ tracking-normal text-primary sm:text-6xl+">Start your 14-day trial</h1>
+		<h1 className="max-w-2xl text-5xl+ text-primary tracking-normal sm:text-6xl+">Start your 14-day trial</h1>
 
-		<p className="mt-5 max-w-xl text-xl leading-8 text-shell-muted">Card required. No charge today.</p>
+		<p className="mt-5 max-w-xl text-shell-muted text-xl leading-8">Card required. No charge today.</p>
 
-		<h2 className="mt-12 text-s+ uppercase tracking-normal text-shell-muted">What happens next</h2>
+		<h2 className="mt-12 text-s+ text-shell-muted uppercase tracking-normal">What happens next</h2>
 
 		<ol className="mt-6 space-y-8">
 			<TrialStep active description="Create workspace and verify payment method" icon={Sparkles} title="Today" />
@@ -50,9 +50,9 @@ function TrialStep({ active, description, icon: Icon, title }: TrialStepProps) {
 			</div>
 
 			<div className="min-w-0 pt-1">
-				<h3 className="text-m+ font-semibold text-shell-foreground">{title}</h3>
+				<h3 className="font-semibold text-m+ text-shell-foreground">{title}</h3>
 
-				<p className="mt-1 text-m leading-6 text-shell-muted">{description}</p>
+				<p className="mt-1 text-m text-shell-muted leading-6">{description}</p>
 			</div>
 		</li>
 	);

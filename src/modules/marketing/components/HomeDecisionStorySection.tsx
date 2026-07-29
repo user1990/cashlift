@@ -30,13 +30,13 @@ const DECISION_CHAPTERS = [
 ] as const;
 
 export const HomeDecisionStorySection = () => (
-	<section aria-labelledby={DECISION_STORY_TITLE_ID} className="border-b border-shell-border">
-		<header className="mx-auto max-w-295 px-4 pb-10 pt-16 sm:px-6 lg:px-8 lg:pt-20">
-			<p className="text-s+ font-semibold uppercase tracking-normal text-primary">From inbox to decision</p>
+	<section aria-labelledby={DECISION_STORY_TITLE_ID} className="border-shell-border border-b">
+		<header className="mx-auto max-w-295 px-4 pt-16 pb-10 sm:px-6 lg:px-8 lg:pt-20">
+			<p className="font-semibold text-primary text-s+ uppercase tracking-normal">From inbox to decision</p>
 
 			<h2
 				id={DECISION_STORY_TITLE_ID}
-				className="mt-3 max-w-3xl text-4xl+ tracking-normal text-shell-foreground sm:text-6xl+"
+				className="mt-3 max-w-3xl text-4xl+ text-shell-foreground tracking-normal sm:text-6xl+"
 			>
 				Three decisions. One daily view.
 			</h2>

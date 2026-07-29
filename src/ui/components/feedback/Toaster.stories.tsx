@@ -3,8 +3,8 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Bell, Check, Clock, Layers3, LoaderCircle, RotateCcw, ShieldAlert, TriangleAlert, X } from "lucide-react";
 import { toast } from "sonner";
-import { Button } from "@/ui/components/Button";
-import { Toaster } from "@/ui/components/Toaster";
+import { Button } from "@/ui/components/actions/Button";
+import { Toaster } from "@/ui/components/feedback/Toaster";
 
 const meta = {
 	parameters: {
@@ -22,7 +22,7 @@ export const StateMatrix: Story = {
 };
 
 const ToasterStateMatrix = () => (
-	<div className="flex max-w-3xl flex-col flex-start items-center justify-center gap-3">
+	<div className="flex max-w-3xl flex-start flex-col items-center justify-center gap-3">
 		<Toaster />
 
 		<Button

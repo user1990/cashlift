@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import type { ComponentProps } from "react";
 import { useState } from "react";
-import { EmailAutocompleteField } from "@/ui/components/EmailAutocompleteField";
+import { EmailAutocompleteField } from "@/ui/components/forms/EmailAutocompleteField";
 
 const meta = {
 	args: {

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-import { Badge } from "@/ui/components/Badge";
+import { Badge } from "@/ui/components/data/Badge";
 
 const BADGE_VARIANTS = [
 	{ label: "Neutral", variant: "neutral" },

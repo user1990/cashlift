@@ -1,6 +1,8 @@
+// @vitest-environment jsdom
+
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Toaster } from "@/ui/components/Toaster";
+import { Toaster } from "@/ui/components/feedback/Toaster";
 
 describe("Toaster", () => {
 	it("exposes the shadcn Sonner slot", () => {

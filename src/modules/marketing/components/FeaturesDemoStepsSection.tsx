@@ -10,9 +10,9 @@ export const FeaturesDemoStepsSection = () => (
 					<li key={title}>
 						<Icon aria-hidden className="size-5 text-primary" />
 
-						<h2 className="mt-4 text-xl+ text-shell-foreground">{title}</h2>
+						<h2 className="mt-4 text-shell-foreground text-xl+">{title}</h2>
 
-						<p className="mt-2 text-m leading-6 text-shell-muted">{description}</p>
+						<p className="mt-2 text-m text-shell-muted leading-6">{description}</p>
 					</li>
 				))}
 			</ol>

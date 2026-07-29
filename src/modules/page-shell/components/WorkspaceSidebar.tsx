@@ -20,7 +20,7 @@ export const WorkspaceSidebar = ({ section, workspace }: WorkspaceSidebarProps) 
 		</Link>
 
 		{workspace.readOnly && (
-			<p className="mx-2 mt-2 rounded-full border border-primary/35 bg-primary/10 px-3 py-1.5 text-center text-s+ font-medium text-primary">
+			<p className="mx-2 mt-2 rounded-full border border-primary/35 bg-primary/10 px-3 py-1.5 text-center font-medium text-primary text-s+">
 				Read-only demo
 			</p>
 		)}

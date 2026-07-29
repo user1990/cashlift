@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-import { Button } from "@/ui/components/Button";
-import { Panel } from "@/ui/components/Panel";
-import { PanelHeader } from "@/ui/components/PanelHeader";
+import { Button } from "@/ui/components/actions/Button";
+import { Panel } from "@/ui/components/layout/Panel";
+import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 
 const meta = {
 	args: {
