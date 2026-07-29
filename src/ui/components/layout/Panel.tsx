@@ -1,7 +1,5 @@
 import { tv, type VariantProps } from "tailwind-variants";
 
-export { PanelHeader } from "@/ui/components/PanelHeader";
-
 const PANEL_VARIANTS = tv({
 	base: "rounded-lg border p-4 transition-[border-color,box-shadow] duration-150 ease",
 	defaultVariants: {

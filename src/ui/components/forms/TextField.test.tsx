@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { TextField } from "@/ui/components/TextField";
+import { TextField } from "@/ui/components/forms/TextField";
 
 describe("TextField", () => {
 	it("labels the input and reports value changes", async () => {

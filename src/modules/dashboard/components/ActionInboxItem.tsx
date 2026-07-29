@@ -1,7 +1,7 @@
 import { ArrowRight, CircleDollarSign, type LucideIcon, ReceiptText, ShieldCheck, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { formatCurrency } from "@/modules/money/format";
-import { Badge } from "@/ui/components/Badge";
+import { Badge } from "@/ui/components/data/Badge";
 import { getCashActionDestination } from "../cashActionDestination";
 import type { DashboardViewModel } from "../types";
 

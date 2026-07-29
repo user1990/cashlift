@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { Button } from "@/ui/components/Button";
+import { Button } from "@/ui/components/actions/Button";
 
 describe("Button", () => {
 	it("calls the press handler when activated", async () => {

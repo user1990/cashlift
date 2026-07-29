@@ -1,6 +1,6 @@
 import { CheckCircle2, Star } from "lucide-react";
 import Link from "next/link";
-import { Panel } from "@/ui/components/Panel";
+import { Panel } from "@/ui/components/layout/Panel";
 import { cn } from "@/ui/utils/cn";
 import type { PRICING_PLANS, PricingBilling } from "../content";
 

@@ -3,8 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { describe, expect, it } from "vitest";
-import { Button } from "@/ui/components/Button";
-import { ControlledEmailAutocompleteField } from "@/ui/components/ControlledEmailAutocompleteField";
+import { Button } from "@/ui/components/actions/Button";
+import { ControlledEmailAutocompleteField } from "@/ui/components/forms/ControlledEmailAutocompleteField";
 
 type EmailFormValues = {
 	email: string;

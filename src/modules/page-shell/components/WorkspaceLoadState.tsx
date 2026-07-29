@@ -1,4 +1,5 @@
-import { Panel, PanelHeader } from "@/ui/components/Panel";
+import { Panel } from "@/ui/components/layout/Panel";
+import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 import type { WorkspaceSection } from "../types";
 import { WorkspaceSectionHeader } from "./WorkspaceSectionHeader";
 

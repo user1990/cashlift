@@ -1,5 +1,6 @@
 import type { FinancialDataset } from "@/modules/workspace/types";
-import { Panel, PanelHeader } from "@/ui/components/Panel";
+import { Panel } from "@/ui/components/layout/Panel";
+import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 import { WorkspaceCardGrid } from "./WorkspaceCardGrid";
 
 type WorkspaceTeamSectionProps = {

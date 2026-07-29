@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-
-import { Badge } from "@/ui/components/Badge";
-import { Button } from "@/ui/components/Button";
-import { Panel, PanelHeader } from "@/ui/components/Panel";
-import { ProgressBar } from "@/ui/components/ProgressBar";
+import { Button } from "@/ui/components/actions/Button";
+import { Badge } from "@/ui/components/data/Badge";
+import { ProgressBar } from "@/ui/components/feedback/ProgressBar";
+import { Panel } from "@/ui/components/layout/Panel";
+import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 
 const meta = {
 	args: {

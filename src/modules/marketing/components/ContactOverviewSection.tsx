@@ -1,4 +1,4 @@
-import { Panel } from "@/ui/components/Panel";
+import { Panel } from "@/ui/components/layout/Panel";
 import { Hero } from "./Hero";
 
 const CONTACT_CHANNELS = [

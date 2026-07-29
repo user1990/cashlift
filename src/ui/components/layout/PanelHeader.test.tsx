@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Button } from "@/ui/components/Button";
-import { PanelHeader } from "@/ui/components/PanelHeader";
+import { Button } from "@/ui/components/actions/Button";
+import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 
 describe("PanelHeader", () => {
 	it("renders the title, label, and action", () => {

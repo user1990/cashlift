@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Check, Download, LoaderCircle, Plus, Trash2 } from "lucide-react";
 
-import { Button } from "@/ui/components/Button";
+import { Button } from "@/ui/components/actions/Button";
 
 const meta = {
 	args: {

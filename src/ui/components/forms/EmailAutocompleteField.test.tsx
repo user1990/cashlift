@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { EmailAutocompleteField } from "@/ui/components/EmailAutocompleteField";
+import { EmailAutocompleteField } from "@/ui/components/forms/EmailAutocompleteField";
 
 describe("EmailAutocompleteField", () => {
 	it("labels the input and reports value changes", async () => {

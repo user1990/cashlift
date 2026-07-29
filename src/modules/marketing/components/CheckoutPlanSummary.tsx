@@ -1,6 +1,6 @@
 import { CheckCircle2, CreditCard } from "lucide-react";
 import Link from "next/link";
-import { Panel } from "@/ui/components/Panel";
+import { Panel } from "@/ui/components/layout/Panel";
 import type { PricingBilling } from "../content";
 import { CheckoutActionButton } from "./CheckoutActionButton";
 

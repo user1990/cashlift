@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Badge } from "@/ui/components/Badge";
+import { Badge } from "@/ui/components/data/Badge";
 
 const BADGE_VARIANTS = ["accent", "danger", "neutral", "primary", "success", "warning"] as const;
 

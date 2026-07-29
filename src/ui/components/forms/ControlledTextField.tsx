@@ -2,8 +2,8 @@
 
 import type { ComponentProps } from "react";
 import type { FieldPath, FieldValues } from "react-hook-form";
-import { ControlledField, type ControlledFieldProps } from "@/ui/components/ControlledField";
-import { TextField } from "@/ui/components/TextField";
+import { ControlledField, type ControlledFieldProps } from "@/ui/components/forms/ControlledField";
+import { TextField } from "@/ui/components/forms/TextField";
 
 type ControlledTextFieldProps<
 	TFieldValues extends FieldValues,

@@ -1,6 +1,6 @@
 import { AmountItem } from "@/modules/money/components/AmountItem";
 import { getPercentage } from "@/modules/money/format";
-import { Badge } from "@/ui/components/Badge";
+import { Badge } from "@/ui/components/data/Badge";
 import type { Subscription } from "../types";
 import { isVendorLeak } from "../utils";
 

@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-import { Button } from "@/ui/components/Button";
-import { ControlledTextField } from "@/ui/components/ControlledTextField";
+import { Button } from "@/ui/components/actions/Button";
+import { ControlledTextField } from "@/ui/components/forms/ControlledTextField";
 
 type DemoFormValues = {
 	monthlyBudget: string;

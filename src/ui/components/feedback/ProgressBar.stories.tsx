@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-import { Badge } from "@/ui/components/Badge";
-import { ProgressBar } from "@/ui/components/ProgressBar";
+import { Badge } from "@/ui/components/data/Badge";
+import { ProgressBar } from "@/ui/components/feedback/ProgressBar";
 
 const PROGRESS_STATES = [
 	{ label: "Not started", value: 0, variant: "neutral" },

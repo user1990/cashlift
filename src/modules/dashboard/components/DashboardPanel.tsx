@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { Panel, PanelHeader } from "@/ui/components/Panel";
+import { Panel } from "@/ui/components/layout/Panel";
+import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 import { cn } from "@/ui/utils/cn";
 
 type DashboardPanelProps = {

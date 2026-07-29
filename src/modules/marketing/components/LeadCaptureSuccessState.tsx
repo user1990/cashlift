@@ -3,7 +3,7 @@
 import { ArrowRight, CheckCircle2, RotateCcw } from "lucide-react";
 import { domAnimation, LazyMotion, useReducedMotion } from "motion/react";
 import * as m from "motion/react-m";
-import { Button } from "@/ui/components/Button";
+import { Button } from "@/ui/components/actions/Button";
 import { ActionLink } from "./ActionLink";
 
 const SUCCESS_ANIMATION = {

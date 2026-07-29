@@ -3,8 +3,9 @@
 import { AmountItem } from "@/modules/money/components/AmountItem";
 import { formatCurrency, getPercentage } from "@/modules/money/format";
 import type { FinancialDataset } from "@/modules/workspace/types";
-import { Badge } from "@/ui/components/Badge";
-import { Panel, PanelHeader } from "@/ui/components/Panel";
+import { Badge } from "@/ui/components/data/Badge";
+import { Panel } from "@/ui/components/layout/Panel";
+import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 import { useInvoiceRiskTotal } from "../hooks/useInvoiceRiskTotal";
 
 type WorkspaceInvoicesSectionProps = {

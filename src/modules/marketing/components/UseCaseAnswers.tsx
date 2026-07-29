@@ -1,4 +1,4 @@
-import { Panel } from "@/ui/components/Panel";
+import { Panel } from "@/ui/components/layout/Panel";
 
 type UseCaseAnswersProps = {
 	answers: readonly string[];

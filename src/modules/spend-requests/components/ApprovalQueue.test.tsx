@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 import { WORKSPACE_DATASET_QUERY_KEYS } from "@/modules/workspace/query";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { server } from "@/test/server";
-import { Toaster } from "@/ui/components/Toaster";
+import { Toaster } from "@/ui/components/feedback/Toaster";
 import { createDecideSpendRequestHandler } from "../fixtures";
 import { ApprovalQueue } from "./ApprovalQueue";
 

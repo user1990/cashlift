@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Panel } from "@/ui/components/Panel";
+import { Panel } from "@/ui/components/layout/Panel";
 
 type IconCardProps = {
 	description: string;

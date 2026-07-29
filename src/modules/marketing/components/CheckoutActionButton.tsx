@@ -2,7 +2,7 @@
 
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/ui/components/Button";
+import { Button } from "@/ui/components/actions/Button";
 
 type CheckoutActionButtonProps = {
 	planName: string;
