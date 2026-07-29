@@ -17,9 +17,12 @@ describe("LeadCaptureForm", () => {
 			/>,
 		);
 
-		await user.type(screen.getByRole("textbox", { name: "Name" }), "Maya Chen");
-		await user.type(screen.getByRole("combobox", { name: "Work email" }), "maya@company.com");
-		await user.type(screen.getByRole("textbox", { name: "Company" }), "Studio Nova");
+		await user.click(screen.getByRole("textbox", { name: "Name" }));
+		await user.paste("Maya Chen");
+		await user.click(screen.getByRole("combobox", { name: "Work email" }));
+		await user.paste("maya@company.com");
+		await user.click(screen.getByRole("textbox", { name: "Company" }));
+		await user.paste("Studio Nova");
 		await user.click(screen.getByRole("button", { name: "Book demo" }));
 
 		expect(screen.queryByRole("textbox", { name: "Name" })).not.toBeInTheDocument();
