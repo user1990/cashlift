@@ -79,6 +79,11 @@ CashLift separates public marketing, public demo, and authenticated workspace co
 
 Business modules should not casually import other business modules. Routes compose them, while explicit composition modules such as `dashboard`, `workspace`, and `page-shell` own their documented cross-module relationships.
 
+The machine-readable review map lives in
+`docs/contributing/architecture/primitives.yaml`. Visual PR recaps use its
+stable primitive IDs, connections, code ownership, and invariants to classify
+the system impact of a diff.
+
 ## Data boundary
 
 Workspace pages resolve data on the server. In demo mode, the resolver returns the typed Studio Nova fixture. In production, it requires Clerk and Supabase configuration, authenticates the user, and uses company-scoped row-level security. Browser code does not query finance tables directly.

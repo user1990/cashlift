@@ -64,6 +64,7 @@ skills/
 ├── review-pr/SKILL.md
 ├── styling/SKILL.md
 ├── testing/SKILL.md
+├── visual-recap/SKILL.md
 ├── web-interface-guidelines/SKILL.md
 └── worktree/SKILL.md
 

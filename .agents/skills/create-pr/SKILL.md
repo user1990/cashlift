@@ -18,8 +18,9 @@ Examples below use the `gh` CLI, which is assumed to be installed in local shell
 3. Generate PR title & create draft PR (if no PR exists)
 4. Get optional design link
 5. Get Vercel preview URL
-6. Generate PR body
-7. Present and execute
+6. Generate a system recap when useful
+7. Generate PR body
+8. Present and execute
 
 ## Step 1: Gather Context
 
@@ -141,7 +142,22 @@ If neither source has a URL yet, write `Deployment pending`.
 
 Never fabricate preview domains.
 
-## Step 6: Generate PR Body
+## Step 6: Generate a System Recap
+
+Read `.agents/skills/visual-recap/SKILL.md` and generate a recap block when the
+PR is non-trivial: it spans multiple system primitives, or changes an API,
+schema, authentication, authorization, financial-data boundary, mutation,
+shared contract, or module boundary.
+
+Skip the recap for a small, obvious change that reviews faster as a plain diff.
+State that decision instead of producing filler.
+
+Generate from the pushed diff and current
+`docs/contributing/architecture/primitives.yaml`. Return the marker-delimited
+block to this workflow; do not update the PR separately before presenting the
+complete body.
+
+## Step 7: Generate PR Body
 
 Use this structure:
 
@@ -161,18 +177,23 @@ Use this structure:
 ## Visuals
 
 {USER_PROVIDED_OR_OMIT_SECTION_ENTIRELY}
+
+{SYSTEM_RECAP_BLOCK_OR_OMIT}
 ```
 
 Rules:
 - Omit References section if no design link was provided
 - Omit Visuals section if no visuals provided
+- Append the complete system recap block after the human-authored sections when Step 6 generated one
+- Regenerate an existing system recap from the current pushed diff and preserve its marker-delimited location
 - Keep Description concise and readable
 
-## Step 7: Present and Execute
+## Step 8: Present and Execute
 
 1. Show composed title and body
 2. Ask: `Update this PR?`
-3. If approved: `gh pr edit {NUMBER} --title "..." --body "..."`
+3. If approved, write the exact body to a temporary file and run:
+   `gh pr edit {NUMBER} --title "..." --body-file {BODY_FILE}`
 4. If user did not ask for draft, mark ready: `gh pr ready {NUMBER}`
 
 If user asks for draft, leave PR in draft state.
