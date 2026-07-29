@@ -13,6 +13,7 @@ describe("TextField", () => {
 		const input = screen.getByRole("textbox", { name: "Company" });
 
 		expect(input).toHaveAttribute("placeholder", "Studio Nova");
+		expect(input).toHaveAttribute("aria-label", "Company");
 		expect(input).toHaveAttribute("data-slot", "input");
 		expect(screen.getByText("Company")).toHaveAttribute("data-slot", "field-label");
 

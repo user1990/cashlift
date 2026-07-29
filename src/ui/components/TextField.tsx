@@ -3,7 +3,6 @@
 import {
 	FieldError,
 	Input,
-	Label,
 	TextField as RACTextField,
 	type TextFieldProps as RACTextFieldProps,
 } from "react-aria-components";
@@ -19,6 +18,7 @@ type TextFieldProps = Omit<RACTextFieldProps, "className"> & {
 
 export const TextField = ({ errorMessage, invalid, label, placeholder, className, ...props }: TextFieldProps) => (
 	<RACTextField
+		aria-label={label}
 		isInvalid={invalid}
 		className={cn(
 			"space-y-1.5 [&:has(input[data-invalid])_input]:border-red-400 [&:has(input[data-invalid])_input]:focus:border-red-400 [&:has(input[data-invalid])_input]:focus:ring-red-400/20",
@@ -28,9 +28,9 @@ export const TextField = ({ errorMessage, invalid, label, placeholder, className
 		data-slot="field"
 		{...props}
 	>
-		<Label className="text-s font-medium text-panel-foreground" data-slot="field-label">
+		<span className="text-s font-medium text-panel-foreground" data-slot="field-label">
 			{label}
-		</Label>
+		</span>
 
 		<Input
 			data-slot="input"

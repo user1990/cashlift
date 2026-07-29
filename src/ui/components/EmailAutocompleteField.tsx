@@ -4,7 +4,6 @@ import { useId, useState } from "react";
 import {
 	FieldError,
 	Input,
-	Label,
 	TextField as RACTextField,
 	type TextFieldProps as RACTextFieldProps,
 } from "react-aria-components";
@@ -76,6 +75,7 @@ export const EmailAutocompleteField = ({
 
 	return (
 		<RACTextField
+			aria-label={label}
 			isInvalid={invalid}
 			className={cn(
 				"relative space-y-1.5 [&:has(input[data-invalid])_input]:border-red-400 [&:has(input[data-invalid])_input]:focus:border-red-400 [&:has(input[data-invalid])_input]:focus:ring-red-400/20",
@@ -88,9 +88,9 @@ export const EmailAutocompleteField = ({
 			value={value}
 			{...props}
 		>
-			<Label className="text-s font-medium text-panel-foreground" data-slot="field-label">
+			<span className="text-s font-medium text-panel-foreground" data-slot="field-label">
 				{label}
-			</Label>
+			</span>
 
 			<Input
 				aria-activedescendant={
