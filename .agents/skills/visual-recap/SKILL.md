@@ -29,10 +29,12 @@ for a hosted or interactive recap.
 ## Establish facts
 
 1. Read `docs/contributing/architecture/primitives.yaml`.
-2. In recap mode, resolve the PR base with
-   `gh pr view <number> --json baseRefName,headRefName`.
-3. Read `git diff <base>...HEAD --stat` and the full diff. Do not classify from
-   conversation or memory.
+2. In recap mode, resolve the PR base and head commits with
+   `gh pr view <number> --json baseRefName,baseRefOid,headRefName,headRefOid`.
+3. Fetch the named base ref with `git fetch origin <baseRefName>` when it is
+   not available locally, then read `git diff <baseRefOid>...<headRefOid> --stat`
+   and the full diff. Use those immutable PR commit IDs rather than a possibly
+   stale local branch or session `HEAD`.
 4. Cross-check module ownership against `.fallowrc.json`.
 5. Map every changed path to one or more primitives through `code`. Use the
    most specific match first. Report genuinely unmapped paths instead of
@@ -105,7 +107,7 @@ flowchart LR
 
 | Invariant | Review evidence |
 | --- | --- |
-| `company-data-isolation` | Query remains scoped by authenticated company ID. |
+| `company-data-isolation` | Query remains scoped by authenticated company ID in `src/modules/workspace/repositories/supabase.ts`. |
 
 ### Reviewer focus
 

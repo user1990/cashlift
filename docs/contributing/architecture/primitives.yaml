@@ -152,6 +152,8 @@ primitives:
     code:
       - "src/instrumentation.ts"
       - "src/instrumentation-client.ts"
+      - "sentry.server.config.ts"
+      - "sentry.edge.config.ts"
       - "src/app/ClientTelemetry.tsx"
       - "src/app/global-error.tsx"
       - "src/services/platform/integrations/sentry.ts"
