@@ -161,7 +161,10 @@
 		"@astrojs/mdx",
 		"@astrojs/react",
 		"@shikijs/twoslash",
-		"@tailwindcss/vite"
+		"@tailwindcss/vite",
+		"@storybook/addon-docs",
+		"shadcn",
+		"tailwindcss"
 	],
 	"rules": {
 		"unused-files": "error",
