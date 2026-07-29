@@ -16,7 +16,7 @@ export const WorkspaceLoadState = ({ message, section, title }: WorkspaceLoadSta
 		<Panel>
 			<PanelHeader label="Status" title={title} />
 
-			<p className="text-m leading-6 text-muted-foreground">{message}</p>
+			<p className="text-m text-muted-foreground leading-6">{message}</p>
 		</Panel>
 	</>
 );

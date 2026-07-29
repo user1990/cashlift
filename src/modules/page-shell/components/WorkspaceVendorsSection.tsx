@@ -16,6 +16,6 @@ export const WorkspaceVendorsSection = ({ dataset }: WorkspaceVendorsSectionProp
 			title={`${formatCurrency(getVendorLeakSavings(dataset.subscriptions))} monthly vendor savings`}
 		/>
 
-		<LeakList items={dataset.subscriptions} className="grid gap-3 @md:grid-cols-2" />
+		<LeakList items={dataset.subscriptions} className="grid @md:grid-cols-2 gap-3" />
 	</Panel>
 );

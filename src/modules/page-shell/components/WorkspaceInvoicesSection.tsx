@@ -26,7 +26,7 @@ export const WorkspaceInvoicesSection = ({ dataset }: WorkspaceInvoicesSectionPr
 				}
 			/>
 
-			<ul className="grid gap-3 @md:grid-cols-2">
+			<ul className="grid @md:grid-cols-2 gap-3">
 				{dataset.invoices.map(({ amountCents, id, status, collectionProbability, owner, client }) => (
 					<AmountItem
 						key={id}

@@ -14,7 +14,7 @@ type AuthGlassShellProps = {
 };
 
 export const AuthGlassShell = ({ action, children, size = "default" }: AuthGlassShellProps) => (
-	<div className="relative grid min-h-[calc(100dvh-4rem)] w-[min(calc(100vw-3rem),92rem)] place-items-center overflow-hidden max-[48rem]:w-[min(calc(100vw-2rem),24.5rem)] max-[28rem]:min-h-[calc(100dvh-4rem)] max-[28rem]:w-[calc(100vw-2rem)] max-[28rem]:rounded-2xl">
+	<div className="relative grid min-h-[calc(100dvh-4rem)] w-[min(calc(100vw-3rem),92rem)] place-items-center overflow-hidden max-[28rem]:min-h-[calc(100dvh-4rem)] max-[28rem]:w-[calc(100vw-2rem)] max-[48rem]:w-[min(calc(100vw-2rem),24.5rem)] max-[28rem]:rounded-2xl">
 		<div className="mx-auto grid w-full max-w-[60.5rem] grid-cols-[minmax(10rem,18rem)_minmax(20rem,24.5rem)_minmax(10rem,18rem)] items-center justify-center max-[48rem]:grid-cols-[minmax(0,1fr)]">
 			<AuthDotRail side="left" />
 
@@ -28,16 +28,16 @@ export const AuthGlassShell = ({ action, children, size = "default" }: AuthGlass
 					<Logo />
 				</div>
 
-				<div className="mt-5 grid min-h-[16.5rem] w-full flex-1 place-items-center [&>*]:[grid-area:1/1] [&>*]:animate-auth-reveal motion-reduce:[&>*]:animate-none max-[28rem]:mt-4">
+				<div className="mt-5 grid min-h-[16.5rem] w-full flex-1 place-items-center max-[28rem]:mt-4 [&>*]:animate-auth-reveal [&>*]:[grid-area:1/1] motion-reduce:[&>*]:animate-none">
 					{children}
 				</div>
 
 				<Link
-					className="inline-flex min-h-8 self-center rounded-md px-2 text-sm text-muted-foreground no-underline outline-none transition-[color] duration-150 ease hover:text-panel-foreground focus-visible:shadow-[inset_0_0_0_2px_var(--primary)] max-[48rem]:mt-4 max-[28rem]:min-h-11"
+					className="ease inline-flex min-h-8 self-center rounded-md px-2 text-muted-foreground text-sm no-underline outline-none transition-[color] duration-150 hover:text-panel-foreground focus-visible:shadow-[inset_0_0_0_2px_var(--primary)] max-[48rem]:mt-4 max-[28rem]:min-h-11"
 					href={action.href}
 					prefetch={false}
 				>
-					{action.prompt} <span className="ml-1 text-primary font-semibold">{action.label}</span>
+					{action.prompt} <span className="ml-1 font-semibold text-primary">{action.label}</span>
 				</Link>
 			</div>
 

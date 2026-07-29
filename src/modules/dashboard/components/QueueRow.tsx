@@ -16,7 +16,7 @@ export const QueueRow = ({ icon, meta, title, value, variant = "plain" }: QueueR
 				{icon}
 
 				<div>
-					<p className="text-m+ font-semibold text-panel-foreground">{title}</p>
+					<p className="font-semibold text-m+ text-panel-foreground">{title}</p>
 
 					{meta && <p className="mt-1 text-s text-shell-muted">{meta}</p>}
 				</div>

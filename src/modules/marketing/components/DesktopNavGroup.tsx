@@ -38,14 +38,14 @@ export const DesktopNavGroup = ({
 		<Button
 			onFocus={(event) => onTriggerFocus(event.currentTarget as HTMLButtonElement)}
 			slot="trigger"
-			className="flex h-9 cursor-pointer items-center gap-1 rounded-md px-3 text-m font-medium text-shell-muted outline-none transition-colors duration-150 hover:text-primary data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20"
+			className="flex h-9 cursor-pointer items-center gap-1 rounded-md px-3 font-medium text-m text-shell-muted outline-none transition-colors duration-150 hover:text-primary data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20"
 		>
 			{group.label}
 
 			<ChevronDown aria-hidden className="size-4 transition-transform duration-150 group-data-[expanded]:rotate-180" />
 		</Button>
 
-		<DisclosurePanel className="absolute left-0 top-full z-10 w-48 pt-2">
+		<DisclosurePanel className="absolute top-full left-0 z-10 w-48 pt-2">
 			<div className="rounded-lg border border-shell-border bg-shell-elevated p-1 shadow-shell">
 				<ul className="grid gap-1">
 					{group.items.map(({ href, label }) => {
@@ -58,7 +58,7 @@ export const DesktopNavGroup = ({
 									href={href}
 									onClick={onClose}
 									className={cn(
-										"block rounded-md px-3 py-2 text-m font-medium text-shell-muted outline-none transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground focus-visible:ring-[3px] focus-visible:ring-primary/20",
+										"block rounded-md px-3 py-2 font-medium text-m text-shell-muted outline-none transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground focus-visible:ring-[3px] focus-visible:ring-primary/20",
 										active && "bg-primary/10 text-primary",
 									)}
 								>

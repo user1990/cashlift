@@ -27,7 +27,7 @@ export const WorkspaceApprovalsSection = ({ dataset, readOnly = false }: Workspa
 			<Panel>
 				<PanelHeader label="Rules" title="Approval policy" />
 
-				<div className="space-y-3 text-m leading-6 text-muted-foreground">
+				<div className="space-y-3 text-m text-muted-foreground leading-6">
 					<p>Managers approve team spend after CashLift shows cash impact.</p>
 
 					<p>Finance holds non-essential requests if buffer risk appears.</p>

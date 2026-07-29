@@ -25,11 +25,11 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
 const WorkspaceUnavailable = ({ message }: { message: string }) => (
 	<MainContent variant="workspace" className="flex items-center justify-center px-4">
 		<div className="max-w-md rounded-lg border border-border bg-panel p-6 text-center shadow-panel">
-			<p className="text-s+ uppercase tracking-normal text-primary">CashLift</p>
+			<p className="text-primary text-s+ uppercase tracking-normal">CashLift</p>
 
-			<h1 className="mt-2 text-4xl+ tracking-normal text-primary">Workspace unavailable</h1>
+			<h1 className="mt-2 text-4xl+ text-primary tracking-normal">Workspace unavailable</h1>
 
-			<p className="mt-3 text-m leading-6 text-muted-foreground">{message}</p>
+			<p className="mt-3 text-m text-muted-foreground leading-6">{message}</p>
 		</div>
 	</MainContent>
 );

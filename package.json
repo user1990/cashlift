@@ -11,7 +11,7 @@
 		"docs:preview": "blume preview",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",
-		"lint": "biome check",
+		"lint": "biome check --unsafe",
 		"lint:fix": "biome check --write src",
 		"check:react": "npx react-doctor@latest --verbose",
 		"typecheck": "tsc --noEmit",

@@ -41,7 +41,7 @@ export const CheckoutActionButton = ({ planName }: CheckoutActionButtonProps) =>
 				<p
 					aria-live="polite"
 					id={CHECKOUT_ACTION_MESSAGE_ID}
-					className="mt-3 rounded-md border border-primary-subtle-border bg-primary-subtle px-3 py-2 text-s leading-5 text-primary"
+					className="mt-3 rounded-md border border-primary-subtle-border bg-primary-subtle px-3 py-2 text-primary text-s leading-5"
 				>
 					{message}
 				</p>

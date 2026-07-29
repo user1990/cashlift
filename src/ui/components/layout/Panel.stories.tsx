@@ -76,19 +76,19 @@ export const Variants: Story = {
 			<Panel>
 				<PanelHeader label="Light" title="Baseline panel" />
 
-				<p className="text-s text-muted-foreground">Default container for dense dashboard content.</p>
+				<p className="text-muted-foreground text-s">Default container for dense dashboard content.</p>
 			</Panel>
 
 			<Panel variant="glass">
 				<PanelHeader label="Glass" title="Raised panel" />
 
-				<p className="text-s text-muted-foreground">Used on shell surfaces that need extra separation.</p>
+				<p className="text-muted-foreground text-s">Used on shell surfaces that need extra separation.</p>
 			</Panel>
 
 			<Panel variant="accent">
 				<PanelHeader label="Accent" title="Priority panel" />
 
-				<p className="text-s text-panel-foreground">Highlights an actionable opportunity.</p>
+				<p className="text-panel-foreground text-s">Highlights an actionable opportunity.</p>
 			</Panel>
 		</div>
 	),

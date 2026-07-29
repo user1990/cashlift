@@ -18,7 +18,7 @@ export const PricingPlanCard = ({ billing, plan }: PricingPlanCardProps) => {
 	return (
 		<li className="relative flex pt-3">
 			{highlighted && (
-				<span className="absolute left-1/2 top-0 z-10 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-primary px-4 py-1.5 text-s font-semibold text-primary-foreground shadow-primary-glow">
+				<span className="absolute top-0 left-1/2 z-10 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-primary px-4 py-1.5 font-semibold text-primary-foreground text-s shadow-primary-glow">
 					<Star aria-hidden className="size-3.5 fill-current" />
 					Recommended
 				</span>
@@ -27,38 +27,38 @@ export const PricingPlanCard = ({ billing, plan }: PricingPlanCardProps) => {
 			<Panel as="article" variant="glass" className={getPlanClassName(highlighted)}>
 				<header>
 					<div className="flex items-start justify-between gap-3">
-						<h2 className="text-4xl+ tracking-normal text-shell-foreground">{plan.name}</h2>
+						<h2 className="text-4xl+ text-shell-foreground tracking-normal">{plan.name}</h2>
 
 						{billing === "annual" && (
-							<span className="shrink-0 rounded-sm bg-signal-subtle px-2 py-1 text-s font-semibold text-signal">
+							<span className="shrink-0 rounded-sm bg-signal-subtle px-2 py-1 font-semibold text-s text-signal">
 								Save 20%
 							</span>
 						)}
 					</div>
 
-					<p className="mt-3 min-h-12 text-l font-medium leading-6 text-shell-muted">{plan.description}</p>
+					<p className="mt-3 min-h-12 font-medium text-l text-shell-muted leading-6">{plan.description}</p>
 				</header>
 
-				<div className="my-5 border-t border-shell-border" />
+				<div className="my-5 border-shell-border border-t" />
 
 				<p className="flex items-end gap-2 text-shell-foreground">
 					<span className="font-mono text-6xl+ leading-none tracking-normal">{price}</span>
 
-					<span className="pb-1 text-m font-medium text-shell-muted">/mo</span>
+					<span className="pb-1 font-medium text-m text-shell-muted">/mo</span>
 				</p>
 
 				<p className="mt-3 min-h-5 text-s text-shell-muted">
 					{billing === "annual" ? `${plan.annualTotal} billed annually` : "Billed monthly"}
 				</p>
 
-				<div className="my-5 border-t border-shell-border" />
+				<div className="my-5 border-shell-border border-t" />
 
 				<ul className="flex flex-1 flex-col gap-3.5">
 					{plan.features.map((feature) => (
 						<li key={feature} className="flex items-start gap-3">
 							<CheckCircle2 aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
 
-							<p className="text-m leading-6 text-shell-foreground">{feature}</p>
+							<p className="text-m text-shell-foreground leading-6">{feature}</p>
 						</li>
 					))}
 				</ul>

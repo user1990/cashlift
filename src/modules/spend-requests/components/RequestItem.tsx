@@ -27,10 +27,10 @@ export const RequestItem = ({
 			(cashAfterApprovalCents !== undefined || actions) && (
 				<>
 					{cashAfterApprovalCents !== undefined && (
-						<div className="mt-3 rounded-md bg-panel p-2 text-s text-muted-foreground">
+						<div className="mt-3 rounded-md bg-panel p-2 text-muted-foreground text-s">
 							<span>Cash after approval: </span>
 
-							<span className="font-mono text-s+ text-panel-foreground">{formatCurrency(cashAfterApprovalCents)}</span>
+							<span className="font-mono text-panel-foreground text-s+">{formatCurrency(cashAfterApprovalCents)}</span>
 						</div>
 					)}
 

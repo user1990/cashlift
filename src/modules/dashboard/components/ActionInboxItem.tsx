@@ -47,7 +47,7 @@ export const ActionInboxItem = ({
 			className="group grid gap-4 transition-colors hover:text-primary sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center"
 			href={getCashActionDestination(type, basePath)}
 		>
-			<span className="grid size-10 place-items-center rounded-full bg-primary-muted font-mono text-s font-semibold text-primary">
+			<span className="grid size-10 place-items-center rounded-full bg-primary-muted font-mono font-semibold text-primary text-s">
 				{index + 1}
 			</span>
 
@@ -57,20 +57,20 @@ export const ActionInboxItem = ({
 
 					<Badge variant={priority === "critical" ? "danger" : "warning"}>{priority}</Badge>
 
-					<span className="text-s font-semibold text-muted-foreground">{ACTION_LABELS[type]}</span>
+					<span className="font-semibold text-muted-foreground text-s">{ACTION_LABELS[type]}</span>
 				</span>
 
-				<span className="block text-m+ font-semibold text-panel-foreground group-hover:text-primary">{title}</span>
+				<span className="block font-semibold text-m+ text-panel-foreground group-hover:text-primary">{title}</span>
 
-				<span className="mt-1 block text-m leading-6 text-muted-foreground">{description}</span>
+				<span className="mt-1 block text-m text-muted-foreground leading-6">{description}</span>
 			</span>
 
 			<span className="flex items-center justify-between gap-3 sm:block sm:text-right">
-				<span className="block font-mono text-m+ font-semibold text-panel-foreground">
+				<span className="block font-mono font-semibold text-m+ text-panel-foreground">
 					{formatCurrency(impactCents)}
 				</span>
 
-				<span className="mt-1 flex items-center justify-end gap-2 text-s text-muted-foreground">
+				<span className="mt-1 flex items-center justify-end gap-2 text-muted-foreground text-s">
 					{owner}
 					<ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-0.5" />
 				</span>

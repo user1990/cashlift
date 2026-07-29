@@ -16,13 +16,13 @@ const MENU_ITEM_CLASS_NAME =
 
 export const AccountMenuShell = ({ avatar, description, items, name, signOut }: AccountMenuShellProps) => (
 	<details className="relative">
-		<summary className="flex w-full cursor-pointer list-none items-center gap-3 rounded-lg px-2 py-3 text-left text-shell-foreground transition-colors duration-150 ease hover:bg-white/5 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
-			<span className="grid size-10 shrink-0 place-items-center rounded-full bg-panel-muted text-s+ font-semibold text-shell-foreground">
+		<summary className="ease flex w-full cursor-pointer list-none items-center gap-3 rounded-lg px-2 py-3 text-left text-shell-foreground transition-colors duration-150 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
+			<span className="grid size-10 shrink-0 place-items-center rounded-full bg-panel-muted font-semibold text-s+ text-shell-foreground">
 				{avatar}
 			</span>
 
 			<span className="min-w-0 flex-1">
-				<span className="block truncate text-m+ font-semibold">{name}</span>
+				<span className="block truncate font-semibold text-m+">{name}</span>
 
 				<span className="block truncate text-s text-shell-muted">{description}</span>
 			</span>

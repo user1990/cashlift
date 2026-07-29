@@ -8,12 +8,12 @@ type CheckoutHeaderProps = {
 };
 
 export const CheckoutHeader = ({ billing }: CheckoutHeaderProps) => (
-	<header className="border-b border-shell-border bg-shell/95">
+	<header className="border-shell-border border-b bg-shell/95">
 		<div className="mx-auto flex max-w-295 items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-8">
 			<Link
 				aria-label="Back to pricing"
 				href={`/pricing?billing=${billing}`}
-				className="inline-flex items-center gap-2 text-m font-medium text-shell-muted transition-colors duration-150 hover:text-primary"
+				className="inline-flex items-center gap-2 font-medium text-m text-shell-muted transition-colors duration-150 hover:text-primary"
 			>
 				<ArrowLeft aria-hidden className="size-5" />
 
@@ -24,7 +24,7 @@ export const CheckoutHeader = ({ billing }: CheckoutHeaderProps) => (
 
 			<Logo />
 
-			<p className="inline-flex items-center gap-2 text-m font-medium text-shell-muted">
+			<p className="inline-flex items-center gap-2 font-medium text-m text-shell-muted">
 				<ShieldCheck aria-hidden className="size-5 text-primary" />
 
 				<span className="hidden sm:inline">Secure checkout</span>

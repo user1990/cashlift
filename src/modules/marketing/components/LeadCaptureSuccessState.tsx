@@ -34,9 +34,9 @@ export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCap
 						<CheckCircle2 aria-hidden className="size-5" />
 					</div>
 
-					<h3 className="mt-4 text-l+ font-semibold text-panel-foreground">{title}</h3>
+					<h3 className="mt-4 font-semibold text-l+ text-panel-foreground">{title}</h3>
 
-					<p className="mt-2 text-m leading-6 text-panel-foreground">{description}</p>
+					<p className="mt-2 text-m text-panel-foreground leading-6">{description}</p>
 				</div>
 
 				<div className="mt-6 grid gap-2">

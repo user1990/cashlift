@@ -22,7 +22,7 @@ export const StateMatrix: Story = {
 };
 
 const ToasterStateMatrix = () => (
-	<div className="flex max-w-3xl flex-col flex-start items-center justify-center gap-3">
+	<div className="flex max-w-3xl flex-start flex-col items-center justify-center gap-3">
 		<Toaster />
 
 		<Button
