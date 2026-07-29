@@ -137,12 +137,7 @@
 			}
 		]
 	},
-	"dynamicallyLoaded": [
-		"doctor.config.ts",
-		"src/services/i18n/request.ts",
-		"src/services/next/emptyPolyfillModule.ts",
-		"src/ui/components/DesignSystem.mdx"
-	],
+	"dynamicallyLoaded": ["doctor.config.ts", "src/services/i18n/request.ts", "src/services/next/emptyPolyfillModule.ts"],
 	"framework": [
 		{
 			"name": "next-16-3-route-segment-config",
@@ -153,7 +148,7 @@
 			]
 		}
 	],
-	"ignorePatterns": ["docs/**", "blume.config.ts", "theme.css"],
+	"ignorePatterns": ["docs/**", "blume.config.ts", "theme.css", "src/ui/components/DesignSystem.mdx"],
 	"ignoreDependencies": [
 		"turbopack-inline-svg-loader",
 		"babel-plugin-react-compiler",
@@ -162,7 +157,6 @@
 		"@astrojs/react",
 		"@shikijs/twoslash",
 		"@tailwindcss/vite",
-		"@storybook/addon-docs",
 		"shadcn",
 		"tailwindcss"
 	],
