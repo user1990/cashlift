@@ -1,0 +1,248 @@
+version: 1
+
+groups:
+  - id: surfaces
+    description: User-visible routes and application composition.
+  - id: identity
+    description: Authentication, authorization, and request security.
+  - id: domain
+    description: Financial models and business behavior.
+  - id: data
+    description: Server data access, persistence, and company isolation.
+  - id: platform
+    description: Shared UI, telemetry, documentation, and delivery tooling.
+
+primitives:
+  - id: public-marketing
+    group: surfaces
+    description: Public product, pricing, contact, legal, and checkout surfaces.
+    code:
+      - "src/app/(marketing)/**"
+      - "src/app/checkout/**"
+      - "src/modules/marketing/**"
+    connects_to:
+      - ui-system
+      - public-demo
+
+  - id: public-demo
+    group: surfaces
+    description: Public Studio Nova workspace experience backed by typed fixtures.
+    code:
+      - "src/app/(public-demo)/**"
+      - "src/modules/workspace/demoDataset.ts"
+      - "src/modules/page-shell/components/PublicDemoWorkspacePageContent.tsx"
+      - "e2e/demo-auth-boundary.spec.ts"
+    connects_to:
+      - workspace-shell
+      - workspace-read-path
+
+  - id: auth-request-boundary
+    group: identity
+    description: Clerk session enforcement, security headers, and authenticated route gating.
+    code:
+      - "src/app/(auth)/**"
+      - "src/proxy.ts"
+      - "src/services/clerk/**"
+      - "src/services/supabase/proxy.ts"
+    connects_to:
+      - workspace-routes
+      - workspace-read-path
+      - spend-decision-path
+
+  - id: workspace-routes
+    group: surfaces
+    description: Protected dashboard routes and server-side route composition.
+    code:
+      - "src/app/(workspace)/**"
+    connects_to:
+      - auth-request-boundary
+      - workspace-shell
+      - workspace-read-path
+
+  - id: workspace-shell
+    group: surfaces
+    description: Shared workspace navigation, sections, providers, and dashboard composition.
+    code:
+      - "src/modules/page-shell/**"
+      - "src/modules/dashboard/**"
+    connects_to:
+      - workspace-routes
+      - public-demo
+      - financial-domain
+      - ui-system
+
+  - id: workspace-read-path
+    group: data
+    description: Validated workspace dataset loading for demo and authenticated production modes.
+    code:
+      - "src/app/api/workspace/dataset/**"
+      - "src/modules/workspace/server.ts"
+      - "src/modules/workspace/resolveWorkspaceDataset.ts"
+      - "src/modules/workspace/read-models.ts"
+      - "src/modules/workspace/query.ts"
+      - "src/modules/workspace/schemas.ts"
+      - "src/modules/workspace/types.ts"
+    connects_to:
+      - auth-request-boundary
+      - public-demo
+      - company-data-store
+      - observability
+
+  - id: spend-decision-path
+    group: domain
+    description: Spend-request validation, authorization, API mutation, and pending interaction.
+    code:
+      - "src/app/api/workspace/spend-requests/**"
+      - "src/modules/workspace/spendRequestDecisions.ts"
+      - "src/modules/spend-requests/**"
+    connects_to:
+      - auth-request-boundary
+      - company-data-store
+      - workspace-shell
+      - observability
+
+  - id: financial-domain
+    group: domain
+    description: Typed financial concepts, validation schemas, calculations, and display models.
+    code:
+      - "src/modules/budgets/**"
+      - "src/modules/cash-actions/**"
+      - "src/modules/cash-outlook/**"
+      - "src/modules/company-memberships/**"
+      - "src/modules/company-roles/**"
+      - "src/modules/invoices/**"
+      - "src/modules/money/**"
+      - "src/modules/subscriptions/**"
+      - "src/modules/vendors/**"
+    connects_to:
+      - workspace-read-path
+      - workspace-shell
+      - company-data-store
+
+  - id: company-data-store
+    group: data
+    description: Supabase schema, RLS policies, company-scoped repositories, and row mapping.
+    code:
+      - "supabase/**"
+      - "src/services/supabase/server.ts"
+      - "src/modules/workspace/repositories/**"
+      - "src/modules/company-memberships/repositories/**"
+    connects_to:
+      - auth-request-boundary
+      - workspace-read-path
+      - spend-decision-path
+      - financial-domain
+
+  - id: ui-system
+    group: platform
+    description: Generic visual primitives, global styling, and component workbench.
+    code:
+      - "src/ui/**"
+      - "src/app/globals.css"
+      - ".storybook/**"
+      - "components.json"
+      - "theme.css"
+    connects_to:
+      - public-marketing
+      - workspace-shell
+
+  - id: observability
+    group: platform
+    description: Sentry initialization, failure reporting, and safe correlation metadata.
+    code:
+      - "src/instrumentation.ts"
+      - "src/instrumentation-client.ts"
+      - "src/app/ClientTelemetry.tsx"
+      - "src/app/global-error.tsx"
+      - "src/services/platform/integrations/sentry.ts"
+    connects_to:
+      - workspace-read-path
+      - spend-decision-path
+
+  - id: delivery-pipeline
+    group: platform
+    description: Build, test, security, and deployment automation.
+    code:
+      - ".github/workflows/**"
+      - "scripts/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+    connects_to:
+      - review-workflow
+      - documentation-system
+
+  - id: documentation-system
+    group: platform
+    description: Blume documentation and human-readable architecture guidance.
+    code:
+      - "docs/**"
+      - ".blume/**"
+      - "blume.config.ts"
+    connects_to:
+      - review-workflow
+      - delivery-pipeline
+
+  - id: review-workflow
+    group: platform
+    description: Agent instructions, module enforcement, and PR review automation.
+    code:
+      - "AGENTS.md"
+      - ".agents/**"
+      - ".fallowrc.json"
+      - "biome.json"
+      - ".biome/**"
+    connects_to:
+      - documentation-system
+      - delivery-pipeline
+
+invariants:
+  - id: company-data-isolation
+    statement: Production reads and writes remain scoped to the authenticated member's company and enforced by RLS.
+    applies_to:
+      - auth-request-boundary
+      - workspace-read-path
+      - spend-decision-path
+      - company-data-store
+
+  - id: server-only-financial-access
+    statement: Browser code accesses financial data through server routes and never queries finance tables directly.
+    applies_to:
+      - workspace-routes
+      - workspace-read-path
+      - company-data-store
+
+  - id: demo-production-separation
+    statement: Public demo behavior uses typed fixtures without initializing Clerk or mutating production data.
+    applies_to:
+      - public-demo
+      - auth-request-boundary
+      - workspace-read-path
+      - spend-decision-path
+
+  - id: authorized-financial-mutations
+    statement: Server-boundary input is validated and only authorized finance leads or managers can mutate spend requests.
+    applies_to:
+      - auth-request-boundary
+      - spend-decision-path
+      - company-data-store
+
+  - id: conflicting-controls-lock
+    statement: A pending financial mutation disables every control that can issue a conflicting decision until settlement.
+    applies_to:
+      - spend-decision-path
+      - workspace-shell
+
+  - id: correlation-without-pii
+    statement: Telemetry uses request or correlation identifiers without direct Clerk user IDs or other PII.
+    applies_to:
+      - observability
+      - workspace-read-path
+      - spend-decision-path
+
+  - id: enforced-module-ownership
+    statement: Source dependencies match the narrow ownership rules enforced by Fallow.
+    applies_to:
+      - financial-domain
+      - workspace-shell
+      - review-workflow

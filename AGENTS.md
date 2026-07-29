@@ -37,6 +37,10 @@ Always read this file first. It defines workflow for this repo. Do not override 
 7. Prevent known review regressions.
    - Read `.agents/skills/guide/SKILL.md` when UI or data-display work touches claims, dates, mutations, or component props.
 
+8. Review the system change.
+   - Read `.agents/skills/visual-recap/SKILL.md` when planning a non-trivial change, creating or updating a non-trivial PR, or when the user asks for a visual plan, system review, or PR recap.
+   - For CashLift PRs, the repository-local GitHub-rendered recap is authoritative. Use a hosted Agent-Native Plan recap only when the user explicitly asks for the hosted or interactive variant.
+
 ## Non-Negotiables
 
 - Never guess imports or duplicate existing helpers/components.
