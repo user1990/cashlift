@@ -3,8 +3,9 @@
 import { AmountItem } from "@/modules/money/components/AmountItem";
 import { formatCurrency, getPercentage } from "@/modules/money/format";
 import type { FinancialDataset } from "@/modules/workspace/types";
-import { Badge } from "@/ui/components/Badge";
-import { Panel, PanelHeader } from "@/ui/components/Panel";
+import { Badge } from "@/ui/components/data/Badge";
+import { Panel } from "@/ui/components/layout/Panel";
+import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 import { useInvoiceRiskTotal } from "../hooks/useInvoiceRiskTotal";
 
 type WorkspaceInvoicesSectionProps = {
@@ -25,7 +26,7 @@ export const WorkspaceInvoicesSection = ({ dataset }: WorkspaceInvoicesSectionPr
 				}
 			/>
 
-			<ul className="grid gap-3 @md:grid-cols-2">
+			<ul className="grid @md:grid-cols-2 gap-3">
 				{dataset.invoices.map(({ amountCents, id, status, collectionProbability, owner, client }) => (
 					<AmountItem
 						key={id}

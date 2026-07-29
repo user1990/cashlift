@@ -8,14 +8,14 @@ type WorkspaceSectionHeaderProps = {
 export const WorkspaceSectionHeader = ({ section }: WorkspaceSectionHeaderProps) => (
 	<div className="flex flex-col gap-3 rounded-lg border border-shell-border bg-shell-elevated p-5 shadow-shell md:flex-row md:items-center md:justify-between">
 		<div>
-			<p className="text-s+ uppercase tracking-normal text-primary">Workspace</p>
+			<p className="text-primary text-s+ uppercase tracking-normal">Workspace</p>
 
-			<h1 className="text-4xl+ tracking-normal text-primary">{getSectionTitle(section)}</h1>
+			<h1 className="text-4xl+ text-primary tracking-normal">{getSectionTitle(section)}</h1>
 		</div>
 
 		<Link
 			href="/demo"
-			className="inline-flex h-9 items-center justify-center rounded-md border border-primary bg-primary px-3 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow"
+			className="ease inline-flex h-9 items-center justify-center rounded-md border border-primary bg-primary px-3 font-medium text-m text-primary-foreground transition-[background-color,box-shadow] duration-150 hover:bg-primary-hover hover:shadow-primary-glow"
 		>
 			Run leak audit
 		</Link>

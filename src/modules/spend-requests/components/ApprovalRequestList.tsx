@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { MoneyCents } from "@/modules/money/types";
-import { Badge } from "@/ui/components/Badge";
+import { Badge } from "@/ui/components/data/Badge";
 import type { SpendRequest } from "../types";
 import { RequestItem } from "./RequestItem";
 

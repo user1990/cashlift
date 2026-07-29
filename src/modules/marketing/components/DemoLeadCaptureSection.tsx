@@ -1,4 +1,5 @@
-import { Panel, PanelHeader } from "@/ui/components/Panel";
+import { Panel } from "@/ui/components/layout/Panel";
+import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 
 export const DemoLeadCaptureSection = () => (

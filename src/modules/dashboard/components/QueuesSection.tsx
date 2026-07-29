@@ -3,8 +3,8 @@ import { formatCurrency, getPercentage } from "@/modules/money/format";
 import { ApprovalQueue } from "@/modules/spend-requests/components/ApprovalQueue";
 import { LeakList } from "@/modules/subscriptions/components/LeakList";
 import { WORKSPACE_DATASET_QUERY_KEYS } from "@/modules/workspace/query";
-import { Badge } from "@/ui/components/Badge";
-import { ProgressBar } from "@/ui/components/ProgressBar";
+import { Badge } from "@/ui/components/data/Badge";
+import { ProgressBar } from "@/ui/components/feedback/ProgressBar";
 import type { DashboardViewModel } from "../types";
 import { DashboardPanel } from "./DashboardPanel";
 import { PanelLink } from "./PanelLink";
@@ -68,7 +68,7 @@ export const QueuesSection = ({ basePath = "/dashboard", dashboard, readOnly = f
 				{dashboard.budgetRows.slice(0, 3).map(({ id, remainingCents, team, usagePercent }) => (
 					<li key={id}>
 						<div className="mb-2 flex items-center justify-between gap-3">
-							<p className="text-m+ font-semibold text-panel-foreground">{team}</p>
+							<p className="font-semibold text-m+ text-panel-foreground">{team}</p>
 
 							<span className="font-mono text-s text-shell-muted">
 								{formatCurrency(remainingCents)} {remainingCents >= 0 ? "left" : "over budget"}

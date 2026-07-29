@@ -7,7 +7,7 @@ export const HeaderActions = () => (
 			href="/login"
 			prefetch={false}
 			target="_top"
-			className="inline-flex h-9 items-center rounded-md px-2 text-s font-medium text-shell-muted transition-colors duration-150 hover:text-primary sm:px-3 sm:text-m"
+			className="inline-flex h-9 items-center rounded-md px-2 font-medium text-s text-shell-muted transition-colors duration-150 hover:text-primary sm:px-3 sm:text-m"
 		>
 			Log in
 		</Link>
@@ -15,7 +15,7 @@ export const HeaderActions = () => (
 		<Link
 			href="/demo/workspace"
 			prefetch={false}
-			className="hidden h-9 items-center justify-center whitespace-nowrap rounded-md border border-primary bg-primary px-3 text-m font-medium text-primary-foreground transition-[background-color,box-shadow] duration-150 ease hover:bg-primary-hover hover:shadow-primary-glow sm:inline-flex"
+			className="ease hidden h-9 items-center justify-center whitespace-nowrap rounded-md border border-primary bg-primary px-3 font-medium text-m text-primary-foreground transition-[background-color,box-shadow] duration-150 hover:bg-primary-hover hover:shadow-primary-glow sm:inline-flex"
 		>
 			Open live demo
 		</Link>

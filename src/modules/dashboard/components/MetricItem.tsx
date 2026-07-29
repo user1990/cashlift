@@ -17,7 +17,7 @@ export const MetricItem = ({ direction, icon, label, trend, value, variant }: Me
 		<div>
 			<p className="text-m text-shell-muted">{label}</p>
 
-			<p className="mt-2 font-mono text-3xl+ font-semibold tracking-normal text-panel-foreground">{value}</p>
+			<p className="mt-2 font-mono font-semibold text-3xl+ text-panel-foreground tracking-normal">{value}</p>
 
 			<p className={getTrendClassName(direction)}>
 				{direction === "up" ? <ArrowUp aria-hidden className="size-4" /> : <ArrowDown aria-hidden className="size-4" />}

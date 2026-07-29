@@ -1,5 +1,6 @@
 import type { FinancialDataset } from "@/modules/workspace/types";
-import { Panel, PanelHeader } from "@/ui/components/Panel";
+import { Panel } from "@/ui/components/layout/Panel";
+import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 import { WorkspaceCardGrid } from "./WorkspaceCardGrid";
 
 type WorkspaceTeamSectionProps = {
@@ -12,7 +13,7 @@ export const WorkspaceTeamSection = ({ dataset }: WorkspaceTeamSectionProps) => 
 			<Panel key={id} as="article" className="min-h-40">
 				<PanelHeader label={team} title={name} />
 
-				<p className="inline-flex rounded-md border border-primary-subtle-border bg-primary-subtle px-2 py-1 text-s+ font-medium text-primary">
+				<p className="inline-flex rounded-md border border-primary-subtle-border bg-primary-subtle px-2 py-1 font-medium text-primary text-s+">
 					{formatRole(role)}
 				</p>
 			</Panel>

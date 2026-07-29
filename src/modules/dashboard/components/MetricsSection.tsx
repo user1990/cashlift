@@ -1,6 +1,6 @@
 import { ShieldCheck, Wallet, WalletCards } from "lucide-react";
 import { formatPreciseCompactCurrency } from "@/modules/money/format";
-import { Panel } from "@/ui/components/Panel";
+import { Panel } from "@/ui/components/layout/Panel";
 import type { DashboardViewModel } from "../types";
 import { MetricItem } from "./MetricItem";
 

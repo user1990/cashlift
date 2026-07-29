@@ -60,7 +60,7 @@ export const DesktopNav = () => {
 				}
 			}}
 			ref={navRef}
-			className="hidden items-center gap-2 text-m font-medium text-shell-muted lg:flex"
+			className="hidden items-center gap-2 font-medium text-m text-shell-muted lg:flex"
 		>
 			<DisclosureGroup
 				expandedKeys={expandedKeys}

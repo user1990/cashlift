@@ -1,7 +1,8 @@
 import { ApprovalQueue } from "@/modules/spend-requests/components/ApprovalQueue";
 import { WORKSPACE_DATASET_QUERY_KEYS } from "@/modules/workspace/query";
 import type { FinancialDataset } from "@/modules/workspace/types";
-import { Panel, PanelHeader } from "@/ui/components/Panel";
+import { Panel } from "@/ui/components/layout/Panel";
+import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 
 type WorkspaceApprovalsSectionProps = {
 	dataset: FinancialDataset;
@@ -26,7 +27,7 @@ export const WorkspaceApprovalsSection = ({ dataset, readOnly = false }: Workspa
 			<Panel>
 				<PanelHeader label="Rules" title="Approval policy" />
 
-				<div className="space-y-3 text-m leading-6 text-muted-foreground">
+				<div className="space-y-3 text-m text-muted-foreground leading-6">
 					<p>Managers approve team spend after CashLift shows cash impact.</p>
 
 					<p>Finance holds non-essential requests if buffer risk appears.</p>

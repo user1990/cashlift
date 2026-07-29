@@ -1,3 +1,5 @@
+// @vitest-environment jsdom
+
 import { render, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { ClerkSignInPasswordAutocomplete } from "./ClerkSignInPasswordAutocomplete";

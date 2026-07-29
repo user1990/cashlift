@@ -3,9 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button } from "@/ui/components/Button";
-import { ControlledEmailAutocompleteField } from "@/ui/components/ControlledEmailAutocompleteField";
-import { ControlledTextField } from "@/ui/components/ControlledTextField";
+import { Button } from "@/ui/components/actions/Button";
+import { ControlledEmailAutocompleteField } from "@/ui/components/forms/ControlledEmailAutocompleteField";
+import { ControlledTextField } from "@/ui/components/forms/ControlledTextField";
 import { LEAD_CAPTURE_SCHEMA, type LeadCaptureFormValues } from "../schemas";
 import { LeadCaptureSuccessState } from "./LeadCaptureSuccessState";
 

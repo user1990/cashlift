@@ -3,7 +3,7 @@
 import { ArrowRight, CheckCircle2, RotateCcw } from "lucide-react";
 import { domAnimation, LazyMotion, useReducedMotion } from "motion/react";
 import * as m from "motion/react-m";
-import { Button } from "@/ui/components/Button";
+import { Button } from "@/ui/components/actions/Button";
 import { ActionLink } from "./ActionLink";
 
 const SUCCESS_ANIMATION = {
@@ -34,9 +34,9 @@ export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCap
 						<CheckCircle2 aria-hidden className="size-5" />
 					</div>
 
-					<h3 className="mt-4 text-l+ font-semibold text-panel-foreground">{title}</h3>
+					<h3 className="mt-4 font-semibold text-l+ text-panel-foreground">{title}</h3>
 
-					<p className="mt-2 text-m leading-6 text-panel-foreground">{description}</p>
+					<p className="mt-2 text-m text-panel-foreground leading-6">{description}</p>
 				</div>
 
 				<div className="mt-6 grid gap-2">

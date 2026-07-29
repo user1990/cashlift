@@ -1,6 +1,7 @@
 import { ShieldCheck } from "lucide-react";
 import type { FinancialDataset } from "@/modules/workspace/types";
-import { Panel, PanelHeader } from "@/ui/components/Panel";
+import { Panel } from "@/ui/components/layout/Panel";
+import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 
 type WorkspaceSettingsSectionProps = {
 	dataset: FinancialDataset;

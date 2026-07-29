@@ -50,7 +50,7 @@ export const OverviewDateRangePickerClient = ({
 		>
 			<Label className="sr-only">Dashboard date range</Label>
 
-			<Group className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-shell-elevated px-4 text-m font-semibold text-shell-foreground outline-none transition-[border-color,box-shadow] duration-150 ease data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20 data-open:border-primary-subtle-border">
+			<Group className="ease inline-flex h-11 items-center gap-2 rounded-md border border-border bg-shell-elevated px-4 font-semibold text-m text-shell-foreground outline-none transition-[border-color,box-shadow] duration-150 data-open:border-primary-subtle-border data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20">
 				<CalendarDays aria-hidden className="size-4 shrink-0" />
 
 				<span aria-hidden className="whitespace-nowrap">
@@ -66,7 +66,7 @@ export const OverviewDateRangePickerClient = ({
 				</DateInput>
 
 				<AriaButton
-					className="flex size-5 items-center cursor-pointer justify-center rounded-sm text-shell-foreground outline-none transition-[color] duration-150 ease hover:text-primary data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20"
+					className="ease flex size-5 cursor-pointer items-center justify-center rounded-sm text-shell-foreground outline-none transition-[color] duration-150 hover:text-primary data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20"
 					isDisabled={!onDateRangeChange}
 				>
 					<ChevronDown aria-hidden className="size-4" />
@@ -84,7 +84,7 @@ export const OverviewDateRangePickerClient = ({
 								<ChevronLeft aria-hidden className="size-4" />
 							</CalendarNavButton>
 
-							<Heading className="text-m font-semibold text-panel-foreground" />
+							<Heading className="font-semibold text-m text-panel-foreground" />
 
 							<CalendarNavButton slot="next">
 								<ChevronRight aria-hidden className="size-4" />
@@ -95,10 +95,10 @@ export const OverviewDateRangePickerClient = ({
 							{(date) => (
 								<CalendarCell
 									className={cn(
-										"size-9 rounded-md text-center text-s outline-none transition-[background-color,color,box-shadow] duration-150 ease",
+										"ease size-9 rounded-md text-center text-s outline-none transition-[background-color,color,box-shadow] duration-150",
 										"text-panel-foreground hover:bg-panel-muted data-disabled:text-muted-foreground/40 data-outside-month:text-muted-foreground",
-										"data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20 data-selected:bg-primary data-selected:text-primary-foreground",
-										"data-selection-start:bg-primary data-selection-start:text-primary-foreground data-selection-end:bg-primary data-selection-end:text-primary-foreground",
+										"data-selected:bg-primary data-selected:text-primary-foreground data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20",
+										"data-selection-end:bg-primary data-selection-start:bg-primary data-selection-end:text-primary-foreground data-selection-start:text-primary-foreground",
 									)}
 									date={date}
 								/>
@@ -118,7 +118,7 @@ type CalendarNavButtonProps = {
 
 const CalendarNavButton = ({ children, slot }: CalendarNavButtonProps) => (
 	<AriaButton
-		className="flex size-8 items-center justify-center rounded-md text-muted-foreground outline-none transition-[background-color,color,box-shadow] duration-150 ease hover:bg-panel-muted hover:text-panel-foreground data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20"
+		className="ease flex size-8 items-center justify-center rounded-md text-muted-foreground outline-none transition-[background-color,color,box-shadow] duration-150 hover:bg-panel-muted hover:text-panel-foreground data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20"
 		slot={slot}
 	>
 		{children}

@@ -7,5 +7,5 @@ type ShellSectionProps = {
 };
 
 export const ShellSection = ({ children, className }: ShellSectionProps) => (
-	<section className={cn("border-y border-shell-border bg-shell-band", className)}>{children}</section>
+	<section className={cn("border-shell-border border-y bg-shell-band", className)}>{children}</section>
 );

@@ -17,7 +17,7 @@ export const MobileNav = () => (
 		<nav
 			id="marketing-mobile-nav"
 			aria-label="Mobile navigation"
-			className="fixed inset-x-0 top-16 hidden border-t border-shell-border bg-shell px-4 py-4 shadow-shell group-open/nav:block sm:px-6"
+			className="fixed inset-x-0 top-16 hidden border-shell-border border-t bg-shell px-4 py-4 shadow-shell group-open/nav:block sm:px-6"
 		>
 			<div className="mx-auto grid max-w-295 gap-5">
 				{MARKETING_NAV_GROUPS.map(({ items, label }) => (
@@ -35,7 +35,7 @@ function MobileNavGroupSection({ group }: { group: NavGroup }) {
 
 	return (
 		<section aria-labelledby={headingId}>
-			<p id={headingId} className="px-3 text-s+ uppercase tracking-normal text-primary">
+			<p id={headingId} className="px-3 text-primary text-s+ uppercase tracking-normal">
 				{group.label}
 			</p>
 

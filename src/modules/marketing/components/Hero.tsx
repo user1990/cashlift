@@ -25,7 +25,7 @@ export const Hero = ({
 			<>
 				<Component
 					className={cn(
-						"max-w-3xl text-4xl font-semibold tracking-normal sm:text-6xl+",
+						"max-w-3xl font-semibold text-4xl tracking-normal sm:text-6xl+",
 						Component === "h1" ? "text-primary" : "text-shell-foreground",
 						titleClassName,
 					)}
@@ -33,11 +33,11 @@ export const Hero = ({
 					{label}
 				</Component>
 
-				<p className="mt-4 max-w-3xl text-3xl+ leading-tight tracking-normal text-shell-foreground">{title}</p>
+				<p className="mt-4 max-w-3xl text-3xl+ text-shell-foreground leading-tight tracking-normal">{title}</p>
 			</>
 		) : (
 			<>
-				<p className="text-s+ uppercase tracking-normal text-primary">{label}</p>
+				<p className="text-primary text-s+ uppercase tracking-normal">{label}</p>
 
 				<Component
 					className={cn(
@@ -51,6 +51,6 @@ export const Hero = ({
 			</>
 		)}
 
-		<p className="mt-5 max-w-2xl text-xl leading-8 text-shell-muted">{description}</p>
+		<p className="mt-5 max-w-2xl text-shell-muted text-xl leading-8">{description}</p>
 	</div>
 );

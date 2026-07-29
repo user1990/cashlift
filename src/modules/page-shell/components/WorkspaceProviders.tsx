@@ -6,7 +6,7 @@ import { type ReactNode, Suspense } from "react";
 import { AuthProvider } from "@/services/clerk/provider";
 import messages from "@/services/i18n/messages/en.json";
 import { QueryProvider } from "@/services/query/provider";
-import { Toaster } from "@/ui/components/Toaster";
+import { Toaster } from "@/ui/components/feedback/Toaster";
 
 type WorkspaceProvidersProps = {
 	children: ReactNode;

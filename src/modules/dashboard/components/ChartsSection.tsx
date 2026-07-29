@@ -18,7 +18,7 @@ export const ChartsSection = ({ dashboard }: ChartsSectionProps) => (
 						{formatPreciseCompactCurrency(dashboard.endingCashBalanceCents)}
 					</p>
 
-					<p className="text-s text-muted-foreground">Ending cash balance</p>
+					<p className="text-muted-foreground text-s">Ending cash balance</p>
 				</div>
 			}
 			label="13-week cash outlook"
