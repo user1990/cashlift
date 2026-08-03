@@ -14,7 +14,7 @@ const API_ERROR_SCHEMA = z.object({
 });
 
 export const decideSpendRequest = async ({ id, status }: SpendRequestDecisionRequest) => {
-	const response = await fetch(`/api/workspace/spend-requests/${id}`, {
+	const response = await fetch(`/api/workspace/spend-requests/${encodeURIComponent(id)}`, {
 		body: JSON.stringify({ status }),
 		headers: {
 			"Content-Type": "application/json",
@@ -30,5 +30,11 @@ export const decideSpendRequest = async ({ id, status }: SpendRequestDecisionReq
 		);
 	}
 
-	return SPEND_REQUEST_SCHEMA.parse(await response.json());
+	const request = SPEND_REQUEST_SCHEMA.safeParse(await response.json().catch(() => null));
+
+	if (!request.success) {
+		throw new Error("Unable to update spend request.");
+	}
+
+	return request.data;
 };

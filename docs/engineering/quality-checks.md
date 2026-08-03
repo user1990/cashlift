@@ -10,6 +10,7 @@ Run the smallest relevant check while iterating, then run the complete appropria
 | Formatting and static analysis | `pnpm lint` |
 | Type safety | `pnpm typecheck` |
 | Unit behavior | `pnpm test` |
+| Runtime coverage report | `pnpm test:coverage` |
 | Browser journeys | `pnpm test:e2e` |
 | Code quality | `pnpm check:code` |
 | Dependency and repository security | `pnpm security:check` and `pnpm security:audit` |

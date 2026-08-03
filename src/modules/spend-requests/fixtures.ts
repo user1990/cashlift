@@ -10,7 +10,7 @@ type SpendRequestDecisionBody = {
 	status: SpendRequestDecisionStatus;
 };
 
-type SpendRequestDecisionResponse = SpendRequest | { error: string };
+type SpendRequestDecisionResponse = Record<string, unknown>;
 
 type SpendRequestDecisionResolver = HttpResponseResolver<
 	SpendRequestDecisionParams,

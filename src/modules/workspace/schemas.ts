@@ -20,7 +20,7 @@ export const WORKSPACE_DATASET_SCOPE_SCHEMA = z.enum([
 	"vendors",
 ]);
 
-const ISO_DATE_SCHEMA = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+const ISO_DATE_SCHEMA = z.iso.date();
 
 export const WORKSPACE_DATASET_DATE_RANGE_SCHEMA = z
 	.object({

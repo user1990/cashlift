@@ -2,8 +2,6 @@
   <img src="./src/app/logo.svg" width="110" alt="CashLift Logo" />
 </p>
 
-<h1 align="center">CashLift</h1>
-
 <p align="center">
   Cash decision command center for service firms.
 </p>
@@ -201,7 +199,7 @@ Demo mode:
 - does not require Clerk keys
 - does not require Supabase keys
 - uses `src/modules/workspace/demoDataset.ts`
-- serves the product workspace at `/app`
+- serves the product workspace at `/dashboard`
 
 ## Production Mode
 

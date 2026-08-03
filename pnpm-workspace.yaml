@@ -1,10 +1,4 @@
 minimumReleaseAge: 10080
-minimumReleaseAgeExclude:
-  # Security exception: required to remediate GHSA-v2hh-gcrm-f6hx before its one-week age gate.
-  - fast-uri@3.1.4
-  # Security exceptions: required to remediate GHSA-r28c-9q8g-f849 and GHSA-mh99-v99m-4gvg before their one-week age gate.
-  - postcss@8.5.18
-  - brace-expansion@5.0.8
 overrides:
   '@vercel/routing-utils>path-to-regexp': 6.3.0
   fast-uri: 3.1.4
@@ -12,7 +6,7 @@ overrides:
   brace-expansion@5.0.7: 5.0.8
   sharp: 0.35.0
   undici: 7.28.0
-  valibot: 1.4.1
+  valibot: 1.4.2
 peerDependencyRules:
   allowedVersions:
     typescript: 6.0.2
