@@ -1,5 +1,5 @@
 ---
-title: CashLift product guide
+title: Product guide
 description: The decisions and workspace areas CashLift brings together.
 ---
 

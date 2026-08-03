@@ -201,7 +201,7 @@ Demo mode:
 - does not require Clerk keys
 - does not require Supabase keys
 - uses `src/modules/workspace/demoDataset.ts`
-- serves the product workspace at `/app`
+- serves the product workspace at `/dashboard`
 
 ## Production Mode
 

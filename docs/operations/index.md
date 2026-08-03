@@ -1,5 +1,5 @@
 ---
-title: CI and documentation delivery
+title: Operations
 description: What CI verifies and how the static documentation site is produced.
 ---
 

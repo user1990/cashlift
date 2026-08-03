@@ -11,6 +11,12 @@ export default defineConfig({
 		},
 	},
 	test: {
+		coverage: {
+			exclude: ["src/**/*.stories.{ts,tsx}", "src/test/**"],
+			include: ["src/**/*.{ts,tsx}"],
+			provider: "v8",
+			reporter: ["text", "json-summary", "html"],
+		},
 		environment: "node",
 		exclude: ["**/e2e/**", "**/node_modules/**"],
 		reporters: process.stdout.isTTY ? ["tree"] : ["default"],

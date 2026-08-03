@@ -1,5 +1,5 @@
 ---
-title: Run CashLift locally
+title: Getting started
 description: Start the application in its safe local demo mode.
 ---
 
@@ -24,6 +24,8 @@ pnpm docs:build
 pnpm lint
 pnpm typecheck
 pnpm test
+pnpm test:coverage
+pnpm check:code
 pnpm test:e2e
 ```
 

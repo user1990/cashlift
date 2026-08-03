@@ -39,7 +39,7 @@ test.describe("axe smoke", () => {
 	});
 
 	test("app shell renders for axe (demo mode)", async ({ page }) => {
-		await page.goto("/app");
+		await page.goto("/dashboard");
 
 		const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 
