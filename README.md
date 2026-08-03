@@ -2,8 +2,6 @@
   <img src="./src/app/logo.svg" width="110" alt="CashLift Logo" />
 </p>
 
-<h1 align="center">CashLift</h1>
-
 <p align="center">
   Cash decision command center for service firms.
 </p>
