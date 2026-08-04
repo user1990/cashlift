@@ -19,6 +19,28 @@ const UPDATED_SPEND_REQUEST_ROW_MOCK = {
 	vendor: "BrandForge",
 };
 
+const COMPANY_ROW_MOCK = {
+	cash_balance_cents: 41_200_000,
+	cash_buffer_target_cents: 25_000_000,
+	default_role: "owner-finance" as const,
+	id: "studio-nova",
+	industry: "agency" as const,
+	monthly_payroll_cents: 17_800_000,
+	name: "Studio Nova",
+};
+
+const SUBSCRIPTION_ROWS_MOCK = [
+	{
+		amount_cents: 126_000,
+		id: "subscription-notion",
+		owner: "Leo",
+		renewal_date: "2026-05-12",
+		status: "unused" as const,
+		usage_percent: 31,
+		vendor: "Notion",
+	},
+];
+
 const createSupabaseClient = ({
 	updateError = null,
 	updatedRequest = UPDATED_SPEND_REQUEST_ROW_MOCK,
@@ -52,6 +74,46 @@ const createSupabaseClient = ({
 		updateMock,
 	};
 };
+
+const createWorkspaceDatasetClient = () => ({
+	from: vi.fn((table: string) => {
+		if (table === "company_members") {
+			return {
+				select: () => ({
+					eq: () => ({
+						limit: () => ({
+							maybeSingle: vi
+								.fn()
+								.mockResolvedValue({ data: { company_id: "studio-nova", role: "owner-finance" }, error: null }),
+						}),
+					}),
+				}),
+			};
+		}
+
+		if (table === "companies") {
+			return {
+				select: () => ({
+					eq: () => ({
+						single: vi.fn().mockResolvedValue({ data: COMPANY_ROW_MOCK, error: null }),
+					}),
+				}),
+			};
+		}
+
+		if (table === "subscriptions") {
+			return {
+				select: () => ({
+					eq: () => ({
+						order: vi.fn().mockResolvedValue({ data: SUBSCRIPTION_ROWS_MOCK, error: null }),
+					}),
+				}),
+			};
+		}
+
+		throw new Error(`Unexpected workspace table: ${table}`);
+	}),
+});
 
 describe("supabaseFinanceRepository", () => {
 	beforeEach(() => {
@@ -101,6 +163,49 @@ describe("supabaseFinanceRepository", () => {
 		).rejects.toMatchObject({
 			code: "supabase_query_failed",
 			message: "Unable to update spend request.",
+		});
+	});
+
+	it("returns a scope-limited dataset through its public read interface", async () => {
+		const client = createWorkspaceDatasetClient();
+		CREATE_SERVER_SUPABASE_CLIENT_MOCK.mockReturnValue(client);
+		const { supabaseFinanceRepository } = await import("./supabase");
+
+		const dataset = await supabaseFinanceRepository.getWorkspaceDataset("user-1", "jwt", "vendors");
+
+		expect(CREATE_SERVER_SUPABASE_CLIENT_MOCK).toHaveBeenCalledWith({ accessToken: "jwt" });
+		expect(client.from).toHaveBeenCalledWith("company_members");
+		expect(client.from).toHaveBeenCalledWith("companies");
+		expect(client.from).toHaveBeenCalledWith("subscriptions");
+		expect(client.from).toHaveBeenCalledTimes(3);
+		expect(dataset).toEqual({
+			cashActions: [],
+			forecast: [],
+			invoices: [],
+			profile: {
+				cashBalanceCents: 41_200_000,
+				cashBufferTargetCents: 25_000_000,
+				companyId: "studio-nova",
+				defaultRole: "owner-finance",
+				industry: "agency",
+				monthlyPayrollCents: 17_800_000,
+				name: "Studio Nova",
+			},
+			spendRequests: [],
+			subscriptions: [
+				{
+					amountCents: 126_000,
+					id: "subscription-notion",
+					owner: "Leo",
+					renewalDate: "2026-05-12",
+					status: "unused",
+					usagePercent: 31,
+					vendor: "Notion",
+				},
+			],
+			teamBudgets: [],
+			teamMembers: [],
+			vendorBills: [],
 		});
 	});
 });
