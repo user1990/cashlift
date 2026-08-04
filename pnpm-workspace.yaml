@@ -39,3 +39,5 @@ allowBuilds:
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+patchedDependencies:
+  react-docgen-typescript@2.4.0: patches/react-docgen-typescript@2.4.0.patch

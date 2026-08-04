@@ -13,6 +13,9 @@ overrides:
   undici: 7.28.0
   valibot: 1.4.2
 
+patchedDependencies:
+  react-docgen-typescript@2.4.0: e9443e2286c1c16f1fe8400e90ff196e47607e34eb908ea18e48fe368bb1286f
+
 importers:
 
   .:
@@ -144,9 +147,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.17)
-      '@typescript/native':
-        specifier: npm:typescript@^7.0.2
-        version: typescript@7.0.2
+      '@typescript/typescript6':
+        specifier: ^6.0.2
+        version: 6.0.2
       '@vitest/coverage-v8':
         specifier: ^4.1.10
         version: 4.1.10(vitest@4.1.10)
@@ -3309,6 +3312,10 @@ packages:
     engines: {node: '>=16.20.0'}
     cpu: [x64]
     os: [win32]
+
+  '@typescript/typescript6@6.0.2':
+    resolution: {integrity: sha512-mbCddXd+jm7hfx7w2YU64/Av4/NqqeG3GoRZgxPcgoTxYjhrcfJRw9ULch71SS4G+Q3bOXFhRvPqjguN0Hyp5w==}
+    hasBin: true
 
   '@typescript/vfs@1.6.4':
     resolution: {integrity: sha512-PJFXFS4ZJKiJ9Qiuix6Dz/OwEIqHD7Dme1UwZhTK11vR+5dqW2ACbdndWQexBzCx+CPuMe5WBYQWCsFyGlQLlQ==}
@@ -8696,7 +8703,7 @@ snapshots:
   '@joshwooding/vite-plugin-react-docgen-typescript@0.7.0(typescript@7.0.2)(vite@8.0.16(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))':
     dependencies:
       glob: 13.0.6
-      react-docgen-typescript: 2.4.0(typescript@7.0.2)
+      react-docgen-typescript: 2.4.0(patch_hash=e9443e2286c1c16f1fe8400e90ff196e47607e34eb908ea18e48fe368bb1286f)(typescript@7.0.2)
       vite: 8.0.16(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)
     optionalDependencies:
       typescript: 7.0.2
@@ -9791,7 +9798,7 @@ snapshots:
       '@storybook/react-dom-shim': 10.5.5(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(storybook@10.5.5(@types/react@19.2.17)(prettier@3.9.5)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))
       react: 19.2.8
       react-docgen: 8.0.3
-      react-docgen-typescript: 2.4.0(typescript@7.0.2)
+      react-docgen-typescript: 2.4.0(patch_hash=e9443e2286c1c16f1fe8400e90ff196e47607e34eb908ea18e48fe368bb1286f)(typescript@7.0.2)
       react-dom: 19.2.8(react@19.2.8)
       storybook: 10.5.5(@types/react@19.2.17)(prettier@3.9.5)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
     optionalDependencies:
@@ -10394,6 +10401,10 @@ snapshots:
 
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
+
+  '@typescript/typescript6@6.0.2':
+    dependencies:
+      '@typescript/old': typescript@6.0.3
 
   '@typescript/vfs@1.6.4(typescript@6.0.3)':
     dependencies:
@@ -13868,7 +13879,7 @@ snapshots:
       react-stately: 3.48.0(react@19.2.8)
       use-sync-external-store: 1.6.0(react@19.2.8)
 
-  react-docgen-typescript@2.4.0(typescript@7.0.2):
+  react-docgen-typescript@2.4.0(patch_hash=e9443e2286c1c16f1fe8400e90ff196e47607e34eb908ea18e48fe368bb1286f)(typescript@7.0.2):
     dependencies:
       typescript: 7.0.2
 
