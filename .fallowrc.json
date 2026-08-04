@@ -152,7 +152,7 @@
 	"ignoreDependencies": [
 		"turbopack-inline-svg-loader",
 		"babel-plugin-react-compiler",
-		"@typescript/native",
+		"@typescript/typescript6",
 		"@astrojs/mdx",
 		"@astrojs/react",
 		"@shikijs/twoslash",
