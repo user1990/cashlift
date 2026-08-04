@@ -1,5 +1,16 @@
 minimumReleaseAge: 10080
 minimumReleaseAgeExclude:
+  - next@16.3.0
+  - '@next/env@16.3.0'
+  - '@next/playwright@16.3.0'
+  - '@next/swc-darwin-arm64@16.3.0'
+  - '@next/swc-darwin-x64@16.3.0'
+  - '@next/swc-linux-arm64-gnu@16.3.0'
+  - '@next/swc-linux-arm64-musl@16.3.0'
+  - '@next/swc-linux-x64-gnu@16.3.0'
+  - '@next/swc-linux-x64-musl@16.3.0'
+  - '@next/swc-win32-arm64-msvc@16.3.0'
+  - '@next/swc-win32-x64-msvc@16.3.0'
   # Security exceptions: required to remediate GHSA-7p8r-x3mc-p8w7 before the one-week age gate.
   - fast-uri@3.1.5
   # Security exceptions: required to remediate GHSA-rgw5-rvv9-x895 before the one-week age gate.
@@ -14,7 +25,7 @@ overrides:
   valibot: 1.4.2
 peerDependencyRules:
   allowedVersions:
-    typescript: 6.0.2
+    typescript: 7.0.2
     '@scalar/astro>astro': 7.0.7
     '@tailwindcss/typography>tailwindcss': 4.3.2
 allowBuilds:
@@ -30,3 +41,5 @@ allowBuilds:
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+patchedDependencies:
+  react-docgen-typescript@2.4.0: patches/react-docgen-typescript@2.4.0.patch

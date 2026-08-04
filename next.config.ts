@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
 	cacheComponents: true,
 	experimental: {
 		inlineCss: true,
+		useTypeScriptCli: true,
 	},
 	partialPrefetching: true,
 	poweredByHeader: false,
