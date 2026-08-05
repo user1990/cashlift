@@ -6,7 +6,7 @@ type HomeDecisionStoryImageProps = {
 };
 
 export const HomeDecisionStoryImage = ({ alt, src }: HomeDecisionStoryImageProps) => (
-	<div className="overflow-hidden rounded-xl border border-shell-border bg-shell-elevated shadow-shell">
+	<div className="overflow-hidden rounded-lg border border-shell-border bg-shell shadow-panel">
 		<Image
 			alt={alt}
 			height={720}

@@ -1,44 +1,89 @@
-import type { ReactNode } from "react";
 import { cn } from "@/ui/utils/cn";
+import type { HomeDecisionStoryAction } from "../types";
 import { HomeDecisionStoryImage } from "./HomeDecisionStoryImage";
 
 type HomeDecisionStoryChapterProps = {
-	chapter: string;
-	description: string;
-	eyebrow: string;
+	action: HomeDecisionStoryAction;
 	imageAlt: string;
 	imageSrc: string;
-	index: number;
-	title: ReactNode;
 };
 
-export const HomeDecisionStoryChapter = ({
-	chapter,
-	description,
-	eyebrow,
-	imageAlt,
-	imageSrc,
-	index,
-	title,
-}: HomeDecisionStoryChapterProps) => {
-	const imageFirst = index % 2 === 0;
+export const HomeDecisionStoryChapter = ({ action, imageAlt, imageSrc }: HomeDecisionStoryChapterProps) => {
+	const chapterStyle = CHAPTER_STYLES[action.type];
 
 	return (
-		<li data-story-chapter={chapter} className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
-			<article className={cn("max-w-xl", imageFirst && "lg:order-2 lg:pl-6")}>
-				<p className="flex items-center gap-3 font-semibold text-primary text-s+ uppercase tracking-normal">
-					<span className="font-mono text-shell-muted">0{index}</span>
-					{eyebrow}
-				</p>
+		<li
+			id={`decision-${action.type}`}
+			data-story-chapter={action.type}
+			className={cn("scroll-mt-24 lg:sticky motion-reduce:lg:static", chapterStyle.position)}
+		>
+			<article
+				className={cn(
+					"relative overflow-hidden rounded-xl border border-shell-border border-t-4 bg-shell-elevated p-5 text-shell-foreground shadow-panel sm:p-7 lg:p-8",
+					chapterStyle.border,
+				)}
+			>
+				<div className="grid gap-7 border-shell-border border-b pb-7 lg:grid-cols-[0.72fr_1.28fr] lg:items-center lg:gap-10">
+					<div className="self-stretch">
+						<h3
+							className={cn(
+								"max-w-xl text-5xl+ capitalize tracking-normal sm:text-6xl+ lg:text-7xl+",
+								chapterStyle.text,
+							)}
+						>
+							{action.type}
+						</h3>
 
-				<h3 className="mt-4 text-4xl+ text-shell-foreground tracking-normal sm:text-5xl+">{title}</h3>
+						<p className="mt-5 max-w-xl text-l text-shell-foreground leading-7">
+							{action.title} {action.description}
+						</p>
+					</div>
 
-				<p className="mt-5 text-l text-shell-muted leading-8">{description}</p>
+					<HomeDecisionStoryImage alt={imageAlt} src={imageSrc} />
+				</div>
+
+				<dl className="grid grid-cols-3 gap-4 pt-5">
+					<DecisionDetail label="Impact" value={action.impact} />
+
+					<DecisionDetail label="Urgency" value={action.priority} capitalize />
+
+					<DecisionDetail label="Owner" value={action.owner} />
+				</dl>
 			</article>
-
-			<div className={cn(imageFirst && "lg:order-1")}>
-				<HomeDecisionStoryImage alt={imageAlt} src={imageSrc} />
-			</div>
 		</li>
 	);
 };
+
+const CHAPTER_STYLES = {
+	approve: {
+		border: "border-t-warning",
+		position: "lg:top-28 lg:z-20",
+		text: "text-warning",
+	},
+	collect: {
+		border: "border-t-primary",
+		position: "lg:top-24 lg:z-10",
+		text: "text-primary",
+	},
+	cut: {
+		border: "border-t-highlight",
+		position: "lg:top-32 lg:z-30",
+		text: "text-highlight",
+	},
+} as const;
+
+type DecisionDetailProps = {
+	label: string;
+	value: string;
+	capitalize?: boolean;
+};
+
+function DecisionDetail({ capitalize = false, label, value }: DecisionDetailProps) {
+	return (
+		<div>
+			<dt className="font-mono text-shell-muted text-xs uppercase tracking-wider">{label}</dt>
+
+			<dd className={cn("mt-2 font-mono text-m sm:text-l", capitalize && "capitalize")}>{value}</dd>
+		</div>
+	);
+}

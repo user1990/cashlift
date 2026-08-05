@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
+import type { CashActionType } from "@/modules/cash-actions/types";
 import { HomePage } from "@/modules/marketing/components/HomePage";
+import type { HomeDecisionStoryAction } from "@/modules/marketing/types";
+import { formatCurrency } from "@/modules/money/format";
+import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
 
 export const metadata: Metadata = {
 	title: "CashLift — See what to collect, approve, or cut today",
@@ -7,5 +11,31 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-	return <HomePage />;
+	return <HomePage actions={HOME_DECISION_ACTIONS} />;
+}
+
+const HOME_DECISION_ACTIONS = [
+	getHomeDecisionAction("collection", "collect"),
+	getHomeDecisionAction("approval", "approve"),
+	getHomeDecisionAction("vendor-leak", "cut"),
+] satisfies HomeDecisionStoryAction[];
+
+function getHomeDecisionAction(
+	actionType: Extract<CashActionType, "approval" | "collection" | "vendor-leak">,
+	storyType: HomeDecisionStoryAction["type"],
+): HomeDecisionStoryAction {
+	const action = DEMO_WORKSPACE_DATASET.cashActions.find(({ type }) => type === actionType);
+
+	if (!action) {
+		throw new Error(`Missing demo cash action for ${actionType}`);
+	}
+
+	return {
+		description: action.description,
+		impact: formatCurrency(action.impactCents),
+		owner: action.owner,
+		priority: action.priority,
+		title: action.title,
+		type: storyType,
+	} satisfies HomeDecisionStoryAction;
 }
