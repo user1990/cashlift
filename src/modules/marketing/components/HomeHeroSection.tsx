@@ -11,8 +11,12 @@ export const HomeHeroSection = () => (
 
 		<div className="relative mx-auto max-w-295 px-4 pt-16 pb-12 sm:px-6 sm:pt-20 lg:px-8 lg:pt-24 lg:pb-16">
 			<header className="mx-auto max-w-4xl text-center">
-				<h1 className="text-5xl+ text-primary tracking-normal sm:text-7xl+">
-					See what to collect, approve, or cut today.
+				<h1 className="text-5xl+ tracking-normal sm:text-7xl+">
+					<span className="block text-shell-foreground">See what to</span>
+
+					<span className="block text-primary">collect, approve,</span>
+
+					<span className="block text-signal">or cut today.</span>
 				</h1>
 
 				<p className="mx-auto mt-6 max-w-2xl text-l text-shell-muted leading-8">
@@ -25,7 +29,7 @@ export const HomeHeroSection = () => (
 				</ActionLink>
 			</header>
 
-			<div className="relative mx-auto mt-10 max-w-280 origin-center overflow-hidden rounded-xl border border-shell-border bg-shell-elevated shadow-shell sm:mt-12 lg:[transform:perspective(90rem)_rotateX(4deg)_scale(.94)]">
+			<div className="relative mx-auto mt-10 max-w-280 origin-center overflow-hidden rounded-xl border border-shell-border bg-shell-elevated shadow-shell sm:mt-12 lg:[transform:perspective(100rem)_rotateX(5deg)_scale(.93)]">
 				<div
 					aria-hidden
 					className="absolute inset-x-0 top-0 z-10 h-px bg-linear-to-r from-transparent via-primary to-transparent"

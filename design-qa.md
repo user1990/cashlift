@@ -49,6 +49,17 @@ No actionable P0, P1, or P2 fidelity issues remain.
 
 final result: passed
 
+## Selected centered hero treatment — 2026-08-05
+
+- Source visual truth: `/Users/pauliusrimgaila/.codex/generated_images/019fcc66-a00d-7c71-b8a4-8f63fc3cfc0d/exec-a4c4b351-8b02-4be2-8176-a8dd9c1f03a4.png`
+- Intended implementation: three centered heading rows — white, cyan, green — followed by the existing `Open live demo` action and a centered dashboard screenshot with a 5-degree X-axis perspective.
+
+### Verification limitation
+
+The in-app browser still blocks `http://localhost:3000/`, so this revised hero could not be captured and compared against the selected mock. Formatting, TypeScript, and focused homepage tests pass. The image preserves the existing priority and high fetch priority configuration.
+
+final result: blocked
+
 ## Revised dark modular decision stack — 2026-08-05
 
 - Source visual truth: `/Users/pauliusrimgaila/.codex/generated_images/019fcc66-a00d-7c71-b8a4-8f63fc3cfc0d/exec-0599b05b-661d-4c4f-858d-622d17b65f50.png`
@@ -107,3 +118,9 @@ The browser console had no errors. Next.js emitted an existing development-only 
 - P3: the highlighted node stays on the first stage, matching the selected mock. It can be connected to scroll position in a later interaction pass if that behavior is desired.
 
 final result: passed
+
+## Current selected hero verification — 2026-08-05
+
+The current implementation follows the selected three-row white, cyan, and green heading treatment while preserving the existing `Open live demo` CTA. A direct in-app browser capture remains blocked by the localhost URL policy, so visual QA cannot truthfully pass.
+
+final result: blocked
