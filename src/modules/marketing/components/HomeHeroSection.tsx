@@ -30,7 +30,15 @@ export const HomeHeroSection = () => (
 			</header>
 
 			<div className="relative mx-auto mt-10 max-w-280 sm:mt-12">
-				<div aria-hidden className="absolute inset-x-12 -bottom-7 h-20 rounded-full bg-primary/35 blur-3xl" />
+				<div
+					aria-hidden
+					className="absolute inset-x-[6%] bottom-0 h-20 bg-[radial-gradient(ellipse_at_50%_100%,color-mix(in_srgb,var(--primary)_62%,transparent),color-mix(in_srgb,var(--primary)_30%,transparent)_46%,transparent_78%)] blur-2xl lg:bottom-7"
+				/>
+
+				<div
+					aria-hidden
+					className="absolute inset-x-[8%] bottom-0 h-px bg-primary shadow-[0_0_14px_4px_color-mix(in_srgb,var(--primary)_72%,transparent)] lg:bottom-7"
+				/>
 
 				<div className="relative origin-center overflow-hidden rounded-xl border border-shell-border bg-shell-elevated shadow-shell lg:[transform:perspective(100rem)_rotateX(6deg)_scale(.92)]">
 					<div
