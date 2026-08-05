@@ -15,10 +15,7 @@ export const HomeDecisionStoryChapter = ({ action, imageAlt, imageSrc }: HomeDec
 		<li
 			id={`decision-${action.type}`}
 			data-story-chapter={action.type}
-			className={cn(
-				"mb-8 scroll-mt-28 lg:sticky lg:mb-[16svh] motion-reduce:lg:static motion-reduce:lg:mb-8",
-				chapterStyle.position,
-			)}
+			className={cn("scroll-mt-24 lg:sticky motion-reduce:lg:static", chapterStyle.position)}
 		>
 			<article
 				className={cn(
@@ -70,7 +67,7 @@ const CHAPTER_STYLES = {
 	},
 	cut: {
 		border: "border-t-highlight",
-		position: "lg:top-32 lg:z-30 lg:mb-0",
+		position: "lg:top-32 lg:z-30",
 		text: "text-highlight",
 	},
 } as const;

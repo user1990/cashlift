@@ -7,35 +7,6 @@ type HomeDecisionStorySectionProps = {
 	actions: HomeDecisionStoryAction[];
 };
 
-export const HomeDecisionStorySection = ({ actions }: HomeDecisionStorySectionProps) => (
-	<section aria-labelledby={DECISION_STORY_TITLE_ID} className="isolate border-shell-border border-b bg-shell">
-		<header className="mx-auto max-w-4xl px-4 pt-14 pb-8 text-center sm:px-6 lg:px-8 lg:pt-16 lg:pb-10">
-			<h2 id={DECISION_STORY_TITLE_ID} className="text-5xl+ text-primary tracking-normal sm:text-7xl+">
-				Three decisions surfaced for today.
-			</h2>
-		</header>
-
-		<div className="mx-auto max-w-295 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
-			<ol>
-				{actions.map((action) => {
-					const chapter = DECISION_CHAPTERS[action.type];
-
-					return (
-						<HomeDecisionStoryChapter
-							key={action.type}
-							action={action}
-							imageAlt={chapter.imageAlt}
-							imageSrc={chapter.imageSrc}
-						/>
-					);
-				})}
-
-				<li aria-hidden data-story-trailing-space="true" className="hidden h-[16svh] lg:block" />
-			</ol>
-		</div>
-	</section>
-);
-
 const DECISION_CHAPTERS = {
 	approve: {
 		imageAlt: "Studio Nova approval queue showing the cash remaining after a hardware request",
@@ -50,3 +21,43 @@ const DECISION_CHAPTERS = {
 		imageSrc: "/marketing/studio-nova-vendors.webp",
 	},
 } as const;
+
+export const HomeDecisionStorySection = ({ actions }: HomeDecisionStorySectionProps) => (
+	<section aria-labelledby={DECISION_STORY_TITLE_ID} className="isolate border-shell-border border-b bg-shell">
+		<header className="mx-auto max-w-4xl px-4 pt-14 pb-8 text-center sm:px-6 lg:px-8 lg:pt-16 lg:pb-10">
+			<h2 id={DECISION_STORY_TITLE_ID} className="text-5xl+ text-primary tracking-normal sm:text-7xl+">
+				Three decisions surfaced for today.
+			</h2>
+		</header>
+
+		<div className="mx-auto max-w-295 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
+			<ol className="[--decision-stick-gap:8svh] max-lg:space-y-8">
+				{actions.flatMap((action, index) => {
+					const chapter = DECISION_CHAPTERS[action.type];
+					const last = index === actions.length - 1;
+					const items = [
+						<HomeDecisionStoryChapter
+							key={action.type}
+							action={action}
+							imageAlt={chapter.imageAlt}
+							imageSrc={chapter.imageSrc}
+						/>,
+					];
+
+					if (!last) {
+						items.push(
+							<li
+								key={`${action.type}-gap`}
+								aria-hidden
+								data-story-stick-gap="true"
+								className="hidden h-(--decision-stick-gap) lg:list-item motion-reduce:lg:hidden"
+							/>,
+						);
+					}
+
+					return items;
+				})}
+			</ol>
+		</div>
+	</section>
+);
