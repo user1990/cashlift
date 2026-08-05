@@ -16,7 +16,7 @@ export const HomeDecisionStorySection = ({ actions }: HomeDecisionStorySectionPr
 		</header>
 
 		<div className="mx-auto max-w-295 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
-			<ol className="lg:pb-[16svh]">
+			<ol>
 				{actions.map((action) => {
 					const chapter = DECISION_CHAPTERS[action.type];
 
@@ -29,6 +29,8 @@ export const HomeDecisionStorySection = ({ actions }: HomeDecisionStorySectionPr
 						/>
 					);
 				})}
+
+				<li aria-hidden data-story-trailing-space="true" className="hidden h-[16svh] lg:block" />
 			</ol>
 		</div>
 	</section>
