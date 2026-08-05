@@ -17,17 +17,15 @@ export const HomeDecisionStorySection = ({ actions }: HomeDecisionStorySectionPr
 
 		<div className="mx-auto max-w-295 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
 			<ol>
-				{actions.map((action, index) => {
+				{actions.map((action) => {
 					const chapter = DECISION_CHAPTERS[action.type];
 
 					return (
 						<HomeDecisionStoryChapter
 							key={action.type}
 							action={action}
-							context={chapter.context}
 							imageAlt={chapter.imageAlt}
 							imageSrc={chapter.imageSrc}
-							index={index + 1}
 						/>
 					);
 				})}
@@ -38,17 +36,14 @@ export const HomeDecisionStorySection = ({ actions }: HomeDecisionStorySectionPr
 
 const DECISION_CHAPTERS = {
 	approve: {
-		context: "New spend affects the safe buffer.",
 		imageAlt: "Studio Nova approval queue showing the cash remaining after a hardware request",
 		imageSrc: "/marketing/studio-nova-approvals.webp",
 	},
 	collect: {
-		context: "Invoice at risk before the next cash dip.",
 		imageAlt: "Studio Nova invoice view highlighting overdue collection risk",
 		imageSrc: "/marketing/studio-nova-invoices.webp",
 	},
 	cut: {
-		context: "Low-use renewal bills again soon.",
 		imageAlt: "Studio Nova vendor view showing low-use and duplicate subscriptions",
 		imageSrc: "/marketing/studio-nova-vendors.webp",
 	},

@@ -4,19 +4,11 @@ import { HomeDecisionStoryImage } from "./HomeDecisionStoryImage";
 
 type HomeDecisionStoryChapterProps = {
 	action: HomeDecisionStoryAction;
-	context: string;
 	imageAlt: string;
 	imageSrc: string;
-	index: number;
 };
 
-export const HomeDecisionStoryChapter = ({
-	action,
-	context,
-	imageAlt,
-	imageSrc,
-	index,
-}: HomeDecisionStoryChapterProps) => {
+export const HomeDecisionStoryChapter = ({ action, imageAlt, imageSrc }: HomeDecisionStoryChapterProps) => {
 	const chapterStyle = CHAPTER_STYLES[action.type];
 
 	return (
@@ -36,17 +28,18 @@ export const HomeDecisionStoryChapter = ({
 			>
 				<div className="grid gap-7 border-shell-border border-b pb-7 lg:grid-cols-[0.72fr_1.28fr] lg:items-center lg:gap-10">
 					<div className="self-stretch">
-						<p className="font-mono text-shell-muted text-s">0{index} / 03</p>
-
-						<p className={cn("mt-4 font-semibold text-s+ uppercase tracking-normal", chapterStyle.text)}>
+						<h3
+							className={cn(
+								"max-w-xl text-5xl+ capitalize tracking-normal sm:text-6xl+ lg:text-7xl+",
+								chapterStyle.text,
+							)}
+						>
 							{action.type}
+						</h3>
+
+						<p className="mt-5 max-w-xl text-l text-shell-foreground leading-7">
+							{action.title} {action.description}
 						</p>
-
-						<h3 className="mt-3 max-w-xl text-3xl+ tracking-normal sm:text-4xl+ lg:text-5xl+">{context}</h3>
-
-						<p className="mt-6 max-w-xl text-2xl+ tracking-normal sm:text-3xl+">{action.title}</p>
-
-						<p className="mt-4 max-w-xl text-l text-shell-muted leading-7">{action.description}</p>
 					</div>
 
 					<HomeDecisionStoryImage alt={imageAlt} src={imageSrc} />

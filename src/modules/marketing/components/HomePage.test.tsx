@@ -51,10 +51,11 @@ describe("HomePage", () => {
 		render(<HomePage actions={[...HOME_ACTIONS_MOCK]} />);
 
 		expect(screen.getAllByRole("heading", { level: 3 }).map(({ textContent }) => textContent)).toEqual([
-			"Invoice at risk before the next cash dip.",
-			"New spend affects the safe buffer.",
-			"Low-use renewal bills again soon.",
+			"collect",
+			"approve",
+			"cut",
 		]);
+		expect(screen.getByText("Collect Aurora Health before buffer risk Collection context")).toBeVisible();
 		expect(screen.getAllByRole("group")).toHaveLength(10);
 		expect(screen.getByText("What kinds of actions does CashLift surface?")).toBeVisible();
 		expect(screen.getByText("Does the demo make payments or financial decisions for me?")).toBeVisible();
