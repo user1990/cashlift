@@ -70,7 +70,7 @@ const CHAPTER_STYLES = {
 	},
 	cut: {
 		border: "border-t-highlight",
-		position: "lg:top-32 lg:z-30",
+		position: "lg:top-32 lg:z-30 lg:mb-0",
 		text: "text-highlight",
 	},
 } as const;
