@@ -12,9 +12,9 @@ export const HomeHeroSection = () => (
 		<div className="relative mx-auto max-w-295 px-4 pt-16 pb-12 sm:px-6 sm:pt-20 lg:px-8 lg:pt-24 lg:pb-16">
 			<header className="mx-auto max-w-4xl text-center">
 				<h1 className="text-5xl+ tracking-normal sm:text-7xl+">
-					<span className="block text-shell-foreground">See what to</span>
+					<span className="block text-shell-foreground">See what to </span>
 
-					<span className="block text-primary">collect, approve,</span>
+					<span className="block text-primary">collect, approve, </span>
 
 					<span className="block text-signal">or cut today.</span>
 				</h1>
