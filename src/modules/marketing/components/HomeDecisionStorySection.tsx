@@ -1,4 +1,3 @@
-import { cn } from "@/ui/utils/cn";
 import type { HomeDecisionStoryAction } from "../types";
 import { HomeDecisionStoryChapter } from "./HomeDecisionStoryChapter";
 
@@ -16,9 +15,7 @@ export const HomeDecisionStorySection = ({ actions }: HomeDecisionStorySectionPr
 			</h2>
 		</header>
 
-		<div className="mx-auto grid max-w-295 px-4 pb-20 sm:px-6 lg:grid-cols-[9rem_minmax(0,1fr)] lg:gap-8 lg:px-8 lg:pb-28">
-			<DecisionProgress />
-
+		<div className="mx-auto max-w-295 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
 			<ol>
 				{actions.map((action, index) => {
 					const chapter = DECISION_CHAPTERS[action.type];
@@ -56,34 +53,3 @@ const DECISION_CHAPTERS = {
 		imageSrc: "/marketing/studio-nova-vendors.webp",
 	},
 } as const;
-
-function DecisionProgress() {
-	return (
-		<div aria-hidden className="relative hidden lg:block">
-			<ol className="sticky top-28 grid h-112 content-between py-2 font-mono">
-				{DECISION_PROGRESS_STEPS.map((label, index) => (
-					<li key={label} className="relative grid grid-cols-[3rem_1fr] items-center gap-3">
-						{index < DECISION_PROGRESS_STEPS.length - 1 && (
-							<span className="absolute top-6 left-6 h-48 w-px bg-primary/60" />
-						)}
-
-						<span
-							className={cn(
-								"relative z-10 grid size-12 place-items-center rounded-full border font-semibold text-m",
-								index === 0
-									? "border-primary bg-primary text-shell shadow-[0_0_18px_color-mix(in_srgb,var(--primary)_60%,transparent)]"
-									: "border-primary/60 bg-shell text-primary",
-							)}
-						>
-							0{index + 1}
-						</span>
-
-						<span className="text-l text-shell-foreground">{label}</span>
-					</li>
-				))}
-			</ol>
-		</div>
-	);
-}
-
-const DECISION_PROGRESS_STEPS = ["Collect", "Approve", "Cut"] as const;
