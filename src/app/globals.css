@@ -13,6 +13,10 @@
 	--shell-foreground: #f8fbff;
 	--shell-muted: #a4adb8;
 	--shell-border: rgb(103 143 170 / 0.34);
+	--paper: #f1f3f2;
+	--paper-border: #c7cecc;
+	--paper-foreground: #071017;
+	--paper-muted: #56616a;
 	--panel: #101b28;
 	--panel-muted: #162436;
 	--panel-foreground: #f8fbff;
@@ -71,6 +75,10 @@
 	--color-shell-foreground: var(--shell-foreground);
 	--color-shell-muted: var(--shell-muted);
 	--color-shell-border: var(--shell-border);
+	--color-paper: var(--paper);
+	--color-paper-border: var(--paper-border);
+	--color-paper-foreground: var(--paper-foreground);
+	--color-paper-muted: var(--paper-muted);
 	--color-panel: var(--panel);
 	--color-panel-muted: var(--panel-muted);
 	--color-panel-foreground: var(--panel-foreground);
@@ -96,6 +104,7 @@
 	--shadow-primary-glow: 0 10px 30px rgb(2 218 235 / 0.3);
 	--shadow-panel: 0 18px 45px rgb(0 0 0 / 0.28);
 	--shadow-shell: 0 18px 55px rgb(0 0 0 / 0.36);
+	--shadow-paper: 0 24px 70px rgb(0 0 0 / 0.36);
 	--font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
 	--font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
 	--color-sidebar-ring: var(--sidebar-ring);

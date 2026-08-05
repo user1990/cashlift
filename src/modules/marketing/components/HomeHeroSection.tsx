@@ -25,7 +25,7 @@ export const HomeHeroSection = () => (
 				</ActionLink>
 			</header>
 
-			<div className="relative mt-10 overflow-hidden rounded-xl border border-shell-border bg-shell-elevated shadow-shell sm:mt-12">
+			<div className="relative mx-auto mt-10 max-w-280 origin-top overflow-hidden rounded-xl border border-shell-border bg-shell-elevated shadow-shell sm:mt-12 lg:[transform:perspective(90rem)_rotateX(2deg)_scale(.97)]">
 				<div
 					aria-hidden
 					className="absolute inset-x-0 top-0 z-10 h-px bg-linear-to-r from-transparent via-primary to-transparent"
