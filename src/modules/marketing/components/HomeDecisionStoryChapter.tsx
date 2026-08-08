@@ -25,14 +25,7 @@ export const HomeDecisionStoryChapter = ({ action, imageAlt, imageSrc }: HomeDec
 			>
 				<div className="grid gap-7 border-shell-border border-b pb-7 lg:grid-cols-[0.72fr_1.28fr] lg:items-center lg:gap-10">
 					<div className="self-stretch">
-						<h3
-							className={cn(
-								"max-w-xl text-5xl+ capitalize tracking-normal sm:text-6xl+ lg:text-7xl+",
-								chapterStyle.text,
-							)}
-						>
-							{action.type}
-						</h3>
+						<h3 className={cn("max-w-xl text-5xl+ capitalize tracking-normal", chapterStyle.text)}>{action.type}</h3>
 
 						<p className="mt-5 max-w-xl text-l text-shell-foreground leading-7">
 							{action.title} {action.description}
