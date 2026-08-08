@@ -20,6 +20,6 @@ export const PanelHeader = ({ action, label, title }: PanelHeaderProps) => (
 			</h2>
 		</div>
 
-		{action ? <div className="shrink-0">{action}</div> : null}
+		{action && <div className="shrink-0">{action}</div>}
 	</div>
 );

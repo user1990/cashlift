@@ -62,7 +62,7 @@ See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow
 - Prefer CSS `:has()` over React state/handlers/props when the state only exists to style a parent based on descendant structure/native state. See `styling/SKILL.md` for details.
 - Prefer native View Transitions for snapshot-based page/UI transitions before adding animation dependencies.
 - Declare `children` explicitly in props; avoid `React.PropsWithChildren`.
-- Prefer `{!items.length && <li>…</li>}` over `{items.length === 0 ? <li>…</li> : null}` for empty-state JSX.
+- For optional JSX (render or nothing), use `{condition && <Node />}` — never `{condition ? <Node /> : null}`. Same for empty states: `{!items.length && <li>…</li>}`. Keep `? :` only when both branches render real UI. When the condition can be `0`, use an explicit boolean (`count > 0 && …`), not bare truthiness.
 - Component boolean props should be optional by default and default to `false` in the component unless the boolean is truly required domain data.
 - Do not present a trend, comparison, date, or financial amount unless it is derived from the current input. Prefer a truthful neutral label to fabricated precision.
 - For browser-current labels, keep the server snapshot deterministic and derive the browser value after hydration with the established `useSyncExternalStore` pattern.

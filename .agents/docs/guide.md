@@ -210,6 +210,24 @@ const roleOptions: { label: string; value: CompanyRole }[] = [];
 
 ## React
 
+### Optional JSX
+
+```tsx
+// ⛔️ bad: ternary with a null branch
+{action ? <div className="shrink-0">{action}</div> : null}
+{items.length === 0 ? <li>No items</li> : null}
+
+// ✅ good: render or nothing
+{action && <div className="shrink-0">{action}</div>}
+{!items.length && <li>No items</li>}
+
+// ✅ good: both branches are real UI
+{isOpen ? <ExpandedPanel /> : <CollapsedPanel />}
+
+// ✅ good: avoid rendering `0`
+{count > 0 && <span>{count} selected</span>}
+```
+
 ### Component naming
 
 ```bash
