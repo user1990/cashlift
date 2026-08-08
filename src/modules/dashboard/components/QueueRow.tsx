@@ -11,8 +11,8 @@ type QueueRowProps = {
 
 export const QueueRow = ({ icon, meta, title, value, variant = "plain" }: QueueRowProps) => (
 	<li className={cn(variant === "primary" && "rounded-lg border border-primary-muted/80 bg-primary-subtle p-4")}>
-		<div className="flex items-start justify-between gap-3">
-			<div className="flex min-w-0 flex-1 items-start gap-3">
+		<div className="flex flex-col gap-3">
+			<div className="flex min-w-0 items-start gap-3">
 				{icon && <span className="shrink-0">{icon}</span>}
 
 				<div className="min-w-0">
@@ -22,7 +22,7 @@ export const QueueRow = ({ icon, meta, title, value, variant = "plain" }: QueueR
 				</div>
 			</div>
 
-			{value && <span className="shrink-0 self-center font-mono text-m+ text-primary">{value}</span>}
+			{value && <span className="font-mono text-m+ text-primary">{value}</span>}
 		</div>
 	</li>
 );
