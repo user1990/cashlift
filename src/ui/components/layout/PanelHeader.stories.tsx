@@ -50,3 +50,24 @@ export const LongTitle: Story = {
 		title: "Vendors with contract changes due this month",
 	},
 };
+
+export const NarrowWithMetric: Story = {
+	args: {
+		action: (
+			<div className="text-right">
+				<p className="font-mono text-3xl+ text-panel-foreground">$2.48M</p>
+
+				<p className="text-muted-foreground text-s">Ending cash balance</p>
+			</div>
+		),
+		label: "13-week cash outlook",
+		title: "Cash outlook from accounting-style data",
+	},
+	decorators: [
+		(Story) => (
+			<Panel className="w-80">
+				<Story />
+			</Panel>
+		),
+	],
+};
