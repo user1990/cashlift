@@ -34,7 +34,7 @@ export const QueuesSection = ({ basePath = "/dashboard", dashboard, readOnly = f
 					<QueueRow
 						key={id}
 						icon={
-							<span className="grid size-10 place-items-center rounded-full bg-primary-muted text-primary">
+							<span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary-muted text-primary">
 								<FileText aria-hidden className="size-5" />
 							</span>
 						}
@@ -68,9 +68,9 @@ export const QueuesSection = ({ basePath = "/dashboard", dashboard, readOnly = f
 				{dashboard.budgetRows.slice(0, 3).map(({ id, remainingCents, team, usagePercent }) => (
 					<li key={id}>
 						<div className="mb-2 flex items-center justify-between gap-3">
-							<p className="font-semibold text-m+ text-panel-foreground">{team}</p>
+							<p className="min-w-0 font-semibold text-m+ text-panel-foreground">{team}</p>
 
-							<span className="font-mono text-s text-shell-muted">
+							<span className="shrink-0 font-mono text-s text-shell-muted">
 								{formatCurrency(remainingCents)} {remainingCents >= 0 ? "left" : "over budget"}
 							</span>
 						</div>

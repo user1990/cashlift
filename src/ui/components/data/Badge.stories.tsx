@@ -68,3 +68,17 @@ export const Variants: Story = {
 		</div>
 	),
 };
+
+export const WrappedLabel: Story = {
+	args: {
+		children: "13-week cash outlook",
+		variant: "primary",
+	},
+	decorators: [
+		(Story) => (
+			<div className="w-36">
+				<Story />
+			</div>
+		),
+	],
+};

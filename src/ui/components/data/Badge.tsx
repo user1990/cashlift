@@ -1,7 +1,7 @@
 import { tv, type VariantProps } from "tailwind-variants";
 
 const BADGE_VARIANTS = tv({
-	base: "inline-flex h-6 max-w-full items-center rounded-full px-2.5 text-2xs+ font-semibold uppercase tracking-normal ring-1 ring-inset",
+	base: "inline-flex min-h-6 max-w-full items-center rounded-full px-2.5 py-0.5 text-2xs+ font-semibold uppercase tracking-normal ring-1 ring-inset",
 	defaultVariants: {
 		variant: "neutral",
 	},
