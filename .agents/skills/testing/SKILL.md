@@ -19,14 +19,24 @@ Use this skill for test changes. Read `.agents/docs/testing.md` only when you ne
 ## What To Test
 
 - Test business behavior and user outcomes, not implementation details.
+- Prefer fewer, longer tests when several assertions belong to one meaningful user or API workflow. Keep the setup in one place and assert the intermediate and final outcomes that make the workflow trustworthy; do not split a flow into tiny tests to enforce one assertion per test.
 - Prefer top-level components/pages/screens when that best captures the workflow.
 - Test component-specific data transformation, state, integration, and feature-flag behavior.
 - For derived UI, cover the supplied data that proves each displayed amount, comparison, and label; do not lock invented copy into a snapshot.
 - For a shared mutation, keep it pending in the test and assert every conflicting action is disabled.
 - For time-sensitive UI, test the client-visible date/state and preserve a deterministic server-safe fallback.
 - Avoid testing TypeScript guarantees, library behavior, class names, HTML structure, default setup, or unrelated initial states.
+- Do not pin incidental copy, tool descriptions, warnings, or configuration strings when a structured contract or observable behavior can be tested instead.
+- Keep the bar high for slower integration and E2E tests: use them only for a boundary or user journey that a faster test cannot honestly falsify.
+- Before adding a regression test, confirm the bug is important and plausibly repeatable. Retain the test only when it protects a meaningful contract; otherwise fold it into an existing workflow test or remove it after the fix is verified.
 - Group related assertions in one `it` when they describe one behavior.
 - Use `it.each` for repetitive cases.
+
+## Test Suite Maintenance
+
+- During changes in a test area, review nearby tests for duplicate setup, overlapping assertions, incidental string pinning, and cases covered more directly by an existing workflow.
+- Prefer editing or combining low-signal tests over adding another case. Do not remove coverage of a business rule, security boundary, user-critical journey, or stable public contract merely to reduce test count.
+- Keep new tests offline-capable and deterministic. If a test cannot explain what regression it would catch, it does not belong in the suite.
 
 ## Mocking Boundaries
 
