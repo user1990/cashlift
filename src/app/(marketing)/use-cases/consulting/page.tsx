@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { UseCasePage } from "@/modules/marketing/components/UseCasePage";
+import { ConsultingReferencePage } from "@/modules/marketing/components/ConsultingReferencePage";
 import { USE_CASES } from "@/modules/marketing/content";
 
 export const metadata: Metadata = {
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function Consulting() {
-	return <UseCasePage useCase={USE_CASES.consulting} />;
+	return <ConsultingReferencePage useCase={USE_CASES.consulting} />;
 }
