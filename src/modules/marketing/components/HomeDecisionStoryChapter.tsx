@@ -6,33 +6,49 @@ type HomeDecisionStoryChapterProps = {
 	action: HomeDecisionStoryAction;
 	imageAlt: string;
 	imageSrc: string;
+	offsetClassName: string;
+	stackClassName: string;
+	stackIndex: number;
 };
 
-export const HomeDecisionStoryChapter = ({ action, imageAlt, imageSrc }: HomeDecisionStoryChapterProps) => {
+export const HomeDecisionStoryChapter = ({
+	action,
+	imageAlt,
+	imageSrc,
+	offsetClassName,
+	stackClassName,
+	stackIndex,
+}: HomeDecisionStoryChapterProps) => {
 	const chapterStyle = CHAPTER_STYLES[action.type];
 
 	return (
 		<li
 			id={`decision-${action.type}`}
 			data-story-chapter={action.type}
-			className={cn("scroll-mt-24 lg:sticky motion-reduce:lg:static", chapterStyle.position)}
+			data-story-stack={stackIndex}
+			className={cn("scroll-mt-24 lg:sticky lg:top-20", stackClassName)}
 		>
 			<article
 				className={cn(
 					"relative overflow-hidden rounded-xl border border-shell-border border-t-4 bg-shell-elevated p-5 text-shell-foreground shadow-panel sm:p-7 lg:p-8",
+					offsetClassName,
 					chapterStyle.border,
 				)}
 			>
 				<div className="grid gap-7 border-shell-border border-b pb-7 lg:grid-cols-[0.72fr_1.28fr] lg:items-center lg:gap-10">
-					<div className="self-stretch">
-						<h3 className={cn("max-w-xl text-5xl+ capitalize tracking-normal", chapterStyle.text)}>{action.type}</h3>
+					<div>
+						<h3 className={cn("max-w-xl text-5xl+ capitalize tracking-normal lg:text-6xl+", chapterStyle.text)}>
+							{action.type}
+						</h3>
 
 						<p className="mt-5 max-w-xl text-l text-shell-foreground leading-7">
 							{action.title} {action.description}
 						</p>
 					</div>
 
-					<HomeDecisionStoryImage alt={imageAlt} src={imageSrc} />
+					<div className="lg:py-10">
+						<HomeDecisionStoryImage alt={imageAlt} src={imageSrc} />
+					</div>
 				</div>
 
 				<dl className="grid grid-cols-3 gap-4 pt-5">
@@ -48,28 +64,12 @@ export const HomeDecisionStoryChapter = ({ action, imageAlt, imageSrc }: HomeDec
 };
 
 const CHAPTER_STYLES = {
-	approve: {
-		border: "border-t-warning",
-		position: "lg:top-28 lg:z-20",
-		text: "text-warning",
-	},
-	collect: {
-		border: "border-t-primary",
-		position: "lg:top-24 lg:z-10",
-		text: "text-primary",
-	},
-	cut: {
-		border: "border-t-highlight",
-		position: "lg:top-32 lg:z-30",
-		text: "text-highlight",
-	},
+	approve: { border: "border-t-warning", text: "text-warning" },
+	collect: { border: "border-t-primary", text: "text-primary" },
+	cut: { border: "border-t-highlight", text: "text-highlight" },
 } as const;
 
-type DecisionDetailProps = {
-	label: string;
-	value: string;
-	capitalize?: boolean;
-};
+type DecisionDetailProps = { label: string; value: string; capitalize?: boolean };
 
 function DecisionDetail({ capitalize = false, label, value }: DecisionDetailProps) {
 	return (
