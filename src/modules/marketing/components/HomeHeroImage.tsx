@@ -17,6 +17,10 @@ export const HomeHeroImage = () => {
 	const pointerFrameRef = useRef<number | null>(null);
 
 	useEffect(() => {
+		if (typeof window.matchMedia !== "function") {
+			return;
+		}
+
 		const mediaQueries = [window.matchMedia(TILT_MEDIA_QUERY), window.matchMedia("(prefers-reduced-motion: reduce)")];
 		const clearTiltWhenUnavailable = () => {
 			const card = cardRef.current;
@@ -144,7 +148,11 @@ function clearTilt(card: HTMLDivElement, animationRef: { current: Animation | nu
 }
 
 function canTilt() {
-	return window.matchMedia(TILT_MEDIA_QUERY).matches && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+	return (
+		typeof window.matchMedia === "function" &&
+		window.matchMedia(TILT_MEDIA_QUERY).matches &&
+		!window.matchMedia("(prefers-reduced-motion: reduce)").matches
+	);
 }
 
 function getTiltTransform(card: HTMLDivElement, clientX: number, clientY: number) {
