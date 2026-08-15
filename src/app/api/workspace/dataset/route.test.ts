@@ -62,6 +62,15 @@ describe("GET /api/workspace/dataset", () => {
 				error: "Unable to load workspace data.",
 			},
 		],
+		[
+			500,
+			{ kind: "data_error" as const, message: "Unable to load workspace data.", requestId: "event-id" },
+			{
+				code: "workspace_data_unavailable",
+				error: "Unable to load workspace data.",
+				requestId: "event-id",
+			},
+		],
 	])("returns %s with mapped error body", async (status, resolved, body) => {
 		mocks.resolveWorkspaceDataset.mockResolvedValue(resolved);
 		const { GET } = await import("./route");
@@ -83,24 +92,6 @@ describe("GET /api/workspace/dataset", () => {
 		expect(response.status).toEqual(200);
 		expect(response.headers.get("Cache-Control")).toEqual("no-store");
 		await expect(response.json()).resolves.toMatchObject({ profile: { companyId: "studio-nova" } });
-	});
-
-	it("includes request ids for reported workspace failures", async () => {
-		mocks.resolveWorkspaceDataset.mockResolvedValue({
-			kind: "data_error",
-			message: "Unable to load workspace data.",
-			requestId: "event-id",
-		});
-		const { GET } = await import("./route");
-
-		const response = await GET(new Request("https://example.com/api/workspace/dataset"));
-
-		expect(response.status).toEqual(500);
-		await expect(response.json()).resolves.toEqual({
-			code: "workspace_data_unavailable",
-			error: "Unable to load workspace data.",
-			requestId: "event-id",
-		});
 	});
 
 	it("passes requested scope to the workspace resolver", async () => {

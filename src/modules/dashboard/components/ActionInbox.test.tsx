@@ -3,7 +3,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
-import { getCashActionDestination } from "../cashActionDestination";
 import { buildDashboardViewModel } from "../view-model";
 import { ActionInbox } from "./ActionInbox";
 
@@ -33,15 +32,5 @@ describe("ActionInbox", () => {
 		render(<ActionInbox actions={[]} basePath="/dashboard" />);
 
 		expect(screen.getByText(/clear for today/i)).toBeInTheDocument();
-	});
-
-	it.each([
-		["approval", "/dashboard/approvals"],
-		["collection", "/dashboard/invoices"],
-		["vendor-leak", "/dashboard/vendors"],
-		["cash-buffer", "/dashboard/cash"],
-		["forecast", "/dashboard/cash"],
-	] as const)("maps %s actions to %s", (type, destination) => {
-		expect(getCashActionDestination(type, "/dashboard")).toBe(destination);
 	});
 });

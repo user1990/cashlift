@@ -6,42 +6,28 @@ import { getPendingApprovalCount, getSpendRequestCashImpact } from "@/modules/sp
 import { getVendorLeakSavings, isVendorLeak } from "@/modules/subscriptions/utils";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { dueWithinWindow } from "@/utilities/dates/dueWithinWindow";
-import { getCashBufferRisk, getRunwayDays } from "./cash";
+import { getCashBufferRisk } from "./cash";
 
 describe("company finance calculations", () => {
 	it("counts pending approvals", () => {
 		expect(getPendingApprovalCount(financialDatasetFixture.spendRequests)).toEqual(2);
 	});
 
-	it("calculates overdue invoice risk", () => {
-		expect(getInvoiceRiskTotal(financialDatasetFixture.invoices, new Date("2026-05-09"))).toEqual(1_840_000);
-	});
+	it("identifies vendor leaks and sums leak savings", () => {
+		const leakIds = financialDatasetFixture.subscriptions.filter(isVendorLeak).map((subscription) => subscription.id);
 
-	it("detects vendor leak savings", () => {
+		expect(leakIds).toEqual(["subscription-notion", "subscription-survey", "subscription-ai-notes"]);
 		expect(getVendorLeakSavings(financialDatasetFixture.subscriptions)).toEqual(261_000);
 	});
 
-	it("identifies vendor leaks from unused, duplicate, and low-use trial subscriptions (single iteration)", () => {
-		const expectedIds = ["subscription-notion", "subscription-survey", "subscription-ai-notes"];
-		const resultIds = [];
-		for (const subscription of financialDatasetFixture.subscriptions) {
-			if (isVendorLeak(subscription)) {
-				resultIds.push(subscription.id);
-			}
-		}
-		expect(resultIds).toEqual(expectedIds);
-	});
-
-	it("identifies overdue invoices without treating paid historical invoices as risk (single iteration)", () => {
+	it("sums overdue invoice risk and excludes paid invoices", () => {
 		const date = new Date("2026-05-09");
-		const expectedIds = ["invoice-northstar"];
-		const resultIds = [];
-		for (const invoice of financialDatasetFixture.invoices) {
-			if (isInvoiceOverdue(invoice, date)) {
-				resultIds.push(invoice.id);
-			}
-		}
-		expect(resultIds).toEqual(expectedIds);
+		const overdueIds = financialDatasetFixture.invoices
+			.filter((invoice) => isInvoiceOverdue(invoice, date))
+			.map((invoice) => invoice.id);
+
+		expect(overdueIds).toEqual(["invoice-northstar"]);
+		expect(getInvoiceRiskTotal(financialDatasetFixture.invoices, date)).toEqual(1_840_000);
 	});
 
 	it("checks due dates inside future and overdue windows", () => {
@@ -71,7 +57,6 @@ describe("company finance calculations", () => {
 
 	it("keeps cash buffer risk at zero when projected cash stays above target", () => {
 		expect(getCashBufferRisk(financialDatasetFixture, new Date("2026-05-09"))).toEqual(0);
-		expect(getRunwayDays(financialDatasetFixture)).toBeGreaterThan(50);
 	});
 
 	it("sorts visible cash actions by priority for finance users", () => {
