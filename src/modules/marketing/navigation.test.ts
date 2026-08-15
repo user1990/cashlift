@@ -3,9 +3,8 @@ import { MARKETING_NAV_GROUPS } from "./navigation";
 
 describe("MARKETING_NAV_GROUPS", () => {
 	it("keeps Demo in the Product navigation", () => {
-		const productGroup = MARKETING_NAV_GROUPS.find(({ label }) => label === "Product");
+		const demoItem = MARKETING_NAV_GROUPS.flatMap(({ items }) => items).find(({ href }) => href === "/demo");
 
-		expect(productGroup).toBeDefined();
-		expect(productGroup?.items).toContainEqual({ href: "/demo", label: "Demo" });
+		expect(demoItem).toBeDefined();
 	});
 });

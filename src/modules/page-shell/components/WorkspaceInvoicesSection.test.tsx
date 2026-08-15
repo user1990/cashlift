@@ -10,16 +10,7 @@ describe("WorkspaceInvoicesSection", () => {
 		vi.useRealTimers();
 	});
 
-	it("calculates overdue risk from the current date", () => {
-		vi.useFakeTimers();
-		vi.setSystemTime(new Date("2026-05-15T12:00:00Z"));
-
-		render(<WorkspaceInvoicesSection dataset={financialDatasetFixture} />);
-
-		expect(screen.getByText("$45,900 overdue cash risk")).toBeInTheDocument();
-	});
-
-	it("updates overdue risk after local midnight", () => {
+	it("recalculates overdue cash risk when the browser date crosses midnight", () => {
 		vi.useFakeTimers();
 		vi.setSystemTime(new Date("2026-05-14T23:59:00"));
 

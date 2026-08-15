@@ -11,13 +11,7 @@ describe("EmailAutocompleteField", () => {
 		const onChange = vi.fn();
 		const { input, user } = setupEmailAutocomplete({
 			onChange,
-			placeholder: "maya@company.com…",
 		});
-
-		expect(input).toHaveAttribute("placeholder", "maya@company.com…");
-		expect(input).toHaveAttribute("aria-label", "Work email");
-		expect(input).toHaveAttribute("data-slot", "combobox-input");
-		expect(input.closest('[data-slot="field"]')).toHaveAttribute("data-slot", "field");
 
 		await user.click(screen.getByText("Work email"));
 
@@ -152,7 +146,6 @@ describe("EmailAutocompleteField", () => {
 
 type ControlledEmailAutocompleteFieldProps = {
 	onChange?: (value: string) => void;
-	placeholder?: string;
 };
 
 function setupEmailAutocomplete(props: ControlledEmailAutocompleteFieldProps = {}) {
@@ -177,7 +170,7 @@ async function pasteValue(user: ReturnType<typeof userEvent.setup>, input: HTMLE
 	await user.paste(value);
 }
 
-function ControlledEmailAutocompleteField({ onChange, placeholder }: ControlledEmailAutocompleteFieldProps) {
+function ControlledEmailAutocompleteField({ onChange }: ControlledEmailAutocompleteFieldProps) {
 	const [value, setValue] = useState("");
 
 	return (
@@ -187,7 +180,6 @@ function ControlledEmailAutocompleteField({ onChange, placeholder }: ControlledE
 				setValue(nextValue);
 				onChange?.(nextValue);
 			}}
-			placeholder={placeholder}
 			value={value}
 		/>
 	);

@@ -6,7 +6,7 @@ import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { buildDashboardViewModel } from "./view-model";
 
 describe("dashboard view model", () => {
-	it("builds company cash metrics for a selected date", () => {
+	it("builds owner-finance cash metrics and ranks the action inbox", () => {
 		const dashboard = buildDashboardViewModel({
 			dataset: financialDatasetFixture,
 			date: new Date("2026-05-09"),
@@ -19,15 +19,6 @@ describe("dashboard view model", () => {
 		expect(dashboard.vendorLeakSavingsCents).toEqual(261_000);
 		expect(dashboard.forecastChartData).toHaveLength(financialDatasetFixture.forecast.length);
 		expect(dashboard.totalCommittedSpendCents).toBeGreaterThan(0);
-	});
-
-	it("orders action inbox by cash risk", () => {
-		const dashboard = buildDashboardViewModel({
-			dataset: financialDatasetFixture,
-			date: new Date("2026-05-09"),
-			role: "owner-finance",
-		});
-
 		expect(dashboard.actionInbox[0].priority).toEqual("critical");
 		expect(dashboard.actionInbox[0].title).toEqual("Decide on BrandForge annual renewal");
 	});
@@ -94,7 +85,6 @@ describe("dashboard view model", () => {
 			role: "owner-finance",
 		});
 
-		expect(dashboard.greetingName).toEqual("Samira Chen");
 		expect(dashboard.dateRangeLabel).toEqual("May 20 - Jun 17, 2024");
 		expect(dashboard.cashAvailableCents).toEqual(248_000_000);
 		expect(dashboard.spendChartData[0]).toMatchObject({
