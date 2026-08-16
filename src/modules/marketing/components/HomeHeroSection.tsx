@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
 import { ActionLink } from "./ActionLink";
+import { HomeHeroImage } from "./HomeHeroImage";
 
 export const HomeHeroSection = () => (
 	<section className="relative isolate overflow-hidden border-shell-border border-b bg-shell">
@@ -40,24 +40,7 @@ export const HomeHeroSection = () => (
 					className="absolute inset-x-[4%] bottom-0 h-px bg-primary shadow-[0_0_20px_4px_color-mix(in_srgb,var(--primary)_90%,transparent)] lg:bottom-7"
 				/>
 
-				<div className="relative origin-center overflow-hidden rounded-xl border border-shell-border bg-shell-elevated shadow-shell lg:[transform:perspective(100rem)_rotateX(6deg)_scale(.92)]">
-					<div
-						aria-hidden
-						className="absolute inset-x-0 top-0 z-10 h-px bg-linear-to-r from-transparent via-primary to-transparent"
-					/>
-
-					<Image
-						alt="Studio Nova overview with ranked cash actions, 13-week cash outlook, and team budget charts"
-						src="/marketing/studio-nova-inbox.webp"
-						decoding="sync"
-						fetchPriority="high"
-						priority
-						width={2880}
-						height={1800}
-						sizes="(min-width: 1180px) 1120px, calc(100vw - 2rem)"
-						className="h-auto w-full"
-					/>
-				</div>
+				<HomeHeroImage />
 			</div>
 		</div>
 	</section>

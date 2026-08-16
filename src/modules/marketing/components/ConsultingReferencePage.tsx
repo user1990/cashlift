@@ -13,7 +13,7 @@ type ConsultingReferencePageProps = {
 export const ConsultingReferencePage = ({ useCase }: ConsultingReferencePageProps) => (
 	<MainContent variant="marketing" className="relative overflow-hidden">
 		<section className="relative isolate">
-			<div aria-hidden className="absolute inset-x-0 top-0 h-px bg-shell-border" />
+			<div aria-hidden className="absolute inset-x-0 top-0 h-px" />
 
 			<div>
 				<Hero description={useCase.description} label={useCase.label} variant="page-title" />
@@ -21,7 +21,7 @@ export const ConsultingReferencePage = ({ useCase }: ConsultingReferencePageProp
 				<div className="relative mt-16 lg:mt-20 lg:pb-8">
 					<ConsultingSignalRail />
 
-					<ol className="relative mx-auto grid max-w-[70rem] gap-6 md:grid-cols-3 md:items-end lg:gap-12">
+					<ol className="relative mx-auto grid max-w-280 gap-6 md:grid-cols-3 md:items-end lg:gap-12">
 						{CONSULTING_DECISIONS.map((decision, index) => (
 							<li
 								key={decision.title}
@@ -67,7 +67,7 @@ const CONSULTING_DECISIONS = [
 
 function ConsultingSignalRail() {
 	return (
-		<div aria-hidden className="pointer-events-none absolute inset-x-[-8rem] top-1/2 hidden lg:block">
+		<div aria-hidden className="pointer-events-none absolute inset-x-32 top-1/2 hidden lg:block">
 			<span className="absolute inset-x-0 top-0 h-px -rotate-12 bg-primary shadow-primary-glow" />
 
 			<span className="absolute top-14 left-[19%] size-5 rounded-full border-4 border-shell bg-primary shadow-primary-glow" />
@@ -86,7 +86,7 @@ function ConsultingDecisionCard({ decision: { accentClassName, Icon, title } }: 
 			href="/demo"
 			className="group block rounded-[1.75rem] focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-4"
 		>
-			<article className="relative flex h-[31rem] flex-col overflow-hidden rounded-[1.75rem] border border-shell-border bg-panel p-5 shadow-shell transition-[border-color,box-shadow,transform] duration-200 group-hover:-translate-y-1 group-hover:border-primary-subtle-border group-hover:shadow-primary-glow motion-reduce:group-hover:transform-none sm:p-6">
+			<article className="relative flex h-124 flex-col overflow-hidden rounded-[1.75rem] border border-shell-border bg-panel p-5 shadow-shell transition-[border-color,box-shadow,transform] duration-200 group-hover:-translate-y-1 group-hover:border-primary-subtle-border group-hover:shadow-primary-glow motion-reduce:group-hover:transform-none sm:p-6">
 				<div className="relative flex h-56 shrink-0 items-center justify-center rounded-2xl border border-border bg-shell-elevated p-5 shadow-panel">
 					<span
 						aria-hidden
