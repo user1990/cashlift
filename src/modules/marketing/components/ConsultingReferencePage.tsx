@@ -86,7 +86,7 @@ function ConsultingDecisionCard({ decision: { accentClassName, Icon, title } }: 
 			href="/demo"
 			className="group block rounded-[1.75rem] focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-4"
 		>
-			<article className="relative flex h-124 flex-col overflow-hidden rounded-[1.75rem] border border-shell-border bg-panel p-5 shadow-shell transition-[border-color,box-shadow,transform] duration-200 group-hover:-translate-y-1 group-hover:border-primary-subtle-border group-hover:shadow-primary-glow motion-reduce:group-hover:transform-none sm:p-6">
+			<article className="relative flex h-100 flex-col overflow-hidden rounded-[1.75rem] border border-shell-border bg-panel p-5 shadow-shell transition-[border-color,box-shadow,transform] duration-200 group-hover:-translate-y-1 group-hover:border-primary-subtle-border group-hover:shadow-primary-glow motion-reduce:group-hover:transform-none sm:p-6">
 				<div className="relative flex h-56 shrink-0 items-center justify-center rounded-2xl border border-border bg-shell-elevated p-5 shadow-panel">
 					<span
 						aria-hidden
@@ -120,13 +120,7 @@ function ConsultingDecisionCard({ decision: { accentClassName, Icon, title } }: 
 					</div>
 				</div>
 
-				<h2 className="mt-7 text-panel-foreground text-xl+">{title}</h2>
-
-				<div aria-hidden className="mt-auto pt-8">
-					<span className="block h-px w-full bg-border" />
-
-					<span className="mt-4 block h-px w-4/5 bg-primary/80" />
-				</div>
+				<h2 className="mt-7 text-center text-panel-foreground text-xl+">{title}</h2>
 			</article>
 		</Link>
 	);
