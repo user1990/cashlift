@@ -1,30 +1,59 @@
 "use client";
 
 import Image from "next/image";
-import { type PointerEvent, useRef } from "react";
+import { type PointerEvent, useEffect, useRef } from "react";
 
 const FOLLOW_DURATION_MS = 1_500;
 const MAX_ROTATE_X_DEGREES = 2.5;
 const MAX_ROTATE_Y_DEGREES = 3.5;
 const REST_ROTATE_X_DEGREES = 6;
 const REST_TRANSFORM = "perspective(1600px) rotateX(6deg) rotateY(0deg) scale(0.92)";
+const TILT_MEDIA_QUERY = "(min-width: 64rem) and (hover: hover) and (pointer: fine)";
 const TILT_EASING = "cubic-bezier(0.03, 0.98, 0.52, 0.99)";
 
 export const HomeHeroImage = () => {
 	const animationRef = useRef<Animation | null>(null);
+	const cardRef = useRef<HTMLDivElement>(null);
 	const pointerFrameRef = useRef<number | null>(null);
 
+	useEffect(() => {
+		if (typeof window.matchMedia !== "function") {
+			return;
+		}
+
+		const mediaQueries = [window.matchMedia(TILT_MEDIA_QUERY), window.matchMedia("(prefers-reduced-motion: reduce)")];
+		const clearTiltWhenUnavailable = () => {
+			const card = cardRef.current;
+			if (!card || canTilt()) {
+				return;
+			}
+
+			cancelPointerFrame(pointerFrameRef);
+			clearTilt(card, animationRef);
+		};
+
+		for (const mediaQuery of mediaQueries) {
+			mediaQuery.addEventListener("change", clearTiltWhenUnavailable);
+		}
+
+		return () => {
+			for (const mediaQuery of mediaQueries) {
+				mediaQuery.removeEventListener("change", clearTiltWhenUnavailable);
+			}
+		};
+	}, []);
+
 	const tiltOnPointerMove = (event: PointerEvent<HTMLDivElement>) => {
-		if (!canTilt(event)) {
+		if (event.pointerType !== "mouse" || !canTilt()) {
+			cancelPointerFrame(pointerFrameRef);
+			clearTilt(event.currentTarget, animationRef);
 			return;
 		}
 
 		const card = event.currentTarget;
 		const { clientX, clientY } = event;
 
-		if (pointerFrameRef.current !== null) {
-			cancelAnimationFrame(pointerFrameRef.current);
-		}
+		cancelPointerFrame(pointerFrameRef);
 
 		pointerFrameRef.current = requestAnimationFrame(() => {
 			pointerFrameRef.current = null;
@@ -33,22 +62,23 @@ export const HomeHeroImage = () => {
 	};
 
 	const resetTilt = (event: PointerEvent<HTMLDivElement>) => {
-		if (pointerFrameRef.current !== null) {
-			cancelAnimationFrame(pointerFrameRef.current);
-			pointerFrameRef.current = null;
-		}
+		cancelPointerFrame(pointerFrameRef);
 
 		if (animationRef.current) {
 			animateCard(event.currentTarget, REST_TRANSFORM, animationRef, true);
+			return;
 		}
+
+		event.currentTarget.classList.remove("will-change-transform");
 	};
 
 	return (
 		<div
+			ref={cardRef}
 			onPointerCancel={resetTilt}
 			onPointerLeave={resetTilt}
 			onPointerMove={tiltOnPointerMove}
-			className="relative origin-center will-change-transform motion-reduce:will-change-auto lg:[transform-style:preserve-3d] lg:[transform:perspective(100rem)_rotateX(6deg)_scale(.92)]"
+			className="relative origin-center lg:[transform-style:preserve-3d] lg:[transform:perspective(100rem)_rotateX(6deg)_scale(.92)]"
 		>
 			<div className="overflow-hidden rounded-xl border border-shell-border bg-shell-elevated shadow-shell motion-reduce:lg:transform-none lg:[transform:translateZ(1rem)]">
 				<div
@@ -80,6 +110,7 @@ function animateCard(
 ) {
 	const currentTransform = getComputedStyle(card).transform;
 	animationRef.current?.cancel();
+	card.classList.add("will-change-transform");
 
 	const animation = card.animate(
 		[{ transform: currentTransform === "none" ? REST_TRANSFORM : currentTransform }, { transform: targetTransform }],
@@ -97,15 +128,29 @@ function animateCard(
 			if (animationRef.current === animation) {
 				animation.cancel();
 				animationRef.current = null;
+				card.classList.remove("will-change-transform");
 			}
 		};
 	}
 }
 
-function canTilt(event: PointerEvent<HTMLDivElement>) {
+function cancelPointerFrame(pointerFrameRef: { current: number | null }) {
+	if (pointerFrameRef.current !== null) {
+		cancelAnimationFrame(pointerFrameRef.current);
+		pointerFrameRef.current = null;
+	}
+}
+
+function clearTilt(card: HTMLDivElement, animationRef: { current: Animation | null }) {
+	animationRef.current?.cancel();
+	animationRef.current = null;
+	card.classList.remove("will-change-transform");
+}
+
+function canTilt() {
 	return (
-		event.pointerType === "mouse" &&
-		window.matchMedia("(min-width: 64rem) and (hover: hover) and (pointer: fine)").matches &&
+		typeof window.matchMedia === "function" &&
+		window.matchMedia(TILT_MEDIA_QUERY).matches &&
 		!window.matchMedia("(prefers-reduced-motion: reduce)").matches
 	);
 }

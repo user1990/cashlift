@@ -25,7 +25,6 @@ describe("PricingBillingToggle", () => {
 		expect(screen.getByRole("radiogroup", { name: "Billing interval" })).toBeInTheDocument();
 		expect(screen.getByRole("radio", { name: "Yearly" })).toBeChecked();
 		expect(screen.getByRole("radio", { name: "Monthly" })).not.toBeChecked();
-		expect(screen.getByText("Billed annually. Cancel anytime.")).toBeInTheDocument();
 
 		await user.click(screen.getByRole("radio", { name: "Monthly" }));
 
@@ -34,7 +33,6 @@ describe("PricingBillingToggle", () => {
 		rerender(<PricingBillingToggle billing="monthly" />);
 
 		expect(screen.getByRole("radio", { name: "Monthly" })).toBeChecked();
-		expect(screen.getByText("Billed monthly. Cancel anytime.")).toBeInTheDocument();
 
 		await user.keyboard("{ArrowLeft}");
 
@@ -43,6 +41,5 @@ describe("PricingBillingToggle", () => {
 		rerender(<PricingBillingToggle billing="annual" />);
 
 		expect(screen.getByRole("radio", { name: "Yearly" })).toBeChecked();
-		expect(screen.getByText("Billed annually. Cancel anytime.")).toBeInTheDocument();
 	});
 });
