@@ -1,4 +1,5 @@
 import { ChevronDown } from "lucide-react";
+import { HomeFaqSectionReveal } from "./HomeFaqSectionReveal";
 
 const HOME_FAQS = [
 	{
@@ -49,7 +50,7 @@ const HOME_FAQS = [
 ] as const;
 
 export const HomeFaqSection = () => (
-	<section aria-labelledby="home-faq-title" data-home-faq className="border-shell-border border-b bg-shell">
+	<HomeFaqSectionReveal>
 		<div data-home-faq-panel className="mx-auto max-w-295 px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
 			<h2 id="home-faq-title" data-home-faq-heading className="text-5xl+ text-primary tracking-normal sm:text-7xl+">
 				FAQ
@@ -57,24 +58,26 @@ export const HomeFaqSection = () => (
 
 			<div className="mt-5 border-shell-border border-t">
 				{HOME_FAQS.map(({ answer, question }) => (
-					<details key={question} data-home-faq-item className="group border-shell-border border-b">
-						<summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-left text-l text-shell-foreground outline-none transition-colors duration-150 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
-							{question}
+					<div key={question} data-home-faq-item>
+						<details className="group border-shell-border border-b">
+							<summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-left text-l text-shell-foreground outline-none transition-colors duration-150 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
+								{question}
 
-							<ChevronDown
-								aria-hidden
-								className="size-5 shrink-0 text-shell-muted transition-transform duration-300 group-open:rotate-180"
-							/>
-						</summary>
+								<ChevronDown
+									aria-hidden
+									className="size-5 shrink-0 text-shell-muted transition-transform duration-300 group-open:rotate-180"
+								/>
+							</summary>
 
-						<div className="ease grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 group-open:grid-rows-[1fr]">
-							<div className="ease block overflow-hidden opacity-0 transition-opacity duration-300 group-open:opacity-100">
-								<p className="max-w-3xl pb-5 text-l text-shell-muted leading-7">{answer}</p>
+							<div className="ease grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 group-open:grid-rows-[1fr]">
+								<div className="ease block overflow-hidden opacity-0 transition-opacity duration-300 group-open:opacity-100">
+									<p className="max-w-3xl pb-5 text-l text-shell-muted leading-7">{answer}</p>
+								</div>
 							</div>
-						</div>
-					</details>
+						</details>
+					</div>
 				))}
 			</div>
 		</div>
-	</section>
+	</HomeFaqSectionReveal>
 );
