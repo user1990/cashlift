@@ -22,9 +22,10 @@ export const HomeFaqSectionReveal = ({ children }: HomeFaqSectionRevealProps) =>
 
 		const reveal = () => {
 			section.dataset.homeFaqAnimate = "true";
-			section.getBoundingClientRect();
 			requestAnimationFrame(() => {
-				section.dataset.homeFaqVisible = "true";
+				requestAnimationFrame(() => {
+					section.dataset.homeFaqVisible = "true";
+				});
 			});
 		};
 

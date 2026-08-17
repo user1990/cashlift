@@ -240,11 +240,58 @@ textarea,
 }
 
 @media (prefers-reduced-motion: no-preference) {
-	[data-home-faq-animate]:not([data-home-faq-visible="true"]) [data-home-faq-panel],
-	[data-home-faq-animate]:not([data-home-faq-visible="true"]) [data-home-faq-heading],
-	[data-home-faq-animate]:not([data-home-faq-visible="true"]) [data-home-faq-item] {
+	[data-home-faq-animate] [data-home-faq-panel],
+	[data-home-faq-animate] [data-home-faq-heading],
+	[data-home-faq-animate] [data-home-faq-item] {
 		opacity: 0;
 		transform: translateY(1rem);
+		transition:
+			opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+			transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	[data-home-faq-animate] [data-home-faq-heading] {
+		transition-delay: 100ms;
+	}
+
+	[data-home-faq-animate] [data-home-faq-item]:nth-child(1) {
+		transition-delay: 180ms;
+	}
+
+	[data-home-faq-animate] [data-home-faq-item]:nth-child(2) {
+		transition-delay: 250ms;
+	}
+
+	[data-home-faq-animate] [data-home-faq-item]:nth-child(3) {
+		transition-delay: 320ms;
+	}
+
+	[data-home-faq-animate] [data-home-faq-item]:nth-child(4) {
+		transition-delay: 390ms;
+	}
+
+	[data-home-faq-animate] [data-home-faq-item]:nth-child(5) {
+		transition-delay: 460ms;
+	}
+
+	[data-home-faq-animate] [data-home-faq-item]:nth-child(6) {
+		transition-delay: 530ms;
+	}
+
+	[data-home-faq-animate] [data-home-faq-item]:nth-child(7) {
+		transition-delay: 600ms;
+	}
+
+	[data-home-faq-animate] [data-home-faq-item]:nth-child(8) {
+		transition-delay: 670ms;
+	}
+
+	[data-home-faq-animate] [data-home-faq-item]:nth-child(9) {
+		transition-delay: 740ms;
+	}
+
+	[data-home-faq-animate] [data-home-faq-item]:nth-child(10) {
+		transition-delay: 810ms;
 	}
 
 	[data-home-faq-visible="true"] [data-home-faq-panel],
@@ -252,57 +299,6 @@ textarea,
 	[data-home-faq-visible="true"] [data-home-faq-item] {
 		opacity: 1;
 		transform: translateY(0);
-		transition:
-			opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
-			transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
-	}
-
-	[data-home-faq-visible="true"] [data-home-faq-panel] {
-		transition-delay: 0ms;
-	}
-
-	[data-home-faq-visible="true"] [data-home-faq-heading] {
-		transition-delay: 100ms;
-	}
-
-	[data-home-faq-visible="true"] [data-home-faq-item]:nth-child(1) {
-		transition-delay: 180ms;
-	}
-
-	[data-home-faq-visible="true"] [data-home-faq-item]:nth-child(2) {
-		transition-delay: 250ms;
-	}
-
-	[data-home-faq-visible="true"] [data-home-faq-item]:nth-child(3) {
-		transition-delay: 320ms;
-	}
-
-	[data-home-faq-visible="true"] [data-home-faq-item]:nth-child(4) {
-		transition-delay: 390ms;
-	}
-
-	[data-home-faq-visible="true"] [data-home-faq-item]:nth-child(5) {
-		transition-delay: 460ms;
-	}
-
-	[data-home-faq-visible="true"] [data-home-faq-item]:nth-child(6) {
-		transition-delay: 530ms;
-	}
-
-	[data-home-faq-visible="true"] [data-home-faq-item]:nth-child(7) {
-		transition-delay: 600ms;
-	}
-
-	[data-home-faq-visible="true"] [data-home-faq-item]:nth-child(8) {
-		transition-delay: 670ms;
-	}
-
-	[data-home-faq-visible="true"] [data-home-faq-item]:nth-child(9) {
-		transition-delay: 740ms;
-	}
-
-	[data-home-faq-visible="true"] [data-home-faq-item]:nth-child(10) {
-		transition-delay: 810ms;
 	}
 }
 
