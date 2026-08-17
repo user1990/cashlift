@@ -239,6 +239,80 @@ textarea,
 	}
 }
 
+@keyframes home-faq-reveal {
+	from {
+		opacity: 0;
+		transform: translateY(1rem);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	@supports (animation-timeline: view()) {
+		[data-home-faq-panel],
+		[data-home-faq-heading],
+		[data-home-faq-item] {
+			animation-duration: 700ms;
+			animation-fill-mode: both;
+			animation-name: home-faq-reveal;
+			animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+			animation-timeline: view();
+		}
+
+		[data-home-faq-panel] {
+			animation-range: entry 0% cover 18%;
+		}
+
+		[data-home-faq-heading] {
+			animation-range: entry 2% cover 24%;
+		}
+
+		[data-home-faq-item]:nth-child(1) {
+			animation-range: entry 8% cover 30%;
+		}
+
+		[data-home-faq-item]:nth-child(2) {
+			animation-range: entry 11.25% cover 33.25%;
+		}
+
+		[data-home-faq-item]:nth-child(3) {
+			animation-range: entry 14.5% cover 36.5%;
+		}
+
+		[data-home-faq-item]:nth-child(4) {
+			animation-range: entry 17.75% cover 39.75%;
+		}
+
+		[data-home-faq-item]:nth-child(5) {
+			animation-range: entry 21% cover 43%;
+		}
+
+		[data-home-faq-item]:nth-child(6) {
+			animation-range: entry 24.25% cover 46.25%;
+		}
+
+		[data-home-faq-item]:nth-child(7) {
+			animation-range: entry 27.5% cover 49.5%;
+		}
+
+		[data-home-faq-item]:nth-child(8) {
+			animation-range: entry 30.75% cover 52.75%;
+		}
+
+		[data-home-faq-item]:nth-child(9) {
+			animation-range: entry 34% cover 56%;
+		}
+
+		[data-home-faq-item]:nth-child(10) {
+			animation-range: entry 37.25% cover 59.25%;
+		}
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;

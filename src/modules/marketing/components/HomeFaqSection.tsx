@@ -49,15 +49,15 @@ const HOME_FAQS = [
 ] as const;
 
 export const HomeFaqSection = () => (
-	<section aria-labelledby="home-faq-title" className="border-shell-border border-b bg-shell">
-		<div className="mx-auto max-w-295 px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-			<h2 id="home-faq-title" className="text-5xl+ text-primary tracking-normal sm:text-7xl+">
+	<section aria-labelledby="home-faq-title" data-home-faq className="border-shell-border border-b bg-shell">
+		<div data-home-faq-panel className="mx-auto max-w-295 px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+			<h2 id="home-faq-title" data-home-faq-heading className="text-5xl+ text-primary tracking-normal sm:text-7xl+">
 				FAQ
 			</h2>
 
 			<div className="mt-5 border-shell-border border-t">
 				{HOME_FAQS.map(({ answer, question }) => (
-					<details key={question} className="group border-shell-border border-b">
+					<details key={question} data-home-faq-item className="group border-shell-border border-b">
 						<summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-left text-l text-shell-foreground outline-none transition-colors duration-150 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
 							{question}
 
