@@ -2,9 +2,16 @@
 
 import { type ReactNode, useEffect, useRef } from "react";
 
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
 type HomeFaqSectionRevealProps = {
 	children: ReactNode;
 };
+
+const canRevealOnScroll = () =>
+	typeof window.matchMedia === "function" &&
+	!window.matchMedia(REDUCED_MOTION_QUERY).matches &&
+	typeof IntersectionObserver === "function";
 
 export const HomeFaqSectionReveal = ({ children }: HomeFaqSectionRevealProps) => {
 	const sectionRef = useRef<HTMLElement>(null);
@@ -15,18 +22,15 @@ export const HomeFaqSectionReveal = ({ children }: HomeFaqSectionRevealProps) =>
 			return;
 		}
 
-		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+		if (!canRevealOnScroll()) {
 			section.dataset.homeFaqVisible = "true";
 			return;
 		}
 
+		section.dataset.homeFaqArmed = "true";
+
 		const reveal = () => {
-			section.dataset.homeFaqAnimate = "true";
-			requestAnimationFrame(() => {
-				requestAnimationFrame(() => {
-					section.dataset.homeFaqVisible = "true";
-				});
-			});
+			section.dataset.homeFaqVisible = "true";
 		};
 
 		const observer = new IntersectionObserver(
@@ -36,7 +40,7 @@ export const HomeFaqSectionReveal = ({ children }: HomeFaqSectionRevealProps) =>
 					observer.disconnect();
 				}
 			},
-			{ rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
+			{ rootMargin: "0px 0px -10% 0px", threshold: 0.12 },
 		);
 
 		observer.observe(section);
