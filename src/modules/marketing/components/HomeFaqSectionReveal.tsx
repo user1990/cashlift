@@ -1,8 +1,10 @@
 "use client";
 
-import { type ReactNode, useEffect, useRef } from "react";
+import { type ReactNode, useLayoutEffect, useRef } from "react";
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+const FAQ_PREHIDE_CLASS = "home-faq-prehide";
+const FAQ_REVEAL_CLASS = "home-faq-reveal-in";
 
 type HomeFaqSectionRevealProps = {
 	children: ReactNode;
@@ -13,37 +15,61 @@ const canRevealOnScroll = () =>
 	!window.matchMedia(REDUCED_MOTION_QUERY).matches &&
 	typeof IntersectionObserver === "function";
 
+const getRevealTargets = (section: HTMLElement) =>
+	[
+		section.querySelector<HTMLElement>("[data-home-faq-heading]"),
+		...section.querySelectorAll<HTMLElement>("[data-home-faq-item]"),
+	].filter((target): target is HTMLElement => target !== null);
+
 export const HomeFaqSectionReveal = ({ children }: HomeFaqSectionRevealProps) => {
 	const sectionRef = useRef<HTMLElement>(null);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const section = sectionRef.current;
 		if (!section) {
 			return;
 		}
 
-		if (!canRevealOnScroll()) {
-			section.dataset.homeFaqVisible = "true";
+		const targets = getRevealTargets(section);
+		if (!canRevealOnScroll() || targets.length === 0) {
+			section.dataset.homeFaqRevealed = "true";
 			return;
 		}
 
-		section.dataset.homeFaqArmed = "true";
+		for (const target of targets) {
+			target.classList.add(FAQ_PREHIDE_CLASS);
+		}
 
-		const reveal = () => {
-			section.dataset.homeFaqVisible = "true";
+		const revealTarget = (target: HTMLElement) => {
+			if (target.dataset.homeFaqAnimated === "true") {
+				return;
+			}
+
+			target.dataset.homeFaqAnimated = "true";
+			target.classList.add(FAQ_REVEAL_CLASS);
+			target.classList.remove(FAQ_PREHIDE_CLASS);
 		};
 
 		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (entry?.isIntersecting) {
-					reveal();
-					observer.disconnect();
+			(entries) => {
+				for (const entry of entries) {
+					if (!entry.isIntersecting) {
+						continue;
+					}
+
+					const target = entry.target;
+					if (target instanceof HTMLElement) {
+						revealTarget(target);
+						observer.unobserve(target);
+					}
 				}
 			},
-			{ rootMargin: "0px 0px -10% 0px", threshold: 0.12 },
+			{ rootMargin: "0px 0px -30% 0px", threshold: 0.35 },
 		);
 
-		observer.observe(section);
+		for (const target of targets) {
+			observer.observe(target);
+		}
 
 		return () => observer.disconnect();
 	}, []);
