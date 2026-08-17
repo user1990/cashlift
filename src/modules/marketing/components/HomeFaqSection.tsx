@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { HomeFaqItem } from "./HomeFaqItem";
 import { HomeFaqSectionReveal } from "./HomeFaqSectionReveal";
 
 const HOME_FAQS = [
@@ -52,26 +52,13 @@ const HOME_FAQS = [
 export const HomeFaqSection = () => (
 	<HomeFaqSectionReveal>
 		<div data-home-faq-panel className="mx-auto max-w-295 px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-			<h2 id="home-faq-title" data-home-faq-heading className="text-5xl+ text-primary tracking-normal sm:text-7xl+">
+			<h2 id="home-faq-title" className="text-5xl+ text-primary tracking-normal sm:text-7xl+">
 				FAQ
 			</h2>
 
-			<div className="mt-5 border-shell-border border-t">
+			<div data-home-faq-list className="mt-5 border-shell-border border-t">
 				{HOME_FAQS.map(({ answer, question }) => (
-					<div key={question} data-home-faq-item>
-						<details className="group border-shell-border border-b">
-							<summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-left text-l text-shell-foreground outline-none transition-colors duration-150 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
-								{question}
-
-								<ChevronDown
-									aria-hidden
-									className="size-5 shrink-0 text-shell-muted transition-transform duration-300 group-open:rotate-180"
-								/>
-							</summary>
-
-							<p className="max-w-3xl pb-5 text-l text-shell-muted leading-7">{answer}</p>
-						</details>
-					</div>
+					<HomeFaqItem key={question} answer={answer} question={question} />
 				))}
 			</div>
 		</div>

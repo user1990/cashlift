@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { HomeFaqSection } from "./HomeFaqSection";
@@ -11,17 +11,25 @@ describe("HomeFaqSection", () => {
 
 		render(<HomeFaqSection />);
 
-		const question = screen.getByText("How does CashLift rank actions?");
-		const answer = screen.getByText(/ranks the demo workspace by cash impact/);
+		const question = screen.getByRole("button", { name: "How does CashLift rank actions?" });
+		const answer =
+			"CashLift ranks the demo workspace by cash impact and urgency, then keeps the reason for each action beside the decision.";
 
-		expect(answer).not.toBeVisible();
-
-		await user.click(question);
-
-		expect(answer).toBeVisible();
+		expect(question).toHaveAttribute("aria-expanded", "false");
+		expect(screen.queryByText(answer)).not.toBeVisible();
 
 		await user.click(question);
 
-		expect(answer).not.toBeVisible();
+		await waitFor(() => {
+			expect(question).toHaveAttribute("aria-expanded", "true");
+			expect(screen.getByText(answer)).toBeVisible();
+		});
+
+		await user.click(question);
+
+		await waitFor(() => {
+			expect(question).toHaveAttribute("aria-expanded", "false");
+			expect(screen.queryByText(answer)).not.toBeVisible();
+		});
 	});
 });

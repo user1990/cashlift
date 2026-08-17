@@ -15,11 +15,7 @@ const canRevealOnScroll = () =>
 	!window.matchMedia(REDUCED_MOTION_QUERY).matches &&
 	typeof IntersectionObserver === "function";
 
-const getRevealTargets = (section: HTMLElement) =>
-	[
-		section.querySelector<HTMLElement>("[data-home-faq-heading]"),
-		...section.querySelectorAll<HTMLElement>("[data-home-faq-item]"),
-	].filter((target): target is HTMLElement => target !== null);
+const getRevealTargets = (section: HTMLElement) => [...section.querySelectorAll<HTMLElement>("[data-home-faq-item]")];
 
 export const HomeFaqSectionReveal = ({ children }: HomeFaqSectionRevealProps) => {
 	const sectionRef = useRef<HTMLElement>(null);
@@ -36,15 +32,31 @@ export const HomeFaqSectionReveal = ({ children }: HomeFaqSectionRevealProps) =>
 			return;
 		}
 
+		const list = section.querySelector<HTMLElement>("[data-home-faq-list]");
+		if (list) {
+			list.classList.add(FAQ_PREHIDE_CLASS);
+		}
+
 		for (const target of targets) {
 			target.classList.add(FAQ_PREHIDE_CLASS);
 		}
+
+		const revealList = () => {
+			if (!list || list.dataset.homeFaqAnimated === "true") {
+				return;
+			}
+
+			list.dataset.homeFaqAnimated = "true";
+			list.classList.add(FAQ_REVEAL_CLASS);
+			list.classList.remove(FAQ_PREHIDE_CLASS);
+		};
 
 		const revealTarget = (target: HTMLElement) => {
 			if (target.dataset.homeFaqAnimated === "true") {
 				return;
 			}
 
+			revealList();
 			target.dataset.homeFaqAnimated = "true";
 			target.classList.add(FAQ_REVEAL_CLASS);
 			target.classList.remove(FAQ_PREHIDE_CLASS);
