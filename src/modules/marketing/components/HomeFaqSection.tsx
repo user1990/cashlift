@@ -49,7 +49,7 @@ const HOME_FAQS = [
 ] as const;
 
 export const HomeFaqSection = () => (
-	<section aria-labelledby="home-faq-title" data-home-faq className="border-shell-border border-b bg-shell">
+	<section aria-labelledby="home-faq-title" className="border-shell-border border-b bg-shell">
 		<div className="mx-auto max-w-295 px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
 			<h2 id="home-faq-title" className="text-5xl+ text-primary tracking-normal sm:text-7xl+">
 				FAQ
@@ -67,7 +67,11 @@ export const HomeFaqSection = () => (
 							/>
 						</summary>
 
-						<p className="max-w-3xl pb-5 text-l text-shell-muted leading-7">{answer}</p>
+						<div className="ease grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 group-open:grid-rows-[1fr]">
+							<div className="ease block overflow-hidden opacity-0 transition-opacity duration-300 group-open:opacity-100">
+								<p className="max-w-3xl pb-5 text-l text-shell-muted leading-7">{answer}</p>
+							</div>
+						</div>
 					</details>
 				))}
 			</div>

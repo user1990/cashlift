@@ -239,26 +239,6 @@ textarea,
 	}
 }
 
-[data-home-faq] details {
-	interpolate-size: allow-keywords;
-}
-
-[data-home-faq] details::details-content {
-	display: block;
-	overflow: hidden;
-	height: 0;
-	opacity: 0;
-	transition:
-		height 300ms ease,
-		opacity 300ms ease,
-		content-visibility 300ms ease allow-discrete;
-}
-
-[data-home-faq] details[open]::details-content {
-	height: auto;
-	opacity: 1;
-}
-
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;
