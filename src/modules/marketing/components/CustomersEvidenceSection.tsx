@@ -5,10 +5,9 @@ import { ProofList } from "./ProofList";
 export const CustomersEvidenceSection = () => (
 	<>
 		<Hero
-			description="MVP proof stories use demo data until real customer evidence exists. They show the outcomes CashLift is built to create."
+			description="See how service teams make money decisions earlier through MVP proof stories built from demo data."
 			label="Customers"
-			labelAsHeading
-			title="Service teams use CashLift to make money decisions earlier."
+			variant="page-title"
 		/>
 
 		<ProofList items={PROOF_POINTS} />

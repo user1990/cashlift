@@ -47,7 +47,6 @@ type PricingPlan = {
 type UseCase = {
 	answers: readonly string[];
 	description: string;
-	headline: string;
 	label: string;
 };
 
@@ -176,8 +175,7 @@ export const USE_CASES = {
 			"What vendor spend can we cut before next month?",
 		],
 		description:
-			"Agency cash changes with project milestones, client delays, contractor bills, and tool renewals. CashLift turns those moving parts into daily actions.",
-		headline: "Keep agency spend aligned with client cash.",
+			"Keep agency spend aligned with client cash across project milestones, delays, contractor bills, and renewals.",
 		label: "Agencies",
 	},
 	consulting: {
@@ -187,8 +185,7 @@ export const USE_CASES = {
 			"Which team has budget room for a contractor?",
 		],
 		description:
-			"Consulting teams need fast decisions across retainers, travel, contractors, and partner tools. CashLift shows the cash impact first.",
-		headline: "Approve consulting spend with retainer timing in view.",
+			"Approve consulting spend with retainer timing in view, so travel, contractors, and partner tools stay cash-aware.",
 		label: "Consulting",
 	},
 	"software-services": {
@@ -198,8 +195,7 @@ export const USE_CASES = {
 			"What happens if a milestone payment slips one week?",
 		],
 		description:
-			"Software service firms balance payroll, cloud costs, contractors, retainers, and client milestone risk. CashLift keeps decisions tied to runway.",
-		headline: "Control project spend before cash gets tight.",
+			"Control project spend before cash gets tight across payroll, cloud costs, contractors, retainers, and client milestone risk.",
 		label: "Software Services",
 	},
 } as const satisfies Record<UseCaseSlug, UseCase>;
