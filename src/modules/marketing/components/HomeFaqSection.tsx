@@ -69,11 +69,7 @@ export const HomeFaqSection = () => (
 								/>
 							</summary>
 
-							<div className="ease grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 group-open:grid-rows-[1fr]">
-								<div className="ease block overflow-hidden opacity-0 transition-opacity duration-300 group-open:opacity-100">
-									<p className="max-w-3xl pb-5 text-l text-shell-muted leading-7">{answer}</p>
-								</div>
-							</div>
+							<p className="max-w-3xl pb-5 text-l text-shell-muted leading-7">{answer}</p>
 						</details>
 					</div>
 				))}
