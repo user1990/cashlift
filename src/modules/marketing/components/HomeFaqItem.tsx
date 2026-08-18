@@ -79,19 +79,22 @@ export const HomeFaqItem = ({ answer, question }: HomeFaqItemProps) => {
 	};
 
 	return (
-		<div data-home-faq-item className="border-shell-border border-b">
+		<div className="border-shell-border border-b">
 			<button
 				aria-controls={answerId}
 				aria-expanded={expanded}
 				type="button"
 				onClick={toggleExpanded}
-				className="flex min-h-14 w-full cursor-pointer items-center justify-between gap-4 py-3 text-left text-l text-shell-foreground outline-none transition-colors duration-150 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
+				className="group flex min-h-14 w-full cursor-pointer items-center justify-between gap-4 py-3 text-left text-l text-shell-foreground outline-none transition-colors duration-150 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
 			>
 				{question}
 
 				<ChevronDown
 					aria-hidden
-					className={cn("size-5 shrink-0 text-shell-muted transition-transform duration-300", expanded && "rotate-180")}
+					className={cn(
+						"size-5 shrink-0 text-shell-muted transition-[color,transform] duration-300 group-hover:text-primary",
+						expanded && "rotate-180",
+					)}
 				/>
 			</button>
 
