@@ -1,13 +1,8 @@
 import { Hero } from "./Hero";
 
-type LegalContentSectionProps = {
-	as?: "h1" | "h2";
-};
-
-export const LegalContentSection = ({ as = "h1" }: LegalContentSectionProps) => (
+export const LegalContentSection = () => (
 	<section>
 		<Hero
-			as={as}
 			description="Do not enter real credentials, personal financial data, or private company records into the demo workspace."
 			label="Legal"
 			labelAsHeading
