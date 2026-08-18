@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function Privacy() {
-	return <LegalPage />;
+	return <LegalPage as="h2" />;
 }
