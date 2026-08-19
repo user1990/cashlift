@@ -45,17 +45,11 @@ export const Hero = ({
 			</>
 		) : labelAsHeading ? (
 			<>
-				<Component
-					className={cn(
-						"max-w-3xl font-semibold text-4xl tracking-normal sm:text-6xl+",
-						Component === "h1" ? "text-primary" : "text-shell-foreground",
-						titleClassName,
-					)}
-				>
+				<Component className={cn("max-w-3xl text-primary tracking-normal sm:text-6xl+", titleClassName)}>
 					{label}
 				</Component>
 
-				<p className="mt-4 max-w-3xl text-3xl+ text-shell-foreground leading-tight tracking-normal">{title}</p>
+				<p className="mt-5 max-w-2xl text-shell-foreground text-xl leading-8">{title}</p>
 			</>
 		) : (
 			<>
