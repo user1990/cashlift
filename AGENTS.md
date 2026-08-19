@@ -51,7 +51,7 @@ Always read this file first. It defines workflow for this repo. Do not override 
 - A mutation that can conflict with another control must lock every conflicting control until it settles, and its pending-state behavior needs a test.
 - Treat browser time as client state. Do not bake a build-time date into a current-status label; preserve the server render and test the client behavior when time affects a decision.
 - Validate server-boundary input with Zod or equivalent, authorize before data access, and avoid SQL/query string concatenation. `.agents/skills/security/SKILL.md` defines the required parse/authenticate/authorize/query order.
-- Keep request protections in `src/proxy.ts`: state-changing workspace API requests need the origin check, and hardening headers stay restrictive.
+- Keep hardening headers in `src/proxy.ts` restrictive. Do not add CORS. Workspace mutations stay JSON and never run on GET; Clerk `SameSite=Lax` is the CSRF control.
 - Do not store auth/session tokens in localStorage or sessionStorage.
 - Do not commit secrets or telemetry that captures PII.
 - Keep telemetry identifiers to request/correlation IDs; do not attach Clerk user IDs or other direct identifiers unless a documented, approved need requires it.

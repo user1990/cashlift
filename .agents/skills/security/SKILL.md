@@ -1,6 +1,6 @@
 ---
 name: security
-description: Request-boundary hardening, authentication/authorization order, CSRF origin checks, secret handling, and browser-storage rules. Trigger when touching `src/app/api/**`, `src/proxy.ts`, server data loading, Supabase repositories, Clerk session code, Zod schemas at a boundary, environment variables, CI security steps, or any change that reads or writes company data.
+description: Authentication/authorization order, Clerk CSRF model, secret handling, and browser-storage rules. Trigger when touching `src/app/api/**`, `src/proxy.ts`, server data loading, Supabase repositories, Clerk session code, Zod schemas at a boundary, environment variables, CI security steps, or any change that reads or writes company data.
 ---
 
 # Security
@@ -22,11 +22,10 @@ Every server boundary follows the same order. Do not reorder or skip a step.
 
 ## Request Rules
 
-- Keep headers and origin checks in `src/proxy.ts` so a new workspace API route inherits them.
-- State-changing workspace API requests (`POST`, `PUT`, `PATCH`, `DELETE`) must pass the origin check in `src/proxy.ts`. That is the CSRF protection for the cookie-backed Clerk session.
-- Keep CSP, HSTS, COOP/CORP, frame protection, referrer policy, and the permissions policy intact. Widening CSP needs a specific origin and a test in `src/proxy.test.ts`.
-- Login brute-force protection belongs to Clerk. Do not add Upstash or an in-process limiter on `/login` unless Clerk is no longer the auth owner.
-- Do not add `Access-Control-Allow-Origin: *`. Workspace APIs are same-origin; CORS would widen access.
+- CSRF is Clerk `SameSite=Lax` cookies plus same-origin JSON mutations. Do not add a custom origin firewall, CSRF tokens, or Upstash on `/login`.
+- Workspace mutations stay JSON `PATCH`/`POST` on `/api/workspace`. Never change state on GET.
+- Do not add `Access-Control-Allow-Origin`. CORS would let other sites call the cookie-backed API.
+- Keep CSP, HSTS, COOP/CORP, frame protection, referrer policy, and the permissions policy in `src/proxy.ts`. Widening CSP needs a specific origin and a test in `src/proxy.test.ts`.
 
 ## Client Rules
 
