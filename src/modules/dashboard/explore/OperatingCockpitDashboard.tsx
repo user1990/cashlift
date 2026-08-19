@@ -1,3 +1,4 @@
+import { Shield } from "lucide-react";
 import Link from "next/link";
 import { getPercentage } from "@/modules/money/format";
 import { ProgressBar } from "@/ui/components/feedback/ProgressBar";
@@ -5,8 +6,12 @@ import { getCashActionDestination } from "../cashActionDestination";
 import { CashOutlookChart } from "../components/CashOutlookChart";
 import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
+import { COCKPIT_ATMOSPHERES } from "./atmospheres";
 import { CASH_ACTION_NEXT_STEP, CASH_ACTION_WORK, type ExplorePresentation, formatExploreMoney } from "./exploreModel";
 import { ExploreKicker, ExploreLink, ExploreMoney, PriorityCue, SupportNoteList } from "./exploreUi";
+import { GlassCard } from "./GlassCard";
+
+type CashAction = DashboardViewModel["actionInbox"][number];
 
 type OperatingCockpitDashboardProps = {
 	basePath: string;
@@ -21,17 +26,21 @@ export const OperatingCockpitDashboard = ({ basePath, dashboard, presentation }:
 		dashboard.lowestProjectedCashCents < dashboard.cashBufferTargetCents;
 
 	return (
-		<div className="space-y-8">
-			<header className="border-border border-b pb-6">
-				<p className="text-muted-foreground text-s">
-					{dashboard.companyName} · {dashboard.dateRangeLabel}
-				</p>
+		<div className="space-y-4 xl:space-y-5">
+			<GlassCard atmosphereClassName={COCKPIT_ATMOSPHERES.status}>
+				<div className="flex flex-wrap items-start justify-between gap-3">
+					<p className="text-muted-foreground text-s">
+						{dashboard.companyName} · {dashboard.dateRangeLabel}
+					</p>
 
-				<h1 className="mt-2 max-w-4xl font-semibold text-3xl+ text-panel-foreground tracking-normal">
+					<p className="text-muted-foreground text-s">{dashboard.runwayDays} days runway</p>
+				</div>
+
+				<h1 className="mt-3 max-w-4xl font-semibold text-3xl+ text-panel-foreground tracking-normal">
 					{dashboard.cashPositionHeadline}
 				</h1>
 
-				<dl className="mt-5 grid gap-4 sm:grid-cols-3">
+				<dl className="mt-6 grid gap-5 sm:grid-cols-3">
 					<div>
 						<dt className="text-muted-foreground text-s">Cash on hand</dt>
 
@@ -41,20 +50,14 @@ export const OperatingCockpitDashboard = ({ basePath, dashboard, presentation }:
 					</div>
 
 					<div>
-						<dt className="text-muted-foreground text-s">Lowest week</dt>
+						<dt className="flex items-center gap-1.5 text-muted-foreground text-s">
+							<Shield aria-hidden className="size-3.5 text-primary" />
+							Cash buffer
+						</dt>
 
 						<dd>
-							<ExploreMoney
-								cents={dashboard.lowestProjectedCashCents ?? dashboard.cashAvailableCents}
-								className="text-3xl+"
-								warning={belowBuffer}
-							/>
+							<ExploreMoney cents={dashboard.cashBufferTargetCents} className="text-3xl+" />
 						</dd>
-						{dashboard.lowestProjectedCashDate && (
-							<p className="mt-1 text-muted-foreground text-s">
-								{formatDashboardDate(dashboard.lowestProjectedCashDate)}
-							</p>
-						)}
 					</div>
 
 					<div>
@@ -67,106 +70,117 @@ export const OperatingCockpitDashboard = ({ basePath, dashboard, presentation }:
 								warning={dashboard.cashAtRiskCents > 0}
 							/>
 						</dd>
+
+						{primaryAction && dashboard.cashAtRiskCents > 0 && (
+							<p className="mt-1 text-s text-warning">{primaryAction.title}</p>
+						)}
 					</div>
 				</dl>
-			</header>
+			</GlassCard>
 
-			<section className="grid gap-8 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-				<div className="min-w-0">
-					<div className="flex flex-wrap items-end justify-between gap-3">
-						<div>
-							<ExploreKicker>Priorities</ExploreKicker>
+			<section className="grid items-stretch gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:gap-5">
+				<GlassCard
+					atmosphereClassName={COCKPIT_ATMOSPHERES.priority}
+					className="h-full"
+					contentClassName="flex h-full flex-col"
+					intensity="active"
+				>
+					<div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+						{primaryAction ? (
+							<PriorityCue priority={primaryAction.priority} />
+						) : (
+							<ExploreKicker>Priority</ExploreKicker>
+						)}
 
-							<h2 className="mt-1 text-panel-foreground text-xl+">Today’s Cash Actions</h2>
-						</div>
+						{primaryAction && (
+							<>
+								<span className="text-muted-foreground text-s">{CASH_ACTION_WORK[primaryAction.type]}</span>
 
-						{presentation.inactionLines[0] && (
-							<p className="max-w-sm text-muted-foreground text-s leading-5">{presentation.inactionLines[0]}</p>
+								<span className="text-muted-foreground text-s">Due {formatDashboardDate(primaryAction.dueDate)}</span>
+							</>
 						)}
 					</div>
 
 					{primaryAction ? (
-						<div className="mt-4 border-border border-b pb-5">
-							<div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-								<PriorityCue priority={primaryAction.priority} />
+						<>
+							<h2 className="mt-3 font-semibold text-2xl+ text-panel-foreground tracking-normal">
+								{primaryAction.title}
+							</h2>
 
-								<span className="text-muted-foreground text-s">{CASH_ACTION_WORK[primaryAction.type]}</span>
+							<p className="mt-3 text-m text-shell-muted leading-6">{primaryAction.description}</p>
 
-								<span className="text-muted-foreground text-s">Due {formatDashboardDate(primaryAction.dueDate)}</span>
-							</div>
-
-							<p className="mt-2 font-semibold text-2xl+ text-panel-foreground">{primaryAction.title}</p>
-
-							<p className="mt-2 text-m text-shell-muted leading-6">{primaryAction.description}</p>
-
-							<div className="mt-4 flex flex-wrap items-center gap-3">
+							<p className="mt-5">
 								<ExploreMoney cents={primaryAction.impactCents} className="text-2xl+" exact />
 
-								<ExploreLink href={getCashActionDestination(primaryAction.type, basePath)} primary>
+								<span className="ml-2 text-muted-foreground text-s">money affected</span>
+							</p>
+
+							<div className="mt-6">
+								<ExploreLink
+									className="min-h-12 rounded-lg px-4"
+									href={getCashActionDestination(primaryAction.type, basePath)}
+									primary
+								>
 									{CASH_ACTION_NEXT_STEP[primaryAction.type]}
 								</ExploreLink>
 							</div>
-						</div>
+						</>
 					) : (
 						<p className="mt-4 text-m text-muted-foreground">You are clear for today.</p>
 					)}
+				</GlassCard>
 
-					{presentation.remainingActions.length > 0 && (
-						<ol className="divide-y divide-border">
-							{presentation.remainingActions.map((action) => (
-								<li key={action.id}>
-									<Link
-										className="flex flex-col gap-2 py-4 outline-none transition-colors hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 sm:flex-row sm:items-start sm:justify-between"
-										href={getCashActionDestination(action.type, basePath)}
-									>
-										<span className="min-w-0">
-											<span className="flex flex-wrap items-center gap-x-3 gap-y-1">
-												<PriorityCue priority={action.priority} />
+				<div className="grid min-w-0 gap-4 xl:gap-5">
+					<GlassCard atmosphereClassName={COCKPIT_ATMOSPHERES.queue}>
+						<ExploreKicker>Priorities</ExploreKicker>
 
-												<span className="text-muted-foreground text-s">{CASH_ACTION_WORK[action.type]}</span>
-											</span>
+						<h2 className="mt-1 text-panel-foreground text-xl+">What matters next</h2>
 
-											<span className="mt-1 block font-semibold text-m+ text-panel-foreground">{action.title}</span>
-										</span>
+						{presentation.remainingActions.length > 0 ? (
+							<ol className="mt-4 divide-y divide-white/10">
+								{presentation.remainingActions.map((action) => (
+									<li key={action.id}>{renderQueueAction(action, basePath)}</li>
+								))}
+							</ol>
+						) : (
+							<p className="mt-4 text-m text-muted-foreground">No other open Cash Actions for this role.</p>
+						)}
+					</GlassCard>
 
-										<ExploreMoney cents={action.impactCents} className="shrink-0" exact />
-									</Link>
-								</li>
-							))}
-						</ol>
-					)}
-				</div>
+					<GlassCard atmosphereClassName={COCKPIT_ATMOSPHERES.outlook}>
+						<ExploreKicker>Future</ExploreKicker>
 
-				<div className="min-w-0">
-					<ExploreKicker>Future</ExploreKicker>
+						<h2 className="mt-1 text-panel-foreground text-xl+">13-week Cash Outlook</h2>
 
-					<h2 className="mt-1 text-panel-foreground text-xl+">
-						{dashboard.lowestProjectedCashDate && dashboard.lowestProjectedCashCents !== undefined
-							? `Lowest week ${formatExploreMoney(dashboard.lowestProjectedCashCents)} on ${formatDashboardDate(dashboard.lowestProjectedCashDate)}`
-							: "13-week cash outlook"}
-					</h2>
+						{dashboard.lowestProjectedCashDate && dashboard.lowestProjectedCashCents !== undefined && (
+							<p className={belowBuffer ? "mt-1 text-s text-warning" : "mt-1 text-muted-foreground text-s"}>
+								Lowest week {formatExploreMoney(dashboard.lowestProjectedCashCents)} on{" "}
+								{formatDashboardDate(dashboard.lowestProjectedCashDate)}
+							</p>
+						)}
 
-					<div className="mt-4">
-						<CashOutlookChart
-							bufferTargetCents={dashboard.cashBufferTargetCents}
-							chartData={dashboard.forecastChartData}
-							lowestProjectedCashDate={dashboard.lowestProjectedCashDate}
-						/>
-					</div>
+						<div className="mt-4">
+							<CashOutlookChart
+								bufferTargetCents={dashboard.cashBufferTargetCents}
+								chartData={dashboard.forecastChartData}
+								lowestProjectedCashDate={dashboard.lowestProjectedCashDate}
+							/>
+						</div>
+					</GlassCard>
 				</div>
 			</section>
 
-			<section className="border-border border-t pt-8">
+			<GlassCard atmosphereClassName={COCKPIT_ATMOSPHERES.support}>
 				<ExploreKicker>Supporting work</ExploreKicker>
 
-				<h2 className="mt-1 text-panel-foreground text-xl+">Approvals, collection, vendor leaks, and guardrails</h2>
+				<h2 className="mt-1 text-panel-foreground text-xl+">Useful context, kept quieter</h2>
 
 				<div className="mt-5 grid gap-8 lg:grid-cols-12">
 					<div className="min-w-0 lg:col-span-7">
 						<p className="font-semibold text-m+ text-panel-foreground">Spend requests to decide</p>
 
 						{dashboard.pendingApprovals.length ? (
-							<ul className="mt-3 divide-y divide-border border-border border-t">
+							<ul className="mt-3 divide-y divide-white/10">
 								{dashboard.pendingApprovals.map(({ amountCents, id, reason, requester, team, vendor }) => (
 									<li key={id} className="flex items-start justify-between gap-3 py-3">
 										<div className="min-w-0">
@@ -202,7 +216,7 @@ export const OperatingCockpitDashboard = ({ basePath, dashboard, presentation }:
 								: "Collect and cut"}
 						</p>
 
-						<ul className="mt-3 divide-y divide-border border-border border-t">
+						<ul className="mt-3 divide-y divide-white/10">
 							{dashboard.overdueInvoices.map(({ amountCents, client, id, owner }) => (
 								<li key={id} className="flex items-start justify-between gap-3 py-3">
 									<div className="min-w-0">
@@ -254,9 +268,30 @@ export const OperatingCockpitDashboard = ({ basePath, dashboard, presentation }:
 						)}
 					</div>
 				</div>
-			</section>
+			</GlassCard>
 
 			<SupportNoteList notes={presentation.supportNotes} />
 		</div>
 	);
 };
+
+function renderQueueAction(action: CashAction, basePath: string) {
+	return (
+		<Link
+			className="flex flex-col gap-2 py-3 outline-none transition-colors hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 sm:flex-row sm:items-start sm:justify-between"
+			href={getCashActionDestination(action.type, basePath)}
+		>
+			<span className="min-w-0">
+				<span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+					<PriorityCue priority={action.priority} />
+
+					<span className="text-muted-foreground text-s">{CASH_ACTION_WORK[action.type]}</span>
+				</span>
+
+				<span className="mt-1 block font-semibold text-m+ text-panel-foreground">{action.title}</span>
+			</span>
+
+			<ExploreMoney cents={action.impactCents} className="shrink-0" exact />
+		</Link>
+	);
+}

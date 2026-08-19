@@ -24,4 +24,13 @@ describe("ExploreDashboard", () => {
 		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(headline);
 		expect(screen.getByRole("link", { name: /open invoices/i })).toHaveAttribute("href", "/dashboard/invoices");
 	});
+
+	it("keeps the operating cockpit figures on the current dataset", () => {
+		render(<ExploreDashboard dataset={DEMO_WORKSPACE_DATASET} direction="c" />);
+
+		expect(screen.getByText(`${dashboard.runwayDays} days runway`)).toBeVisible();
+		expect(screen.getByText("Cash buffer")).toBeVisible();
+		expect(screen.getByRole("heading", { name: dashboard.actionInbox[0]?.title })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "13-week Cash Outlook" })).toBeVisible();
+	});
 });
