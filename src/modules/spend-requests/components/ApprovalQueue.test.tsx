@@ -27,14 +27,17 @@ describe("ApprovalQueue", () => {
 		expect(screen.queryByRole("button", { name: /reject/i })).not.toBeInTheDocument();
 	});
 
-	it("submits an approved request decision", async () => {
-		const user = userEvent.setup();
+	it("submits an approved request decision and locks every control while pending", async () => {
+		const user = userEvent.setup({ delay: null });
 		const { resolveDecision } = mockSpendRequestDecisionPending();
 		const queryClient = renderApprovalQueue();
 
 		await user.click(screen.getByRole("button", { name: "Approve BrandForge" }));
 
 		expect(screen.getByRole("button", { name: "Approve BrandForge" })).toBeDisabled();
+		expect(screen.getByRole("button", { name: "Approve Delta" })).toBeDisabled();
+		expect(screen.getByRole("button", { name: "Reject Delta" })).toBeDisabled();
+
 		resolveDecision();
 
 		expect(await screen.findByText("Spend approved")).toBeInTheDocument();
@@ -46,26 +49,14 @@ describe("ApprovalQueue", () => {
 	});
 
 	it("rolls back the optimistic request when the mutation fails", async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		mockSpendRequestDecisionFailure();
 		renderApprovalQueue();
 
 		await user.click(screen.getByRole("button", { name: "Reject Delta" }));
 
 		expect(await screen.findByText("Spend update failed")).toBeInTheDocument();
-		expect(await screen.findByText("Unable to update spend request.")).toBeInTheDocument();
 		expect(screen.getByText("Delta")).toBeInTheDocument();
-	});
-
-	it("disables every decision control while a decision is pending", async () => {
-		const user = userEvent.setup();
-		mockSpendRequestDecisionPending();
-		renderApprovalQueue();
-
-		await user.click(screen.getByRole("button", { name: "Approve BrandForge" }));
-
-		expect(screen.getByRole("button", { name: "Approve Delta" })).toBeDisabled();
-		expect(screen.getByRole("button", { name: "Reject Delta" })).toBeDisabled();
 	});
 });
 

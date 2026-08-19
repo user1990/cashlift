@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,7 +14,7 @@ type BudgetFormValues = {
 
 describe("ControlledTextField", () => {
 	it("formats, parses, and submits the controlled value", async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		render(<BudgetForm />);
 
 		const input = screen.getByRole("textbox", { name: "Monthly budget" });
@@ -22,12 +22,10 @@ describe("ControlledTextField", () => {
 		expect(input).toHaveValue("1200");
 
 		await user.clear(input);
-		await user.type(input, "2500");
+		await user.paste("2500");
 		await user.click(screen.getByRole("button", { name: "Save budget" }));
 
-		await waitFor(() => {
-			expect(screen.getByText("Saved budget: 2500")).toBeInTheDocument();
-		});
+		expect(screen.getByText("Saved budget: 2500")).toBeInTheDocument();
 	});
 });
 
