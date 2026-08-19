@@ -33,8 +33,8 @@ Do not remove coverage for business rules, authorization or tenant boundaries, f
 
 ## Performance
 
-- Keep unit and component tests at or below 200ms each. `pnpm test` runs `scripts/check-test-durations.mjs` after Vitest and fails CI when any case exceeds the limit.
-- `slowTestThreshold` in `vitest.config.mts` only marks slow cases in local tree reporter output. It is not enforcement.
+- Keep each unit/component test at or below 200ms. Vitest loads `src/test/slowTestReporter.mts`, which fails the run when any single test exceeds the limit.
+- Vitest tree output can still show a **file** in yellow when the whole file is slow. That is file wall time (setup + all tests), not one test breaching the limit.
 - Prefer one render per workflow, `userEvent.setup({ delay: null })`, paste over character-by-character typing, and consolidated assertions.
 - Do not add sleeps, fixed delays, or arbitrary timeouts to mask slow setup.
 

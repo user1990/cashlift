@@ -34,8 +34,8 @@ Use this skill for test changes. Read `.agents/docs/testing.md` only when you ne
 
 ## Performance
 
-- Keep unit and component tests at or below 200ms each. CI enforces this with `scripts/check-test-durations.mjs` after `vitest run`.
-- `slowTestThreshold` in `vitest.config.mts` only changes reporter coloring in local tree output. It does not fail tests or print CI errors.
+- Keep each unit/component test at or below 200ms. Vitest loads `src/test/slowTestReporter.mts`, which fails the run when any single test exceeds the limit.
+- Vitest tree output can still show a **file** in yellow when the whole file is slow. That is file wall time (setup + all tests), not one test breaching the limit.
 - Prefer one render per workflow, `userEvent.setup({ delay: null })`, paste over character-by-character typing, and consolidated assertions.
 - Do not add sleeps, fixed delays, or arbitrary timeouts to mask slow setup.
 
