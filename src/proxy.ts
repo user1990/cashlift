@@ -7,6 +7,8 @@ import { updateSupabaseSession } from "@/services/supabase/proxy";
 
 const AUTH_PATH_PREFIXES = ["/login", "/signup"] as const;
 const CLERK_ASSET_PATH_PREFIX = "/__clerk";
+const STATE_CHANGING_METHODS = new Set(["DELETE", "PATCH", "POST", "PUT"]);
+const WORKSPACE_API_PATH_PREFIX = "/api/workspace";
 const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard", "/api/workspace"] as const;
 const NEXT_IMAGE_FILL_STYLE_HASH = "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='";
 const NEXT_IMAGE_COLOR_STYLE_HASH = "'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk='";
@@ -123,7 +125,54 @@ export const needsClerkMiddleware = (pathname: string, workspaceAuthEnabled = !w
 		AUTH_PATH_PREFIXES.some((prefix) => matchesPathPrefix(pathname, prefix)) ||
 		needsWorkspaceSession(pathname));
 
+/**
+ * Cookie-backed Clerk sessions need an origin check on writes. Browsers always send Origin
+ * on state-changing requests, so a missing or foreign origin is rejected here for every
+ * workspace API route.
+ */
+export const rejectUntrustedWorkspaceApiRequest = (request: NextRequest) => {
+	if (
+		!matchesPathPrefix(request.nextUrl.pathname, WORKSPACE_API_PATH_PREFIX) ||
+		!STATE_CHANGING_METHODS.has(request.method)
+	) {
+		return null;
+	}
+
+	if (workspaceApiOriginTrusted(request)) {
+		return null;
+	}
+
+	const { contentSecurityPolicy } = createSecurityRequestHeaders(request);
+	const response = NextResponse.json(
+		{ code: "workspace_forbidden", error: "Workspace API request origin is not allowed." },
+		{ headers: { "Cache-Control": "no-store" }, status: 403 },
+	);
+
+	return applySecurityResponseHeaders(request, response, contentSecurityPolicy);
+};
+
+const workspaceApiOriginTrusted = (request: NextRequest) => {
+	const origin = request.headers.get("origin");
+	const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+
+	if (!origin || !host) {
+		return false;
+	}
+
+	try {
+		return new URL(origin).host === host;
+	} catch {
+		return false;
+	}
+};
+
 export default function proxy(request: NextRequest, event: NextFetchEvent) {
+	const rejected = rejectUntrustedWorkspaceApiRequest(request);
+
+	if (rejected) {
+		return rejected;
+	}
+
 	if (needsClerkMiddleware(request.nextUrl.pathname)) {
 		return clerkSessionMiddleware(request, event);
 	}

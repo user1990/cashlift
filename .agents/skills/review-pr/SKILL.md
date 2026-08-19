@@ -13,6 +13,7 @@ Review the current branch locally and return PR-style findings in the chat. Do n
    - `architecture` for module boundaries, aliases, and import rules
    - `testing` for test expectations and mocking rules
    - `guide` for repo conventions
+   - `security` whenever the diff touches API routes, `src/proxy.ts`, auth, Supabase access, env vars, or CI security steps
    - `styling` for UI, Tailwind, and design token changes
    - Use `pnpm check:code` for Fallow dead-code and duplication checks
 2. Gather context in parallel:

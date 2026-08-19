@@ -13,6 +13,7 @@ import proxy, {
 	createContentSecurityPolicy,
 	needsClerkMiddleware,
 	needsWorkspaceSession,
+	rejectUntrustedWorkspaceApiRequest,
 } from "./proxy";
 
 describe("proxy security headers", () => {
@@ -131,3 +132,66 @@ describe("proxy security headers", () => {
 		},
 	);
 });
+
+describe("workspace API request guard", () => {
+	it("rejects a cross-origin write before it reaches authentication", async () => {
+		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(
+			workspaceApiRequest({ origin: "https://evil.test" }),
+		);
+
+		expect(response.status).toEqual(403);
+		expect(response.headers.get("Cache-Control")).toEqual("no-store");
+		expect(response.headers.get("X-Frame-Options")).toEqual("DENY");
+		await expect(response.json()).resolves.toEqual({
+			code: "workspace_forbidden",
+			error: "Workspace API request origin is not allowed.",
+		});
+	});
+
+	it("rejects a write with no origin header", () => {
+		const response = rejectUntrustedWorkspaceApiRequest(workspaceApiRequest({}));
+
+		expect(response?.status).toEqual(403);
+	});
+
+	it("allows a same-origin write and a read to continue past the guard", () => {
+		const sameOrigin = rejectUntrustedWorkspaceApiRequest(workspaceApiRequest({ origin: "https://cashlift.test" }));
+		const forwarded = rejectUntrustedWorkspaceApiRequest(
+			workspaceApiRequest({
+				headers: { host: "internal.vercel.app", origin: "https://cashlift.test", "x-forwarded-host": "cashlift.test" },
+			}),
+		);
+		const read = rejectUntrustedWorkspaceApiRequest(workspaceApiRequest({ method: "GET" }));
+
+		expect(sameOrigin).toEqual(null);
+		expect(forwarded).toEqual(null);
+		expect(read).toEqual(null);
+	});
+
+	it("leaves requests outside the workspace API untouched", () => {
+		const request = new NextRequest("https://cashlift.test/api/workspaces", { method: "POST" });
+
+		expect(rejectUntrustedWorkspaceApiRequest(request)).toEqual(null);
+	});
+});
+
+function workspaceApiRequest({
+	headers: extraHeaders,
+	method = "PATCH",
+	origin,
+}: {
+	headers?: Record<string, string>;
+	method?: string;
+	origin?: string;
+}) {
+	const headers = new Headers({ host: "cashlift.test", ...extraHeaders });
+
+	if (origin) {
+		headers.set("origin", origin);
+	}
+
+	return new NextRequest("https://cashlift.test/api/workspace/spend-requests/request-brandforge", {
+		headers,
+		method,
+	});
+}
