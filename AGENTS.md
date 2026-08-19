@@ -22,6 +22,7 @@ Always read this file first. It defines workflow for this repo. Do not override 
    - Read only matching `SKILL.md` files under `.agents/skills/` first.
    - Read `.agents/docs/*` only when the skill says deeper examples or rationale are needed.
    - UI work usually starts with `architecture` and `styling`; add `guide`, `web-interface-guidelines`, and `testing` as needed.
+   - When adding a production dependency, `"use client"` leaf, polyfill, or third-party script, read `.agents/skills/baseline-javascript/SKILL.md`.
 
 5. Match local conventions before editing.
    - Read 2-3 nearby files of the same kind before writing code.
@@ -59,6 +60,7 @@ Always read this file first. It defines workflow for this repo. Do not override 
 - Package manager: `pnpm`
 - Runtime: shell commands must auto-select Node from `.nvmrc` / `.node-version` before any `pnpm` command. `pnpm` can fail before project scripts run on older Node versions.
 - Conventions: `.agents/skills/guide/SKILL.md`
+- JavaScript delivery: `.agents/skills/baseline-javascript/SKILL.md`
 - Directory guide: `.agents/README.md`
 - Code diagnostics: `pnpm check:code` (Fallow), `pnpm check:react` (React Doctor)
 - Issue tracker: `docs/agents/issue-tracker.md` (Linear, CashLift team)

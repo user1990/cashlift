@@ -5,6 +5,7 @@ Rules and conventions live in `.agents/skills/guide/SKILL.md`. Load this doc onl
 Related references:
 
 - Architecture: `.agents/skills/architecture/SKILL.md`
+- Baseline JavaScript: `.agents/skills/baseline-javascript/SKILL.md` and `docs/engineering/baseline-javascript.md`
 - Styling: `.agents/skills/styling/SKILL.md` and `.agents/docs/styling.md`
 - Testing: `.agents/skills/testing/SKILL.md` and `.agents/docs/testing.md`
 - Stack: `package.json`

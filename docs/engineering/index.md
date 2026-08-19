@@ -1,6 +1,6 @@
 ---
 title: Engineering guides
-description: Practical guidance for CashLift's data, forms, security, observability, and release workflow.
+description: Practical guidance for CashLift's data, forms, security, observability, JavaScript delivery, and release workflow.
 ---
 
 Use these guides when changing application code or engineering workflow:
@@ -11,3 +11,5 @@ Use these guides when changing application code or engineering workflow:
 - [Access and data security](/engineering/access-and-data-security) — preserve Clerk, Supabase RLS, and request-boundary protections.
 - [Observability and failures](/engineering/observability-and-failures) — make failures actionable without exposing user data.
 - [Quality checks](/engineering/quality-checks) — choose the right verification command before handoff.
+- [Baseline JavaScript](/engineering/baseline-javascript) — decide when the platform can replace a client library, and record the choice.
+- [Baseline JavaScript decision log](/engineering/baseline-javascript-decision-log) — living inventory of production JavaScript keep/drop decisions.

@@ -119,3 +119,4 @@ Protected workspace routes default to server-first data loading. Client Componen
 5. Business modules communicate through route-level composition or explicit, documented dependencies.
 6. Prefer explicit file imports over broad module-root barrels.
 7. When adding a business module or an explicit cross-module dependency, update `.fallowrc.json` in the same change with the narrowest zone and allowlist, then run `pnpm check:code`. Do not widen an allowlist to make an unrelated import pass.
+8. Production browser libraries, polyfills, and `"use client"` scripts follow `.agents/skills/baseline-javascript/SKILL.md`. Do not create a module to wrap a platform API that is already Baseline-safe.

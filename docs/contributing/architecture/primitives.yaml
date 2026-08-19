@@ -161,6 +161,24 @@ primitives:
       - workspace-read-path
       - spend-decision-path
 
+  - id: javascript-delivery
+    group: platform
+    description: Browser Baseline targets, client JavaScript payload policy, and polyfill boundaries.
+    code:
+      - "docs/architecture/decisions/baseline-javascript-targets.md"
+      - "docs/engineering/baseline-javascript.md"
+      - "docs/engineering/baseline-javascript-decision-log.md"
+      - ".agents/skills/baseline-javascript/**"
+      - "src/services/next/emptyPolyfillModule.ts"
+      - "next.config.ts"
+    connects_to:
+      - ui-system
+      - workspace-shell
+      - public-marketing
+      - public-demo
+      - delivery-pipeline
+      - review-workflow
+
   - id: delivery-pipeline
     group: platform
     description: Build, test, security, and deployment automation.
@@ -171,6 +189,7 @@ primitives:
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
     connects_to:
+      - javascript-delivery
       - review-workflow
       - documentation-system
 
@@ -197,6 +216,7 @@ primitives:
     connects_to:
       - documentation-system
       - delivery-pipeline
+      - javascript-delivery
 
 invariants:
   - id: company-data-isolation
