@@ -15,6 +15,7 @@
 /.fallow/
 /playwright-report/
 /test-results/
+/.vitest-results.json
 /blob-report/
 
 # next.js

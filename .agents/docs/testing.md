@@ -33,7 +33,8 @@ Do not remove coverage for business rules, authorization or tenant boundaries, f
 
 ## Performance
 
-- Keep unit and component tests at or below 200ms each. Vitest uses `slowTestThreshold: 200` in `vitest.config.ts` to flag slower cases in reporter output.
+- Keep unit and component tests at or below 200ms each. `pnpm test` runs `scripts/check-test-durations.mjs` after Vitest and fails CI when any case exceeds the limit.
+- `slowTestThreshold` in `vitest.config.ts` only marks slow cases in local tree reporter output. It is not enforcement.
 - Prefer one render per workflow, `userEvent.setup({ delay: null })`, paste over character-by-character typing, and consolidated assertions.
 - Do not add sleeps, fixed delays, or arbitrary timeouts to mask slow setup.
 

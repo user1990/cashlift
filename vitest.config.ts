@@ -11,7 +11,6 @@ export default defineConfig({
 		},
 	},
 	test: {
-		slowTestThreshold: 200,
 		coverage: {
 			exclude: ["src/**/*.stories.{ts,tsx}", "src/test/**"],
 			include: ["src/**/*.{ts,tsx}"],
@@ -20,7 +19,8 @@ export default defineConfig({
 		},
 		environment: "node",
 		exclude: ["**/e2e/**", "**/node_modules/**"],
-		reporters: process.stdout.isTTY ? ["tree"] : ["default"],
+		reporters: [process.stdout.isTTY ? "tree" : "default", ["json", { outputFile: ".vitest-results.json" }]],
 		setupFiles: ["./src/test/setup.ts"],
+		slowTestThreshold: 200,
 	},
 });
