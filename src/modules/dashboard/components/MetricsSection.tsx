@@ -24,9 +24,7 @@ export const MetricsSection = ({ dashboard }: MetricsSectionProps) => {
 
 			<MetricItem
 				detail={
-					lowestProjectedCashDate
-						? formatDashboardDate(lowestProjectedCashDate)
-						: "No 13-week outlook for this range"
+					lowestProjectedCashDate ? formatDashboardDate(lowestProjectedCashDate) : "No 13-week outlook for this range"
 				}
 				label="Lowest projected cash"
 				value={lowestProjectedCashCents === undefined ? "None" : formatPreciseCompactCurrency(lowestProjectedCashCents)}

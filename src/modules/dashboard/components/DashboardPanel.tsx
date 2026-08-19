@@ -14,7 +14,7 @@ export const DashboardPanel = ({ action, children, className, label, title }: Da
 	<Panel className={cn("p-5", className)}>
 		<div className="mb-4 flex items-start justify-between gap-4">
 			<div className="min-w-0">
-				<p className="text-s text-muted-foreground">{label}</p>
+				<p className="text-muted-foreground text-s">{label}</p>
 
 				<h2 className="mt-1 text-l+ text-panel-foreground">{title}</h2>
 			</div>

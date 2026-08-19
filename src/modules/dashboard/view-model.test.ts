@@ -92,9 +92,7 @@ describe("dashboard view model", () => {
 		expect(dashboard.cashBufferTargetCents).toEqual(14_000_000);
 		expect(dashboard.lowestProjectedCashCents).toEqual(170_000_000);
 		expect(dashboard.lowestProjectedCashDate).toEqual("2024-06-10");
-		expect(dashboard.cashPositionHeadline).toEqual(
-			"Cash stays above the $140K buffer; lowest week is $1.7M on Jun 10",
-		);
+		expect(dashboard.cashPositionHeadline).toEqual("Cash stays above the $140K buffer; lowest week is $1.7M on Jun 10");
 		expect(dashboard.spendChartData[0]).toMatchObject({
 			remaining: 169_000,
 			team: "Client Delivery",

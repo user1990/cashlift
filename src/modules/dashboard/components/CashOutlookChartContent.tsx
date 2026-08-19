@@ -91,15 +91,7 @@ function shouldShowBufferLine(bufferDollars: number, minimumBalance: number, max
 }
 
 function getOutlookDot(lowestProjectedCashDate: string | undefined) {
-	return ({
-		cx,
-		cy,
-		payload,
-	}: {
-		cx?: number;
-		cy?: number;
-		payload?: { week?: string };
-	}) => {
+	return ({ cx, cy, payload }: { cx?: number; cy?: number; payload?: { week?: string } }) => {
 		const isTrough = Boolean(lowestProjectedCashDate) && payload?.week === lowestProjectedCashDate;
 
 		return (

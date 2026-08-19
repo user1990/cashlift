@@ -79,10 +79,7 @@ export const QueuesSection = ({ basePath = "/dashboard", dashboard, readOnly = f
 				)}
 
 				{vendorLeaks.length > 0 && (
-					<LeakList
-						className={overdueInvoices.length > 0 ? "mt-3 space-y-3" : "space-y-3"}
-						items={vendorLeaks}
-					/>
+					<LeakList className={overdueInvoices.length > 0 ? "mt-3 space-y-3" : "space-y-3"} items={vendorLeaks} />
 				)}
 
 				<div className="grid gap-2 sm:grid-cols-2">
