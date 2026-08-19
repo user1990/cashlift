@@ -35,7 +35,7 @@ Use this skill for test changes. Read `.agents/docs/testing.md` only when you ne
 ## Performance
 
 - Keep unit and component tests at or below 200ms each. CI enforces this with `scripts/check-test-durations.mjs` after `vitest run`.
-- `slowTestThreshold` in `vitest.config.ts` only changes reporter coloring in local tree output. It does not fail tests or print CI errors.
+- `slowTestThreshold` in `vitest.config.mts` only changes reporter coloring in local tree output. It does not fail tests or print CI errors.
 - Prefer one render per workflow, `userEvent.setup({ delay: null })`, paste over character-by-character typing, and consolidated assertions.
 - Do not add sleeps, fixed delays, or arbitrary timeouts to mask slow setup.
 
