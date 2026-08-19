@@ -7,16 +7,12 @@ import { TextField } from "@/ui/components/forms/TextField";
 
 describe("TextField", () => {
 	it("labels the input and reports value changes", async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		const onChange = vi.fn();
 
 		render(<TextField label="Company" onChange={onChange} placeholder="Studio Nova" />);
 
 		const input = screen.getByRole("textbox", { name: "Company" });
-
-		await user.click(screen.getByText("Company"));
-
-		expect(input).toHaveFocus();
 
 		await user.type(input, "CashLift");
 

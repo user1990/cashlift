@@ -11,6 +11,7 @@ export default defineConfig({
 		},
 	},
 	test: {
+		slowTestThreshold: 200,
 		coverage: {
 			exclude: ["src/**/*.stories.{ts,tsx}", "src/test/**"],
 			include: ["src/**/*.{ts,tsx}"],

@@ -7,7 +7,7 @@ import { MobileNav } from "./MobileNav";
 
 describe("MobileNav", () => {
 	it("keeps account actions in the header and shows every navigation group when opened", async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 
 		render(<MobileNav />);
 

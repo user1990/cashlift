@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -21,8 +21,7 @@ describe("ControlledTextField", () => {
 
 		expect(input).toHaveValue("1200");
 
-		await user.clear(input);
-		await user.paste("2500");
+		fireEvent.change(input, { target: { value: "2500" } });
 		await user.click(screen.getByRole("button", { name: "Save budget" }));
 
 		expect(screen.getByText("Saved budget: 2500")).toBeInTheDocument();

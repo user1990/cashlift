@@ -31,6 +31,12 @@ Do not remove coverage for business rules, authorization or tenant boundaries, f
 - Prefer an existing form, route, or integration test when it already proves ordinary required, primitive, enum, date, and numeric validation.
 - Do not repeat shared primitive schema behavior in every persisted-record schema. Test a shared primitive directly only when its domain rule needs standalone protection.
 
+## Performance
+
+- Keep unit and component tests at or below 200ms each. Vitest uses `slowTestThreshold: 200` in `vitest.config.ts` to flag slower cases in reporter output.
+- Prefer one render per workflow, `userEvent.setup({ delay: null })`, paste over character-by-character typing, and consolidated assertions.
+- Do not add sleeps, fixed delays, or arbitrary timeouts to mask slow setup.
+
 ## Organization
 
 - Use direct RTL queries and `user-event` in the test body for simple cases.

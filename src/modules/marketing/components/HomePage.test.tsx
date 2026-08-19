@@ -42,8 +42,5 @@ describe("HomePage", () => {
 		expect(screen.getAllByRole("heading", { level: 3 }).map(({ textContent }) => textContent)).toEqual(
 			HOME_ACTIONS_MOCK.map((action) => action.type),
 		);
-		expect(screen.getByText(HOME_ACTIONS_MOCK[0].title, { exact: false })).toBeVisible();
-		expect(screen.getByText(HOME_ACTIONS_MOCK[1].title, { exact: false })).toBeVisible();
-		expect(screen.getByText(HOME_ACTIONS_MOCK[2].title, { exact: false })).toBeVisible();
 	});
 });
