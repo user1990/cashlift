@@ -61,6 +61,13 @@ Always read this file first. It defines workflow for this repo. Do not override 
 - Conventions: `.agents/skills/guide/SKILL.md`
 - Directory guide: `.agents/README.md`
 - Code diagnostics: `pnpm check:code` (Fallow), `pnpm check:react` (React Doctor)
+- Issue tracker: `docs/agents/issue-tracker.md` (Linear, CashLift team)
+- Triage labels: `docs/agents/triage-labels.md`
+- Domain docs: `docs/agents/domain.md`
+
+## Next.js Docs
+
+This rule scopes the generated `nextjs-agent-rules` block below. Read one named file under `node_modules/next/dist/docs/` when the task touches routing, caching, rendering, or a server boundary. For other work, treat nearby code as the convention source. When `node_modules/next` is absent, say the version is unverified rather than writing from recall.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
