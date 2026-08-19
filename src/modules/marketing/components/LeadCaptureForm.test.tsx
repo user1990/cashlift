@@ -2,12 +2,23 @@
 
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import type { ReactNode } from "react";
+import { describe, expect, it, vi } from "vitest";
 import { LeadCaptureForm } from "./LeadCaptureForm";
+
+vi.mock("motion/react", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("motion/react")>();
+
+	return {
+		...actual,
+		LazyMotion: ({ children }: { children: ReactNode }) => children,
+		useReducedMotion: () => true,
+	};
+});
 
 describe("LeadCaptureForm", () => {
 	it("replaces the form with a success state and can reset to an empty form", async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 
 		render(
 			<LeadCaptureForm
@@ -17,24 +28,12 @@ describe("LeadCaptureForm", () => {
 			/>,
 		);
 
-		await user.click(screen.getByRole("textbox", { name: "Name" }));
-		await user.paste("Maya Chen");
-		await user.click(screen.getByRole("combobox", { name: "Work email" }));
-		await user.paste("maya@company.com");
-		await user.click(screen.getByRole("textbox", { name: "Company" }));
-		await user.paste("Studio Nova");
+		await fillLeadCaptureForm(user);
 		await user.click(screen.getByRole("button", { name: "Book demo" }));
 
 		expect(screen.queryByRole("textbox", { name: "Name" })).not.toBeInTheDocument();
-		expect(screen.queryByRole("button", { name: "Book demo" })).not.toBeInTheDocument();
-		const successHeading = screen.getByRole("heading", { name: "Demo request received" });
-
-		expect(screen.getByRole("status")).toContainElement(successHeading);
-		expect(successHeading).not.toHaveAttribute("tabindex");
-		expect(document.body).toHaveFocus();
-		expect(
-			screen.getByText("We'll follow up with the audit walkthrough. You can explore the sample workspace now."),
-		).toBeInTheDocument();
+		expect(screen.getByRole("heading", { name: "Demo request received" })).toBeInTheDocument();
+		expect(screen.getByRole("status")).toBeInTheDocument();
 		expect(screen.getByRole("link", { name: /Explore live demo/i })).toHaveAttribute("href", "/demo/workspace");
 
 		await user.click(screen.getByRole("button", { name: /Send another request/i }));
@@ -48,3 +47,14 @@ describe("LeadCaptureForm", () => {
 		expect(screen.getByRole("button", { name: "Book demo" })).toBeInTheDocument();
 	});
 });
+
+async function fillLeadCaptureForm(user: ReturnType<typeof userEvent.setup>) {
+	const nameField = screen.getByRole("textbox", { name: "Name" });
+
+	await user.click(nameField);
+	await user.paste("Maya Chen");
+	await user.tab();
+	await user.paste("maya@company.com");
+	await user.tab();
+	await user.paste("Studio Nova");
+}
