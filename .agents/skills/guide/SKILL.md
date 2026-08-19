@@ -72,12 +72,7 @@ See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow
 
 ## Security
 
-- Render user text through JSX by default. Use `dangerouslySetInnerHTML` only with sanitized, reviewed HTML.
-- Do not store auth/session tokens in `localStorage` or `sessionStorage`.
-- Protect cookie-authenticated state-changing requests with CSRF validation unless equivalent protection exists.
-- Validate external input at server boundaries with Zod/equivalent, then authorize before querying or mutating.
-- Use parameterized queries/query builders only.
-- Keep CSP and browser hardening headers restrictive.
+For anything crossing a trust boundary — API routes, `src/proxy.ts`, server data loading, Supabase repositories, Clerk session code, environment variables — load `.agents/skills/security/SKILL.md`.
 
 ## Git
 

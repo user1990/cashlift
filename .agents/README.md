@@ -63,6 +63,7 @@ skills/
 ├── create-pr/SKILL.md
 ├── guide/SKILL.md
 ├── review-pr/SKILL.md
+├── security/SKILL.md
 ├── styling/SKILL.md
 ├── testing/SKILL.md
 ├── visual-recap/SKILL.md
