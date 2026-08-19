@@ -36,13 +36,13 @@ export const Overview = ({
 		<div className="space-y-5">
 			<OverviewHeader dashboard={dashboard} dateRange={dateRange} onDateRangeChange={onDateRangeChange} />
 
+			<MetricsSection dashboard={dashboard} />
+
 			<ActionInbox actions={dashboard.actionInbox} basePath={basePath} />
 
 			<ChartsSection dashboard={dashboard} />
 
 			<QueuesSection basePath={basePath} dashboard={dashboard} readOnly={readOnly} />
-
-			<MetricsSection dashboard={dashboard} />
 		</div>
 	);
 };

@@ -1,8 +1,9 @@
-import { ArrowRight, CircleDollarSign, type LucideIcon, ReceiptText, ShieldCheck, TrendingUp } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { formatCurrency } from "@/modules/money/format";
 import { Badge } from "@/ui/components/data/Badge";
 import { getCashActionDestination } from "../cashActionDestination";
+import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
 
 type CashAction = DashboardViewModel["actionInbox"][number];
@@ -10,10 +11,9 @@ type CashActionType = CashAction["type"];
 
 type ActionInboxItemProps = Pick<
 	CashAction,
-	"description" | "impactCents" | "owner" | "priority" | "title" | "type"
+	"description" | "dueDate" | "impactCents" | "owner" | "priority" | "title" | "type"
 > & {
 	basePath: string;
-	index: number;
 };
 
 const ACTION_LABELS = {
@@ -24,19 +24,11 @@ const ACTION_LABELS = {
 	"vendor-leak": "Cut waste",
 } as const satisfies Record<CashActionType, string>;
 
-const ACTION_ICONS = {
-	approval: ShieldCheck,
-	"cash-buffer": TrendingUp,
-	collection: CircleDollarSign,
-	forecast: TrendingUp,
-	"vendor-leak": ReceiptText,
-} as const satisfies Record<CashActionType, LucideIcon>;
-
 export const ActionInboxItem = ({
 	basePath,
 	description,
+	dueDate,
 	impactCents,
-	index,
 	owner,
 	priority,
 	title,
@@ -44,20 +36,16 @@ export const ActionInboxItem = ({
 }: ActionInboxItemProps) => (
 	<li className="py-4 first:pt-0 last:pb-0">
 		<Link
-			className="group grid gap-4 transition-colors hover:text-primary sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center"
+			className="group grid gap-4 outline-none transition-colors hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start"
 			href={getCashActionDestination(type, basePath)}
 		>
-			<span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary-muted font-mono font-semibold text-primary text-s">
-				{index + 1}
-			</span>
-
 			<span className="min-w-0">
 				<span className="mb-1.5 flex flex-wrap items-center gap-2">
-					<ActionIcon type={type} />
+					<Badge variant={getPriorityBadgeVariant(priority)}>{priority}</Badge>
 
-					<Badge variant={priority === "critical" ? "danger" : "warning"}>{priority}</Badge>
+					<span className="text-muted-foreground text-s">{ACTION_LABELS[type]}</span>
 
-					<span className="font-semibold text-muted-foreground text-s">{ACTION_LABELS[type]}</span>
+					<span className="text-muted-foreground text-s">Due {formatDashboardDate(dueDate)}</span>
 				</span>
 
 				<span className="block font-semibold text-m+ text-panel-foreground group-hover:text-primary">{title}</span>
@@ -65,8 +53,8 @@ export const ActionInboxItem = ({
 				<span className="mt-1 block text-m text-muted-foreground leading-6">{description}</span>
 			</span>
 
-			<span className="flex min-w-0 items-center justify-between gap-3 sm:block sm:text-right">
-				<span className="block shrink-0 font-mono font-semibold text-m+ text-panel-foreground">
+			<span className="flex min-w-0 items-center justify-between gap-3 sm:block sm:pt-0.5 sm:text-right">
+				<span className="block shrink-0 font-mono font-semibold text-l+ text-panel-foreground">
 					{formatCurrency(impactCents)}
 				</span>
 
@@ -79,8 +67,14 @@ export const ActionInboxItem = ({
 	</li>
 );
 
-function ActionIcon({ type }: { type: CashActionType }) {
-	const Icon = ACTION_ICONS[type];
+function getPriorityBadgeVariant(priority: CashAction["priority"]) {
+	if (priority === "critical") {
+		return "danger";
+	}
 
-	return <Icon aria-hidden className="size-4 text-primary" />;
+	if (priority === "high") {
+		return "warning";
+	}
+
+	return "neutral";
 }

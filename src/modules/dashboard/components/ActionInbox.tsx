@@ -8,16 +8,16 @@ type ActionInboxProps = {
 };
 
 export const ActionInbox = ({ actions, basePath }: ActionInboxProps) => (
-	<DashboardPanel label="Today's inbox" title="Ranked by cash impact and urgency">
+	<DashboardPanel label="Today's inbox" title="Ranked by cash impact, due date, and urgency">
 		{actions.length ? (
 			<ol className="divide-y divide-border">
-				{actions.map(({ description, id, impactCents, owner, priority, title, type }, index) => (
+				{actions.map(({ description, dueDate, id, impactCents, owner, priority, title, type }) => (
 					<ActionInboxItem
 						key={id}
 						basePath={basePath}
 						description={description}
+						dueDate={dueDate}
 						impactCents={impactCents}
-						index={index}
 						owner={owner}
 						priority={priority}
 						title={title}

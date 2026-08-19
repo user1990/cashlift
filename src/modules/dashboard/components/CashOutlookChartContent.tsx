@@ -1,11 +1,13 @@
 import { useId } from "react";
-import { formatCurrencyDollars } from "@/modules/money/format";
+import { centsToDollars, formatCurrencyDollars } from "@/modules/money/format";
+import type { MoneyCents } from "@/modules/money/types";
 import type { ForecastChartDataPoint } from "../types";
 import { ChartFrame } from "./ChartFrame";
 import {
 	RechartsArea,
 	RechartsAreaChart,
 	RechartsCartesianGrid,
+	RechartsReferenceLine,
 	RechartsResponsiveContainer,
 	RechartsTooltip,
 	RechartsXAxis,
@@ -13,15 +15,29 @@ import {
 } from "./LazyRechartsComponent";
 
 type CashOutlookChartContentProps = {
+	bufferTargetCents: MoneyCents;
 	chartData: ForecastChartDataPoint[];
+	lowestProjectedCashDate?: string;
 };
 
-export const CashOutlookChartContent = ({ chartData }: CashOutlookChartContentProps) => {
+export const CashOutlookChartContent = ({
+	bufferTargetCents,
+	chartData,
+	lowestProjectedCashDate,
+}: CashOutlookChartContentProps) => {
 	const chartId = useId().replaceAll(":", "");
+	const cashOutlookFillId = `cash-outlook-fill-${chartId}`;
+
+	if (!chartData.length) {
+		return <p className="text-m text-muted-foreground">No 13-week outlook for this range.</p>;
+	}
+
 	const balances = chartData.map(({ balance }) => balance);
 	const minimumBalance = Math.min(...balances);
 	const maximumBalance = Math.max(...balances);
-	const cashOutlookFillId = `cash-outlook-fill-${chartId}`;
+	const bufferDollars = centsToDollars(bufferTargetCents);
+	const showBufferLine = shouldShowBufferLine(bufferDollars, minimumBalance, maximumBalance);
+	const domainMin = showBufferLine ? Math.min(minimumBalance, bufferDollars) : minimumBalance;
 
 	return (
 		<ChartFrame>
@@ -29,7 +45,7 @@ export const CashOutlookChartContent = ({ chartData }: CashOutlookChartContentPr
 				<RechartsAreaChart data={chartData}>
 					<defs>
 						<linearGradient id={cashOutlookFillId} x1="0" x2="0" y1="0" y2="1">
-							<stop offset="0%" stopColor="var(--primary)" stopOpacity="0.45" />
+							<stop offset="0%" stopColor="var(--primary)" stopOpacity="0.22" />
 
 							<stop offset="100%" stopColor="var(--primary)" stopOpacity="0.02" />
 						</linearGradient>
@@ -39,18 +55,25 @@ export const CashOutlookChartContent = ({ chartData }: CashOutlookChartContentPr
 
 					<RechartsXAxis dataKey="week" tickFormatter={formatWeekLabel} />
 
-					<RechartsYAxis domain={[minimumBalance, maximumBalance]} tickFormatter={formatMillions} />
+					<RechartsYAxis domain={[domainMin, maximumBalance]} tickFormatter={formatMillions} />
 
 					<RechartsTooltip formatter={formatTooltipCurrency} labelFormatter={formatWeekLabel} />
+
+					{showBufferLine && (
+						<RechartsReferenceLine
+							label={{ fill: "var(--muted-foreground)", fontSize: 12, position: "insideTopLeft", value: "Buffer" }}
+							y={bufferDollars}
+						/>
+					)}
 
 					<RechartsArea
 						animationDuration={700}
 						dataKey="balance"
-						dot={{ fill: "var(--primary)", r: 4, stroke: "var(--shell)", strokeWidth: 2 }}
+						dot={getOutlookDot(lowestProjectedCashDate)}
 						fill={`url(#${cashOutlookFillId})`}
 						name="Projected balance"
 						stroke="var(--primary)"
-						strokeWidth={3}
+						strokeWidth={2}
 						type="monotone"
 					/>
 				</RechartsAreaChart>
@@ -58,6 +81,39 @@ export const CashOutlookChartContent = ({ chartData }: CashOutlookChartContentPr
 		</ChartFrame>
 	);
 };
+
+function shouldShowBufferLine(bufferDollars: number, minimumBalance: number, maximumBalance: number) {
+	if (bufferDollars <= 0 || bufferDollars > maximumBalance) {
+		return false;
+	}
+
+	return bufferDollars >= minimumBalance * 0.5;
+}
+
+function getOutlookDot(lowestProjectedCashDate: string | undefined) {
+	return ({
+		cx,
+		cy,
+		payload,
+	}: {
+		cx?: number;
+		cy?: number;
+		payload?: { week?: string };
+	}) => {
+		const isTrough = Boolean(lowestProjectedCashDate) && payload?.week === lowestProjectedCashDate;
+
+		return (
+			<circle
+				cx={cx}
+				cy={cy}
+				fill={isTrough ? "var(--warning)" : "var(--primary)"}
+				r={isTrough ? 5 : 3}
+				stroke="var(--shell)"
+				strokeWidth={2}
+			/>
+		);
+	};
+}
 
 function formatMillions(value: number) {
 	return `$${(value / 1_000_000).toFixed(1)}M`;

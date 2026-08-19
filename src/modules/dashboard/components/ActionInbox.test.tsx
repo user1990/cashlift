@@ -23,6 +23,8 @@ describe("ActionInbox", () => {
 			expect.stringContaining("Decide on Client Delivery hardware"),
 			expect.stringContaining("Cancel Notion trial seats"),
 		]);
+		expect(links[0]).toHaveTextContent("Due May 20");
+		expect(links[0]).toHaveTextContent("$126,500");
 		expect(links[0]).toHaveAttribute("href", "/demo/workspace/invoices");
 		expect(links[1]).toHaveAttribute("href", "/demo/workspace/approvals");
 		expect(links[2]).toHaveAttribute("href", "/demo/workspace/vendors");

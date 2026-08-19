@@ -1,6 +1,6 @@
-import { ShieldCheck, Wallet, WalletCards } from "lucide-react";
 import { formatPreciseCompactCurrency } from "@/modules/money/format";
 import { Panel } from "@/ui/components/layout/Panel";
+import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
 import { MetricItem } from "./MetricItem";
 
@@ -8,42 +8,58 @@ type MetricsSectionProps = {
 	dashboard: DashboardViewModel;
 };
 
-export const MetricsSection = ({ dashboard }: MetricsSectionProps) => (
-	<Panel className="grid gap-0 p-0 md:grid-cols-2 xl:grid-cols-4">
-		<MetricItem
-			direction="up"
-			icon={<Wallet aria-hidden className="size-5" />}
-			label="Cash on hand"
-			trend="Current balance"
-			value={formatPreciseCompactCurrency(dashboard.cashAvailableCents)}
-			variant="primary"
-		/>
+export const MetricsSection = ({ dashboard }: MetricsSectionProps) => {
+	const lowestProjectedCashCents = dashboard.lowestProjectedCashCents;
+	const lowestProjectedCashDate = dashboard.lowestProjectedCashDate;
+	const belowBuffer =
+		lowestProjectedCashCents !== undefined && lowestProjectedCashCents < dashboard.cashBufferTargetCents;
 
-		<MetricItem
-			direction="up"
-			icon={<WalletCards aria-hidden className="size-5" />}
-			label="Committed spend"
-			trend="Current commitments"
-			value={formatPreciseCompactCurrency(dashboard.totalCommittedSpendCents)}
-			variant="highlight"
-		/>
+	return (
+		<Panel className="grid gap-0 p-0 md:grid-cols-3">
+			<MetricItem
+				detail={`Buffer ${formatPreciseCompactCurrency(dashboard.cashBufferTargetCents)}`}
+				label="Cash on hand"
+				value={formatPreciseCompactCurrency(dashboard.cashAvailableCents)}
+			/>
 
-		<MetricItem
-			direction="down"
-			icon={<WalletCards aria-hidden className="size-5" />}
-			label="Uncommitted"
-			trend="Available after commitments"
-			value={formatPreciseCompactCurrency(dashboard.totalUncommittedCents)}
-			variant="violet"
-		/>
+			<MetricItem
+				detail={
+					lowestProjectedCashDate
+						? formatDashboardDate(lowestProjectedCashDate)
+						: "No 13-week outlook for this range"
+				}
+				label="Lowest projected cash"
+				value={lowestProjectedCashCents === undefined ? "None" : formatPreciseCompactCurrency(lowestProjectedCashCents)}
+				warning={belowBuffer}
+			/>
 
-		<MetricItem
-			direction="up"
-			icon={<ShieldCheck aria-hidden className="size-5" />}
-			label="At risk"
-			trend="Invoice and buffer exposure"
-			value={formatPreciseCompactCurrency(dashboard.cashAtRiskCents)}
-			variant="warning"
-		/>
-	</Panel>
-);
+			<MetricItem
+				detail={getAtRiskDetail(dashboard)}
+				label="Money at risk"
+				value={formatPreciseCompactCurrency(dashboard.cashAtRiskCents)}
+				warning={dashboard.cashAtRiskCents > 0}
+			/>
+		</Panel>
+	);
+};
+
+function getAtRiskDetail(dashboard: DashboardViewModel) {
+	const invoiceRiskCents = dashboard.invoiceRiskCents;
+	const bufferRiskCents = dashboard.bufferRiskCents;
+
+	if (invoiceRiskCents === 0 && bufferRiskCents === 0) {
+		return "No overdue invoices or buffer gap";
+	}
+
+	const parts: string[] = [];
+
+	if (invoiceRiskCents > 0) {
+		parts.push(`${formatPreciseCompactCurrency(invoiceRiskCents)} overdue`);
+	}
+
+	if (bufferRiskCents > 0) {
+		parts.push(`${formatPreciseCompactCurrency(bufferRiskCents)} buffer gap`);
+	}
+
+	return parts.join(" · ");
+}
