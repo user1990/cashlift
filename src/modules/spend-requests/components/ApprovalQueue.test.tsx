@@ -1,16 +1,20 @@
 // @vitest-environment jsdom
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { HttpResponse } from "msw";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { WORKSPACE_DATASET_QUERY_KEYS } from "@/modules/workspace/query";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { server } from "@/test/server";
 import { Toaster } from "@/ui/components/feedback/Toaster";
 import { createDecideSpendRequestHandler } from "../fixtures";
 import { ApprovalQueue } from "./ApprovalQueue";
+
+vi.mock("@/ui/components/feedback/Toaster", () => ({
+	Toaster: () => null,
+}));
 
 describe("ApprovalQueue", () => {
 	it("shows request context without mutation controls in read-only mode", () => {
@@ -39,12 +43,12 @@ describe("ApprovalQueue", () => {
 
 		resolveDecision();
 
-		await waitFor(() => {
-			expect(getSpendRequestStatuses(queryClient)).toEqual({
-				"request-brandforge": "approved",
-				"request-client-onsite": "pending",
-				"request-webcam": "approved",
-			});
+		await act(async () => {});
+
+		expect(getSpendRequestStatuses(queryClient)).toEqual({
+			"request-brandforge": "approved",
+			"request-client-onsite": "pending",
+			"request-webcam": "approved",
 		});
 	});
 
@@ -55,9 +59,9 @@ describe("ApprovalQueue", () => {
 
 		await user.click(screen.getByRole("button", { name: "Reject Delta" }));
 
-		await waitFor(() => {
-			expect(screen.getByRole("button", { name: "Reject Delta" })).not.toBeDisabled();
-		});
+		await act(async () => {});
+
+		expect(screen.getByRole("button", { name: "Reject Delta" })).not.toBeDisabled();
 		expect(screen.getByText("Delta")).toBeInTheDocument();
 	});
 });
