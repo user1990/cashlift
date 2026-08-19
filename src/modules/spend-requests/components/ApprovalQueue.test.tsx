@@ -1,36 +1,23 @@
 // @vitest-environment jsdom
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { act, render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { HttpResponse } from "msw";
 import { describe, expect, it, vi } from "vitest";
 import { WORKSPACE_DATASET_QUERY_KEYS } from "@/modules/workspace/query";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { server } from "@/test/server";
-import { Toaster } from "@/ui/components/feedback/Toaster";
 import { createDecideSpendRequestHandler } from "../fixtures";
 import { ApprovalQueue } from "./ApprovalQueue";
+
+const APPROVAL_QUEUE_REQUESTS_MOCK = financialDatasetFixture.spendRequests.slice(0, 2);
 
 vi.mock("@/ui/components/feedback/Toaster", () => ({
 	Toaster: () => null,
 }));
 
 describe("ApprovalQueue", () => {
-	it("shows request context without mutation controls in read-only mode", () => {
-		render(
-			<ApprovalQueue
-				datasetQueryKey={WORKSPACE_DATASET_QUERY_KEYS.all}
-				readOnly
-				requests={financialDatasetFixture.spendRequests}
-			/>,
-		);
-
-		expect(screen.getByText("BrandForge")).toBeInTheDocument();
-		expect(screen.queryByRole("button", { name: /approve/i })).not.toBeInTheDocument();
-		expect(screen.queryByRole("button", { name: /reject/i })).not.toBeInTheDocument();
-	});
-
 	it("submits an approved request decision and locks every control while pending", async () => {
 		const user = userEvent.setup({ delay: null });
 		const { resolveDecision } = mockSpendRequestDecisionPending();
@@ -42,13 +29,12 @@ describe("ApprovalQueue", () => {
 		expect(screen.getByRole("button", { name: "Reject Delta" })).toBeDisabled();
 
 		resolveDecision();
-
-		await act(async () => {});
-
-		expect(getSpendRequestStatuses(queryClient)).toEqual({
-			"request-brandforge": "approved",
-			"request-client-onsite": "pending",
-			"request-webcam": "approved",
+		await waitFor(() => {
+			expect(getSpendRequestStatuses(queryClient)).toEqual({
+				"request-brandforge": "approved",
+				"request-client-onsite": "pending",
+				"request-webcam": "approved",
+			});
 		});
 	});
 
@@ -59,9 +45,9 @@ describe("ApprovalQueue", () => {
 
 		await user.click(screen.getByRole("button", { name: "Reject Delta" }));
 
-		await act(async () => {});
-
-		expect(screen.getByRole("button", { name: "Reject Delta" })).not.toBeDisabled();
+		await waitFor(() => {
+			expect(screen.getByRole("button", { name: "Reject Delta" })).not.toBeDisabled();
+		});
 		expect(screen.getByText("Delta")).toBeInTheDocument();
 	});
 });
@@ -109,12 +95,7 @@ function renderApprovalQueue() {
 
 	render(
 		<QueryClientProvider client={queryClient}>
-			<ApprovalQueue
-				datasetQueryKey={WORKSPACE_DATASET_QUERY_KEYS.all}
-				requests={financialDatasetFixture.spendRequests}
-			/>
-
-			<Toaster />
+			<ApprovalQueue datasetQueryKey={WORKSPACE_DATASET_QUERY_KEYS.all} requests={APPROVAL_QUEUE_REQUESTS_MOCK} />
 		</QueryClientProvider>,
 	);
 

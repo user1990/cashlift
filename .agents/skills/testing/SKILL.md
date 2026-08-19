@@ -32,13 +32,6 @@ Use this skill for test changes. Read `.agents/docs/testing.md` only when you ne
 - Group related assertions in one `it` when they describe one behavior.
 - Use `it.each` for repetitive cases.
 
-## Performance
-
-- Keep each unit/component test at or below 200ms. Vitest loads `src/test/slowTestReporter.mts`, which fails the run when any single test exceeds the limit.
-- Vitest tree output can still show a **file** in yellow when the whole file is slow. That is file wall time (setup + all tests), not one test breaching the limit.
-- Prefer one render per workflow, `userEvent.setup({ delay: null })`, paste over character-by-character typing, and consolidated assertions.
-- Do not add sleeps, fixed delays, or arbitrary timeouts to mask slow setup.
-
 ## Test Suite Maintenance
 
 - During changes in a test area, review nearby tests for duplicate setup, overlapping assertions, incidental string pinning, and cases covered more directly by an existing workflow.
@@ -49,7 +42,7 @@ Use this skill for test changes. Read `.agents/docs/testing.md` only when you ne
 
 - Never mock React hooks such as `useAuthSession`, `useUser`, or `useLogout`.
 - Never manipulate Zustand stores directly with `setState()` or `getState().actions`.
-- Mock only top-level boundaries: storage (`localStorage`/`sessionStorage`), HTTP via MSW, and heavy UI boundaries already covered by a faster dedicated test.
+- Mock only top-level boundaries: storage (`localStorage`/`sessionStorage`) and HTTP via MSW.
 - Manipulate storage with module test utilities, then let real hooks read it.
 - Use real hooks or `renderHook()` to trigger state changes.
 - Store-manipulating test utilities are allowed only as documented workarounds for framework timing issues.

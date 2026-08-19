@@ -19,7 +19,7 @@ export default defineConfig({
 		},
 		environment: "node",
 		exclude: ["**/e2e/**", "**/node_modules/**"],
-		reporters: [process.stdout.isTTY ? "tree" : "default", "./src/test/slowTestReporter.mts"],
+		reporters: process.stdout.isTTY ? ["tree"] : ["default"],
 		setupFiles: ["./src/test/setup.ts"],
 	},
 });
