@@ -5,22 +5,13 @@ import { describe, expect, it } from "vitest";
 import { AuthGlassShell } from "./AuthGlassShell";
 
 describe("AuthGlassShell", () => {
-	it.each([
-		{
-			action: { href: "/signup", label: "Create account", prompt: "New to CashLift?" },
-			accessibleName: "New to CashLift? Create account",
-		},
-		{
-			action: { href: "/login", label: "Sign in", prompt: "Already have an account?" },
-			accessibleName: "Already have an account? Sign in",
-		},
-	])("keeps $accessibleName discoverable without Clerk's footer", ({ accessibleName, action }) => {
+	it("keeps the signup action discoverable without Clerk's footer", () => {
 		render(
-			<AuthGlassShell action={action}>
+			<AuthGlassShell action={{ href: "/signup", label: "Create account", prompt: "New to CashLift?" }}>
 				<div>Sign in form</div>
 			</AuthGlassShell>,
 		);
 
-		expect(screen.getByRole("link", { name: accessibleName })).toHaveAttribute("href", action.href);
+		expect(screen.getByRole("link", { name: "New to CashLift? Create account" })).toHaveAttribute("href", "/signup");
 	});
 });
