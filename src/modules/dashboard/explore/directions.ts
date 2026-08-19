@@ -18,7 +18,7 @@ export const EXPLORE_DIRECTIONS = {
 		id: "c",
 		name: "Operating cockpit",
 		promise: "Status, then priorities, then the future, then supporting work",
-		summary: "A balanced desk: cash status and ranked work beside the outlook, with operating detail below.",
+		summary: "A balanced desk: current cash state, the one decision that matters, and the outlook that explains why.",
 	},
 } as const;
 

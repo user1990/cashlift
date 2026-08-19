@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { MoneyCents } from "@/modules/money/types";
@@ -64,22 +64,26 @@ type ExploreLinkProps = {
 	className?: string;
 };
 
-export const ExploreLink = ({ children, className, href, primary = false }: ExploreLinkProps) => (
-	<Link
-		className={cn(
-			"ease inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-3 font-semibold text-m outline-none transition-[background-color,border-color,color,box-shadow] duration-150 focus-visible:ring-[3px] focus-visible:ring-primary/20",
-			primary
-				? "border border-primary/80 bg-primary text-primary-foreground hover:border-primary-hover hover:bg-primary-hover"
-				: "border border-shell-border bg-shell-elevated text-shell-foreground hover:border-primary-subtle-border hover:text-primary",
-			className,
-		)}
-		href={href}
-	>
-		{children}
+export const ExploreLink = ({ children, className, href, primary = false }: ExploreLinkProps) => {
+	const Icon = primary ? ArrowUpRight : ArrowRight;
 
-		<ArrowRight aria-hidden className="size-4" />
-	</Link>
-);
+	return (
+		<Link
+			className={cn(
+				"ease inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-3 font-semibold text-m outline-none transition-[background-color,border-color,color,box-shadow] duration-150 focus-visible:ring-[3px] focus-visible:ring-primary/20",
+				primary
+					? "border border-primary/80 bg-primary text-primary-foreground shadow-primary-glow hover:border-primary-hover hover:bg-primary-hover"
+					: "border border-shell-border bg-shell-elevated text-shell-foreground hover:border-primary-subtle-border hover:text-primary",
+				className,
+			)}
+			href={href}
+		>
+			{children}
+
+			<Icon aria-hidden className="size-4" />
+		</Link>
+	);
+};
 
 type ExploreKickerProps = {
 	children: ReactNode;
@@ -94,7 +98,7 @@ type SupportNoteListProps = {
 };
 
 export const SupportNoteList = ({ notes }: SupportNoteListProps) => (
-	<aside className="border-border border-t pt-4">
+	<aside>
 		<p className="text-muted-foreground text-s">Requires backend/product support</p>
 
 		<ul className="mt-2 space-y-1 text-muted-foreground text-s leading-5">
