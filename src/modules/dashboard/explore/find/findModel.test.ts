@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
-import { ACTION_CATEGORY_IDS, buildFindItems, filterFindItems, getFindSuggestions } from "./findModel";
+import {
+	ACTION_CATEGORY_IDS,
+	buildFindItems,
+	filterFindItems,
+	getFindFacetValues,
+	getFindSuggestions,
+} from "./findModel";
 
 describe("find presentation", () => {
 	const items = buildFindItems(DEMO_WORKSPACE_DATASET, "/dashboard");
@@ -30,5 +36,11 @@ describe("find presentation", () => {
 		expect(missingItems).toEqual([]);
 		expect(getFindSuggestions(items, "logi")).toEqual(["Logitech"]);
 		expect(ACTION_CATEGORY_IDS).toEqual(["all", "collect", "approve", "cut", "pay", "review"]);
+		expect(
+			getFindFacetValues(
+				filterFindItems(items, { category: "collect", owner: "", query: "", status: "" }, "work"),
+				"status",
+			),
+		).toEqual(["open", "overdue", "sent"]);
 	});
 });
