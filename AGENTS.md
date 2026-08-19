@@ -78,3 +78,13 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Cursor Cloud specific instructions
+
+Environment is a single Next.js 16 app (pnpm, Node pinned in `.nvmrc`). The startup update script already runs `pnpm install --frozen-lockfile --ignore-scripts`, so dependencies are ready when you start.
+
+- Node version: shells resolve Node 24 automatically (nvm default alias + `~/.bashrc`). If `node -v` ever shows an older version, run `nvm use` from the repo root before any `pnpm` command.
+- Do not run a plain `pnpm install` here: the repo's `prepare` script runs `lefthook install`, which exits non-zero because Cursor manages `core.hooksPath`. This also makes any `pnpm <script>` reinstall-and-fail. Reinstall with `pnpm install --frozen-lockfile --ignore-scripts` instead. Dependency build scripts (esbuild, fallow) are not required for lint/test/build/dev, so skipping them is fine.
+- Run the app in demo mode (no secrets): `CASHLIFT_APP_MODE=demo pnpm dev` → http://localhost:3000, workspace at `/dashboard`. Demo data comes from `src/modules/workspace/demoDataset.ts`.
+- `pnpm build` works without secrets (defaults to production mode; `/dashboard/*` routes are dynamic). Do NOT run `next build`/`next start` with `CASHLIFT_APP_MODE=demo` — `src/services/env/app.ts` throws by design. Running the built server in production mode (`pnpm start`) needs Clerk + Supabase secrets; local work uses demo mode + `pnpm dev`.
+- Quality checks (see README "Quality Checks"): `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm check:code`.
