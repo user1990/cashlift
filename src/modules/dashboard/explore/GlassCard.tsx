@@ -25,8 +25,8 @@ export const GlassCard = ({
 	);
 	const overlayClassName =
 		intensity === "active"
-			? "absolute inset-0 bg-shell/50 backdrop-blur-2xl"
-			: "absolute inset-0 bg-shell/70 backdrop-blur-2xl";
+			? "absolute inset-0 bg-panel/35 backdrop-blur-xl"
+			: "absolute inset-0 bg-panel/45 backdrop-blur-xl";
 	const content = (
 		<>
 			<div aria-hidden className={cn("absolute inset-0 bg-cover bg-no-repeat", atmosphereClassName)} />
