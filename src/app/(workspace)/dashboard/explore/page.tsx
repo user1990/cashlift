@@ -44,6 +44,21 @@ export default function DashboardExploreIndex() {
 				})}
 			</ul>
 
+			<section className="space-y-3">
+				<h2 className="text-panel-foreground text-xl+">Find prototypes</h2>
+
+				<p className="max-w-3xl text-m text-shell-muted leading-6">
+					Isolated search, category, and filter directions for finding invoices, spend requests, vendor leaks, and
+					related workspace items.
+				</p>
+
+				<p>
+					<Link className="text-m text-primary hover:underline" href="/dashboard/explore/find">
+						Open find directions
+					</Link>
+				</p>
+			</section>
+
 			<p>
 				<Link className="text-m text-muted-foreground hover:text-panel-foreground" href="/dashboard">
 					Back to production overview
