@@ -1,5 +1,3 @@
-import { cn } from "@/ui/utils/cn";
-
 type MetricItemProps = {
 	detail: string;
 	label: string;
@@ -12,10 +10,11 @@ export const MetricItem = ({ detail, label, value, warning = false }: MetricItem
 		<p className="text-m text-shell-muted">{label}</p>
 
 		<p
-			className={cn(
-				"mt-2 font-mono font-semibold text-3xl+ tracking-normal",
-				warning ? "text-warning" : "text-panel-foreground",
-			)}
+			className={
+				warning
+					? "mt-2 font-mono font-semibold text-3xl+ text-warning tracking-normal"
+					: "mt-2 font-mono font-semibold text-3xl+ text-panel-foreground tracking-normal"
+			}
 		>
 			{value}
 		</p>
