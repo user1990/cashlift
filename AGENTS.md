@@ -22,7 +22,7 @@ Always read this file first. It defines workflow for this repo. Do not override 
    - Read only matching `SKILL.md` files under `.agents/skills/` first.
    - Read `.agents/docs/*` only when the skill says deeper examples or rationale are needed.
    - UI work usually starts with `architecture` and `styling`; add `guide`, `web-interface-guidelines`, and `testing` as needed.
-   - When adding a production dependency, `"use client"` leaf, polyfill, or third-party script, read `.agents/skills/baseline-javascript/SKILL.md`.
+   - When adding a production npm dependency, polyfill, or third-party browser script, read `.agents/skills/baseline-javascript/SKILL.md`.
    - Read `.agents/skills/security/SKILL.md` before touching `src/app/api/**`, `src/proxy.ts`, server data loading, Supabase repositories, Clerk session code, environment variables, or CI security steps. This skill is mandatory for that work, not optional.
 
 5. Match local conventions before editing.
@@ -62,7 +62,7 @@ Always read this file first. It defines workflow for this repo. Do not override 
 - Package manager: `pnpm`
 - Runtime: shell commands must auto-select Node from `.nvmrc` / `.node-version` before any `pnpm` command. `pnpm` can fail before project scripts run on older Node versions.
 - Conventions: `.agents/skills/guide/SKILL.md`
-- JavaScript delivery: `.agents/skills/baseline-javascript/SKILL.md`
+- JavaScript delivery: `docs/architecture/decisions/baseline-javascript-targets.md` (agents: `.agents/skills/baseline-javascript/SKILL.md`)
 - Security rules: `.agents/skills/security/SKILL.md`
 - Directory guide: `.agents/README.md`
 - Security checks: `pnpm security:check`, `pnpm security:audit`

@@ -23,7 +23,6 @@ See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow
 
 ## TypeScript And JavaScript
 
-- Before adding a production browser dependency, polyfill, or `"use client"` script, follow `.agents/skills/baseline-javascript/SKILL.md`. Prefer Baseline Widely available APIs on public routes; Newly available APIs on the Company Workspace need a feature check or server-rendered fallback.
 - Static module constants use `UPPER_SNAKE_CASE`; runtime locals use `camelCase`.
 - Avoid single-letter variables except `i` in loops.
 - Type properties: required first, optional second; alphabetize within each group.

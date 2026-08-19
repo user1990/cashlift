@@ -5,7 +5,7 @@ description: Keep the server-rendered workspace and browser cache coherent.
 
 Workspace pages begin with data loaded on the server. Interactive sections then use React Query with that same dataset as `initialData`, avoiding a duplicate request during hydration.
 
-Browser transport stays on `fetch` plus feature-level Zod parsing. Do not add an HTTP client library; see [Baseline JavaScript](/engineering/baseline-javascript).
+Browser transport stays on `fetch` plus feature-level Zod parsing. Do not add an HTTP client library.
 
 ## Query rules
 
