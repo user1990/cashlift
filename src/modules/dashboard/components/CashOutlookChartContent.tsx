@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { centsToDollars, formatCurrencyDollars } from "@/modules/money/format";
+import { centsToDollars, formatCurrencyDollars, formatPreciseCompactCurrency } from "@/modules/money/format";
 import type { MoneyCents } from "@/modules/money/types";
 import type { ForecastChartDataPoint } from "../types";
 import { ChartFrame } from "./ChartFrame";
@@ -55,7 +55,7 @@ export const CashOutlookChartContent = ({
 
 					<RechartsXAxis dataKey="week" tickFormatter={formatWeekLabel} />
 
-					<RechartsYAxis domain={[domainMin, maximumBalance]} tickFormatter={formatMillions} />
+					<RechartsYAxis domain={[domainMin, maximumBalance]} tickFormatter={formatOutlookAxis} />
 
 					<RechartsTooltip formatter={formatTooltipCurrency} labelFormatter={formatWeekLabel} />
 
@@ -107,8 +107,8 @@ function getOutlookDot(lowestProjectedCashDate: string | undefined) {
 	};
 }
 
-function formatMillions(value: number) {
-	return `$${(value / 1_000_000).toFixed(1)}M`;
+function formatOutlookAxis(value: number) {
+	return formatPreciseCompactCurrency(Math.round(value * 100));
 }
 
 function formatTooltipCurrency(value: unknown) {

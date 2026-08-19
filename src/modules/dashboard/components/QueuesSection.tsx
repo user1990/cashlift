@@ -15,14 +15,12 @@ type QueuesSectionProps = {
 	readOnly?: boolean;
 };
 
-const OVERDUE_INVOICE_PREVIEW_COUNT = 3;
-const VENDOR_LEAK_PREVIEW_COUNT = 2;
-const BUDGET_PREVIEW_COUNT = 3;
-
 export const QueuesSection = ({ basePath = "/dashboard", dashboard, readOnly = false }: QueuesSectionProps) => {
-	const overdueInvoices = dashboard.overdueInvoices.slice(0, OVERDUE_INVOICE_PREVIEW_COUNT);
-	const vendorLeaks = dashboard.vendorLeaks.slice(0, VENDOR_LEAK_PREVIEW_COUNT);
-	const recoverableCents = dashboard.invoiceRiskCents + dashboard.vendorLeakSavingsCents;
+	const overdueInvoices = dashboard.overdueInvoices;
+	const vendorLeaks = dashboard.vendorLeaks;
+	const recoverableCents =
+		overdueInvoices.reduce((totalCents, invoice) => totalCents + invoice.amountCents, 0) +
+		vendorLeaks.reduce((totalCents, leak) => totalCents + leak.amountCents, 0);
 
 	return (
 		<section className="grid gap-4 xl:grid-cols-3">
@@ -96,7 +94,7 @@ export const QueuesSection = ({ basePath = "/dashboard", dashboard, readOnly = f
 			<DashboardPanel label="Budget guardrails" title="Team limits">
 				{dashboard.budgetRows.length ? (
 					<ul className="space-y-4">
-						{dashboard.budgetRows.slice(0, BUDGET_PREVIEW_COUNT).map(({ id, remainingCents, team, usagePercent }) => (
+						{dashboard.budgetRows.map(({ id, remainingCents, team, usagePercent }) => (
 							<li key={id}>
 								<div className="mb-2 flex items-center justify-between gap-3">
 									<p className="min-w-0 font-semibold text-m+ text-panel-foreground">{team}</p>
