@@ -22,9 +22,14 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work")
 	const deferredQueryKey = useDeferredValue(queryKey);
 	const pending = deferredQueryKey !== queryKey;
 	const results = filterFindItems(items, query, categoryMode);
-	const suggestions = getFindSuggestions(items, query.query);
-	const owners = getFindFacetValues(items, "owner");
-	const statuses = getFindFacetValues(items, "status");
+	const categoryItems = filterFindItems(
+		items,
+		{ category: query.category, owner: "", query: "", status: "" },
+		categoryMode,
+	);
+	const suggestions = getFindSuggestions(categoryItems, query.query);
+	const owners = getFindFacetValues(categoryItems, "owner");
+	const statuses = getFindFacetValues(categoryItems, "status");
 	const selectedIndex = results.findIndex((item) => item.id === selectedId);
 	const selectedItem = selectedIndex >= 0 ? results[selectedIndex] : undefined;
 
