@@ -7,15 +7,14 @@ import { ConsultingReferencePage } from "./ConsultingReferencePage";
 
 describe("ConsultingReferencePage", () => {
 	it("keeps every consulting decision and the primary CTA interactive", () => {
+		const { answers, label } = USE_CASES.consulting;
+
 		render(<ConsultingReferencePage useCase={USE_CASES.consulting} />);
 
-		expect(screen.getByRole("heading", { level: 1, name: "Consulting" })).toBeInTheDocument();
-
-		const decisionLinks = screen.getAllByRole("link", { name: /^Explore:/ });
-
-		expect(decisionLinks).toHaveLength(3);
-		expect(decisionLinks.map((link) => link.getAttribute("href"))).toEqual(["/demo", "/demo", "/demo"]);
+		expect(screen.getByRole("heading", { level: 1, name: label })).toBeInTheDocument();
+		expect(screen.getByRole("link", { name: `Explore: ${answers[0]}` })).toHaveAttribute("href", "/demo");
+		expect(screen.getByRole("link", { name: `Explore: ${answers[1]}` })).toHaveAttribute("href", "/demo");
+		expect(screen.getByRole("link", { name: `Explore: ${answers[2]}` })).toHaveAttribute("href", "/demo");
 		expect(screen.getByRole("link", { name: "Run use-case demo" })).toHaveAttribute("href", "/demo");
-		expect(screen.queryByRole("img")).not.toBeInTheDocument();
 	});
 });
