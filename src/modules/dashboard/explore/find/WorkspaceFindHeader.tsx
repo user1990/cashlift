@@ -38,7 +38,7 @@ export const WorkspaceFindHeader = ({ items, session }: WorkspaceFindHeaderProps
 				</p>
 
 				<div className="flex flex-wrap items-center gap-3">
-					<p className="@lg:block hidden text-muted-foreground text-s">↑↓ to move, Enter to open</p>
+					<p className="@lg:block hidden text-panel-foreground/80 text-s">↑↓ to move, Enter to open</p>
 
 					<button
 						className="inline-flex @lg:hidden min-h-11 items-center rounded-full border border-white/10 px-3 text-m text-panel-foreground outline-none hover:border-primary/40 focus-visible:ring-[3px] focus-visible:ring-primary/20"
