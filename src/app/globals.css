@@ -239,18 +239,6 @@ textarea,
 	}
 }
 
-@keyframes lead-success-from-top {
-	from {
-		opacity: 0;
-		transform: translateY(-1.25rem);
-	}
-
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
 @keyframes lead-success-from-bottom {
 	from {
 		opacity: 0;
@@ -275,15 +263,11 @@ textarea,
 	}
 }
 
-.lead-success-enter-from-top,
 .lead-success-enter-from-bottom,
 .lead-success-enter-from-left {
+	animation-duration: 300ms;
 	animation-fill-mode: both;
 	animation-timing-function: ease-out;
-}
-
-.lead-success-enter-from-top {
-	animation-name: lead-success-from-top;
 }
 
 .lead-success-enter-from-bottom {
@@ -292,24 +276,6 @@ textarea,
 
 .lead-success-enter-from-left {
 	animation-name: lead-success-from-left;
-}
-
-form[data-lead-form-enter="slide300"] {
-	transition-duration: 80ms;
-}
-
-form[data-lead-form-enter="slideLeft"] {
-	transition-duration: 100ms;
-}
-
-.lead-success-enter-from-top[data-lead-enter="slide300"],
-.lead-success-enter-from-bottom[data-lead-enter="slide300"] {
-	animation-duration: 300ms;
-}
-
-.lead-success-enter-from-left[data-lead-enter="slideLeft"],
-.lead-success-enter-from-bottom[data-lead-enter="slideLeft"] {
-	animation-duration: 400ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -324,5 +290,10 @@ form[data-lead-form-enter="slideLeft"] {
 		animation-iteration-count: 1;
 		scroll-behavior: auto;
 		transition-duration: 0.01ms;
+	}
+
+	.lead-success-enter-from-bottom,
+	.lead-success-enter-from-left {
+		animation: none;
 	}
 }

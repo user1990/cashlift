@@ -2,29 +2,21 @@
 
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/ui/components/actions/Button";
-import { cn } from "@/ui/utils/cn";
-import type { LeadCaptureTransitionVariant } from "../leadCaptureTransitions";
 import { ActionLink } from "./ActionLink";
 
 type LeadCaptureSuccessStateProps = {
 	description: string;
 	onReset: () => void;
-	transitionVariant?: LeadCaptureTransitionVariant;
 };
 
-export const LeadCaptureSuccessState = ({
-	description,
-	onReset,
-	transitionVariant = "slide300",
-}: LeadCaptureSuccessStateProps) => (
+export const LeadCaptureSuccessState = ({ description, onReset }: LeadCaptureSuccessStateProps) => (
 	<div className="flex h-full flex-col gap-3">
 		<div className="flex min-h-0 flex-1 flex-col">
 			<div
 				aria-atomic="true"
 				aria-live="polite"
-				data-lead-enter={transitionVariant}
 				role="status"
-				className={getMessageClassName(transitionVariant)}
+				className="lead-success-enter-from-left border-signal border-l-2 pl-3 motion-reduce:animate-none"
 			>
 				<p className="text-m leading-6">
 					<span className="font-medium text-signal">Request received.</span>{" "}
@@ -37,8 +29,7 @@ export const LeadCaptureSuccessState = ({
 			<ActionLink
 				href="/demo/workspace"
 				variant="primary"
-				data-lead-enter={transitionVariant}
-				className="lead-success-enter-from-bottom w-full"
+				className="lead-success-enter-from-bottom w-full motion-reduce:animate-none"
 			>
 				Explore live demo
 			</ActionLink>
@@ -50,10 +41,3 @@ export const LeadCaptureSuccessState = ({
 		</div>
 	</div>
 );
-
-function getMessageClassName(variant: LeadCaptureTransitionVariant) {
-	return cn(
-		"border-signal border-l-2 pl-3",
-		variant === "slideLeft" ? "lead-success-enter-from-left" : "lead-success-enter-from-top",
-	);
-}
