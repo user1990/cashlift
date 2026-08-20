@@ -3,7 +3,7 @@ import { ActionLink } from "./ActionLink";
 import { Hero } from "./Hero";
 
 export const DemoOverviewSection = () => (
-	<section className="min-w-0">
+	<section className="flex min-w-0 flex-col justify-center">
 		<Hero
 			description="We’ll use the Studio Nova workspace to turn approval, collection, and renewal questions into a ranked action plan."
 			label="See the cash leak. Understand the impact. Know what to do next."
