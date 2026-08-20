@@ -6,6 +6,7 @@ import { getWorkspaceNavItems } from "../navigation";
 import type { WorkspaceExperience, WorkspaceSection } from "../types";
 import { getWorkspaceExperienceContract } from "../workspaceExperience";
 import { MainContent } from "./MainContent";
+import { WorkspaceMobileNav } from "./WorkspaceMobileNav";
 import { WorkspaceSidebar } from "./WorkspaceSidebar";
 
 type WorkspaceShellProps = {
@@ -19,6 +20,8 @@ export const WorkspaceShell = ({ children, experience }: WorkspaceShellProps) =>
 
 	return (
 		<MainContent variant="workspace">
+			<WorkspaceMobileNav section={section} workspace={workspace} />
+
 			<div className="mx-auto grid w-full max-w-[1600px] gap-6 p-4 lg:grid-cols-[236px_1fr]">
 				<WorkspaceSidebar section={section} workspace={workspace} />
 
@@ -29,7 +32,7 @@ export const WorkspaceShell = ({ children, experience }: WorkspaceShellProps) =>
 };
 
 function useActiveWorkspaceSection(basePath: string): WorkspaceSection {
-	const pathname = usePathname();
+	const pathname = usePathname() ?? "";
 	const activeItem = getWorkspaceNavItems(basePath).find(
 		({ href }) => pathname === href || (href !== basePath && pathname.startsWith(`${href}/`)),
 	);
