@@ -1,54 +1,27 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { EXPLORE_DIRECTION_IDS, EXPLORE_DIRECTIONS } from "@/modules/dashboard/explore/directions";
+import { ExplorePrototype } from "@/modules/dashboard/explore/ExplorePrototype";
+import { WorkspaceLoadState } from "@/modules/page-shell/components/WorkspaceLoadState";
+import { loadWorkspaceDataset } from "@/modules/workspace/server";
 
 export const metadata: Metadata = {
-	title: "Dashboard design exploration — CashLift",
-	description: "Three isolated /dashboard overview prototypes for visual UX comparison.",
+	title: "Operating cockpit prototype — CashLift",
+	description: "Liquid-glass dashboard prototype with header search and filters.",
 };
 
-export default function DashboardExploreIndex() {
-	return (
-		<div className="space-y-8">
-			<header className="max-w-3xl space-y-3">
-				<p className="text-muted-foreground text-s">Design prototype · production overview is unchanged</p>
+export default async function DashboardExplorePage() {
+	const result = await loadWorkspaceDataset("overview");
 
-				<h1 className="font-semibold text-3xl+ text-panel-foreground tracking-normal">Dashboard design exploration</h1>
+	if (result.status === "success") {
+		return <ExplorePrototype dataset={result.dataset} />;
+	}
 
-				<p className="text-m+ text-shell-muted leading-6">
-					Three overview directions using existing Company Workspace data. Open each full page to judge hierarchy,
-					actions, forecast, and supporting work on desktop and mobile.
-				</p>
-			</header>
+	if (result.status === "unauthenticated") {
+		return <WorkspaceLoadState message={result.message} section="overview" title="Sign in required" />;
+	}
 
-			<ul className="grid gap-4 lg:grid-cols-3">
-				{EXPLORE_DIRECTION_IDS.map((id) => {
-					const direction = EXPLORE_DIRECTIONS[id];
+	if (result.status === "forbidden") {
+		return <WorkspaceLoadState message={result.message} section="overview" title="No company workspace" />;
+	}
 
-					return (
-						<li key={id}>
-							<Link
-								className="ease flex min-h-44 flex-col rounded-lg border border-border bg-panel p-5 shadow-panel outline-none transition-[border-color] duration-150 hover:border-primary-subtle-border focus-visible:ring-[3px] focus-visible:ring-primary/20"
-								href={direction.href}
-							>
-								<p className="text-muted-foreground text-s">Direction {id.toUpperCase()}</p>
-
-								<h2 className="mt-2 text-panel-foreground text-xl+">{direction.name}</h2>
-
-								<p className="mt-2 text-m text-shell-muted leading-6">{direction.promise}</p>
-
-								<p className="mt-auto pt-6 text-m text-primary">Open full prototype</p>
-							</Link>
-						</li>
-					);
-				})}
-			</ul>
-
-			<p>
-				<Link className="text-m text-muted-foreground hover:text-panel-foreground" href="/dashboard">
-					Back to production overview
-				</Link>
-			</p>
-		</div>
-	);
+	return <WorkspaceLoadState message={result.message} section="overview" title="Workspace data unavailable" />;
 }
