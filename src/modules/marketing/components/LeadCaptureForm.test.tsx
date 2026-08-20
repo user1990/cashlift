@@ -31,4 +31,18 @@ describe("LeadCaptureForm", () => {
 
 		expect(screen.getByRole("textbox", { name: "Name" })).toBeInTheDocument();
 	});
+
+	it("applies the selected success enter timing", () => {
+		render(
+			<LeadCaptureForm
+				buttonLabel="Book an audit walkthrough"
+				submitted
+				successDescription="We'll follow up to arrange the audit walkthrough."
+				transitionVariant="slideSlow"
+			/>,
+		);
+
+		expect(screen.getByRole("status")).toHaveAttribute("data-lead-enter", "slideSlow");
+		expect(screen.getByRole("status")).toHaveAttribute("data-lead-enter-item", "message");
+	});
 });

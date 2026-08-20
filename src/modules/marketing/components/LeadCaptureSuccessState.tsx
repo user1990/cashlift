@@ -3,20 +3,18 @@
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/ui/components/actions/Button";
 import { cn } from "@/ui/utils/cn";
-import { LEAD_CAPTURE_TRANSITION_PRESETS, type LeadCaptureTransitionVariant } from "../leadCaptureTransitions";
+import { LEAD_CAPTURE_TRANSITION_KIND, type LeadCaptureTransitionVariant } from "../leadCaptureTransitions";
 import { ActionLink } from "./ActionLink";
 
 type LeadCaptureSuccessStateProps = {
 	description: string;
 	onReset: () => void;
-	visible: boolean;
 	transitionVariant?: LeadCaptureTransitionVariant;
 };
 
 export const LeadCaptureSuccessState = ({
 	description,
 	onReset,
-	visible,
 	transitionVariant = "opacityFast",
 }: LeadCaptureSuccessStateProps) => (
 	<div className="flex h-full flex-col gap-3">
@@ -24,8 +22,10 @@ export const LeadCaptureSuccessState = ({
 			<div
 				aria-atomic="true"
 				aria-live="polite"
+				data-lead-enter={transitionVariant}
+				data-lead-enter-item="message"
 				role="status"
-				className={cn("border-signal border-l-2 pl-3", getItemClassName(transitionVariant, visible, 0))}
+				className={cn("border-signal border-l-2 pl-3", getItemClassName(transitionVariant))}
 			>
 				<p className="text-m leading-6">
 					<span className="font-medium text-signal">Request received.</span>{" "}
@@ -34,7 +34,11 @@ export const LeadCaptureSuccessState = ({
 			</div>
 		</div>
 
-		<div className={cn("mt-auto grid gap-2", getItemClassName(transitionVariant, visible, 1))}>
+		<div
+			data-lead-enter={transitionVariant}
+			data-lead-enter-item="cta"
+			className={cn("mt-auto grid gap-2", getItemClassName(transitionVariant))}
+		>
 			<ActionLink href="/demo/workspace" variant="primary" className="w-full">
 				Explore live demo
 			</ActionLink>
@@ -47,16 +51,6 @@ export const LeadCaptureSuccessState = ({
 	</div>
 );
 
-function getItemClassName(variant: LeadCaptureTransitionVariant, visible: boolean, itemIndex: 0 | 1) {
-	const preset = LEAD_CAPTURE_TRANSITION_PRESETS[variant];
-	const slide = preset.kind === "slide";
-
-	return cn(
-		"ease-out motion-reduce:delay-0 motion-reduce:transition-none",
-		preset.itemDurationClassName,
-		preset.itemDelayClassNames[itemIndex],
-		slide ? "transition-[opacity,transform] motion-reduce:transform-none" : "transition-[opacity]",
-		visible ? "opacity-100" : "opacity-0",
-		slide && (visible ? "translate-y-0" : "-translate-y-2"),
-	);
+function getItemClassName(variant: LeadCaptureTransitionVariant) {
+	return LEAD_CAPTURE_TRANSITION_KIND[variant] === "slide" ? "lead-success-enter-slide" : "lead-success-enter";
 }

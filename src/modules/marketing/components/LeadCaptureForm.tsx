@@ -7,7 +7,7 @@ import { Button } from "@/ui/components/actions/Button";
 import { ControlledEmailAutocompleteField } from "@/ui/components/forms/ControlledEmailAutocompleteField";
 import { ControlledTextField } from "@/ui/components/forms/ControlledTextField";
 import { cn } from "@/ui/utils/cn";
-import { LEAD_CAPTURE_TRANSITION_PRESETS, type LeadCaptureTransitionVariant } from "../leadCaptureTransitions";
+import type { LeadCaptureTransitionVariant } from "../leadCaptureTransitions";
 import { LEAD_CAPTURE_SCHEMA, type LeadCaptureFormValues } from "../schemas";
 import { LeadCaptureSuccessState } from "./LeadCaptureSuccessState";
 
@@ -16,6 +16,7 @@ type LeadCaptureFormProps = {
 	successDescription: string;
 	onReset?: () => void;
 	onSuccess?: () => void;
+	playId?: number;
 	submitted?: boolean;
 	transitionVariant?: LeadCaptureTransitionVariant;
 };
@@ -24,6 +25,7 @@ export const LeadCaptureForm = ({
 	buttonLabel,
 	onReset,
 	onSuccess,
+	playId = 0,
 	submitted,
 	successDescription,
 	transitionVariant = "opacityFast",
@@ -63,11 +65,12 @@ export const LeadCaptureForm = ({
 	};
 
 	return (
-		<div className="relative overflow-hidden">
+		<div className="relative">
 			<form
 				aria-hidden={successVisible || undefined}
+				data-lead-form-enter={transitionVariant}
 				onSubmit={handleSubmit(submitForm)}
-				className={getFormTransitionClassName(transitionVariant, successVisible)}
+				className={getFormTransitionClassName(successVisible)}
 			>
 				<ControlledTextField
 					autoComplete="name"
@@ -98,26 +101,19 @@ export const LeadCaptureForm = ({
 				</Button>
 			</form>
 
-			<div aria-hidden={!successVisible || undefined} className={getSuccessShellClassName(successVisible)}>
-				<LeadCaptureSuccessState
-					description={successDescription}
-					onReset={resetForm}
-					transitionVariant={transitionVariant}
-					visible={successVisible}
-				/>
-			</div>
+			{successVisible && (
+				<div key={playId} className="absolute inset-0">
+					<LeadCaptureSuccessState
+						description={successDescription}
+						onReset={resetForm}
+						transitionVariant={transitionVariant}
+					/>
+				</div>
+			)}
 		</div>
 	);
 };
 
-function getFormTransitionClassName(variant: LeadCaptureTransitionVariant, successVisible: boolean) {
-	return cn(
-		"flex flex-col gap-3 transition-[opacity] ease motion-reduce:transition-none",
-		LEAD_CAPTURE_TRANSITION_PRESETS[variant].formDurationClassName,
-		successVisible && "pointer-events-none opacity-0",
-	);
-}
-
-function getSuccessShellClassName(successVisible: boolean) {
-	return cn("absolute inset-0", !successVisible && "pointer-events-none");
+function getFormTransitionClassName(successVisible: boolean) {
+	return cn("flex flex-col gap-3 transition-opacity ease", successVisible && "pointer-events-none opacity-0");
 }

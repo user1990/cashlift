@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/ui/components/actions/Button";
 import { Panel } from "@/ui/components/layout/Panel";
 import { cn } from "@/ui/utils/cn";
@@ -9,28 +9,24 @@ import { LEAD_CAPTURE_TRANSITIONS, type LeadCaptureTransitionVariant } from "../
 import { LeadCaptureForm } from "./LeadCaptureForm";
 
 const DEMO_BOOK_CARD_BACKGROUND_SRC = "/marketing/demo-book-card-bg.webp";
-const PREVIEW_REPLAY_DELAY_MS = 40;
 
 const TRANSITION_PREVIEW_LABELS = {
-	opacityFast: "Fade 100",
-	opacitySlow: "Fade 300",
-	slideFast: "Slide 150",
-	slideMid: "Slide 200",
-	slideSlow: "Slide 300",
+	opacityFast: "Fade 180",
+	opacitySlow: "Fade 700",
+	slideFast: "Slide 240",
+	slideMid: "Slide 420",
+	slideSlow: "Slide 900",
 } as const satisfies Record<LeadCaptureTransitionVariant, string>;
 
 export const DemoLeadCaptureSection = () => {
-	const playTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+	const [playId, setPlayId] = useState(0);
 	const [previewTransition, setPreviewTransition] = useState<LeadCaptureTransitionVariant | null>(null);
 	const [submitted, setSubmitted] = useState(false);
 
 	const playTransition = (variant: LeadCaptureTransitionVariant) => {
-		window.clearTimeout(playTimeoutRef.current);
+		setPlayId((currentPlayId) => currentPlayId + 1);
 		setPreviewTransition(variant);
-		setSubmitted(false);
-		playTimeoutRef.current = setTimeout(() => {
-			setSubmitted(true);
-		}, PREVIEW_REPLAY_DELAY_MS);
+		setSubmitted(true);
 	};
 
 	return (
@@ -56,14 +52,15 @@ export const DemoLeadCaptureSection = () => {
 					<LeadCaptureForm
 						buttonLabel="Book an audit walkthrough"
 						onReset={() => {
-							window.clearTimeout(playTimeoutRef.current);
 							setPreviewTransition(null);
 							setSubmitted(false);
 						}}
 						onSuccess={() => {
+							setPlayId((currentPlayId) => currentPlayId + 1);
 							setPreviewTransition((variant) => variant ?? "opacityFast");
 							setSubmitted(true);
 						}}
+						playId={playId}
 						submitted={submitted}
 						successDescription="We'll follow up to arrange the audit walkthrough. You can explore the read-only workspace now."
 						transitionVariant={previewTransition ?? "opacityFast"}
