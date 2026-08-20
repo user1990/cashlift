@@ -41,7 +41,6 @@
 		"cnfast": "^0.0.8",
 		"date-fns": "^4.4.0",
 		"lucide-react": "^1.27.0",
-		"motion": "^12.42.2",
 		"next": "16.3.0",
 		"next-intl": "^4.13.4",
 		"nuqs": "2.9.2",
