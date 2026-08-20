@@ -1,41 +1,79 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
+import { Button } from "@/ui/components/actions/Button";
 import { Panel } from "@/ui/components/layout/Panel";
 import { cn } from "@/ui/utils/cn";
 import { LeadCaptureForm } from "./LeadCaptureForm";
+import { LEAD_CAPTURE_SUCCESS_LAYOUTS, type LeadCaptureSuccessLayout } from "./LeadCaptureSuccessState";
 
 const DEMO_BOOK_CARD_BACKGROUND_SRC = "/marketing/demo-book-card-bg.webp";
 
-export const DemoLeadCaptureSection = () => (
-	<Panel as="section" variant="glass" className={getDemoLeadCapturePanelClassName()}>
-		<Image
-			alt=""
-			fill
-			sizes="(min-width: 1024px) 24rem, calc(100vw - 2rem)"
-			src={DEMO_BOOK_CARD_BACKGROUND_SRC}
-			className="pointer-events-none object-cover"
-		/>
+const SUCCESS_PREVIEW_LABELS = {
+	line: "Line",
+	next: "Next",
+	plain: "Plain",
+	stack: "Stack",
+	title: "Title",
+} as const satisfies Record<LeadCaptureSuccessLayout, string>;
 
-		<div aria-hidden className={getDemoLeadCaptureOverlayClassName()} />
+export const DemoLeadCaptureSection = () => {
+	const [previewLayout, setPreviewLayout] = useState<LeadCaptureSuccessLayout | null>(null);
 
-		<div className="relative flex flex-col">
-			<header className="mb-3">
-				<p className="text-primary text-s+ uppercase tracking-normal">Book walkthrough</p>
+	return (
+		<div className="flex flex-col gap-3 lg:self-start">
+			<Panel as="section" variant="glass" className={getDemoLeadCapturePanelClassName()}>
+				<Image
+					alt=""
+					fill
+					sizes="(min-width: 1024px) 24rem, calc(100vw - 2rem)"
+					src={DEMO_BOOK_CARD_BACKGROUND_SRC}
+					className="pointer-events-none object-cover"
+				/>
 
-				<h2 className="mt-2 text-l+ text-shell-foreground">Choose who we should contact</h2>
-			</header>
+				<div aria-hidden className={getDemoLeadCaptureOverlayClassName()} />
 
-			<LeadCaptureForm
-				buttonLabel="Book an audit walkthrough"
-				successDescription="We'll follow up to arrange the audit walkthrough. You can explore the read-only workspace now."
-				successTitle="Walkthrough request received"
-			/>
+				<div className="relative flex flex-col">
+					<header className="mb-3">
+						<p className="text-primary text-s+ uppercase tracking-normal">Book walkthrough</p>
+
+						<h2 className="mt-2 text-l+ text-shell-foreground">Choose who we should contact</h2>
+					</header>
+
+					<LeadCaptureForm
+						buttonLabel="Book an audit walkthrough"
+						onReset={() => setPreviewLayout(null)}
+						onSuccess={() => setPreviewLayout((layout) => layout ?? "plain")}
+						submitted={previewLayout !== null}
+						successDescription="We'll follow up to arrange the audit walkthrough. You can explore the read-only workspace now."
+						successLayout={previewLayout ?? "plain"}
+						successTitle="Walkthrough request received"
+					/>
+				</div>
+			</Panel>
+
+			<div className="grid grid-cols-5 gap-2">
+				{LEAD_CAPTURE_SUCCESS_LAYOUTS.map((id) => (
+					<Button
+						key={id}
+						aria-pressed={previewLayout === id}
+						onPress={() => setPreviewLayout(id)}
+						size="small"
+						variant={previewLayout === id ? "primary" : "secondary"}
+						className="min-h-11"
+					>
+						{SUCCESS_PREVIEW_LABELS[id]}
+					</Button>
+				))}
+			</div>
 		</div>
-	</Panel>
-);
+	);
+};
 
 function getDemoLeadCapturePanelClassName() {
 	return cn(
-		"relative isolate flex flex-col overflow-hidden bg-transparent p-5 shadow-none backdrop-blur-none md:p-6 lg:self-start",
+		"relative isolate flex flex-col overflow-hidden bg-transparent p-5 shadow-none backdrop-blur-none md:p-6",
 		"[&_[data-slot=field-label]]:text-shell-foreground",
 		"[&_[data-slot=input]]:border-shell-border [&_[data-slot=input]]:bg-shell/40 [&_[data-slot=input]]:text-shell-foreground",
 		"[&_[data-slot=combobox-input]]:border-shell-border [&_[data-slot=combobox-input]]:bg-shell/40 [&_[data-slot=combobox-input]]:text-shell-foreground",

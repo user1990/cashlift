@@ -1,56 +1,106 @@
 "use client";
 
-import { ArrowRight, CheckCircle2, RotateCcw } from "lucide-react";
-import { domAnimation, LazyMotion, useReducedMotion } from "motion/react";
-import * as m from "motion/react-m";
 import { Button } from "@/ui/components/actions/Button";
 import { ActionLink } from "./ActionLink";
 
-const SUCCESS_ANIMATION = {
-	hidden: { opacity: 0, transform: "translateY(8px)" },
-	visible: { opacity: 1, transform: "translateY(0)" },
-} as const;
+export const LEAD_CAPTURE_SUCCESS_LAYOUTS = ["plain", "title", "next", "line", "stack"] as const;
+
+export type LeadCaptureSuccessLayout = (typeof LEAD_CAPTURE_SUCCESS_LAYOUTS)[number];
 
 type LeadCaptureSuccessStateProps = {
 	description: string;
 	onReset: () => void;
 	title: string;
+	layout?: LeadCaptureSuccessLayout;
 };
 
-export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCaptureSuccessStateProps) => {
-	const reducedMotion = useReducedMotion();
+export const LeadCaptureSuccessState = ({
+	description,
+	layout = "plain",
+	onReset,
+	title,
+}: LeadCaptureSuccessStateProps) => (
+	<div className="flex h-full flex-col gap-3">
+		<div aria-atomic="true" aria-live="polite" role="status" className="flex min-h-0 flex-1 flex-col gap-3">
+			{renderSuccessCopy({ description, layout, onReset, title })}
+		</div>
 
-	return (
-		<LazyMotion features={domAnimation}>
-			<m.div
-				animate="visible"
-				initial={reducedMotion ? "visible" : "hidden"}
-				transition={{ duration: reducedMotion ? 0 : 0.18, ease: [0.16, 1, 0.3, 1] }}
-				variants={SUCCESS_ANIMATION}
-				className="flex min-h-72 flex-1 flex-col justify-between"
-			>
-				<div aria-atomic="true" aria-live="polite" role="status">
-					<div className="flex size-10 items-center justify-center rounded-md border border-signal/30 bg-signal/10 text-signal">
-						<CheckCircle2 aria-hidden className="size-5" />
-					</div>
+		<ActionLink href="/demo/workspace" variant="primary" className="mt-auto w-full">
+			Explore live demo
+		</ActionLink>
+	</div>
+);
 
-					<h3 className="mt-4 font-semibold text-l+ text-shell-foreground">{title}</h3>
+type SuccessCopyProps = {
+	description: string;
+	layout: LeadCaptureSuccessLayout;
+	onReset: () => void;
+	title: string;
+};
 
-					<p className="mt-2 text-m text-shell-muted leading-6">{description}</p>
-				</div>
+function renderSuccessCopy({ description, layout, onReset, title }: SuccessCopyProps) {
+	switch (layout) {
+		case "title":
+			return <h3 className="font-semibold text-l+ text-shell-foreground">{title}</h3>;
 
-				<div className="mt-6 grid gap-2">
-					<ActionLink href="/demo/workspace" variant="primary" className="w-full">
-						Explore live demo
-						<ArrowRight aria-hidden className="size-4" />
-					</ActionLink>
+		case "next":
+			return (
+				<>
+					<p className="font-medium text-primary text-s">Request received</p>
+
+					<h3 className="text-l+ text-shell-foreground">{title}</h3>
+
+					<p className="text-m text-shell-muted leading-6">{description}</p>
+
+					{resetAction(onReset)}
+				</>
+			);
+
+		case "line":
+			return (
+				<>
+					<div aria-hidden className="h-px w-10 bg-signal" />
+
+					<p className="font-medium text-s text-signal">Received</p>
+
+					<h3 className="text-l+ text-shell-foreground">{title}</h3>
+
+					<p className="text-m text-shell-muted leading-6">{description}</p>
+
+					{resetAction(onReset)}
+				</>
+			);
+
+		case "stack":
+			return (
+				<>
+					<h3 className="text-l+ text-shell-foreground">{title}</h3>
+
+					<p className="text-m text-shell-muted leading-6">{description}</p>
 
 					<Button onPress={onReset} size="large" type="button" variant="secondary" className="w-full">
-						<RotateCcw aria-hidden className="size-3.5" />
 						Send another request
 					</Button>
-				</div>
-			</m.div>
-		</LazyMotion>
+				</>
+			);
+
+		default:
+			return (
+				<>
+					<h3 className="font-semibold text-l+ text-shell-foreground">{title}</h3>
+
+					<p className="text-m text-shell-muted leading-6">{description}</p>
+
+					{resetAction(onReset)}
+				</>
+			);
+	}
+}
+
+function resetAction(onReset: () => void) {
+	return (
+		<Button onPress={onReset} type="button" variant="ghost" className="h-11 w-fit px-0 text-shell-muted">
+			Send another request
+		</Button>
 	);
-};
+}
