@@ -102,9 +102,7 @@ type WorkspaceNavGroupDefinition = {
 export const getWorkspaceNavGroups = (basePath: string): WorkspaceNavGroup[] =>
 	WORKSPACE_NAV_GROUPS.map((group) => ({
 		id: group.id,
-		items: group.items
-			.filter((item) => item.visible?.(basePath) ?? true)
-			.map((item) => buildWorkspaceNavItem(basePath, item)),
+		items: group.items.map((item) => buildWorkspaceNavItem(basePath, item)),
 	})).filter((group) => group.items.length > 0);
 
 export const getWorkspaceNavItems = (basePath: string): WorkspaceNavItem[] =>

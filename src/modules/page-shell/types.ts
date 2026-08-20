@@ -22,7 +22,6 @@ export type WorkspaceNavItemDefinition = {
 	path?: string;
 	priority?: boolean;
 	section: WorkspaceSection;
-	visible?: (basePath: string) => boolean;
 };
 
 export type WorkspaceNavGroup = {
