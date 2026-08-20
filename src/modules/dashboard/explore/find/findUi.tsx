@@ -173,8 +173,8 @@ export const FindFilterButton = ({ children, onClick, selected = false }: FindFi
 		aria-pressed={selected}
 		className={
 			selected
-				? "inline-flex min-h-11 items-center border-primary border-b-2 px-1 font-semibold text-m text-panel-foreground outline-none focus-visible:ring-[3px] focus-visible:ring-primary/20"
-				: "inline-flex min-h-11 items-center border-transparent border-b-2 px-1 text-m text-shell-muted outline-none hover:text-panel-foreground focus-visible:ring-[3px] focus-visible:ring-primary/20"
+				? "inline-flex min-h-11 cursor-pointer items-center border-primary border-b-2 px-1 font-semibold text-m text-panel-foreground outline-none focus-visible:ring-[3px] focus-visible:ring-primary/20"
+				: "inline-flex min-h-11 cursor-pointer items-center border-transparent border-b-2 px-1 text-m text-shell-muted outline-none hover:text-panel-foreground focus-visible:ring-[3px] focus-visible:ring-primary/20"
 		}
 		onClick={onClick}
 		type="button"
