@@ -8,10 +8,9 @@ import { useFindSession } from "./find/useFindSession";
 import { WorkspaceFindCommandPalette } from "./find/WorkspaceFindCommandPalette";
 import { WorkspaceFindResults } from "./find/WorkspaceFindResults";
 import { WorkspaceFindTrigger } from "./find/WorkspaceFindTrigger";
-import { GlassCard, GlassVariantProvider } from "./GlassCard";
+import { GlassCard } from "./GlassCard";
 import { OperatingCockpitDashboard } from "./OperatingCockpitDashboard";
 import { PrototypeFrame } from "./PrototypeFrame";
-import { useGlassVariant } from "./useGlassVariant";
 
 type ExplorePrototypeProps = {
 	dataset: FinancialDataset;
@@ -25,27 +24,24 @@ export const ExplorePrototype = ({ dataset }: ExplorePrototypeProps) => {
 	const presentation = buildExplorePresentation(dashboard);
 	const items = buildFindItems(dataset, "/dashboard");
 	const session = useFindSession(items, "work");
-	const { setVariant, variant } = useGlassVariant();
 	const findActive =
 		Boolean(session.query.query) || hasActiveFindFilters(session.query) || session.query.category !== "all";
 
 	return (
-		<GlassVariantProvider variant={variant}>
-			<div className="space-y-6">
-				<PrototypeFrame onVariantChange={setVariant} variant={variant} />
+		<div className="space-y-6">
+			<PrototypeFrame />
 
-				<WorkspaceFindTrigger onOpen={session.openPalette} />
+			<WorkspaceFindTrigger onOpen={session.openPalette} />
 
-				<WorkspaceFindCommandPalette items={items} session={session} />
+			<WorkspaceFindCommandPalette items={items} session={session} />
 
-				{findActive && !session.open ? (
-					<GlassCard atmosphere="find">
-						<WorkspaceFindResults itemsCount={items.length} session={session} />
-					</GlassCard>
-				) : (
-					<OperatingCockpitDashboard basePath="/dashboard" dashboard={dashboard} presentation={presentation} />
-				)}
-			</div>
-		</GlassVariantProvider>
+			{findActive && !session.open ? (
+				<GlassCard atmosphere="find">
+					<WorkspaceFindResults itemsCount={items.length} session={session} />
+				</GlassCard>
+			) : (
+				<OperatingCockpitDashboard basePath="/dashboard" dashboard={dashboard} presentation={presentation} />
+			)}
+		</div>
 	);
 };

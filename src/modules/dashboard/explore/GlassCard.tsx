@@ -1,8 +1,8 @@
 "use client";
 
-import { createContext, type ReactNode, useContext } from "react";
+import type { ReactNode } from "react";
 import { cn } from "@/ui/utils/cn";
-import { type CockpitAtmosphere, DEFAULT_GLASS_VARIANT, GLASS_VARIANTS, type GlassVariantId } from "./glassVariants";
+import { type CockpitAtmosphere, LIQUID_GLASS_LOOK } from "./glassVariants";
 
 type GlassCardProps = {
 	atmosphere: CockpitAtmosphere;
@@ -13,12 +13,6 @@ type GlassCardProps = {
 	intensity?: "active" | "quiet";
 };
 
-const GlassVariantContext = createContext<GlassVariantId>(DEFAULT_GLASS_VARIANT);
-
-export const GlassVariantProvider = ({ children, variant }: { children: ReactNode; variant: GlassVariantId }) => (
-	<GlassVariantContext.Provider value={variant}>{children}</GlassVariantContext.Provider>
-);
-
 export const GlassCard = ({
 	as = "section",
 	atmosphere,
@@ -27,18 +21,20 @@ export const GlassCard = ({
 	contentClassName,
 	intensity = "quiet",
 }: GlassCardProps) => {
-	const variant = useContext(GlassVariantContext);
-	const look = GLASS_VARIANTS[variant];
 	const cardClassName = cn(
 		"relative isolate overflow-hidden rounded-2xl border ease transition-[border-color,box-shadow] duration-300 motion-reduce:transition-none",
-		look.cardClassName,
+		LIQUID_GLASS_LOOK.cardClassName,
 		intensity === "active" ? "border-primary/30" : "border-white/10",
 		className,
 	);
-	const overlayClassName = intensity === "active" ? look.overlayActiveClassName : look.overlayQuietClassName;
+	const overlayClassName =
+		intensity === "active" ? LIQUID_GLASS_LOOK.overlayActiveClassName : LIQUID_GLASS_LOOK.overlayQuietClassName;
 	const content = (
 		<>
-			<div aria-hidden className={cn("absolute inset-0 bg-cover bg-no-repeat", look.atmosphereClassName(atmosphere))} />
+			<div
+				aria-hidden
+				className={cn("absolute inset-0 bg-cover bg-no-repeat", LIQUID_GLASS_LOOK.atmosphereClassName(atmosphere))}
+			/>
 
 			<div aria-hidden className={overlayClassName} />
 
