@@ -46,9 +46,9 @@ describe("ExplorePrototype", () => {
 		expect(screen.getByRole("button", { name: "Liquid" })).toHaveAttribute("aria-pressed", "false");
 		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(dashboard.cashPositionHeadline);
 
-		await user.click(screen.getByRole("button", { name: "Shift" }));
+		await user.click(screen.getByRole("button", { name: "Soft" }));
 
-		expect(screen.getByRole("button", { name: "Shift" })).toHaveAttribute("aria-pressed", "true");
+		expect(screen.getByRole("button", { name: "Soft" })).toHaveAttribute("aria-pressed", "true");
 		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(dashboard.cashPositionHeadline);
 	});
 
