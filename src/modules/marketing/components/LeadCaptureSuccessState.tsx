@@ -27,16 +27,16 @@ export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCap
 				initial={reducedMotion ? "visible" : "hidden"}
 				transition={{ duration: reducedMotion ? 0 : 0.18, ease: [0.16, 1, 0.3, 1] }}
 				variants={SUCCESS_ANIMATION}
-				className="flex min-h-72 flex-1 flex-col justify-between rounded-lg border-2 border-signal bg-signal/5 p-4 shadow-panel"
+				className="flex min-h-72 flex-1 flex-col justify-between"
 			>
 				<div aria-atomic="true" aria-live="polite" role="status">
-					<div className="flex size-10 items-center justify-center rounded-full bg-signal text-primary-foreground">
+					<div className="flex size-10 items-center justify-center rounded-md border border-signal/30 bg-signal/10 text-signal">
 						<CheckCircle2 aria-hidden className="size-5" />
 					</div>
 
-					<h3 className="mt-4 font-semibold text-l+ text-panel-foreground">{title}</h3>
+					<h3 className="mt-4 font-semibold text-l+ text-shell-foreground">{title}</h3>
 
-					<p className="mt-2 text-m text-panel-foreground leading-6">{description}</p>
+					<p className="mt-2 text-m text-shell-muted leading-6">{description}</p>
 				</div>
 
 				<div className="mt-6 grid gap-2">
