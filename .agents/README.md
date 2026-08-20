@@ -59,6 +59,7 @@ Reference material the agent (or human) can consult for context. Each doc:
 ```
 skills/
 ├── architecture/SKILL.md
+├── baseline-javascript/SKILL.md
 ├── create-pr/SKILL.md
 ├── guide/SKILL.md
 ├── review-pr/SKILL.md

@@ -161,6 +161,16 @@ primitives:
       - workspace-read-path
       - spend-decision-path
 
+  - id: javascript-delivery
+    group: platform
+    description: Browser Baseline targets and client JavaScript dependency policy.
+    code:
+      - "docs/architecture/decisions/baseline-javascript-targets.md"
+      - ".agents/skills/baseline-javascript/**"
+    connects_to:
+      - review-workflow
+      - documentation-system
+
   - id: delivery-pipeline
     group: platform
     description: Build, test, security, and deployment automation.
@@ -171,6 +181,7 @@ primitives:
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
     connects_to:
+      - javascript-delivery
       - review-workflow
       - documentation-system
 
@@ -197,6 +208,7 @@ primitives:
     connects_to:
       - documentation-system
       - delivery-pipeline
+      - javascript-delivery
 
 invariants:
   - id: company-data-isolation
