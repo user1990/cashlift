@@ -2,6 +2,7 @@
 
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/ui/components/actions/Button";
+import { cn } from "@/ui/utils/cn";
 import type { LeadCaptureTransitionVariant } from "../leadCaptureTransitions";
 import { ActionLink } from "./ActionLink";
 
@@ -23,7 +24,7 @@ export const LeadCaptureSuccessState = ({
 				aria-live="polite"
 				data-lead-enter={transitionVariant}
 				role="status"
-				className="lead-success-enter-from-top border-signal border-l-2 pl-3"
+				className={getMessageClassName(transitionVariant)}
 			>
 				<p className="text-m leading-6">
 					<span className="font-medium text-signal">Request received.</span>{" "}
@@ -49,3 +50,10 @@ export const LeadCaptureSuccessState = ({
 		</div>
 	</div>
 );
+
+function getMessageClassName(variant: LeadCaptureTransitionVariant) {
+	return cn(
+		"border-signal border-l-2 pl-3",
+		variant === "slideLeft" ? "lead-success-enter-from-left" : "lead-success-enter-from-top",
+	);
+}

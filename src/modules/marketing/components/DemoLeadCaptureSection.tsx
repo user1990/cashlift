@@ -12,7 +12,7 @@ const DEMO_BOOK_CARD_BACKGROUND_SRC = "/marketing/demo-book-card-bg.webp";
 
 const TRANSITION_PREVIEW_LABELS = {
 	slide300: "Slide 300",
-	slide400: "Slide 400",
+	slideLeft: "From left",
 } as const satisfies Record<LeadCaptureTransitionVariant, string>;
 
 export const DemoLeadCaptureSection = () => {

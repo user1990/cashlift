@@ -38,10 +38,10 @@ describe("LeadCaptureForm", () => {
 				buttonLabel="Book an audit walkthrough"
 				submitted
 				successDescription="We'll follow up to arrange the audit walkthrough."
-				transitionVariant="slide400"
+				transitionVariant="slideLeft"
 			/>,
 		);
 
-		expect(screen.getByRole("status")).toHaveAttribute("data-lead-enter", "slide400");
+		expect(screen.getByRole("status")).toHaveAttribute("data-lead-enter", "slideLeft");
 	});
 });
