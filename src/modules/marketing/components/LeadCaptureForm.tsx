@@ -28,7 +28,7 @@ export const LeadCaptureForm = ({
 	playId = 0,
 	submitted,
 	successDescription,
-	transitionVariant = "opacityFast",
+	transitionVariant = "slide300",
 }: LeadCaptureFormProps) => {
 	const [internalSubmitted, setInternalSubmitted] = useState(false);
 	const [nameAutoFocus, setNameAutoFocus] = useState(false);

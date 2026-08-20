@@ -11,11 +11,8 @@ import { LeadCaptureForm } from "./LeadCaptureForm";
 const DEMO_BOOK_CARD_BACKGROUND_SRC = "/marketing/demo-book-card-bg.webp";
 
 const TRANSITION_PREVIEW_LABELS = {
-	opacityFast: "Fade 180",
-	opacitySlow: "Fade 700",
-	slideFast: "Slide 240",
-	slideMid: "Slide 420",
-	slideSlow: "Slide 900",
+	slide300: "Slide 300",
+	slide400: "Slide 400",
 } as const satisfies Record<LeadCaptureTransitionVariant, string>;
 
 export const DemoLeadCaptureSection = () => {
@@ -57,18 +54,18 @@ export const DemoLeadCaptureSection = () => {
 						}}
 						onSuccess={() => {
 							setPlayId((currentPlayId) => currentPlayId + 1);
-							setPreviewTransition((variant) => variant ?? "opacityFast");
+							setPreviewTransition((variant) => variant ?? "slide300");
 							setSubmitted(true);
 						}}
 						playId={playId}
 						submitted={submitted}
 						successDescription="We'll follow up to arrange the audit walkthrough. You can explore the read-only workspace now."
-						transitionVariant={previewTransition ?? "opacityFast"}
+						transitionVariant={previewTransition ?? "slide300"}
 					/>
 				</div>
 			</Panel>
 
-			<div className="grid grid-cols-5 gap-2">
+			<div className="grid grid-cols-2 gap-2">
 				{LEAD_CAPTURE_TRANSITIONS.map((variant) => (
 					<Button
 						key={variant}
