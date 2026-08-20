@@ -6,16 +6,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import logo from "@/app/logo.svg";
-import type { WorkspaceExperienceContract, WorkspaceSection } from "../types";
+import type { WorkspaceExperienceContract } from "../types";
 import { WorkspaceAccountMenu } from "./WorkspaceAccountMenu";
 import { WorkspaceSidebarPanel } from "./WorkspaceSidebarPanel";
 
 type WorkspaceMobileNavProps = {
-	section: WorkspaceSection;
 	workspace: WorkspaceExperienceContract;
 };
 
-export const WorkspaceMobileNav = ({ section, workspace }: WorkspaceMobileNavProps) => {
+export const WorkspaceMobileNav = ({ workspace }: WorkspaceMobileNavProps) => {
 	const drawerId = useId();
 	const pathname = usePathname();
 	const [open, setOpen] = useState(false);
@@ -86,7 +85,6 @@ export const WorkspaceMobileNav = ({ section, workspace }: WorkspaceMobileNavPro
 					>
 						<WorkspaceSidebarPanel
 							onNavigate={closeDrawer}
-							section={section}
 							showAccountMenu={false}
 							showLogo={false}
 							workspace={workspace}
