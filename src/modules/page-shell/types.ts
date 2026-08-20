@@ -16,6 +16,20 @@ export type WorkspaceNavItem = {
 	priority?: boolean;
 };
 
+export type WorkspaceNavItemDefinition = {
+	icon: LucideIcon;
+	label: string;
+	path?: string;
+	priority?: boolean;
+	section: WorkspaceSection;
+	visible?: (basePath: string) => boolean;
+};
+
+export type WorkspaceNavGroup = {
+	id: string;
+	items: WorkspaceNavItem[];
+};
+
 export type WorkspaceExperience = CashLiftAppMode | "public-demo";
 
 export type WorkspaceExperienceContract = {

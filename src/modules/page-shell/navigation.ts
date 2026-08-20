@@ -1,63 +1,150 @@
 import {
 	BarChart3,
+	CircleDollarSign,
 	ClipboardCheck,
 	FileText,
 	Home,
 	ReceiptText,
 	Settings,
+	Sparkles,
+	TrendingUp,
 	UsersRound,
 	WalletCards,
 } from "lucide-react";
-import type { WorkspaceNavItem } from "./types";
+import type { WorkspaceNavGroup, WorkspaceNavItem, WorkspaceNavItemDefinition, WorkspaceSection } from "./types";
 
-const WORKSPACE_NAV_ITEMS = [
+const WORKSPACE_NAV_GROUPS = [
 	{
-		icon: Home,
-		label: "Overview",
-		priority: true,
-		section: "overview",
+		id: "home",
+		items: [
+			{
+				icon: Home,
+				label: "Overview",
+				priority: true,
+				section: "overview",
+			},
+			{
+				icon: Sparkles,
+				label: "Operating cockpit",
+				path: "explore",
+				section: "overview",
+				visible: (basePath) => basePath === "/dashboard",
+			},
+		],
 	},
 	{
-		icon: BarChart3,
-		label: "Cash Insights",
-		section: "cash",
+		id: "cash",
+		items: [
+			{
+				icon: BarChart3,
+				label: "Cash Insights",
+				section: "cash",
+			},
+			{
+				icon: TrendingUp,
+				label: "13-week Outlook",
+				section: "overview",
+			},
+		],
 	},
 	{
-		icon: FileText,
-		label: "Invoices",
-		section: "invoices",
+		id: "receivables",
+		items: [
+			{
+				icon: FileText,
+				label: "Invoices",
+				priority: true,
+				section: "invoices",
+			},
+			{
+				icon: CircleDollarSign,
+				label: "Overdue collections",
+				section: "invoices",
+			},
+		],
 	},
 	{
-		icon: ReceiptText,
-		label: "Vendors",
-		priority: true,
-		section: "vendors",
+		id: "spend",
+		items: [
+			{
+				icon: ClipboardCheck,
+				label: "Spend approvals",
+				priority: true,
+				section: "approvals",
+			},
+			{
+				icon: ReceiptText,
+				label: "Vendor bills & leaks",
+				priority: true,
+				section: "vendors",
+			},
+			{
+				icon: WalletCards,
+				label: "Team budgets",
+				section: "budgets",
+			},
+		],
 	},
 	{
-		icon: WalletCards,
-		label: "Budgets",
-		section: "budgets",
+		id: "company",
+		items: [
+			{
+				icon: UsersRound,
+				label: "Team",
+				section: "team",
+			},
+			{
+				icon: Settings,
+				label: "Settings",
+				section: "settings",
+			},
+		],
 	},
-	{
-		icon: ClipboardCheck,
-		label: "Approvals",
-		priority: true,
-		section: "approvals",
-	},
-	{
-		icon: UsersRound,
-		label: "Team",
-		section: "team",
-	},
-	{
-		icon: Settings,
-		label: "Settings",
-		section: "settings",
-	},
-] as const satisfies readonly Omit<WorkspaceNavItem, "href">[];
+] as const satisfies readonly WorkspaceNavGroupDefinition[];
+
+type WorkspaceNavGroupDefinition = {
+	id: string;
+	items: readonly WorkspaceNavItemDefinition[];
+};
+
+export const getWorkspaceNavGroups = (basePath: string): WorkspaceNavGroup[] =>
+	WORKSPACE_NAV_GROUPS.map((group) => ({
+		id: group.id,
+		items: group.items
+			.filter((item) => item.visible?.(basePath) ?? true)
+			.map((item) => buildWorkspaceNavItem(basePath, item)),
+	})).filter((group) => group.items.length > 0);
 
 export const getWorkspaceNavItems = (basePath: string): WorkspaceNavItem[] =>
-	WORKSPACE_NAV_ITEMS.map((item) => ({
-		...item,
-		href: item.section === "overview" ? basePath : `${basePath}/${item.section}`,
-	}));
+	getWorkspaceNavGroups(basePath).flatMap((group) => group.items);
+
+export const getActiveWorkspaceNavItem = (pathname: string, basePath: string): WorkspaceNavItem | undefined => {
+	const matches = getWorkspaceNavItems(basePath).filter(
+		({ href }) => pathname === href || (href !== basePath && pathname.startsWith(`${href}/`)),
+	);
+
+	return matches.sort((left, right) => right.href.length - left.href.length)[0];
+};
+
+export const getActiveWorkspaceSection = (pathname: string, basePath: string): WorkspaceSection =>
+	getActiveWorkspaceNavItem(pathname, basePath)?.section ?? "overview";
+
+export const isWorkspaceNavItemActive = (pathname: string, href: string, basePath: string): boolean =>
+	getActiveWorkspaceNavItem(pathname, basePath)?.href === href;
+
+const buildWorkspaceNavItem = (basePath: string, item: WorkspaceNavItemDefinition): WorkspaceNavItem => ({
+	...item,
+	href: resolveWorkspaceNavHref(basePath, item),
+});
+
+const resolveWorkspaceNavHref = (basePath: string, item: WorkspaceNavItemDefinition): string => {
+	if (item.path) {
+		return `${basePath}/${item.path}`;
+	}
+
+	if (item.section === "overview") {
+		return basePath;
+	}
+
+	return `${basePath}/${item.section}`;
+};
