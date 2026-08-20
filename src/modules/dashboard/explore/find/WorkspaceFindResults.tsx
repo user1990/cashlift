@@ -34,6 +34,22 @@ export const WorkspaceFindResults = ({ itemsCount, session }: WorkspaceFindResul
 
 	return (
 		<>
+			<div className="mb-3 flex flex-wrap items-center justify-between gap-3 px-1">
+				<p aria-live="polite" className="text-muted-foreground text-s">
+					{session.pending
+						? "Updating…"
+						: `${session.results.length} ${session.results.length === 1 ? "result" : "results"}`}
+				</p>
+
+				<button
+					className="inline-flex min-h-11 items-center text-m text-muted-foreground outline-none hover:text-panel-foreground focus-visible:ring-[3px] focus-visible:ring-primary/20"
+					onClick={session.clearAll}
+					type="button"
+				>
+					Clear all
+				</button>
+			</div>
+
 			<FindLoadingState columns glass visible={showSkeleton} />
 
 			{session.results.length > 0 && (

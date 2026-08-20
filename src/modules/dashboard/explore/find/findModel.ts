@@ -217,6 +217,43 @@ export const EMPTY_FIND_QUERY: FindQuery = {
 
 export const hasActiveFindFilters = (query: FindQuery) => Boolean(query.owner || query.status);
 
+export type FindExample = {
+	category: string;
+	hint?: string;
+	id: string;
+	label: string;
+	query?: string;
+};
+
+export const getFindExamples = (items: FindItem[], categoryMode: "kind" | "work", limit = 6): FindExample[] => {
+	const examples: FindExample[] = [];
+
+	for (const category of categoryMode === "kind" ? CATALOG_CATEGORY_IDS : ACTION_CATEGORY_IDS) {
+		if (category === "all") {
+			continue;
+		}
+
+		const match = items.find((item) => (categoryMode === "kind" ? item.kind : item.work) === category);
+
+		if (!match) {
+			continue;
+		}
+
+		examples.push({
+			category,
+			hint: match.title,
+			id: `example-${category}`,
+			label: categoryMode === "kind" ? KIND_LABELS[category as FindKind] : WORK_LABELS[category as FindWork],
+		});
+
+		if (examples.length >= limit) {
+			break;
+		}
+	}
+
+	return examples;
+};
+
 function itemMatchesFindQuery(item: FindItem, query: FindQuery, categoryMode: "kind" | "work") {
 	const categoryValue = categoryMode === "kind" ? item.kind : item.work;
 	const normalizedQuery = normalizeFindQuery(query.query);

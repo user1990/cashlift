@@ -14,6 +14,7 @@ type FindSearchFieldProps = {
 	onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
 	value: string;
 	glass?: boolean;
+	hideShortcut?: boolean;
 	onSelectSuggestion?: (suggestion: string) => void;
 	placeholder?: string;
 	suggestions?: string[];
@@ -26,6 +27,7 @@ export const FindSearchField = ({
 	onKeyDown,
 	value,
 	glass = false,
+	hideShortcut = false,
 	onSelectSuggestion,
 	placeholder = "Search invoices, vendors, spend requests…",
 	suggestions = [],
@@ -51,7 +53,8 @@ export const FindSearchField = ({
 				aria-expanded={suggestionsOpen}
 				autoComplete="off"
 				className={cn(
-					"h-12 w-full rounded-lg border py-3 pr-20 pl-10 text-l text-panel-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground focus:border-primary focus:ring-[3px] focus:ring-primary/20",
+					"h-12 w-full rounded-lg border py-3 text-l text-panel-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground focus:border-primary focus:ring-[3px] focus:ring-primary/20",
+					hideShortcut ? "pr-4 pl-10" : "pr-20 pl-10",
 					glass ? "border-white/30 bg-panel/35 backdrop-blur-xl" : "border-shell-border bg-shell-elevated",
 				)}
 				id={id}
@@ -72,9 +75,11 @@ export const FindSearchField = ({
 				value={value}
 			/>
 
-			<kbd className="pointer-events-none absolute top-1/2 right-3 hidden -translate-y-1/2 rounded-md border border-shell-border px-1.5 font-mono text-muted-foreground text-s sm:inline">
-				⌘K
-			</kbd>
+			{!hideShortcut && (
+				<kbd className="pointer-events-none absolute top-1/2 right-3 hidden -translate-y-1/2 rounded-md border border-shell-border px-1.5 font-mono text-muted-foreground text-s sm:inline">
+					⌘K
+				</kbd>
+			)}
 
 			{suggestionsOpen && onSelectSuggestion && (
 				<div
@@ -181,6 +186,64 @@ export const FindFilterButton = ({ children, onClick, selected = false }: FindFi
 	>
 		{children}
 	</button>
+);
+
+type FindCategoryChipProps = {
+	children: ReactNode;
+	onClick: () => void;
+	selected?: boolean;
+};
+
+export const FindCategoryChip = ({ children, onClick, selected = false }: FindCategoryChipProps) => (
+	<button
+		aria-pressed={selected}
+		className={cn(
+			"inline-flex min-h-9 shrink-0 cursor-pointer items-center rounded-full border px-3 text-m outline-none transition-[background-color,border-color,color] duration-150 focus-visible:ring-[3px] focus-visible:ring-primary/20 motion-reduce:transition-none",
+			selected
+				? "border-primary/40 bg-primary/15 font-semibold text-panel-foreground"
+				: "border-transparent text-shell-muted hover:bg-white/5 hover:text-panel-foreground",
+		)}
+		onClick={onClick}
+		type="button"
+	>
+		{children}
+	</button>
+);
+
+type FindShortcutFooterProps = {
+	className?: string;
+};
+
+export const FindShortcutFooter = ({ className }: FindShortcutFooterProps) => (
+	<div className={cn("flex flex-wrap items-center gap-x-5 gap-y-2 border-white/10 border-t px-4 py-3", className)}>
+		<FindShortcutHint keys={["↑", "↓"]} label="Navigate" />
+
+		<FindShortcutHint keys={["↵"]} label="Open page" />
+
+		<FindShortcutHint keys={["esc"]} label="Close" />
+	</div>
+);
+
+type FindShortcutHintProps = {
+	keys: string[];
+	label: string;
+};
+
+const FindShortcutHint = ({ keys, label }: FindShortcutHintProps) => (
+	<div className="inline-flex items-center gap-2 text-muted-foreground text-s">
+		<span className="inline-flex items-center gap-1">
+			{keys.map((key) => (
+				<kbd
+					className="inline-flex min-w-5 items-center justify-center rounded border border-shell-border px-1 font-mono text-[0.6875rem] leading-none"
+					key={key}
+				>
+					{key}
+				</kbd>
+			))}
+		</span>
+
+		<span>{label}</span>
+	</div>
 );
 
 type FindEmptyStateProps = {

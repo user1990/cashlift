@@ -5,8 +5,9 @@ import { buildDashboardViewModel } from "../view-model";
 import { buildExplorePresentation } from "./exploreModel";
 import { buildFindItems, hasActiveFindFilters } from "./find/findModel";
 import { useFindSession } from "./find/useFindSession";
-import { WorkspaceFindHeader } from "./find/WorkspaceFindHeader";
+import { WorkspaceFindCommandPalette } from "./find/WorkspaceFindCommandPalette";
 import { WorkspaceFindResults } from "./find/WorkspaceFindResults";
+import { WorkspaceFindTrigger } from "./find/WorkspaceFindTrigger";
 import { GlassCard, GlassVariantProvider } from "./GlassCard";
 import { OperatingCockpitDashboard } from "./OperatingCockpitDashboard";
 import { PrototypeFrame } from "./PrototypeFrame";
@@ -33,11 +34,11 @@ export const ExplorePrototype = ({ dataset }: ExplorePrototypeProps) => {
 			<div className="space-y-6">
 				<PrototypeFrame onVariantChange={setVariant} variant={variant} />
 
-				<GlassCard atmosphere="status" intensity="active">
-					<WorkspaceFindHeader items={items} session={session} />
-				</GlassCard>
+				<WorkspaceFindTrigger onOpen={session.openPalette} />
 
-				{findActive ? (
+				<WorkspaceFindCommandPalette items={items} session={session} />
+
+				{findActive && !session.open ? (
 					<GlassCard atmosphere="find">
 						<WorkspaceFindResults itemsCount={items.length} session={session} />
 					</GlassCard>
