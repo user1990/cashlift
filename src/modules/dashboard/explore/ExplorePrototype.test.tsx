@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { describe, expect, it } from "vitest";
@@ -31,6 +31,25 @@ describe("ExplorePrototype", () => {
 		expect(screen.getByRole("heading", { name: dashboard.actionInbox[0]?.title })).toBeVisible();
 		expect(screen.getByRole("heading", { name: "13-week Cash Outlook" })).toBeVisible();
 		expect(screen.getByRole("combobox", { name: /search company workspace/i })).toBeVisible();
+		expect(within(screen.getByRole("group", { name: "Glass card look" })).getAllByRole("button")).toHaveLength(5);
+		expect(screen.getByRole("button", { name: "Liquid" })).toHaveAttribute("aria-pressed", "true");
+	});
+
+	it("switches glass card looks from the prototype header", async () => {
+		const user = userEvent.setup();
+
+		renderPrototype();
+
+		await user.click(screen.getByRole("button", { name: "Frost" }));
+
+		expect(screen.getByRole("button", { name: "Frost" })).toHaveAttribute("aria-pressed", "true");
+		expect(screen.getByRole("button", { name: "Liquid" })).toHaveAttribute("aria-pressed", "false");
+		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(dashboard.cashPositionHeadline);
+
+		await user.click(screen.getByRole("button", { name: "Shift" }));
+
+		expect(screen.getByRole("button", { name: "Shift" })).toHaveAttribute("aria-pressed", "true");
+		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(dashboard.cashPositionHeadline);
 	});
 
 	it("finds workspace items from the header search and filters", async () => {

@@ -1,8 +1,11 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { createContext, type ReactNode, useContext } from "react";
 import { cn } from "@/ui/utils/cn";
+import { type CockpitAtmosphere, DEFAULT_GLASS_VARIANT, GLASS_VARIANTS, type GlassVariantId } from "./glassVariants";
 
 type GlassCardProps = {
-	atmosphereClassName: string;
+	atmosphere: CockpitAtmosphere;
 	children: ReactNode;
 	as?: "article" | "div" | "section";
 	className?: string;
@@ -10,26 +13,32 @@ type GlassCardProps = {
 	intensity?: "active" | "quiet";
 };
 
+const GlassVariantContext = createContext<GlassVariantId>(DEFAULT_GLASS_VARIANT);
+
+export const GlassVariantProvider = ({ children, variant }: { children: ReactNode; variant: GlassVariantId }) => (
+	<GlassVariantContext.Provider value={variant}>{children}</GlassVariantContext.Provider>
+);
+
 export const GlassCard = ({
 	as = "section",
-	atmosphereClassName,
+	atmosphere,
 	children,
 	className,
 	contentClassName,
 	intensity = "quiet",
 }: GlassCardProps) => {
+	const variant = useContext(GlassVariantContext);
+	const look = GLASS_VARIANTS[variant];
 	const cardClassName = cn(
-		"relative isolate overflow-hidden rounded-2xl border shadow-shell",
+		"relative isolate overflow-hidden rounded-2xl border ease transition-[border-color,box-shadow] duration-300 motion-reduce:transition-none",
+		look.cardClassName,
 		intensity === "active" ? "border-primary/30" : "border-white/10",
 		className,
 	);
-	const overlayClassName =
-		intensity === "active"
-			? "absolute inset-0 bg-panel/35 backdrop-blur-xl"
-			: "absolute inset-0 bg-panel/45 backdrop-blur-xl";
+	const overlayClassName = intensity === "active" ? look.overlayActiveClassName : look.overlayQuietClassName;
 	const content = (
 		<>
-			<div aria-hidden className={cn("absolute inset-0 bg-cover bg-no-repeat", atmosphereClassName)} />
+			<div aria-hidden className={cn("absolute inset-0 bg-cover bg-no-repeat", look.atmosphereClassName(atmosphere))} />
 
 			<div aria-hidden className={overlayClassName} />
 
