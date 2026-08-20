@@ -45,7 +45,7 @@ export const LeadCaptureForm = ({ buttonLabel, successDescription, successTitle 
 	}
 
 	return (
-		<form onSubmit={handleSubmit(submitForm)} className="flex flex-1 flex-col gap-3">
+		<form onSubmit={handleSubmit(submitForm)} className="flex flex-col gap-3">
 			<ControlledTextField
 				autoComplete="name"
 				autoFocus={nameAutoFocus}
@@ -70,7 +70,7 @@ export const LeadCaptureForm = ({ buttonLabel, successDescription, successTitle 
 				placeholder="Studio Nova…"
 			/>
 
-			<Button type="submit" variant="primary" size="large" className="mt-auto w-full">
+			<Button type="submit" variant="primary" size="large" className="w-full">
 				{buttonLabel}
 			</Button>
 		</form>
