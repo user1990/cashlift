@@ -6,7 +6,6 @@ import { getCashActionDestination } from "../cashActionDestination";
 import { CashOutlookChart } from "../components/CashOutlookChart";
 import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
-import { COCKPIT_ATMOSPHERES } from "./atmospheres";
 import { CASH_ACTION_NEXT_STEP, CASH_ACTION_WORK, type ExplorePresentation, formatExploreMoney } from "./exploreModel";
 import { ExploreKicker, ExploreLink, ExploreMoney, PriorityCue, SupportNoteList } from "./exploreUi";
 import { GlassCard } from "./GlassCard";
@@ -27,7 +26,7 @@ export const OperatingCockpitDashboard = ({ basePath, dashboard, presentation }:
 
 	return (
 		<div className="space-y-4 xl:space-y-5">
-			<GlassCard atmosphereClassName={COCKPIT_ATMOSPHERES.status}>
+			<GlassCard atmosphere="status">
 				<div className="flex flex-wrap items-start justify-between gap-3">
 					<p className="text-muted-foreground text-s">
 						{dashboard.companyName} · {dashboard.dateRangeLabel}
@@ -79,12 +78,7 @@ export const OperatingCockpitDashboard = ({ basePath, dashboard, presentation }:
 			</GlassCard>
 
 			<section className="grid items-stretch gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:gap-5">
-				<GlassCard
-					atmosphereClassName={COCKPIT_ATMOSPHERES.priority}
-					className="h-full"
-					contentClassName="flex h-full flex-col"
-					intensity="active"
-				>
+				<GlassCard atmosphere="priority" className="h-full" contentClassName="flex h-full flex-col" intensity="active">
 					<div className="flex flex-wrap items-center gap-x-3 gap-y-1">
 						{primaryAction ? (
 							<PriorityCue priority={primaryAction.priority} />
@@ -131,7 +125,7 @@ export const OperatingCockpitDashboard = ({ basePath, dashboard, presentation }:
 				</GlassCard>
 
 				<div className="grid min-w-0 gap-4 xl:gap-5">
-					<GlassCard atmosphereClassName={COCKPIT_ATMOSPHERES.queue}>
+					<GlassCard atmosphere="queue">
 						<ExploreKicker>Priorities</ExploreKicker>
 
 						<h2 className="mt-1 text-panel-foreground text-xl+">What matters next</h2>
@@ -147,7 +141,7 @@ export const OperatingCockpitDashboard = ({ basePath, dashboard, presentation }:
 						)}
 					</GlassCard>
 
-					<GlassCard atmosphereClassName={COCKPIT_ATMOSPHERES.outlook}>
+					<GlassCard atmosphere="outlook">
 						<ExploreKicker>Future</ExploreKicker>
 
 						<h2 className="mt-1 text-panel-foreground text-xl+">13-week Cash Outlook</h2>
@@ -170,7 +164,7 @@ export const OperatingCockpitDashboard = ({ basePath, dashboard, presentation }:
 				</div>
 			</section>
 
-			<GlassCard atmosphereClassName={COCKPIT_ATMOSPHERES.support}>
+			<GlassCard atmosphere="support">
 				<ExploreKicker>Supporting work</ExploreKicker>
 
 				<h2 className="mt-1 text-panel-foreground text-xl+">Useful context, kept quieter</h2>
