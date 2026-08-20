@@ -22,6 +22,7 @@ const LazyRechartsAreaChart = lazyRechartsComponent("AreaChart");
 const LazyRechartsBar = lazyRechartsComponent("Bar");
 const LazyRechartsBarChart = lazyRechartsComponent("BarChart");
 const LazyRechartsCartesianGrid = lazyRechartsComponent("CartesianGrid");
+const LazyRechartsReferenceLine = lazyRechartsComponent("ReferenceLine");
 const LazyRechartsResponsiveContainer = lazyRechartsComponent("ResponsiveContainer");
 const LazyRechartsTooltip = lazyRechartsComponent("Tooltip");
 const LazyRechartsXAxis = lazyRechartsComponent("XAxis");
@@ -44,6 +45,13 @@ export const RechartsCartesianGrid = (props: RechartsComponentProps) =>
 		stroke: "var(--border)",
 		strokeOpacity: 0.8,
 		vertical: false,
+		...props,
+	});
+
+export const RechartsReferenceLine = (props: RechartsComponentProps) =>
+	createElement(LazyRechartsReferenceLine, {
+		stroke: "var(--warning)",
+		strokeDasharray: "4 4",
 		...props,
 	});
 

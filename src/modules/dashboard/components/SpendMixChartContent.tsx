@@ -1,4 +1,3 @@
-import { useId } from "react";
 import { formatCurrencyDollars } from "@/modules/money/format";
 import type { SpendChartDataPoint } from "../types";
 import { ChartFrame } from "./ChartFrame";
@@ -17,30 +16,13 @@ type SpendMixChartContentProps = {
 };
 
 export const SpendMixChartContent = ({ chartData }: SpendMixChartContentProps) => {
-	const chartId = useId().replaceAll(":", "");
 	const minimumValue = Math.min(...chartData.map(({ remaining }) => remaining), 0);
 	const maximumValue = Math.max(...chartData.flatMap(({ remaining, used }) => [remaining, used]), 1);
-	const budgetRemainingFillId = `budget-remaining-fill-${chartId}`;
-	const budgetUsedFillId = `budget-used-fill-${chartId}`;
 
 	return (
 		<ChartFrame>
 			<RechartsResponsiveContainer>
 				<RechartsBarChart data={chartData}>
-					<defs>
-						<linearGradient id={budgetUsedFillId} x1="0" x2="0" y1="0" y2="1">
-							<stop offset="0%" stopColor="var(--primary)" />
-
-							<stop offset="100%" stopColor="var(--primary-muted)" />
-						</linearGradient>
-
-						<linearGradient id={budgetRemainingFillId} x1="0" x2="0" y1="0" y2="1">
-							<stop offset="0%" stopColor="var(--highlight)" />
-
-							<stop offset="100%" stopColor="var(--highlight-muted)" />
-						</linearGradient>
-					</defs>
-
 					<RechartsCartesianGrid />
 
 					<RechartsXAxis dataKey="team" />
@@ -49,12 +31,12 @@ export const SpendMixChartContent = ({ chartData }: SpendMixChartContentProps) =
 
 					<RechartsTooltip formatter={formatTooltipCurrency} />
 
-					<RechartsBar animationDuration={650} dataKey="used" fill={`url(#${budgetUsedFillId})`} name="Budget used" />
+					<RechartsBar animationDuration={650} dataKey="used" fill="var(--primary)" name="Budget used" />
 
 					<RechartsBar
 						animationDuration={650}
 						dataKey="remaining"
-						fill={`url(#${budgetRemainingFillId})`}
+						fill="var(--shell-muted)"
 						name="Remaining budget (negative = over budget)"
 					/>
 				</RechartsBarChart>

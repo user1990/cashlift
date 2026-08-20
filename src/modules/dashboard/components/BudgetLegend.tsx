@@ -6,7 +6,7 @@ export const BudgetLegend = () => (
 		</span>
 
 		<span className="inline-flex items-center gap-2">
-			<span className="size-3 rounded-full bg-highlight" />
+			<span className="size-3 rounded-full bg-shell-muted" />
 			Remaining
 		</span>
 	</div>

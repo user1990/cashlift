@@ -12,12 +12,14 @@ type OverviewHeaderProps = {
 
 export const OverviewHeader = ({ dashboard, dateRange, onDateRangeChange }: OverviewHeaderProps) => (
 	<header className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-		<div>
-			<h1 className="font-semibold text-3xl+ text-primary tracking-normal">
-				Good morning, {dashboard.greetingName} <span aria-hidden>👋</span>
+		<div className="min-w-0">
+			<h1 className="font-semibold text-3xl+ text-panel-foreground tracking-normal">
+				{dashboard.cashPositionHeadline}
 			</h1>
 
-			<p className="mt-1 text-m+ text-shell-muted">Here’s your cash and spend overview.</p>
+			<p className="mt-1 text-m+ text-shell-muted">
+				{dashboard.companyName} · {dashboard.dateRangeLabel}
+			</p>
 		</div>
 
 		<OverviewDateRangePicker

@@ -3,13 +3,15 @@ import { getVisibleCashActions } from "@/modules/cash-actions/utils";
 import { getEndingBalance } from "@/modules/cash-outlook/utils";
 import type { CompanyRole } from "@/modules/company-roles/types";
 import { getInvoiceRiskTotal, getUpcomingInvoiceTotal, isInvoiceOverdue } from "@/modules/invoices/utils";
-import { centsToDollars } from "@/modules/money/format";
+import { centsToDollars, formatPreciseCompactCurrency } from "@/modules/money/format";
+import type { MoneyCents } from "@/modules/money/types";
 import type { SpendRequest } from "@/modules/spend-requests/types";
 import { getPendingApprovalCount, getSpendRequestCashImpact } from "@/modules/spend-requests/utils";
 import { getVendorLeakSavings, isVendorLeak } from "@/modules/subscriptions/utils";
 import { getCashBufferRisk, getRunwayDays } from "@/modules/workspace/cash";
 import { getDueVendorBills, getUpcomingOutflowTotal } from "@/modules/workspace/outflows";
 import type { FinancialDataset } from "@/modules/workspace/types";
+import { formatDashboardDate } from "./overviewDateRangeLabel";
 
 type BuildDashboardViewModelParams = {
 	dataset: FinancialDataset;
@@ -58,21 +60,36 @@ export const buildDashboardViewModel = ({
 		dataset.forecast.length > 0
 			? getEndingBalance(dataset.forecast[dataset.forecast.length - 1])
 			: dataset.profile.cashBalanceCents;
+	const lowestProjectedCash = getLowestProjectedCash(dataset.forecast);
+	const cashBufferTargetCents = dataset.profile.cashBufferTargetCents;
+	const cashAvailableCents = dataset.profile.cashBalanceCents;
+	const bufferRiskCents = getCashBufferRisk(bufferDataset, date);
+	const invoiceRiskCents = getInvoiceRiskTotal(dataset.invoices, date);
 	const primaryFinanceUser =
 		dataset.teamMembers.find((member) => member.role === "owner-finance") ?? dataset.teamMembers[0];
 
 	return {
 		actionInbox: getVisibleCashActions(dataset.cashActions, role),
 		budgetRows,
-		cashAtRiskCents: getCashBufferRisk(bufferDataset, date) + getInvoiceRiskTotal(dataset.invoices, date),
-		cashAvailableCents: dataset.profile.cashBalanceCents,
+		bufferRiskCents,
+		cashAtRiskCents: bufferRiskCents + invoiceRiskCents,
+		cashAvailableCents,
+		cashBufferTargetCents,
+		cashPositionHeadline: getCashPositionHeadline({
+			availableCents: cashAvailableCents,
+			bufferTargetCents: cashBufferTargetCents,
+			lowestProjectedCashCents: lowestProjectedCash?.cents,
+			lowestProjectedCashDate: lowestProjectedCash?.date,
+		}),
 		companyName: dataset.profile.name,
 		dateRangeLabel: getDateRangeLabel(dataset.forecast),
 		dueVendorBills,
 		endingCashBalanceCents,
 		forecastChartData,
 		greetingName: primaryFinanceUser?.name ?? dataset.profile.name,
-		invoiceRiskCents: getInvoiceRiskTotal(dataset.invoices, date),
+		invoiceRiskCents,
+		lowestProjectedCashCents: lowestProjectedCash?.cents,
+		lowestProjectedCashDate: lowestProjectedCash?.date,
 		overdueInvoices,
 		pendingApprovalCount: getPendingApprovalCount(dataset.spendRequests),
 		pendingApprovals: pendingApprovals.map((request) => withCashImpact(request, dataset)),
@@ -93,17 +110,61 @@ const withCashImpact = (request: SpendRequest, dataset: FinancialDataset) => ({
 	cashAfterApprovalCents: getSpendRequestCashImpact(request, dataset),
 });
 
-const DATE_RANGE_FORMATTER = new Intl.DateTimeFormat("en-US", { day: "numeric", month: "short" });
-
 function getDateRangeLabel(forecast: FinancialDataset["forecast"]) {
 	if (forecast.length === 0) {
 		return "Current period";
 	}
 
-	const startDate = new Date(`${forecast[0].date}T00:00:00`);
 	const endDate = new Date(`${forecast[forecast.length - 1].date}T00:00:00`);
 
-	return `${DATE_RANGE_FORMATTER.format(startDate)} - ${DATE_RANGE_FORMATTER.format(endDate)}, ${endDate.getFullYear()}`;
+	return `${formatDashboardDate(forecast[0].date)} - ${formatDashboardDate(forecast[forecast.length - 1].date)}, ${endDate.getFullYear()}`;
+}
+
+function getLowestProjectedCash(forecast: FinancialDataset["forecast"]) {
+	if (forecast.length === 0) {
+		return;
+	}
+
+	return forecast.reduce(
+		(lowest, point) => {
+			const cents = getEndingBalance(point);
+
+			if (cents < lowest.cents) {
+				return { cents, date: point.date };
+			}
+
+			return lowest;
+		},
+		{ cents: getEndingBalance(forecast[0]), date: forecast[0].date },
+	);
+}
+
+function getCashPositionHeadline({
+	availableCents,
+	bufferTargetCents,
+	lowestProjectedCashCents,
+	lowestProjectedCashDate,
+}: {
+	availableCents: MoneyCents;
+	bufferTargetCents: MoneyCents;
+	lowestProjectedCashCents?: MoneyCents;
+	lowestProjectedCashDate?: string;
+}) {
+	const buffer = formatPreciseCompactCurrency(bufferTargetCents);
+
+	if (lowestProjectedCashDate !== undefined && lowestProjectedCashCents !== undefined) {
+		if (lowestProjectedCashCents < bufferTargetCents) {
+			return `Cash falls below your ${buffer} buffer on ${formatDashboardDate(lowestProjectedCashDate)}`;
+		}
+
+		return `Cash stays above the ${buffer} buffer; lowest week is ${formatPreciseCompactCurrency(lowestProjectedCashCents)} on ${formatDashboardDate(lowestProjectedCashDate)}`;
+	}
+
+	if (availableCents < bufferTargetCents) {
+		return `Cash on hand is ${formatPreciseCompactCurrency(availableCents)}, below the ${buffer} buffer`;
+	}
+
+	return `Cash on hand is ${formatPreciseCompactCurrency(availableCents)} against a ${buffer} buffer`;
 }
 
 function getDefaultDashboardDate(dataset: FinancialDataset) {
