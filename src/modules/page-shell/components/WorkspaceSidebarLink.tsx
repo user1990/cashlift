@@ -5,16 +5,18 @@ import type { WorkspaceNavItem } from "../types";
 type WorkspaceSidebarLinkProps = {
 	item: WorkspaceNavItem;
 	active?: boolean;
+	onNavigate?: () => void;
 };
 
-export const WorkspaceSidebarLink = ({ active = false, item }: WorkspaceSidebarLinkProps) => {
+export const WorkspaceSidebarLink = ({ active = false, item, onNavigate }: WorkspaceSidebarLinkProps) => {
 	const Icon = item.icon;
 
 	return (
 		<Link
 			aria-current={active ? "page" : undefined}
-			href={item.href}
 			className={getWorkspaceSidebarLinkClassName(active)}
+			href={item.href}
+			onClick={onNavigate}
 			prefetch={item.priority ? true : undefined}
 		>
 			<WorkspaceActiveIndicator active={active} />
