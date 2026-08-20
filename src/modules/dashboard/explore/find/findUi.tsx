@@ -52,7 +52,7 @@ export const FindSearchField = ({
 				autoComplete="off"
 				className={cn(
 					"h-12 w-full rounded-lg border py-3 pr-20 pl-10 text-l text-panel-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground focus:border-primary focus:ring-[3px] focus:ring-primary/20",
-					glass ? "border-white/10 bg-panel/35 backdrop-blur-xl" : "border-shell-border bg-shell-elevated",
+					glass ? "border-white/30 bg-panel/35 backdrop-blur-xl" : "border-shell-border bg-shell-elevated",
 				)}
 				id={id}
 				onChange={(event) => onChange(event.currentTarget.value)}
