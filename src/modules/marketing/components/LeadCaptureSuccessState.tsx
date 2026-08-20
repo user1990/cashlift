@@ -20,16 +20,21 @@ export const LeadCaptureSuccessState = ({
 	transitionVariant = "opacityFast",
 }: LeadCaptureSuccessStateProps) => (
 	<div className="flex h-full flex-col gap-3">
-		<div aria-atomic="true" aria-live="polite" role="status" className="flex min-h-0 flex-1 flex-col gap-3">
-			<div aria-hidden className={cn("h-px w-10 bg-signal", getItemClassName(transitionVariant, visible, 0))} />
-
-			<p className={cn("text-m leading-6", getItemClassName(transitionVariant, visible, 1))}>
-				<span className="font-medium text-signal">Received.</span>{" "}
-				<span className="text-shell-muted">{description}</span>
-			</p>
+		<div className="flex min-h-0 flex-1 flex-col">
+			<div
+				aria-atomic="true"
+				aria-live="polite"
+				role="status"
+				className={cn("border-signal border-l-2 pl-3", getItemClassName(transitionVariant, visible, 0))}
+			>
+				<p className="text-m leading-6">
+					<span className="font-medium text-signal">Request received.</span>{" "}
+					<span className="text-shell-muted">{description}</span>
+				</p>
+			</div>
 		</div>
 
-		<div className={cn("mt-auto grid gap-2", getItemClassName(transitionVariant, visible, 2))}>
+		<div className={cn("mt-auto grid gap-2", getItemClassName(transitionVariant, visible, 1))}>
 			<ActionLink href="/demo/workspace" variant="primary" className="w-full">
 				Explore live demo
 			</ActionLink>
@@ -42,7 +47,7 @@ export const LeadCaptureSuccessState = ({
 	</div>
 );
 
-function getItemClassName(variant: LeadCaptureTransitionVariant, visible: boolean, itemIndex: 0 | 1 | 2) {
+function getItemClassName(variant: LeadCaptureTransitionVariant, visible: boolean, itemIndex: 0 | 1) {
 	const preset = LEAD_CAPTURE_TRANSITION_PRESETS[variant];
 	const slide = preset.kind === "slide";
 

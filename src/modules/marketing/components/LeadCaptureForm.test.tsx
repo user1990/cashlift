@@ -22,7 +22,7 @@ describe("LeadCaptureForm", () => {
 		await user.click(screen.getByRole("button", { name: "Book an audit walkthrough" }));
 
 		expect(screen.getByRole("status")).toHaveTextContent(
-			"Received. We'll follow up to arrange the audit walkthrough. You can explore the read-only workspace now.",
+			"Request received. We'll follow up to arrange the audit walkthrough. You can explore the read-only workspace now.",
 		);
 		expect(screen.getByRole("link", { name: "Explore live demo" })).toBeInTheDocument();
 		expect(screen.queryByRole("textbox", { name: "Name" })).not.toBeInTheDocument();
