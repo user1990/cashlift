@@ -1,4 +1,5 @@
 import { type KeyboardEvent, useDeferredValue, useEffect, useRef, useState } from "react";
+import { getFindOptionId } from "./findDom";
 import {
 	type FindItem,
 	type FindQuery,
@@ -7,7 +8,6 @@ import {
 	getFindSuggestions,
 	hasActiveFindFilters,
 } from "./findModel";
-import { getFindOptionId } from "./findUi";
 import { useFindQueryState } from "./useFindQueryState";
 
 const MAX_RECENT_SEARCHES = 5;
