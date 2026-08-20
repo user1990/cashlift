@@ -8,30 +8,16 @@ import { ControlledEmailAutocompleteField } from "@/ui/components/forms/Controll
 import { ControlledTextField } from "@/ui/components/forms/ControlledTextField";
 import { cn } from "@/ui/utils/cn";
 import { LEAD_CAPTURE_SCHEMA, type LeadCaptureFormValues } from "../schemas";
-import { type LeadCaptureSuccessLayout, LeadCaptureSuccessState } from "./LeadCaptureSuccessState";
+import { LeadCaptureSuccessState } from "./LeadCaptureSuccessState";
 
 type LeadCaptureFormProps = {
 	buttonLabel: string;
 	successDescription: string;
-	successTitle: string;
-	onReset?: () => void;
-	onSuccess?: () => void;
-	submitted?: boolean;
-	successLayout?: LeadCaptureSuccessLayout;
 };
 
-export const LeadCaptureForm = ({
-	buttonLabel,
-	onReset,
-	onSuccess,
-	submitted,
-	successDescription,
-	successLayout = "plain",
-	successTitle,
-}: LeadCaptureFormProps) => {
-	const [internalSubmitted, setInternalSubmitted] = useState(false);
+export const LeadCaptureForm = ({ buttonLabel, successDescription }: LeadCaptureFormProps) => {
+	const [submitted, setSubmitted] = useState(false);
 	const [nameAutoFocus, setNameAutoFocus] = useState(false);
-	const successVisible = submitted ?? internalSubmitted;
 	const form = useForm<LeadCaptureFormValues>({
 		defaultValues: {
 			company: "",
@@ -45,32 +31,23 @@ export const LeadCaptureForm = ({
 
 	const submitForm = () => {
 		reset();
-		onSuccess?.();
-
-		if (submitted === undefined) {
-			setInternalSubmitted(true);
-		}
+		setSubmitted(true);
 	};
 
 	const resetForm = () => {
 		setNameAutoFocus(true);
-		onReset?.();
-
-		if (submitted === undefined) {
-			setInternalSubmitted(false);
-		}
-
+		setSubmitted(false);
 		reset();
 	};
 
 	return (
 		<div className="relative">
 			<form
-				aria-hidden={successVisible || undefined}
+				aria-hidden={submitted || undefined}
 				onSubmit={handleSubmit(submitForm)}
 				className={cn(
 					"ease flex flex-col gap-3 transition-[opacity] duration-150 motion-reduce:transition-none",
-					successVisible && "pointer-events-none opacity-0",
+					submitted && "pointer-events-none opacity-0",
 				)}
 			>
 				<ControlledTextField
@@ -103,18 +80,13 @@ export const LeadCaptureForm = ({
 			</form>
 
 			<div
-				aria-hidden={!successVisible || undefined}
+				aria-hidden={!submitted || undefined}
 				className={cn(
 					"ease absolute inset-0 transition-[opacity] duration-150 motion-reduce:transition-none",
-					successVisible ? "opacity-100" : "pointer-events-none opacity-0",
+					submitted ? "opacity-100" : "pointer-events-none opacity-0",
 				)}
 			>
-				<LeadCaptureSuccessState
-					description={successDescription}
-					layout={successLayout}
-					onReset={resetForm}
-					title={successTitle}
-				/>
+				<LeadCaptureSuccessState description={successDescription} onReset={resetForm} />
 			</div>
 		</div>
 	);
