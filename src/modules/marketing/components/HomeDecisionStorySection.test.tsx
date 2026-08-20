@@ -32,11 +32,17 @@ const HOME_ACTIONS_MOCK = [
 ] as const;
 
 describe("HomeDecisionStorySection", () => {
-	it("shows ranked cash decisions in priority order", () => {
+	it("shows ranked cash decisions with their titles and impacts", () => {
 		render(<HomeDecisionStorySection actions={[...HOME_ACTIONS_MOCK]} />);
 
 		expect(screen.getAllByRole("heading", { level: 3 }).map(({ textContent }) => textContent)).toEqual(
 			HOME_ACTIONS_MOCK.map((action) => action.type),
 		);
+		expect(screen.getByText(HOME_ACTIONS_MOCK[0].title, { exact: false })).toBeInTheDocument();
+		expect(screen.getByText(HOME_ACTIONS_MOCK[0].impact)).toBeInTheDocument();
+		expect(screen.getByText(HOME_ACTIONS_MOCK[1].title, { exact: false })).toBeInTheDocument();
+		expect(screen.getByText(HOME_ACTIONS_MOCK[1].impact)).toBeInTheDocument();
+		expect(screen.getByText(HOME_ACTIONS_MOCK[2].title, { exact: false })).toBeInTheDocument();
+		expect(screen.getByText(HOME_ACTIONS_MOCK[2].impact)).toBeInTheDocument();
 	});
 });
