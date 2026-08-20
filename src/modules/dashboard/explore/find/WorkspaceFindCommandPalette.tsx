@@ -221,8 +221,6 @@ const FindExampleRow = ({
 					{example.hint && <span className="mt-0.5 block truncate text-muted-foreground text-s">{example.hint}</span>}
 				</span>
 			</span>
-
-			{example.category !== "all" && <span className="shrink-0 text-muted-foreground text-s">Filter</span>}
 		</button>
 	</div>
 );
