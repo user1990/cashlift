@@ -3,7 +3,7 @@ import { WorkspacePage } from "@/modules/page-shell/components/WorkspacePage";
 
 export const metadata: Metadata = {
 	title: "Today’s CashLift — CashLift",
-	description: "Daily cash action inbox for approvals, collections, vendor leaks, and cash buffer decisions.",
+	description: "Liquid-glass operating cockpit with command search, cash position, and next actions.",
 };
 
 export default async function DashboardHome() {

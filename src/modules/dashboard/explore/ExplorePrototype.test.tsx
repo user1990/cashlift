@@ -37,7 +37,6 @@ describe("ExplorePrototype", () => {
 		expect(screen.getByRole("heading", { name: dashboard.actionInbox[0]?.title })).toBeVisible();
 		expect(screen.getByRole("heading", { name: "13-week Cash Outlook" })).toBeVisible();
 		expect(screen.getByRole("button", { name: /search for anything in this workspace/i })).toBeVisible();
-		expect(screen.getByText("Operating cockpit")).toBeVisible();
 	});
 
 	it("opens the command palette with the search trigger and keyboard shortcut", async () => {

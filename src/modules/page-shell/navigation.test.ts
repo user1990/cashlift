@@ -8,7 +8,6 @@ describe("workspace navigation", () => {
 		expect(groups.map((group) => group.id)).toEqual(["home", "cash", "receivables", "spend", "company"]);
 		expect(getWorkspaceNavItems("/dashboard").map((item) => item.label)).toEqual([
 			"Overview",
-			"Operating cockpit",
 			"Cash Insights",
 			"13-week Outlook",
 			"Invoices",
@@ -21,12 +20,7 @@ describe("workspace navigation", () => {
 		]);
 	});
 
-	it("hides the operating cockpit shortcut outside the dashboard workspace", () => {
-		expect(getWorkspaceNavItems("/demo/workspace").map((item) => item.label)).not.toContain("Operating cockpit");
-	});
-
 	it("prefers the most specific active destination for nested routes", () => {
-		expect(getActiveWorkspaceNavItem("/dashboard/explore", "/dashboard")?.label).toBe("Operating cockpit");
 		expect(getActiveWorkspaceNavItem("/dashboard/invoices", "/dashboard")?.label).toBe("Invoices");
 		expect(getActiveWorkspaceNavItem("/dashboard", "/dashboard")?.label).toBe("Overview");
 	});
