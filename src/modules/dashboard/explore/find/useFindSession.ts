@@ -17,6 +17,7 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work")
 	const [recentSearches, setRecentSearches] = useState<string[]>([]);
 	const [selectedId, setSelectedId] = useState<string>();
 	const [filtersOpen, setFiltersOpen] = useState(false);
+	const [open, setOpen] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const queryKey = [query.category, query.owner, query.query, query.status].join("\0");
 	const deferredQueryKey = useDeferredValue(queryKey);
@@ -33,11 +34,14 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work")
 	const selectedIndex = results.findIndex((item) => item.id === selectedId);
 	const selectedItem = selectedIndex >= 0 ? results[selectedIndex] : undefined;
 
+	const openPalette = () => setOpen(true);
+	const closePalette = () => setOpen(false);
+
 	useEffect(() => {
 		const onWindowKeyDown = (event: globalThis.KeyboardEvent) => {
 			if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
 				event.preventDefault();
-				inputRef.current?.focus();
+				setOpen(true);
 			}
 		};
 
@@ -45,6 +49,19 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work")
 
 		return () => window.removeEventListener("keydown", onWindowKeyDown);
 	}, []);
+
+	useEffect(() => {
+		if (!open) {
+			return;
+		}
+
+		const frame = requestAnimationFrame(() => {
+			inputRef.current?.focus();
+			inputRef.current?.select();
+		});
+
+		return () => cancelAnimationFrame(frame);
+	}, [open]);
 
 	const rememberQuery = (value: string) => {
 		const nextQuery = value.trim();
@@ -78,13 +95,13 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work")
 			event.preventDefault();
 			rememberQuery(query.query);
 			activateFindItem(selectedItem);
+			closePalette();
 			return;
 		}
 
 		if (event.key === "Escape") {
 			event.preventDefault();
-			updateQuery({ query: "" });
-			setSelectedId(undefined);
+			closePalette();
 		}
 	};
 
@@ -92,10 +109,13 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work")
 		applySearch,
 		clearAll,
 		clearFilters,
+		closePalette,
 		filtersOpen,
 		handleSearchKeyDown,
 		hasFilters: hasActiveFindFilters(query),
 		inputRef,
+		open,
+		openPalette,
 		owners,
 		pending,
 		query,
@@ -103,6 +123,7 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work")
 		results,
 		selectedId,
 		setFiltersOpen,
+		setOpen,
 		setSelectedId,
 		statuses,
 		suggestions,

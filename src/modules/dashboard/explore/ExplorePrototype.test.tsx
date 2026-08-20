@@ -22,6 +22,12 @@ describe("ExplorePrototype", () => {
 			</NuqsTestingAdapter>,
 		);
 
+	const openFindPalette = async (user: ReturnType<typeof userEvent.setup>) => {
+		await user.click(screen.getByRole("button", { name: /search for anything in this workspace/i }));
+
+		return screen.getByRole("combobox", { name: /search company workspace/i });
+	};
+
 	it("renders the liquid-glass cockpit from the current dataset", () => {
 		renderPrototype();
 
@@ -30,7 +36,7 @@ describe("ExplorePrototype", () => {
 		expect(screen.getByText("Cash buffer")).toBeVisible();
 		expect(screen.getByRole("heading", { name: dashboard.actionInbox[0]?.title })).toBeVisible();
 		expect(screen.getByRole("heading", { name: "13-week Cash Outlook" })).toBeVisible();
-		expect(screen.getByRole("combobox", { name: /search company workspace/i })).toBeVisible();
+		expect(screen.getByRole("button", { name: /search for anything in this workspace/i })).toBeVisible();
 		expect(within(screen.getByRole("group", { name: "Glass card look" })).getAllByRole("button")).toHaveLength(5);
 		expect(screen.getByRole("button", { name: "Liquid" })).toHaveAttribute("aria-pressed", "true");
 	});
@@ -52,12 +58,36 @@ describe("ExplorePrototype", () => {
 		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(dashboard.cashPositionHeadline);
 	});
 
-	it("finds workspace items from the header search and filters", async () => {
+	it("opens the command palette with the search trigger and keyboard shortcut", async () => {
 		const user = userEvent.setup();
 
 		renderPrototype();
 
-		const search = screen.getByRole("combobox", { name: /search company workspace/i });
+		expect(screen.queryByRole("combobox", { name: /search company workspace/i })).not.toBeInTheDocument();
+
+		await openFindPalette(user);
+
+		expect(screen.getByRole("dialog", { name: /search company workspace/i })).toBeVisible();
+		expect(screen.getByRole("button", { name: "All" })).toHaveAttribute("aria-pressed", "true");
+		expect(screen.getByText("Examples")).toBeVisible();
+
+		await user.keyboard("{Escape}");
+
+		await waitFor(() => {
+			expect(screen.queryByRole("dialog", { name: /search company workspace/i })).not.toBeInTheDocument();
+		});
+
+		await user.keyboard("{Meta>}k{/Meta}");
+
+		expect(screen.getByRole("dialog", { name: /search company workspace/i })).toBeVisible();
+	});
+
+	it("finds workspace items from the command palette and filters", async () => {
+		const user = userEvent.setup();
+
+		renderPrototype();
+
+		const search = await openFindPalette(user);
 
 		await user.click(search);
 		await user.paste("Aurora");
@@ -69,13 +99,20 @@ describe("ExplorePrototype", () => {
 			]);
 		});
 
+		await user.keyboard("{Escape}");
+
+		await waitFor(() => {
+			expect(screen.getAllByRole("link", { name: /aurora health/i })).toHaveLength(2);
+		});
+
 		await user.click(screen.getByRole("button", { name: "Clear all" }));
 
 		await waitFor(() => {
 			expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(dashboard.cashPositionHeadline);
 		});
 
-		await user.click(search);
+		await openFindPalette(user);
+		await user.click(screen.getByRole("combobox", { name: /search company workspace/i }));
 		await user.paste("zzzz");
 
 		expect(screen.getByText("No results")).toBeVisible();
@@ -83,14 +120,18 @@ describe("ExplorePrototype", () => {
 		await user.click(screen.getByRole("button", { name: "Reset search" }));
 
 		await waitFor(() => {
-			expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(dashboard.cashPositionHeadline);
+			expect(screen.getByText("Examples")).toBeVisible();
 		});
 
-		await user.click(screen.getByRole("button", { name: /collect/i }));
-		await user.click(screen.getByRole("button", { name: /^overdue$/i }));
+		await user.keyboard("{Escape}");
+		await openFindPalette(user);
+		await user.click(screen.getByRole("button", { name: /^collect$/i }));
+		await user.click(screen.getByRole("combobox", { name: /search company workspace/i }));
+		await user.paste("Aurora");
 
 		await waitFor(() => {
-			expect(screen.getAllByRole("link", { name: /aurora health/i }).map((link) => link.getAttribute("href"))).toEqual([
+			expect(screen.getAllByRole("link", { name: /aurora/i }).map((link) => link.getAttribute("href"))).toEqual([
+				"/dashboard/invoices",
 				"/dashboard/invoices",
 			]);
 		});
