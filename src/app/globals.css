@@ -239,6 +239,45 @@ textarea,
 	}
 }
 
+@keyframes lead-success-from-bottom {
+	from {
+		opacity: 0;
+		transform: translateY(1.25rem);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes lead-success-from-left {
+	from {
+		opacity: 0;
+		transform: translateX(-1.5rem);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.lead-success-enter-from-bottom,
+.lead-success-enter-from-left {
+	animation-duration: 300ms;
+	animation-fill-mode: both;
+	animation-timing-function: ease-out;
+}
+
+.lead-success-enter-from-bottom {
+	animation-name: lead-success-from-bottom;
+}
+
+.lead-success-enter-from-left {
+	animation-name: lead-success-from-left;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;
@@ -251,5 +290,10 @@ textarea,
 		animation-iteration-count: 1;
 		scroll-behavior: auto;
 		transition-duration: 0.01ms;
+	}
+
+	.lead-success-enter-from-bottom,
+	.lead-success-enter-from-left {
+		animation: none;
 	}
 }

@@ -9,7 +9,6 @@ export const ContactLeadCaptureSection = () => (
 		<LeadCaptureForm
 			buttonLabel="Send message"
 			successDescription="We'll follow up with the right next step. You can explore the sample workspace now."
-			successTitle="Message received"
 		/>
 	</Panel>
 );

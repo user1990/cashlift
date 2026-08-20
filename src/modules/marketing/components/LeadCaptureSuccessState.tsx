@@ -1,56 +1,43 @@
 "use client";
 
-import { ArrowRight, CheckCircle2, RotateCcw } from "lucide-react";
-import { domAnimation, LazyMotion, useReducedMotion } from "motion/react";
-import * as m from "motion/react-m";
+import { RotateCcw } from "lucide-react";
 import { Button } from "@/ui/components/actions/Button";
 import { ActionLink } from "./ActionLink";
-
-const SUCCESS_ANIMATION = {
-	hidden: { opacity: 0, transform: "translateY(8px)" },
-	visible: { opacity: 1, transform: "translateY(0)" },
-} as const;
 
 type LeadCaptureSuccessStateProps = {
 	description: string;
 	onReset: () => void;
-	title: string;
 };
 
-export const LeadCaptureSuccessState = ({ description, onReset, title }: LeadCaptureSuccessStateProps) => {
-	const reducedMotion = useReducedMotion();
-
-	return (
-		<LazyMotion features={domAnimation}>
-			<m.div
-				animate="visible"
-				initial={reducedMotion ? "visible" : "hidden"}
-				transition={{ duration: reducedMotion ? 0 : 0.18, ease: [0.16, 1, 0.3, 1] }}
-				variants={SUCCESS_ANIMATION}
-				className="flex min-h-72 flex-1 flex-col justify-between rounded-lg border-2 border-signal bg-signal/5 p-4 shadow-panel"
+export const LeadCaptureSuccessState = ({ description, onReset }: LeadCaptureSuccessStateProps) => (
+	<div className="flex h-full flex-col gap-3">
+		<div className="flex min-h-0 flex-1 flex-col">
+			<div
+				aria-atomic="true"
+				aria-live="polite"
+				role="status"
+				className="lead-success-enter-from-left border-signal border-l-2 pl-3 motion-reduce:animate-none"
 			>
-				<div aria-atomic="true" aria-live="polite" role="status">
-					<div className="flex size-10 items-center justify-center rounded-full bg-signal text-primary-foreground">
-						<CheckCircle2 aria-hidden className="size-5" />
-					</div>
+				<p className="text-m leading-6">
+					<span className="font-medium text-signal">Request received.</span>{" "}
+					<span className="text-shell-muted">{description}</span>
+				</p>
+			</div>
+		</div>
 
-					<h3 className="mt-4 font-semibold text-l+ text-panel-foreground">{title}</h3>
+		<div className="mt-auto grid gap-2">
+			<ActionLink
+				href="/demo/workspace"
+				variant="primary"
+				className="lead-success-enter-from-bottom w-full motion-reduce:animate-none"
+			>
+				Explore live demo
+			</ActionLink>
 
-					<p className="mt-2 text-m text-panel-foreground leading-6">{description}</p>
-				</div>
-
-				<div className="mt-6 grid gap-2">
-					<ActionLink href="/demo/workspace" variant="primary" className="w-full">
-						Explore live demo
-						<ArrowRight aria-hidden className="size-4" />
-					</ActionLink>
-
-					<Button onPress={onReset} size="large" type="button" variant="secondary" className="w-full">
-						<RotateCcw aria-hidden className="size-3.5" />
-						Send another request
-					</Button>
-				</div>
-			</m.div>
-		</LazyMotion>
-	);
-};
+			<Button onPress={onReset} size="large" type="button" variant="secondary" className="w-full">
+				<RotateCcw aria-hidden className="size-3.5" />
+				Send another request
+			</Button>
+		</div>
+	</div>
+);

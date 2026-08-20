@@ -6,16 +6,18 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/ui/components/actions/Button";
 import { ControlledEmailAutocompleteField } from "@/ui/components/forms/ControlledEmailAutocompleteField";
 import { ControlledTextField } from "@/ui/components/forms/ControlledTextField";
+import { cn } from "@/ui/utils/cn";
 import { LEAD_CAPTURE_SCHEMA, type LeadCaptureFormValues } from "../schemas";
 import { LeadCaptureSuccessState } from "./LeadCaptureSuccessState";
 
 type LeadCaptureFormProps = {
 	buttonLabel: string;
 	successDescription: string;
-	successTitle: string;
+	onReset?: () => void;
+	onSuccess?: () => void;
 };
 
-export const LeadCaptureForm = ({ buttonLabel, successDescription, successTitle }: LeadCaptureFormProps) => {
+export const LeadCaptureForm = ({ buttonLabel, onReset, onSuccess, successDescription }: LeadCaptureFormProps) => {
 	const [submitted, setSubmitted] = useState(false);
 	const [nameAutoFocus, setNameAutoFocus] = useState(false);
 	const form = useForm<LeadCaptureFormValues>({
@@ -30,49 +32,66 @@ export const LeadCaptureForm = ({ buttonLabel, successDescription, successTitle 
 	const { control, handleSubmit, reset } = form;
 
 	const submitForm = () => {
-		setSubmitted(true);
 		reset();
+		onSuccess?.();
+		setSubmitted(true);
 	};
 
 	const resetForm = () => {
 		setNameAutoFocus(true);
+		onReset?.();
 		setSubmitted(false);
 		reset();
 	};
 
-	if (submitted) {
-		return <LeadCaptureSuccessState description={successDescription} onReset={resetForm} title={successTitle} />;
-	}
-
 	return (
-		<form onSubmit={handleSubmit(submitForm)} className="flex flex-1 flex-col gap-3">
-			<ControlledTextField
-				autoComplete="name"
-				autoFocus={nameAutoFocus}
-				control={control}
-				label="Name"
-				name="name"
-				placeholder="Maya Chen…"
-			/>
+		<div className="relative">
+			<form
+				aria-hidden={submitted || undefined}
+				onSubmit={handleSubmit(submitForm)}
+				className={getFormTransitionClassName(submitted)}
+			>
+				<ControlledTextField
+					autoComplete="name"
+					autoFocus={nameAutoFocus}
+					control={control}
+					label="Name"
+					name="name"
+					placeholder="Maya Chen…"
+				/>
 
-			<ControlledEmailAutocompleteField
-				control={control}
-				label="Work email"
-				name="email"
-				placeholder="maya@company.com…"
-			/>
+				<ControlledEmailAutocompleteField
+					control={control}
+					label="Work email"
+					name="email"
+					placeholder="maya@company.com…"
+				/>
 
-			<ControlledTextField
-				autoComplete="organization"
-				control={control}
-				label="Company"
-				name="company"
-				placeholder="Studio Nova…"
-			/>
+				<ControlledTextField
+					autoComplete="organization"
+					control={control}
+					label="Company"
+					name="company"
+					placeholder="Studio Nova…"
+				/>
 
-			<Button type="submit" variant="primary" size="large" className="mt-auto w-full">
-				{buttonLabel}
-			</Button>
-		</form>
+				<Button type="submit" variant="primary" size="large" className="w-full">
+					{buttonLabel}
+				</Button>
+			</form>
+
+			{submitted && (
+				<div className="absolute inset-0">
+					<LeadCaptureSuccessState description={successDescription} onReset={resetForm} />
+				</div>
+			)}
+		</div>
 	);
 };
+
+function getFormTransitionClassName(successVisible: boolean) {
+	return cn(
+		"flex flex-col gap-3 transition-opacity duration-75 ease motion-reduce:transition-none",
+		successVisible && "pointer-events-none opacity-0",
+	);
+}
