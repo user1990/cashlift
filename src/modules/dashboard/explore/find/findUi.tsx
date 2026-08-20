@@ -2,6 +2,7 @@ import { Search } from "lucide-react";
 import Link from "next/link";
 import type { KeyboardEvent, ReactNode, RefObject } from "react";
 import { cn } from "@/ui/utils/cn";
+import { getFindOptionId } from "./findDom";
 import { type FindItem, formatFindAmount, formatFindDueDate } from "./findModel";
 
 const FIND_SKELETON_ROW_IDS = ["alpha", "bravo", "charlie", "delta", "echo"] as const;
@@ -12,6 +13,7 @@ type FindSearchFieldProps = {
 	onChange: (value: string) => void;
 	onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
 	value: string;
+	glass?: boolean;
 	onSelectSuggestion?: (suggestion: string) => void;
 	placeholder?: string;
 	suggestions?: string[];
@@ -23,6 +25,7 @@ export const FindSearchField = ({
 	onChange,
 	onKeyDown,
 	value,
+	glass = false,
 	onSelectSuggestion,
 	placeholder = "Search invoices, vendors, spend requests…",
 	suggestions = [],
@@ -47,7 +50,10 @@ export const FindSearchField = ({
 				aria-controls={suggestionsOpen ? listboxId : "find-results"}
 				aria-expanded={suggestionsOpen}
 				autoComplete="off"
-				className="h-12 w-full rounded-lg border border-shell-border bg-shell-elevated py-3 pr-20 pl-10 text-l text-panel-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground focus:border-primary focus:ring-[3px] focus:ring-primary/20"
+				className={cn(
+					"h-12 w-full rounded-lg border py-3 pr-20 pl-10 text-l text-panel-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground focus:border-primary focus:ring-[3px] focus:ring-primary/20",
+					glass ? "border-white/10 bg-panel/35 backdrop-blur-xl" : "border-shell-border bg-shell-elevated",
+				)}
 				id={id}
 				onChange={(event) => onChange(event.currentTarget.value)}
 				onKeyDown={(event) => {
@@ -72,7 +78,10 @@ export const FindSearchField = ({
 
 			{suggestionsOpen && onSelectSuggestion && (
 				<div
-					className="absolute z-20 mt-1 w-full rounded-lg border border-shell-border bg-shell-elevated p-1 shadow-panel"
+					className={cn(
+						"absolute z-20 mt-1 w-full rounded-lg border p-1 shadow-panel",
+						glass ? "border-white/10 bg-panel/80 backdrop-blur-xl" : "border-shell-border bg-shell-elevated",
+					)}
 					id={listboxId}
 					role="listbox"
 				>
@@ -201,6 +210,7 @@ export const FindEmptyState = ({ title, actionLabel = "Clear all", detail, onCle
 
 type FindResultRowProps = {
 	item: FindItem;
+	glass?: boolean;
 	highlightQuery?: string;
 	selected?: boolean;
 	showColumns?: boolean;
@@ -209,6 +219,7 @@ type FindResultRowProps = {
 
 export const FindResultRow = ({
 	item,
+	glass = false,
 	highlightQuery = "",
 	selected = false,
 	showColumns = false,
@@ -227,7 +238,12 @@ export const FindResultRow = ({
 				showColumns
 					? "@xl:grid-cols-[minmax(0,1.5fr)_7.5rem_6.5rem_6rem_auto] grid-cols-[minmax(0,1fr)_auto]"
 					: "grid-cols-[minmax(0,1fr)_auto]",
-				selected ? "border-primary bg-primary-subtle" : "hover:border-primary/40 hover:bg-shell-elevated",
+				selected
+					? "border-primary bg-primary-subtle"
+					: glass
+						? "hover:border-primary/40 hover:bg-white/5"
+						: "hover:border-primary/40 hover:bg-shell-elevated",
+				selected && glass && "bg-white/10",
 			)}
 		>
 			<span className="min-w-0">
@@ -263,8 +279,13 @@ export const FindResultRow = ({
 	);
 };
 
-export const FindResultHeader = () => (
-	<div className="@xl:grid hidden grid-cols-[minmax(0,1.5fr)_7.5rem_6.5rem_6rem_auto] gap-4 border-border border-b px-3 py-2 text-muted-foreground text-s">
+export const FindResultHeader = ({ glass = false }: { glass?: boolean }) => (
+	<div
+		className={cn(
+			"@xl:grid hidden grid-cols-[minmax(0,1.5fr)_7.5rem_6.5rem_6rem_auto] gap-4 border-b px-3 py-2 text-muted-foreground text-s",
+			glass ? "border-white/10" : "border-border",
+		)}
+	>
 		<span>Item</span>
 
 		<span>Owner</span>
@@ -279,10 +300,11 @@ export const FindResultHeader = () => (
 
 type FindLoadingStateProps = {
 	columns?: boolean;
+	glass?: boolean;
 	visible?: boolean;
 };
 
-export const FindLoadingState = ({ columns = false, visible = false }: FindLoadingStateProps) => {
+export const FindLoadingState = ({ columns = false, glass = false, visible = false }: FindLoadingStateProps) => {
 	if (!visible) {
 		return;
 	}
@@ -291,7 +313,10 @@ export const FindLoadingState = ({ columns = false, visible = false }: FindLoadi
 		<ul
 			aria-busy="true"
 			aria-label="Loading results"
-			className="divide-y divide-border overflow-hidden rounded-lg border border-shell-border"
+			className={cn(
+				"divide-y overflow-hidden rounded-lg border",
+				glass ? "divide-white/10 border-white/10" : "divide-border border-shell-border",
+			)}
 			role="status"
 		>
 			{FIND_SKELETON_ROW_IDS.map((rowId) => (
@@ -335,8 +360,6 @@ export const FindLoadingState = ({ columns = false, visible = false }: FindLoadi
 		</ul>
 	);
 };
-
-export const getFindOptionId = (itemId: string) => `find-option-${itemId}`;
 
 function highlightFindText(text: string, query: string) {
 	const needle = query.trim();

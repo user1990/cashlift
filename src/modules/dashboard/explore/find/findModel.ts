@@ -160,9 +160,23 @@ export const getFindSuggestions = (items: FindItem[], query: string, limit = 6) 
 		return [];
 	}
 
-	const titles = items.filter((item) => getFindHaystack(item).includes(normalizedQuery)).map((item) => item.title);
+	const seen = new Set<string>();
+	const suggestions: string[] = [];
 
-	return [...new Set(titles)].slice(0, limit);
+	for (const item of items) {
+		if (!getFindHaystack(item).includes(normalizedQuery) || seen.has(item.title)) {
+			continue;
+		}
+
+		seen.add(item.title);
+		suggestions.push(item.title);
+
+		if (suggestions.length >= limit) {
+			break;
+		}
+	}
+
+	return suggestions;
 };
 
 export const getFindFacetValues = (items: FindItem[], field: "owner" | "status") =>
