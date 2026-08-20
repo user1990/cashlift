@@ -3,7 +3,7 @@
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/ui/components/actions/Button";
 import { cn } from "@/ui/utils/cn";
-import type { LeadCaptureTransitionVariant } from "../leadCaptureTransitions";
+import { LEAD_CAPTURE_TRANSITION_PRESETS, type LeadCaptureTransitionVariant } from "../leadCaptureTransitions";
 import { ActionLink } from "./ActionLink";
 
 type LeadCaptureSuccessStateProps = {
@@ -17,50 +17,41 @@ export const LeadCaptureSuccessState = ({
 	description,
 	onReset,
 	visible,
-	transitionVariant = "fade",
-}: LeadCaptureSuccessStateProps) => {
-	const stagger = transitionVariant === "stagger";
-	const centered = transitionVariant === "slow";
+	transitionVariant = "opacityFast",
+}: LeadCaptureSuccessStateProps) => (
+	<div className="flex h-full flex-col gap-3">
+		<div aria-atomic="true" aria-live="polite" role="status" className="flex min-h-0 flex-1 flex-col gap-3">
+			<div aria-hidden className={cn("h-px w-10 bg-signal", getItemClassName(transitionVariant, visible, 0))} />
 
-	return (
-		<div className={cn("flex h-full flex-col gap-3", centered && "justify-center")}>
-			<div
-				aria-atomic="true"
-				aria-live="polite"
-				role="status"
-				className={cn("flex min-h-0 flex-col gap-3", !centered && "flex-1")}
-			>
-				<div
-					aria-hidden
-					className={cn("h-px w-10 bg-signal", stagger && getStaggerItemClassName(visible, "delay-0"))}
-				/>
-
-				<p className={cn("text-m leading-6", stagger && getStaggerItemClassName(visible, "delay-75"))}>
-					<span className="font-medium text-signal">Received.</span>{" "}
-					<span className="text-shell-muted">{description}</span>
-				</p>
-			</div>
-
-			<div
-				className={cn("grid gap-2", !centered && "mt-auto", stagger && getStaggerItemClassName(visible, "delay-150"))}
-			>
-				<ActionLink href="/demo/workspace" variant="primary" className="w-full">
-					Explore live demo
-				</ActionLink>
-
-				<Button onPress={onReset} size="large" type="button" variant="secondary" className="w-full">
-					<RotateCcw aria-hidden className="size-3.5" />
-					Send another request
-				</Button>
-			</div>
+			<p className={cn("text-m leading-6", getItemClassName(transitionVariant, visible, 1))}>
+				<span className="font-medium text-signal">Received.</span>{" "}
+				<span className="text-shell-muted">{description}</span>
+			</p>
 		</div>
-	);
-};
 
-function getStaggerItemClassName(visible: boolean, delayClassName: string) {
+		<div className={cn("mt-auto grid gap-2", getItemClassName(transitionVariant, visible, 2))}>
+			<ActionLink href="/demo/workspace" variant="primary" className="w-full">
+				Explore live demo
+			</ActionLink>
+
+			<Button onPress={onReset} size="large" type="button" variant="secondary" className="w-full">
+				<RotateCcw aria-hidden className="size-3.5" />
+				Send another request
+			</Button>
+		</div>
+	</div>
+);
+
+function getItemClassName(variant: LeadCaptureTransitionVariant, visible: boolean, itemIndex: 0 | 1 | 2) {
+	const preset = LEAD_CAPTURE_TRANSITION_PRESETS[variant];
+	const slide = preset.kind === "slide";
+
 	return cn(
-		"ease-out transition-[opacity,transform] duration-200 motion-reduce:delay-0 motion-reduce:transform-none motion-reduce:transition-none",
-		delayClassName,
-		visible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0",
+		"ease-out motion-reduce:delay-0 motion-reduce:transition-none",
+		preset.itemDurationClassName,
+		preset.itemDelayClassNames[itemIndex],
+		slide ? "transition-[opacity,transform] motion-reduce:transform-none" : "transition-[opacity]",
+		visible ? "opacity-100" : "opacity-0",
+		slide && (visible ? "translate-y-0" : "-translate-y-2"),
 	);
 }

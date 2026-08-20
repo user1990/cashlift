@@ -7,7 +7,7 @@ import { Button } from "@/ui/components/actions/Button";
 import { ControlledEmailAutocompleteField } from "@/ui/components/forms/ControlledEmailAutocompleteField";
 import { ControlledTextField } from "@/ui/components/forms/ControlledTextField";
 import { cn } from "@/ui/utils/cn";
-import type { LeadCaptureTransitionVariant } from "../leadCaptureTransitions";
+import { LEAD_CAPTURE_TRANSITION_PRESETS, type LeadCaptureTransitionVariant } from "../leadCaptureTransitions";
 import { LEAD_CAPTURE_SCHEMA, type LeadCaptureFormValues } from "../schemas";
 import { LeadCaptureSuccessState } from "./LeadCaptureSuccessState";
 
@@ -26,7 +26,7 @@ export const LeadCaptureForm = ({
 	onSuccess,
 	submitted,
 	successDescription,
-	transitionVariant = "fade",
+	transitionVariant = "opacityFast",
 }: LeadCaptureFormProps) => {
 	const [internalSubmitted, setInternalSubmitted] = useState(false);
 	const [nameAutoFocus, setNameAutoFocus] = useState(false);
@@ -98,10 +98,7 @@ export const LeadCaptureForm = ({
 				</Button>
 			</form>
 
-			<div
-				aria-hidden={!successVisible || undefined}
-				className={getSuccessTransitionClassName(transitionVariant, successVisible)}
-			>
+			<div aria-hidden={!successVisible || undefined} className={getSuccessShellClassName(successVisible)}>
 				<LeadCaptureSuccessState
 					description={successDescription}
 					onReset={resetForm}
@@ -114,56 +111,13 @@ export const LeadCaptureForm = ({
 };
 
 function getFormTransitionClassName(variant: LeadCaptureTransitionVariant, successVisible: boolean) {
-	const hidden = successVisible && "pointer-events-none opacity-0";
-
-	switch (variant) {
-		case "hold":
-			return cn("flex flex-col gap-3 transition-[opacity] duration-100 ease-in motion-reduce:transition-none", hidden);
-
-		case "rise":
-			return cn("flex flex-col gap-3 transition-[opacity] duration-150 ease motion-reduce:transition-none", hidden);
-
-		case "slow":
-			return cn(
-				"flex flex-col gap-3 transition-[opacity,transform] duration-300 ease-in motion-reduce:transform-none motion-reduce:transition-none",
-				successVisible ? "pointer-events-none scale-[0.98] opacity-0" : "scale-100 opacity-100",
-			);
-
-		case "stagger":
-			return cn("flex flex-col gap-3 transition-[opacity] duration-100 ease-out motion-reduce:transition-none", hidden);
-
-		default:
-			return cn("flex flex-col gap-3 transition-[opacity] duration-150 ease motion-reduce:transition-none", hidden);
-	}
+	return cn(
+		"flex flex-col gap-3 transition-[opacity] ease motion-reduce:transition-none",
+		LEAD_CAPTURE_TRANSITION_PRESETS[variant].formDurationClassName,
+		successVisible && "pointer-events-none opacity-0",
+	);
 }
 
-function getSuccessTransitionClassName(variant: LeadCaptureTransitionVariant, successVisible: boolean) {
-	switch (variant) {
-		case "hold":
-			return cn(
-				"absolute inset-0 transition-[opacity] delay-150 duration-200 ease-out motion-reduce:delay-0 motion-reduce:transition-none",
-				successVisible ? "opacity-100" : "pointer-events-none opacity-0",
-			);
-
-		case "rise":
-			return cn(
-				"absolute inset-0 transition-[opacity,transform] duration-200 ease motion-reduce:transform-none motion-reduce:transition-none",
-				successVisible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0",
-			);
-
-		case "slow":
-			return cn(
-				"absolute inset-0 transition-[opacity,transform] delay-75 duration-500 ease-out motion-reduce:delay-0 motion-reduce:transform-none motion-reduce:transition-none",
-				successVisible ? "scale-100 opacity-100" : "pointer-events-none scale-[0.98] opacity-0",
-			);
-
-		case "stagger":
-			return cn("absolute inset-0", successVisible ? "opacity-100" : "pointer-events-none");
-
-		default:
-			return cn(
-				"absolute inset-0 transition-[opacity] duration-150 ease motion-reduce:transition-none",
-				successVisible ? "opacity-100" : "pointer-events-none opacity-0",
-			);
-	}
+function getSuccessShellClassName(successVisible: boolean) {
+	return cn("absolute inset-0", !successVisible && "pointer-events-none");
 }

@@ -12,11 +12,11 @@ const DEMO_BOOK_CARD_BACKGROUND_SRC = "/marketing/demo-book-card-bg.webp";
 const PREVIEW_REPLAY_DELAY_MS = 40;
 
 const TRANSITION_PREVIEW_LABELS = {
-	fade: "Fade",
-	hold: "Hold",
-	rise: "Rise",
-	slow: "Slow",
-	stagger: "Stagger",
+	opacityFast: "Fade 100",
+	opacitySlow: "Fade 300",
+	slideFast: "Slide 150",
+	slideMid: "Slide 200",
+	slideSlow: "Slide 300",
 } as const satisfies Record<LeadCaptureTransitionVariant, string>;
 
 export const DemoLeadCaptureSection = () => {
@@ -61,12 +61,12 @@ export const DemoLeadCaptureSection = () => {
 							setSubmitted(false);
 						}}
 						onSuccess={() => {
-							setPreviewTransition((variant) => variant ?? "fade");
+							setPreviewTransition((variant) => variant ?? "opacityFast");
 							setSubmitted(true);
 						}}
 						submitted={submitted}
 						successDescription="We'll follow up to arrange the audit walkthrough. You can explore the read-only workspace now."
-						transitionVariant={previewTransition ?? "fade"}
+						transitionVariant={previewTransition ?? "opacityFast"}
 					/>
 				</div>
 			</Panel>
