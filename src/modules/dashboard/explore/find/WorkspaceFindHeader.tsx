@@ -143,10 +143,10 @@ export const WorkspaceFindHeader = ({ items, session }: WorkspaceFindHeaderProps
 
 function getWorkCategoryClassName(selected: boolean) {
 	if (selected) {
-		return "flex min-h-11 w-full items-center justify-between gap-3 rounded-full border border-primary/40 bg-panel/45 px-3 text-left font-semibold text-m text-panel-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.12)] outline-none backdrop-blur-md focus-visible:ring-[3px] focus-visible:ring-primary/20";
+		return "flex min-h-11 w-full cursor-pointer items-center justify-between gap-3 rounded-full border border-primary/40 bg-panel/45 px-3 text-left font-semibold text-m text-panel-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.12)] outline-none backdrop-blur-md focus-visible:ring-[3px] focus-visible:ring-primary/20";
 	}
 
-	return "flex min-h-11 w-full items-center justify-between gap-3 rounded-full px-3 text-left text-m text-shell-muted outline-none hover:bg-white/5 hover:text-panel-foreground focus-visible:ring-[3px] focus-visible:ring-primary/20";
+	return "flex min-h-11 w-full cursor-pointer items-center justify-between gap-3 rounded-full px-3 text-left text-m text-shell-muted outline-none hover:bg-white/5 hover:text-panel-foreground focus-visible:ring-[3px] focus-visible:ring-primary/20";
 }
 
 function getFilterPanelClassName(filtersOpen: boolean) {
