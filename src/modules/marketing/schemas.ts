@@ -8,3 +8,9 @@ export const LEAD_CAPTURE_SCHEMA = z.object({
 });
 
 export type LeadCaptureFormValues = z.infer<typeof LEAD_CAPTURE_SCHEMA>;
+
+export const HELP_FAQ_QUERY_MAX_CHARACTERS = 120;
+
+export const HELP_FAQ_QUERY_SCHEMA = z
+	.string()
+	.refine((value) => countCharacters(value) <= HELP_FAQ_QUERY_MAX_CHARACTERS);

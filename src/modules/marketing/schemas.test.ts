@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { LEAD_CAPTURE_SCHEMA } from "./schemas";
+import { HELP_FAQ_QUERY_SCHEMA, LEAD_CAPTURE_SCHEMA } from "./schemas";
 
 describe("LEAD_CAPTURE_SCHEMA", () => {
 	it("validates name and company lengths with user-visible characters", () => {
@@ -18,5 +18,12 @@ describe("LEAD_CAPTURE_SCHEMA", () => {
 				name: "👍🏾",
 			}).success,
 		).toEqual(false);
+	});
+});
+
+describe("HELP_FAQ_QUERY_SCHEMA", () => {
+	it("accepts queries within the character limit", () => {
+		expect(HELP_FAQ_QUERY_SCHEMA.safeParse("demo").success).toEqual(true);
+		expect(HELP_FAQ_QUERY_SCHEMA.safeParse("x".repeat(121)).success).toEqual(false);
 	});
 });

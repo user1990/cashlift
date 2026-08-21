@@ -22,6 +22,16 @@ type FooterLinkGroup = {
 	links: readonly MarketingNavItem[];
 };
 
+type HelpFaqItem = {
+	answer: string;
+	question: string;
+};
+
+export type HelpFaqGroup = {
+	items: readonly HelpFaqItem[];
+	name: string;
+};
+
 type MarketingCard = {
 	description: string;
 	icon: LucideIcon;
@@ -200,6 +210,137 @@ export const USE_CASES = {
 	},
 } as const satisfies Record<UseCaseSlug, UseCase>;
 
+export const HELP_FAQ_GROUPS = [
+	{
+		items: [
+			{
+				answer:
+					"CashLift ranks the demo workspace by cash impact and urgency, then keeps the reason for each action beside the decision.",
+				question: "How does CashLift rank actions?",
+			},
+			{
+				answer: "The daily inbox groups the demo actions into collection, approval, and renewal decisions.",
+				question: "What kinds of actions does CashLift surface?",
+			},
+			{
+				answer:
+					"Each example keeps its cash impact, urgency, owner, and supporting context next to the recommended action.",
+				question: "What context comes with each action?",
+			},
+			{
+				answer:
+					"A cash action is a prioritized piece of daily finance work tied to a cash impact, such as collecting an invoice or deciding a spend request.",
+				question: "What is a cash action?",
+			},
+			{
+				answer:
+					"The cash buffer is the company’s target reserve that should remain after expected inflows and outflows.",
+				question: "What is a cash buffer?",
+			},
+		],
+		name: "How it works",
+	},
+	{
+		items: [
+			{
+				answer:
+					"The live demo uses a read-only Studio Nova workspace. It does not claim or require a production integration to explore the workflow.",
+				question: "Where does CashLift get its data?",
+			},
+			{
+				answer:
+					"No. The Studio Nova workspace is a read-only sample, so you can explore it without entering company records.",
+				question: "Can I try the demo with real company data?",
+			},
+			{
+				answer: "No. The live demo is available to explore without creating an account.",
+				question: "Do I need an account to explore the demo?",
+			},
+			{
+				answer: "No. This demo does not move money, issue cards, or provide financial, legal, or tax advice.",
+				question: "Does the demo make payments or financial decisions for me?",
+			},
+			{
+				answer:
+					"Start with the ranked daily inbox, then open a collection, approval, or renewal example to see its context.",
+				question: "Where should I start in the live demo?",
+			},
+		],
+		name: "Demo",
+	},
+	{
+		items: [
+			{
+				answer:
+					"A company workspace is the company-scoped operating space where members review cash actions, spend requests, invoices, vendor bills, subscriptions, budgets, and forecasts.",
+				question: "What is a company workspace?",
+			},
+			{
+				answer: "Finance sees all cash decisions. Managers approve team spend. Employees submit requests and receipts.",
+				question: "What roles exist in a company workspace?",
+			},
+			{
+				answer:
+					"Visible cash actions depend on role. Finance sees the full ranked inbox; managers and employees see the decisions assigned to them.",
+				question: "Do managers and finance see the same inbox?",
+			},
+			{
+				answer:
+					"The 13-week cash outlook is a weekly forecast of opening balance, inflow, outflow, and ending balance for the company workspace.",
+				question: "What is the 13-week cash outlook?",
+			},
+			{
+				answer:
+					"A vendor leak is a subscription or vendor cost likely to be waste because it is unused, duplicated, or low-use trial spend.",
+				question: "What is a vendor leak?",
+			},
+		],
+		name: "Company workspace",
+	},
+	{
+		items: [
+			{
+				answer:
+					"Starter, Professional, and Enterprise are listed on the pricing page with the features included in each plan.",
+				question: "Which plans are available?",
+			},
+			{
+				answer:
+					"Starter includes a free cash leak audit, one company workspace, a spend request inbox, and the 13-week cash outlook.",
+				question: "What is included in Starter?",
+			},
+			{
+				answer:
+					"Professional adds unlimited request-only employees, manager approval queues, team budgets, and vendor renewal reviews. Enterprise adds multi-company view, custom approval rules, cash scenario reviews, and priority onboarding.",
+				question: "How do Professional and Enterprise differ?",
+			},
+			{
+				answer:
+					"No. CashLift does not move money, issue cards, or provide financial, legal, or tax advice in this demo.",
+				question: "Does a paid plan move money or issue cards?",
+			},
+		],
+		name: "Plans",
+	},
+	{
+		items: [
+			{
+				answer: "The landing page is designed around service-firm questions: what to collect, approve, or cut today.",
+				question: "Who is CashLift designed for?",
+			},
+			{
+				answer: "Open the live demo to review the daily inbox without creating an account or moving any money.",
+				question: "How can we get started?",
+			},
+			{
+				answer: "Use the contact page to reach sales or support. Demo mode keeps those requests local.",
+				question: "How do I contact support?",
+			},
+		],
+		name: "Getting started",
+	},
+] as const satisfies readonly HelpFaqGroup[];
+
 export const PROOF_POINTS = [
 	{
 		metric: "$18.4k",
@@ -233,6 +374,7 @@ export const FOOTER_LINKS = [
 		label: "Company",
 		links: [
 			{ href: "/customers", label: "Customers" },
+			{ href: "/help", label: "Help" },
 			{ href: "/contact", label: "Contact" },
 		],
 	},
