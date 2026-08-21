@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "useeffectevent-refactor": {
+      "source": "badri-derakhshan/useeffectevent-refactor-skill",
+      "sourceType": "github",
+      "skillPath": "useeffectevent-refactor/SKILL.md",
+      "computedHash": "c99e86804831ec2fe47c5c3e184645119cd95bcd85c5d87c75876909c27190d0"
+    }
+  }
+}
