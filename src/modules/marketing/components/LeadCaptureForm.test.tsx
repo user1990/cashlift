@@ -6,25 +6,20 @@ import { describe, expect, it } from "vitest";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 
 describe("LeadCaptureForm", () => {
-	it("crossfades to success without unmounting the fields", async () => {
+	it("offers the live demo after submit and restores the form on reset", async () => {
 		const user = userEvent.setup();
+		const buttonLabel = "Book an audit walkthrough";
+		const successDescription = "We'll follow up to arrange the audit walkthrough.";
 
-		render(
-			<LeadCaptureForm
-				buttonLabel="Book an audit walkthrough"
-				successDescription="We'll follow up to arrange the audit walkthrough. You can explore the read-only workspace now."
-			/>,
-		);
+		render(<LeadCaptureForm buttonLabel={buttonLabel} successDescription={successDescription} />);
 
 		await user.type(screen.getByLabelText("Name"), "Maya Chen");
 		await user.type(screen.getByRole("combobox", { name: "Work email" }), "maya@company.com");
 		await user.type(screen.getByLabelText("Company"), "Studio Nova");
-		await user.click(screen.getByRole("button", { name: "Book an audit walkthrough" }));
+		await user.click(screen.getByRole("button", { name: buttonLabel }));
 
-		expect(screen.getByRole("status")).toHaveTextContent(
-			"Request received. We'll follow up to arrange the audit walkthrough. You can explore the read-only workspace now.",
-		);
-		expect(screen.getByRole("link", { name: "Explore live demo" })).toBeInTheDocument();
+		expect(screen.getByRole("status")).toHaveTextContent(successDescription);
+		expect(screen.getByRole("link")).toHaveAttribute("href", "/demo/workspace");
 		expect(screen.queryByRole("textbox", { name: "Name" })).not.toBeInTheDocument();
 
 		await user.click(screen.getByRole("button", { name: "Send another request" }));
