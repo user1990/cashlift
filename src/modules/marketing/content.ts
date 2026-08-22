@@ -22,6 +22,16 @@ type FooterLinkGroup = {
 	links: readonly MarketingNavItem[];
 };
 
+type HelpFaqGroup = {
+	items: readonly HelpFaqItem[];
+	name: string;
+};
+
+type HelpFaqItem = {
+	answer: string;
+	question: string;
+};
+
 type MarketingCard = {
 	description: string;
 	icon: LucideIcon;
@@ -215,6 +225,93 @@ export const PROOF_POINTS = [
 	},
 ] as const satisfies readonly { metric: string; text: string }[];
 
+export const HELP_FAQ_GROUPS = [
+	{
+		items: [
+			{
+				answer:
+					"CashLift ranks the demo workspace by cash impact and urgency, then keeps the reason for each action beside the decision.",
+				question: "How does CashLift rank actions?",
+			},
+			{
+				answer:
+					"CashLift ranks approvals, collections, vendor leaks, and buffer risks so teams can act on the cash decisions that matter now.",
+				question: "What kinds of decisions does CashLift surface?",
+			},
+			{
+				answer:
+					"Each example keeps its cash impact, urgency, owner, and supporting context next to the recommended action.",
+				question: "What context comes with each action?",
+			},
+		],
+		name: "How it works",
+	},
+	{
+		items: [
+			{
+				answer:
+					"The live demo uses a read-only Studio Nova workspace. It does not claim or require a production integration to explore the workflow.",
+				question: "Where does CashLift get its data?",
+			},
+			{
+				answer:
+					"No. The Studio Nova workspace is a read-only sample, so you can explore it without entering company records.",
+				question: "Can I try the demo with real company data?",
+			},
+			{
+				answer: "No. This demo does not move money, issue cards, or provide financial, legal, or tax advice.",
+				question: "Does the demo make payments or financial decisions for me?",
+			},
+		],
+		name: "Demo",
+	},
+	{
+		items: [
+			{
+				answer: "Finance sees all cash decisions. Managers approve team spend. Employees submit requests and receipts.",
+				question: "Which roles can use a company workspace?",
+			},
+			{
+				answer: "The landing page is designed around service-firm questions: what to collect, approve, or cut today.",
+				question: "Who is the demo designed for?",
+			},
+		],
+		name: "Company workspace",
+	},
+	{
+		items: [
+			{
+				answer: "Open /pricing for current plan details, feature coverage, and the full comparison.",
+				question: "Where can I compare plans?",
+			},
+			{
+				answer:
+					"The pricing page is the source of truth for current plan details. See /pricing before making a buying decision.",
+				question: "Where should I check current pricing?",
+			},
+		],
+		name: "Plans",
+	},
+	{
+		items: [
+			{
+				answer: "No. The live demo is available to explore without creating an account.",
+				question: "Do I need an account to explore the demo?",
+			},
+			{
+				answer:
+					"Start with the ranked daily inbox, then open a collection, approval, or renewal example to see its context.",
+				question: "Where should I start in the live demo?",
+			},
+			{
+				answer: "Open the live demo to review the daily inbox without creating an account or moving any money.",
+				question: "How can we get started?",
+			},
+		],
+		name: "Getting started",
+	},
+] as const satisfies readonly HelpFaqGroup[];
+
 export const FOOTER_LINKS = [
 	{
 		label: "Product",
@@ -233,6 +330,7 @@ export const FOOTER_LINKS = [
 		label: "Company",
 		links: [
 			{ href: "/customers", label: "Customers" },
+			{ href: "/help", label: "Help" },
 			{ href: "/contact", label: "Contact" },
 		],
 	},
