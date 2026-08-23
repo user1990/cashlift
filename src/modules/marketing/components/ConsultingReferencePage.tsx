@@ -8,13 +8,7 @@ type ConsultingReferencePageProps = {
 };
 
 export const ConsultingReferencePage = ({ useCase }: ConsultingReferencePageProps) => (
-	<UseCaseReferencePage
-		cardHref="/demo"
-		decisions={CONSULTING_DECISIONS}
-		gridColumnsClassName="md:grid-cols-3"
-		showSignalRail
-		useCase={useCase}
-	/>
+	<UseCaseReferencePage cardHref="/demo" decisions={CONSULTING_DECISIONS} showSignalRail useCase={useCase} />
 );
 
 const CONSULTING_DECISIONS = [

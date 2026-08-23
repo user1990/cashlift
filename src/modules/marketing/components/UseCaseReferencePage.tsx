@@ -10,7 +10,6 @@ type UseCaseReferencePageProps = {
 	decisions: readonly UseCaseReferenceDecision[];
 	useCase: (typeof USE_CASES)[keyof typeof USE_CASES];
 	cardHref?: string;
-	gridColumnsClassName?: string;
 	showSignalRail?: boolean;
 };
 
@@ -18,7 +17,6 @@ export const UseCaseReferencePage = ({
 	decisions,
 	useCase,
 	cardHref,
-	gridColumnsClassName = "lg:grid-cols-3",
 	showSignalRail = false,
 }: UseCaseReferencePageProps) => (
 	<MainContent variant="marketing" className="relative overflow-hidden">
@@ -31,7 +29,12 @@ export const UseCaseReferencePage = ({
 				<div className="relative mt-16 lg:mt-20 lg:pb-8">
 					{showSignalRail && <UseCaseSignalRail />}
 
-					<ol className={cn("relative mx-auto grid max-w-280 gap-6 lg:items-end lg:gap-12", gridColumnsClassName)}>
+					<ol
+						className={cn(
+							"relative mx-auto grid max-w-280 gap-6 lg:gap-12",
+							showSignalRail ? "md:grid-cols-3 md:items-end" : "lg:grid-cols-3 lg:items-end",
+						)}
+					>
 						{decisions.map((decision, index) => (
 							<li
 								key={decision.title}
@@ -70,11 +73,11 @@ function UseCaseSignalRail() {
 }
 
 function UseCaseDecisionCard({
-	cardHref,
 	decision: { accentClassName, Icon, title },
+	cardHref,
 }: {
-	cardHref?: string;
 	decision: UseCaseReferenceDecision;
+	cardHref?: string;
 }) {
 	const card = (
 		<article
