@@ -330,6 +330,7 @@ export const FOOTER_LINKS = [
 		label: "Company",
 		links: [
 			{ href: "/customers", label: "Customers" },
+			{ href: "/developers", label: "Developers" },
 			{ href: "/help", label: "Help" },
 			{ href: "/contact", label: "Contact" },
 		],

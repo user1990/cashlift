@@ -1,17 +1,40 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import type { CashActionType } from "@/modules/cash-actions/types";
 import { HomePage } from "@/modules/marketing/components/HomePage";
 import type { HomeDecisionStoryAction } from "@/modules/marketing/types";
 import { formatCurrency } from "@/modules/money/format";
 import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
+import { SITE_URL } from "@/services/site";
 
 export const metadata: Metadata = {
+	alternates: { canonical: "/" },
 	title: "CashLift — See what to collect, approve, or cut today",
 	description: "CashLift ranks the cash actions that matter now in one daily inbox for service firms.",
 };
 
-export default function Home() {
-	return <HomePage actions={HOME_DECISION_ACTIONS} />;
+const HOME_STRUCTURED_DATA = {
+	"@context": "https://schema.org",
+	"@type": "SoftwareApplication",
+	applicationCategory: "BusinessApplication",
+	description: "A cash-aware spend decision command center for service firms.",
+	name: "CashLift",
+	operatingSystem: "Web",
+	url: SITE_URL,
+} as const;
+
+export default async function Home() {
+	const nonce = (await headers()).get("x-nonce") ?? undefined;
+
+	return (
+		<>
+			<HomePage actions={HOME_DECISION_ACTIONS} />
+
+			<script nonce={nonce} type="application/ld+json">
+				{JSON.stringify(HOME_STRUCTURED_DATA)}
+			</script>
+		</>
+	);
 }
 
 const HOME_DECISION_ACTIONS = [
