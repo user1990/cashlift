@@ -1,60 +1,73 @@
 "use client";
 
-import { Search, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { ChevronRight, CornerDownLeft, FileQuestion, Mail, MessageCircle, Search, X } from "lucide-react";
+import type { KeyboardEvent as ReactKeyboardEvent, RefObject } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/ui/utils/cn";
-import { filterHelpFaqGroups, type HelpFaqGroupLike, parseHelpFaqQuery } from "../utils";
+import { filterHelpFaqGroups, type HelpFaqGroupLike, type HelpFaqItemLike, parseHelpFaqQuery } from "../utils";
 import { ActionLink } from "./ActionLink";
+
+const HELP_FAQ_SEARCH_ID = "help-faq-search";
+const HELP_FAQ_DIALOG_TITLE_ID = "help-faq-dialog-title";
+const HELP_FAQ_RESULTS_ID = "help-faq-results";
 
 type HelpFaqCatalogProps = {
 	groups: readonly HelpFaqGroupLike[];
 	initialQuery?: string;
 };
 
-type HelpFaqVariant = "categories" | "highlight" | "mobile" | "contact" | "combined";
-
-const HELP_FAQ_VARIANTS = [
-	{
-		description: "Jump to a topic, then narrow the same table with a phrase.",
-		id: "categories",
-		label: "1 · Category navigation",
-	},
-	{
-		description: "Make the words that matched your query easy to scan in both columns.",
-		id: "highlight",
-		label: "2 · Match highlighting",
-	},
-	{
-		description: "Keep the desktop table intact and switch small screens to readable stacked rows.",
-		id: "mobile",
-		label: "3 · Mobile rows",
-	},
-	{
-		description: "Add a calm next step after the answers using the existing contact message.",
-		id: "contact",
-		label: "4 · Contact panel",
-	},
-	{
-		description: "A combined direction: topics, highlights, mobile rows, and the contact next step.",
-		id: "combined",
-		label: "5 · Combined",
-	},
-] as const satisfies readonly { description: string; id: HelpFaqVariant; label: string }[];
+type HelpFaqResult = HelpFaqItemLike & {
+	groupName: string;
+	id: string;
+};
 
 export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProps) => {
-	const [query, setQuery] = useState(parseHelpFaqQuery(initialQuery));
-	const [variant, setVariant] = useState<HelpFaqVariant>("categories");
+	const [query, setQuery] = useState(() => parseHelpFaqQuery(initialQuery));
+	const [isPaletteOpen, setIsPaletteOpen] = useState(() => Boolean(parseHelpFaqQuery(initialQuery)));
+	const [activeResultIndex, setActiveResultIndex] = useState(0);
+	const [selectedResult, setSelectedResult] = useState<HelpFaqResult | null>(null);
+	const triggerRef = useRef<HTMLButtonElement>(null);
+	const searchRef = useRef<HTMLInputElement>(null);
 	const filteredGroups = useMemo(() => filterHelpFaqGroups(groups, query), [groups, query]);
-	const resultCount = filteredGroups.reduce((count, group) => count + group.items.length, 0);
-	const activeVariant = HELP_FAQ_VARIANTS.find(({ id }) => id === variant) ?? HELP_FAQ_VARIANTS[0];
-	const showCategoryLinks = variant === "categories" || variant === "combined";
-	const showHighlights = variant === "highlight" || variant === "combined";
-	const useStackedMobileRows = variant === "mobile" || variant === "combined";
-	const showContactPanel = variant === "contact" || variant === "combined";
+	const results = useMemo(() => flattenHelpFaqGroups(filteredGroups), [filteredGroups]);
+	const activeResult = results[activeResultIndex];
+
+	useEffect(() => {
+		setActiveResultIndex((currentIndex) => Math.min(currentIndex, Math.max(results.length - 1, 0)));
+	}, [results.length]);
+
+	useEffect(() => {
+		if (!isPaletteOpen) {
+			return;
+		}
+
+		searchRef.current?.focus();
+		const previousOverflow = document.body.style.overflow;
+		document.body.style.overflow = "hidden";
+
+		return () => {
+			document.body.style.overflow = previousOverflow;
+		};
+	}, [isPaletteOpen]);
+
+	useEffect(() => {
+		const handleGlobalKeyDown = (event: KeyboardEvent) => {
+			if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+				event.preventDefault();
+				setIsPaletteOpen(true);
+			}
+		};
+
+		window.addEventListener("keydown", handleGlobalKeyDown);
+
+		return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+	}, []);
 
 	const updateQuery = (nextQuery: string) => {
 		const normalizedQuery = parseHelpFaqQuery(nextQuery);
 		setQuery(normalizedQuery);
+		setActiveResultIndex(0);
+		setSelectedResult(null);
 
 		if (typeof window === "undefined") {
 			return;
@@ -71,303 +84,300 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 		window.history.replaceState(null, "", `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`);
 	};
 
-	const updateVariant = (nextVariant: HelpFaqVariant) => {
-		setVariant(nextVariant);
+	const openPalette = () => setIsPaletteOpen(true);
+	const closePalette = () => {
+		setIsPaletteOpen(false);
+		window.requestAnimationFrame(() => triggerRef.current?.focus());
+	};
+	const selectResult = (result: HelpFaqResult) => {
+		setSelectedResult(result);
+		setIsPaletteOpen(false);
+		window.requestAnimationFrame(() => triggerRef.current?.focus());
 	};
 
 	return (
-		<section aria-labelledby="help-faq-catalog-title" className="mt-12 scroll-mt-24">
-			<CatalogHeader activeVariant={activeVariant} resultCount={resultCount} />
+		<section aria-labelledby="help-faq-catalog-title" className="mt-10 scroll-mt-24">
+			<h2 id="help-faq-catalog-title" className="sr-only">
+				Help FAQ search
+			</h2>
 
-			<VariantTabs onChange={updateVariant} value={variant} />
+			<SearchTrigger onClick={openPalette} query={query} triggerRef={triggerRef} />
 
-			<div id="help-faq-catalog-panel" role="tabpanel" className="mt-6">
-				<div className="rounded-lg border border-shell-border bg-shell-elevated/55 p-4 shadow-shell sm:p-5">
-					<SearchField onChange={updateQuery} query={query} />
+			{selectedResult && <SelectedAnswer result={selectedResult} />}
 
-					<CatalogResults
-						groups={groups}
-						filteredGroups={filteredGroups}
-						onClear={() => updateQuery("")}
-						query={showHighlights ? query : ""}
-						showCategoryLinks={showCategoryLinks}
-						useStackedMobileRows={useStackedMobileRows}
-					/>
-				</div>
-			</div>
+			<ContactPanel />
 
-			{showContactPanel ? <ContactPanel /> : null}
+			{isPaletteOpen && (
+				<HelpFaqPalette
+					activeResult={activeResult}
+					activeResultIndex={activeResultIndex}
+					closePalette={closePalette}
+					filteredGroups={filteredGroups}
+					onKeyDown={(event) => {
+						if (event.key === "ArrowDown") {
+							event.preventDefault();
+							setActiveResultIndex((currentIndex) => Math.min(currentIndex + 1, Math.max(results.length - 1, 0)));
+						}
+
+						if (event.key === "ArrowUp") {
+							event.preventDefault();
+							setActiveResultIndex((currentIndex) => Math.max(currentIndex - 1, 0));
+						}
+
+						if (event.key === "Enter" && activeResult) {
+							event.preventDefault();
+							selectResult(activeResult);
+						}
+
+						if (event.key === "Escape") {
+							event.preventDefault();
+							closePalette();
+						}
+					}}
+					query={query}
+					results={results}
+					searchRef={searchRef}
+					selectResult={selectResult}
+					updateQuery={updateQuery}
+				/>
+			)}
 		</section>
 	);
 };
 
-function CatalogHeader({
-	activeVariant,
-	resultCount,
+function SearchTrigger({
+	onClick,
+	query,
+	triggerRef,
 }: {
-	activeVariant: (typeof HELP_FAQ_VARIANTS)[number];
-	resultCount: number;
+	onClick: () => void;
+	query: string;
+	triggerRef: RefObject<HTMLButtonElement | null>;
 }) {
 	return (
-		<div className="flex flex-col gap-5 border-shell-border border-y py-5 lg:flex-row lg:items-end lg:justify-between">
-			<div>
-				<p className="text-primary text-s+ uppercase tracking-normal">Prototype directions</p>
+		<button
+			ref={triggerRef}
+			type="button"
+			aria-haspopup="dialog"
+			aria-label={query ? `Open Help search for ${query}` : "Open Help search"}
+			onClick={onClick}
+			className="group relative isolate flex min-h-14 w-full cursor-pointer items-center justify-between gap-4 overflow-hidden rounded-xl border border-primary-subtle-border/70 bg-shell-elevated/45 px-4 text-left shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07),0_18px_42px_rgb(0_0_0_/_0.24)] outline-none backdrop-blur-md transition-[border-color,box-shadow] duration-150 before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-r before:from-primary/10 before:via-transparent before:to-warning/10 before:content-[''] hover:border-primary focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/25 motion-reduce:transition-none"
+		>
+			<span className="relative z-1 flex min-w-0 items-center gap-3 text-m text-shell-muted sm:text-l">
+				<Search
+					aria-hidden
+					className="size-5 shrink-0 text-shell-muted transition-colors duration-150 group-hover:text-primary group-focus-visible:text-primary motion-reduce:transition-none"
+				/>
 
-				<h2 id="help-faq-catalog-title" className="mt-2 text-3xl+ text-shell-foreground tracking-normal">
-					Find an answer
-				</h2>
-			</div>
+				<span className="truncate">{query || "Search help"}</span>
+			</span>
 
-			<div className="max-w-xl lg:text-right">
-				<p className="text-m text-shell-muted leading-6">{activeVariant.description}</p>
+			<span className="relative z-1 flex shrink-0 items-center gap-2 text-primary">
+				<span className="hidden items-center gap-1 font-mono text-s text-shell-muted sm:inline-flex">
+					<kbd className="rounded border border-shell-border px-1.5 py-0.5">⌘</kbd>
 
-				<p aria-live="polite" className="mt-2 font-mono text-primary text-s+">
-					{resultCount} {resultCount === 1 ? "match" : "matches"}
-				</p>
-			</div>
-		</div>
+					<kbd className="rounded border border-shell-border px-1.5 py-0.5">K</kbd>
+				</span>
+
+				<span
+					aria-hidden
+					className="text-xl leading-none transition-transform duration-150 group-hover:translate-x-0.5 motion-reduce:transition-none"
+				>
+					→
+				</span>
+			</span>
+		</button>
 	);
 }
 
-function VariantTabs({ onChange, value }: { onChange: (variant: HelpFaqVariant) => void; value: HelpFaqVariant }) {
+function HelpFaqPalette({
+	activeResult,
+	activeResultIndex,
+	closePalette,
+	filteredGroups,
+	onKeyDown,
+	query,
+	results,
+	searchRef,
+	selectResult,
+	updateQuery,
+}: {
+	activeResult: HelpFaqResult | undefined;
+	activeResultIndex: number;
+	closePalette: () => void;
+	filteredGroups: readonly HelpFaqGroupLike[];
+	onKeyDown: (event: ReactKeyboardEvent<HTMLInputElement>) => void;
+	query: string;
+	results: readonly HelpFaqResult[];
+	searchRef: RefObject<HTMLInputElement | null>;
+	selectResult: (result: HelpFaqResult) => void;
+	updateQuery: (query: string) => void;
+}) {
 	return (
-		<div role="tablist" aria-label="FAQ catalog variants" className="mt-5 overflow-x-auto pb-1">
-			<div className="flex min-w-max gap-2">
-				{HELP_FAQ_VARIANTS.map(({ id, label }) => (
-					<button
-						key={id}
-						type="button"
-						role="tab"
-						aria-controls="help-faq-catalog-panel"
-						aria-selected={value === id}
-						onClick={() => onChange(id)}
-						className={cn(
-							"min-h-11 rounded-md border px-3 font-medium text-m outline-none transition-[background-color,border-color,color] duration-150 focus-visible:ring-[3px] focus-visible:ring-primary/25",
-							value === id
-								? "border-primary bg-primary text-primary-foreground"
-								: "border-shell-border bg-shell-elevated text-shell-muted hover:border-primary-subtle-border hover:text-shell-foreground",
-						)}
-					>
-						{label}
-					</button>
-				))}
-			</div>
-		</div>
-	);
-}
+		<div
+			role="presentation"
+			className="fixed inset-0 z-50 flex items-center justify-center bg-shell/75 p-4 backdrop-blur-md motion-reduce:backdrop-blur-none max-md:items-stretch max-md:p-0"
+		>
+			<button
+				type="button"
+				aria-hidden="true"
+				aria-label="Close Help search"
+				tabIndex={-1}
+				onClick={closePalette}
+				className="absolute inset-0 cursor-default"
+			/>
 
-function SearchField({ onChange, query }: { onChange: (query: string) => void; query: string }) {
-	return (
-		<div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-			<div className="min-w-0 flex-1">
-				<label htmlFor="help-faq-search" className="text-m+ text-shell-foreground">
-					Search help
-				</label>
+			<div
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby={HELP_FAQ_DIALOG_TITLE_ID}
+				className="relative isolate flex max-h-[min(760px,calc(100dvh-2rem))] w-full max-w-[680px] flex-col overflow-hidden rounded-2xl border border-primary-subtle-border/70 bg-shell-elevated/90 text-shell-foreground shadow-[inset_0_1px_0_rgb(255_255_255_/_0.1),0_30px_90px_rgb(0_0_0_/_0.55)] backdrop-blur-xl before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-br before:from-primary/8 before:via-transparent before:to-warning/8 before:content-[''] max-md:h-full max-md:max-h-none max-md:max-w-none max-md:rounded-none max-md:border-x-0 max-md:border-b-0"
+			>
+				<div className="relative z-1 flex min-h-16 items-center gap-3 border-shell-border border-b bg-shell/45 px-5 max-md:px-4">
+					<Search aria-hidden className="size-5 shrink-0 text-primary" />
 
-				<div className="relative mt-2">
-					<Search
-						aria-hidden
-						className="pointer-events-none absolute top-1/2 left-3 size-5 -translate-y-1/2 text-shell-muted"
-					/>
+					<h2 id={HELP_FAQ_DIALOG_TITLE_ID} className="sr-only">
+						Search Help FAQs
+					</h2>
 
 					<input
-						id="help-faq-search"
+						ref={searchRef}
+						id={HELP_FAQ_SEARCH_ID}
+						type="search"
 						value={query}
-						onChange={(event) => onChange(event.target.value)}
-						placeholder="Search questions, answers, or a topic"
+						onChange={(event) => updateQuery(event.target.value)}
+						onKeyDown={onKeyDown}
+						placeholder="Search help…"
 						autoComplete="off"
-						spellCheck="false"
-						className="h-12 w-full rounded-md border border-shell-border bg-shell px-11 pr-12 text-base text-shell-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-shell-muted focus:border-primary focus:ring-[3px] focus:ring-primary/20"
+						aria-label="Search Help FAQs"
+						aria-controls={HELP_FAQ_RESULTS_ID}
+						aria-activedescendant={activeResult ? resultDomId(activeResult.id) : undefined}
+						className="min-w-0 flex-1 border-0 bg-transparent text-base text-shell-foreground outline-none placeholder:text-shell-muted focus:ring-0 sm:text-l"
 					/>
 
-					{query ? (
-						<button
-							type="button"
-							aria-label="Clear help search"
-							onClick={() => onChange("")}
-							className="absolute top-1/2 right-1.5 grid size-11 -translate-y-1/2 place-items-center rounded-md text-shell-muted outline-none transition-colors duration-150 hover:text-shell-foreground focus-visible:ring-[3px] focus-visible:ring-primary/25"
-						>
-							<X aria-hidden className="size-5" />
-						</button>
-					) : null}
+					<button
+						type="button"
+						aria-label="Close Help search"
+						onClick={closePalette}
+						className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-md text-shell-muted outline-none transition-[background-color,color] duration-150 hover:bg-primary/10 hover:text-shell-foreground focus-visible:ring-[3px] focus-visible:ring-primary/25 motion-reduce:transition-none"
+					>
+						<X aria-hidden className="size-5" />
+					</button>
+				</div>
+
+				<div
+					id={HELP_FAQ_RESULTS_ID}
+					role="listbox"
+					aria-label="Help FAQ results"
+					className="relative z-1 min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-4 sm:px-5"
+				>
+					{filteredGroups.length > 0 ? (
+						filteredGroups.map((group) => (
+							<div key={group.name} className="not-first:mt-5">
+								<p className="px-3 pb-2 font-mono font-semibold text-primary text-s+ uppercase tracking-[0.16em]">
+									{group.name}
+								</p>
+
+								{group.items.map((item) => {
+									const result = findResult(results, group.name, item.question);
+									const resultIndex = results.findIndex(({ id }) => id === result.id);
+									const active = resultIndex === activeResultIndex;
+
+									return (
+										<button
+											key={result.id}
+											type="button"
+											role="option"
+											id={resultDomId(result.id)}
+											aria-selected={active}
+											onClick={() => selectResult(result)}
+											className={cn(
+												"group flex min-h-14 w-full cursor-pointer items-center gap-3 rounded-xl border px-3 py-2.5 text-left outline-none transition-[background-color,border-color,box-shadow] duration-150 focus-visible:ring-[3px] focus-visible:ring-primary/25 motion-reduce:transition-none",
+												active
+													? "border-warning/80 bg-warning/10 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07),0_0_28px_rgb(210_157_24_/_0.12)]"
+													: "border-transparent hover:border-shell-border hover:bg-shell/35",
+											)}
+										>
+											<span
+												className={cn(
+													"grid size-8 shrink-0 place-items-center rounded-md text-shell-muted transition-colors duration-150 motion-reduce:transition-none",
+													active && "text-warning",
+												)}
+											>
+												<FileQuestion aria-hidden className="size-4" />
+											</span>
+
+											<span className="min-w-0 flex-1">
+												<span className="block truncate font-medium text-m text-shell-foreground">
+													<HighlightText query={query} text={result.question} />
+												</span>
+
+												<span className="mt-1 block text-s text-shell-muted leading-5 md:hidden">
+													<HighlightText query={query} text={result.answer} />
+												</span>
+											</span>
+
+											<span
+												className={cn(
+													"grid size-9 shrink-0 place-items-center rounded-md text-shell-muted transition-[background-color,color] duration-150 motion-reduce:transition-none",
+													active && "bg-warning text-shell",
+												)}
+											>
+												{active ? (
+													<CornerDownLeft aria-hidden className="size-4" />
+												) : (
+													<ChevronRight aria-hidden className="size-4" />
+												)}
+											</span>
+										</button>
+									);
+								})}
+							</div>
+						))
+					) : (
+						<EmptyState onClear={() => updateQuery("")} query={query} />
+					)}
+				</div>
+
+				<div className="relative z-1 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-shell-border border-t bg-shell/45 px-5 py-3 text-s text-shell-muted max-md:px-4">
+					<p aria-live="polite" className="font-mono">
+						{results.length} {results.length === 1 ? "answer" : "answers"}
+					</p>
+
+					<div className="flex flex-wrap items-center gap-3">
+						<span className="hidden items-center gap-1 sm:inline-flex">
+							<kbd className="rounded border border-shell-border px-1.5 py-0.5">↑ ↓</kbd> Navigate
+						</span>
+
+						<span className="hidden items-center gap-1 sm:inline-flex">
+							<kbd className="rounded border border-shell-border px-1.5 py-0.5">↵</kbd> Open answer
+						</span>
+
+						<span className="inline-flex items-center gap-1">
+							<kbd className="rounded border border-shell-border px-1.5 py-0.5">Esc</kbd> Close
+						</span>
+					</div>
 				</div>
 			</div>
-
-			<p className="shrink-0 text-m text-shell-muted sm:pb-3">Search includes topic names</p>
-		</div>
-	);
-}
-
-function CatalogResults({
-	filteredGroups,
-	groups,
-	onClear,
-	query,
-	showCategoryLinks,
-	useStackedMobileRows,
-}: {
-	filteredGroups: readonly HelpFaqGroupLike[];
-	groups: readonly HelpFaqGroupLike[];
-	onClear: () => void;
-	query: string;
-	showCategoryLinks: boolean;
-	useStackedMobileRows: boolean;
-}) {
-	return (
-		<>
-			{showCategoryLinks ? <CategoryLinks groups={groups} /> : null}
-
-			{filteredGroups.length > 0 ? (
-				<>
-					<div className={cn("mt-5", useStackedMobileRows && "md:hidden")}>
-						{useStackedMobileRows ? <StackedRows groups={filteredGroups} query={query} /> : null}
-					</div>
-
-					<div
-						className={cn(
-							"mt-5 overflow-x-auto rounded-md border border-shell-border",
-							useStackedMobileRows && "hidden md:block",
-						)}
-					>
-						<HelpFaqTable groups={filteredGroups} query={query} />
-					</div>
-				</>
-			) : (
-				<EmptyState onClear={onClear} query={query} />
-			)}
-		</>
-	);
-}
-
-function HelpFaqTable({ groups, query }: { groups: readonly HelpFaqGroupLike[]; query: string }) {
-	return (
-		<table
-			aria-label="Help questions and answers"
-			className="w-full min-w-[42rem] border-separate border-spacing-0 text-left"
-		>
-			<thead>
-				<tr>
-					<th
-						scope="col"
-						className="w-[38%] border-shell-border border-b bg-shell px-4 py-3 font-medium text-m text-shell-muted"
-					>
-						Question
-					</th>
-
-					<th
-						scope="col"
-						className="border-shell-border border-b bg-shell px-4 py-3 font-medium text-m text-shell-muted"
-					>
-						Answer
-					</th>
-				</tr>
-			</thead>
-
-			<tbody>
-				{groups.map((group) => (
-					<HelpFaqGroupRows key={group.name} group={group} query={query} />
-				))}
-			</tbody>
-		</table>
-	);
-}
-
-function CategoryLinks({ groups }: Pick<HelpFaqCatalogProps, "groups">) {
-	return (
-		<nav aria-label="Help categories" className="mt-5 flex flex-wrap gap-2 border-shell-border border-t pt-4">
-			{groups.map(({ name }) => (
-				<a
-					key={name}
-					href={`#help-group-${slugify(name)}`}
-					className="inline-flex min-h-11 items-center rounded-md border border-primary-subtle-border/70 bg-primary-subtle/45 px-3 font-medium text-m text-primary outline-none transition-colors duration-150 hover:bg-primary-subtle focus-visible:ring-[3px] focus-visible:ring-primary/25"
-				>
-					{name}
-				</a>
-			))}
-		</nav>
-	);
-}
-
-function HelpFaqGroupRows({ group, query }: { group: HelpFaqCatalogProps["groups"][number]; query: string }) {
-	return (
-		<>
-			<tr id={`help-group-${slugify(group.name)}`} className="scroll-mt-24">
-				<th
-					colSpan={2}
-					scope="rowgroup"
-					className="border-shell-border border-b bg-primary/5 px-4 py-3 text-left font-semibold text-m text-primary"
-				>
-					<span>{group.name}</span>
-
-					<span className="ml-2 font-mono font-normal text-s+ text-shell-muted">{group.items.length}</span>
-				</th>
-			</tr>
-
-			{group.items.map(({ answer, question }) => (
-				<tr key={question}>
-					<th
-						scope="row"
-						className="border-shell-border border-b px-4 py-4 align-top font-medium text-l text-shell-foreground leading-7"
-					>
-						<HighlightText query={query} text={question} />
-					</th>
-
-					<td className="border-shell-border border-b px-4 py-4 align-top text-l text-shell-muted leading-7">
-						<HighlightText query={query} text={answer} />
-					</td>
-				</tr>
-			))}
-		</>
-	);
-}
-
-function StackedRows({ groups, query }: { groups: HelpFaqCatalogProps["groups"]; query: string }) {
-	return (
-		<div className="grid gap-3">
-			{groups.map((group) => (
-				<section
-					key={group.name}
-					id={`help-group-${slugify(group.name)}`}
-					className="scroll-mt-24 rounded-md border border-shell-border bg-shell px-4 py-4"
-				>
-					<h3 className="font-semibold text-m text-primary">
-						{group.name} <span className="font-mono font-normal text-s+ text-shell-muted">{group.items.length}</span>
-					</h3>
-
-					<div className="mt-3 divide-y divide-shell-border">
-						{group.items.map(({ answer, question }) => (
-							<article key={question} className="py-4 first:pt-0 last:pb-0">
-								<h4 className="font-medium text-l text-shell-foreground leading-7">
-									<HighlightText query={query} text={question} />
-								</h4>
-
-								<p className="mt-2 text-l text-shell-muted leading-7">
-									<HighlightText query={query} text={answer} />
-								</p>
-							</article>
-						))}
-					</div>
-				</section>
-			))}
 		</div>
 	);
 }
 
 function EmptyState({ onClear, query }: { onClear: () => void; query: string }) {
 	return (
-		<div className="mt-5 flex min-h-48 flex-col items-center justify-center rounded-md border border-shell-border border-dashed bg-shell px-6 py-10 text-center">
-			<p className="font-mono text-primary text-s+">No matches</p>
+		<div className="flex min-h-56 flex-col items-center justify-center rounded-xl border border-shell-border border-dashed bg-shell/25 px-6 py-10 text-center">
+			<Search aria-hidden className="size-5 text-shell-muted" />
 
-			<h3 className="mt-2 text-2xl text-shell-foreground">No results for “{query}”</h3>
+			<h3 className="mt-3 text-shell-foreground text-xl">No results for “{query}”</h3>
 
 			<p className="mt-2 max-w-md text-m text-shell-muted leading-6">
-				Try a shorter phrase, search a topic name, or clear the query to browse every answer.
+				Try a shorter phrase or browse the Help answers without a search.
 			</p>
 
 			<button
 				type="button"
 				onClick={onClear}
-				className="mt-5 inline-flex min-h-11 items-center rounded-md border border-shell-border px-4 font-medium text-m text-shell-foreground outline-none transition-colors duration-150 hover:border-primary hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/25"
+				className="mt-5 inline-flex min-h-11 cursor-pointer items-center rounded-md border border-shell-border px-4 font-medium text-m text-shell-foreground outline-none transition-[border-color,color] duration-150 hover:border-primary hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/25 motion-reduce:transition-none"
 			>
 				Clear search
 			</button>
@@ -375,24 +385,79 @@ function EmptyState({ onClear, query }: { onClear: () => void; query: string }) 
 	);
 }
 
+function SelectedAnswer({ result }: { result: HelpFaqResult }) {
+	return (
+		<article className="relative isolate mt-5 overflow-hidden rounded-xl border border-primary-subtle-border/70 bg-shell-elevated/45 p-4 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07),0_18px_42px_rgb(0_0_0_/_0.24)] backdrop-blur-md before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-r before:from-primary/10 before:via-transparent before:to-warning/10 before:content-[''] sm:p-5">
+			<div className="relative flex items-start gap-3">
+				<span className="grid size-9 shrink-0 place-items-center rounded-md border border-primary/35 bg-primary/10 text-primary">
+					<FileQuestion aria-hidden className="size-4" />
+				</span>
+
+				<div className="min-w-0">
+					<p className="font-mono text-primary text-s uppercase tracking-[0.14em]">Answer</p>
+
+					<h3 className="mt-1 font-medium text-m text-shell-foreground sm:text-l">{result.question}</h3>
+
+					<p className="mt-2 text-m text-shell-muted leading-6 sm:text-l sm:leading-7">{result.answer}</p>
+				</div>
+			</div>
+		</article>
+	);
+}
+
 function ContactPanel() {
 	return (
-		<aside className="mt-8 flex flex-col gap-5 rounded-lg border border-primary-subtle-border bg-primary-subtle/35 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-			<div>
-				<p className="text-primary text-s+ uppercase tracking-normal">Still need help?</p>
+		<aside className="relative isolate mt-8 overflow-hidden rounded-lg border border-warning/60 bg-warning-subtle/55 p-4 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07),0_18px_42px_rgb(0_0_0_/_0.22)] backdrop-blur-md before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-r before:from-warning/10 before:via-transparent before:to-primary/5 before:content-[''] sm:p-6">
+			<div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+				<div className="flex min-w-0 items-start gap-3">
+					<span className="grid size-10 shrink-0 place-items-center rounded-md border border-warning/70 bg-warning/10 text-warning">
+						<MessageCircle aria-hidden className="size-5" />
+					</span>
 
-				<h3 className="mt-2 text-2xl text-shell-foreground">Talk through cash ops for your service team.</h3>
+					<div className="min-w-0">
+						<h3 className="font-semibold text-shell-foreground text-xl">Still need help?</h3>
 
-				<p className="mt-2 max-w-2xl text-m text-shell-muted leading-6">
-					Use this MVP contact page for sales, support, partnerships, and product feedback. Submissions stay local in
-					demo mode.
-				</p>
+						<p className="mt-1 max-w-xl text-m text-shell-muted leading-6">
+							Talk through cash ops for your service team—sales, support, partnerships, and product feedback stay local
+							in demo mode.
+						</p>
+					</div>
+				</div>
+
+				<div className="grid gap-4 sm:grid-cols-2 lg:flex lg:items-center">
+					<ContactChannel email="sales@cashlift.example" label="Sales" />
+
+					<ContactChannel email="support@cashlift.example" label="Support" />
+
+					<ActionLink
+						href="/contact"
+						variant="secondary"
+						className="w-full border-warning/70 bg-warning/10 text-warning hover:border-warning hover:bg-warning/15 hover:text-warning sm:col-span-2 lg:w-auto"
+					>
+						Contact us
+					</ActionLink>
+				</div>
 			</div>
-
-			<ActionLink href="/contact" variant="secondary" className="shrink-0">
-				Contact us
-			</ActionLink>
 		</aside>
+	);
+}
+
+function ContactChannel({ email, label }: { email: string; label: string }) {
+	return (
+		<div className="flex min-w-0 items-center gap-2">
+			<Mail aria-hidden className="size-4 shrink-0 text-warning" />
+
+			<div className="min-w-0">
+				<p className="text-s text-shell-muted">{label}</p>
+
+				<a
+					href={`mailto:${email}`}
+					className="break-all text-s text-warning underline-offset-4 outline-none hover:underline focus-visible:ring-[3px] focus-visible:ring-warning/30"
+				>
+					{email}
+				</a>
+			</div>
+		</div>
 	);
 }
 
@@ -421,6 +486,30 @@ function HighlightText({ query, text }: { query: string; text: string }) {
 			part
 		);
 	});
+}
+
+function flattenHelpFaqGroups(groups: readonly HelpFaqGroupLike[]): HelpFaqResult[] {
+	return groups.flatMap((group) =>
+		group.items.map((item) => ({
+			...item,
+			groupName: group.name,
+			id: `${slugify(group.name)}-${slugify(item.question)}`,
+		})),
+	);
+}
+
+function findResult(results: readonly HelpFaqResult[], groupName: string, question: string): HelpFaqResult {
+	const result = results.find((item) => item.groupName === groupName && item.question === question);
+
+	if (!result) {
+		throw new Error(`Missing Help FAQ result for ${groupName}: ${question}`);
+	}
+
+	return result;
+}
+
+function resultDomId(id: string) {
+	return `help-faq-result-${id}`;
 }
 
 function escapeRegExp(value: string) {
