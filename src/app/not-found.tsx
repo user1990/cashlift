@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function NotFound() {
 	return (
 		<main className="grid min-h-dvh place-items-center bg-shell px-6 py-16 text-shell-foreground">
@@ -11,13 +13,13 @@ export default function NotFound() {
 				</p>
 
 				<nav aria-label="Not found recovery" className="mt-8 flex flex-wrap gap-x-5 gap-y-3 text-primary">
-					<a href="/">Home</a>
+					<Link href="/">Home</Link>
 
-					<a href="/sitemap.xml">Sitemap</a>
+					<Link href="/sitemap.xml">Sitemap</Link>
 
-					<a href="/llms.txt">Agent guidance</a>
+					<Link href="/llms.txt">Agent guidance</Link>
 
-					<a href="/help">Help</a>
+					<Link href="/help">Help</Link>
 				</nav>
 			</section>
 		</main>

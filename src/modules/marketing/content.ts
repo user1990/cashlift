@@ -23,6 +23,7 @@ type FooterLinkGroup = {
 };
 
 type HelpFaqGroup = {
+	icon: LucideIcon;
 	items: readonly HelpFaqItem[];
 	name: string;
 };
@@ -227,6 +228,7 @@ export const PROOF_POINTS = [
 
 export const HELP_FAQ_GROUPS = [
 	{
+		icon: ChartSpline,
 		items: [
 			{
 				answer:
@@ -247,6 +249,7 @@ export const HELP_FAQ_GROUPS = [
 		name: "How it works",
 	},
 	{
+		icon: LifeBuoy,
 		items: [
 			{
 				answer:
@@ -266,6 +269,7 @@ export const HELP_FAQ_GROUPS = [
 		name: "Demo",
 	},
 	{
+		icon: Users,
 		items: [
 			{
 				answer: "Finance sees all cash decisions. Managers approve team spend. Employees submit requests and receipts.",
@@ -279,6 +283,7 @@ export const HELP_FAQ_GROUPS = [
 		name: "Company workspace",
 	},
 	{
+		icon: CreditCard,
 		items: [
 			{
 				answer: "Open /pricing for current plan details, feature coverage, and the full comparison.",
@@ -293,6 +298,7 @@ export const HELP_FAQ_GROUPS = [
 		name: "Plans",
 	},
 	{
+		icon: BanknoteArrowUp,
 		items: [
 			{
 				answer: "No. The live demo is available to explore without creating an account.",

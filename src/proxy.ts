@@ -10,6 +10,8 @@ import { preferredContentType } from "@/utilities/http/accept";
 const AUTH_PATH_PREFIXES = ["/login", "/signup"] as const;
 const CLERK_ASSET_PATH_PREFIX = "/__clerk";
 const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard", "/api/workspace"] as const;
+const NON_DOCUMENT_PATH_PREFIXES = ["/api", "/dashboard", "/login", "/signup", "/__clerk", "/_next"] as const;
+const NON_DOCUMENT_PATHS = ["/llms.txt", "/openapi.json", "/robots.txt", "/sitemap.xml"] as const;
 const NEXT_IMAGE_FILL_STYLE_HASH = "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='";
 const NEXT_IMAGE_COLOR_STYLE_HASH = "'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk='";
 const isDevelopment = () => process.env.NODE_ENV === "development";
@@ -101,8 +103,12 @@ const isNextInternalRequest = (request: NextRequest) =>
 	request.headers.has("Next-Router-State-Tree") ||
 	request.headers.has("Next-Router-Prefetch");
 
+const isPublicDocumentPath = (pathname: string) =>
+	!NON_DOCUMENT_PATHS.includes(pathname as (typeof NON_DOCUMENT_PATHS)[number]) &&
+	!NON_DOCUMENT_PATH_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
+
 const handleAgentContentNegotiation = (request: NextRequest) => {
-	if (isNextInternalRequest(request)) {
+	if (isNextInternalRequest(request) || !isPublicDocumentPath(request.nextUrl.pathname)) {
 		return undefined;
 	}
 
@@ -126,13 +132,16 @@ const handleAgentContentNegotiation = (request: NextRequest) => {
 	}
 
 	if (preferredType === null && acceptHeader) {
-		return new Response("Not Acceptable\n\nAvailable: text/html, text/markdown\n", {
+		const response = new Response("Not Acceptable\n\nAvailable: text/html, text/markdown\n", {
 			headers: {
 				"Content-Type": "text/plain; charset=utf-8",
 				Vary: "Accept, Accept-Encoding",
 			},
 			status: 406,
 		});
+		const { contentSecurityPolicy } = createSecurityRequestHeaders(request);
+
+		return applySecurityResponseHeaders(request, response, contentSecurityPolicy);
 	}
 
 	return undefined;

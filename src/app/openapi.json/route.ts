@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { WORKSPACE_DATASET_SCOPE_SCHEMA } from "@/modules/workspace/schemas";
 import { SITE_URL } from "@/services/site";
 
 const OPENAPI_DOCUMENT = {
@@ -20,7 +21,7 @@ const OPENAPI_DOCUMENT = {
 						required: false,
 						schema: {
 							default: "overview",
-							enum: ["approvals", "cash", "invoices", "overview", "vendors"],
+							enum: [...WORKSPACE_DATASET_SCOPE_SCHEMA.options],
 							type: "string",
 						},
 					},

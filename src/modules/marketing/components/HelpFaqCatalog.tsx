@@ -1,13 +1,14 @@
 "use client";
 
-import { ChevronRight, CornerDownLeft, FileQuestion, Mail, MessageCircle, Search, X } from "lucide-react";
-import type { KeyboardEvent as ReactKeyboardEvent, RefObject } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { ChevronRight, CornerDownLeft, FileQuestion, Mail, MessageCircle, Search, SearchX, X } from "lucide-react";
+import type { KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, RefObject } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/ui/utils/cn";
 import { filterHelpFaqGroups, type HelpFaqGroupLike, type HelpFaqItemLike, parseHelpFaqQuery } from "../utils";
 import { ActionLink } from "./ActionLink";
 
 const HELP_FAQ_SEARCH_ID = "help-faq-search";
+const HELP_FAQ_DIALOG_ID = "help-faq-dialog";
 const HELP_FAQ_DIALOG_TITLE_ID = "help-faq-dialog-title";
 const HELP_FAQ_RESULTS_ID = "help-faq-results";
 
@@ -18,6 +19,7 @@ type HelpFaqCatalogProps = {
 
 type HelpFaqResult = HelpFaqItemLike & {
 	groupName: string;
+	icon?: HelpFaqGroupLike["icon"];
 	id: string;
 };
 
@@ -26,15 +28,13 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 	const [isPaletteOpen, setIsPaletteOpen] = useState(() => Boolean(parseHelpFaqQuery(initialQuery)));
 	const [activeResultIndex, setActiveResultIndex] = useState(0);
 	const [selectedResult, setSelectedResult] = useState<HelpFaqResult | null>(null);
+	const dialogRef = useRef<HTMLDialogElement>(null);
 	const triggerRef = useRef<HTMLButtonElement>(null);
 	const searchRef = useRef<HTMLInputElement>(null);
 	const filteredGroups = useMemo(() => filterHelpFaqGroups(groups, query), [groups, query]);
 	const results = useMemo(() => flattenHelpFaqGroups(filteredGroups), [filteredGroups]);
-	const activeResult = results[activeResultIndex];
-
-	useEffect(() => {
-		setActiveResultIndex((currentIndex) => Math.min(currentIndex, Math.max(results.length - 1, 0)));
-	}, [results.length]);
+	const visibleActiveResultIndex = Math.min(activeResultIndex, Math.max(results.length - 1, 0));
+	const activeResult = results[visibleActiveResultIndex];
 
 	useEffect(() => {
 		if (!isPaletteOpen) {
@@ -49,19 +49,6 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 			document.body.style.overflow = previousOverflow;
 		};
 	}, [isPaletteOpen]);
-
-	useEffect(() => {
-		const handleGlobalKeyDown = (event: KeyboardEvent) => {
-			if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-				event.preventDefault();
-				setIsPaletteOpen(true);
-			}
-		};
-
-		window.addEventListener("keydown", handleGlobalKeyDown);
-
-		return () => window.removeEventListener("keydown", handleGlobalKeyDown);
-	}, []);
 
 	const updateQuery = (nextQuery: string) => {
 		const normalizedQuery = parseHelpFaqQuery(nextQuery);
@@ -84,16 +71,32 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 		window.history.replaceState(null, "", `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`);
 	};
 
-	const openPalette = () => setIsPaletteOpen(true);
-	const closePalette = () => {
+	const openPalette = useCallback(() => setIsPaletteOpen(true), []);
+	const closePalette = useCallback(() => {
 		setIsPaletteOpen(false);
 		window.requestAnimationFrame(() => triggerRef.current?.focus());
-	};
+	}, []);
 	const selectResult = (result: HelpFaqResult) => {
 		setSelectedResult(result);
-		setIsPaletteOpen(false);
-		window.requestAnimationFrame(() => triggerRef.current?.focus());
+		closePalette();
 	};
+
+	useEffect(() => {
+		const handleGlobalKeyDown = (event: KeyboardEvent) => {
+			if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+				event.preventDefault();
+				if (isPaletteOpen) {
+					closePalette();
+				} else {
+					openPalette();
+				}
+			}
+		};
+
+		window.addEventListener("keydown", handleGlobalKeyDown);
+
+		return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+	}, [closePalette, isPaletteOpen, openPalette]);
 
 	return (
 		<section aria-labelledby="help-faq-catalog-title" className="mt-10 scroll-mt-24">
@@ -110,8 +113,9 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 			{isPaletteOpen && (
 				<HelpFaqPalette
 					activeResult={activeResult}
-					activeResultIndex={activeResultIndex}
+					activeResultIndex={visibleActiveResultIndex}
 					closePalette={closePalette}
+					dialogRef={dialogRef}
 					filteredGroups={filteredGroups}
 					onKeyDown={(event) => {
 						if (event.key === "ArrowDown") {
@@ -124,14 +128,13 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 							setActiveResultIndex((currentIndex) => Math.max(currentIndex - 1, 0));
 						}
 
-						if (event.key === "Enter" && activeResult) {
+						if (event.key === "Enter") {
 							event.preventDefault();
-							selectResult(activeResult);
-						}
-
-						if (event.key === "Escape") {
-							event.preventDefault();
-							closePalette();
+							if (activeResult) {
+								selectResult(activeResult);
+							} else {
+								updateQuery("");
+							}
 						}
 					}}
 					query={query}
@@ -158,6 +161,7 @@ function SearchTrigger({
 		<button
 			ref={triggerRef}
 			type="button"
+			aria-controls={HELP_FAQ_DIALOG_ID}
 			aria-haspopup="dialog"
 			aria-label={query ? `Open Help search for ${query}` : "Open Help search"}
 			onClick={onClick}
@@ -173,7 +177,7 @@ function SearchTrigger({
 			</span>
 
 			<span className="relative z-1 flex shrink-0 items-center gap-2 text-primary">
-				<span className="hidden items-center gap-1 font-mono text-s text-shell-muted sm:inline-flex">
+				<span className="hidden items-center gap-1 font-mono text-s text-shell-muted md:inline-flex">
 					<kbd className="rounded border border-shell-border px-1.5 py-0.5">⌘</kbd>
 
 					<kbd className="rounded border border-shell-border px-1.5 py-0.5">K</kbd>
@@ -194,6 +198,7 @@ function HelpFaqPalette({
 	activeResult,
 	activeResultIndex,
 	closePalette,
+	dialogRef,
 	filteredGroups,
 	onKeyDown,
 	query,
@@ -205,6 +210,7 @@ function HelpFaqPalette({
 	activeResult: HelpFaqResult | undefined;
 	activeResultIndex: number;
 	closePalette: () => void;
+	dialogRef: RefObject<HTMLDialogElement | null>;
 	filteredGroups: readonly HelpFaqGroupLike[];
 	onKeyDown: (event: ReactKeyboardEvent<HTMLInputElement>) => void;
 	query: string;
@@ -213,26 +219,57 @@ function HelpFaqPalette({
 	selectResult: (result: HelpFaqResult) => void;
 	updateQuery: (query: string) => void;
 }) {
-	return (
-		<div
-			role="presentation"
-			className="fixed inset-0 z-50 flex items-center justify-center bg-shell/75 p-4 backdrop-blur-md motion-reduce:backdrop-blur-none max-md:items-stretch max-md:p-0"
-		>
-			<button
-				type="button"
-				aria-hidden="true"
-				aria-label="Close Help search"
-				tabIndex={-1}
-				onClick={closePalette}
-				className="absolute inset-0 cursor-default"
-			/>
+	const handleDialogKeyDown = (event: ReactKeyboardEvent<HTMLDialogElement>) => {
+		if (event.key === "Escape") {
+			event.preventDefault();
+			closePalette();
+			return;
+		}
 
-			<div
-				role="dialog"
-				aria-modal="true"
-				aria-labelledby={HELP_FAQ_DIALOG_TITLE_ID}
-				className="relative isolate flex max-h-[min(760px,calc(100dvh-2rem))] w-full max-w-[680px] flex-col overflow-hidden rounded-2xl border border-primary-subtle-border/70 bg-shell-elevated/90 text-shell-foreground shadow-[inset_0_1px_0_rgb(255_255_255_/_0.1),0_30px_90px_rgb(0_0_0_/_0.55)] backdrop-blur-xl before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-br before:from-primary/8 before:via-transparent before:to-warning/8 before:content-[''] max-md:h-full max-md:max-h-none max-md:max-w-none max-md:rounded-none max-md:border-x-0 max-md:border-b-0"
-			>
+		if (event.key !== "Tab") {
+			return;
+		}
+
+		const focusableElements = Array.from(
+			dialogRef.current?.querySelectorAll<HTMLElement>(
+				"input:not([disabled]), button:not([disabled]):not([tabindex='-1'])",
+			) ?? [],
+		);
+		const firstFocusableElement = focusableElements[0];
+		const lastFocusableElement = focusableElements.at(-1);
+
+		if (!firstFocusableElement || !lastFocusableElement) {
+			return;
+		}
+
+		if (event.shiftKey && document.activeElement === firstFocusableElement) {
+			event.preventDefault();
+			lastFocusableElement.focus();
+			return;
+		}
+
+		if (!event.shiftKey && document.activeElement === lastFocusableElement) {
+			event.preventDefault();
+			firstFocusableElement.focus();
+		}
+	};
+
+	return (
+		<dialog
+			ref={dialogRef}
+			id={HELP_FAQ_DIALOG_ID}
+			open
+			aria-modal="true"
+			aria-labelledby={HELP_FAQ_DIALOG_TITLE_ID}
+			onClick={(event: ReactMouseEvent<HTMLDialogElement>) => {
+				if (event.target === event.currentTarget) {
+					closePalette();
+				}
+			}}
+			onKeyDown={handleDialogKeyDown}
+			className="fixed inset-0 z-50 m-0 flex h-dvh w-dvw max-w-none items-center justify-center border-0 bg-shell/75 p-4 backdrop-blur-md motion-reduce:backdrop-blur-none max-md:items-stretch max-md:p-0"
+		>
+			<div className="relative isolate flex h-[min(760px,calc(100dvh-2rem))] w-full max-w-[680px] flex-col overflow-hidden rounded-2xl border border-primary-subtle-border/70 bg-shell-elevated/90 text-shell-foreground shadow-[inset_0_1px_0_rgb(255_255_255_/_0.1),0_30px_90px_rgb(0_0_0_/_0.55)] backdrop-blur-xl before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-br before:from-primary/8 before:via-transparent before:to-warning/8 before:content-[''] max-md:h-full max-md:max-w-none max-md:rounded-none max-md:border-x-0 max-md:border-b-0">
 				<div className="relative z-1 flex min-h-16 items-center gap-3 border-shell-border border-b bg-shell/45 px-5 max-md:px-4">
 					<Search aria-hidden className="size-5 shrink-0 text-primary" />
 
@@ -243,7 +280,8 @@ function HelpFaqPalette({
 					<input
 						ref={searchRef}
 						id={HELP_FAQ_SEARCH_ID}
-						type="search"
+						type="text"
+						role="combobox"
 						value={query}
 						onChange={(event) => updateQuery(event.target.value)}
 						onKeyDown={onKeyDown}
@@ -251,6 +289,8 @@ function HelpFaqPalette({
 						autoComplete="off"
 						aria-label="Search Help FAQs"
 						aria-controls={HELP_FAQ_RESULTS_ID}
+						aria-expanded="true"
+						aria-autocomplete="list"
 						aria-activedescendant={activeResult ? resultDomId(activeResult.id) : undefined}
 						className="min-w-0 flex-1 border-0 bg-transparent text-base text-shell-foreground outline-none placeholder:text-shell-muted focus:ring-0 sm:text-l"
 					/>
@@ -258,6 +298,7 @@ function HelpFaqPalette({
 					<button
 						type="button"
 						aria-label="Close Help search"
+						title="Close Help search"
 						onClick={closePalette}
 						className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-md text-shell-muted outline-none transition-[background-color,color] duration-150 hover:bg-primary/10 hover:text-shell-foreground focus-visible:ring-[3px] focus-visible:ring-primary/25 motion-reduce:transition-none"
 					>
@@ -282,17 +323,19 @@ function HelpFaqPalette({
 									const result = findResult(results, group.name, item.question);
 									const resultIndex = results.findIndex(({ id }) => id === result.id);
 									const active = resultIndex === activeResultIndex;
+									const ResultIcon = result.icon ?? FileQuestion;
 
 									return (
 										<button
 											key={result.id}
 											type="button"
+											tabIndex={-1}
 											role="option"
 											id={resultDomId(result.id)}
 											aria-selected={active}
 											onClick={() => selectResult(result)}
 											className={cn(
-												"group flex min-h-14 w-full cursor-pointer items-center gap-3 rounded-xl border px-3 py-2.5 text-left outline-none transition-[background-color,border-color,box-shadow] duration-150 focus-visible:ring-[3px] focus-visible:ring-primary/25 motion-reduce:transition-none",
+												"group flex min-h-14 w-full cursor-pointer items-center gap-3 rounded-xl border px-3 py-2.5 text-left outline-none transition-[background-color,border-color,box-shadow] duration-150 focus-visible:border-warning/80 focus-visible:bg-warning/10 focus-visible:ring-[3px] focus-visible:ring-warning/25 motion-reduce:transition-none",
 												active
 													? "border-warning/80 bg-warning/10 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07),0_0_28px_rgb(210_157_24_/_0.12)]"
 													: "border-transparent hover:border-shell-border hover:bg-shell/35",
@@ -304,7 +347,7 @@ function HelpFaqPalette({
 													active && "text-warning",
 												)}
 											>
-												<FileQuestion aria-hidden className="size-4" />
+												<ResultIcon aria-hidden className="size-4" />
 											</span>
 
 											<span className="min-w-0 flex-1">
@@ -312,7 +355,7 @@ function HelpFaqPalette({
 													<HighlightText query={query} text={result.question} />
 												</span>
 
-												<span className="mt-1 block text-s text-shell-muted leading-5 md:hidden">
+												<span className="mt-1 line-clamp-2 block text-s text-shell-muted leading-5">
 													<HighlightText query={query} text={result.answer} />
 												</span>
 											</span>
@@ -340,18 +383,22 @@ function HelpFaqPalette({
 				</div>
 
 				<div className="relative z-1 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-shell-border border-t bg-shell/45 px-5 py-3 text-s text-shell-muted max-md:px-4">
-					<p aria-live="polite" className="font-mono">
+					<p aria-atomic="true" aria-live="polite" role="status" className="font-mono">
 						{results.length} {results.length === 1 ? "answer" : "answers"}
 					</p>
 
 					<div className="flex flex-wrap items-center gap-3">
-						<span className="hidden items-center gap-1 sm:inline-flex">
-							<kbd className="rounded border border-shell-border px-1.5 py-0.5">↑ ↓</kbd> Navigate
-						</span>
+						{results.length > 0 && (
+							<>
+								<span className="hidden items-center gap-1 md:inline-flex">
+									<kbd className="rounded border border-shell-border px-1.5 py-0.5">↑ ↓</kbd> Navigate
+								</span>
 
-						<span className="hidden items-center gap-1 sm:inline-flex">
-							<kbd className="rounded border border-shell-border px-1.5 py-0.5">↵</kbd> Open answer
-						</span>
+								<span className="hidden items-center gap-1 md:inline-flex">
+									<kbd className="rounded border border-shell-border px-1.5 py-0.5">↵</kbd> Open answer
+								</span>
+							</>
+						)}
 
 						<span className="inline-flex items-center gap-1">
 							<kbd className="rounded border border-shell-border px-1.5 py-0.5">Esc</kbd> Close
@@ -359,14 +406,14 @@ function HelpFaqPalette({
 					</div>
 				</div>
 			</div>
-		</div>
+		</dialog>
 	);
 }
 
 function EmptyState({ onClear, query }: { onClear: () => void; query: string }) {
 	return (
-		<div className="flex min-h-56 flex-col items-center justify-center rounded-xl border border-shell-border border-dashed bg-shell/25 px-6 py-10 text-center">
-			<Search aria-hidden className="size-5 text-shell-muted" />
+		<div className="flex h-full min-h-0 flex-col items-center justify-center rounded-xl border border-shell-border border-dashed bg-shell/25 px-6 py-10 text-center">
+			<SearchX aria-hidden className="size-5 text-shell-muted" />
 
 			<h3 className="mt-3 text-shell-foreground text-xl">No results for “{query}”</h3>
 
@@ -386,11 +433,13 @@ function EmptyState({ onClear, query }: { onClear: () => void; query: string }) 
 }
 
 function SelectedAnswer({ result }: { result: HelpFaqResult }) {
+	const ResultIcon = result.icon ?? FileQuestion;
+
 	return (
 		<article className="relative isolate mt-5 overflow-hidden rounded-xl border border-primary-subtle-border/70 bg-shell-elevated/45 p-4 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07),0_18px_42px_rgb(0_0_0_/_0.24)] backdrop-blur-md before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-r before:from-primary/10 before:via-transparent before:to-warning/10 before:content-[''] sm:p-5">
 			<div className="relative flex items-start gap-3">
 				<span className="grid size-9 shrink-0 place-items-center rounded-md border border-primary/35 bg-primary/10 text-primary">
-					<FileQuestion aria-hidden className="size-4" />
+					<ResultIcon aria-hidden className="size-4" />
 				</span>
 
 				<div className="min-w-0">
@@ -462,23 +511,21 @@ function ContactChannel({ email, label }: { email: string; label: string }) {
 }
 
 function HighlightText({ query, text }: { query: string; text: string }) {
-	const terms = query
-		.split(/\s+/)
-		.filter(Boolean)
-		.map((term) => escapeRegExp(term));
+	const terms = query.split(/\s+/).filter(Boolean);
+	const escapedTerms = terms.map((term) => escapeRegExp(term));
 
 	if (terms.length === 0) {
 		return text;
 	}
 
-	const parts = text.split(new RegExp(`(${terms.join("|")})`, "gi"));
+	const parts = text.split(new RegExp(`(${escapedTerms.join("|")})`, "gi"));
 	const occurrences = new Map<string, number>();
 
 	return parts.map((part) => {
 		const occurrence = occurrences.get(part) ?? 0;
 		occurrences.set(part, occurrence + 1);
 
-		return terms.some((term) => new RegExp(`^${term}$`, "i").test(part)) ? (
+		return terms.some((term) => term.toLocaleLowerCase() === part.toLocaleLowerCase()) ? (
 			<mark key={`${part}-${occurrence}`} className="rounded bg-primary/20 px-0.5 text-primary">
 				{part}
 			</mark>

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { MainContent } from "@/modules/page-shell/components/MainContent";
 import type { HomeDecisionStoryAction } from "../types";
 import { HomeDecisionStorySection } from "./HomeDecisionStorySection";
@@ -33,13 +34,13 @@ export const HomePage = ({ actions }: HomePageProps) => (
 				</p>
 
 				<p className="mt-4 text-shell-muted leading-7">
-					<a href="/demo/workspace" className="text-primary">
+					<Link href="/demo/workspace" className="text-primary">
 						Open the live demo
-					</a>{" "}
+					</Link>{" "}
 					or read the{" "}
-					<a href="/help" className="text-primary">
+					<Link href="/help" className="text-primary">
 						CashLift help index
-					</a>
+					</Link>
 					.
 				</p>
 			</section>
