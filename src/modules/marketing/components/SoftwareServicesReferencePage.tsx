@@ -1,6 +1,7 @@
 import { CalendarClock, Cloud, UsersRound } from "lucide-react";
 import type { USE_CASES } from "../content";
-import { type UseCaseReferenceDecision, UseCaseReferencePage } from "./UseCaseReferencePage";
+import type { UseCaseReferenceDecision } from "../types";
+import { UseCaseReferencePage } from "./UseCaseReferencePage";
 
 type SoftwareServicesReferencePageProps = {
 	useCase: (typeof USE_CASES)["software-services"];

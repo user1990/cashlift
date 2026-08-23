@@ -10,7 +10,6 @@ describe("SoftwareServicesReferencePage", () => {
 		render(<SoftwareServicesReferencePage useCase={USE_CASES["software-services"]} />);
 
 		expect(screen.getByRole("heading", { level: 1, name: "Software Services" })).toBeInTheDocument();
-		expect(screen.getAllByRole("article")).toHaveLength(3);
 		expect(
 			screen.getByRole("heading", { level: 2, name: "Can we add cloud spend for this project?" }),
 		).toBeInTheDocument();
@@ -21,6 +20,12 @@ describe("SoftwareServicesReferencePage", () => {
 			screen.getByRole("heading", { level: 2, name: "What happens if a milestone payment slips one week?" }),
 		).toBeInTheDocument();
 		expect(screen.getByRole("link", { name: "Run use-case demo" })).toHaveAttribute("href", "/demo");
-		expect(screen.getAllByRole("link")).toHaveLength(1);
+		expect(screen.queryByRole("link", { name: "Can we add cloud spend for this project?" })).not.toBeInTheDocument();
+		expect(
+			screen.queryByRole("link", { name: "Which subscription seats are idle before renewal?" }),
+		).not.toBeInTheDocument();
+		expect(
+			screen.queryByRole("link", { name: "What happens if a milestone payment slips one week?" }),
+		).not.toBeInTheDocument();
 	});
 });

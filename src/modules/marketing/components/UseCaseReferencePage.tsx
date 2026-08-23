@@ -1,29 +1,25 @@
-import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { MainContent } from "@/modules/page-shell/components/MainContent";
 import { cn } from "@/ui/utils/cn";
 import type { USE_CASES } from "../content";
+import type { UseCaseReferenceDecision } from "../types";
 import { ActionLink } from "./ActionLink";
 import { Hero } from "./Hero";
 
-export type UseCaseReferenceDecision = {
-	accentClassName: string;
-	Icon: LucideIcon;
-	title: string;
-};
-
 type UseCaseReferencePageProps = {
-	cardHref?: string;
 	decisions: readonly UseCaseReferenceDecision[];
-	showSignalRail?: boolean;
 	useCase: (typeof USE_CASES)[keyof typeof USE_CASES];
+	cardHref?: string;
+	gridColumnsClassName?: string;
+	showSignalRail?: boolean;
 };
 
 export const UseCaseReferencePage = ({
-	cardHref,
 	decisions,
-	showSignalRail = false,
 	useCase,
+	cardHref,
+	gridColumnsClassName = "lg:grid-cols-3",
+	showSignalRail = false,
 }: UseCaseReferencePageProps) => (
 	<MainContent variant="marketing" className="relative overflow-hidden">
 		<section className="relative isolate">
@@ -35,7 +31,7 @@ export const UseCaseReferencePage = ({
 				<div className="relative mt-16 lg:mt-20 lg:pb-8">
 					{showSignalRail && <UseCaseSignalRail />}
 
-					<ol className="relative mx-auto grid max-w-280 gap-6 lg:grid-cols-3 lg:items-end lg:gap-12">
+					<ol className={cn("relative mx-auto grid max-w-280 gap-6 lg:items-end lg:gap-12", gridColumnsClassName)}>
 						{decisions.map((decision, index) => (
 							<li
 								key={decision.title}
@@ -83,9 +79,9 @@ function UseCaseDecisionCard({
 	const card = (
 		<article
 			className={cn(
-				"relative flex h-100 flex-col overflow-hidden rounded-[1.75rem] border border-shell-border bg-panel p-5 shadow-shell sm:p-6",
+				"relative flex h-100 flex-col overflow-hidden rounded-[1.75rem] border border-shell-border bg-shell-elevated/70 p-5 text-shell-foreground shadow-shell backdrop-blur sm:p-6",
 				cardHref &&
-					"transition-[border-color,box-shadow,transform] duration-200 group-hover:-translate-y-1 group-hover:border-primary-subtle-border group-hover:shadow-primary-glow motion-reduce:group-hover:transform-none",
+					"transition-transform duration-200 group-hover:-translate-y-1 group-hover:border-primary-subtle-border group-hover:shadow-primary-glow motion-reduce:transition-none motion-reduce:group-hover:transform-none",
 			)}
 		>
 			<div className="relative flex h-56 shrink-0 items-center justify-center rounded-2xl border border-border bg-shell-elevated p-5 shadow-panel">
