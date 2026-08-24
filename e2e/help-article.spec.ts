@@ -34,10 +34,11 @@ test.describe("Help FAQ article prototype", () => {
 
 		await expect(page).toHaveURL(`/help/${REPRESENTATIVE_SLUG}?q=manager%20approves`);
 		await expect(page).toHaveTitle(/What does CashLift show before a manager approves spend/);
-		await expect(page.locator('meta[name="description"]')).toHaveAttribute(
-			"content",
-			"See the cash context beside a request before deciding whether to approve it.",
-		);
+		await expect(
+			page.locator(
+				'meta[name="description"][content="See the cash context beside a request before deciding whether to approve it."]',
+			),
+		).toHaveCount(1);
 		await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
 			"href",
 			`https://cashlift.vercel.app/help/${REPRESENTATIVE_SLUG}`,
