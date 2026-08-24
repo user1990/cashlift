@@ -13,6 +13,26 @@ test.describe("Help FAQ article prototype", () => {
 		await expect(page.getByRole("article")).toBeVisible();
 		await expect(page.getByRole("heading", { level: 1, name: /What does CashLift show before/ })).toBeVisible();
 		await expect(page.getByRole("article").getByText("Short answer", { exact: true }).first()).toBeVisible();
+		await expect(page.getByRole("region", { name: "What it shows" })).toBeVisible();
+
+		const sectionLabels = await page
+			.locator("article section[aria-labelledby^='help-faq-section-']")
+			.evaluateAll((sections) =>
+				sections.map((section) => {
+					const labelledBy = section.getAttribute("aria-labelledby") ?? "";
+
+					return {
+						hasHeadingTarget: Boolean(document.getElementById(labelledBy)),
+						labelledBy,
+					};
+				}),
+			);
+
+		expect(sectionLabels).toHaveLength(3);
+		expect(sectionLabels.every(({ hasHeadingTarget, labelledBy }) => hasHeadingTarget && !/\s/.test(labelledBy))).toBe(
+			true,
+		);
+
 		await expect(page.getByRole("link", { name: "What context comes with each action?" })).toHaveAttribute(
 			"href",
 			"/help/what-context-comes-with-each-action?q=manager%20approves",

@@ -18,7 +18,14 @@ import type { KeyboardEvent as ReactKeyboardEvent, RefObject } from "react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/ui/utils/cn";
 import type { HelpFaqIconName } from "../content";
-import { filterHelpFaqGroups, type HelpFaqGroupLike, type HelpFaqItemLike, parseHelpFaqQuery } from "../utils";
+import {
+	filterHelpFaqGroups,
+	getHelpFaqHref,
+	type HelpFaqGroupLike,
+	type HelpFaqItemLike,
+	parseHelpFaqQuery,
+	slugifyHelpFaqValue,
+} from "../utils";
 import { HelpContactPanel } from "./HelpContactPanel";
 
 const HELP_FAQ_SEARCH_ID = "help-faq-search";
@@ -360,7 +367,7 @@ function HelpFaqPalette({
 									return (
 										<Link
 											key={result.id}
-											href={helpFaqHref(result.slug, query)}
+											href={getHelpFaqHref(result.slug, query)}
 											ref={(element) => setResultRef(resultIndex, element)}
 											tabIndex={0}
 											role="option"
@@ -496,7 +503,7 @@ function flattenHelpFaqGroups(groups: readonly HelpFaqGroupLike[]): HelpFaqResul
 			...item,
 			groupName: group.name,
 			icon: group.icon,
-			id: `${slugify(group.name)}-${slugify(item.question)}`,
+			id: `${slugifyHelpFaqValue(group.name)}-${slugifyHelpFaqValue(item.question)}`,
 		})),
 	);
 }
@@ -519,12 +526,6 @@ function escapeRegExp(value: string) {
 	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function helpFaqHref(slug: string, query: string) {
-	const normalizedQuery = parseHelpFaqQuery(query);
-
-	return normalizedQuery ? `/help/${slug}?q=${encodeURIComponent(normalizedQuery)}` : `/help/${slug}`;
-}
-
 function HelpFaqIcon({ iconName }: { iconName: HelpFaqIconName | undefined }) {
 	switch (iconName) {
 		case "banknote-arrow-up":
@@ -540,8 +541,4 @@ function HelpFaqIcon({ iconName }: { iconName: HelpFaqIconName | undefined }) {
 		default:
 			return <FileQuestion aria-hidden className="size-4" />;
 	}
-}
-
-function slugify(value: string) {
-	return value.toLocaleLowerCase().replace(/[^a-z0-9]+/g, "-");
 }

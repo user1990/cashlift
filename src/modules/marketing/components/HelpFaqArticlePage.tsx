@@ -2,6 +2,7 @@ import { ArrowLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { MainContent } from "@/modules/page-shell/components/MainContent";
 import type { HelpFaqArticle, HelpFaqItem } from "../content";
+import { getHelpFaqHref, slugifyHelpFaqValue } from "../utils";
 import { HelpContactPanel } from "./HelpContactPanel";
 import { Hero } from "./Hero";
 
@@ -49,17 +50,21 @@ export const HelpFaqArticlePage = ({ article, item, query, relatedItems, returnH
 				</div>
 			</section>
 
-			{article?.sections.length && (
+			{article !== undefined && article.sections.length > 0 && (
 				<div className="mt-12 grid gap-9 border-shell-border border-t pt-10 sm:gap-10">
-					{article.sections.map(({ body, heading }) => (
-						<section key={heading} aria-labelledby={`help-faq-section-${heading}`} className="max-w-3xl">
-							<h2 id={`help-faq-section-${heading}`} className="text-2xl text-shell-foreground sm:text-3xl">
-								{heading}
-							</h2>
+					{article.sections.map(({ body, heading }) => {
+						const sectionId = helpFaqSectionId(heading);
 
-							<p className="mt-3 text-m text-shell-muted leading-7 sm:text-l sm:leading-8">{body}</p>
-						</section>
-					))}
+						return (
+							<section key={heading} aria-labelledby={sectionId} className="max-w-3xl">
+								<h2 id={sectionId} className="text-2xl text-shell-foreground sm:text-3xl">
+									{heading}
+								</h2>
+
+								<p className="mt-3 text-m text-shell-muted leading-7 sm:text-l sm:leading-8">{body}</p>
+							</section>
+						);
+					})}
 				</div>
 			)}
 
@@ -73,7 +78,7 @@ export const HelpFaqArticlePage = ({ article, item, query, relatedItems, returnH
 						{relatedItems.map(({ question, slug }) => (
 							<li key={slug}>
 								<Link
-									href={helpFaqHref(slug, query)}
+									href={getHelpFaqHref(slug, query)}
 									className="group flex min-h-20 items-center justify-between gap-3 rounded-lg border border-shell-border bg-shell-elevated/30 p-4 text-m text-shell-foreground outline-none transition-[border-color,background-color] duration-150 hover:border-primary/60 hover:bg-shell-elevated/55 focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/25 motion-reduce:transition-none"
 								>
 									<span>{question}</span>
@@ -94,6 +99,6 @@ export const HelpFaqArticlePage = ({ article, item, query, relatedItems, returnH
 	</MainContent>
 );
 
-function helpFaqHref(slug: string, query: string) {
-	return query ? `/help/${slug}?q=${encodeURIComponent(query)}` : `/help/${slug}`;
+function helpFaqSectionId(heading: string) {
+	return `help-faq-section-${slugifyHelpFaqValue(heading)}`;
 }
