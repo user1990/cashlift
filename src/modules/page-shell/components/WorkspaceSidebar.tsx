@@ -19,7 +19,7 @@ export const WorkspaceSidebar = ({ section, workspace }: WorkspaceSidebarProps) 
 			href={workspace.basePath}
 			className="group flex items-center gap-3 px-2 py-3"
 		>
-			<CashLiftLogo className="h-6 w-auto shrink-0 transition-transform duration-200 ease-out group-hover:-translate-y-px group-hover:scale-[0.97] group-focus-visible:-translate-y-px group-focus-visible:scale-[0.97] motion-reduce:transform-none motion-reduce:transition-none" />
+			<CashLiftLogo className="h-6 w-auto shrink-0 transition-transform duration-200 ease-out group-hover:scale-[0.97] group-focus-visible:scale-[0.97] motion-reduce:transform-none motion-reduce:transition-none" />
 		</Link>
 
 		{workspace.readOnly && (
