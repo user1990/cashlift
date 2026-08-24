@@ -247,6 +247,26 @@ export const HELP_FAQ_GROUPS = [
 					"Each example keeps its cash impact, urgency, owner, and supporting context next to the recommended action.",
 				question: "What context comes with each action?",
 			},
+			{
+				answer:
+					"Each request shows budget remaining, cash after approval, and invoice timing so a manager can see the cash context before saying yes.",
+				question: "What does CashLift show before a manager approves spend?",
+			},
+			{
+				answer:
+					"The collection queue keeps an owner, probability, due date, and next action beside receivables so the team knows what to follow up next.",
+				question: "How does CashLift turn overdue invoices into daily work?",
+			},
+			{
+				answer:
+					"The vendor leak finder surfaces unused seats, duplicate tools, trials close to renewal, and vendor bills that can wait.",
+				question: "What vendor leaks can CashLift help me review?",
+			},
+			{
+				answer:
+					"The 13-week cash outlook shows weekly balance, inflows, outflows, payroll pressure, and buffer risk without requiring a spreadsheet.",
+				question: "What does the cash outlook include?",
+			},
 		],
 		name: "How it works",
 	},
@@ -267,6 +287,11 @@ export const HELP_FAQ_GROUPS = [
 				answer: "No. This demo does not move money, issue cards, or provide financial, legal, or tax advice.",
 				question: "Does the demo make payments or financial decisions for me?",
 			},
+			{
+				answer:
+					"Read-only means the Studio Nova workspace is sample data for exploring the workflow. It does not claim or require a production integration, and you should not enter company records.",
+				question: "What does read-only mean in the live demo?",
+			},
 		],
 		name: "Demo",
 	},
@@ -280,6 +305,11 @@ export const HELP_FAQ_GROUPS = [
 			{
 				answer: "The landing page is designed around service-firm questions: what to collect, approve, or cut today.",
 				question: "Who is the demo designed for?",
+			},
+			{
+				answer:
+					"Finance sees all cash decisions, managers approve team spend, and employees submit requests and receipts. The role split keeps each decision with the people who need to act on it.",
+				question: "How do Finance, managers, and employees use CashLift?",
 			},
 		],
 		name: "Company workspace",
@@ -314,6 +344,11 @@ export const HELP_FAQ_GROUPS = [
 			{
 				answer: "Open the live demo to review the daily inbox without creating an account or moving any money.",
 				question: "How can we get started?",
+			},
+			{
+				answer:
+					"Open the live demo, review the ranked daily inbox, and open one collection, approval, or renewal example for its context. Then use /pricing to compare current plan details and feature coverage.",
+				question: "What is the fastest way to evaluate CashLift?",
 			},
 		],
 		name: "Getting started",

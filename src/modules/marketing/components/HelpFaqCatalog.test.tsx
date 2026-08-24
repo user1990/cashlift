@@ -31,7 +31,7 @@ describe("HelpFaqCatalog", () => {
 		await user.type(search, "read-only");
 
 		expect(screen.getByText("Can I try the demo with real company data?")).toBeVisible();
-		expect(screen.getByText("2 answers")).toBeVisible();
+		expect(screen.getByText("3 answers")).toBeVisible();
 		expect(window.location.search).toBe("?q=read-only");
 	});
 
