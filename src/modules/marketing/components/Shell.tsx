@@ -48,10 +48,8 @@ export const Shell = ({ children }: ShellProps) => (
 			</div>
 
 			<div className="relative border-shell-border border-t">
-				<div className="mx-auto flex max-w-295 flex-col gap-3 px-4 py-5 text-s text-shell-muted sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-					<span>Explore the system</span>
-
-					<span>One clearer next decision.</span>
+				<div className="mx-auto flex max-w-295 justify-center px-4 py-5 text-center text-s text-shell-muted sm:px-6 lg:px-8">
+					<span>© 2026 CashLift. All rights reserved.</span>
 				</div>
 			</div>
 		</footer>
