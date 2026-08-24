@@ -1,5 +1,0 @@
-interface:
-  allow_implicit_invocation: false
-  display_name: "Web Animation Design"
-  short_description: "Design purposeful, accessible web animations"
-  default_prompt: "Use $web-animation-design to design or implement this animation."
