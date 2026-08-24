@@ -11,6 +11,10 @@ type RootLayoutProps = {
 export const metadata: Metadata = {
 	title: "CashLift",
 	description: "A cash-aware spend decision command center for service firms.",
+	icons: {
+		apple: "/brand/cashlift-icon.svg",
+		icon: "/brand/cashlift-icon.svg",
+	},
 };
 
 export const viewport: Viewport = {

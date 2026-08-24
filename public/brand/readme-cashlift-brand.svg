@@ -1,6 +1,6 @@
 <svg aria-labelledby="title desc" fill="none" role="img" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
   <title id="title">CashLift brand banner</title>
-  <desc id="desc">CashLift wordmark with finance command center brand artwork.</desc>
+  <desc id="desc">CashLift dollar-styled wordmark with an upward double-stripe arrow and finance command center brand artwork.</desc>
   <defs>
     <radialGradient id="green-glow" cx="24%" cy="21%" r="62%">
       <stop offset="0%" stop-color="#22c77a" stop-opacity="0.38"/>
@@ -41,8 +41,13 @@
   <path d="M0 724C226 610 388 638 566 532C748 424 854 302 1058 286C1248 270 1396 362 1600 300" stroke="url(#cash-line)" stroke-linecap="round" stroke-width="6" opacity="0.82" filter="url(#soft-glow)"/>
 
   <g transform="translate(108 168)">
-    <text fill="#22c77a" font-family="Arial Black, Arial, sans-serif" font-size="116" font-weight="900" letter-spacing="-4" x="0" y="96">Cash</text>
-    <text fill="#02daeb" font-family="Arial Black, Arial, sans-serif" font-size="116" font-weight="900" letter-spacing="-4" x="300" y="96">Lift</text>
+    <text fill="#11c978" font-family="Arial Black, Arial, sans-serif" font-size="116" font-weight="900" letter-spacing="-4" x="0" y="96">Cash</text>
+    <path d="M218 28V112M230 28V112" stroke="#11c978" stroke-width="5"/>
+    <text fill="#04c6ea" font-family="Arial Black, Arial, sans-serif" font-size="116" font-weight="900" letter-spacing="-4" x="300" y="96">Lift</text>
+    <path d="M302 115H620" stroke="#04c6ea" stroke-width="11"/>
+    <path d="M592 115L754 22L768 34L625 124L606 124Z" fill="#04c6ea"/>
+    <path d="M624 115L761 28L770 39L640 124L621 124Z" fill="#04c6ea"/>
+    <path d="M710 34L789 2L778 76L760 56L741 76Z" fill="#04c6ea"/>
     <text fill="#f5fbff" font-family="Inter, Arial, sans-serif" font-size="39" font-weight="700" x="2" y="172">Cash decision command center</text>
     <text fill="#9fb5b8" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="500" x="2" y="224">Approve spend. Recover receivables. Protect runway.</text>
   </g>

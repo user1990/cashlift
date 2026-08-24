@@ -1,0 +1,8 @@
+<svg aria-labelledby="title desc" fill="none" role="img" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">CashLift icon</title>
+  <desc id="desc">A dollar-styled S with an upward cyan arrow.</desc>
+  <text fill="#11c978" font-family="Arial Black, Arial, sans-serif" font-size="92" font-weight="900" x="8" y="94">$</text>
+  <path d="M56 102L99 52L105 59L62 109L56 109Z" fill="#04c6ea"/>
+  <path d="M73 102L111 56L116 62L78 109L71 109Z" fill="#04c6ea"/>
+  <path d="M91 57L119 45L115 76L108 67L102 75Z" fill="#04c6ea"/>
+</svg>
