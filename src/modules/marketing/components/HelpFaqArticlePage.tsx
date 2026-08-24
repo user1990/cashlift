@@ -19,7 +19,7 @@ export const HelpFaqArticlePage = ({ article, item, query, relatedItems, returnH
 			<nav aria-label="Help article navigation">
 				<Link
 					href={returnHref}
-					className="inline-flex min-h-11 items-center gap-2 rounded-md text-m text-shell-muted outline-none transition-colors duration-150 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/25 motion-reduce:transition-none"
+					className="inline-flex min-h-11 items-center gap-2 rounded-md font-medium text-m text-shell-muted outline-none transition-colors duration-150 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 motion-reduce:transition-none"
 				>
 					<ArrowLeft aria-hidden className="size-4" />
 					Back to Help search
