@@ -42,11 +42,11 @@
 
   <g transform="translate(108 168)">
     <text fill="#11c978" font-family="Arial Black, Arial, sans-serif" font-size="116" font-weight="900" letter-spacing="-4" x="0" y="96">Cash</text>
-    <path d="M218 28V112M230 28V112" stroke="#11c978" stroke-width="5"/>
+    <path d="M218 40V106M230 40V106" stroke="#11c978" stroke-width="5"/>
     <text fill="#04c6ea" font-family="Arial Black, Arial, sans-serif" font-size="116" font-weight="900" letter-spacing="-4" x="300" y="96">Lift</text>
     <path d="M302 115H620" stroke="#04c6ea" stroke-width="11"/>
-    <path d="M592 115L754 22L768 34L625 124L606 124Z" fill="#04c6ea"/>
-    <path d="M624 115L761 28L770 39L640 124L621 124Z" fill="#04c6ea"/>
+    <path d="M592 124L754 30" stroke="#04c6ea" stroke-width="11" stroke-linecap="butt"/>
+    <path d="M624 124L786 30" stroke="#04c6ea" stroke-width="11" stroke-linecap="butt"/>
     <path d="M710 34L789 2L778 76L760 56L741 76Z" fill="#04c6ea"/>
     <text fill="#f5fbff" font-family="Inter, Arial, sans-serif" font-size="39" font-weight="700" x="2" y="172">Cash decision command center</text>
     <text fill="#9fb5b8" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="500" x="2" y="224">Approve spend. Recover receivables. Protect runway.</text>
