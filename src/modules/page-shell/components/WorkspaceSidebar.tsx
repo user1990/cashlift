@@ -15,7 +15,7 @@ type WorkspaceSidebarProps = {
 export const WorkspaceSidebar = ({ section, workspace }: WorkspaceSidebarProps) => (
 	<aside className="flex min-h-[calc(100vh-2rem)] flex-col rounded-lg border border-white/5 bg-black/30 p-3 shadow-shell backdrop-blur lg:sticky lg:top-4 lg:self-start">
 		<Link aria-label="CashLift workspace home" href={workspace.basePath} className="flex items-center gap-3 px-2 py-3">
-			<CashLiftLogo className="h-8 w-auto shrink-0" />
+			<CashLiftLogo className="h-6 w-auto shrink-0" />
 		</Link>
 
 		{workspace.readOnly && (
