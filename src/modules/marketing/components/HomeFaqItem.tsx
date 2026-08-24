@@ -27,7 +27,7 @@ export const HomeFaqItem = ({ answer, question }: HomeFaqItemProps) => {
 				<ChevronDown
 					aria-hidden
 					className={cn(
-						"size-5 shrink-0 text-shell-muted transition-[color,transform] duration-300 group-hover:text-primary",
+						"size-5 shrink-0 text-shell-muted transition-[color,transform] duration-[var(--motion-duration-micro)] ease-in-out group-hover:text-primary",
 						expanded && "rotate-180",
 					)}
 				/>
@@ -35,7 +35,7 @@ export const HomeFaqItem = ({ answer, question }: HomeFaqItemProps) => {
 
 			<div
 				className={cn(
-					"ease grid overflow-hidden transition-[grid-template-rows] duration-300 motion-reduce:transition-none",
+					"grid overflow-hidden transition-[grid-template-rows] duration-[var(--motion-duration-standard)] ease-out motion-reduce:transition-none",
 					expanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
 				)}
 			>
@@ -43,7 +43,7 @@ export const HomeFaqItem = ({ answer, question }: HomeFaqItemProps) => {
 					<p
 						id={answerId}
 						className={cn(
-							"ease max-w-3xl pb-5 text-l text-shell-muted leading-7 transition-[opacity,transform] duration-300 motion-reduce:transition-none",
+							"max-w-3xl pb-5 text-l text-shell-muted leading-7 transition-[opacity,transform] duration-[var(--motion-duration-standard)] ease-out motion-reduce:transition-none",
 							expanded ? "translate-y-0 opacity-100" : "invisible translate-y-2 opacity-0",
 						)}
 					>

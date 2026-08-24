@@ -4,7 +4,7 @@ import { Button as RACButton, type ButtonProps as RACButtonProps } from "react-a
 import { tv, type VariantProps } from "tailwind-variants";
 
 const BUTTON_VARIANTS = tv({
-	base: "inline-flex cursor-pointer items-center justify-center gap-2 rounded-md font-semibold outline-none transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease active:scale-[0.98] motion-reduce:active:scale-100 data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20 data-disabled:cursor-not-allowed data-disabled:opacity-50 data-pressed:scale-[0.98] motion-reduce:data-pressed:scale-100",
+	base: "inline-flex cursor-pointer items-center justify-center gap-2 rounded-md font-semibold outline-none transition-[background-color,border-color,color,box-shadow,transform] duration-[var(--motion-duration-micro)] ease data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20 data-disabled:cursor-not-allowed data-disabled:opacity-50 data-pressed:scale-[var(--motion-press-scale)] motion-reduce:data-pressed:scale-100",
 	defaultVariants: {
 		size: "default",
 		variant: "secondary",
