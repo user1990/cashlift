@@ -59,6 +59,23 @@ describe("HelpFaqCatalog", () => {
 		expect(screen.getByText(/CashLift ranks approvals, collections, vendor leaks/)).toBeVisible();
 	});
 
+	it("wraps Arrow navigation across the FAQ results", async () => {
+		const user = userEvent.setup();
+
+		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} />);
+		await user.click(screen.getByRole("button", { name: "Open Help search" }));
+
+		const results = screen.getAllByRole("option");
+
+		expect(results[0]).toHaveAttribute("aria-selected", "true");
+
+		await user.keyboard("{ArrowUp}");
+		expect(results.at(-1)).toHaveAttribute("aria-selected", "true");
+
+		await user.keyboard("{ArrowDown}");
+		expect(results[0]).toHaveAttribute("aria-selected", "true");
+	});
+
 	it("includes FAQ results in the dialog Tab order", async () => {
 		const user = userEvent.setup();
 

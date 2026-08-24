@@ -44,6 +44,7 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 	const [activeResultIndex, setActiveResultIndex] = useState(0);
 	const [selectedResult, setSelectedResult] = useState<HelpFaqResult | null>(null);
 	const dialogRef = useRef<HTMLDialogElement>(null);
+	const resultRefs = useRef<(HTMLButtonElement | null)[]>([]);
 	const triggerRef = useRef<HTMLButtonElement>(null);
 	const searchRef = useRef<HTMLInputElement>(null);
 	const wasPaletteOpenRef = useRef(false);
@@ -51,6 +52,19 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 	const results = flattenHelpFaqGroups(filteredGroups);
 	const visibleActiveResultIndex = Math.min(activeResultIndex, Math.max(results.length - 1, 0));
 	const activeResult = results[visibleActiveResultIndex];
+	const activeResultId = activeResult?.id;
+
+	useEffect(() => {
+		if (!isPaletteOpen || !activeResultId) {
+			return;
+		}
+
+		const activeResultElement = resultRefs.current[visibleActiveResultIndex];
+
+		if (typeof activeResultElement?.scrollIntoView === "function") {
+			activeResultElement.scrollIntoView({ block: "nearest" });
+		}
+	}, [activeResultId, isPaletteOpen, visibleActiveResultIndex]);
 
 	useEffect(() => {
 		if (!isPaletteOpen) {
@@ -133,15 +147,24 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 					dialogRef={dialogRef}
 					filteredGroups={filteredGroups}
 					onResultFocus={(resultIndex) => setActiveResultIndex(resultIndex)}
+					setResultRef={(resultIndex, element) => {
+						resultRefs.current[resultIndex] = element;
+					}}
 					onKeyDown={(event) => {
 						if (event.key === "ArrowDown") {
 							event.preventDefault();
-							setActiveResultIndex((currentIndex) => Math.min(currentIndex + 1, Math.max(results.length - 1, 0)));
+
+							if (results.length > 0) {
+								setActiveResultIndex((currentIndex) => (currentIndex + 1) % results.length);
+							}
 						}
 
 						if (event.key === "ArrowUp") {
 							event.preventDefault();
-							setActiveResultIndex((currentIndex) => Math.max(currentIndex - 1, 0));
+
+							if (results.length > 0) {
+								setActiveResultIndex((currentIndex) => (currentIndex - 1 + results.length) % results.length);
+							}
 						}
 
 						if (event.key === "Enter") {
@@ -219,6 +242,7 @@ function HelpFaqPalette({
 	query,
 	results,
 	searchRef,
+	setResultRef,
 	selectResult,
 	updateQuery,
 }: {
@@ -232,6 +256,7 @@ function HelpFaqPalette({
 	query: string;
 	results: readonly HelpFaqResult[];
 	searchRef: RefObject<HTMLInputElement | null>;
+	setResultRef: (resultIndex: number, element: HTMLButtonElement | null) => void;
 	selectResult: (result: HelpFaqResult) => void;
 	updateQuery: (query: string) => void;
 }) {
@@ -346,6 +371,7 @@ function HelpFaqPalette({
 									return (
 										<button
 											key={result.id}
+											ref={(element) => setResultRef(resultIndex, element)}
 											type="button"
 											tabIndex={0}
 											role="option"
