@@ -2,7 +2,7 @@
 
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { HELP_FAQ_GROUPS } from "../content";
 import { HelpFaqCatalog } from "./HelpFaqCatalog";
 
@@ -46,17 +46,22 @@ describe("HelpFaqCatalog", () => {
 		expect(screen.getAllByText("demo", { exact: true }).length).toBeGreaterThan(0);
 	});
 
-	it("supports keyboard selection and reveals the selected answer", async () => {
+	it("opens the stable article route from the active result", async () => {
 		const user = userEvent.setup();
 
 		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} />);
 
 		await user.click(screen.getByRole("button", { name: "Open Help search" }));
-		await user.keyboard("{ArrowDown}{Enter}");
 
-		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-		expect(screen.getByRole("heading", { name: "What kinds of decisions does CashLift surface?" })).toBeVisible();
-		expect(screen.getByText(/CashLift ranks approvals, collections, vendor leaks/)).toBeVisible();
+		const results = screen.getAllByRole("option");
+		const activeResult = results[0];
+		const click = vi.spyOn(activeResult, "click");
+
+		expect(activeResult).toHaveAttribute("href", "/help/how-does-cashlift-rank-actions");
+
+		await user.keyboard("{Enter}");
+
+		expect(click).toHaveBeenCalledTimes(1);
 	});
 
 	it("wraps Arrow navigation across the FAQ results", async () => {
@@ -102,6 +107,24 @@ describe("HelpFaqCatalog", () => {
 
 		expect(screen.getByRole("dialog", { name: "Search Help FAQs" })).toBeInTheDocument();
 		expect(screen.getByRole("combobox", { name: "Search Help FAQs" })).toHaveValue("pricing");
+	});
+
+	it("keeps the originating query in article links", async () => {
+		const user = userEvent.setup();
+
+		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} initialQuery="approval" />);
+
+		const representativeResult = screen.getByRole("option", {
+			name: /What does CashLift show before a manager approves spend\?/,
+		});
+
+		expect(representativeResult).toHaveAttribute(
+			"href",
+			"/help/what-does-cashlift-show-before-a-manager-approves-spend?q=approval",
+		);
+
+		await user.click(screen.getByRole("button", { name: "Close Help search" }));
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
 
 	it("keeps the palette keyboard-accessible and preserves a no-results query", async () => {

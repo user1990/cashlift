@@ -8,19 +8,18 @@ import {
 	CreditCard,
 	FileQuestion,
 	LifeBuoy,
-	Mail,
-	MessageCircle,
 	Search,
 	SearchX,
 	Users,
 	X,
 } from "lucide-react";
+import Link from "next/link";
 import type { KeyboardEvent as ReactKeyboardEvent, RefObject } from "react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/ui/utils/cn";
 import type { HelpFaqIconName } from "../content";
 import { filterHelpFaqGroups, type HelpFaqGroupLike, type HelpFaqItemLike, parseHelpFaqQuery } from "../utils";
-import { ActionLink } from "./ActionLink";
+import { HelpContactPanel } from "./HelpContactPanel";
 
 const HELP_FAQ_SEARCH_ID = "help-faq-search";
 const HELP_FAQ_DIALOG_ID = "help-faq-dialog";
@@ -42,9 +41,8 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 	const [query, setQuery] = useState(() => parseHelpFaqQuery(initialQuery));
 	const [isPaletteOpen, setIsPaletteOpen] = useState(() => Boolean(parseHelpFaqQuery(initialQuery)));
 	const [activeResultIndex, setActiveResultIndex] = useState(0);
-	const [selectedResult, setSelectedResult] = useState<HelpFaqResult | null>(null);
 	const dialogRef = useRef<HTMLDialogElement>(null);
-	const resultRefs = useRef<(HTMLButtonElement | null)[]>([]);
+	const resultRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 	const triggerRef = useRef<HTMLButtonElement>(null);
 	const searchRef = useRef<HTMLInputElement>(null);
 	const wasPaletteOpenRef = useRef(false);
@@ -90,7 +88,6 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 		const normalizedQuery = parseHelpFaqQuery(nextQuery);
 		setQuery(normalizedQuery);
 		setActiveResultIndex(0);
-		setSelectedResult(null);
 
 		if (typeof window === "undefined") {
 			return;
@@ -109,10 +106,7 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 
 	const openPalette = () => setIsPaletteOpen(true);
 	const closePalette = () => setIsPaletteOpen(false);
-	const selectResult = (result: HelpFaqResult) => {
-		setSelectedResult(result);
-		closePalette();
-	};
+	const activateResult = (resultIndex: number) => resultRefs.current[resultIndex]?.click();
 
 	useEffect(() => {
 		const handleGlobalKeyDown = (event: KeyboardEvent) => {
@@ -135,9 +129,7 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 
 			<SearchTrigger onClick={openPalette} query={query} triggerRef={triggerRef} />
 
-			{selectedResult && <SelectedAnswer result={selectedResult} />}
-
-			<ContactPanel />
+			<HelpContactPanel />
 
 			{isPaletteOpen && (
 				<HelpFaqPalette
@@ -170,14 +162,13 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 						if (event.key === "Enter") {
 							event.preventDefault();
 							if (activeResult) {
-								selectResult(activeResult);
+								activateResult(visibleActiveResultIndex);
 							}
 						}
 					}}
 					query={query}
 					results={results}
 					searchRef={searchRef}
-					selectResult={selectResult}
 					updateQuery={updateQuery}
 				/>
 			)}
@@ -243,7 +234,6 @@ function HelpFaqPalette({
 	results,
 	searchRef,
 	setResultRef,
-	selectResult,
 	updateQuery,
 }: {
 	activeResult: HelpFaqResult | undefined;
@@ -256,8 +246,7 @@ function HelpFaqPalette({
 	query: string;
 	results: readonly HelpFaqResult[];
 	searchRef: RefObject<HTMLInputElement | null>;
-	setResultRef: (resultIndex: number, element: HTMLButtonElement | null) => void;
-	selectResult: (result: HelpFaqResult) => void;
+	setResultRef: (resultIndex: number, element: HTMLAnchorElement | null) => void;
 	updateQuery: (query: string) => void;
 }) {
 	const handleDialogKeyDown = (event: ReactKeyboardEvent<HTMLDialogElement>) => {
@@ -273,7 +262,7 @@ function HelpFaqPalette({
 
 		const focusableElements = Array.from(
 			dialogRef.current?.querySelectorAll<HTMLElement>(
-				"input:not([disabled]), button:not([disabled]):not([tabindex='-1'])",
+				"input:not([disabled]), button:not([disabled]):not([tabindex='-1']), a[href]:not([tabindex='-1'])",
 			) ?? [],
 		);
 		const firstFocusableElement = focusableElements[0];
@@ -369,15 +358,14 @@ function HelpFaqPalette({
 									const active = resultIndex === activeResultIndex;
 
 									return (
-										<button
+										<Link
 											key={result.id}
+											href={helpFaqHref(result.slug, query)}
 											ref={(element) => setResultRef(resultIndex, element)}
-											type="button"
 											tabIndex={0}
 											role="option"
 											id={resultDomId(result.id)}
 											aria-selected={active}
-											onClick={() => selectResult(result)}
 											onFocus={() => onResultFocus(resultIndex)}
 											className={cn(
 												"group flex min-h-14 w-full cursor-pointer items-center gap-3 rounded-xl border px-3 py-2.5 text-left outline-none transition-[background-color,border-color,box-shadow] duration-150 focus-visible:border-warning/80 focus-visible:bg-warning/10 focus-visible:ring-[3px] focus-visible:ring-warning/25 motion-reduce:transition-none",
@@ -417,7 +405,7 @@ function HelpFaqPalette({
 													<ChevronRight aria-hidden className="size-4" />
 												)}
 											</span>
-										</button>
+										</Link>
 									);
 								})}
 							</div>
@@ -477,82 +465,6 @@ function EmptyState({ onClear, query }: { onClear: () => void; query: string }) 
 	);
 }
 
-function SelectedAnswer({ result }: { result: HelpFaqResult }) {
-	return (
-		<article className="relative isolate mt-5 overflow-hidden rounded-xl border border-primary-subtle-border/70 bg-shell-elevated/45 p-4 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07),0_18px_42px_rgb(0_0_0_/_0.24)] backdrop-blur-md before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-r before:from-primary/10 before:via-transparent before:to-warning/10 before:content-[''] sm:p-5">
-			<div className="relative flex items-start gap-3">
-				<span className="grid size-9 shrink-0 place-items-center rounded-md border border-primary/35 bg-primary/10 text-primary">
-					<HelpFaqIcon iconName={result.icon} />
-				</span>
-
-				<div className="min-w-0">
-					<p className="font-mono text-primary text-s uppercase tracking-[0.14em]">Answer</p>
-
-					<h3 className="mt-1 font-medium text-m text-shell-foreground sm:text-l">{result.question}</h3>
-
-					<p className="mt-2 text-m text-shell-muted leading-6 sm:text-l sm:leading-7">{result.answer}</p>
-				</div>
-			</div>
-		</article>
-	);
-}
-
-function ContactPanel() {
-	return (
-		<aside className="relative isolate mt-8 overflow-hidden rounded-lg border border-warning/60 bg-warning-subtle/55 p-4 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07),0_18px_42px_rgb(0_0_0_/_0.22)] backdrop-blur-md before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-r before:from-warning/10 before:via-transparent before:to-primary/5 before:content-[''] sm:p-6">
-			<div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-				<div className="flex min-w-0 items-start gap-3">
-					<span className="grid size-10 shrink-0 place-items-center rounded-md border border-warning/70 bg-warning/10 text-warning">
-						<MessageCircle aria-hidden className="size-5" />
-					</span>
-
-					<div className="min-w-0">
-						<h3 className="font-semibold text-shell-foreground text-xl">Still need help?</h3>
-
-						<p className="mt-1 max-w-xl text-m text-shell-muted leading-6">
-							Talk through cash ops for your service team—sales, support, partnerships, and product feedback stay local
-							in demo mode.
-						</p>
-					</div>
-				</div>
-
-				<div className="grid gap-4 sm:grid-cols-2 lg:flex lg:items-center">
-					<ContactChannel email="sales@cashlift.example" label="Sales" />
-
-					<ContactChannel email="support@cashlift.example" label="Support" />
-
-					<ActionLink
-						href="/contact"
-						variant="secondary"
-						className="w-full border-warning/70 bg-warning/10 text-warning hover:border-warning hover:bg-warning/15 hover:text-warning sm:col-span-2 lg:w-auto"
-					>
-						Contact us
-					</ActionLink>
-				</div>
-			</div>
-		</aside>
-	);
-}
-
-function ContactChannel({ email, label }: { email: string; label: string }) {
-	return (
-		<div className="flex min-w-0 items-center gap-2">
-			<Mail aria-hidden className="size-4 shrink-0 text-warning" />
-
-			<div className="min-w-0">
-				<p className="text-s text-shell-muted">{label}</p>
-
-				<a
-					href={`mailto:${email}`}
-					className="break-all text-s text-warning underline-offset-4 outline-none hover:underline focus-visible:ring-[3px] focus-visible:ring-warning/30"
-				>
-					{email}
-				</a>
-			</div>
-		</div>
-	);
-}
-
 function HighlightText({ query, text }: { query: string; text: string }) {
 	const terms = query.split(/\s+/).filter(Boolean);
 	const escapedTerms = terms.map((term) => escapeRegExp(term));
@@ -604,6 +516,12 @@ function resultDomId(id: string) {
 
 function escapeRegExp(value: string) {
 	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function helpFaqHref(slug: string, query: string) {
+	const normalizedQuery = parseHelpFaqQuery(query);
+
+	return normalizedQuery ? `/help/${slug}?q=${encodeURIComponent(normalizedQuery)}` : `/help/${slug}`;
 }
 
 function HelpFaqIcon({ iconName }: { iconName: HelpFaqIconName | undefined }) {

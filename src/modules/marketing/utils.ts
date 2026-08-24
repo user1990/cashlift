@@ -11,6 +11,7 @@ export type HelpFaqGroupLike = {
 export type HelpFaqItemLike = {
 	answer: string;
 	question: string;
+	slug: string;
 };
 
 export const parseHelpFaqQuery = (value: string | string[] | undefined) => {
