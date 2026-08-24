@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { FooterAccordion } from "./FooterAccordion";
+import { FooterCopyright } from "./FooterCopyright";
 import { Header } from "./Header";
 
 type ShellProps = {
@@ -49,7 +50,7 @@ export const Shell = ({ children }: ShellProps) => (
 
 			<div className="relative border-shell-border border-t">
 				<div className="mx-auto flex max-w-295 justify-center px-4 py-5 text-center text-s text-shell-muted sm:px-6 lg:px-8">
-					<span>© 2026 CashLift. All rights reserved.</span>
+					<FooterCopyright />
 				</div>
 			</div>
 		</footer>
