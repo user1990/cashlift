@@ -22,6 +22,19 @@ type FooterLinkGroup = {
 	links: readonly MarketingNavItem[];
 };
 
+export type HelpFaqIconName = "banknote-arrow-up" | "chart-spline" | "credit-card" | "life-buoy" | "users";
+
+type HelpFaqGroup = {
+	icon: HelpFaqIconName;
+	items: readonly HelpFaqItem[];
+	name: string;
+};
+
+type HelpFaqItem = {
+	answer: string;
+	question: string;
+};
+
 type MarketingCard = {
 	description: string;
 	icon: LucideIcon;
@@ -215,6 +228,133 @@ export const PROOF_POINTS = [
 	},
 ] as const satisfies readonly { metric: string; text: string }[];
 
+export const HELP_FAQ_GROUPS = [
+	{
+		icon: "chart-spline",
+		items: [
+			{
+				answer:
+					"CashLift ranks the demo workspace by cash impact and urgency, then keeps the reason for each action beside the decision.",
+				question: "How does CashLift rank actions?",
+			},
+			{
+				answer:
+					"CashLift ranks approvals, collections, vendor leaks, and buffer risks so teams can act on the cash decisions that matter now.",
+				question: "What kinds of decisions does CashLift surface?",
+			},
+			{
+				answer:
+					"Each example keeps its cash impact, urgency, owner, and supporting context next to the recommended action.",
+				question: "What context comes with each action?",
+			},
+			{
+				answer:
+					"Each request shows budget remaining, cash after approval, and invoice timing so a manager can see the cash context before saying yes.",
+				question: "What does CashLift show before a manager approves spend?",
+			},
+			{
+				answer:
+					"The collection queue keeps an owner, probability, due date, and next action beside receivables so the team knows what to follow up next.",
+				question: "How does CashLift turn overdue invoices into daily work?",
+			},
+			{
+				answer:
+					"The vendor leak finder surfaces unused seats, duplicate tools, trials close to renewal, and vendor bills that can wait.",
+				question: "What vendor leaks can CashLift help me review?",
+			},
+			{
+				answer:
+					"The 13-week cash outlook shows weekly balance, inflows, outflows, payroll pressure, and buffer risk without requiring a spreadsheet.",
+				question: "What does the cash outlook include?",
+			},
+		],
+		name: "How it works",
+	},
+	{
+		icon: "life-buoy",
+		items: [
+			{
+				answer:
+					"The live demo uses a read-only Studio Nova workspace. It does not claim or require a production integration to explore the workflow.",
+				question: "Where does CashLift get its data?",
+			},
+			{
+				answer:
+					"No. The Studio Nova workspace is a read-only sample, so you can explore it without entering company records.",
+				question: "Can I try the demo with real company data?",
+			},
+			{
+				answer: "No. This demo does not move money, issue cards, or provide financial, legal, or tax advice.",
+				question: "Does the demo make payments or financial decisions for me?",
+			},
+			{
+				answer:
+					"Read-only means the Studio Nova workspace is sample data for exploring the workflow. It does not claim or require a production integration, and you should not enter company records.",
+				question: "What does read-only mean in the live demo?",
+			},
+		],
+		name: "Demo",
+	},
+	{
+		icon: "users",
+		items: [
+			{
+				answer: "Finance sees all cash decisions. Managers approve team spend. Employees submit requests and receipts.",
+				question: "Which roles can use a company workspace?",
+			},
+			{
+				answer: "The landing page is designed around service-firm questions: what to collect, approve, or cut today.",
+				question: "Who is the demo designed for?",
+			},
+			{
+				answer:
+					"Finance sees all cash decisions, managers approve team spend, and employees submit requests and receipts. The role split keeps each decision with the people who need to act on it.",
+				question: "How do Finance, managers, and employees use CashLift?",
+			},
+		],
+		name: "Company workspace",
+	},
+	{
+		icon: "credit-card",
+		items: [
+			{
+				answer: "Open /pricing for current plan details, feature coverage, and the full comparison.",
+				question: "Where can I compare plans?",
+			},
+			{
+				answer:
+					"The pricing page is the source of truth for current plan details. See /pricing before making a buying decision.",
+				question: "Where should I check current pricing?",
+			},
+		],
+		name: "Plans",
+	},
+	{
+		icon: "banknote-arrow-up",
+		items: [
+			{
+				answer: "No. The live demo is available to explore without creating an account.",
+				question: "Do I need an account to explore the demo?",
+			},
+			{
+				answer:
+					"Start with the ranked daily inbox, then open a collection, approval, or renewal example to see its context.",
+				question: "Where should I start in the live demo?",
+			},
+			{
+				answer: "Open the live demo to review the daily inbox without creating an account or moving any money.",
+				question: "How can we get started?",
+			},
+			{
+				answer:
+					"Open the live demo, review the ranked daily inbox, and open one collection, approval, or renewal example for its context. Then use /pricing to compare current plan details and feature coverage.",
+				question: "What is the fastest way to evaluate CashLift?",
+			},
+		],
+		name: "Getting started",
+	},
+] as const satisfies readonly HelpFaqGroup[];
+
 export const FOOTER_LINKS = [
 	{
 		label: "Product",
@@ -233,6 +373,8 @@ export const FOOTER_LINKS = [
 		label: "Company",
 		links: [
 			{ href: "/customers", label: "Customers" },
+			{ href: "/developers", label: "Developers" },
+			{ href: "/help", label: "Help" },
 			{ href: "/contact", label: "Contact" },
 		],
 	},
