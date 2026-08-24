@@ -59,6 +59,25 @@ describe("HelpFaqCatalog", () => {
 		expect(screen.getByText(/CashLift ranks approvals, collections, vendor leaks/)).toBeVisible();
 	});
 
+	it("includes FAQ results in the dialog Tab order", async () => {
+		const user = userEvent.setup();
+
+		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} />);
+		await user.click(screen.getByRole("button", { name: "Open Help search" }));
+
+		const results = screen.getAllByRole("option");
+		const closeButton = screen.getByRole("button", { name: "Close Help search" });
+
+		await user.tab();
+		expect(closeButton).toHaveFocus();
+
+		await user.tab();
+		expect(results[0]).toHaveFocus();
+
+		await user.tab();
+		expect(results[1]).toHaveFocus();
+	});
+
 	it("opens with a shared URL query", () => {
 		window.history.replaceState(null, "", "/help?q=pricing");
 
@@ -81,7 +100,7 @@ describe("HelpFaqCatalog", () => {
 		expect(screen.getByRole("heading", { name: "No results for “unmatchedterm”" })).toBeVisible();
 
 		await user.keyboard("{Enter}");
-		expect(search).toHaveValue("");
+		expect(search).toHaveValue("unmatchedterm");
 
 		await user.tab();
 		expect(screen.getByRole("button", { name: "Close Help search" })).toHaveFocus();

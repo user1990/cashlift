@@ -132,6 +132,7 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 					closePalette={closePalette}
 					dialogRef={dialogRef}
 					filteredGroups={filteredGroups}
+					onResultFocus={(resultIndex) => setActiveResultIndex(resultIndex)}
 					onKeyDown={(event) => {
 						if (event.key === "ArrowDown") {
 							event.preventDefault();
@@ -147,8 +148,6 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 							event.preventDefault();
 							if (activeResult) {
 								selectResult(activeResult);
-							} else {
-								updateQuery("");
 							}
 						}
 					}}
@@ -215,6 +214,7 @@ function HelpFaqPalette({
 	closePalette,
 	dialogRef,
 	filteredGroups,
+	onResultFocus,
 	onKeyDown,
 	query,
 	results,
@@ -227,6 +227,7 @@ function HelpFaqPalette({
 	closePalette: () => void;
 	dialogRef: RefObject<HTMLDialogElement | null>;
 	filteredGroups: readonly HelpFaqGroupLike[];
+	onResultFocus: (resultIndex: number) => void;
 	onKeyDown: (event: ReactKeyboardEvent<HTMLInputElement>) => void;
 	query: string;
 	results: readonly HelpFaqResult[];
@@ -346,11 +347,12 @@ function HelpFaqPalette({
 										<button
 											key={result.id}
 											type="button"
-											tabIndex={-1}
+											tabIndex={0}
 											role="option"
 											id={resultDomId(result.id)}
 											aria-selected={active}
 											onClick={() => selectResult(result)}
+											onFocus={() => onResultFocus(resultIndex)}
 											className={cn(
 												"group flex min-h-14 w-full cursor-pointer items-center gap-3 rounded-xl border px-3 py-2.5 text-left outline-none transition-[background-color,border-color,box-shadow] duration-150 focus-visible:border-warning/80 focus-visible:bg-warning/10 focus-visible:ring-[3px] focus-visible:ring-warning/25 motion-reduce:transition-none",
 												active
