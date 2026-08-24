@@ -15,8 +15,8 @@ import {
 	Users,
 	X,
 } from "lucide-react";
-import type { KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, RefObject } from "react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent, RefObject } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/ui/utils/cn";
 import type { HelpFaqIconName } from "../content";
 import { filterHelpFaqGroups, type HelpFaqGroupLike, type HelpFaqItemLike, parseHelpFaqQuery } from "../utils";
@@ -26,13 +26,6 @@ const HELP_FAQ_SEARCH_ID = "help-faq-search";
 const HELP_FAQ_DIALOG_ID = "help-faq-dialog";
 const HELP_FAQ_DIALOG_TITLE_ID = "help-faq-dialog-title";
 const HELP_FAQ_RESULTS_ID = "help-faq-results";
-const HELP_FAQ_ICONS = {
-	"banknote-arrow-up": BanknoteArrowUp,
-	"chart-spline": ChartSpline,
-	"credit-card": CreditCard,
-	"life-buoy": LifeBuoy,
-	users: Users,
-} satisfies Record<HelpFaqIconName, typeof FileQuestion>;
 
 type HelpFaqCatalogProps = {
 	groups: readonly HelpFaqGroupLike[];
@@ -53,16 +46,23 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const triggerRef = useRef<HTMLButtonElement>(null);
 	const searchRef = useRef<HTMLInputElement>(null);
-	const filteredGroups = useMemo(() => filterHelpFaqGroups(groups, query), [groups, query]);
-	const results = useMemo(() => flattenHelpFaqGroups(filteredGroups), [filteredGroups]);
+	const wasPaletteOpenRef = useRef(false);
+	const filteredGroups = filterHelpFaqGroups(groups, query);
+	const results = flattenHelpFaqGroups(filteredGroups);
 	const visibleActiveResultIndex = Math.min(activeResultIndex, Math.max(results.length - 1, 0));
 	const activeResult = results[visibleActiveResultIndex];
 
 	useEffect(() => {
 		if (!isPaletteOpen) {
+			if (wasPaletteOpenRef.current) {
+				window.requestAnimationFrame(() => triggerRef.current?.focus());
+			}
+
+			wasPaletteOpenRef.current = false;
 			return;
 		}
 
+		wasPaletteOpenRef.current = true;
 		searchRef.current?.focus();
 		const previousOverflow = document.body.style.overflow;
 		document.body.style.overflow = "hidden";
@@ -93,11 +93,8 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 		window.history.replaceState(null, "", `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`);
 	};
 
-	const openPalette = useCallback(() => setIsPaletteOpen(true), []);
-	const closePalette = useCallback(() => {
-		setIsPaletteOpen(false);
-		window.requestAnimationFrame(() => triggerRef.current?.focus());
-	}, []);
+	const openPalette = () => setIsPaletteOpen(true);
+	const closePalette = () => setIsPaletteOpen(false);
 	const selectResult = (result: HelpFaqResult) => {
 		setSelectedResult(result);
 		closePalette();
@@ -107,18 +104,14 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 		const handleGlobalKeyDown = (event: KeyboardEvent) => {
 			if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
 				event.preventDefault();
-				if (isPaletteOpen) {
-					closePalette();
-				} else {
-					openPalette();
-				}
+				setIsPaletteOpen((isOpen) => !isOpen);
 			}
 		};
 
 		window.addEventListener("keydown", handleGlobalKeyDown);
 
 		return () => window.removeEventListener("keydown", handleGlobalKeyDown);
-	}, [closePalette, isPaletteOpen, openPalette]);
+	}, []);
 
 	return (
 		<section aria-labelledby="help-faq-catalog-title" className="mt-10 scroll-mt-24">
@@ -283,14 +276,17 @@ function HelpFaqPalette({
 			open
 			aria-modal="true"
 			aria-labelledby={HELP_FAQ_DIALOG_TITLE_ID}
-			onClick={(event: ReactMouseEvent<HTMLDialogElement>) => {
-				if (event.target === event.currentTarget) {
-					closePalette();
-				}
-			}}
 			onKeyDown={handleDialogKeyDown}
 			className="fixed inset-0 z-50 m-0 flex h-dvh w-dvw max-w-none items-center justify-center border-0 bg-shell/75 p-4 backdrop-blur-md motion-reduce:backdrop-blur-none max-md:items-stretch max-md:p-0"
 		>
+			<button
+				type="button"
+				tabIndex={-1}
+				aria-label="Dismiss Help search backdrop"
+				onClick={closePalette}
+				className="absolute inset-0 cursor-default"
+			/>
+
 			<div className="relative isolate flex h-[min(760px,calc(100dvh-2rem))] w-full max-w-[680px] flex-col overflow-hidden rounded-2xl border border-primary-subtle-border/70 bg-shell-elevated/90 text-shell-foreground shadow-[inset_0_1px_0_rgb(255_255_255_/_0.1),0_30px_90px_rgb(0_0_0_/_0.55)] backdrop-blur-xl before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-br before:from-primary/8 before:via-transparent before:to-warning/8 before:content-[''] max-md:h-full max-md:max-w-none max-md:rounded-none max-md:border-x-0 max-md:border-b-0">
 				<div className="relative z-1 flex min-h-16 items-center gap-3 border-shell-border border-b bg-shell/45 px-5 max-md:px-4">
 					<Search aria-hidden className="size-5 shrink-0 text-primary" />
@@ -345,7 +341,6 @@ function HelpFaqPalette({
 									const result = findResult(results, group.name, item.question);
 									const resultIndex = results.findIndex(({ id }) => id === result.id);
 									const active = resultIndex === activeResultIndex;
-									const ResultIcon = getHelpFaqIcon(result.icon);
 
 									return (
 										<button
@@ -369,7 +364,7 @@ function HelpFaqPalette({
 													active && "text-warning",
 												)}
 											>
-												<ResultIcon aria-hidden className="size-4" />
+												<HelpFaqIcon iconName={result.icon} />
 											</span>
 
 											<span className="min-w-0 flex-1">
@@ -455,13 +450,11 @@ function EmptyState({ onClear, query }: { onClear: () => void; query: string }) 
 }
 
 function SelectedAnswer({ result }: { result: HelpFaqResult }) {
-	const ResultIcon = getHelpFaqIcon(result.icon);
-
 	return (
 		<article className="relative isolate mt-5 overflow-hidden rounded-xl border border-primary-subtle-border/70 bg-shell-elevated/45 p-4 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07),0_18px_42px_rgb(0_0_0_/_0.24)] backdrop-blur-md before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-r before:from-primary/10 before:via-transparent before:to-warning/10 before:content-[''] sm:p-5">
 			<div className="relative flex items-start gap-3">
 				<span className="grid size-9 shrink-0 place-items-center rounded-md border border-primary/35 bg-primary/10 text-primary">
-					<ResultIcon aria-hidden className="size-4" />
+					<HelpFaqIcon iconName={result.icon} />
 				</span>
 
 				<div className="min-w-0">
@@ -585,8 +578,21 @@ function escapeRegExp(value: string) {
 	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function getHelpFaqIcon(iconName: HelpFaqIconName | undefined) {
-	return iconName ? HELP_FAQ_ICONS[iconName] : FileQuestion;
+function HelpFaqIcon({ iconName }: { iconName: HelpFaqIconName | undefined }) {
+	switch (iconName) {
+		case "banknote-arrow-up":
+			return <BanknoteArrowUp aria-hidden className="size-4" />;
+		case "chart-spline":
+			return <ChartSpline aria-hidden className="size-4" />;
+		case "credit-card":
+			return <CreditCard aria-hidden className="size-4" />;
+		case "life-buoy":
+			return <LifeBuoy aria-hidden className="size-4" />;
+		case "users":
+			return <Users aria-hidden className="size-4" />;
+		default:
+			return <FileQuestion aria-hidden className="size-4" />;
+	}
 }
 
 function slugify(value: string) {
