@@ -495,6 +495,7 @@ function flattenHelpFaqGroups(groups: readonly HelpFaqGroupLike[]): HelpFaqResul
 		group.items.map((item) => ({
 			...item,
 			groupName: group.name,
+			icon: group.icon,
 			id: `${slugify(group.name)}-${slugify(item.question)}`,
 		})),
 	);

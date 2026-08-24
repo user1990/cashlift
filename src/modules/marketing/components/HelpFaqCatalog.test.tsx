@@ -64,6 +64,24 @@ describe("HelpFaqCatalog", () => {
 		expect(click).toHaveBeenCalledTimes(1);
 	});
 
+	it("uses the topic icon for each FAQ result", async () => {
+		const user = userEvent.setup();
+
+		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} />);
+		await user.click(screen.getByRole("button", { name: "Open Help search" }));
+
+		const iconClasses = screen
+			.getAllByRole("option")
+			.map((result) => result.querySelector("svg")?.getAttribute("class") ?? "");
+
+		expect(iconClasses.some((iconClass) => iconClass.includes("lucide-chart-spline"))).toBe(true);
+		expect(iconClasses.some((iconClass) => iconClass.includes("lucide-life-buoy"))).toBe(true);
+		expect(iconClasses.some((iconClass) => iconClass.includes("lucide-users"))).toBe(true);
+		expect(iconClasses.some((iconClass) => iconClass.includes("lucide-credit-card"))).toBe(true);
+		expect(iconClasses.some((iconClass) => iconClass.includes("lucide-banknote-arrow-up"))).toBe(true);
+		expect(iconClasses.every((iconClass) => !iconClass.includes("lucide-file-question"))).toBe(true);
+	});
+
 	it("wraps Arrow navigation across the FAQ results", async () => {
 		const user = userEvent.setup();
 
