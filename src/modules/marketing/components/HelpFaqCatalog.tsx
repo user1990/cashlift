@@ -1,9 +1,24 @@
 "use client";
 
-import { ChevronRight, CornerDownLeft, FileQuestion, Mail, MessageCircle, Search, SearchX, X } from "lucide-react";
+import {
+	BanknoteArrowUp,
+	ChartSpline,
+	ChevronRight,
+	CornerDownLeft,
+	CreditCard,
+	FileQuestion,
+	LifeBuoy,
+	Mail,
+	MessageCircle,
+	Search,
+	SearchX,
+	Users,
+	X,
+} from "lucide-react";
 import type { KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, RefObject } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/ui/utils/cn";
+import type { HelpFaqIconName } from "../content";
 import { filterHelpFaqGroups, type HelpFaqGroupLike, type HelpFaqItemLike, parseHelpFaqQuery } from "../utils";
 import { ActionLink } from "./ActionLink";
 
@@ -11,6 +26,13 @@ const HELP_FAQ_SEARCH_ID = "help-faq-search";
 const HELP_FAQ_DIALOG_ID = "help-faq-dialog";
 const HELP_FAQ_DIALOG_TITLE_ID = "help-faq-dialog-title";
 const HELP_FAQ_RESULTS_ID = "help-faq-results";
+const HELP_FAQ_ICONS = {
+	"banknote-arrow-up": BanknoteArrowUp,
+	"chart-spline": ChartSpline,
+	"credit-card": CreditCard,
+	"life-buoy": LifeBuoy,
+	users: Users,
+} satisfies Record<HelpFaqIconName, typeof FileQuestion>;
 
 type HelpFaqCatalogProps = {
 	groups: readonly HelpFaqGroupLike[];
@@ -323,7 +345,7 @@ function HelpFaqPalette({
 									const result = findResult(results, group.name, item.question);
 									const resultIndex = results.findIndex(({ id }) => id === result.id);
 									const active = resultIndex === activeResultIndex;
-									const ResultIcon = result.icon ?? FileQuestion;
+									const ResultIcon = getHelpFaqIcon(result.icon);
 
 									return (
 										<button
@@ -433,7 +455,7 @@ function EmptyState({ onClear, query }: { onClear: () => void; query: string }) 
 }
 
 function SelectedAnswer({ result }: { result: HelpFaqResult }) {
-	const ResultIcon = result.icon ?? FileQuestion;
+	const ResultIcon = getHelpFaqIcon(result.icon);
 
 	return (
 		<article className="relative isolate mt-5 overflow-hidden rounded-xl border border-primary-subtle-border/70 bg-shell-elevated/45 p-4 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07),0_18px_42px_rgb(0_0_0_/_0.24)] backdrop-blur-md before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-r before:from-primary/10 before:via-transparent before:to-warning/10 before:content-[''] sm:p-5">
@@ -561,6 +583,10 @@ function resultDomId(id: string) {
 
 function escapeRegExp(value: string) {
 	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function getHelpFaqIcon(iconName: HelpFaqIconName | undefined) {
+	return iconName ? HELP_FAQ_ICONS[iconName] : FileQuestion;
 }
 
 function slugify(value: string) {

@@ -14,6 +14,8 @@ describe("HelpFaqCatalog", () => {
 	it("opens the palette, filters results, and persists q in the URL", async () => {
 		const user = userEvent.setup();
 
+		expect(HELP_FAQ_GROUPS.every(({ icon }) => typeof icon === "string")).toBe(true);
+
 		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} />);
 
 		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();

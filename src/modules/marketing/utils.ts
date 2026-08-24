@@ -1,9 +1,9 @@
-import type { LucideIcon } from "lucide-react";
+import type { HelpFaqIconName } from "./content";
 
 const MAX_HELP_FAQ_QUERY_LENGTH = 120;
 
 export type HelpFaqGroupLike = {
-	icon?: LucideIcon;
+	icon?: HelpFaqIconName;
 	items: readonly HelpFaqItemLike[];
 	name: string;
 };

@@ -22,8 +22,10 @@ type FooterLinkGroup = {
 	links: readonly MarketingNavItem[];
 };
 
+export type HelpFaqIconName = "banknote-arrow-up" | "chart-spline" | "credit-card" | "life-buoy" | "users";
+
 type HelpFaqGroup = {
-	icon: LucideIcon;
+	icon: HelpFaqIconName;
 	items: readonly HelpFaqItem[];
 	name: string;
 };
@@ -228,7 +230,7 @@ export const PROOF_POINTS = [
 
 export const HELP_FAQ_GROUPS = [
 	{
-		icon: ChartSpline,
+		icon: "chart-spline",
 		items: [
 			{
 				answer:
@@ -249,7 +251,7 @@ export const HELP_FAQ_GROUPS = [
 		name: "How it works",
 	},
 	{
-		icon: LifeBuoy,
+		icon: "life-buoy",
 		items: [
 			{
 				answer:
@@ -269,7 +271,7 @@ export const HELP_FAQ_GROUPS = [
 		name: "Demo",
 	},
 	{
-		icon: Users,
+		icon: "users",
 		items: [
 			{
 				answer: "Finance sees all cash decisions. Managers approve team spend. Employees submit requests and receipts.",
@@ -283,7 +285,7 @@ export const HELP_FAQ_GROUPS = [
 		name: "Company workspace",
 	},
 	{
-		icon: CreditCard,
+		icon: "credit-card",
 		items: [
 			{
 				answer: "Open /pricing for current plan details, feature coverage, and the full comparison.",
@@ -298,7 +300,7 @@ export const HELP_FAQ_GROUPS = [
 		name: "Plans",
 	},
 	{
-		icon: BanknoteArrowUp,
+		icon: "banknote-arrow-up",
 		items: [
 			{
 				answer: "No. The live demo is available to explore without creating an account.",
