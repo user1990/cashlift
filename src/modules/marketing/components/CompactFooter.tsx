@@ -33,13 +33,13 @@ export const CompactFooter = () => (
 			>
 				{COMPACT_FOOTER_GROUPS.map(({ label, links }, index) => (
 					<div key={label} className={cn("min-w-0 flex-1", index > 0 && "border-shell-border border-l pl-8")}>
-						<div className="flex items-center justify-center gap-3">
+						<div className="flex items-center justify-between gap-3">
 							<p className="font-mono text-primary text-xs uppercase tracking-[0.16em]">{label}</p>
 
 							<span className="font-mono text-shell-muted text-xs">0{index + 1}</span>
 						</div>
 
-						<ul className="mt-5 grid justify-items-center gap-2">
+						<ul className="mt-5 grid justify-items-start gap-2">
 							{links.map(({ href, label: linkLabel }) => (
 								<li key={href}>
 									<CompactFooterLink href={href} label={linkLabel} />
