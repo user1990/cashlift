@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { useState } from "react";
 
 import { TextField } from "@/ui/components/forms/TextField";
 
@@ -9,7 +10,7 @@ const meta = {
 	component: TextField,
 	decorators: [
 		(Story) => (
-			<div className="w-80">
+			<div className="w-80 rounded-lg border border-border bg-shell p-6 text-shell-foreground shadow-panel">
 				<Story />
 			</div>
 		),
@@ -39,6 +40,10 @@ export const Invalid: Story = {
 		invalid: true,
 		label: "Vendor name",
 	},
+};
+
+export const ErrorTransition: Story = {
+	render: () => <ErrorTransitionDemo />,
 };
 
 export const Disabled: Story = {
@@ -82,3 +87,26 @@ export const Sizes: Story = {
 		</div>
 	),
 };
+
+function ErrorTransitionDemo() {
+	const [invalid, setInvalid] = useState(false);
+
+	return (
+		<div className="grid w-80 gap-3">
+			<TextField
+				errorMessage={invalid ? "Vendor name is required" : undefined}
+				invalid={invalid}
+				label="Vendor name"
+				placeholder="Acme Studio"
+			/>
+
+			<button
+				className="w-fit rounded-md border border-border bg-panel px-3 py-2 font-medium text-panel-foreground text-s outline-none transition-colors hover:border-primary hover:bg-panel-muted hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
+				onClick={() => setInvalid((isInvalid) => !isInvalid)}
+				type="button"
+			>
+				{invalid ? "Clear error" : "Show error"}
+			</button>
+		</div>
+	);
+}
