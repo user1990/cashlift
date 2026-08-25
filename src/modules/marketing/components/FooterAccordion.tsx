@@ -113,7 +113,7 @@ export const FooterAccordion = ({ groups = FOOTER_LINKS }: FooterAccordionProps)
 const FooterLink = ({ href, label }: { href: string; label: string }) => (
 	<Link
 		href={href}
-		className="group inline-flex min-h-8 items-center gap-1 text-m text-shell-foreground/80 outline-none transition-[color] duration-150 hover:text-primary focus-visible:text-primary motion-reduce:transition-none"
+		className="group inline-flex min-h-11 items-center gap-1 text-m text-shell-foreground/80 outline-none transition-[color] duration-150 hover:text-primary focus-visible:text-primary motion-reduce:transition-none lg:min-h-8"
 	>
 		{label}
 		<ArrowUpRight
