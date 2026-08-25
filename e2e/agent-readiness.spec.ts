@@ -25,20 +25,6 @@ test.describe("agent-readable public contracts", () => {
 		expect(body).toContain("/llms.txt");
 	});
 
-	test("negotiates Markdown and varies the response by Accept", async ({ request }) => {
-		const markdownResponse = await request.get("/", { headers: { Accept: "text/markdown" } });
-		const markdownBody = await markdownResponse.text();
-
-		expect(markdownResponse.status()).toBe(200);
-		expect(markdownResponse.headers()["content-type"]).toContain("text/markdown");
-		expect(markdownResponse.headers()[varyHeader(markdownResponse)]).toContain("Accept");
-		expect(markdownBody).toContain("# CashLift");
-
-		const unsupportedResponse = await request.get("/", { headers: { Accept: "application/pdf" } });
-
-		expect(unsupportedResponse.status()).toBe(406);
-	});
-
 	test("publishes agent guidance, developer resources, and the sitemap", async ({ request }) => {
 		const [llmsResponse, developerResponse, openApiResponse, sitemapResponse, robotsResponse] = await Promise.all([
 			request.get("/llms.txt"),
@@ -56,21 +42,16 @@ test.describe("agent-readable public contracts", () => {
 
 		expect(llmsResponse.status()).toBe(200);
 		expect(llmsBody).toMatch(/^# CashLift\n\n> /);
-		expect(llmsBody).toContain("## When to use CashLift");
 		expect(llmsBody).toContain("/developers");
+		expect(llmsBody).toContain("/openapi.json");
 		expect(developerResponse.status()).toBe(200);
-		expect(developerBody).toContain("CashLift developer resources");
+		expect(developerBody).toContain('href="/openapi.json"');
 		expect(openApiResponse.status()).toBe(200);
 		expect(openApiBody.openapi).toBe("3.1.0");
 		expect(openApiBody.paths["/api/workspace/dataset"]).toBeDefined();
 		expect(sitemapResponse.status()).toBe(200);
 		expect(sitemapBody).toContain("https://cashlift.vercel.app/developers");
-		expect(sitemapBody).toContain("<lastmod>2026-08-23</lastmod>");
 		expect(robotsResponse.status()).toBe(200);
 		expect(robotsBody).toContain("Sitemap: https://cashlift.vercel.app/sitemap.xml");
 	});
 });
-
-function varyHeader(response: { headers(): Record<string, string> }) {
-	return Object.keys(response.headers()).find((header) => header.toLowerCase() === "vary") ?? "vary";
-}

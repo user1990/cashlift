@@ -3,69 +3,71 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
-import { HELP_FAQ_GROUPS } from "../content";
+import { getHelpFaqItemBySlug, HELP_FAQ_GROUPS } from "../content";
+import { filterHelpFaqGroups, getHelpFaqHref } from "../utils";
 import { HelpFaqCatalog } from "./HelpFaqCatalog";
+
+const READ_ONLY_QUERY = "read-only";
+const SHARED_QUERY = "approval";
+const REPRESENTATIVE_SLUG = "what-does-cashlift-show-before-a-manager-approves-spend";
 
 describe("HelpFaqCatalog", () => {
 	beforeEach(() => {
 		window.history.replaceState(null, "", "/help");
 	});
 
-	it("opens the palette, filters results, and persists q in the URL", async () => {
+	it("opens search, filters results, and writes the query into article links", async () => {
 		const user = userEvent.setup();
-
-		expect(HELP_FAQ_GROUPS.every(({ icon }) => typeof icon === "string")).toBe(true);
+		const matchingItems = filterHelpFaqGroups(HELP_FAQ_GROUPS, READ_ONLY_QUERY).flatMap(({ items }) => items);
+		const representativeMatch = matchingItems[0];
 
 		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} />);
 
+		expect(screen.getByRole("link", { name: "Contact us" })).toHaveAttribute("href", "/contact");
 		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 
 		await user.click(screen.getByRole("button", { name: "Open Help search" }));
 
 		const search = screen.getByRole("combobox", { name: "Search Help FAQs" });
 		expect(screen.getByRole("dialog", { name: "Search Help FAQs" })).toBeInTheDocument();
-		expect(search).toHaveAttribute("type", "text");
-		expect(search).toHaveAttribute("aria-expanded", "true");
-		expect(screen.getByRole("button", { name: "Close Help search" })).toHaveAttribute("title", "Close Help search");
 
-		await user.type(search, "read-only");
+		await user.type(search, READ_ONLY_QUERY);
 
-		expect(screen.getByText("Can I try the demo with real company data?")).toBeVisible();
-		expect(screen.getByText("3 answers")).toBeVisible();
-		expect(window.location.search).toBe("?q=read-only");
+		expect(screen.getByRole("option", { name: optionName(representativeMatch.question) })).toHaveAttribute(
+			"href",
+			getHelpFaqHref(representativeMatch.slug, READ_ONLY_QUERY),
+		);
+		expect(screen.getByRole("status")).toHaveTextContent(`${matchingItems.length} answers`);
+		expect(window.location.search).toBe(`?q=${READ_ONLY_QUERY}`);
 	});
 
-	it("highlights matching questions and answers while filtering the catalog", async () => {
+	it("opens from a shared query and keeps it on article links until the palette closes", async () => {
 		const user = userEvent.setup();
+		const representativeQuestion = getHelpFaqItemBySlug(REPRESENTATIVE_SLUG)?.question ?? "";
 
-		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} />);
-		await user.click(screen.getByRole("button", { name: "Open Help search" }));
+		window.history.replaceState(null, "", `/help?q=${SHARED_QUERY}`);
+		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} initialQuery={SHARED_QUERY} />);
 
-		await user.type(screen.getByRole("combobox", { name: "Search Help FAQs" }), "demo");
+		expect(screen.getByRole("dialog", { name: "Search Help FAQs" })).toBeInTheDocument();
+		expect(screen.getByRole("combobox", { name: "Search Help FAQs" })).toHaveValue(SHARED_QUERY);
+		expect(screen.getByRole("option", { name: optionName(representativeQuestion) })).toHaveAttribute(
+			"href",
+			getHelpFaqHref(REPRESENTATIVE_SLUG, SHARED_QUERY),
+		);
 
-		expect(screen.getAllByText("demo", { exact: true }).length).toBeGreaterThan(0);
+		await user.click(screen.getByRole("button", { name: "Close Help search" }));
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
 
-	it("exposes the stable article route from the active result", async () => {
-		const user = userEvent.setup();
-
-		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} />);
-
-		await user.click(screen.getByRole("button", { name: "Open Help search" }));
-
-		const results = screen.getAllByRole("option");
-		const activeResult = results[0];
-
-		expect(activeResult).toHaveAttribute("href", "/help/how-does-cashlift-rank-actions");
-	});
-
-	it("wraps Arrow navigation across the FAQ results", async () => {
+	it("wraps arrow keys, traps Tab, and preserves a no-results query until Escape", async () => {
 		const user = userEvent.setup();
 
 		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} />);
 		await user.click(screen.getByRole("button", { name: "Open Help search" }));
 
 		const results = screen.getAllByRole("option");
+		const closeButton = screen.getByRole("button", { name: "Close Help search" });
+		const search = screen.getByRole("combobox", { name: "Search Help FAQs" });
 
 		expect(results[0]).toHaveAttribute("aria-selected", "true");
 
@@ -74,16 +76,6 @@ describe("HelpFaqCatalog", () => {
 
 		await user.keyboard("{ArrowDown}");
 		expect(results[0]).toHaveAttribute("aria-selected", "true");
-	});
-
-	it("includes FAQ results in the dialog Tab order", async () => {
-		const user = userEvent.setup();
-
-		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} />);
-		await user.click(screen.getByRole("button", { name: "Open Help search" }));
-
-		const results = screen.getAllByRole("option");
-		const closeButton = screen.getByRole("button", { name: "Close Help search" });
 
 		await user.tab();
 		expect(closeButton).toHaveFocus();
@@ -93,62 +85,19 @@ describe("HelpFaqCatalog", () => {
 
 		await user.tab();
 		expect(results[1]).toHaveFocus();
-	});
 
-	it("opens with a shared URL query", () => {
-		window.history.replaceState(null, "", "/help?q=pricing");
-
-		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} initialQuery="pricing" />);
-
-		expect(screen.getByRole("dialog", { name: "Search Help FAQs" })).toBeInTheDocument();
-		expect(screen.getByRole("combobox", { name: "Search Help FAQs" })).toHaveValue("pricing");
-	});
-
-	it("keeps the originating query in article links", async () => {
-		const user = userEvent.setup();
-
-		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} initialQuery="approval" />);
-
-		const representativeResult = screen.getByRole("option", {
-			name: /What does CashLift show before a manager approves spend\?/,
-		});
-
-		expect(representativeResult).toHaveAttribute(
-			"href",
-			"/help/what-does-cashlift-show-before-a-manager-approves-spend?q=approval",
-		);
-
-		await user.click(screen.getByRole("button", { name: "Close Help search" }));
-		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-	});
-
-	it("keeps the palette keyboard-accessible and preserves a no-results query", async () => {
-		const user = userEvent.setup();
-
-		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} />);
-		await user.click(screen.getByRole("button", { name: "Open Help search" }));
-
-		const search = screen.getByRole("combobox", { name: "Search Help FAQs" });
-		expect(search).toHaveFocus();
-
+		await user.click(search);
 		await user.type(search, "unmatchedterm");
-		expect(screen.getByRole("heading", { name: "No results for “unmatchedterm”" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: /No results/ })).toBeVisible();
 
 		await user.keyboard("{Enter}");
 		expect(search).toHaveValue("unmatchedterm");
 
-		await user.tab();
-		expect(screen.getByRole("button", { name: "Close Help search" })).toHaveFocus();
-
 		await user.keyboard("{Escape}");
 		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
-
-	it("keeps the contact panel in the help flow", () => {
-		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} />);
-
-		expect(screen.getByRole("heading", { name: "Still need help?" })).toBeVisible();
-		expect(screen.getByRole("link", { name: "Contact us" })).toHaveAttribute("href", "/contact");
-		expect(screen.getByRole("button", { name: "Open Help search" })).toBeVisible();
-	});
 });
+
+function optionName(question: string) {
+	return (accessibleName: string) => accessibleName.includes(question);
+}

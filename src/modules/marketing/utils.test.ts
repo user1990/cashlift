@@ -10,18 +10,12 @@ describe("parseHelpFaqQuery", () => {
 });
 
 describe("filterHelpFaqGroups", () => {
-	it("matches question, answer, and group names while preserving grouped results", () => {
+	it("filters grouped FAQs by normalized terms and returns every item for an empty query", () => {
+		expect(filterHelpFaqGroups(HELP_FAQ_GROUPS, "")).toEqual(HELP_FAQ_GROUPS);
 		expect(filterHelpFaqGroups(HELP_FAQ_GROUPS, "read-only").map(({ name }) => name)).toEqual(["Demo"]);
 		expect(filterHelpFaqGroups(HELP_FAQ_GROUPS, "cash impact")[0]?.items).toHaveLength(2);
 		expect(filterHelpFaqGroups(HELP_FAQ_GROUPS, "plans")[0]?.items).toHaveLength(2);
-	});
-
-	it("matches every whitespace-normalized term across the searchable fields", () => {
 		expect(filterHelpFaqGroups(HELP_FAQ_GROUPS, "  demo   financial  ")[0]?.items).toHaveLength(1);
 		expect(filterHelpFaqGroups(HELP_FAQ_GROUPS, "financial demo")[0]?.items).toHaveLength(1);
-	});
-
-	it("returns every item for an empty query", () => {
-		expect(filterHelpFaqGroups(HELP_FAQ_GROUPS, "")).toEqual(HELP_FAQ_GROUPS);
 	});
 });
