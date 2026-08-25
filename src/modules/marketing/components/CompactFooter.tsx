@@ -39,7 +39,7 @@ export const CompactFooter = () => (
 							<span className="font-mono text-shell-muted text-xs">0{index + 1}</span>
 						</div>
 
-						<ul className="mt-3 flex flex-wrap justify-center gap-x-5 gap-y-2">
+						<ul className="mt-5 grid justify-items-center gap-2">
 							{links.map(({ href, label: linkLabel }) => (
 								<li key={href}>
 									<CompactFooterLink href={href} label={linkLabel} />
