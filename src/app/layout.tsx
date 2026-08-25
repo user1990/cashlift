@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 	title: "CashLift",
 	description: "A cash-aware spend decision command center for service firms.",
 	icons: {
-		apple: "/brand/cashlift-icon.svg",
+		apple: "/brand/cashlift-icon-180.png",
 		icon: "/brand/cashlift-icon.svg",
 	},
 };
