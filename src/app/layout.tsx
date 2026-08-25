@@ -13,6 +13,10 @@ export const metadata: Metadata = {
 	metadataBase: new URL(SITE_URL),
 	title: "CashLift",
 	description: "A cash-aware spend decision command center for service firms.",
+	icons: {
+		apple: "/brand/cashlift-icon-180.png",
+		icon: "/brand/cashlift-icon.svg",
+	},
 };
 
 export const viewport: Viewport = {
