@@ -6,14 +6,23 @@ import { useId, useState } from "react";
 import { cn } from "@/ui/utils/cn";
 import { FOOTER_LINKS } from "../content";
 
-export const FooterAccordion = () => {
+type FooterAccordionGroup = {
+	label: string;
+	links: readonly { href: string; label: string }[];
+};
+
+type FooterAccordionProps = {
+	groups?: readonly FooterAccordionGroup[];
+};
+
+export const FooterAccordion = ({ groups = FOOTER_LINKS }: FooterAccordionProps) => {
 	const accordionId = useId();
 	const [openLabel, setOpenLabel] = useState<string | null>(null);
 
 	return (
 		<nav aria-label="Footer" className="relative">
 			<div className="lg:hidden">
-				{FOOTER_LINKS.map(({ label, links }, index) => {
+				{groups.map(({ label, links }, index) => {
 					const expanded = openLabel === label;
 					const panelId = `${accordionId}-panel-${index}`;
 					const buttonId = `${accordionId}-button-${index}`;
@@ -79,7 +88,7 @@ export const FooterAccordion = () => {
 			</div>
 
 			<ul className="hidden gap-3 lg:grid lg:grid-cols-4">
-				{FOOTER_LINKS.map(({ label, links }, index) => (
+				{groups.map(({ label, links }, index) => (
 					<li key={label} className="rounded-2xl border border-shell-border bg-shell-elevated/70 p-5 backdrop-blur-md">
 						<div className="flex items-center justify-between gap-3">
 							<p className="font-mono text-primary text-xs uppercase tracking-[0.16em]">{label}</p>
