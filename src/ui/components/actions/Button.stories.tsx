@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Check, Download, LoaderCircle, Plus, Trash2 } from "lucide-react";
 
 import { Button } from "@/ui/components/actions/Button";
+import { buttonVariants } from "@/ui/components/actions/buttonVariants";
 
 const meta = {
 	args: {
@@ -66,6 +67,14 @@ export const Variants: Story = {
 
 			<Button variant="ghost">Ghost</Button>
 		</div>
+	),
+};
+
+export const Link: Story = {
+	render: () => (
+		<a className={buttonVariants({ variant: "link" })} href="/help">
+			View help center
+		</a>
 	),
 };
 
