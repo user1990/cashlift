@@ -60,9 +60,9 @@ export const TextField = ({ errorMessage, id, invalid, label, placeholder, class
 							data-error-visible="true"
 							data-slot="field-error-message"
 							layout="size"
-							initial={{ opacity: 0, y: -40 }}
-							animate={{ opacity: 1, y: 0 }}
-							exit={{ opacity: 0, y: -40 }}
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							exit={{ opacity: 0 }}
 							transition={errorTransition}
 						>
 							<div className="flex min-w-0 items-center gap-1.5 pt-1 text-red-400 text-s leading-5">
