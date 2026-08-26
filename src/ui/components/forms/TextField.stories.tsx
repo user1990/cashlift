@@ -94,7 +94,7 @@ function ErrorTransitionDemo() {
 
 	return (
 		<LazyMotion features={domAnimation}>
-			<m.div className="grid w-full gap-3" layout="size">
+			<m.div className="grid w-full gap-3">
 				<TextField
 					errorMessage={invalid ? "Vendor name is required" : undefined}
 					invalid={invalid}
@@ -102,13 +102,14 @@ function ErrorTransitionDemo() {
 					placeholder="Acme Studio"
 				/>
 
-				<button
+				<m.button
 					className="w-fit rounded-md border border-border bg-panel px-3 py-2 font-medium text-panel-foreground text-s outline-none transition-colors hover:border-primary hover:bg-panel-muted hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
+					layout="position"
 					onClick={() => setInvalid((isInvalid) => !isInvalid)}
 					type="button"
 				>
 					{invalid ? "Clear error" : "Show error"}
-				</button>
+				</m.button>
 			</m.div>
 		</LazyMotion>
 	);
