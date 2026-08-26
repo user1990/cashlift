@@ -56,10 +56,9 @@ export const TextField = ({ errorMessage, id, invalid, label, placeholder, class
 					{errorMessage && (
 						<m.div
 							aria-hidden="true"
-							className="origin-top overflow-visible"
+							className="overflow-visible"
 							data-error-visible="true"
 							data-slot="field-error-message"
-							layout="size"
 							initial={{ opacity: 0 }}
 							animate={{ opacity: 1 }}
 							exit={{ opacity: 0 }}
