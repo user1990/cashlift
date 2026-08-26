@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { domAnimation, LazyMotion, m } from "framer-motion";
+import { domAnimation, LazyMotion, m, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 
 import { TextField } from "@/ui/components/forms/TextField";
@@ -91,6 +91,11 @@ export const Sizes: Story = {
 
 function ErrorTransitionDemo() {
 	const [invalid, setInvalid] = useState(false);
+	const shouldReduceMotion = useReducedMotion();
+	const sectionTransition = {
+		duration: shouldReduceMotion ? 0 : 0.2,
+		ease: "easeOut" as const,
+	};
 
 	return (
 		<LazyMotion features={domAnimation}>
@@ -106,6 +111,7 @@ function ErrorTransitionDemo() {
 					className="w-fit rounded-md border border-border bg-panel px-3 py-2 font-medium text-panel-foreground text-s outline-none transition-colors hover:border-primary hover:bg-panel-muted hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
 					layout="position"
 					onClick={() => setInvalid((isInvalid) => !isInvalid)}
+					transition={sectionTransition}
 					type="button"
 				>
 					{invalid ? "Clear error" : "Show error"}
