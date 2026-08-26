@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { domMax, LazyMotion, m, useReducedMotion } from "framer-motion";
+import { AnimatePresence, domMax, LazyMotion, m, useReducedMotion } from "framer-motion";
 import { type ReactNode, useState } from "react";
 
 import { TextField } from "@/ui/components/forms/TextField";
@@ -47,6 +47,9 @@ export const Invalid: Story = {
 };
 
 export const ErrorTransition: Story = {
+	parameters: {
+		layout: "padded",
+	},
 	render: () => <ErrorTransitionDemo />,
 };
 
@@ -97,12 +100,13 @@ function ErrorTransitionDemo() {
 	const shouldReduceMotion = useReducedMotion();
 	const sectionTransition = {
 		duration: shouldReduceMotion ? 0 : 0.2,
-		ease: "easeOut" as const,
+		ease: "easeInOut" as const,
 	};
+	const errorRowLayoutOffset = 30;
 
 	return (
 		<StoryFrame>
-			<m.div className="grid w-full gap-3">
+			<div className="grid w-full gap-3">
 				<TextField
 					errorMessage={invalid ? "Vendor name is required" : undefined}
 					invalid={invalid}
@@ -110,16 +114,20 @@ function ErrorTransitionDemo() {
 					placeholder="Acme Studio"
 				/>
 
-				<m.button
-					className="w-fit rounded-md border border-border bg-panel px-3 py-2 font-medium text-panel-foreground text-s outline-none transition-colors hover:border-primary hover:bg-panel-muted hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
-					layout="position"
-					onClick={() => setInvalid((isInvalid) => !isInvalid)}
-					transition={sectionTransition}
-					type="button"
-				>
-					{invalid ? "Clear error" : "Show error"}
-				</m.button>
-			</m.div>
+				<AnimatePresence initial={false}>
+					<m.button
+						animate={{ y: 0 }}
+						className="w-fit rounded-md border border-border bg-panel px-3 py-2 font-medium text-panel-foreground text-s outline-none transition-colors hover:border-primary hover:bg-panel-muted hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
+						initial={shouldReduceMotion ? false : { y: invalid ? -errorRowLayoutOffset : errorRowLayoutOffset }}
+						key={invalid ? "clear-error" : "show-error"}
+						onClick={() => setInvalid((isInvalid) => !isInvalid)}
+						transition={sectionTransition}
+						type="button"
+					>
+						{invalid ? "Clear error" : "Show error"}
+					</m.button>
+				</AnimatePresence>
+			</div>
 		</StoryFrame>
 	);
 }
@@ -129,13 +137,16 @@ function StoryFrame({ children }: { children: ReactNode }) {
 
 	return (
 		<LazyMotion features={domMax}>
-			<m.div
-				className="w-80 rounded-lg border border-border bg-shell p-6 text-shell-foreground shadow-panel"
-				layout
-				transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: "easeOut" }}
-			>
-				{children}
-			</m.div>
+			<div className="relative w-80 p-6 text-shell-foreground">
+				<m.div
+					aria-hidden="true"
+					className="pointer-events-none absolute inset-0 rounded-lg border border-border bg-shell shadow-panel"
+					layout
+					transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: "easeInOut" }}
+				/>
+
+				<div className="relative">{children}</div>
+			</div>
 		</LazyMotion>
 	);
 }
