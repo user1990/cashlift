@@ -92,7 +92,7 @@ function ErrorTransitionDemo() {
 	const [invalid, setInvalid] = useState(false);
 
 	return (
-		<div className="grid w-80 gap-3">
+		<div className="grid w-full gap-3">
 			<TextField
 				errorMessage={invalid ? "Vendor name is required" : undefined}
 				invalid={invalid}
