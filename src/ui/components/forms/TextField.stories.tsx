@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { domAnimation, LazyMotion, m, useReducedMotion } from "framer-motion";
-import { useState } from "react";
+import { domMax, LazyMotion, m, useReducedMotion } from "framer-motion";
+import { type ReactNode, useState } from "react";
 
 import { TextField } from "@/ui/components/forms/TextField";
 
@@ -10,11 +10,14 @@ const meta = {
 	},
 	component: TextField,
 	decorators: [
-		(Story) => (
-			<div className="w-80 rounded-lg border border-border bg-shell p-6 text-shell-foreground shadow-panel">
+		(Story, context) =>
+			context.id === "forms-textfield--error-transition" ? (
 				<Story />
-			</div>
-		),
+			) : (
+				<div className="w-80 rounded-lg border border-border bg-shell p-6 text-shell-foreground shadow-panel">
+					<Story />
+				</div>
+			),
 	],
 	parameters: {
 		layout: "centered",
@@ -98,7 +101,7 @@ function ErrorTransitionDemo() {
 	};
 
 	return (
-		<LazyMotion features={domAnimation}>
+		<StoryFrame>
 			<m.div className="grid w-full gap-3">
 				<TextField
 					errorMessage={invalid ? "Vendor name is required" : undefined}
@@ -116,6 +119,22 @@ function ErrorTransitionDemo() {
 				>
 					{invalid ? "Clear error" : "Show error"}
 				</m.button>
+			</m.div>
+		</StoryFrame>
+	);
+}
+
+function StoryFrame({ children }: { children: ReactNode }) {
+	const shouldReduceMotion = useReducedMotion();
+
+	return (
+		<LazyMotion features={domMax}>
+			<m.div
+				className="w-80 rounded-lg border border-border bg-shell p-6 text-shell-foreground shadow-panel"
+				layout
+				transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: "easeOut" }}
+			>
+				{children}
 			</m.div>
 		</LazyMotion>
 	);
