@@ -69,9 +69,9 @@ export const TextField = ({ errorMessage, id, invalid, label, placeholder, class
 								<m.span
 									aria-hidden="true"
 									className="flex size-3.5 shrink-0 origin-center"
-									initial={{ opacity: 0, scale: 0.95 }}
+									initial={{ opacity: 0, scale: 0.5 }}
 									animate={{ opacity: 1, scale: 1 }}
-									exit={{ opacity: 0, scale: 0.95 }}
+									exit={{ opacity: 0, scale: 0.5 }}
 									transition={errorTransition}
 								>
 									<CircleAlert className="size-3.5 text-red-400" strokeWidth={2.25} />
