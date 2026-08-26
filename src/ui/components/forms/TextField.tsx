@@ -52,7 +52,7 @@ export const TextField = ({ errorMessage, id, invalid, label, placeholder, class
 			/>
 
 			<LazyMotion features={domAnimation}>
-				<AnimatePresence initial={false}>
+				<AnimatePresence initial={false} mode="popLayout">
 					{errorMessage && (
 						<m.div
 							aria-hidden="true"
