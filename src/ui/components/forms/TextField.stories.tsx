@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { domAnimation, LazyMotion, m } from "framer-motion";
 import { useState } from "react";
 
 import { TextField } from "@/ui/components/forms/TextField";
@@ -92,21 +93,23 @@ function ErrorTransitionDemo() {
 	const [invalid, setInvalid] = useState(false);
 
 	return (
-		<div className="grid w-full gap-3">
-			<TextField
-				errorMessage={invalid ? "Vendor name is required" : undefined}
-				invalid={invalid}
-				label="Vendor name"
-				placeholder="Acme Studio"
-			/>
+		<LazyMotion features={domAnimation}>
+			<m.div className="grid w-full gap-3" layout="size">
+				<TextField
+					errorMessage={invalid ? "Vendor name is required" : undefined}
+					invalid={invalid}
+					label="Vendor name"
+					placeholder="Acme Studio"
+				/>
 
-			<button
-				className="w-fit rounded-md border border-border bg-panel px-3 py-2 font-medium text-panel-foreground text-s outline-none transition-colors hover:border-primary hover:bg-panel-muted hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
-				onClick={() => setInvalid((isInvalid) => !isInvalid)}
-				type="button"
-			>
-				{invalid ? "Clear error" : "Show error"}
-			</button>
-		</div>
+				<button
+					className="w-fit rounded-md border border-border bg-panel px-3 py-2 font-medium text-panel-foreground text-s outline-none transition-colors hover:border-primary hover:bg-panel-muted hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
+					onClick={() => setInvalid((isInvalid) => !isInvalid)}
+					type="button"
+				>
+					{invalid ? "Clear error" : "Show error"}
+				</button>
+			</m.div>
+		</LazyMotion>
 	);
 }
