@@ -24,6 +24,15 @@ describe("EmailAutocompleteField", () => {
 
 		expect(input).toHaveValue("ma@outlook.com");
 	});
+
+	it("renders the shared error status presentation", () => {
+		const { container } = render(
+			<EmailAutocompleteField errorMessage="Enter a work email" invalid label="Work email" />,
+		);
+
+		expect(screen.getAllByText("Enter a work email")).toHaveLength(2);
+		expect(container.querySelector('[data-slot="field-error-message"] svg')).toBeInTheDocument();
+	});
 });
 
 function ControlledEmailAutocompleteField() {
