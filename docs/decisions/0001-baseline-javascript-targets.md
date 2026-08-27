@@ -20,9 +20,10 @@ real use cases with incomplete browser APIs or oversized polyfills.
 Use [Web Platform Baseline](https://webstatus.dev/) as the compatibility source
 of truth. Do not add a production JavaScript library, polyfill, or third-party
 script when a Baseline-safe platform feature covers the real use case. Public
-marketing, checkout, and demo first paint target “Widely available”; the
-authenticated workspace may use “Newly available” with a feature check or
-fallback.
+marketing, checkout, and legal surfaces target “Widely available.” Public demo
+first paint also targets “Widely available,” but may use “Newly available” with
+a server-rendered fallback. The authenticated workspace may use “Newly
+available” with a feature check or fallback.
 
 ## Consequences
 
