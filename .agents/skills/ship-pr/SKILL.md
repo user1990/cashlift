@@ -5,8 +5,8 @@ description: Run a CashLift pull request from scope through review, verification
 
 # Ship PR
 
-Use narrowest mode. For multi-step Ship/Resolve, keep a ledger: mode, risk,
-base/head SHA, PR, checks, feedback, gate.
+Use narrowest mode. For multi-step Ship/Resolve, ledger: mode, risk, SHAs, PR,
+checks, feedback, gate.
 
 ## Modes and authority
 
@@ -19,19 +19,18 @@ Later sections apply only to named modes.
   required CI/feedback gates, including valid feedback resolution; never merge
   or deploy.
 - **Resolve**: fix valid feedback for an existing PR, verify, commit, push,
-  reply, and resolve the exact addressed thread. Ask on specification conflicts.
+  reply, and resolve the exact addressed thread. Ask on specification or
+  product-choice conflicts.
 - **Merge/deploy**: act only when explicitly requested after readiness passes.
 
-After inspecting, state mode and provisional risk. Preserve
-unrelated dirty work. In write-capable modes, use a clean
-worktree at the requested branch/head when the current checkout is dirty; never
-reset or switch the dirty checkout.
+After inspection, state mode and provisional risk. Preserve dirty
+work. Write modes use a clean requested branch/head worktree; never reset or
+switch the dirty checkout.
 
 ## 1. Pin the change (all modes)
 
-Read root `AGENTS.md`, request, and PR body or linked issue/spec. Load
-only triggered skills and ADRs under `docs/decisions/`; follow root visual-recap
-rules.
+Read root `AGENTS.md`, request, and PR body/spec. Load triggered skills and ADRs
+under `docs/decisions/`; follow root visual-recap rules.
 
 For an existing PR, record its `number`, `url`, `baseRefName`, `baseRefOid`,
 `headRefName`, and `headRefOid`:
@@ -46,21 +45,20 @@ before editing. Without a PR, pin the intended-base merge-base and local
 `HEAD`. Record status, paths, commits.
 
 Review the pinned range, not a moving branch. Report uncommitted files
-separately unless requested. Start with changed hunks and enclosing units;
-expand to files, direct callers/tests, consumers, or history only when risk or
-evidence requires it.
+separately unless requested. Start with changed hunks/units; expand to files,
+callers/tests, consumers, or history only when risk or evidence requires it.
 
 ## 2. Classify risk and load context (Review, Ship, Resolve)
 
 - **Low**: isolated docs, tests, or mechanical changes; focused checks.
 - **Medium**: UI, shared contracts, dependencies, or multi-module behavior;
-  relevant tests and preview inspection.
+  relevant tests; preview when applicable.
 - **High**: auth/authorization, payments, PII, API/data boundaries, migrations,
-  security headers, or broad refactors; security checks and a second semantic
-  pass.
+  security headers, or broad refactors; production-like verification, security
+  checks, and a second semantic pass.
 
-Reconcile the request, PR description/spec, ADRs, and repository rules. Search
-callers and consumers before proposing interface changes.
+Reconcile request/spec, ADRs, and repository rules. Search callers/consumers
+before proposing interface changes.
 
 ## 3. Review the whole diff (Review, Ship, Resolve)
 
@@ -92,7 +90,8 @@ Always run `git diff --check`. For code, select the repository Node version and
 run only checks needed to prove changed behavior. Docs/instruction-only changes
 may stop after diff, structure, and reference validation unless risk requires
 more. Browser changes require rendered-flow verification; high-risk work
-requires security checks and a second semantic pass. Record results/limits and
+requires security checks and a second semantic pass. Record commands, results,
+limits;
 never call a blocked check green.
 
 ## 5. Prepare the PR (Ship, Resolve)
@@ -106,8 +105,8 @@ git push -u origin HEAD
 gh pr view --json number,title,body,url,isDraft,headRefOid,mergeable,statusCheckRollup
 ```
 
-Before any PR, comment, reply, resolution, or recap mutation, read current
-remote state and avoid duplicates. In Ship mode, create a draft if needed and
+Before remote mutation, read current state and avoid duplicates. In Ship, create
+a draft if needed and
 use `<Scope>: Sentence case summary`; include Description, Verification, Risk,
 and Preview. Never invent preview URLs. Follow root visual-recap rules.
 
@@ -121,13 +120,14 @@ has passed required checks and has no valid unresolved feedback:
 1. Wait for required CI/deployment with the available monitor; never busy-poll.
 2. Fix failed checks at root, verify locally, commit, push, and restart for the
    new head.
-3. For medium/high risk, inspect the preview and await only review required by
-   repository policy or the user.
+3. For medium/high risk, inspect an applicable preview and await only review
+   required by repository policy or the user.
 4. Fetch reviews, inline comments, and issue comments; address valid defects
    and record reasons for every non-change.
 5. Before replying or resolving, verify the response is not already present.
    Reply and resolve the exact addressed thread only after its fix is pushed and
-   verified, using the actual reviewer login, thread URL, and commit URL.
+   verified, using the actual reviewer login, thread URL, and commit URL. Use:
+   `@<login> Fixed in [<sha>](<commit-url>): <resolution>. Verification: <check>.`
 
 ```bash
 PR_NUMBER=$(gh pr view --json number --jq '.number')
@@ -138,8 +138,9 @@ gh api "repos/{owner}/{repo}/issues/$PR_NUMBER/comments"
 
 Use the GitHub connector or `gh api graphql` for `resolveReviewThread`. If CLI
 authentication fails, use one connector fallback; otherwise mark the surface
-unverified and do not claim readiness. Rebase only when genuinely unmergeable
-or requested, preserving authored commits and rerunning relevant checks.
+unverified and do not claim readiness. If no monitor is available for a required
+pending gate, report that exact gate. Rebase only when genuinely unmergeable or
+requested, preserving authored commits and rerunning relevant checks.
 
 ## 7. Readiness and handoff (Ship, Resolve; Review when requested)
 
