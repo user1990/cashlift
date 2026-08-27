@@ -62,8 +62,7 @@ Always read this file first. It defines workflow for this repo. Do not override 
 - Package manager: `pnpm`
 - Runtime: shell commands must auto-select Node from `.nvmrc` / `.node-version` before any `pnpm` command. `pnpm` can fail before project scripts run on older Node versions.
 - Conventions: `.agents/skills/guide/SKILL.md`
-- Decision records: `docs/decisions/index.md` — read relevant accepted decisions before proposing a new primitive, product surface, data-access path, dependency policy, or security boundary. When work establishes a durable decision future agents may re-propose, proactively suggest recording it with `docs/decisions/0000-template.md`. Do not silently override an accepted decision; supersede it with a new ADR.
-- JavaScript delivery: `docs/decisions/0001-baseline-javascript-targets.md` (agents: `.agents/skills/baseline-javascript/SKILL.md`)
+- JavaScript delivery: `docs/architecture/decisions/baseline-javascript-targets.md` (agents: `.agents/skills/baseline-javascript/SKILL.md`)
 - Security rules: `.agents/skills/security/SKILL.md`
 - Directory guide: `.agents/README.md`
 - Security checks: `pnpm security:check`, `pnpm security:audit`
