@@ -1,12 +1,8 @@
 "use client";
 
 import { useId, useState } from "react";
-import {
-	FieldError,
-	Input,
-	TextField as RACTextField,
-	type TextFieldProps as RACTextFieldProps,
-} from "react-aria-components";
+import { Input, TextField as RACTextField, type TextFieldProps as RACTextFieldProps } from "react-aria-components";
+import { FieldErrorMessage } from "@/ui/components/forms/FieldErrorMessage";
 import { cn } from "@/ui/utils/cn";
 
 const EMAIL_DOMAINS = ["gmail.com", "outlook.com", "icloud.com", "yahoo.com", "proton.me", "hotmail.com"];
@@ -81,7 +77,7 @@ export const EmailAutocompleteField = ({
 			aria-label={label}
 			isInvalid={invalid}
 			className={cn(
-				"relative space-y-1.5 [&:has(input[data-invalid])_input]:border-red-400 [&:has(input[data-invalid])_input]:focus:border-red-400 [&:has(input[data-invalid])_input]:focus:ring-red-400/20",
+				"relative space-y-1.5 [&:has(input[data-invalid])_input]:border-red-400 [&:has(input[data-invalid])_input]:transition-none [&:has(input[data-invalid])_input]:focus:border-red-400 [&:has(input[data-invalid])_input]:focus:ring-red-400/20",
 				className,
 			)}
 			data-invalid={invalid || undefined}
@@ -170,11 +166,7 @@ export const EmailAutocompleteField = ({
 				</div>
 			)}
 
-			{errorMessage && (
-				<FieldError aria-live="polite" className="text-red-400 text-s" data-slot="field-error">
-					{errorMessage}
-				</FieldError>
-			)}
+			<FieldErrorMessage errorMessage={errorMessage} />
 		</RACTextField>
 	);
 };

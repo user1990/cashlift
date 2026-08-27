@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { AnimatePresence, domMax, LazyMotion, m, useReducedMotion } from "framer-motion";
 import { type ReactNode, useState } from "react";
 
 import { TextField } from "@/ui/components/forms/TextField";
@@ -97,12 +96,6 @@ export const Sizes: Story = {
 
 function ErrorTransitionDemo() {
 	const [invalid, setInvalid] = useState(false);
-	const shouldReduceMotion = useReducedMotion();
-	const sectionTransition = {
-		duration: shouldReduceMotion ? 0 : 0.2,
-		ease: "easeInOut" as const,
-	};
-	const errorRowLayoutOffset = 30;
 
 	return (
 		<StoryFrame>
@@ -114,39 +107,22 @@ function ErrorTransitionDemo() {
 					placeholder="Acme Studio"
 				/>
 
-				<AnimatePresence initial={false}>
-					<m.button
-						animate={{ y: 0 }}
-						className="w-fit rounded-md border border-border bg-panel px-3 py-2 font-medium text-panel-foreground text-s outline-none transition-colors hover:border-primary hover:bg-panel-muted hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
-						initial={shouldReduceMotion ? false : { y: invalid ? -errorRowLayoutOffset : errorRowLayoutOffset }}
-						key={invalid ? "clear-error" : "show-error"}
-						onClick={() => setInvalid((isInvalid) => !isInvalid)}
-						transition={sectionTransition}
-						type="button"
-					>
-						{invalid ? "Clear error" : "Show error"}
-					</m.button>
-				</AnimatePresence>
+				<button
+					className="w-fit rounded-md border border-border bg-panel px-3 py-2 font-medium text-panel-foreground text-s outline-none transition-colors hover:border-primary hover:bg-panel-muted hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
+					onClick={() => setInvalid((isInvalid) => !isInvalid)}
+					type="button"
+				>
+					{invalid ? "Clear error" : "Show error"}
+				</button>
 			</div>
 		</StoryFrame>
 	);
 }
 
 function StoryFrame({ children }: { children: ReactNode }) {
-	const shouldReduceMotion = useReducedMotion();
-
 	return (
-		<LazyMotion features={domMax}>
-			<div className="relative w-80 p-6 text-shell-foreground">
-				<m.div
-					aria-hidden="true"
-					className="pointer-events-none absolute inset-0 rounded-lg border border-border bg-shell shadow-panel"
-					layout
-					transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: "easeInOut" }}
-				/>
-
-				<div className="relative">{children}</div>
-			</div>
-		</LazyMotion>
+		<div className="w-80 rounded-lg border border-border bg-shell p-6 text-shell-foreground shadow-panel">
+			{children}
+		</div>
 	);
 }
