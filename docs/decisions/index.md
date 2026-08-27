@@ -25,6 +25,8 @@ accepted decision, mark the old record as superseded rather than rewriting it.
 - [0001 — Baseline JavaScript targets](./0001-baseline-javascript-targets.md)
 - [0002 — Public demo, protected workspace](./0002-public-demo-protected-workspace.md)
 - [0003 — Clerk-authenticated Supabase RLS](./0003-clerk-authenticated-supabase-rls.md)
+- [0004 — Decision support, not money movement](./0004-decision-support-not-money-movement.md)
+- [0005 — Explainable financial decisions, no invented forecasts](./0005-explainable-financial-decisions.md)
 
 ## Historical decisions
 
