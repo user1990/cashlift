@@ -5,157 +5,129 @@ description: Run a CashLift pull request from scope through review, verification
 
 # Ship PR
 
-Run one accountable PR cycle. Keep a short state ledger: goal, mode, risk, base
-SHA, head SHA, PR, checks, open feedback, next gate.
+Use narrowest mode. For multi-step Ship/Resolve, keep a ledger: mode, risk,
+base/head SHA, PR, checks, feedback, gate.
 
 ## Modes and authority
 
-Infer the narrowest mode from the request:
+Later sections apply only to named modes.
 
-- **Review**: inspect and report only. No edits, staging, commits, pushes, PR
-  comments, or thread resolution.
-- **Feedback**: fetch and classify existing GitHub feedback; remain read-only.
-- **Ship**: edit the requested implementation or docs, verify, commit, push,
-  and create/update the PR. A request to ship authorizes those repository and
-  GitHub mutations, but not merge or deploy.
-- **Resolve**: address valid feedback, verify, commit, push, reply, and resolve
-  the exact thread. Ask only when feedback conflicts with the specification or
-  requires a product choice.
-- **Merge/deploy**: do this only when explicitly requested, after the gates in
-  this document pass.
+- **Review**: pin, inspect, verify, and report. Read-only.
+- **Feedback**: pin the PR/head, fetch all feedback once, classify, and report.
+  Do not review the diff or run local checks unless requested.
+- **Ship**: implement, verify, commit, push, create/update the PR, and complete
+  required CI/feedback gates, including valid feedback resolution; never merge
+  or deploy.
+- **Resolve**: fix valid feedback for an existing PR, verify, commit, push,
+  reply, and resolve the exact addressed thread. Ask on specification conflicts.
+- **Merge/deploy**: act only when explicitly requested after readiness passes.
 
-State the selected mode and risk before acting. Preserve unrelated dirty work;
-use a fresh worktree from the intended base when the current checkout is dirty.
+After inspecting, state mode and provisional risk. Preserve
+unrelated dirty work. In write-capable modes, use a clean
+worktree at the requested branch/head when the current checkout is dirty; never
+reset or switch the dirty checkout.
 
-## 1. Pin the change
+## 1. Pin the change (all modes)
 
-Read root `AGENTS.md`, then load only relevant local skills. For non-trivial
-PRs, read `.agents/skills/visual-recap/SKILL.md`. Read the PR body, linked issue
-or spec, relevant ADRs under `docs/decisions/`, and applicable architecture,
-security, testing, styling, or guide skills before judging the change.
+Read root `AGENTS.md`, request, and PR body or linked issue/spec. Load
+only triggered skills and ADRs under `docs/decisions/`; follow root visual-recap
+rules.
 
-Capture immutable SHAs before review:
+For an existing PR, record its `number`, `url`, `baseRefName`, `baseRefOid`,
+`headRefName`, and `headRefOid`:
 
 ```bash
-git fetch origin
-BASE_SHA=$(git merge-base origin/main HEAD)
-HEAD_SHA=$(git rev-parse HEAD)
-git status --short --branch
-git diff --name-status "$BASE_SHA" "$HEAD_SHA"
-git log --oneline "$BASE_SHA..$HEAD_SHA"
+gh pr view <number> --json number,url,baseRefName,baseRefOid,headRefName,headRefOid
 ```
 
-Review the pinned range, not a moving branch. Include tracked uncommitted files
-only when the user explicitly wants a working-tree review; otherwise report
-them separately. Inspect complete files, callers, tests, and relevant history
-around every changed boundary. Continue through the entire diff.
+Set `BASE_SHA` and `HEAD_SHA` to those OIDs, fetch missing objects, and review
+`BASE_SHA...HEAD_SHA`. In Ship/Resolve, local `HEAD` must equal the PR head
+before editing. Without a PR, pin the intended-base merge-base and local
+`HEAD`. Record status, paths, commits.
 
-## 2. Classify risk and load context
+Review the pinned range, not a moving branch. Report uncommitted files
+separately unless requested. Start with changed hunks and enclosing units;
+expand to files, direct callers/tests, consumers, or history only when risk or
+evidence requires it.
+
+## 2. Classify risk and load context (Review, Ship, Resolve)
 
 - **Low**: isolated docs, tests, or mechanical changes; focused checks.
-- **Medium**: user-visible UI, shared contracts, dependencies, or multi-module
-  behavior; full relevant tests and preview/manual inspection.
-- **High**: auth, authorization, payments, PII, API/data boundaries, migrations,
-  security headers, or broad refactors; security review, targeted tests,
-  production-like verification, and a second semantic pass.
+- **Medium**: UI, shared contracts, dependencies, or multi-module behavior;
+  relevant tests and preview inspection.
+- **High**: auth/authorization, payments, PII, API/data boundaries, migrations,
+  security headers, or broad refactors; security checks and a second semantic
+  pass.
 
-Never infer intent from code alone. Reconcile the diff with the request, PR
-description, linked spec, ADRs, and repository rules. Search for callers and
-consumers before proposing interface changes.
+Reconcile the request, PR description/spec, ADRs, and repository rules. Search
+callers and consumers before proposing interface changes.
 
-## 3. Review the whole diff
+## 3. Review the whole diff (Review, Ship, Resolve)
 
-Look for introduced, actionable defects—not preferences. Check:
+Check correctness/data integrity; boundaries/security/privacy; user behavior,
+accessibility, responsive layout, browser-time claims; tests for changed
+behavior and meaningful error paths; and concrete maintainability risk.
 
-- correctness, edge cases, failure and loading states, and data integrity;
-- integration, module boundaries, auth/authorization, privacy, and secrets;
-- user behavior, accessibility, responsive layout, and browser-time claims;
-- tests that prove changed business behavior and meaningful error paths;
-- maintainability and Fowler smells: duplication, long routines, large
-  conditionals, primitive obsession, data clumps, repeated branching,
-  shotgun surgery, divergent change, feature envy, speculative abstraction,
-  message chains, middlemen, and weak module boundaries.
+Report a finding only when it is introduced by the pinned diff, concrete,
+actionable, demonstrable from code or a reproducible check, and materially
+likely to matter. Do not filter by expected author acceptance. Do not report
+formatting, unreachable hypothetical misuse, or pre-existing debt.
 
-Apply this evidence gate to each candidate finding. Report it only if it is
-introduced by the pinned diff, concrete and actionable, demonstrable from code
-or a reproducible check, likely to matter, and likely to be fixed. Do not report
-formatting, hypothetical misuse without a reachable path, or pre-existing debt.
-
-For each finding use an exact changed line (or the smallest overlapping range),
-severity, impact, evidence, and fix:
+Use an exact changed line and:
 
 ```text
 P1 — path/to/file.ts:42
-Problem: <specific failure and affected path>
-Evidence: <test, trace, or direct code path>
+Problem: <failure and affected path>
+Evidence: <test, trace, or code path>
 Fix: <smallest safe correction>
 ```
 
-Use `P0` for release-blocking/data-loss/security emergencies, `P1` for likely
-major regressions, `P2` for normal defects, and `P3` for minor robustness.
-If none pass the gate, say `No findings.` and state residual test or review
-limits. Keep findings separate from the overall readiness assessment.
+Use P0 for release-blocking/data-loss/security emergencies, P1 for major
+regressions, P2 for normal defects, and P3 for minor robustness. If none pass
+the gate, say `No findings.` and state residual limits.
 
-## 4. Verify proportionally
+## 4. Verify proportionally (Review, Ship, Resolve)
 
-Run deterministic checks from `package.json` after selecting the repository’s
-Node version. At minimum use `git diff --check` and the narrowest relevant
-lint, typecheck, unit, e2e, security, or code-diagnostic commands. For changed
-browser behavior, verify the rendered flow at the required viewport; static
-checks are not browser proof. For high-risk work, include the relevant security
-checks and a final independent semantic pass.
+Always run `git diff --check`. For code, select the repository Node version and
+run only checks needed to prove changed behavior. Docs/instruction-only changes
+may stop after diff, structure, and reference validation unless risk requires
+more. Browser changes require rendered-flow verification; high-risk work
+requires security checks and a second semantic pass. Record results/limits and
+never call a blocked check green.
 
-Record command, result, and any environment limitation. Separate failures
-introduced by the change from pre-existing or infrastructure failures; do not
-call a blocked check green.
+## 5. Prepare the PR (Ship, Resolve)
 
-## 5. Prepare the PR (Ship mode)
-
-Create a feature branch from the pinned intended base when needed. Stage named
-files only. Use a capitalized imperative commit subject of 72 characters or
-fewer. Run checks before pushing, then:
+In Ship mode, create a feature branch from the pinned base when needed. In both
+modes, stage named files only, use a capitalized imperative subject of 72
+characters or fewer, and run checks before pushing:
 
 ```bash
 git push -u origin HEAD
 gh pr view --json number,title,body,url,isDraft,headRefOid,mergeable,statusCheckRollup
 ```
 
-Create a draft if no PR exists. Use `<Scope>: Sentence case summary` for the
-title. Write a concise body with Description, Verification, Risk, and Preview;
-include a design link only if supplied. Never invent preview URLs—use the
-Vercel bot/status URL or write `Deployment pending`. Generate the repository
-visual recap for non-trivial changes and preserve only its current
-marker-delimited block.
+Before any PR, comment, reply, resolution, or recap mutation, read current
+remote state and avoid duplicates. In Ship mode, create a draft if needed and
+use `<Scope>: Sentence case summary`; include Description, Verification, Risk,
+and Preview. Never invent preview URLs. Follow root visual-recap rules.
 
-## 6. Run the ship loop
+## 6. Feedback and ship loop (Feedback, Ship, Resolve)
 
-After every push, refresh the remote head SHA and PR state. The loop is complete
-only when the same remote head has passed all required checks and has no valid
-unresolved feedback:
+Feedback mode fetches all three surfaces once, classifies each item as valid
+defect, already fixed, out of scope, duplicate, or intentional design, reports,
+and stops. Ship and Resolve continue after every push until the same remote head
+has passed required checks and has no valid unresolved feedback:
 
-1. Wait for CI/deployment using the available GitHub wait/monitor mechanism;
-   do not busy-poll or code through an intentional gate.
-2. Fix failed checks at their root, run the relevant checks locally, commit, and
-   push. Restart the loop because the head changed.
-3. For medium/high risk, inspect the preview and request/await the applicable
-   automated and human review before declaring readiness.
-4. Fetch review comments, reviews, and issue discussion. Classify each as
-   valid defect, already fixed, out of scope, duplicate, or intentional design.
-   Address valid defects; record the reason for every non-change.
-5. For each addressed inline thread, reply and resolve the exact thread only
-   after the fix is pushed and verified. Use this format:
-
-```text
-@user1990 Fixed in [`<short-sha>`](<full-commit-url>): <one-sentence resolution>.
-
-Verification: `<check 1>`, `<check 2>`.
-```
-
-Use the actual reviewer login, exact thread URL, and exact commit URL. Never
-claim resolution before GitHub shows the reply and resolved state.
-
-For CLI access, gather all three feedback surfaces rather than only the review
-summary:
+1. Wait for required CI/deployment with the available monitor; never busy-poll.
+2. Fix failed checks at root, verify locally, commit, push, and restart for the
+   new head.
+3. For medium/high risk, inspect the preview and await only review required by
+   repository policy or the user.
+4. Fetch reviews, inline comments, and issue comments; address valid defects
+   and record reasons for every non-change.
+5. Before replying or resolving, verify the response is not already present.
+   Reply and resolve the exact addressed thread only after its fix is pushed and
+   verified, using the actual reviewer login, thread URL, and commit URL.
 
 ```bash
 PR_NUMBER=$(gh pr view --json number --jq '.number')
@@ -164,34 +136,29 @@ gh api "repos/{owner}/{repo}/pulls/$PR_NUMBER/comments"
 gh api "repos/{owner}/{repo}/issues/$PR_NUMBER/comments"
 ```
 
-Use the GitHub connector or `gh api graphql` for inline-thread node IDs and the
-`resolveReviewThread` mutation. Keep the exact URL beside each item in the
-ledger so the final report and reply cannot drift from the addressed thread.
+Use the GitHub connector or `gh api graphql` for `resolveReviewThread`. If CLI
+authentication fails, use one connector fallback; otherwise mark the surface
+unverified and do not claim readiness. Rebase only when genuinely unmergeable
+or requested, preserving authored commits and rerunning relevant checks.
 
-Rebase only when the branch is genuinely unmergeable or the user requests it;
-preserve authored commits when possible and rerun the full relevant checks after
-rebasing.
+## 7. Readiness and handoff (Ship, Resolve; Review when requested)
 
-## 7. Readiness and handoff
+Feedback mode stops after classification unless readiness was requested. For
+handoff or an explicitly requested merge, confirm intended diff, remote head
+identity, required CI, required deployment/approvals, valid feedback, applicable
+title/body/recap state, and mergeability. An unavailable required surface is
+unverified, not green. Optional human review must not block readiness. Merge or
+deploy only with explicit authority.
 
-Before handoff or an explicitly requested merge, confirm: intended diff only;
-remote head matches the reviewed SHA; required CI is green; deployment status
-is known; approvals are present; valid feedback is cleared; title/body and
-recap describe the current head; and the PR is mergeable. A clean task worktree
-does not excuse unrelated changes in another checkout.
-
-Merge or deploy only with explicit authority and the repository’s supported
-command. Otherwise stop at a ready PR and report the remaining human gate.
-
-Use the smallest useful final report:
+Use the smallest report:
 
 ```text
 PR: <url> (<status>)
-Head: [`<short-sha>`](<full-commit-url>)
+Head: <short-sha>
 Checks: <results>
-Feedback: <resolved links and any intentional/out-of-scope items>
+Feedback: <links and intentional/out-of-scope items>
 Risk: <low|medium|high>; remaining gate: <none or exact gate>
 ```
 
-For a review-only run, lead with findings or `No findings.` and do not imply
-that edits, pushes, comments, or resolutions occurred.
+For Review, lead with findings or `No findings.` and do not imply edits,
+pushes, comments, or resolutions occurred.
