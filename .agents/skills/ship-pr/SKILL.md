@@ -195,21 +195,3 @@ Risk: <low|medium|high>; remaining gate: <none or exact gate>
 
 For a review-only run, lead with findings or `No findings.` and do not imply
 that edits, pushes, comments, or resolutions occurred.
-
-## Model policy
-
-Use the least expensive model that can satisfy the risk gate; the skill cannot
-force the session model, so state the selected model in the ledger/report.
-
-- Default orchestration and routine PRs: `gpt-5.6-terra`, medium reasoning.
-- High-risk review, security/data boundaries, or unresolved disagreement:
-  `gpt-5.6-sol`, high; use xhigh only when the evidence remains ambiguous.
-- Repeated CI triage, feedback classification, or formatting: `gpt-5.6-luna`,
-  low/medium; do not use it as the sole high-risk approval pass.
-- Treat `gpt-5.3-codex-spark` as optional research preview for rapid,
-  text-only low-risk iteration, never as the default release gate.
-
-Higher reasoning consumes more time and tokens. Avoid Ultra/max by default;
-reserve subagent-heavy modes for genuinely complex, high-risk work. Availability
-and account pricing can vary; see the current [Codex model guidance](https://developers.openai.com/codex/models)
-and [OpenAI model catalog](https://developers.openai.com/api/docs/models).
