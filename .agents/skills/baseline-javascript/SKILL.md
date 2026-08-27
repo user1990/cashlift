@@ -5,7 +5,7 @@ description: Evaluate new production npm dependencies, polyfills, and third-part
 
 # Baseline JavaScript
 
-Read `docs/architecture/decisions/baseline-javascript-targets.md` before adding a production dependency, polyfill, or third-party script. Agents: load this skill only for those cases, not for every client component.
+Read `docs/decisions/0001-baseline-javascript-targets.md` before adding a production dependency, polyfill, or third-party script. Agents: load this skill only for those cases, not for every client component.
 
 ## Targets
 

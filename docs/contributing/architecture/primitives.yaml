@@ -165,7 +165,7 @@ primitives:
     group: platform
     description: Browser Baseline targets and client JavaScript dependency policy.
     code:
-      - "docs/architecture/decisions/baseline-javascript-targets.md"
+      - "docs/decisions/0001-baseline-javascript-targets.md"
       - ".agents/skills/baseline-javascript/**"
     connects_to:
       - review-workflow
