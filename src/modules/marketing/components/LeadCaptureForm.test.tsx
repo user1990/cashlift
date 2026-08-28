@@ -20,6 +20,7 @@ describe("LeadCaptureForm", () => {
 
 		expect(screen.getByRole("status")).toHaveTextContent(successDescription);
 		expect(screen.getByRole("link")).toHaveAttribute("href", "/demo/workspace");
+		expect(screen.queryByRole("textbox", { name: "Name" })).not.toBeInTheDocument();
 
 		await user.click(screen.getByRole("button", { name: "Send another request" }));
 

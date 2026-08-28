@@ -62,6 +62,7 @@ Always read this file first. It defines workflow for this repo. Do not override 
 - Package manager: `pnpm`
 - Runtime: shell commands must auto-select Node from `.nvmrc` / `.node-version` before any `pnpm` command. `pnpm` can fail before project scripts run on older Node versions.
 - Conventions: `.agents/skills/guide/SKILL.md`
+- PR lifecycle: `.agents/skills/ship-pr/SKILL.md` — use for review, PR creation/update, CI gates, and exact feedback resolution.
 - JavaScript delivery: `docs/architecture/decisions/baseline-javascript-targets.md` (agents: `.agents/skills/baseline-javascript/SKILL.md`)
 - Security rules: `.agents/skills/security/SKILL.md`
 - Directory guide: `.agents/README.md`

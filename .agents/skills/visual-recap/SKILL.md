@@ -141,7 +141,7 @@ Include `### Invariants` only when an invariant is touched. Include
 mode, add `### Plan vs actual` only when a plan block existed and implementation
 meaningfully drifted.
 
-When used inside `create-pr`, return the finished marker-delimited block to that
+When used inside `ship-pr`, return the finished marker-delimited block to that
 workflow so it can present and apply the complete PR body once.
 
 When updating an existing PR directly, write the block to a temporary file and,

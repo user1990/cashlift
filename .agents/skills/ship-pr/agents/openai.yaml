@@ -1,0 +1,3 @@
+display_name: Ship PR
+short_description: Review, verify, and carry a CashLift PR through feedback resolution
+default_prompt: Run the full ship-pr cycle for this change, stopping at merge unless I explicitly authorize it.
