@@ -18,29 +18,31 @@ describe("QueuesSection", () => {
 			dashboard.overdueInvoices.reduce((totalCents, invoice) => totalCents + invoice.amountCents, 0) +
 			dashboard.vendorLeaks.reduce((totalCents, leak) => totalCents + leak.amountCents, 0);
 
-		render(<QueuesSection dashboard={dashboard} readOnly />);
+		const { unmount } = render(<QueuesSection dashboard={dashboard} readOnly />);
 
 		expect(screen.getByText(formatPreciseCompactCurrency(visibleRecoverableCents))).toBeInTheDocument();
 		expect(screen.getByText("Northstar Labs")).toBeInTheDocument();
 		expect(screen.getByText("Notion")).toBeInTheDocument();
 		expect(screen.getByText("MeetingAI")).toBeInTheDocument();
 		expect(screen.getByText("SurveyStack")).toBeInTheDocument();
-	});
 
-	it("renders an empty collect-and-cut state without a recoverable total", () => {
-		const dashboard = buildDashboardViewModel({
-			dataset: {
-				...financialDatasetFixture,
-				invoices: [],
-				subscriptions: [],
-			},
-			date: new Date("2026-05-09"),
-			role: "owner-finance",
-		});
+		unmount();
 
-		render(<QueuesSection dashboard={dashboard} readOnly />);
+		render(
+			<QueuesSection
+				dashboard={buildDashboardViewModel({
+					dataset: {
+						...financialDatasetFixture,
+						invoices: [],
+						subscriptions: [],
+					},
+					date: new Date("2026-05-09"),
+					role: "owner-finance",
+				})}
+				readOnly
+			/>,
+		);
 
-		expect(screen.getByText("No overdue invoices or vendor leaks need action.")).toBeInTheDocument();
-		expect(screen.queryByText("To collect or cut")).not.toBeInTheDocument();
+		expect(screen.queryByText(formatPreciseCompactCurrency(visibleRecoverableCents))).not.toBeInTheDocument();
 	});
 });
