@@ -5,7 +5,7 @@ CashLift uses a single-context domain documentation layout.
 ## Before exploring
 
 - Read `CONTEXT.md` at the repository root.
-- Read ADRs under `docs/adr/` that touch the area being changed.
+- Read relevant decision records under `docs/decisions/` that touch the area being changed.
 - If either source is absent, proceed without proposing documentation solely to fill the gap.
 
 ## Vocabulary
