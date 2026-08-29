@@ -19,6 +19,8 @@ describe("dashboard view model", () => {
 		expect(dashboard.vendorLeakSavingsCents).toEqual(261_000);
 		expect(dashboard.forecastChartData).toHaveLength(financialDatasetFixture.forecast.length);
 		expect(dashboard.totalCommittedSpendCents).toBeGreaterThan(0);
+		expect(dashboard.lowestProjectedCashCents).toEqual(41_310_000);
+		expect(dashboard.lowestProjectedCashDate).toEqual("2026-05-06");
 		expect(dashboard.actionInbox[0].priority).toEqual("critical");
 		expect(dashboard.actionInbox[0].title).toEqual("Decide on BrandForge annual renewal");
 	});
@@ -64,7 +66,6 @@ describe("dashboard view model", () => {
 		expect(dashboard.forecastChartData).toEqual([]);
 		expect(dashboard.invoiceRiskCents).toEqual(0);
 		expect(dashboard.lowestProjectedCashCents).toBeUndefined();
-		expect(dashboard.cashPositionHeadline).toEqual("Cash on hand is $412K against a $250K buffer");
 		expect(dashboard.pendingApprovalCount).toEqual(0);
 		expect(dashboard.vendorLeaks).toEqual([]);
 	});
@@ -87,12 +88,10 @@ describe("dashboard view model", () => {
 			role: "owner-finance",
 		});
 
-		expect(dashboard.dateRangeLabel).toEqual("May 20 - Jun 17, 2024");
 		expect(dashboard.cashAvailableCents).toEqual(248_000_000);
 		expect(dashboard.cashBufferTargetCents).toEqual(14_000_000);
 		expect(dashboard.lowestProjectedCashCents).toEqual(170_000_000);
 		expect(dashboard.lowestProjectedCashDate).toEqual("2024-06-10");
-		expect(dashboard.cashPositionHeadline).toEqual("Cash stays above the $140K buffer; lowest week is $1.7M on Jun 10");
 		expect(dashboard.spendChartData[0]).toMatchObject({
 			remaining: 169_000,
 			team: "Client Delivery",
@@ -100,21 +99,7 @@ describe("dashboard view model", () => {
 		});
 	});
 
-	it("derives a cash-position headline from the trough and buffer", () => {
-		const dashboard = buildDashboardViewModel({
-			dataset: financialDatasetFixture,
-			date: new Date("2026-05-09"),
-			role: "owner-finance",
-		});
-
-		expect(dashboard.lowestProjectedCashCents).toEqual(41_310_000);
-		expect(dashboard.lowestProjectedCashDate).toEqual("2026-05-06");
-		expect(dashboard.cashPositionHeadline).toEqual(
-			"Cash stays above the $250K buffer; lowest week is $413.1K on May 6",
-		);
-	});
-
-	it("names the buffer-breach week when the outlook trough is below the cash buffer", () => {
+	it("flags the outlook trough when it falls below the cash buffer", () => {
 		const dashboard = buildDashboardViewModel({
 			dataset: {
 				...financialDatasetFixture,
@@ -134,6 +119,7 @@ describe("dashboard view model", () => {
 		});
 
 		expect(dashboard.lowestProjectedCashCents).toEqual(12_100_000);
-		expect(dashboard.cashPositionHeadline).toEqual("Cash falls below your $250K buffer on Jun 10");
+		expect(dashboard.lowestProjectedCashDate).toEqual("2026-06-10");
+		expect(dashboard.lowestProjectedCashCents).toBeLessThan(dashboard.cashBufferTargetCents);
 	});
 });

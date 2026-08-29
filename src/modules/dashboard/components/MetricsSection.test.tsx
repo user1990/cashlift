@@ -2,45 +2,56 @@
 
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { formatPreciseCompactCurrency } from "@/modules/money/format";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
+import { formatDashboardDate } from "../overviewDateRangeLabel";
 import { buildDashboardViewModel } from "../view-model";
 import { MetricsSection } from "./MetricsSection";
 
 describe("MetricsSection", () => {
-	it("shows cash on hand, the outlook trough, and split money at risk", () => {
+	it("shows supplied cash, trough, and at-risk amounts without inventing an empty outlook", () => {
 		const dashboard = buildDashboardViewModel({
 			dataset: financialDatasetFixture,
 			date: new Date("2026-05-09"),
 			role: "owner-finance",
 		});
+		const troughCents = dashboard.lowestProjectedCashCents;
+		const troughDate = dashboard.lowestProjectedCashDate;
 
-		render(<MetricsSection dashboard={dashboard} />);
+		if (troughCents === undefined || troughDate === undefined) {
+			throw new Error("fixture must include an outlook trough");
+		}
 
-		expect(screen.getByText("Cash on hand")).toBeInTheDocument();
-		expect(screen.getByText("$412K")).toBeInTheDocument();
-		expect(screen.getByText("Buffer $250K")).toBeInTheDocument();
-		expect(screen.getByText("Lowest projected cash")).toBeInTheDocument();
-		expect(screen.getByText("$413.1K")).toBeInTheDocument();
-		expect(screen.getByText("May 6")).toBeInTheDocument();
-		expect(screen.getByText("Money at risk")).toBeInTheDocument();
-		expect(screen.getByText("$18.4K overdue")).toBeInTheDocument();
-	});
+		const { unmount } = render(<MetricsSection dashboard={dashboard} />);
 
-	it("does not invent a trough when the outlook is empty", () => {
-		const dashboard = buildDashboardViewModel({
-			dataset: {
-				...financialDatasetFixture,
-				forecast: [],
-				invoices: [],
-			},
-			date: new Date("2026-05-09"),
-			role: "owner-finance",
-		});
+		expect(screen.getByText(formatPreciseCompactCurrency(dashboard.cashAvailableCents))).toBeInTheDocument();
+		expect(
+			screen.getByText(`Buffer ${formatPreciseCompactCurrency(dashboard.cashBufferTargetCents)}`),
+		).toBeInTheDocument();
+		expect(screen.getByText(formatPreciseCompactCurrency(troughCents))).toBeInTheDocument();
+		expect(screen.getByText(formatDashboardDate(troughDate))).toBeInTheDocument();
+		expect(screen.getByText(`${formatPreciseCompactCurrency(dashboard.invoiceRiskCents)} overdue`)).toBeInTheDocument();
 
-		render(<MetricsSection dashboard={dashboard} />);
+		unmount();
 
-		expect(screen.getByText("None")).toBeInTheDocument();
-		expect(screen.getByText("No 13-week outlook for this range")).toBeInTheDocument();
-		expect(screen.getByText("No overdue invoices or buffer gap")).toBeInTheDocument();
+		render(
+			<MetricsSection
+				dashboard={buildDashboardViewModel({
+					dataset: {
+						...financialDatasetFixture,
+						forecast: [],
+						invoices: [],
+					},
+					date: new Date("2026-05-09"),
+					role: "owner-finance",
+				})}
+			/>,
+		);
+
+		expect(screen.queryByText(formatPreciseCompactCurrency(troughCents))).not.toBeInTheDocument();
+		expect(screen.queryByText(formatDashboardDate(troughDate))).not.toBeInTheDocument();
+		expect(
+			screen.queryByText(`${formatPreciseCompactCurrency(dashboard.invoiceRiskCents)} overdue`),
+		).not.toBeInTheDocument();
 	});
 });

@@ -64,6 +64,7 @@ Always read this file first. It defines workflow for this repo. Do not override 
 - Conventions: `.agents/skills/guide/SKILL.md`
 - Decision records: `docs/decisions/index.md` — read relevant accepted decisions before proposing a new primitive, product surface, data-access path, dependency policy, or security boundary. When work establishes a durable decision future agents may re-propose, proactively suggest recording it with `docs/decisions/0000-template.md`. Do not silently override an accepted decision; supersede it with a new ADR.
 - JavaScript delivery: `docs/decisions/0001-baseline-javascript-targets.md` (agents: `.agents/skills/baseline-javascript/SKILL.md`)
+- PR lifecycle: `.agents/skills/ship-pr/SKILL.md` — use for review, PR creation/update, CI gates, and exact feedback resolution.
 - Security rules: `.agents/skills/security/SKILL.md`
 - Directory guide: `.agents/README.md`
 - Security checks: `pnpm security:check`, `pnpm security:audit`
