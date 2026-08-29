@@ -2,9 +2,10 @@ import { describe, expect, it } from "vitest";
 import { MARKETING_NAV_GROUPS } from "./navigation";
 
 describe("MARKETING_NAV_GROUPS", () => {
-	it("keeps Demo in the Product navigation", () => {
-		const hasDemo = MARKETING_NAV_GROUPS.some((group) => group.items.some((item) => item.href === "/demo"));
+	it("labels the walkthrough route consistently", () => {
+		const productNavigation = MARKETING_NAV_GROUPS.find((group) => group.label === "Product")?.items;
+		const demoItem = productNavigation?.find((item) => item.href === "/demo");
 
-		expect(hasDemo).toBe(true);
+		expect(demoItem).toEqual({ href: "/demo", label: "Book a walkthrough" });
 	});
 });

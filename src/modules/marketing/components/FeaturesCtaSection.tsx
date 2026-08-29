@@ -7,12 +7,12 @@ export const FeaturesCtaSection = () => (
 			<p className="text-primary text-s+ uppercase tracking-normal">Get started</p>
 
 			<h2 className="mt-2 text-4xl+ text-shell-foreground tracking-normal">
-				Open the product demo or run a leak audit.
+				See the product in action or run a leak audit.
 			</h2>
 		</header>
 
 		<ActionLink href="/demo">
-			See demo
+			Book a walkthrough
 			<ArrowRight aria-hidden className="size-4" />
 		</ActionLink>
 	</section>

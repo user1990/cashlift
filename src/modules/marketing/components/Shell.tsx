@@ -42,10 +42,10 @@ const MarketingFooter = () => (
 				</p>
 
 				<Link
-					href="/demo"
+					href="/demo/workspace"
 					className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 font-semibold text-m text-primary-foreground shadow-primary-glow transition-[background-color,box-shadow] duration-150 hover:bg-primary-hover hover:shadow-primary-glow focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 motion-reduce:transition-none"
 				>
-					Open live demo
+					Explore the workspace
 					<ArrowUpRight aria-hidden className="size-4" />
 				</Link>
 			</section>
