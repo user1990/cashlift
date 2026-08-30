@@ -34,7 +34,7 @@ export const ConsultingReferencePage = ({ useCase }: ConsultingReferencePageProp
 				</div>
 
 				<div className="mt-12 flex justify-center lg:mt-4">
-					<ActionLink href="/demo">Run use-case demo</ActionLink>
+					<ActionLink href="/demo">Book a walkthrough</ActionLink>
 				</div>
 			</div>
 		</section>
@@ -82,7 +82,7 @@ function ConsultingSignalRail() {
 function ConsultingDecisionCard({ decision: { accentClassName, Icon, title } }: { decision: ConsultingDecision }) {
 	return (
 		<Link
-			aria-label={`Explore: ${title}`}
+			aria-label={`Book a walkthrough: ${title}`}
 			href="/demo"
 			className="group block rounded-[1.75rem] focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-4"
 		>

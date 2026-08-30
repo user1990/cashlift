@@ -81,7 +81,7 @@ export const DEFAULT_PRICING_PLAN_SLUG = "professional" satisfies PricingPlanSlu
 
 export const PRODUCT_NAV = [
 	{ href: "/features", label: "Features" },
-	{ href: "/demo", label: "Demo" },
+	{ href: "/demo", label: "Book a walkthrough" },
 	{ href: "/pricing", label: "Pricing" },
 ] as const satisfies readonly MarketingNavItem[];
 
@@ -421,7 +421,7 @@ export const FOOTER_LINKS = [
 		links: [
 			{ href: "/features", label: "Features" },
 			{ href: "/pricing", label: "Pricing" },
-			{ href: "/demo", label: "Demo" },
+			{ href: "/demo", label: "Book a walkthrough" },
 			{ href: "/dashboard", label: "Dashboard" },
 		],
 	},
