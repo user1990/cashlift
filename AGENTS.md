@@ -9,6 +9,8 @@ Always read this file first. It defines workflow for this repo. Do not override 
    - Start in the current app's `src/`, then expand to `packages/*` when relevant.
    - Search related concepts, not just the first implementation idea.
    - Use a fast sub-agent only when the runtime/user permits it and the search genuinely spans many files.
+   - Load [orchestrate](.agents/skills/orchestrate/SKILL.md) when the task has two or more independent slices, crosses two or more source areas, has a broad branch/PR surface, or explicitly asks for parallel agents. Run `pnpm check:orchestration` for an advisory signal and tell the human whether parallel work is recommended.
+   - Keep one implementer for small, sequential, diagnostic, or shared-file work; orchestration is a recommendation, not a requirement.
 
 2. Understand the task.
    - Identify the work type: UI, component creation, refactor, bug fix, tests, API/data, docs, PR/review, or diagnostics.
