@@ -18,6 +18,9 @@ describe("workspace navigation", () => {
 			"Team",
 			"Settings",
 		]);
+		expect(getWorkspaceNavItems("/dashboard").find((item) => item.label === "13-week Outlook")?.href).toBe(
+			"/dashboard#cash-outlook",
+		);
 	});
 
 	it("prefers the most specific active destination for nested routes", () => {

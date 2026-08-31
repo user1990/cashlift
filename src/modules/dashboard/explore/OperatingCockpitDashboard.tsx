@@ -1,9 +1,11 @@
 import { Shield } from "lucide-react";
 import Link from "next/link";
 import { getPercentage } from "@/modules/money/format";
+import type { WorkspaceDatasetDateRange } from "@/modules/workspace/types";
 import { ProgressBar } from "@/ui/components/feedback/ProgressBar";
 import { getCashActionDestination } from "../cashActionDestination";
 import { CashOutlookChart } from "../components/CashOutlookChart";
+import { OverviewDateRangePicker } from "../components/OverviewDateRangePicker";
 import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
 import { CASH_ACTION_NEXT_STEP, CASH_ACTION_WORK, type ExplorePresentation, formatExploreMoney } from "./exploreModel";
@@ -15,10 +17,18 @@ type CashAction = DashboardViewModel["actionInbox"][number];
 type OperatingCockpitDashboardProps = {
 	basePath: string;
 	dashboard: DashboardViewModel;
+	dateRange?: WorkspaceDatasetDateRange;
+	onDateRangeChange?: (dateRange: WorkspaceDatasetDateRange) => void;
 	presentation: ExplorePresentation;
 };
 
-export const OperatingCockpitDashboard = ({ basePath, dashboard, presentation }: OperatingCockpitDashboardProps) => {
+export const OperatingCockpitDashboard = ({
+	basePath,
+	dashboard,
+	dateRange,
+	onDateRangeChange,
+	presentation,
+}: OperatingCockpitDashboardProps) => {
 	const primaryAction = presentation.primaryAction;
 	const belowBuffer =
 		dashboard.lowestProjectedCashCents !== undefined &&
@@ -32,7 +42,15 @@ export const OperatingCockpitDashboard = ({ basePath, dashboard, presentation }:
 						{dashboard.companyName} · {dashboard.dateRangeLabel}
 					</p>
 
-					<p className="text-muted-foreground text-s">{dashboard.runwayDays} days runway</p>
+					<div className="flex flex-wrap items-center gap-3">
+						<p className="text-muted-foreground text-s">{dashboard.runwayDays} days runway</p>
+
+						<OverviewDateRangePicker
+							dateRange={dateRange}
+							fallbackLabel={dashboard.dateRangeLabel}
+							onDateRangeChange={onDateRangeChange}
+						/>
+					</div>
 				</div>
 
 				<h1 className="mt-3 max-w-4xl font-semibold text-3xl+ text-panel-foreground tracking-normal">
@@ -141,26 +159,28 @@ export const OperatingCockpitDashboard = ({ basePath, dashboard, presentation }:
 						)}
 					</GlassCard>
 
-					<GlassCard atmosphere="outlook">
-						<ExploreKicker>Future</ExploreKicker>
+					<div id="cash-outlook">
+						<GlassCard atmosphere="outlook">
+							<ExploreKicker>Future</ExploreKicker>
 
-						<h2 className="mt-1 text-panel-foreground text-xl+">13-week Cash Outlook</h2>
+							<h2 className="mt-1 text-panel-foreground text-xl+">13-week Cash Outlook</h2>
 
-						{dashboard.lowestProjectedCashDate && dashboard.lowestProjectedCashCents !== undefined && (
-							<p className={belowBuffer ? "mt-1 text-s text-warning" : "mt-1 text-muted-foreground text-s"}>
-								Lowest week {formatExploreMoney(dashboard.lowestProjectedCashCents)} on{" "}
-								{formatDashboardDate(dashboard.lowestProjectedCashDate)}
-							</p>
-						)}
+							{dashboard.lowestProjectedCashDate && dashboard.lowestProjectedCashCents !== undefined && (
+								<p className={belowBuffer ? "mt-1 text-s text-warning" : "mt-1 text-muted-foreground text-s"}>
+									Lowest week {formatExploreMoney(dashboard.lowestProjectedCashCents)} on{" "}
+									{formatDashboardDate(dashboard.lowestProjectedCashDate)}
+								</p>
+							)}
 
-						<div className="mt-4">
-							<CashOutlookChart
-								bufferTargetCents={dashboard.cashBufferTargetCents}
-								chartData={dashboard.forecastChartData}
-								lowestProjectedCashDate={dashboard.lowestProjectedCashDate}
-							/>
-						</div>
-					</GlassCard>
+							<div className="mt-4">
+								<CashOutlookChart
+									bufferTargetCents={dashboard.cashBufferTargetCents}
+									chartData={dashboard.forecastChartData}
+									lowestProjectedCashDate={dashboard.lowestProjectedCashDate}
+								/>
+							</div>
+						</GlassCard>
+					</div>
 				</div>
 			</section>
 

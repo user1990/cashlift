@@ -10,7 +10,7 @@ import {
 	UsersRound,
 	WalletCards,
 } from "lucide-react";
-import type { WorkspaceNavGroup, WorkspaceNavItem, WorkspaceNavItemDefinition, WorkspaceSection } from "./types";
+import type { WorkspaceNavGroup, WorkspaceNavItem, WorkspaceNavItemDefinition } from "./types";
 
 const WORKSPACE_NAV_GROUPS = [
 	{
@@ -35,6 +35,7 @@ const WORKSPACE_NAV_GROUPS = [
 			{
 				icon: TrendingUp,
 				label: "13-week Outlook",
+				path: "#cash-outlook",
 				section: "overview",
 			},
 		],
@@ -116,9 +117,6 @@ export const getActiveWorkspaceNavItem = (pathname: string, basePath: string): W
 	return matches.sort((left, right) => right.href.length - left.href.length)[0];
 };
 
-export const getActiveWorkspaceSection = (pathname: string, basePath: string): WorkspaceSection =>
-	getActiveWorkspaceNavItem(pathname, basePath)?.section ?? "overview";
-
 export const isWorkspaceNavItemActive = (pathname: string, href: string, basePath: string): boolean =>
 	getActiveWorkspaceNavItem(pathname, basePath)?.href === href;
 
@@ -129,6 +127,10 @@ const buildWorkspaceNavItem = (basePath: string, item: WorkspaceNavItemDefinitio
 
 const resolveWorkspaceNavHref = (basePath: string, item: WorkspaceNavItemDefinition): string => {
 	if (item.path) {
+		if (item.path.startsWith("#")) {
+			return `${basePath}${item.path}`;
+		}
+
 		return `${basePath}/${item.path}`;
 	}
 

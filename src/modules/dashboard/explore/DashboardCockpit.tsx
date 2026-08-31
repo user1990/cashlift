@@ -25,6 +25,7 @@ export const DashboardCockpit = ({
 	bufferDataset,
 	dataset,
 	dateRange,
+	onDateRangeChange,
 }: DashboardCockpitProps) => {
 	const dashboard = buildDashboardViewModel({
 		bufferDataset,
@@ -49,7 +50,13 @@ export const DashboardCockpit = ({
 					<WorkspaceFindResults itemsCount={items.length} session={session} />
 				</GlassCard>
 			) : (
-				<OperatingCockpitDashboard basePath={basePath} dashboard={dashboard} presentation={presentation} />
+				<OperatingCockpitDashboard
+					basePath={basePath}
+					dashboard={dashboard}
+					dateRange={dateRange}
+					onDateRangeChange={onDateRangeChange}
+					presentation={presentation}
+				/>
 			)}
 		</div>
 	);

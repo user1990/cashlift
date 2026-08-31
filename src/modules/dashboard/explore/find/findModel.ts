@@ -7,11 +7,11 @@ import { getCashActionDestination } from "../../cashActionDestination";
 import { formatDashboardDate } from "../../overviewDateRangeLabel";
 import { CASH_ACTION_NEXT_STEP } from "../exploreModel";
 
-export const FIND_KINDS = ["invoice", "spend-request", "subscription", "vendor-bill", "cash-action", "budget"] as const;
+const FIND_KINDS = ["invoice", "spend-request", "subscription", "vendor-bill", "cash-action", "budget"] as const;
 
 export type FindKind = (typeof FIND_KINDS)[number];
 
-export const FIND_WORK = ["collect", "approve", "cut", "pay", "review"] as const;
+const FIND_WORK = ["collect", "approve", "cut", "pay", "review"] as const;
 
 export type FindWork = (typeof FIND_WORK)[number];
 
@@ -38,7 +38,7 @@ export type FindQuery = {
 	status: string;
 };
 
-export const KIND_LABELS: Record<FindKind, string> = {
+const KIND_LABELS: Record<FindKind, string> = {
 	budget: "Budget",
 	"cash-action": "Cash Action",
 	invoice: "Invoice",
@@ -55,7 +55,7 @@ export const WORK_LABELS: Record<FindWork, string> = {
 	review: "Review",
 };
 
-export const CATALOG_CATEGORY_IDS = ["all", ...FIND_KINDS] as const;
+const CATALOG_CATEGORY_IDS = ["all", ...FIND_KINDS] as const;
 export const ACTION_CATEGORY_IDS = ["all", ...FIND_WORK] as const;
 
 export const buildFindItems = (dataset: FinancialDataset, basePath: string): FindItem[] => {
@@ -162,9 +162,10 @@ export const getFindSuggestions = (items: FindItem[], query: string, limit = 6) 
 
 	const seen = new Set<string>();
 	const suggestions: string[] = [];
+	const queryMatcher = new RegExp(escapeRegExp(normalizedQuery));
 
 	for (const item of items) {
-		if (!getFindHaystack(item).includes(normalizedQuery) || seen.has(item.title)) {
+		if (!queryMatcher.test(getFindHaystack(item)) || seen.has(item.title)) {
 			continue;
 		}
 
@@ -181,28 +182,6 @@ export const getFindSuggestions = (items: FindItem[], query: string, limit = 6) 
 
 export const getFindFacetValues = (items: FindItem[], field: "owner" | "status") =>
 	[...new Set(items.map((item) => item[field]))].toSorted((left, right) => left.localeCompare(right));
-
-export const countFindCategory = (items: FindItem[], category: string, categoryMode: "kind" | "work") => {
-	if (category === "all") {
-		return items.length;
-	}
-
-	return items.filter((item) => (categoryMode === "kind" ? item.kind : item.work) === category).length;
-};
-
-export const groupFindItems = (items: FindItem[]) => {
-	const groups: { id: FindKind; items: FindItem[]; label: string }[] = [];
-
-	for (const kind of FIND_KINDS) {
-		const kindItems = items.filter((item) => item.kind === kind);
-
-		if (kindItems.length) {
-			groups.push({ id: kind, items: kindItems, label: KIND_LABELS[kind] });
-		}
-	}
-
-	return groups;
-};
 
 export const formatFindAmount = (cents: MoneyCents) => formatCurrency(cents);
 
@@ -284,6 +263,10 @@ function getCashActionWork(type: FinancialDataset["cashActions"][number]["type"]
 
 function normalizeFindQuery(query: string) {
 	return query.trim().toLowerCase();
+}
+
+function escapeRegExp(value: string) {
+	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function getFindHaystack(item: FindItem) {

@@ -19,8 +19,6 @@ const DEFAULT_TOOLTIP_CONTENT_STYLE = {
 
 const LazyRechartsArea = lazyRechartsComponent("Area");
 const LazyRechartsAreaChart = lazyRechartsComponent("AreaChart");
-const LazyRechartsBar = lazyRechartsComponent("Bar");
-const LazyRechartsBarChart = lazyRechartsComponent("BarChart");
 const LazyRechartsCartesianGrid = lazyRechartsComponent("CartesianGrid");
 const LazyRechartsReferenceLine = lazyRechartsComponent("ReferenceLine");
 const LazyRechartsResponsiveContainer = lazyRechartsComponent("ResponsiveContainer");
@@ -33,12 +31,6 @@ export const RechartsArea = (props: RechartsComponentProps) =>
 
 export const RechartsAreaChart = (props: RechartsComponentProps) =>
 	createElement(LazyRechartsAreaChart, { accessibilityLayer: false, margin: DEFAULT_CHART_MARGIN, ...props });
-
-export const RechartsBar = (props: RechartsComponentProps) =>
-	createElement(LazyRechartsBar, { isAnimationActive: true, radius: [6, 6, 0, 0], ...props });
-
-export const RechartsBarChart = (props: RechartsComponentProps) =>
-	createElement(LazyRechartsBarChart, { accessibilityLayer: false, margin: DEFAULT_CHART_MARGIN, ...props });
 
 export const RechartsCartesianGrid = (props: RechartsComponentProps) =>
 	createElement(LazyRechartsCartesianGrid, {

@@ -16,13 +16,9 @@ type WorkspaceMobileNavProps = {
 
 export const WorkspaceMobileNav = ({ workspace }: WorkspaceMobileNavProps) => {
 	const drawerId = useId();
-	const pathname = usePathname();
-	const [open, setOpen] = useState(false);
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: close the drawer after route changes
-	useEffect(() => {
-		setOpen(false);
-	}, [pathname]);
+	const pathname = usePathname() ?? "";
+	const [openPath, setOpenPath] = useState<string | null>(null);
+	const open = openPath === pathname;
 
 	useEffect(() => {
 		if (!open) {
@@ -38,7 +34,11 @@ export const WorkspaceMobileNav = ({ workspace }: WorkspaceMobileNavProps) => {
 	}, [open]);
 
 	const closeDrawer = () => {
-		setOpen(false);
+		setOpenPath(null);
+	};
+
+	const toggleDrawer = () => {
+		setOpenPath((currentPath) => (currentPath === pathname ? null : pathname));
 	};
 
 	return (
@@ -50,7 +50,7 @@ export const WorkspaceMobileNav = ({ workspace }: WorkspaceMobileNavProps) => {
 						aria-expanded={open}
 						aria-label={open ? "Close navigation" : "Open navigation"}
 						className="ease inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-black/30 text-shell-foreground outline-none transition-[border-color,color] duration-150 hover:border-primary/40 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
-						onClick={() => setOpen((current) => !current)}
+						onClick={toggleDrawer}
 						type="button"
 					>
 						{open ? <X aria-hidden className="size-5" /> : <Menu aria-hidden className="size-5" />}
