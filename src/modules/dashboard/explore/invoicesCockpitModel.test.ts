@@ -29,10 +29,12 @@ describe("invoices cockpit presentation", () => {
 		expect(presentation.overdue.map((invoice) => invoice.id)).toEqual(["invoice-brightline", "invoice-northstar"]);
 		expect(presentation.queueInvoices.map((invoice) => invoice.id)).toEqual(["invoice-northstar"]);
 		expect(presentation.openOnTime.map((invoice) => invoice.id)).toEqual(["invoice-harbor"]);
+		expect(presentation.overdue.map((invoice) => invoice.viewStatus)).toEqual(["overdue", "overdue"]);
 		expect(presentation.dueSchedule.map((invoice) => invoice.id)).toEqual([
 			"invoice-northstar",
 			"invoice-brightline",
 			"invoice-harbor",
 		]);
+		expect(presentation.dueSchedule.map((invoice) => invoice.viewStatus)).toEqual(["overdue", "overdue", "promised"]);
 	});
 });

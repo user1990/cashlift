@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { Invoice, InvoiceStatus } from "@/modules/invoices/types";
+import type { InvoiceStatus } from "@/modules/invoices/types";
 import { getPercentage } from "@/modules/money/format";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { cn } from "@/ui/utils/cn";
@@ -13,6 +13,7 @@ import {
 	formatInvoiceDueDate,
 	getInvoiceAnchorId,
 	INVOICE_STATUS_LABEL,
+	type InvoiceCockpitRow,
 	type InvoicesCockpitPresentation,
 } from "./invoicesCockpitModel";
 import { WorkspaceFindShell } from "./WorkspaceFindShell";
@@ -137,7 +138,7 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 							</p>
 
 							<p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground text-s">
-								<InvoiceStatusCue status={primaryInvoice.status} />
+								<InvoiceStatusCue status={primaryInvoice.viewStatus} />
 
 								<span>
 									{getPercentage(primaryInvoice.collectionProbability)} collection probability · {primaryInvoice.owner}
@@ -203,13 +204,13 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 
 						{openOnTime.length > 0 ? (
 							<ul className="mt-3 divide-y divide-white/10">
-								{openOnTime.map(({ amountCents, client, collectionProbability, dueDate, id, owner, status }) => (
+								{openOnTime.map(({ amountCents, client, collectionProbability, dueDate, id, owner, viewStatus }) => (
 									<li key={id} className="flex items-start justify-between gap-3 py-3">
 										<div className="min-w-0">
 											<p className="font-semibold text-m+ text-panel-foreground">{client}</p>
 
 											<p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground text-s">
-												<InvoiceStatusCue status={status} />
+												<InvoiceStatusCue status={viewStatus} />
 
 												<span>
 													Due {formatInvoiceDueDate(dueDate)} · {owner} · {getPercentage(collectionProbability)}
@@ -231,13 +232,13 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 
 						{paid.length > 0 ? (
 							<ul className="mt-3 divide-y divide-white/10">
-								{paid.map(({ amountCents, client, dueDate, id, owner, status }) => (
+								{paid.map(({ amountCents, client, dueDate, id, owner, viewStatus }) => (
 									<li key={id} className="flex items-start justify-between gap-3 py-3" id={getInvoiceAnchorId(id)}>
 										<div className="min-w-0">
 											<p className="font-semibold text-m+ text-panel-foreground">{client}</p>
 
 											<p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground text-s">
-												<InvoiceStatusCue status={status} />
+												<InvoiceStatusCue status={viewStatus} />
 
 												<span>
 													{owner} · Due {formatInvoiceDueDate(dueDate)}
@@ -288,8 +289,8 @@ function InvoiceStatusCue({ status }: { status: InvoiceStatus }) {
 	);
 }
 
-function renderQueueInvoice(invoice: Invoice) {
-	const { amountCents, client, collectionProbability, dueDate, id, owner, status } = invoice;
+function renderQueueInvoice(invoice: InvoiceCockpitRow) {
+	const { amountCents, client, collectionProbability, dueDate, id, owner, viewStatus } = invoice;
 
 	return (
 		<Link
@@ -298,7 +299,7 @@ function renderQueueInvoice(invoice: Invoice) {
 		>
 			<span className="min-w-0">
 				<span className="flex flex-wrap items-center gap-x-3 gap-y-1">
-					<InvoiceStatusCue status={status} />
+					<InvoiceStatusCue status={viewStatus} />
 
 					<span className="text-muted-foreground text-s">Due {formatInvoiceDueDate(dueDate)}</span>
 				</span>
@@ -315,14 +316,14 @@ function renderQueueInvoice(invoice: Invoice) {
 	);
 }
 
-function renderDueInvoice(invoice: Invoice) {
-	const { amountCents, client, dueDate, owner, status } = invoice;
+function renderDueInvoice(invoice: InvoiceCockpitRow) {
+	const { amountCents, client, dueDate, owner, viewStatus } = invoice;
 
 	return (
 		<div className="flex flex-col gap-2 py-3 sm:flex-row sm:items-start sm:justify-between">
 			<div className="min-w-0">
 				<p className="flex flex-wrap items-center gap-x-3 gap-y-1">
-					<InvoiceStatusCue status={status} />
+					<InvoiceStatusCue status={viewStatus} />
 
 					<span className="text-muted-foreground text-s">{formatInvoiceDueDate(dueDate)}</span>
 				</p>

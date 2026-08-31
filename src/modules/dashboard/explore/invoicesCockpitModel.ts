@@ -29,14 +29,19 @@ export const buildInvoicesCockpitPresentation = ({
 }: BuildInvoicesCockpitPresentationParams) => {
 	const overdue = dataset.invoices
 		.filter((invoice) => isOverdueForView(invoice, asOfDate))
-		.toSorted((left, right) => right.amountCents - left.amountCents);
-	const paid = dataset.invoices.filter((invoice) => invoice.status === "paid");
+		.toSorted((left, right) => right.amountCents - left.amountCents)
+		.map((invoice) => withViewStatus(invoice, asOfDate));
+	const paid = dataset.invoices
+		.filter((invoice) => invoice.status === "paid")
+		.map((invoice) => withViewStatus(invoice, asOfDate));
 	const openOnTime = dataset.invoices
 		.filter((invoice) => invoice.status !== "paid" && !isOverdueForView(invoice, asOfDate))
-		.toSorted((left, right) => left.dueDate.localeCompare(right.dueDate));
+		.toSorted((left, right) => left.dueDate.localeCompare(right.dueDate))
+		.map((invoice) => withViewStatus(invoice, asOfDate));
 	const dueSchedule = dataset.invoices
 		.filter((invoice) => invoice.status !== "paid")
-		.toSorted((left, right) => left.dueDate.localeCompare(right.dueDate));
+		.toSorted((left, right) => left.dueDate.localeCompare(right.dueDate))
+		.map((invoice) => withViewStatus(invoice, asOfDate));
 	const primaryInvoice = overdue[0];
 	const collectionActions = dataset.cashActions.filter(
 		(action) => action.status === "open" && action.type === "collection",
@@ -72,6 +77,15 @@ export const buildInvoicesCockpitPresentation = ({
 export const getInvoiceAnchorId = (invoiceId: string) => `invoice-${invoiceId}`;
 
 export const formatInvoiceDueDate = (isoDate: string) => formatDashboardDate(isoDate);
+
+export type InvoiceCockpitRow = Invoice & { viewStatus: InvoiceStatus };
+
+function withViewStatus(invoice: Invoice, asOfDate: Date | undefined): InvoiceCockpitRow {
+	return {
+		...invoice,
+		viewStatus: invoice.status === "paid" || !isOverdueForView(invoice, asOfDate) ? invoice.status : "overdue",
+	};
+}
 
 function isOverdueForView(invoice: Invoice, asOfDate: Date | undefined) {
 	if (!asOfDate) {
