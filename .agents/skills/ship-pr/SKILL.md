@@ -1,9 +1,17 @@
 ---
 name: ship-pr
 description: Run a CashLift pull request from scope through review, verification, feedback resolution, and handoff. Trigger on ship/create/open/update/review PR, address or resolve review feedback, or prepare a branch for merge.
+icon: git-branch
+color: blue
 ---
 
 # Ship PR
+
+## Slash invocation
+
+When invoked via `/ship-pr` (Cursor) or `$ship-pr` (Codex) with no further
+instructions, run the full ship-pr cycle for the current change. Stop at merge
+unless the user explicitly authorizes merge or deploy.
 
 Use narrowest mode. For multi-step Ship/Resolve, ledger: mode, risk, SHAs, PR,
 checks, feedback, gate.
