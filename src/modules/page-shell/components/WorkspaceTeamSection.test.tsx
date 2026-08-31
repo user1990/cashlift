@@ -28,7 +28,7 @@ describe("WorkspaceTeamSection", () => {
 		expect(screen.getByRole("link", { name: "Open team budgets" })).toHaveAttribute("href", "/dashboard/budgets");
 		expect(screen.getByRole("link", { name: "View team budgets" })).toHaveAttribute("href", "/dashboard/budgets");
 		expect(screen.queryByRole("link", { name: "Run leak audit" })).not.toBeInTheDocument();
-		expect(screen.queryByRole("heading", { name: "Team", exact: true })).not.toBeInTheDocument();
+		expect(screen.queryByRole("heading", { name: /^Team$/ })).not.toBeInTheDocument();
 	});
 
 	it("renders empty and single-team headlines from the supplied members", () => {
