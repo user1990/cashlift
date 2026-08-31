@@ -15,6 +15,6 @@ export const UseCasePage = ({ answersVariant = "default", useCase }: UseCasePage
 
 		<UseCaseAnswers answers={useCase.answers} variant={answersVariant} />
 
-		<UseCaseDemoCtaSection />
+		<UseCaseDemoCtaSection centered={answersVariant === "glass"} />
 	</MainContent>
 );

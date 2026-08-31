@@ -1,4 +1,5 @@
 import { CalendarClock, ReceiptText, Scissors } from "lucide-react";
+import Image from "next/image";
 import { Panel } from "@/ui/components/layout/Panel";
 import { cn } from "@/ui/utils/cn";
 
@@ -29,9 +30,10 @@ const AGENCY_ANSWER_ICONS = [CalendarClock, ReceiptText, Scissors] as const;
 
 function renderGlassAnswers(answers: readonly string[]) {
 	return (
-		<ul className="mt-10 grid gap-5">
+		<ul className="relative mt-10 grid gap-4 before:absolute before:top-16 before:bottom-16 before:left-8 before:w-px before:bg-primary/55 before:content-[''] sm:gap-5 sm:before:left-12">
 			{answers.map((answer, index) => {
 				const Icon = AGENCY_ANSWER_ICONS[index % AGENCY_ANSWER_ICONS.length];
+				const background = AGENCY_ANSWER_BACKGROUNDS[index % AGENCY_ANSWER_BACKGROUNDS.length];
 
 				return (
 					<li key={answer}>
@@ -39,20 +41,37 @@ function renderGlassAnswers(answers: readonly string[]) {
 							as="article"
 							variant="glass"
 							className={cn(
-								"group relative flex min-h-64 flex-col items-center justify-center overflow-hidden bg-shell-elevated/60 px-6 py-8 text-center shadow-none sm:min-h-72 sm:px-10",
+								"group relative isolate flex min-h-44 items-center overflow-hidden bg-shell-elevated/55 px-5 py-6 shadow-none sm:min-h-52 sm:px-10",
 								index === answers.length - 1 && "border-primary/80 shadow-primary-glow",
 							)}
 						>
-							<span
-								aria-hidden="true"
-								className="relative grid size-24 place-items-center rounded-lg border border-shell-border bg-shell/70 text-primary shadow-shell before:absolute before:inset-2 before:rounded-md before:border before:border-primary/20 before:content-['']"
-							>
-								<Icon className="relative size-10 stroke-[1.5]" />
-							</span>
+							<Image
+								fill
+								loading="eager"
+								priority={index === 0}
+								sizes="(min-width: 1024px) 72rem, calc(100vw - 2rem)"
+								src={background.src}
+								alt=""
+								className="pointer-events-none object-cover opacity-55"
+							/>
 
-							<p className="mt-7 max-w-3xl font-medium text-m+ text-shell-foreground leading-7 sm:text-xl+ sm:leading-8">
-								{answer}
-							</p>
+							<div
+								aria-hidden="true"
+								className="pointer-events-none absolute inset-0 bg-shell/70 backdrop-blur-[2px]"
+							/>
+
+							<div className="relative z-10 flex w-full items-center gap-4 sm:gap-10">
+								<span
+									aria-hidden="true"
+									className="relative grid size-16 shrink-0 place-items-center rounded-lg border border-shell-border bg-shell/80 text-primary shadow-shell before:absolute before:inset-2 before:rounded-md before:border before:border-primary/20 before:content-[''] sm:size-24"
+								>
+									<Icon className="relative size-7 stroke-[1.5] sm:size-10" />
+								</span>
+
+								<p className="max-w-4xl font-medium text-m+ text-shell-foreground leading-7 sm:text-xl+ sm:leading-8">
+									{answer}
+								</p>
+							</div>
 						</Panel>
 					</li>
 				);
@@ -60,3 +79,9 @@ function renderGlassAnswers(answers: readonly string[]) {
 		</ul>
 	);
 }
+
+const AGENCY_ANSWER_BACKGROUNDS = [
+	{ src: "/marketing/agencies-runway-calendar.webp" },
+	{ src: "/marketing/agencies-runway-invoice.webp" },
+	{ src: "/marketing/agencies-runway-vendor.webp" },
+] as const;
