@@ -31,6 +31,11 @@ export const WorkspacePageView = ({
 			readOnly={workspace.readOnly}
 		/>
 	) : (
-		<WorkspaceSectionPage dataset={dataset} readOnly={workspace.readOnly} section={section} />
+		<WorkspaceSectionPage
+			basePath={workspace.basePath}
+			dataset={dataset}
+			readOnly={workspace.readOnly}
+			section={section}
+		/>
 	);
 };

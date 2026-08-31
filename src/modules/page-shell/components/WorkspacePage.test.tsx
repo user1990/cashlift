@@ -3,6 +3,7 @@
 import { render, screen } from "@testing-library/react";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { buildDashboardViewModel } from "@/modules/dashboard/view-model";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { WorkspacePage } from "./WorkspacePage";
 import { WorkspacePageContent } from "./WorkspacePageContent";
@@ -42,5 +43,24 @@ describe("WorkspacePage", () => {
 		expect(screen.getByRole("heading", { name: "Spend approvals" })).toBeInTheDocument();
 		expect(screen.getByText("BrandForge")).toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: /approve/i })).not.toBeInTheDocument();
+	});
+
+	it("renders cash insights in the liquid-glass cockpit instead of the legacy header", () => {
+		const dashboard = buildDashboardViewModel({
+			dataset: financialDatasetFixture,
+			date: new Date("2026-05-09"),
+			role: "owner-finance",
+		});
+
+		render(
+			<NuqsTestingAdapter hasMemory>
+				<WorkspacePageContent dataset={financialDatasetFixture} experience="public-demo" section="cash" />
+			</NuqsTestingAdapter>,
+		);
+
+		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(dashboard.cashPositionHeadline);
+		expect(screen.getByRole("heading", { name: "13-week Cash Outlook" })).toBeVisible();
+		expect(screen.queryByRole("link", { name: "Run leak audit" })).not.toBeInTheDocument();
+		expect(screen.getByRole("link", { name: "Back to overview" })).toHaveAttribute("href", "/demo/workspace");
 	});
 });
