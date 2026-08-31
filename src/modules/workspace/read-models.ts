@@ -16,7 +16,7 @@ type DatasetTable = keyof Omit<FinancialDataset, "profile">;
 export const WORKSPACE_SCOPE_TABLES = {
 	approvals: ["spendRequests"],
 	budgets: ["teamBudgets"],
-	cash: [],
+	cash: ["cashActions", "forecast", "invoices", "spendRequests", "subscriptions", "teamBudgets", "vendorBills"],
 	invoices: ["invoices"],
 	overview: [
 		"cashActions",
