@@ -226,20 +226,23 @@ export const USE_CASES = {
 export const PROOF_POINTS = [
 	{
 		icon: FileClock,
+		image: "/marketing/customers-invoice-bg.webp",
 		metric: "$18.4k",
 		text: "overdue invoice surfaced as top action before payroll pressure",
 	},
 	{
 		icon: SearchCheck,
+		image: "/marketing/customers-vendor-bg.webp",
 		metric: "$2.6k",
 		text: "monthly vendor leaks identified in unused seats and duplicate tools",
 	},
 	{
 		icon: ClipboardCheck,
+		image: "/marketing/customers-audit-bg.webp",
 		metric: "3 min",
 		text: "to run a mock accounting-style cash leak audit in the demo",
 	},
-] as const satisfies readonly { icon: LucideIcon; metric: string; text: string }[];
+] as const satisfies readonly { icon: LucideIcon; image: string; metric: string; text: string }[];
 
 export const HELP_FAQ_GROUPS: readonly HelpFaqGroup[] = [
 	{

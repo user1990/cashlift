@@ -11,12 +11,6 @@ type ProofPointProps = {
 
 export const ProofPoint = ({ Icon, metric, metricClassName, term, text, textClassName }: ProofPointProps) => (
 	<>
-		<dl>
-			<dt className="sr-only">{term}</dt>
-
-			<dd className={`font-mono ${metricClassName}`}>{metric}</dd>
-		</dl>
-
 		{Icon && (
 			<span
 				aria-hidden
@@ -25,6 +19,12 @@ export const ProofPoint = ({ Icon, metric, metricClassName, term, text, textClas
 				<Icon aria-hidden strokeWidth={1.5} className="size-5" />
 			</span>
 		)}
+
+		<dl>
+			<dt className="sr-only">{term}</dt>
+
+			<dd className={`font-mono ${metricClassName}`}>{metric}</dd>
+		</dl>
 
 		<p className={`text-m leading-6 ${textClassName}`}>{text}</p>
 	</>
