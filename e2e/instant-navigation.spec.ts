@@ -9,7 +9,8 @@ test.describe("dashboard navigation", () => {
 			.getByRole("link", { name: "Spend approvals", exact: true })
 			.click();
 		await expect(page).toHaveURL(/\/dashboard\/approvals$/);
-		await expect(page.getByRole("heading", { name: "Spend approvals", exact: true })).toBeVisible();
+		await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+		await expect(page.getByRole("heading", { name: "Logitech" })).toBeVisible();
 	});
 
 	test("shows the vendors shell immediately from the dashboard", async ({ page }) => {
