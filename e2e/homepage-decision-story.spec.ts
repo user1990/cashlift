@@ -7,6 +7,6 @@ test.describe("homepage decision story", () => {
 		await page.locator("main").getByRole("link", { name: "Open live demo" }).first().click();
 
 		await expect(page).toHaveURL(/\/demo\/workspace$/);
-		await expect(page.getByText("Read-only demo").first()).toBeVisible();
+		await expect(page.locator("aside > p").filter({ hasText: "Read-only demo" })).toBeVisible();
 	});
 });

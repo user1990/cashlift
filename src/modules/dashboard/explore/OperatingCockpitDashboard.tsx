@@ -89,7 +89,7 @@ export const OperatingCockpitDashboard = ({
 						</dd>
 
 						{primaryAction && dashboard.cashAtRiskCents > 0 && (
-							<p className="mt-1 text-s text-warning">{primaryAction.title}</p>
+							<dd className="mt-1 text-s text-warning">{primaryAction.title}</dd>
 						)}
 					</div>
 				</dl>

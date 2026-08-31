@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("keeps the static tour public and production workspace routes protected", async ({ page, request }) => {
 	await page.goto("/demo/workspace");
-	await expect(page.getByText("Read-only demo").first()).toBeVisible();
+	await expect(page.locator("aside > p").filter({ hasText: "Read-only demo" })).toBeVisible();
 
 	const dashboardResponse = await request.get("/dashboard", { maxRedirects: 0 });
 

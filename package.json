@@ -60,7 +60,6 @@
 		"@astrojs/react": "6.0.2",
 		"@axe-core/playwright": "^4.13.0",
 		"@biomejs/biome": "^2.5.8",
-		"@next/playwright": "16.3.1",
 		"@playwright/test": "^1.62.1",
 		"@shikijs/twoslash": "4.4.3",
 		"@storybook/addon-docs": "^10.5.8",
