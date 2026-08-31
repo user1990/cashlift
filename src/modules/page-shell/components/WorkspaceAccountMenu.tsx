@@ -16,7 +16,7 @@ export const WorkspaceAccountMenu = ({ workspace }: WorkspaceAccountMenuProps) =
 				description="Read-only demo"
 				items={[
 					{ href: "/", label: "Return home" },
-					{ href: "/demo", label: "Book walkthrough" },
+					{ href: "/demo", label: "Book a walkthrough" },
 				]}
 				name="Studio Nova"
 			/>

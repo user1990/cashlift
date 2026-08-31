@@ -18,6 +18,7 @@ primitives:
     description: Public product, pricing, contact, legal, and checkout surfaces.
     code:
       - "src/app/(marketing)/**"
+      - "src/app/(marketing-demo)/**"
       - "src/app/checkout/**"
       - "src/modules/marketing/**"
     connects_to:
@@ -161,6 +162,16 @@ primitives:
       - workspace-read-path
       - spend-decision-path
 
+  - id: javascript-delivery
+    group: platform
+    description: Browser Baseline targets and client JavaScript dependency policy.
+    code:
+      - "docs/decisions/0001-baseline-javascript-targets.md"
+      - ".agents/skills/baseline-javascript/**"
+    connects_to:
+      - review-workflow
+      - documentation-system
+
   - id: delivery-pipeline
     group: platform
     description: Build, test, security, and deployment automation.
@@ -171,6 +182,7 @@ primitives:
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
     connects_to:
+      - javascript-delivery
       - review-workflow
       - documentation-system
 
@@ -197,6 +209,7 @@ primitives:
     connects_to:
       - documentation-system
       - delivery-pipeline
+      - javascript-delivery
 
 invariants:
   - id: company-data-isolation

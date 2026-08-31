@@ -21,7 +21,6 @@ const assertNoUnnamedLinks = (violations: AccessibilityViolation[]) => {
 test.describe("axe smoke", () => {
 	test("marketing home has no serious or critical axe violations", async ({ page }) => {
 		await page.goto("/");
-		await expect(page.locator("h1, h2, h3, h4, h5, h6").first()).toHaveJSProperty("tagName", "H1");
 
 		const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 

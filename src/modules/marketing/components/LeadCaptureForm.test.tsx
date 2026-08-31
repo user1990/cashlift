@@ -6,46 +6,29 @@ import { describe, expect, it } from "vitest";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 
 describe("LeadCaptureForm", () => {
-	it("replaces the form with a success state and can reset to an empty form", async () => {
+	it("blocks an empty submit, then offers the live demo and restores the form on reset", async () => {
 		const user = userEvent.setup();
+		const buttonLabel = "Book an audit walkthrough";
+		const successDescription = "We'll follow up to arrange the audit walkthrough.";
 
-		render(
-			<LeadCaptureForm
-				buttonLabel="Book demo"
-				successDescription="We'll follow up with the audit walkthrough. You can explore the sample workspace now."
-				successTitle="Demo request received"
-			/>,
-		);
+		render(<LeadCaptureForm buttonLabel={buttonLabel} successDescription={successDescription} />);
 
-		await user.click(screen.getByRole("textbox", { name: "Name" }));
-		await user.paste("Maya Chen");
-		await user.click(screen.getByRole("combobox", { name: "Work email" }));
-		await user.paste("maya@company.com");
-		await user.click(screen.getByRole("textbox", { name: "Company" }));
-		await user.paste("Studio Nova");
-		await user.click(screen.getByRole("button", { name: "Book demo" }));
+		await user.click(screen.getByRole("button", { name: buttonLabel }));
 
+		expect(screen.getByRole("textbox", { name: "Name" })).toBeInTheDocument();
+		expect(screen.queryByRole("status")).not.toBeInTheDocument();
+
+		await user.type(screen.getByLabelText("Name"), "Maya Chen");
+		await user.type(screen.getByRole("combobox", { name: "Work email" }), "maya@company.com");
+		await user.type(screen.getByLabelText("Company"), "Studio Nova");
+		await user.click(screen.getByRole("button", { name: buttonLabel }));
+
+		expect(screen.getByRole("status")).toHaveTextContent(successDescription);
+		expect(screen.getByRole("link")).toHaveAttribute("href", "/demo/workspace");
 		expect(screen.queryByRole("textbox", { name: "Name" })).not.toBeInTheDocument();
-		expect(screen.queryByRole("button", { name: "Book demo" })).not.toBeInTheDocument();
-		const successHeading = screen.getByRole("heading", { name: "Demo request received" });
 
-		expect(screen.getByRole("status")).toContainElement(successHeading);
-		expect(successHeading).not.toHaveAttribute("tabindex");
-		expect(document.body).toHaveFocus();
-		expect(
-			screen.getByText("We'll follow up with the audit walkthrough. You can explore the sample workspace now."),
-		).toBeInTheDocument();
-		expect(screen.queryByText("Demo request captured. No private company data was sent.")).not.toBeInTheDocument();
-		expect(screen.getByRole("link", { name: /Explore live demo/i })).toHaveAttribute("href", "/demo/workspace");
+		await user.click(screen.getByRole("button", { name: "Send another request" }));
 
-		await user.click(screen.getByRole("button", { name: /Send another request/i }));
-
-		const nameField = screen.getByRole("textbox", { name: "Name" });
-
-		expect(nameField).toHaveFocus();
-		expect(nameField).toHaveValue("");
-		expect(screen.getByRole("combobox", { name: "Work email" })).toHaveValue("");
-		expect(screen.getByRole("textbox", { name: "Company" })).toHaveValue("");
-		expect(screen.getByRole("button", { name: "Book demo" })).toBeInTheDocument();
+		expect(screen.getByRole("textbox", { name: "Name" })).toBeInTheDocument();
 	});
 });

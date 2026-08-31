@@ -10,9 +10,8 @@ export const ContactOverviewSection = () => (
 	<section>
 		<Hero
 			label="Contact"
-			labelAsHeading
-			title="Talk through cash ops for your service team."
-			description="Use this MVP contact page for sales, support, partnerships, and product feedback. Submissions stay local in demo mode."
+			description="Talk through cash ops for your service team—sales, support, partnerships, and product feedback stay local in demo mode."
+			variant="page-title"
 		/>
 
 		<ul className="mt-8 grid gap-4 md:grid-cols-2">

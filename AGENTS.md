@@ -9,6 +9,8 @@ Always read this file first. It defines workflow for this repo. Do not override 
    - Start in the current app's `src/`, then expand to `packages/*` when relevant.
    - Search related concepts, not just the first implementation idea.
    - Use a fast sub-agent only when the runtime/user permits it and the search genuinely spans many files.
+   - Load [orchestrate](.agents/skills/orchestrate/SKILL.md) when the task has two or more independent slices, crosses two or more source areas, has a broad branch/PR surface, or explicitly asks for parallel agents. Run `pnpm check:orchestration` for an advisory signal and tell the human whether parallel work is recommended.
+   - Keep one implementer for small, sequential, diagnostic, or shared-file work; orchestration is a recommendation, not a requirement.
 
 2. Understand the task.
    - Identify the work type: UI, component creation, refactor, bug fix, tests, API/data, docs, PR/review, or diagnostics.
@@ -22,6 +24,8 @@ Always read this file first. It defines workflow for this repo. Do not override 
    - Read only matching `SKILL.md` files under `.agents/skills/` first.
    - Read `.agents/docs/*` only when the skill says deeper examples or rationale are needed.
    - UI work usually starts with `architecture` and `styling`; add `guide`, `web-interface-guidelines`, and `testing` as needed.
+   - When adding a production npm dependency, polyfill, or third-party browser script, read `.agents/skills/baseline-javascript/SKILL.md`.
+   - Read `.agents/skills/security/SKILL.md` before touching `src/app/api/**`, `src/proxy.ts`, server data loading, Supabase repositories, Clerk session code, environment variables, or CI security steps. This skill is mandatory for that work, not optional.
 
 5. Match local conventions before editing.
    - Read 2-3 nearby files of the same kind before writing code.
@@ -49,7 +53,8 @@ Always read this file first. It defines workflow for this repo. Do not override 
 - Do not invent trends, comparisons, dates, or monetary values. Derive each displayed value from the current input, or omit the claim.
 - A mutation that can conflict with another control must lock every conflicting control until it settles, and its pending-state behavior needs a test.
 - Treat browser time as client state. Do not bake a build-time date into a current-status label; preserve the server render and test the client behavior when time affects a decision.
-- Validate server-boundary input with Zod or equivalent, authorize before data access, and avoid SQL/query string concatenation.
+- Validate server-boundary input with Zod or equivalent, authorize before data access, and avoid SQL/query string concatenation. `.agents/skills/security/SKILL.md` defines the required parse/authenticate/authorize/query order.
+- Keep hardening headers in `src/proxy.ts` restrictive. Do not add CORS. Workspace mutations stay JSON and never run on GET; Clerk `SameSite=Lax` is the CSRF control.
 - Do not store auth/session tokens in localStorage or sessionStorage.
 - Do not commit secrets or telemetry that captures PII.
 - Keep telemetry identifiers to request/correlation IDs; do not attach Clerk user IDs or other direct identifiers unless a documented, approved need requires it.
@@ -59,8 +64,20 @@ Always read this file first. It defines workflow for this repo. Do not override 
 - Package manager: `pnpm`
 - Runtime: shell commands must auto-select Node from `.nvmrc` / `.node-version` before any `pnpm` command. `pnpm` can fail before project scripts run on older Node versions.
 - Conventions: `.agents/skills/guide/SKILL.md`
+- Decision records: `docs/decisions/index.md` — read relevant accepted decisions before proposing a new primitive, product surface, data-access path, dependency policy, or security boundary. When work establishes a durable decision future agents may re-propose, proactively suggest recording it with `docs/decisions/0000-template.md`. Do not silently override an accepted decision; supersede it with a new ADR.
+- JavaScript delivery: `docs/decisions/0001-baseline-javascript-targets.md` (agents: `.agents/skills/baseline-javascript/SKILL.md`)
+- PR lifecycle: `.agents/skills/ship-pr/SKILL.md` — use for review, PR creation/update, CI gates, and exact feedback resolution.
+- Security rules: `.agents/skills/security/SKILL.md`
 - Directory guide: `.agents/README.md`
+- Security checks: `pnpm security:check`, `pnpm security:audit`
 - Code diagnostics: `pnpm check:code` (Fallow), `pnpm check:react` (React Doctor)
+- Issue tracker: `docs/agents/issue-tracker.md` (Linear, CashLift team)
+- Triage labels: `docs/agents/triage-labels.md`
+- Domain docs: `docs/agents/domain.md`
+
+## Next.js Docs
+
+This rule scopes the generated `nextjs-agent-rules` block below. Read one named file under `node_modules/next/dist/docs/` when the task touches routing, caching, rendering, or a server boundary. For other work, treat nearby code as the convention source. When `node_modules/next` is absent, say the version is unverified rather than writing from recall.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

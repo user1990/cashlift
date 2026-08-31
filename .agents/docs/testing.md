@@ -5,9 +5,25 @@ This reference preserves the detailed testing guidance while keeping the hot-pat
 ## Core Principles
 
 - Test business logic and user-facing outcomes, not implementation details.
+- Prefer fewer, longer tests when assertions belong to one workflow: arrange once, perform the meaningful actions, and assert the intermediate and final outcomes together.
 - Focus on a component's unique responsibility: data transformation, business rules, state behavior, and integration between child components when needed.
 - Avoid redundant tests for behavior already guaranteed by TypeScript, accessible selectors, framework/library behavior, parent/child tests, or global setup.
 - Prefer top-level component/page tests when they capture the user workflow without excessive setup.
+- Keep the bar high for slow integration and E2E coverage; use those layers only when a faster test cannot honestly exercise the boundary or journey.
+- Treat regression tests as maintained product coverage, not permanent debugging artifacts. Keep a regression test when it protects an important, plausible failure mode; otherwise combine it with the relevant workflow test or remove it once the fix is verified.
+
+## Test Review And Retirement
+
+When changing a test area, review nearby cases before adding coverage. For each test, be able to name the behavior or contract whose regression would matter. Prefer a single workflow test with related assertions over several tiny tests that repeat setup or inspect the same rendered state.
+
+Retire or consolidate tests that only:
+
+- repeat a behavior already proved by a higher-level workflow or a more direct unit test;
+- assert TypeScript, framework, library, default setup, class names, DOM structure, or an incidental initial state;
+- pin instructional/configuration copy or a string blob instead of a structured contract or observable outcome; or
+- cover an unlikely bug whose maintenance cost exceeds its product value.
+
+Do not remove coverage for business rules, authorization or tenant boundaries, financial decisions, important mutation states, stable public contracts, or user-critical journeys. The goal is a smaller high-signal suite, not a lower coverage number.
 
 ### Zod Schemas
 

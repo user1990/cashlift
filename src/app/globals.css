@@ -30,7 +30,7 @@
 	--primary-subtle-border: #0a9eb4;
 	--primary-muted: #06626e;
 	--primary-strong: #0295aa;
-	--highlight: #dc1693;
+	--highlight: #eb4aaa;
 	--highlight-muted: #a61271;
 	--highlight-subtle: #30192b;
 	--signal: #22c77a;
@@ -64,6 +64,13 @@
 	--sidebar-accent-foreground: var(--shell-foreground);
 	--sidebar-border: var(--shell-border);
 	--sidebar-ring: var(--primary);
+	--motion-duration-micro: 150ms;
+	--motion-duration-standard: 200ms;
+	--motion-duration-enter: 240ms;
+	--motion-ease-hover: ease;
+	--motion-ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+	--motion-ease-move: cubic-bezier(0.645, 0.045, 0.355, 1);
+	--motion-press-scale: 0.97;
 }
 
 @theme inline {
@@ -135,7 +142,7 @@
 }
 
 @theme {
-	--animate-auth-reveal: auth-reveal 220ms cubic-bezier(0.22, 1, 0.36, 1);
+	--animate-auth-reveal: auth-reveal var(--motion-duration-enter) var(--motion-ease-enter);
 	--animate-auth-skeleton-pulse: auth-skeleton-pulse 1.6s ease-in-out infinite;
 
 	@keyframes auth-reveal {
@@ -179,6 +186,22 @@ textarea,
 	touch-action: manipulation;
 }
 
+:where(button, a, summary, [role="button"], input, select, textarea) {
+	transition-duration: var(--motion-duration-micro);
+	transition-timing-function: var(--motion-ease-hover);
+}
+
+:where(button, a, summary, [role="button"]) {
+	transform-origin: center;
+	transition-property: transform, background-color, border-color, color, box-shadow, opacity;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	:where(button, a, summary, [role="button"]):not(:disabled):not([aria-disabled="true"]):not([data-disabled]):active {
+		transform: scale(var(--motion-press-scale));
+	}
+}
+
 .progress-bar {
 	appearance: none;
 	border: 0;
@@ -205,6 +228,79 @@ textarea,
 	background: color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
+@media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+	@supports (animation-timeline: view()) {
+		[data-story-stack="0"] > article,
+		[data-story-stack="1"] > article {
+			animation-duration: 1ms;
+			animation-fill-mode: both;
+			animation-range: entry 0% exit 0%;
+			animation-timing-function: linear;
+			animation-timeline: view();
+			transform-origin: center center;
+		}
+
+		[data-story-stack="0"] > article {
+			animation-name: decision-story-shrink-first;
+		}
+
+		[data-story-stack="1"] > article {
+			animation-name: decision-story-shrink-second;
+		}
+	}
+}
+
+@keyframes decision-story-shrink-first {
+	to {
+		transform: scale(0.9);
+	}
+}
+
+@keyframes decision-story-shrink-second {
+	to {
+		transform: scale(0.95);
+	}
+}
+
+@keyframes lead-success-from-bottom {
+	from {
+		opacity: 0;
+		transform: translateY(1.25rem);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes lead-success-from-left {
+	from {
+		opacity: 0;
+		transform: translateX(-1.5rem);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.lead-success-enter-from-bottom,
+.lead-success-enter-from-left {
+	animation-duration: var(--motion-duration-enter);
+	animation-fill-mode: both;
+	animation-timing-function: var(--motion-ease-enter);
+}
+
+.lead-success-enter-from-bottom {
+	animation-name: lead-success-from-bottom;
+}
+
+.lead-success-enter-from-left {
+	animation-name: lead-success-from-left;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;
@@ -213,9 +309,17 @@ textarea,
 	*,
 	*::before,
 	*::after {
-		animation-duration: 0.01ms;
-		animation-iteration-count: 1;
+		animation: none;
 		scroll-behavior: auto;
-		transition-duration: 0.01ms;
+		transition: none;
+	}
+
+	:where(button, a, summary, [role="button"]) {
+		transform: none;
+	}
+
+	.lead-success-enter-from-bottom,
+	.lead-success-enter-from-left {
+		animation: none;
 	}
 }

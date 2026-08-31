@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { Panel } from "@/ui/components/layout/Panel";
-import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 import { cn } from "@/ui/utils/cn";
 
 type DashboardPanelProps = {
@@ -12,8 +11,16 @@ type DashboardPanelProps = {
 };
 
 export const DashboardPanel = ({ action, children, className, label, title }: DashboardPanelProps) => (
-	<Panel className={cn("min-h-96 p-6", className)}>
-		<PanelHeader action={action} label={label} title={title} />
+	<Panel className={cn("p-5", className)}>
+		<div className="mb-4 flex items-start justify-between gap-4">
+			<div className="min-w-0">
+				<p className="text-muted-foreground text-s">{label}</p>
+
+				<h2 className="mt-1 text-l+ text-panel-foreground">{title}</h2>
+			</div>
+
+			{action && <div className="shrink-0">{action}</div>}
+		</div>
 
 		{children}
 	</Panel>

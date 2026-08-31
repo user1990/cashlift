@@ -1,15 +1,28 @@
 import type { ReactNode } from "react";
 import { cn } from "@/ui/utils/cn";
 
-type HeroProps = {
-	description: ReactNode;
-	label: ReactNode;
-	title: ReactNode;
+type HeroBaseProps = {
 	as?: "h1" | "h2";
 	className?: string;
-	labelAsHeading?: boolean;
+	label: ReactNode;
 	titleClassName?: string;
 };
+
+type DefaultHeroProps = HeroBaseProps & {
+	description: ReactNode;
+	labelAsHeading?: boolean;
+	title: ReactNode;
+	variant?: "default";
+};
+
+type PageTitleHeroProps = HeroBaseProps & {
+	description: ReactNode;
+	labelAsHeading?: never;
+	title?: never;
+	variant: "page-title";
+};
+
+type HeroProps = DefaultHeroProps | PageTitleHeroProps;
 
 export const Hero = ({
 	as: Component = "h1",
@@ -19,21 +32,24 @@ export const Hero = ({
 	labelAsHeading = false,
 	title,
 	titleClassName,
+	variant = "default",
 }: HeroProps) => (
 	<div className={className}>
-		{labelAsHeading ? (
+		{variant === "page-title" ? (
 			<>
-				<Component
-					className={cn(
-						"max-w-3xl font-semibold text-4xl tracking-normal sm:text-6xl+",
-						Component === "h1" ? "text-primary" : "text-shell-foreground",
-						titleClassName,
-					)}
-				>
+				<Component className={cn("max-w-3xl text-4xl+ text-primary tracking-normal sm:text-6xl+", titleClassName)}>
 					{label}
 				</Component>
 
-				<p className="mt-4 max-w-3xl text-3xl+ text-shell-foreground leading-tight tracking-normal">{title}</p>
+				<p className="mt-5 max-w-2xl text-shell-foreground text-xl leading-8">{description}</p>
+			</>
+		) : labelAsHeading ? (
+			<>
+				<Component className={cn("max-w-3xl text-primary tracking-normal sm:text-6xl+", titleClassName)}>
+					{label}
+				</Component>
+
+				<p className="mt-5 max-w-2xl text-shell-foreground text-xl leading-8">{title}</p>
 			</>
 		) : (
 			<>
@@ -51,6 +67,6 @@ export const Hero = ({
 			</>
 		)}
 
-		<p className="mt-5 max-w-2xl text-shell-muted text-xl leading-8">{description}</p>
+		{variant === "default" && <p className="mt-5 max-w-2xl text-shell-muted text-xl leading-8">{description}</p>}
 	</div>
 );

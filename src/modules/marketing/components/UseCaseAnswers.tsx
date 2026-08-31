@@ -16,7 +16,7 @@ export const UseCaseAnswers = ({ answers, variant = "default" }: UseCaseAnswersP
 		<ul className="mt-10 grid gap-4 md:grid-cols-3">
 			{answers.map((answer) => (
 				<li key={answer}>
-					<Panel as="article">
+					<Panel as="article" className="h-full">
 						<p className="text-m+ text-panel-foreground">{answer}</p>
 					</Panel>
 				</li>

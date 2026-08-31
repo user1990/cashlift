@@ -1,15 +1,26 @@
+import type { MoneyCents } from "@/modules/money/types";
 import type { ForecastChartDataPoint } from "../types";
 import { CashOutlookChartContent } from "./CashOutlookChartContent";
 import { CashOutlookChartSummary } from "./CashOutlookChartSummary";
 
 type CashOutlookChartProps = {
+	bufferTargetCents: MoneyCents;
 	chartData: ForecastChartDataPoint[];
+	lowestProjectedCashDate?: string;
 };
 
-export const CashOutlookChart = ({ chartData }: CashOutlookChartProps) => (
+export const CashOutlookChart = ({ bufferTargetCents, chartData, lowestProjectedCashDate }: CashOutlookChartProps) => (
 	<>
-		<CashOutlookChartSummary chartData={chartData} />
+		<CashOutlookChartSummary
+			bufferTargetCents={bufferTargetCents}
+			chartData={chartData}
+			lowestProjectedCashDate={lowestProjectedCashDate}
+		/>
 
-		<CashOutlookChartContent chartData={chartData} />
+		<CashOutlookChartContent
+			bufferTargetCents={bufferTargetCents}
+			chartData={chartData}
+			lowestProjectedCashDate={lowestProjectedCashDate}
+		/>
 	</>
 );

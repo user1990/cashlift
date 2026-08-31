@@ -12,10 +12,9 @@ export const PricingPlansSection = ({ billing }: PricingPlansSectionProps) => (
 	<section>
 		<div>
 			<Hero
-				description="Start with a free cash leak audit, then use one plan for owners, finance, managers, and request-only employees."
+				description="Flat team plans. Invite every employee without seat anxiety."
 				label="Pricing"
-				labelAsHeading
-				title="Flat team plans. Invite every employee without seat anxiety."
+				variant="page-title"
 			/>
 
 			<div className="mt-8">

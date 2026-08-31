@@ -42,7 +42,10 @@ export const DesktopNavGroup = ({
 		>
 			{group.label}
 
-			<ChevronDown aria-hidden className="size-4 transition-transform duration-150 group-data-[expanded]:rotate-180" />
+			<ChevronDown
+				aria-hidden
+				className="size-4 transition-transform duration-[var(--motion-duration-micro)] ease-in-out group-data-[expanded]:rotate-180 motion-reduce:transition-none"
+			/>
 		</Button>
 
 		<DisclosurePanel className="absolute top-full left-0 z-10 w-48 pt-2">

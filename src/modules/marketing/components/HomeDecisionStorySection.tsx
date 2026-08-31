@@ -22,40 +22,37 @@ const DECISION_CHAPTERS = {
 	},
 } as const;
 
+const DECISION_STACKS = [
+	{ offsetClassName: "lg:top-0", stackClassName: "lg:z-10" },
+	{ offsetClassName: "lg:top-16", stackClassName: "lg:z-20" },
+	{ offsetClassName: "lg:top-32", stackClassName: "lg:z-30" },
+] as const;
+
 export const HomeDecisionStorySection = ({ actions }: HomeDecisionStorySectionProps) => (
 	<section aria-labelledby={DECISION_STORY_TITLE_ID} className="isolate border-shell-border border-b bg-shell">
 		<header className="mx-auto max-w-4xl px-4 pt-14 pb-8 text-center sm:px-6 lg:px-8 lg:pt-16 lg:pb-10">
-			<h2 id={DECISION_STORY_TITLE_ID} className="text-5xl+ text-primary tracking-normal sm:text-7xl+">
+			<h2 id={DECISION_STORY_TITLE_ID} className="text-4xl+ text-primary tracking-normal sm:text-6xl+">
 				Three decisions surfaced for today.
 			</h2>
 		</header>
 
-		<div className="mx-auto max-w-295 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
-			<ol className="[--decision-stick-gap:8svh] max-lg:space-y-8">
-				{actions.flatMap((action, index) => {
+		<div className="mx-auto max-w-295 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-40">
+			<ol className="max-lg:space-y-8">
+				{actions.map((action, index) => {
 					const chapter = DECISION_CHAPTERS[action.type];
-					const last = index === actions.length - 1;
-					const items = [
+					const stack = DECISION_STACKS[index] ?? DECISION_STACKS[2];
+
+					return (
 						<HomeDecisionStoryChapter
 							key={action.type}
 							action={action}
 							imageAlt={chapter.imageAlt}
 							imageSrc={chapter.imageSrc}
-						/>,
-					];
-
-					if (!last) {
-						items.push(
-							<li
-								key={`${action.type}-gap`}
-								aria-hidden
-								data-story-stick-gap="true"
-								className="hidden h-(--decision-stick-gap) lg:list-item motion-reduce:lg:hidden"
-							/>,
-						);
-					}
-
-					return items;
+							offsetClassName={stack.offsetClassName}
+							stackIndex={Math.min(index, 2)}
+							stackClassName={stack.stackClassName}
+						/>
+					);
 				})}
 			</ol>
 		</div>

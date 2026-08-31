@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { HomeFaqItem } from "./HomeFaqItem";
 
 const HOME_FAQS = [
 	{
@@ -57,18 +57,7 @@ export const HomeFaqSection = () => (
 
 			<div className="mt-5 border-shell-border border-t">
 				{HOME_FAQS.map(({ answer, question }) => (
-					<details key={question} className="group border-shell-border border-b">
-						<summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-left text-l text-shell-foreground outline-none transition-colors duration-150 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden">
-							{question}
-
-							<ChevronDown
-								aria-hidden
-								className="size-5 shrink-0 text-shell-muted transition-transform duration-150 group-open:rotate-180"
-							/>
-						</summary>
-
-						<p className="max-w-3xl pb-5 text-l text-shell-muted leading-7">{answer}</p>
-					</details>
+					<HomeFaqItem key={question} answer={answer} question={question} />
 				))}
 			</div>
 		</div>

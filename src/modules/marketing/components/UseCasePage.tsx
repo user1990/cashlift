@@ -11,7 +11,7 @@ type UseCasePageProps = {
 
 export const UseCasePage = ({ answersVariant = "default", useCase }: UseCasePageProps) => (
 	<MainContent variant="marketing">
-		<Hero description={useCase.description} label={useCase.label} labelAsHeading title={useCase.headline} />
+		<Hero description={useCase.description} label={useCase.label} variant="page-title" />
 
 		<UseCaseAnswers answers={useCase.answers} variant={answersVariant} />
 

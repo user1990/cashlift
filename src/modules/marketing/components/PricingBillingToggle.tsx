@@ -42,7 +42,7 @@ export const PricingBillingToggle = ({ billing }: PricingBillingToggleProps) => 
 				<span
 					aria-hidden
 					className={cn(
-						"pointer-events-none absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-full bg-primary shadow-primary-glow transition-transform duration-200 ease-out motion-reduce:transition-none",
+						"pointer-events-none absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-full bg-primary shadow-primary-glow transition-transform duration-[var(--motion-duration-standard)] ease-in-out motion-reduce:transition-none",
 						selectedBilling === "monthly" && "translate-x-full",
 					)}
 				/>

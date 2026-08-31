@@ -6,7 +6,7 @@ import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { buildDashboardViewModel } from "./view-model";
 
 describe("dashboard view model", () => {
-	it("builds company cash metrics for a selected date", () => {
+	it("builds owner-finance cash metrics and ranks the action inbox", () => {
 		const dashboard = buildDashboardViewModel({
 			dataset: financialDatasetFixture,
 			date: new Date("2026-05-09"),
@@ -19,15 +19,8 @@ describe("dashboard view model", () => {
 		expect(dashboard.vendorLeakSavingsCents).toEqual(261_000);
 		expect(dashboard.forecastChartData).toHaveLength(financialDatasetFixture.forecast.length);
 		expect(dashboard.totalCommittedSpendCents).toBeGreaterThan(0);
-	});
-
-	it("orders action inbox by cash risk", () => {
-		const dashboard = buildDashboardViewModel({
-			dataset: financialDatasetFixture,
-			date: new Date("2026-05-09"),
-			role: "owner-finance",
-		});
-
+		expect(dashboard.lowestProjectedCashCents).toEqual(41_310_000);
+		expect(dashboard.lowestProjectedCashDate).toEqual("2026-05-06");
 		expect(dashboard.actionInbox[0].priority).toEqual("critical");
 		expect(dashboard.actionInbox[0].title).toEqual("Decide on BrandForge annual renewal");
 	});
@@ -72,6 +65,7 @@ describe("dashboard view model", () => {
 		expect(dashboard.actionInbox).toEqual([]);
 		expect(dashboard.forecastChartData).toEqual([]);
 		expect(dashboard.invoiceRiskCents).toEqual(0);
+		expect(dashboard.lowestProjectedCashCents).toBeUndefined();
 		expect(dashboard.pendingApprovalCount).toEqual(0);
 		expect(dashboard.vendorLeaks).toEqual([]);
 	});
@@ -94,13 +88,38 @@ describe("dashboard view model", () => {
 			role: "owner-finance",
 		});
 
-		expect(dashboard.greetingName).toEqual("Samira Chen");
-		expect(dashboard.dateRangeLabel).toEqual("May 20 - Jun 17, 2024");
 		expect(dashboard.cashAvailableCents).toEqual(248_000_000);
+		expect(dashboard.cashBufferTargetCents).toEqual(14_000_000);
+		expect(dashboard.lowestProjectedCashCents).toEqual(170_000_000);
+		expect(dashboard.lowestProjectedCashDate).toEqual("2024-06-10");
 		expect(dashboard.spendChartData[0]).toMatchObject({
 			remaining: 169_000,
 			team: "Client Delivery",
 			used: 98_000,
 		});
+	});
+
+	it("flags the outlook trough when it falls below the cash buffer", () => {
+		const dashboard = buildDashboardViewModel({
+			dataset: {
+				...financialDatasetFixture,
+				forecast: [
+					{
+						date: "2026-06-10",
+						id: "forecast-trough",
+						inflowCents: 100_000,
+						openingBalanceCents: 20_000_000,
+						outflowCents: 8_000_000,
+						scenario: "base",
+					},
+				],
+			},
+			date: new Date("2026-05-09"),
+			role: "owner-finance",
+		});
+
+		expect(dashboard.lowestProjectedCashCents).toEqual(12_100_000);
+		expect(dashboard.lowestProjectedCashDate).toEqual("2026-06-10");
+		expect(dashboard.lowestProjectedCashCents).toBeLessThan(dashboard.cashBufferTargetCents);
 	});
 });

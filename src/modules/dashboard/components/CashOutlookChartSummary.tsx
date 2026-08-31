@@ -1,13 +1,24 @@
-import { formatCurrencyDollars } from "@/modules/money/format";
+import { formatCurrency, formatCurrencyDollars } from "@/modules/money/format";
+import type { MoneyCents } from "@/modules/money/types";
+import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { ForecastChartDataPoint } from "../types";
 
 type CashOutlookChartSummaryProps = {
+	bufferTargetCents: MoneyCents;
 	chartData: ForecastChartDataPoint[];
+	lowestProjectedCashDate?: string;
 };
 
-export const CashOutlookChartSummary = ({ chartData }: CashOutlookChartSummaryProps) => (
+export const CashOutlookChartSummary = ({
+	bufferTargetCents,
+	chartData,
+	lowestProjectedCashDate,
+}: CashOutlookChartSummaryProps) => (
 	<table className="sr-only">
-		<caption>13-week cash outlook by week</caption>
+		<caption>
+			13-week cash outlook by week. Cash buffer {formatCurrency(bufferTargetCents)}
+			{lowestProjectedCashDate ? `. Lowest week ${formatDashboardDate(lowestProjectedCashDate)}` : ""}
+		</caption>
 
 		<thead>
 			<tr>

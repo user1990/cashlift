@@ -65,7 +65,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Production build
-        run: pnpm build
+        run: mkdir -p .next/cache && pnpm build
 
       - name: Documentation build
         run: pnpm docs:build
