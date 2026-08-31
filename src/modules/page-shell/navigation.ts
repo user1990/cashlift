@@ -1,6 +1,5 @@
 import {
 	BarChart3,
-	CircleDollarSign,
 	ClipboardCheck,
 	FileText,
 	Home,
@@ -47,11 +46,6 @@ const WORKSPACE_NAV_GROUPS = [
 				icon: FileText,
 				label: "Invoices",
 				priority: true,
-				section: "invoices",
-			},
-			{
-				icon: CircleDollarSign,
-				label: "Overdue collections",
 				section: "invoices",
 			},
 		],
