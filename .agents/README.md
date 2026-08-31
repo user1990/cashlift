@@ -62,6 +62,7 @@ skills/
 ├── baseline-javascript/SKILL.md
 ├── ship-pr/SKILL.md
 ├── guide/SKILL.md
+├── orchestrate/SKILL.md
 ├── security/SKILL.md
 ├── styling/SKILL.md
 ├── testing/SKILL.md

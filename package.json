@@ -23,6 +23,7 @@
 		"test:e2e:production": "env -u NO_COLOR playwright test --config playwright.production.config.ts",
 		"security:audit": "pnpm audit --prod --audit-level high",
 		"security:check": "node scripts/security-check.mjs",
+		"check:orchestration": "node scripts/check-orchestration.mjs",
 		"check:code": "astro sync && fallow --only dupes && fallow --only dead-code",
 		"check:code:fix": "fallow fix --dry-run",
 		"prepare": "lefthook install",
