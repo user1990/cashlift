@@ -12,18 +12,24 @@ import { WorkspaceVendorsSection } from "./WorkspaceVendorsSection";
 type WorkspaceSectionPageProps = {
 	dataset: FinancialDataset;
 	section: Exclude<WorkspaceSection, "overview">;
+	basePath?: string;
 	readOnly?: boolean;
 };
 
-export const WorkspaceSectionPage = ({ dataset, readOnly = false, section }: WorkspaceSectionPageProps) => (
+export const WorkspaceSectionPage = ({
+	basePath = "/dashboard",
+	dataset,
+	readOnly = false,
+	section,
+}: WorkspaceSectionPageProps) => (
 	<>
-		<WorkspaceSectionHeader section={section} />
+		{section !== "invoices" && <WorkspaceSectionHeader section={section} />}
 
-		<WorkspaceSectionContent dataset={dataset} readOnly={readOnly} section={section} />
+		<WorkspaceSectionContent basePath={basePath} dataset={dataset} readOnly={readOnly} section={section} />
 	</>
 );
 
-function WorkspaceSectionContent({ dataset, readOnly, section }: WorkspaceSectionPageProps) {
+function WorkspaceSectionContent({ basePath, dataset, readOnly, section }: WorkspaceSectionPageProps) {
 	switch (section) {
 		case "approvals":
 			return <WorkspaceApprovalsSection dataset={dataset} readOnly={readOnly} />;
@@ -32,7 +38,7 @@ function WorkspaceSectionContent({ dataset, readOnly, section }: WorkspaceSectio
 		case "cash":
 			return <WorkspaceCashSection dataset={dataset} />;
 		case "invoices":
-			return <WorkspaceInvoicesSection dataset={dataset} />;
+			return <WorkspaceInvoicesSection basePath={basePath} dataset={dataset} />;
 		case "settings":
 			return <WorkspaceSettingsSection dataset={dataset} />;
 		case "team":
