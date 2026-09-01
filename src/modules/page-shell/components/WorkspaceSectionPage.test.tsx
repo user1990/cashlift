@@ -5,23 +5,35 @@ import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { describe, expect, it } from "vitest";
 import { buildTeamBudgetsPresentation } from "@/modules/dashboard/explore/teamBudgetsModel";
 import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
+import { buildVendorsPresentation } from "../vendorsPresentation";
 import { WorkspaceSectionPage } from "./WorkspaceSectionPage";
 
 describe("WorkspaceSectionPage", () => {
-	it("uses the glass cockpit instead of the workspace section header on team budgets", () => {
-		const presentation = buildTeamBudgetsPresentation(DEMO_WORKSPACE_DATASET);
-
-		render(<WorkspaceSectionPage dataset={DEMO_WORKSPACE_DATASET} section="budgets" />);
+	it.each([
+		{
+			headline: buildTeamBudgetsPresentation(DEMO_WORKSPACE_DATASET).headline,
+			section: "budgets" as const,
+		},
+		{
+			headline: "3 company members across Finance, Client Delivery, and Operations",
+			section: "team" as const,
+		},
+		{
+			headline: buildVendorsPresentation(DEMO_WORKSPACE_DATASET).headline,
+			section: "vendors" as const,
+		},
+	])("uses the glass cockpit instead of the workspace section header on $section", ({ headline, section }) => {
+		render(<WorkspaceSectionPage basePath="/dashboard" dataset={DEMO_WORKSPACE_DATASET} section={section} />);
 
 		expect(screen.queryByRole("link", { name: "Run leak audit" })).not.toBeInTheDocument();
 		expect(screen.queryByText("Workspace")).not.toBeInTheDocument();
-		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(presentation.headline);
+		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(headline);
 	});
 
 	it("uses the glass cockpit instead of the workspace section header on invoices", () => {
 		render(
 			<NuqsTestingAdapter hasMemory>
-				<WorkspaceSectionPage dataset={DEMO_WORKSPACE_DATASET} section="invoices" />
+				<WorkspaceSectionPage basePath="/dashboard" dataset={DEMO_WORKSPACE_DATASET} section="invoices" />
 			</NuqsTestingAdapter>,
 		);
 
