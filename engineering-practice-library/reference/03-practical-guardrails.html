@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Practical Guardrails</title><link rel="stylesheet" href="../assets/course.css"><link rel="stylesheet" href="../assets/extended-course.css"><link rel="stylesheet" href="../assets/practice-reference.css"></head>
+<body><main>
+<p class="eyebrow">Practice reference · 27 operating patterns</p>
+<h1>Make the guardrails executable.</h1>
+<p class="lede">Scan the short titles, then expand only the case you need. Every case contains its purpose, situation, copy/paste wording, and proof to request.</p>
+
+<section class="filter-panel" aria-labelledby="filter-heading"><div class="filter-toolbar"><div><p class="eyebrow" id="filter-heading">Find a topic</p><div class="filter-chips" role="group" aria-label="Filter guardrail topics"><button class="filter-chip" type="button" data-filter="all" aria-pressed="true">All <span class="filter-count" data-count-for="all">28</span></button><button class="filter-chip" type="button" data-filter="core" aria-pressed="false">Core <span class="filter-count" data-count-for="core">1</span></button><button class="filter-chip" type="button" data-filter="anti-pattern" aria-pressed="false">Anti-patterns <span class="filter-count" data-count-for="anti-pattern">7</span></button><button class="filter-chip" type="button" data-filter="strength" aria-pressed="false">Strengths <span class="filter-count" data-count-for="strength">10</span></button><button class="filter-chip" type="button" data-filter="rule" aria-pressed="false">Rules <span class="filter-count" data-count-for="rule">10</span></button></div></div><label class="filter-search">Search titles and content<input id="guardrail-filter" type="search" placeholder="e.g. preview, handoff, authority" autocomplete="off"></label></div><p class="filter-status" id="filter-status" role="status" aria-live="polite">Showing 28 of 28 topics.</p><p class="filter-empty" id="filter-empty" hidden>No matching topics. Try another category or search term.</p></section>
+
+<details class="card accent"><summary><span>Universal wrapper</span><small>Start any task with the minimum contract</small></summary><div class="accordion-body"><p>Start a real task with this short wrapper, then add only the relevant modules below.</p><pre><code>TASK CONTRACT
+
+Goal: [observable result]
+Preserve: [behavior/files/APIs/accessibility/unrelated work]
+Prohibited: [push/deploy/publish/contact/etc.]
+State: prove checkout, branch, commit, dirty files, runtime, route, and baseline first.
+Diagnosis: reproduce and test hypotheses before choosing implementation.
+Done: report synthetic checks, independent behavior, final diff review, and limitations.
+Handoff: record decisions, rejected alternatives, risks, and the safest next step.</code></pre></div></details>
+
+<section><h2>Part I · Recurring anti-patterns repaired</h2><p>Expand a case when you recognize the failure mode.</p>
+<details class="card bad"><summary><span>1. Diagnose before prescribing</span><small>Use when a solution is suggested before evidence</small></summary><div class="accordion-body"><p><strong>Situation:</strong> You know the visual fix you want, but not the mechanism.</p><p><strong>Bad:</strong> <code>Make the drawer slide from the right and feel smoother.</code></p><pre><code>REPAIR THIS REQUEST
+
+First reproduce the drawer issue. Report actual versus expected geometry, then test at least two hypotheses covering layout, transform origin, scroll state, or sequencing. Recommend the smallest mechanism change only after the evidence.</code></pre><p><strong>Proof:</strong> reproduction steps, measured geometry, hypotheses tested, and a cause/fix explanation appear before edits.</p></div></details>
+<details class="card bad"><summary><span>2. Add independent review</span><small>Use when the implementer would review its own assumptions</small></summary><div class="accordion-body"><p><strong>Situation:</strong> The same agent implements, tests its own assumptions, and declares success.</p><pre><code>INDEPENDENT REVIEW
+
+After implementation, assign a separate reviewer who did not make the change. Ask it to challenge assumptions, inspect accessibility and state conflicts, and rank regressions by severity. The implementer must reconcile the report before claiming completion.</code></pre><p><strong>Proof:</strong> reviewer identity/role, independent findings, rejected or accepted risks, and the integrator’s decision.</p></div></details>
+<details class="card bad"><summary><span>3. Prove preview identity</span><small>Use when a responding browser may be stale or mismatched</small></summary><div class="accordion-body"><p><strong>Situation:</strong> A browser responds, but the route may come from another checkout or server.</p><pre><code>PREVIEW IDENTITY
+
+Prove the chain: target checkout → server working directory and command → browser URL and route. Report branch, commit, dirty files, runtime, and the process serving the port. If any identity is uncertain, stop; do not use the preview as evidence.</code></pre><p><strong>Proof:</strong> matching checkout/commit, server cwd/command, URL/route, and a baseline screenshot or behavior from that exact chain.</p></div></details>
+<details class="card bad"><summary><span>4. Reset the visual loop</span><small>Use after two visual attempts miss the target</small></summary><div class="accordion-body"><p><strong>Situation:</strong> Several “slower,” “higher,” or “more polished” tweaks have missed.</p><pre><code>RESET THE VISUAL LOOP
+
+Stop editing after two misses. Restate invariant geometry, entry and exit states, timing, focus, scroll, reduced-motion behavior, and the exact screenshots or measurements that will prove it. Propose one consolidated change and wait for approval.</code></pre><p><strong>Proof:</strong> one written contract replaces the sequence of micro-corrections; both settled states are verified.</p></div></details>
+<details class="card bad"><summary><span>5. Write the handoff</span><small>Use when a task may resume later</small></summary><div class="accordion-body"><p><strong>Situation:</strong> Tomorrow’s agent would need to reread the whole conversation.</p><pre><code>WRITE THE HANDOFF
+
+Record the objective, selected approach, rejected alternatives and reasons, changed surfaces, verification, unresolved risks, remaining decision, external approvals, and safest next action. Reference large existing artifacts instead of copying them.</code></pre><p><strong>Proof:</strong> a compact handoff exists at a durable project location and another agent can resume without transcript archaeology.</p></div></details>
+<details class="card bad"><summary><span>6. Preserve the delegation scorecard</span><small>Use when multiple agents contribute evidence</small></summary><div class="accordion-body"><p><strong>Situation:</strong> You ask for many agents but cannot tell who concluded what.</p><pre><code>DELEGATION SCORECARD
+
+For each agent record: objective, context, scope, exclusions, write policy, return schema, acceptance criteria, stop condition, and owner. Preserve each report. The main agent must reconcile reports, state rejected alternatives, and name the final integrator.</code></pre><p><strong>Proof:</strong> role outputs and a decision scorecard survive, rather than only a vague summary.</p></div></details>
+<details class="card bad"><summary><span>7. Install a project baseline</span><small>Use when a repository lacks reliable agent instructions</small></summary><div class="accordion-body"><p><strong>Situation:</strong> One repository has excellent instructions; another has none.</p><pre><code>PROJECT BASELINE
+
+Before risky work, load or propose the smallest root-level contract covering state inspection, scope preservation, acceptance, independent verification, external-action boundaries, and handoff. Keep project-specific details in task guidance.</code></pre><p><strong>Proof:</strong> the agent names the contract it loaded or flags its absence before mutation.</p></div></details>
+</section>
+
+<section><h2>Part II · Strengths to preserve deliberately</h2><p>Expand a case when you want to protect a good habit from being optimized away.</p>
+<details class="card good"><summary><span>1. Name the outcome</span><small>Make “done” observable instead of subjective</small></summary><div class="accordion-body"><pre><code>OUTCOME
+
+State the observable result, not a vague quality goal. Example: “At 390px, the mobile drawer opens from the trigger, traps focus, closes with Escape, and leaves the page scroll position unchanged.”</code></pre><p><strong>Proof:</strong> completion can be checked from behavior or measurement without asking what “better” means.</p></div></details>
+<details class="card good"><summary><span>2. Preserve boundaries</span><small>Prevent scope drift and accidental redesign</small></summary><div class="accordion-body"><pre><code>PRESERVE
+
+Preserve existing copy, route contracts, keyboard behavior, accessibility semantics, responsive shell, and unrelated dirty work. Do not add dependencies or redesign adjacent surfaces.</code></pre><p><strong>Proof:</strong> the final diff and focused checks show the constraints survived.</p></div></details>
+<details class="card good"><summary><span>3. Ground claims in artifacts</span><small>Use screenshots, DOM, routes, and source as evidence</small></summary><div class="accordion-body"><pre><code>GROUNDING ARTIFACTS
+
+Use the supplied screenshot, DOM state, route, structured data, and source file as evidence. Name each artifact and explain what claim it supports. Do not infer from a stale or unrelated preview.</code></pre><p><strong>Proof:</strong> every important recommendation points to an inspectable artifact.</p></div></details>
+<details class="card good"><summary><span>4. Gate visual decisions</span><small>Keep exploration separate from production selection</small></summary><div class="accordion-body"><pre><code>SELECTION GATE
+
+Produce exactly three labeled visual directions. Compare them against the stated contract. Do not apply a production branding or design choice until I select one direction.</code></pre><p><strong>Proof:</strong> options, criteria, and the selection decision are visible; exploration is not silently shipped.</p></div></details>
+<details class="card good"><summary><span>5. Define acceptance</span><small>Make another person’s pass/fail result repeatable</small></summary><div class="accordion-body"><pre><code>ACCEPTANCE
+
+Define expected DOM/state/visual outcomes before editing. Include viewport, interaction sequence, accessibility state, and what would falsify completion.</code></pre><p><strong>Proof:</strong> another person can run the checks and reach the same pass/fail result.</p></div></details>
+<details class="card good"><summary><span>6. Use three proof channels</span><small>Separate build, behavior, and diff evidence</small></summary><div class="accordion-body"><pre><code>THREE CHANNELS
+
+Run focused tests, typecheck/lint/build; independently exercise the rendered flow and inspect console/network; then review the final diff for scope and necessity. Report each channel separately.</code></pre><p><strong>Proof:</strong> a green build is not used as a substitute for browser behavior or diff review.</p></div></details>
+<details class="card good"><summary><span>7. Isolate the work</span><small>Protect unrelated changes with branches and worktrees</small></summary><div class="accordion-body"><pre><code>ISOLATION
+
+Use a fresh intended worktree when isolation is required. Before and after, list worktrees and dirty files. Do not reset, clean, or overwrite unrelated work.</code></pre><p><strong>Proof:</strong> unrelated changes remain intact and the target worktree is identifiable.</p></div></details>
+<details class="card good"><summary><span>8. Challenge the model</span><small>Change the cause model, not only the visual value</small></summary><div class="accordion-body"><pre><code>CHALLENGE THE MODEL
+
+If the result misses, do not only tune values. Explain which assumption failed, what evidence contradicts it, and which model or mechanism should replace it.</code></pre><p><strong>Proof:</strong> the next attempt changes the causal model when the evidence requires it.</p></div></details>
+<details class="card good"><summary><span>9. Keep authority explicit</span><small>Stop before spending, publishing, deploying, or contacting</small></summary><div class="accordion-body"><pre><code>AUTHORITY
+
+Local inspection and edits are allowed. Push, PR creation, deployment, publishing, spending, signup, messaging, uploads, and external contact require separate explicit authorization.</code></pre><p><strong>Proof:</strong> the agent stops before the side effect and shows destination, payload, scope, and rollback.</p></div></details>
+<details class="card good"><summary><span>10. Capture durable evidence</span><small>Leave a restart point for the next session</small></summary><div class="accordion-body"><pre><code>DURABLE CAPTURE
+
+End with a compact handoff, evidence ledger, build log, decision record, or definition of done when the task may resume. Link existing artifacts; do not leave important reasoning only in chat.</code></pre><p><strong>Proof:</strong> the next session has a restart point and known uncertainty.</p></div></details>
+</section>
+
+<section><h2>Part III · Rules turned into daily moves</h2><p>Expand a rule when you need the exact prompt line and its failure signal.</p><div class="rule-list">
+<details class="rule-item"><summary><span>1. State before change</span></summary><div class="rule-body"><p><strong>Prompt:</strong> <code>Prove checkout, branch, commit, dirty files, runtime, route, and baseline before editing.</code></p><p><strong>Failure signal:</strong> Agent edits before a baseline report.</p></div></details>
+<details class="rule-item"><summary><span>2. Diagnose before prescribe</span></summary><div class="rule-body"><p><strong>Prompt:</strong> <code>Reproduce, state actual/expected, test competing hypotheses, then choose the smallest mechanism.</code></p><p><strong>Failure signal:</strong> Solution appears before reproduction.</p></div></details>
+<details class="rule-item"><summary><span>3. One task, one owner, explicit boundaries</span></summary><div class="rule-body"><p><strong>Prompt:</strong> <code>Name the integrator, in-scope surfaces, exclusions, and write authority.</code></p><p><strong>Failure signal:</strong> Two agents mutate the same surface or nobody owns reconciliation.</p></div></details>
+<details class="rule-item"><summary><span>4. Delegate bounded work with a return schema</span></summary><div class="rule-body"><p><strong>Prompt:</strong> <code>Return findings, evidence, risks, recommendation, and stop status in this schema.</code></p><p><strong>Failure signal:</strong> “Here is some help” with no independently usable output.</p></div></details>
+<details class="rule-item"><summary><span>5. Every completion needs independent proof</span></summary><div class="rule-body"><p><strong>Prompt:</strong> <code>Separate synthetic checks, independent behavior, and final diff review.</code></p><p><strong>Failure signal:</strong> “Tests pass” is the only evidence.</p></div></details>
+<details class="rule-item"><summary><span>6. Two misses trigger a contract rewrite</span></summary><div class="rule-body"><p><strong>Prompt:</strong> <code>After two misses, stop editing and rewrite invariants before another mutation.</code></p><p><strong>Failure signal:</strong> Third micro-patch changes one value only.</p></div></details>
+<details class="rule-item"><summary><span>7. Review the final diff, not only the rendered result</span></summary><div class="rule-body"><p><strong>Prompt:</strong> <code>Explain why each changed file is necessary and confirm no unrelated files changed.</code></p><p><strong>Failure signal:</strong> Beautiful preview hides scope drift or accidental files.</p></div></details>
+<details class="rule-item"><summary><span>8. Capture decisions before context disappears</span></summary><div class="rule-body"><p><strong>Prompt:</strong> <code>Record selected approach, rejected alternatives, evidence, risks, and next step.</code></p><p><strong>Failure signal:</strong> Tomorrow’s work begins with “what did we decide?”</p></div></details>
+<details class="rule-item"><summary><span>9. Worktree cleanup is part of completion</span></summary><div class="rule-body"><p><strong>Prompt:</strong> <code>List residue, stale servers, temporary artifacts, and safe cleanup actions; do not delete without authority.</code></p><p><strong>Failure signal:</strong> Future work starts amid ambiguous sibling worktrees or ports.</p></div></details>
+<details class="rule-item"><summary><span>10. External actions need separate authorization</span></summary><div class="rule-body"><p><strong>Prompt:</strong> <code>Stop before push, PR, deploy, publish, upload, message, or contact; show destination and payload first.</code></p><p><strong>Failure signal:</strong> Approval is requested after the side effect.</p></div></details>
+</div></section>
+
+<section class="card accent"><h2>One practical prompt that combines the system</h2><pre><code>Build the requested Spotify-like UI change, but follow this workflow:
+
+1. STATE: prove target checkout, branch, commit, dirty files, runtime, server cwd/command, route, viewport, and baseline screenshot.
+2. DIAGNOSE: reproduce the issue, state actual versus expected, and test at least two plausible causes.
+3. PRESERVE: keep existing copy, accessibility, route/API contracts, responsive shell, design tokens, and unrelated work.
+4. DELEGATE: if useful, assign separate analysis, adversarial review, and verification-design roles. No overlapping writes; return reports in a named schema.
+5. IMPLEMENT: choose the smallest convention-matching change. Use near-black surfaces, functional green only, pill/circle geometry, compact type, and content-first color.
+6. STOP: after two misses, rewrite the visual contract before editing again.
+7. VERIFY: run focused checks, independently exercise the rendered route, inspect console/network, and review the final diff.
+8. HAND OFF: record decisions, rejected alternatives, evidence, risks, residue, and the safest next step.
+9. AUTHORITY: do not push, create a PR, deploy, publish, upload, or contact anyone without separate explicit approval.
+
+Return a short report for each phase. Do not claim completion if any required phase is missing.</code></pre></section>
+
+<footer><p>Use the <a href="../lessons/0002-practical-guardrails.html">interactive repair lesson</a> next. For concrete anti-pattern and strength scenarios, open the <a href="04-practical-examples.html">practical examples library</a>. For the source wording, see the <a href="01-agent-prompting-playbook.html">complete prompting playbook</a>.</p></footer>
+</main><script src="../assets/practice-reference.js"></script></body></html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lesson 0003: React / TypeScript State Boundaries</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">Lesson 0003</div>
+        <h1>React / TypeScript: state boundaries</h1>
+        <p class="lede">A lot of frontend complexity comes from mixing server state, domain state, UI state, and short-lived interaction state.</p>
+      </header>
+
+      <nav class="small"><a href="index.html">Sprint index</a></nav>
+
+      <section class="grid two">
+        <article class="panel"><h2>Server state</h2><p>Data owned by the backend: cache, freshness, loading, error, retry, auth, and invalidation rules.</p></article>
+        <article class="panel"><h2>Domain state</h2><p>Business meaning prepared for UI: confidence, missing data, conflict status, permissions, and derived facts.</p></article>
+        <article class="panel"><h2>UI state</h2><p>Visible presentation choices: selected tab, open section, sort order, filter text, active panel.</p></article>
+        <article class="panel"><h2>Interaction state</h2><p>Ephemeral input: hover, drag, optimistic pending state, temporary form edits before commit.</p></article>
+      </section>
+
+      <section>
+        <h2>Example</h2>
+        <p>A mileage timeline should not make every component interpret raw API records. Map raw responses into <code>MileageEvent[]</code> with <code>status: "confirmed" | "conflicting" | "missing"</code>, then let components render clear states.</p>
+        <p class="small">Primary sources: <a href="https://react.dev/learn/you-might-not-need-an-effect">React: You Might Not Need an Effect</a>, <a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html">TypeScript Narrowing</a>.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Practice</h2>
+        <p>Classify each item by owner: server, domain, ui, or interaction.</p>
+        <div class="choice-row"><span>API retry after 500</span><select data-answer="server"><option></option><option>server</option><option>domain</option><option>ui</option><option>interaction</option></select></div>
+        <div class="choice-row"><span>Mileage conflict detected</span><select data-answer="domain"><option></option><option>server</option><option>domain</option><option>ui</option><option>interaction</option></select></div>
+        <div class="choice-row"><span>Expanded report section</span><select data-answer="ui"><option></option><option>server</option><option>domain</option><option>ui</option><option>interaction</option></select></div>
+        <button id="check" type="button">Check answers</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Choose answers, then check.</div>
+      </section>
+
+      <section class="panel">
+        <h2>Good answer direction</h2>
+        <p>"I model API responses separately from UI models. Unstable backend contracts should not leak into components. Components should render a clear domain model, not reinterpret raw data in every section."</p>
+      </section>
+    </main>
+    <script>
+      document.querySelector("#check").addEventListener("click", () => {
+        const selects = [...document.querySelectorAll("select[data-answer]")];
+        const correct = selects.filter((select) => select.value === select.dataset.answer).length;
+        const feedback = document.querySelector("#feedback");
+        feedback.className = "feedback " + (correct === selects.length ? "good" : "bad");
+        feedback.textContent = correct === selects.length
+          ? "Correct. This separation is the basis for predictable component architecture."
+          : `${correct} of ${selects.length} correct. Ask who owns freshness, business meaning, visual display, or temporary input.`;
+      });
+    </script>
+  </body>
+</html>

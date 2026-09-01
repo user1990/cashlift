@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AI Code Reading Reference</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+  <div class="eyebrow">Reference</div>
+  <h1>AI Code Reading Reference</h1>
+  <p class="callout">When AI writes code, your senior skill shifts from typing every line to reading, tracing, reviewing, testing, and directing the codebase shape.</p>
+  <h2>Short Summary</h2>
+  <p>AI can generate code quickly, but developers still need fundamentals to judge whether the code belongs, works, fails safely, and fits the system. The highest-leverage skill is reading generated code through control flow, data flow, error flow, state, side effects, modularity, and architecture.</p>
+  <h2>Key Points</h2>
+  <ul>
+    <li>Do not memorize every library method; understand what code does, why it belongs there, and what data it transforms.</li>
+    <li>Trace three flows first: control flow, data flow, and error flow.</li>
+    <li>Check scope, inputs, outputs, state ownership, and side effects before trusting generated code.</li>
+    <li>Review abstraction, modularity, and architecture because AI often solves locally while damaging long-term shape.</li>
+    <li>For web apps, verify the request/response cycle, HTTP semantics, and concurrency behavior under messy timing.</li>
+  </ul>
+  <h2>Remember</h2>
+  <ul>
+    <li>Clean-looking code can still have the wrong path through it.</li>
+    <li>Happy-path generation is not production readiness.</li>
+    <li>Agentic coding means directing placement, tradeoffs, tests, and failure behavior.</li>
+  </ul>
+  <h2>Use In Practice</h2>
+  <ol>
+    <li>For every AI-generated feature, draw the user action to API to database to UI data path.</li>
+    <li>Ask where it can fail, who sees the failure, and what evidence logs or tests prove the behavior.</li>
+    <li>Before merging, ask whether the logic is in the right layer or whether AI created duplicate, leaky, or unnecessary abstractions.</li>
+  </ol>
+  <h2>12-Part Review Checklist</h2>
+  <table>
+    <thead><tr><th>Concept</th><th>Staff-level question</th><th>Common AI failure</th></tr></thead>
+    <tbody>
+      <tr><td>Control flow</td><td>What runs first, what returns early, and what path is skipped?</td><td>Validation, cleanup, or auth runs after a return or in the wrong branch.</td></tr>
+      <tr><td>Data flow</td><td>Where does data enter, change shape, persist, and render?</td><td>DTO, API response, cache, and UI type disagree.</td></tr>
+      <tr><td>Error flow</td><td>What happens when a request, value, permission, or write fails?</td><td>Only the perfect happy path works.</td></tr>
+      <tr><td>Scope</td><td>Who can read or mutate this value?</td><td>State or variables leak across boundaries.</td></tr>
+      <tr><td>Input/output</td><td>What does this unit require and guarantee?</td><td>Function signatures lie or return inconsistent shapes.</td></tr>
+      <tr><td>State</td><td>Where does changing data live, and who owns updates?</td><td>Duplicated state drifts across UI, cache, server, and database.</td></tr>
+      <tr><td>Abstraction</td><td>Does this hide real complexity or hide important behavior?</td><td>AI creates helpers that make debugging harder.</td></tr>
+      <tr><td>Modularity</td><td>Does each file have one job and a clear dependency direction?</td><td>Business logic lands in UI components or route handlers.</td></tr>
+      <tr><td>Architecture</td><td>Does this fit the system map?</td><td>The feature works but violates the repo's established pattern.</td></tr>
+      <tr><td>Side effects</td><td>Is this pure calculation or does it change the world?</td><td>Writes, emails, cache invalidation, or analytics are mixed into logic.</td></tr>
+      <tr><td>Request/response</td><td>Are method, status, auth, validation, and response shape correct?</td><td>API semantics are plausible but wrong.</td></tr>
+      <tr><td>Concurrency</td><td>What breaks when two users, jobs, tabs, or retries happen together?</td><td>Race conditions, duplicate writes, stale UI, or stuck queues.</td></tr>
+    </tbody>
+  </table>
+  <h2>Primary Sources</h2>
+  <ul>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling">MDN: Control flow and error handling</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview">MDN: Overview of HTTP</a></li>
+    <li><a href="https://react.dev/learn/state-as-a-snapshot">React: State as a Snapshot</a></li>
+    <li><a href="https://google.github.io/eng-practices/review/reviewer/standard.html">Google Engineering Practices: Code Review Standard</a></li>
+  </ul>
+  <div class="nav"><a href="../lessons/index.html">Lessons index</a><a href="../lessons/0042-read-ai-generated-code-like-a-staff-engineer.html">Related lesson</a></div>
+</main>
+</body>
+</html>

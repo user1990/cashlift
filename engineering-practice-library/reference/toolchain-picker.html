@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Map software quality checks to established tools across common language ecosystems.">
+  <title>Reference · Toolchain picker</title>
+  <link rel="stylesheet" href="../assets/course.css"><script src="../assets/lesson.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="toolchain-picker.html#content">Skip to toolchains</a>
+  <div class="app-shell"><aside class="sidebar" aria-label="Reference navigation">
+    <a class="brand" href="../index.html"><span class="brand-mark">SF</span><span>Software Fundamentals</span></a><div class="nav-label">References</div>
+    <nav class="course-nav"><a href="../index.html"><span class="nav-number">⌂</span>Course</a><a href="quality-gauntlet.html"><span class="nav-number">→</span>Quality gauntlet</a><a href="crap-calculator.html"><span class="nav-number">ƒ</span>CRAP calculator</a><a href="glossary.html"><span class="nav-number">Aa</span>Glossary</a><a aria-current="page" href="toolchain-picker.html"><span class="nav-number">⚒</span>Toolchains</a></nav>
+  </aside>
+  <main class="main" id="content"><article class="lesson">
+    <div class="topbar"><a class="crumb" href="quality-gauntlet.html">← Quality gauntlet</a><button class="secondary-button" data-print type="button">Print reference</button></div>
+    <header class="lesson-header"><div class="eyebrow">Reference</div><h1>Toolchain picker</h1><p class="lede">Choose one established tool per needed signal. Inspect the repository first; replacing a working toolchain is not a prerequisite.</p></header>
+
+    <table class="comparison"><thead><tr><th>Signal</th><th>JS / TypeScript</th><th>JVM</th><th>.NET</th><th>Python</th></tr></thead><tbody>
+      <tr><td>Types / build</td><td><a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html">TypeScript</a></td><td><a href="https://docs.gradle.org/current/userguide/java_testing.html">Gradle</a></td><td><a href="https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-build">dotnet build</a></td><td><a href="https://mypy.readthedocs.io/">mypy</a> / <a href="https://docs.astral.sh/ty/">ty</a></td></tr>
+      <tr><td>Lint / static</td><td><a href="https://eslint.org/docs/latest/">ESLint</a></td><td><a href="https://checkstyle.org/">Checkstyle</a> / compiler</td><td><a href="https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/overview">Roslyn analyzers</a></td><td><a href="https://docs.astral.sh/ruff/">Ruff</a></td></tr>
+      <tr><td>Unit behavior</td><td><a href="https://vitest.dev/guide/">Vitest</a> / <a href="https://jestjs.io/docs/getting-started">Jest</a></td><td><a href="https://junit.org/junit5/docs/current/user-guide/">JUnit</a></td><td><a href="https://xunit.net/">xUnit.net</a></td><td><a href="https://docs.pytest.org/">pytest</a></td></tr>
+      <tr><td>Coverage</td><td><a href="https://vitest.dev/guide/coverage.html">Vitest coverage</a> / <a href="https://istanbul.js.org/">Istanbul</a></td><td><a href="https://www.jacoco.org/jacoco/trunk/doc/">JaCoCo</a></td><td><a href="https://github.com/coverlet-coverage/coverlet">Coverlet</a></td><td><a href="https://coverage.readthedocs.io/">coverage.py</a></td></tr>
+      <tr><td>Mutation</td><td><a href="https://stryker-mutator.io/docs/stryker-js/introduction/">StrykerJS</a></td><td><a href="https://pitest.org/">PIT</a></td><td><a href="https://stryker-mutator.io/docs/stryker-net/introduction/">Stryker.NET</a></td><td><a href="https://mutmut.readthedocs.io/">mutmut</a></td></tr>
+      <tr><td>Architecture</td><td><a href="https://github.com/sverweij/dependency-cruiser">dependency-cruiser</a></td><td><a href="https://www.archunit.org/">ArchUnit</a></td><td><a href="https://github.com/BenMorris/NetArchTest">NetArchTest</a></td><td><a href="https://import-linter.readthedocs.io/">Import Linter</a></td></tr>
+      <tr><td>Acceptance</td><td><a href="https://cucumber.io/docs/installation/javascript/">Cucumber.js</a></td><td><a href="https://cucumber.io/docs/installation/java/">Cucumber-JVM</a></td><td><a href="https://reqnroll.net/">Reqnroll</a></td><td><a href="https://behave.readthedocs.io/">behave</a></td></tr>
+    </tbody></table>
+
+    <h2>Selection rules</h2>
+    <ol>
+      <li><strong>Start with the defect.</strong> Name what current checks miss before adding a tool.</li>
+      <li><strong>Prefer repository conventions.</strong> Extend an existing runner before introducing a parallel ecosystem.</li>
+      <li><strong>Prove failure.</strong> Intentionally violate the rule and see the command fail.</li>
+      <li><strong>Keep the fast loop fast.</strong> Target changed files or packages; schedule broad mutation if necessary.</li>
+      <li><strong>Make output actionable.</strong> An agent should see the reason and likely repair, not merely a number.</li>
+      <li><strong>Ratchet baselines.</strong> Block new regressions before demanding a global clean slate.</li>
+    </ol>
+
+    <div class="callout warning"><h3>Tools are examples, not endorsements</h3><p>Availability, operators, counting rules, and maintenance status change. Read the linked official documentation and evaluate fit, licensing, runtime, and false-positive rate before adoption.</p></div>
+    <footer class="lesson-footer"><a href="glossary.html"><small>Previous reference</small>Course glossary</a><a class="next" href="../lessons/0007-adopt-the-quality-loop.html"><small>Put it into practice</small>Adoption lesson →</a></footer>
+  </article></main></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation"><a href="../index.html">Course</a><a href="quality-gauntlet.html">Gauntlet</a><a aria-current="page" href="toolchain-picker.html">Tools</a></nav>
+</body></html>

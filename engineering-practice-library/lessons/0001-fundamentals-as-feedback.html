@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Learn why AI-assisted development needs executable feedback, not prompt rules alone.">
+  <title>01 · Fundamentals as feedback</title>
+  <link rel="stylesheet" href="../assets/course.css"><script src="../assets/lesson.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="0001-fundamentals-as-feedback.html#content">Skip to lesson</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Course navigation">
+      <a class="brand" href="../index.html"><span class="brand-mark">SF</span><span>Software Fundamentals</span></a>
+      <div class="nav-label">Lesson 01</div>
+      <nav class="course-nav">
+        <a href="../index.html"><span class="nav-number">⌂</span>Overview</a>
+        <a aria-current="page" href="0001-fundamentals-as-feedback.html"><span class="nav-number">01</span>Feedback</a>
+        <a href="0002-clean-code-search-cost.html"><span class="nav-number">02</span>Clean code</a>
+        <a href="0003-tests-specify-behavior.html"><span class="nav-number">03</span>Tests</a>
+        <a href="0004-coverage-is-a-map.html"><span class="nav-number">04</span>Coverage</a>
+        <a href="0005-mutation-tests-the-tests.html"><span class="nav-number">05</span>Mutation</a>
+        <a href="0006-architecture-as-code.html"><span class="nav-number">06</span>Architecture</a>
+        <a href="0007-adopt-the-quality-loop.html"><span class="nav-number">07</span>Adoption</a>
+      </nav>
+    </aside>
+    <main class="main" id="content"><article class="lesson">
+      <div class="topbar"><a class="crumb" href="../index.html">← Course overview</a><span class="pill">10 minutes</span></div>
+      <header class="lesson-header">
+        <div class="eyebrow">Lesson 01 · Foundation</div>
+        <h1>Fundamentals are a feedback system</h1>
+        <p class="lede">AI changes who types the code. It does not change the need to detect when the code is wrong, tangled, or unsafe.</p>
+        <div class="lesson-meta"><span>Knowledge → judgment</span><span>One retrieval check</span><span>No setup required</span></div>
+      </header>
+
+      <section class="objective"><h2>Win for this lesson</h2><p>Given a development rule, you can place it in the right enforcement layer: prompt, executable check, or human decision.</p></section>
+
+      <p>An agent can produce a plausible implementation in minutes. That speed compresses the interval between decisions: good design compounds faster, but so does accidental complexity. The useful question is not “Can the agent write this?” It is “What feedback will reveal that the result is wrong?”</p>
+
+      <h2>Three enforcement layers</h2>
+      <div class="concept"><div class="concept-icon">P</div><div><h3>Prompt: direction</h3><p>Use prose for goals, local context, and preferences. It is flexible and cheap, but interpretation is probabilistic. A prompt can request “keep modules independent”; it cannot prove that they are.</p></div></div>
+      <div class="concept"><div class="concept-icon">✓</div><div><h3>Check: invariant</h3><p>Use tests, types, linters, dependency rules, and security policies for conditions with a machine-detectable pass or fail. The same input receives the same verdict.</p></div></div>
+      <div class="concept"><div class="concept-icon">H</div><div><h3>Human: strategy</h3><p>Keep product intent, tradeoffs, architecture choices, risk acceptance, and taste with a responsible person. These require context and judgment, not merely consistency.</p></div></div>
+
+      <table class="comparison">
+        <thead><tr><th>Statement</th><th>Best home</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>“Prefer clear names.”</td><td>Prompt + review</td><td>Meaning and taste are contextual.</td></tr>
+          <tr><td>“Domain must not import UI.”</td><td>Dependency check</td><td>The import graph is mechanically inspectable.</td></tr>
+          <tr><td>“Refunds require manager approval.”</td><td>Behavior test + human policy</td><td>The rule is testable; the policy choice is strategic.</td></tr>
+          <tr><td>“Never expose a secret.”</td><td>Multiple controls</td><td>High impact requires prevention, scanning, permissions, and review.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout warning"><h3>Do not overread “lost in the middle”</h3><p>The cited research found positional degradation on specific long-context retrieval and question-answering tasks. It supports keeping context relevant and checks external. It does <strong>not</strong> prove that every long prompt is ignored or that repository instructions are useless.</p></div>
+
+      <h2>The smallest useful agent loop</h2>
+      <div class="flow" aria-label="Agent quality loop">
+        <div class="flow-step"><span class="number">01</span><strong>Intent</strong><span>Define one observable outcome.</span></div>
+        <div class="flow-step"><span class="number">02</span><strong>Implement</strong><span>Let the agent inspect and change.</span></div>
+        <div class="flow-step"><span class="number">03</span><strong>Verify</strong><span>Run deterministic checks.</span></div>
+        <div class="flow-step"><span class="number">04</span><strong>Judge</strong><span>Human reviews outcome and risk.</span></div>
+      </div>
+      <p>The loop matters more than the number of agents. One agent with a clear target and fast checks is a better starting point than a five-role pipeline with vague acceptance criteria.</p>
+
+      <section class="quiz" data-quiz data-answer="check">
+        <h3>Retrieval check</h3>
+        <fieldset><legend>An API must always emit a required version header. Where is the strongest primary enforcement?</legend>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q1" value="prompt" data-feedback="A reminder helps, but it cannot prove every response path complies.">Repeat prompt guidance</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="check" data-feedback="Correct. An integration or contract test can inspect every relevant response deterministically.">Add executable check</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="context" data-feedback="More context increases material to process; it does not create enforcement.">Request longer context</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="trust" data-feedback="Judgment is useful, but a required protocol invariant belongs in an automated check.">Trust agent judgment</label>
+          </div>
+        </fieldset>
+        <button class="secondary-button" type="button">Check answer</button><p class="feedback" aria-live="polite"></p>
+      </section>
+
+      <section class="exercise reflection"><h2>Make it yours</h2><p>Write one rule from a codebase you care about. Then label it <strong>prompt</strong>, <strong>check</strong>, or <strong>human</strong>. If it needs more than one layer, say why.</p><textarea data-note-key="lesson-0001-rule" aria-label="Your enforcement rule" placeholder="Rule: …&#10;Layer: …&#10;Reason: …"></textarea></section>
+
+      <section class="source-card"><span class="source-type">Primary research</span><h3><a href="https://arxiv.org/abs/2307.03172">Lost in the Middle: How Language Models Use Long Contexts</a></h3><p>Read the abstract, Figure 1, and limitations. Notice that the evidence is about position-sensitive use of context, not a universal law that agents ignore long instructions.</p></section>
+
+      <div class="callout info"><h3>Ask your teacher</h3><p>Send me your rule and classification. I can challenge the boundary and help convert it into a concrete check.</p></div>
+      <button class="mark-complete" data-lesson="0001" aria-pressed="false" type="button">Mark lesson complete</button>
+      <footer class="lesson-footer"><a href="../index.html"><small>Back</small>Course map</a><a class="next" href="0002-clean-code-search-cost.html"><small>Next lesson</small>Clean code lowers search cost →</a></footer>
+    </article></main>
+  </div>
+  <nav class="mobile-nav" aria-label="Mobile navigation"><a href="../index.html">Course</a><a aria-current="page" href="0001-fundamentals-as-feedback.html">Lesson 01</a><a href="../reference/quality-gauntlet.html">Reference</a></nav>
+</body></html>

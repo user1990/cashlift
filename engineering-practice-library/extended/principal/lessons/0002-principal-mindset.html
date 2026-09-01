@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lesson 0002: Principal Mindset</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">Lesson 0002</div>
+        <h1>Principal mindset: defaults across teams</h1>
+        <p class="lede">A Principal Frontend Engineer does not win by owning every decision. They make important decisions easier, visible, and repeatable.</p>
+      </header>
+
+      <nav class="small"><a href="index.html">Sprint index</a></nav>
+
+      <section class="panel rule">
+        <h2>The useful distinction</h2>
+        <p>Senior engineers often solve hard problems inside one team. Principal engineers reduce repeated problem-solving across teams by shaping defaults: data fetching, error states, feature boundaries, analytics, accessibility, performance budgets, and review standards.</p>
+        <p class="small">Primary source: <a href="https://react.dev/learn/thinking-in-react">React: Thinking in React</a>. Use it as a small model for decomposing UI and state before scaling that thinking to teams.</p>
+      </section>
+
+      <section>
+        <h2>Example</h2>
+        <p>Three teams show API errors differently: one toast, one blank screen, one raw backend message. The Principal move is not "build a shared toast." The better move is a standard error contract, reusable <code>ErrorState</code>, logging convention, and migration path for important routes.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Practice</h2>
+        <p>Write three frontend defaults that would help Report, Checkout, and CMS/Marketing teams without removing their autonomy.</p>
+        <textarea id="answer" aria-label="Write three defaults" placeholder="1.&#10;2.&#10;3."></textarea>
+        <button id="check" type="button">Check direction</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Write first, then check.</div>
+      </section>
+
+      <section class="panel">
+        <h2>Good answer direction</h2>
+        <p>"I would standardize decision boundaries before standardizing every component: data fetching, error states, form validation, analytics, accessibility, and shared UI ownership. Teams stay autonomous in feature logic, but they stop reinventing base patterns for the same recurring problems."</p>
+        <p class="small">Ask me to review your three defaults and I will turn them into interview-ready language.</p>
+      </section>
+    </main>
+    <script>
+      const answer = document.querySelector("#answer");
+      const feedback = document.querySelector("#feedback");
+      document.querySelector("#check").addEventListener("click", () => {
+        const lines = answer.value.split("\n").filter((line) => line.trim().length > 8);
+        feedback.className = "feedback " + (lines.length >= 3 ? "good" : "bad");
+        feedback.textContent = lines.length >= 3
+          ? "Good. Now make each default testable: owner, rule, example, rollout path."
+          : "Add at least three concrete defaults. Avoid vague words like quality or consistency by themselves.";
+      });
+    </script>
+  </body>
+</html>

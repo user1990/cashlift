@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 1 · State before change</title>
+  <link rel="stylesheet" href="../assets/course.css">
+<link rel="stylesheet" href="../assets/extended-course.css"><link rel="stylesheet" href="../assets/practice-reference.css"></head>
+<body>
+<main>
+  <p class="eyebrow">Prompting field guide · lesson 01</p>
+  <h1>State before change.</h1>
+  <p class="lede">The first reliable prompt does not ask for code. It asks the agent to prove which reality it is about to mutate.</p>
+
+  <section class="card accent">
+    <h2>The one-sentence rule</h2>
+    <p><strong>No mutation before the agent proves which state it is mutating.</strong></p>
+    <p>That means checkout, branch, commit, dirty files, runtime, dependency state, route or command, and baseline behavior. A correct fix in the wrong checkout is still a failure.</p>
+  </section>
+
+  <section class="card quiz" aria-labelledby="recall-heading">
+    <h2 id="recall-heading">Retrieve before reading on</h2>
+    <p>Which prompt opening creates the strongest safety gate?</p>
+    <button type="button" data-answer="correct">Inspect state</button>
+    <button type="button" data-answer="wrong">Edit immediately</button>
+    <button type="button" data-answer="wrong">Ask vaguely</button>
+    <p class="feedback" role="status" aria-live="polite"></p>
+  </section>
+
+  <section>
+    <h2>Bad → better</h2>
+    <div class="card bad"><p><strong>Bad:</strong></p><pre><code>Give live preview on latest master.</code></pre><p>Why it fails: “latest” and “live” are ambiguous. The agent can use a stale branch, a dirty checkout, or a server from another directory.</p></div>
+    <div class="card good"><p><strong>Better:</strong></p><pre><code>Before editing, report:
+
+1. Current directory, branch, commit, and dirty files.
+2. Whether this is the intended checkout.
+3. Runtime and package-manager versions.
+4. The exact route or command used for the baseline.
+5. Any existing implementation of the behavior.
+
+Do not edit until the baseline is confirmed. If the checkout is stale, dirty in a conflicting way, or different from the requested branch, stop and explain the mismatch.</code></pre></div>
+  </section>
+
+  <section class="card">
+    <h2>Copy/paste gate</h2>
+    <pre><code>STATE GATE
+
+Before making any change:
+
+- inspect the current checkout and branch
+- inspect dirty/untracked files
+- inspect the current commit
+- verify runtime and dependency state
+- reproduce the current behavior
+- identify the exact files and route involved
+
+Return a short baseline report first. Do not edit until the state is confirmed.</code></pre>
+  </section>
+
+  <section class="card">
+    <h2>Apply it to the Spotify-like practice domain</h2>
+    <p>Before asking an agent to “make the sidebar feel like Spotify,” make it identify the target checkout, route, viewport, existing layout, and current screenshot. Then define the visual baseline: <code>#121212</code> base, <code>#181818</code> surface, <code>#1ed760</code> functional accent, dense 8px spacing, and the current sidebar/mobile behavior.</p>
+    <p>That turns taste into an observable starting state. Read the complete [agent prompting playbook](../reference/01-agent-prompting-playbook.html) and [Spotify-like design system](../reference/02-spotify-design-system.html) before the next lesson.</p>
+  </section>
+
+  <section class="card">
+    <h2>Two-minute practice</h2>
+    <p>Rewrite one real request you might send to an agent. Include the state gate, the intended route or surface, and the baseline evidence you expect back.</p>
+    <textarea aria-label="Your rewritten state-gated prompt" placeholder="STATE GATE\n\nBefore editing...\n\nBaseline evidence..."></textarea>
+  </section>
+
+  <footer>
+    <p>Primary reading: <a href="https://git-scm.com/docs/git-worktree">Git worktree documentation</a> and <a href="https://help.openai.com/en/articles/4936848-how-do-i-create-a-good-prompt">OpenAI’s prompt-writing guide</a>. Ask your teacher a follow-up question if any part of the gate feels too strict or unclear.</p>
+    <p>Next: diagnose before prescribe · <a href="../CURRICULUM.md">course map</a></p>
+  </footer>
+</main>
+<script>
+  document.querySelectorAll('[data-answer]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const feedback = document.querySelector('.feedback');
+      feedback.textContent = button.dataset.answer === 'correct'
+        ? 'Correct: establish the real working state before mutation.'
+        : 'Not yet: first prove the state, then decide whether mutation is safe.';
+    });
+  });
+</script>
+<script src="../assets/practice-reference.js"></script>
+</body>
+</html>

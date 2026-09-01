@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>C22: WebGL / WebGPU: GPU-backed rendering</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">C22</div>
+        <h1>WebGL / WebGPU: GPU-backed rendering</h1>
+        <p class="lede">GPU APIs are useful when the UI is graphics-bound, not just because the result looks advanced.</p>
+      </header>
+      <nav class="small"><a href="index.html">Sprint index</a></nav>
+      <section class="panel rule">
+        <h2>The rule</h2>
+        <p>Reach for WebGL/WebGPU when canvas/SVG/DOM cannot meet rendering volume, frame rate, or visual requirements.</p>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <p>A dense damage heatmap or 3D vehicle view may justify GPU rendering; ordinary dashboards usually do not.</p>
+      </section>
+      <section class="panel">
+        <h2>Practice</h2>
+        <p>Choose one visual. Decide DOM, SVG, Canvas, WebGL, or WebGPU and explain the tradeoff.</p>
+        <textarea id="answer" aria-label="Practice answer" placeholder="Write your answer here."></textarea>
+        <button id="check" type="button">Check direction</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Write a concrete answer, then check.</div>
+      </section>
+      <section class="panel">
+        <h2>Good answer direction</h2>
+        <p>Strong answer: I choose the rendering technology by data volume, interaction needs, accessibility impact, and fallback cost.</p>
+      </section>
+      <section>
+        <h2>Primary sources</h2>
+        <ul>
+          <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API">MDN: WebGL API</a></li>
+          <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API">MDN: WebGPU API</a></li>
+        </ul>
+        <p class="small">Ask me follow-up questions about anything unclear; I can turn your answer into an interview-ready version.</p>
+      </section>
+    </main>
+    <script>
+      const answer = document.querySelector("#answer");
+      const feedback = document.querySelector("#feedback");
+      document.querySelector("#check").addEventListener("click", () => {
+        const words = answer.value.trim().split(/\s+/).filter(Boolean).length;
+        feedback.className = "feedback " + (words >= 20 ? "good" : "bad");
+        feedback.textContent = words >= 20
+          ? "Good start. Now make it sharper: name the tradeoff, owner, risk, and verification step."
+          : "Make it more concrete. Aim for at least 20 words with a tradeoff and an example.";
+      });
+    </script>
+  </body>
+</html>

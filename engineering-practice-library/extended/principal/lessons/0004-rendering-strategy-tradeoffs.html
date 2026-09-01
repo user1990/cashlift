@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lesson 0004: Rendering Strategy Tradeoffs</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">Lesson 0004</div>
+        <h1>Rendering strategy: route-level tradeoffs</h1>
+        <p class="lede">Do not pick SSR, SSG, ISR, or client rendering globally. Pick per route and per interaction.</p>
+      </header>
+
+      <nav class="small"><a href="index.html">Sprint index</a></nav>
+
+      <section class="panel rule">
+        <h2>The decision frame</h2>
+        <p>Choose rendering by asking five questions: does it need SEO, personalization, fresh data, instant trust signal, or heavy interaction? The answer often changes inside the same product.</p>
+        <p class="small">Primary sources: <a href="https://nextjs.org/docs/app">Next.js App Router</a>, <a href="https://nextjs.org/docs/app/getting-started/server-and-client-components">Next.js Server and Client Components</a>.</p>
+      </section>
+
+      <section>
+        <h2>Example</h2>
+        <p>A vehicle report is authenticated and trust-critical. The report shell can be server-rendered with auth and cache rules. Expandable sections, filters, and charts can be client components. Marketing pages can be static or incrementally regenerated.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Practice</h2>
+        <p>Choose a likely default for each route.</p>
+        <div class="choice-row"><span>Public pricing page</span><select data-answer="static"><option></option><option>static</option><option>server</option><option>client</option></select></div>
+        <div class="choice-row"><span>Authenticated report shell</span><select data-answer="server"><option></option><option>static</option><option>server</option><option>client</option></select></div>
+        <div class="choice-row"><span>Interactive chart controls</span><select data-answer="client"><option></option><option>static</option><option>server</option><option>client</option></select></div>
+        <button id="check" type="button">Check answers</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Choose answers, then check.</div>
+      </section>
+
+      <section class="panel">
+        <h2>Good answer direction</h2>
+        <p>"I would not use one rendering strategy for the whole product. Marketing pages optimize for SEO and cache. Authenticated reports optimize for data correctness, fast meaningful content, and clear loading/error boundaries."</p>
+      </section>
+    </main>
+    <script>
+      document.querySelector("#check").addEventListener("click", () => {
+        const selects = [...document.querySelectorAll("select[data-answer]")];
+        const correct = selects.filter((select) => select.value === select.dataset.answer).length;
+        const feedback = document.querySelector("#feedback");
+        feedback.className = "feedback " + (correct === selects.length ? "good" : "bad");
+        feedback.textContent = correct === selects.length
+          ? "Correct. The route and interaction carry the tradeoff."
+          : `${correct} of ${selects.length} correct. Re-check SEO, personalization, freshness, and interaction weight.`;
+      });
+    </script>
+  </body>
+</html>

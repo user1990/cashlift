@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lesson 0001: Keyboard-First Accessibility</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">Lesson 0001</div>
+        <h1>Keyboard-first accessibility</h1>
+        <p class="lede">Principal-level frontend work starts with one habit: before adding ARIA or polish, prove that the interface works from the keyboard.</p>
+      </header>
+
+      <nav class="small" aria-label="Lesson links">
+        <a href="../reference/accessibility-keyboard-first.html">Reference sheet</a>
+      </nav>
+
+      <section class="panel rule">
+        <h2>The one decision</h2>
+        <p>If a native HTML element gives you the behavior and semantics you need, use it. MDN says native elements bring built-in keyboard accessibility, roles, and states; W3C's ARIA guidance says authors must provide keyboard behavior when they create ARIA widgets themselves.</p>
+        <p class="small">Primary sources: <a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">MDN ARIA</a>, <a href="https://www.w3.org/TR/using-aria/">W3C Using ARIA</a>, <a href="https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/">W3C APG Keyboard Interface</a>.</p>
+      </section>
+
+      <section>
+        <h2>Why this matters</h2>
+        <div class="grid two">
+          <article class="panel">
+            <h3>Keyboard users need a path</h3>
+            <p>W3C APG frames keyboard UX around visible focus, predictable focus movement, Tab order between components, and expected movement inside composite widgets.</p>
+          </article>
+          <article class="panel">
+            <h3>Focus is state</h3>
+            <p>WCAG Focus Visible requires a visible keyboard focus indicator. If the user cannot see where focus is, they cannot reliably operate the page.</p>
+          </article>
+          <article class="panel">
+            <h3>ARIA is not behavior</h3>
+            <p>ARIA can describe meaning to assistive technology. It does not automatically add Enter, Space, Escape, arrow-key handling, or focus restoration.</p>
+          </article>
+          <article class="panel">
+            <h3>Contrast is not optional</h3>
+            <p>WCAG Contrast Minimum sets 4.5:1 for normal text and 3:1 for large text. Thin fonts and subtle colors can pass numerically but still read poorly.</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2>Interview answer pattern</h2>
+        <p>When asked about accessibility, answer like this:</p>
+        <ol>
+          <li>Start with semantic HTML.</li>
+          <li>Test keyboard path before mouse polish.</li>
+          <li>Keep focus visible and predictable.</li>
+          <li>Add ARIA only for missing semantics.</li>
+          <li>Verify with real browser behavior, then assistive tech when risk is high.</li>
+        </ol>
+      </section>
+
+      <section class="panel">
+        <h2>Practice: native or custom?</h2>
+        <p>For each snippet, choose whether the safer Principal-level default is <strong>native</strong> or <strong>custom</strong>. The answer labels are intentionally equal length.</p>
+
+        <div class="choice-row">
+          <div>
+            <strong>1.</strong>
+            <code>&lt;div role="button" tabindex="0"&gt;Save&lt;/div&gt;</code>
+          </div>
+          <label>
+            <span class="small">Choice</span>
+            <select data-answer="native">
+              <option value="">Select</option>
+              <option value="native">native</option>
+              <option value="custom">custom</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="choice-row">
+          <div>
+            <strong>2.</strong>
+            <code>&lt;button type="button"&gt;Save&lt;/button&gt;</code>
+          </div>
+          <label>
+            <span class="small">Choice</span>
+            <select data-answer="native">
+              <option value="">Select</option>
+              <option value="native">native</option>
+              <option value="custom">custom</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="choice-row">
+          <div>
+            <strong>3.</strong>
+            <code>&lt;ul role="listbox"&gt;...arrow-key behavior...&lt;/ul&gt;</code>
+          </div>
+          <label>
+            <span class="small">Choice</span>
+            <select data-answer="custom">
+              <option value="">Select</option>
+              <option value="native">native</option>
+              <option value="custom">custom</option>
+            </select>
+          </label>
+        </div>
+
+        <button id="check" type="button">Check answers</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Choose answers, then check.</div>
+      </section>
+
+      <section>
+        <h2>Small real-world task</h2>
+        <p>Open any app screen you use. Press Tab from the browser address bar until you reach the main action. Write down the first place where focus disappears, jumps unpredictably, or lands somewhere useless. That is the bug report.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Primary source to read</h2>
+        <p>Read W3C APG's <a href="https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/">Developing a Keyboard Interface</a>. Focus only on the introduction, visible focus, tab sequence, and movement inside components.</p>
+        <p class="small">Ask me follow-up questions about any part that feels unclear. I can turn your bug report into the next lesson.</p>
+      </section>
+    </main>
+
+    <script>
+      const button = document.querySelector("#check");
+      const feedback = document.querySelector("#feedback");
+
+      button.addEventListener("click", () => {
+        const selects = [...document.querySelectorAll("select[data-answer]")];
+        const unanswered = selects.filter((select) => !select.value).length;
+        const correct = selects.filter((select) => select.value === select.dataset.answer).length;
+
+        feedback.className = "feedback";
+
+        if (unanswered > 0) {
+          feedback.classList.add("bad");
+          feedback.textContent = "Finish every choice first. Retrieval works best when you commit.";
+          return;
+        }
+
+        if (correct === selects.length) {
+          feedback.classList.add("good");
+          feedback.textContent = "Correct. The key idea: prefer native controls, and only go custom when the interaction genuinely needs it.";
+          return;
+        }
+
+        feedback.classList.add("bad");
+        feedback.textContent = `${correct} of ${selects.length} correct. Re-check whether the browser already gives you the semantics and keyboard behavior.`;
+      });
+    </script>
+  </body>
+</html>

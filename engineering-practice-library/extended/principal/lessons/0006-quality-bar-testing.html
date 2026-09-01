@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lesson 0006: Quality Bar Testing</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">Lesson 0006</div>
+        <h1>Quality bar: testing and review boundaries</h1>
+        <p class="lede">A useful quality bar prevents recurring mistakes without becoming a bureaucratic wall.</p>
+      </header>
+
+      <nav class="small"><a href="index.html">Sprint index</a></nav>
+
+      <section class="panel rule">
+        <h2>Test by responsibility</h2>
+        <p>Unit tests protect domain rules. Integration tests protect user-visible component behavior. End-to-end tests protect critical business flows. Do not use expensive e2e tests as a replacement for cheaper focused tests.</p>
+        <p class="small">Primary sources: <a href="https://testing-library.com/docs/guiding-principles">Testing Library Guiding Principles</a>, <a href="https://playwright.dev/docs/intro">Playwright Docs</a>.</p>
+      </section>
+
+      <section>
+        <h2>Example</h2>
+        <p>Checkout flow: unit test price calculation, integration test promo code and validation messages, e2e test the happy path from report selection to payment confirmation.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Practice</h2>
+        <p>Classify the best test level.</p>
+        <div class="choice-row"><span>Price calculation rule</span><select data-answer="unit"><option></option><option>unit</option><option>integ</option><option>e2e</option></select></div>
+        <div class="choice-row"><span>Promo validation message</span><select data-answer="integ"><option></option><option>unit</option><option>integ</option><option>e2e</option></select></div>
+        <div class="choice-row"><span>Purchase confirmation path</span><select data-answer="e2e"><option></option><option>unit</option><option>integ</option><option>e2e</option></select></div>
+        <button id="check" type="button">Check answers</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Choose answers, then check.</div>
+      </section>
+
+      <section class="panel">
+        <h2>Good answer direction</h2>
+        <p>"E2E should cover critical user flows, integration tests should verify behavior, and domain rules should stay cheap to test in isolation. The quality bar should be fast enough that teams actually use it."</p>
+      </section>
+    </main>
+    <script>
+      document.querySelector("#check").addEventListener("click", () => {
+        const selects = [...document.querySelectorAll("select[data-answer]")];
+        const correct = selects.filter((select) => select.value === select.dataset.answer).length;
+        const feedback = document.querySelector("#feedback");
+        feedback.className = "feedback " + (correct === selects.length ? "good" : "bad");
+        feedback.textContent = correct === selects.length
+          ? "Correct. Match the test cost to the responsibility."
+          : `${correct} of ${selects.length} correct. Push business-critical journeys upward, pure rules downward.`;
+      });
+    </script>
+  </body>
+</html>

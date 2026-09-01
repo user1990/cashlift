@@ -1,0 +1,27 @@
+.filter-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 18px; padding: 20px; }
+.filter-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.filter-chip { padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--panel-raised); cursor: pointer; font-size: 12px; font-weight: 800; }
+.filter-chip[aria-pressed="true"] { color: #071109; border-color: var(--accent); background: var(--accent); }
+.filter-search { display: grid; gap: 7px; min-width: min(100%, 280px); color: var(--muted); font-size: 12px; font-weight: 800; }
+.filter-search input { width: 100%; padding: 11px 13px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: var(--panel-raised); }
+.filter-status { margin: 0; padding: 0 20px 18px; color: var(--muted); font-size: 13px; }
+.filter-empty { margin: 12px 0; padding: 18px; border: 1px dashed var(--line); border-radius: 12px; color: var(--muted); }
+details.card { padding: 0; overflow: hidden; }
+details.card summary, details.rule-item summary { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 18px 20px; cursor: pointer; list-style-position: inside; }
+details.card summary span, details.rule-item summary span { font-weight: 800; }
+details.card summary small, details.rule-item summary small { color: var(--muted); font-size: 12px; text-align: right; }
+.accordion-body, .rule-body { padding: 0 20px 20px; }
+.accordion-body p, .rule-body p { color: var(--muted); }
+.summary-title { display: inline-flex; align-items: center; gap: 10px; }
+.topic-icon { display: inline-grid; width: 28px; height: 28px; flex: 0 0 28px; place-items: center; border: 1px solid rgba(30,215,96,.45); border-radius: 9px; color: var(--accent); background: var(--accent-soft); font-size: 15px; line-height: 1; }
+.example-block { margin: 0 0 18px; }
+.example-label { display: inline-flex; margin: 0 0 7px; padding: 5px 9px; border-radius: 999px; font-size: 10px; font-weight: 900; letter-spacing: .12em; line-height: 1; }
+.bad-example-label { color: #ffd9dd; background: #61212b; }
+.good-prompt-label { color: #d8ffe5; background: #145d31; }
+.bad-example pre { margin-top: 0; border-color: rgba(243,114,127,.45); background: #1e1013; }
+.good-prompt { border-color: rgba(30,215,96,.38); }
+pre { position: relative; overflow: auto; }
+.copy-example { float: right; margin: 0 0 8px 12px; padding: 6px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--panel-raised); cursor: pointer; font-size: 11px; font-weight: 800; }
+.copy-example:hover { color: var(--ink); border-color: var(--accent); }
+footer { margin-top: 54px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); }
+@media (max-width: 760px) { .filter-toolbar { align-items: stretch; flex-direction: column; } details.card summary, details.rule-item summary { align-items: flex-start; flex-direction: column; gap: 6px; } details.card summary small, details.rule-item summary small { text-align: left; } }

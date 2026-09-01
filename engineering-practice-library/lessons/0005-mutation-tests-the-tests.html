@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Use mutation testing to evaluate whether tests detect meaningful behavioral changes.">
+  <title>05 · Mutation tests the tests</title>
+  <link rel="stylesheet" href="../assets/course.css"><script src="../assets/lesson.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="0005-mutation-tests-the-tests.html#content">Skip to lesson</a>
+  <div class="app-shell"><aside class="sidebar" aria-label="Course navigation">
+    <a class="brand" href="../index.html"><span class="brand-mark">SF</span><span>Software Fundamentals</span></a><div class="nav-label">Lesson 05</div>
+    <nav class="course-nav"><a href="../index.html"><span class="nav-number">⌂</span>Overview</a><a href="0001-fundamentals-as-feedback.html"><span class="nav-number">01</span>Feedback</a><a href="0002-clean-code-search-cost.html"><span class="nav-number">02</span>Clean code</a><a href="0003-tests-specify-behavior.html"><span class="nav-number">03</span>Tests</a><a href="0004-coverage-is-a-map.html"><span class="nav-number">04</span>Coverage</a><a aria-current="page" href="0005-mutation-tests-the-tests.html"><span class="nav-number">05</span>Mutation</a><a href="0006-architecture-as-code.html"><span class="nav-number">06</span>Architecture</a><a href="0007-adopt-the-quality-loop.html"><span class="nav-number">07</span>Adoption</a></nav>
+  </aside>
+  <main class="main" id="content"><article class="lesson">
+    <div class="topbar"><a class="crumb" href="0004-coverage-is-a-map.html">← Lesson 04</a><span class="pill">14 minutes</span></div>
+    <header class="lesson-header"><div class="eyebrow">Lesson 05 · Test strength</div><h1>Mutation testing tests the tests</h1><p class="lede">Coverage asks whether code ran. Mutation asks whether a small, deliberate mistake would be noticed.</p><div class="lesson-meta"><span>Mutants</span><span>Test oracles</span><span>Survivor triage</span></div></header>
+    <section class="objective"><h2>Win for this lesson</h2><p>You can interpret a surviving mutant, write a test that distinguishes the changed behavior, or classify the mutant with an explicit reason.</p></section>
+
+    <h2>The mutation loop</h2>
+    <div class="flow"><div class="flow-step"><span class="number">01</span><strong>Change</strong><span>Tool inserts one small fault.</span></div><div class="flow-step"><span class="number">02</span><strong>Run</strong><span>Relevant tests execute.</span></div><div class="flow-step"><span class="number">03</span><strong>Observe</strong><span>Failure kills; success survives.</span></div><div class="flow-step"><span class="number">04</span><strong>Triage</strong><span>Test, refactor, classify, or ignore.</span></div></div>
+
+    <p class="code-label">Production rule</p><pre><code>function canEnter(age: number) {
+  return age &gt;= 18;
+}</code></pre>
+    <p class="code-label">Existing test</p><pre><code>expect(canEnter(21)).toBe(true);</code></pre>
+    <p>A mutator changes <code>&gt;=</code> to <code>&gt;</code>. The test still passes, so the mutant survives. The suite has not specified what happens at exactly 18.</p>
+    <p class="code-label">Behavioral distinction</p><pre><code>expect(canEnter(18)).toBe(true); // kills the boundary mutant
+expect(canEnter(17)).toBe(false);</code></pre>
+
+    <h2>A survivor is a question, not a command</h2>
+    <table class="comparison"><thead><tr><th>Cause</th><th>Response</th></tr></thead><tbody>
+      <tr><td>Missing boundary or outcome assertion</td><td>Add the smallest test that names the distinction.</td></tr>
+      <tr><td>Dead or unreachable code</td><td>Delete or simplify the production code.</td></tr>
+      <tr><td>Equivalent behavior</td><td>Classify it; no possible test can distinguish it.</td></tr>
+      <tr><td>Low-value logging or defensive path</td><td>Document a scoped exception with owner and review point.</td></tr>
+      <tr><td>Brittle implementation-coupled test needed</td><td>Reconsider the interface before adding the test.</td></tr>
+    </tbody></table>
+
+    <div class="callout warning"><h3>“Kill every mutant” is unsafe as an absolute</h3><p>Equivalent and redundant mutants exist. A 100% mutation score can reward noisy or implementation-coupled tests. The stronger policy is: <strong>every relevant survivor is killed or classified with a reason</strong>, and the baseline never silently regresses.</p></div>
+
+    <h2>Put mutation in the right loop</h2>
+    <ul>
+      <li><strong>While coding:</strong> mutate one changed file or package.</li>
+      <li><strong>On pull request:</strong> mutate changed code; fail only on meaningful regression.</li>
+      <li><strong>Scheduled:</strong> run the broader suite when cost is too high for every change.</li>
+      <li><strong>Human checkpoint:</strong> review survivors that imply a missing requirement or questionable oracle.</li>
+    </ul>
+    <p>An agent is excellent at the repetitive loop of locating a survivor and proposing a focused test. A human should still reject tests that merely mirror the implementation.</p>
+
+    <section class="quiz" data-quiz data-answer="boundary"><h3>Retrieval check</h3><fieldset><legend>The <code>&gt;=</code> to <code>&gt;</code> mutant survives for an age rule. What response adds the most evidence?</legend><div class="quiz-options">
+      <label class="quiz-option"><input type="radio" name="q5" value="boundary" data-feedback="Correct. A test at the decision boundary distinguishes the required behaviors.">Add a boundary test</label>
+      <label class="quiz-option"><input type="radio" name="q5" value="coverage" data-feedback="The mutated line already ran; more line coverage may not strengthen the oracle.">Increase line coverage target</label>
+      <label class="quiz-option"><input type="radio" name="q5" value="ignore" data-feedback="Some survivors deserve classification, but ignoring all of them discards the signal.">Ignore every surviving mutant</label>
+      <label class="quiz-option"><input type="radio" name="q5" value="rewrite" data-feedback="A full rewrite is disproportionate before the missing distinction is understood.">Rewrite entire module now</label>
+    </div></fieldset><button class="secondary-button" type="button">Check answer</button><p class="feedback" aria-live="polite"></p></section>
+
+    <section class="exercise reflection"><h2>Survivor triage</h2><p>Pick one conditional from a real project. Imagine the operator flipped. What test would fail? If none, is the test missing, the code unnecessary, or the mutant equivalent?</p><textarea data-note-key="lesson-0005-mutant" aria-label="Your mutant triage" placeholder="Original: …&#10;Mutation: …&#10;Expected failing test: …&#10;If none, classification: …"></textarea></section>
+
+    <section class="source-card"><span class="source-type">Official tool documentation</span><h3><a href="https://pitest.org/quickstart/basic_concepts/">PIT · Basic Concepts</a> and <a href="https://stryker-mutator.io/docs/">Stryker · Mutation Testing</a></h3><p>Use the tool that matches your stack. Read the operator list and test-selection model before choosing thresholds; mutation tools do not all generate the same mutants.</p></section>
+    <div class="callout info"><h3>Ask your teacher</h3><p>Paste one surviving mutant report. I can help decide whether it reveals missing behavior, disposable code, or a justified exception.</p></div>
+    <button class="mark-complete" data-lesson="0005" aria-pressed="false" type="button">Mark lesson complete</button>
+    <footer class="lesson-footer"><a href="0004-coverage-is-a-map.html"><small>Previous</small>Coverage is a map</a><a class="next" href="0006-architecture-as-code.html"><small>Next lesson</small>Architecture as code →</a></footer>
+  </article></main></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation"><a href="../index.html">Course</a><a aria-current="page" href="0005-mutation-tests-the-tests.html">Lesson 05</a><a href="../reference/toolchain-picker.html">Tools</a></nav>
+</body></html>

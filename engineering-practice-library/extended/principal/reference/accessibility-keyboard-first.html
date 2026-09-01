@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Keyboard-First Accessibility Reference</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">Reference</div>
+        <h1>Keyboard-First Accessibility</h1>
+        <p class="lede">A quick review sheet for code review and interview answers.</p>
+      </header>
+
+      <section class="grid two">
+        <article class="panel">
+          <h2>Default rule</h2>
+          <p>Prefer native HTML controls. Native controls bring semantics, keyboard behavior, focus behavior, and platform compatibility before you write JavaScript.</p>
+        </article>
+
+        <article class="panel">
+          <h2>ARIA rule</h2>
+          <p>ARIA can add missing semantics, but it does not add the expected behavior. If you create a custom control, you own keyboard interaction and state updates.</p>
+        </article>
+      </section>
+
+      <section>
+        <h2>Review checklist</h2>
+        <ol>
+          <li>Can every clickable action be reached with Tab or an expected arrow-key pattern?</li>
+          <li>Is focus visible and easy to find?</li>
+          <li>Does focus move predictably after opening, closing, deleting, or navigating?</li>
+          <li>Is DOM order aligned with visual and screen-reader reading order?</li>
+          <li>Can native HTML replace a custom ARIA widget?</li>
+          <li>Does text meet at least 4.5:1 contrast for normal body text?</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>Useful sources</h2>
+        <ul>
+          <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">MDN Accessibility</a></li>
+          <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">MDN ARIA</a></li>
+          <li><a href="https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/">W3C APG Keyboard Interface</a></li>
+          <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html">WCAG Focus Visible</a></li>
+          <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html">WCAG Contrast Minimum</a></li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>

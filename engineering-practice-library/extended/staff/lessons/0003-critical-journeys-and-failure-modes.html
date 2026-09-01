@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lesson 3 — Critical Journeys</title><link rel="stylesheet" href="../assets/course.css"><script defer src="../assets/course.js"></script></head><body><main>
+<nav><a href="0002-senior-vs-staff-scope.html">← Lesson 2</a><span>Risk domains</span></nav>
+<p class="eyebrow">Lesson 3 of 6</p><h1>Think in failure modes</h1><p class="lede">Your win: explain why payments and authentication demand more than correct happy-path UI.</p>
+<ul class="meta"><li>16 minutes</li><li>Systems judgment</li><li>Failure simulation</li></ul>
+<h2>A critical journey is a state machine</h2><p>A checkout does not simply “submit.” A payment can require a method, confirmation, additional authentication, asynchronous processing, success, cancellation, or another attempt. The interface must preserve truth across refreshes, redirects, retries, and delayed provider responses.</p>
+<div class="idea"><p><strong>Risk = likelihood × consequence × detectability.</strong></p><p>A rare duplicate charge deserves stronger prevention than a common cosmetic glitch because consequence is much higher. A silent analytics failure deserves attention because detectability is low.</p></div>
+<div data-question data-correct-feedback="The client may have lost the response while the server completed the charge. Replaying blindly can duplicate the commercial action." data-wrong-feedback="A retry is unsafe until the system reconciles the authoritative server or provider state.">
+<h2>Payment scenario</h2><p>The browser times out immediately after confirmation. What should happen first?</p><div class="choices">
+<button class="choice" onclick="answer(this)">Submit payment again immediately</button>
+<button class="choice" data-correct="true" onclick="answer(this)">Reconcile authoritative payment state</button>
+<button class="choice" onclick="answer(this)">Show generic failure message</button>
+</div><div class="feedback"></div><button class="secondary" onclick="resetQuestion(this)">Try again</button></div>
+<h2>Authentication scenario</h2><p>A protected page disappears from navigation for unauthorized users. Is authorization complete?</p><details><summary>Answer</summary><p>No. Navigation is presentation, not enforcement. Server-side access control must protect the resource. Session lifecycle, logout invalidation, sensitive-operation re-authentication, error logging, and recovery flows are separate concerns. OWASP ASVS organizes these into explicit verification areas.</p></details>
+<h2>Failure-mode matrix</h2><table><thead><tr><th>Failure</th><th>User risk</th><th>Control</th><th>Proof</th></tr></thead><tbody>
+<tr><td>Duplicate payment</td><td>Double charge</td><td>Idempotency + reconciliation</td><td>Retry integration test</td></tr>
+<tr><td>3DS redirect loss</td><td>Unclear purchase</td><td>Resume from provider state</td><td>Redirect E2E + telemetry</td></tr>
+<tr><td>Stale session UI</td><td>False access expectation</td><td>Server authorization</td><td>Protected-resource test</td></tr>
+<tr><td>OTP abuse</td><td>Account attack</td><td>Rate limits + monitoring</td><td>Security verification</td></tr>
+</tbody></table>
+<div class="exercise"><p class="label">Practical drill</p><p>Choose a journey you owned. List one failure before submission, one during an external handoff, and one after apparent success. For each, name the authoritative state and the user-safe recovery.</p><textarea placeholder="Failure → authority → recovery → detection…"></textarea><button onclick="revealModel(this)">See checkout example</button><div class="feedback"><p><strong>Before:</strong> expired price → pricing service → refresh quote without losing cart.</p><p><strong>During:</strong> 3DS return missing → payment provider → resume or safely retry from intent status.</p><p><strong>After:</strong> receipt API delayed → order service → show pending state and poll/reconcile, never create a second order.</p></div></div>
+<p class="sources"><strong>Primary reading:</strong> <a href="https://docs.stripe.com/payments/paymentintents/lifecycle">Stripe PaymentIntent lifecycle</a>. For identity controls, use the <a href="https://owasp.org/www-project-application-security-verification-standard/">OWASP ASVS</a>.</p><p>Ask your agent to run a failure-mode review on a real checkout or auth design.</p>
+<div class="next"><a href="0002-senior-vs-staff-scope.html">← Scope</a><a href="0004-risk-based-reliability.html">Next: reliability →</a></div>
+</main></body></html>

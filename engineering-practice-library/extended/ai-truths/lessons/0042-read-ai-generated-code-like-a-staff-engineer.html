@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>42. Read AI-generated code like a staff engineer</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Advanced Extension 42</div>
+  <h1>Read AI-generated code like a staff engineer</h1>
+  <p class="callout"><strong>Staff-level point:</strong> AI lowers typing cost, so the scarce skill becomes code comprehension, placement judgment, failure analysis, and verification design.</p>
+  <h2>Extracted Summary</h2>
+  <p>The transcript argues that AI-era developers must still understand programming fundamentals, but the emphasis shifts toward reading and directing generated code. The practical checklist is to inspect control flow, data flow, error flow, scope, input/output, state, abstraction, modularity, architecture, side effects, request/response behavior, and concurrency.</p>
+  <div class="grid">
+    <section class="card"><h2>Advanced Example: AI-built lead export</h2><p>An agent adds a CSV export for dashboard leads. It touches UI filters, an API route, a query builder, analytics, and a download helper. The feature may work locally while still exporting the wrong date range, leaking unauthorized rows, timing out on large accounts, or bypassing audit logging.</p></section>
+    <section class="card soft"><h2>Your Review Job</h2><p>Do not review alphabetically. Review by dependency: data contract, query/auth, API response, UI state, export side effect, tests, logs, and rollback behavior.</p></section>
+  </div>
+  <h2>The 5-Pass Review Workflow</h2>
+  <ol>
+    <li><strong>Map the slice.</strong> Write one sentence for the feature path: "User clicks X, client sends Y, server validates Z, database reads W, UI receives V."</li>
+    <li><strong>Trace three flows.</strong> Mark control flow, data flow, and error flow before commenting on style.</li>
+    <li><strong>Separate pure logic from side effects.</strong> Keep formatting, filtering, parsing, and validation easy to test; isolate database writes, emails, cache invalidation, file downloads, and analytics.</li>
+    <li><strong>Check placement.</strong> Decide whether logic belongs in component, hook, route, service, model/query layer, background job, or shared utility.</li>
+    <li><strong>Demand evidence.</strong> Require tests or manual verification for boundary cases: empty data, invalid input, auth failure, retry, concurrent action, and large data.</li>
+  </ol>
+  <h2>Practical Workflows</h2>
+  <table>
+    <thead><tr><th>Use case</th><th>Workflow</th><th>Pass condition</th></tr></thead>
+    <tbody>
+      <tr><td>AI code review</td><td>Ask the agent to produce a dependency-ordered review plan, then inspect the diff in that order.</td><td>You can explain why each changed file exists and what would break if removed.</td></tr>
+      <tr><td>Feature implementation</td><td>Before coding, ask for a data-flow map and failure table. After coding, compare implementation against the map.</td><td>The final code handles the same failures the plan named.</td></tr>
+      <tr><td>Bug fix</td><td>Ask AI for three possible broken flows, then verify one with logs, tests, or reproduction steps.</td><td>The chosen fix changes the failing path, not just the symptom.</td></tr>
+      <tr><td>Automation workflow</td><td>Define trigger, inputs, state, tools, side effects, human approval, observability, and rollback.</td><td>The workflow can be stopped, retried, audited, and explained.</td></tr>
+      <tr><td>Agent task delegation</td><td>Give the agent the target layer and forbidden layers: "Change API validation only; do not edit UI copy or schema."</td><td>The diff stays inside the intended ownership boundary.</td></tr>
+    </tbody>
+  </table>
+  <h2>Review Prompt Template</h2>
+  <pre>Review this AI-generated diff like a staff engineer.
+
+First, summarize the intended feature in one sentence.
+Then inspect in this order:
+1. Control flow: early returns, skipped validation, cleanup paths.
+2. Data flow: source, transformations, persistence, response, UI rendering.
+3. Error flow: bad input, auth failure, network failure, DB failure, empty state.
+4. State and side effects: duplicated state, stale cache, writes, emails, downloads, logs.
+5. Modularity and architecture: wrong layer, duplicate helper, unnecessary abstraction.
+6. Concurrency: duplicate clicks, retries, simultaneous users, background jobs.
+
+Return only:
+- blocking bugs
+- risky assumptions
+- missing tests
+- one suggested smaller diff if the implementation is overbuilt</pre>
+  <h2>Hands-On Drill</h2>
+  <p>Take one recent AI-generated change. Fill this out before trusting it:</p>
+  <table>
+    <tbody>
+      <tr><th>Control flow</th><td>What branch returns early? What must run before return?</td></tr>
+      <tr><th>Data flow</th><td>What exact object shape crosses each boundary?</td></tr>
+      <tr><th>Error flow</th><td>What does user see? What does developer see?</td></tr>
+      <tr><th>State</th><td>Where is truth stored? What is derived?</td></tr>
+      <tr><th>Side effects</th><td>What external thing changes?</td></tr>
+      <tr><th>Architecture</th><td>Which layer owns this logic?</td></tr>
+      <tr><th>Concurrency</th><td>What happens on retry, double click, or parallel job?</td></tr>
+    </tbody>
+  </table>
+  <h2>Feedback Loop</h2>
+  <p><strong>Pass condition:</strong> You can reject or redirect AI code with a concrete reason tied to flow, ownership, failure behavior, or evidence, not taste.</p>
+  <div class="quiz card" data-correct="b"><p><strong>Quick retrieval:</strong> What is the first serious review move for a large AI-generated feature?</p><button data-answer="a">Polish naming style</button> <button data-answer="b">Trace feature flow</button> <button data-answer="c">Accept working demo</button><p data-result class="small"></p></div>
+  <h2>Primary Source To Read</h2>
+  <p>Start with <a href="../reference/ai-code-reading.html">the AI code reading reference</a>, especially the 12-part checklist and primary source links.</p>
+  <p class="small">Ask the agent follow-up questions with your actual diff, PR, repo, or generated code. The lesson becomes useful when the checklist catches real risk.</p>
+  <div class="nav"><a href="index.html">Index</a><a href="0040-barrier-is-willingness-to-try.html">Previous</a><a href="index.html">Next</a></div>
+</main>
+</body>
+</html>

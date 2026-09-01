@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interpret coverage, cyclomatic complexity, and CRAP as risk signals rather than quality certificates.">
+  <title>04 · Coverage is a map</title>
+  <link rel="stylesheet" href="../assets/course.css"><script src="../assets/lesson.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="0004-coverage-is-a-map.html#content">Skip to lesson</a>
+  <div class="app-shell"><aside class="sidebar" aria-label="Course navigation">
+    <a class="brand" href="../index.html"><span class="brand-mark">SF</span><span>Software Fundamentals</span></a><div class="nav-label">Lesson 04</div>
+    <nav class="course-nav"><a href="../index.html"><span class="nav-number">⌂</span>Overview</a><a href="0001-fundamentals-as-feedback.html"><span class="nav-number">01</span>Feedback</a><a href="0002-clean-code-search-cost.html"><span class="nav-number">02</span>Clean code</a><a href="0003-tests-specify-behavior.html"><span class="nav-number">03</span>Tests</a><a aria-current="page" href="0004-coverage-is-a-map.html"><span class="nav-number">04</span>Coverage</a><a href="0005-mutation-tests-the-tests.html"><span class="nav-number">05</span>Mutation</a><a href="0006-architecture-as-code.html"><span class="nav-number">06</span>Architecture</a><a href="0007-adopt-the-quality-loop.html"><span class="nav-number">07</span>Adoption</a></nav>
+  </aside>
+  <main class="main" id="content"><article class="lesson">
+    <div class="topbar"><a class="crumb" href="0003-tests-specify-behavior.html">← Lesson 03</a><span class="pill">10 minutes</span></div>
+    <header class="lesson-header"><div class="eyebrow">Lesson 04 · Signal</div><h1>Coverage is a map, not proof</h1><p class="lede">Coverage shows where tests travelled. It does not show whether they noticed the scenery—or whether the map contains the right destination.</p><div class="lesson-meta"><span>Coverage kinds</span><span>Cyclomatic complexity</span><span>CRAP metric</span></div></header>
+    <section class="objective"><h2>Win for this lesson</h2><p>You can read coverage and complexity together to choose where to investigate, without treating either score as a certificate of correctness.</p></section>
+
+    <h2>What each signal can say</h2>
+    <table class="comparison"><thead><tr><th>Signal</th><th>It can reveal</th><th>It cannot prove</th></tr></thead><tbody>
+      <tr><td>Statement coverage</td><td>Which executable statements ran</td><td>That results were asserted correctly</td></tr>
+      <tr><td>Branch coverage</td><td>Which decision outcomes ran</td><td>That all important input classes exist</td></tr>
+      <tr><td>Cyclomatic complexity</td><td>Size of a basis set of independent control-flow paths</td><td>Business risk, readability, or total possible paths</td></tr>
+      <tr><td>CRAP</td><td>Where complexity and weak coverage coincide</td><td>That low-scoring code is well designed</td></tr>
+    </tbody></table>
+
+    <div class="callout info"><h3>Precision matters</h3><p>Cyclomatic complexity is often described loosely as “the number of paths.” More precisely, it counts a basis set of linearly independent paths under a tool’s control-flow model. Boolean expressions, exceptions, and switch statements may be counted differently by different tools.</p></div>
+
+    <h2>The original CRAP1 formula</h2>
+    <pre><code>CRAP(m) = comp(m)² × (1 − coverage(m) / 100)³ + comp(m)</code></pre>
+    <p>The score rises sharply when a method is both complex and poorly covered. At 100% coverage, the first term becomes zero, so CRAP equals cyclomatic complexity. At 0% coverage, it becomes <code>comp² + comp</code>.</p>
+    <table class="comparison"><thead><tr><th>Complexity</th><th>Coverage</th><th>CRAP</th><th>Interpretation</th></tr></thead><tbody>
+      <tr><td>6</td><td>100%</td><td>6.0</td><td>Executed, still structurally complex</td></tr>
+      <tr><td>6</td><td>50%</td><td>10.5</td><td>Investigate tests and design</td></tr>
+      <tr><td>6</td><td>0%</td><td>42.0</td><td>Complex and unexercised</td></tr>
+    </tbody></table>
+
+    <div class="callout warning"><h3>Two threshold stories</h3><p>The original CRAP1 author proposed <strong>over 30</strong> as a warning heuristic. In the supplied interview, Robert Martin describes personal experiments keeping human code below 4 and agent-oriented code near 6 or 8. Those are not standards. Tool counting rules and coverage types vary, so calibrate against defects and review burden in your repository.</p></div>
+
+    <h2>Use coverage as a question generator</h2>
+    <div class="flow"><div class="flow-step"><span class="number">01</span><strong>Locate</strong><span>Find changed, risky, unexecuted behavior.</span></div><div class="flow-step"><span class="number">02</span><strong>Explain</strong><span>Name the missing behavioral distinction.</span></div><div class="flow-step"><span class="number">03</span><strong>Assert</strong><span>Add a test with a meaningful oracle.</span></div><div class="flow-step"><span class="number">04</span><strong>Simplify</strong><span>Refactor only if structure stays costly.</span></div></div>
+
+    <section class="quiz" data-quiz data-answer="boundary"><h3>Retrieval check</h3><fieldset><legend>A refund function has 100% statement coverage, but changing <code>&gt;= 18</code> to <code>&gt; 18</code> does not fail a test. What is the strongest next move?</legend><div class="quiz-options">
+      <label class="quiz-option"><input type="radio" name="q4" value="boundary" data-feedback="Correct. The suite executed the line but did not distinguish the business boundary.">Add a boundary assertion</label>
+      <label class="quiz-option"><input type="radio" name="q4" value="target" data-feedback="Coverage is already complete for statements; raising the same target adds no evidence.">Raise the coverage target</label>
+      <label class="quiz-option"><input type="radio" name="q4" value="delete" data-feedback="The branch may encode required behavior; deletion avoids rather than resolves the question.">Delete the branch entirely</label>
+      <label class="quiz-option"><input type="radio" name="q4" value="trust" data-feedback="The percentage recorded execution, not sensitivity to this defect.">Trust the percentage alone</label>
+    </div></fieldset><button class="secondary-button" type="button">Check answer</button><p class="feedback" aria-live="polite"></p></section>
+
+    <section class="exercise"><h2>Explore the curve</h2><p>Open the <a href="../reference/crap-calculator.html">interactive CRAP calculator</a>. Hold complexity at 8 and change coverage. Then hold coverage at 100% and change complexity. Explain which intervention—tests or refactoring—addresses each case.</p></section>
+
+    <section class="source-card"><span class="source-type">Original metric rationale</span><h3><a href="https://testing.googleblog.com/2011/02/this-code-is-crap.html">Alberto Savoia · This Code is CRAP</a></h3><p>The post gives the acronym’s provenance, formula, original threshold, and empirical caveat. Pair it with Google’s <a href="https://testing.googleblog.com/2020/08/code-coverage-best-practices.html">coverage best practices</a>.</p></section>
+    <div class="callout info"><h3>Ask your teacher</h3><p>Share a coverage report and one risky function. I can help distinguish a missing test from a design problem without chasing a percentage.</p></div>
+    <button class="mark-complete" data-lesson="0004" aria-pressed="false" type="button">Mark lesson complete</button>
+    <footer class="lesson-footer"><a href="0003-tests-specify-behavior.html"><small>Previous</small>Tests specify behavior</a><a class="next" href="0005-mutation-tests-the-tests.html"><small>Next lesson</small>Mutation tests the tests →</a></footer>
+  </article></main></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation"><a href="../index.html">Course</a><a aria-current="page" href="0004-coverage-is-a-map.html">Lesson 04</a><a href="../reference/crap-calculator.html">Calculator</a></nav>
+</body></html>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Learn how clean modules reduce reasoning and search cost for people and AI agents.">
+  <title>02 · Clean code lowers search cost</title>
+  <link rel="stylesheet" href="../assets/course.css"><script src="../assets/lesson.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="0002-clean-code-search-cost.html#content">Skip to lesson</a>
+  <div class="app-shell"><aside class="sidebar" aria-label="Course navigation">
+    <a class="brand" href="../index.html"><span class="brand-mark">SF</span><span>Software Fundamentals</span></a><div class="nav-label">Lesson 02</div>
+    <nav class="course-nav"><a href="../index.html"><span class="nav-number">⌂</span>Overview</a><a href="0001-fundamentals-as-feedback.html"><span class="nav-number">01</span>Feedback</a><a aria-current="page" href="0002-clean-code-search-cost.html"><span class="nav-number">02</span>Clean code</a><a href="0003-tests-specify-behavior.html"><span class="nav-number">03</span>Tests</a><a href="0004-coverage-is-a-map.html"><span class="nav-number">04</span>Coverage</a><a href="0005-mutation-tests-the-tests.html"><span class="nav-number">05</span>Mutation</a><a href="0006-architecture-as-code.html"><span class="nav-number">06</span>Architecture</a><a href="0007-adopt-the-quality-loop.html"><span class="nav-number">07</span>Adoption</a></nav>
+  </aside>
+  <main class="main" id="content"><article class="lesson">
+    <div class="topbar"><a class="crumb" href="0001-fundamentals-as-feedback.html">← Lesson 01</a><span class="pill">12 minutes</span></div>
+    <header class="lesson-header"><div class="eyebrow">Lesson 02 · Design</div><h1>Clean code lowers search cost</h1><p class="lede">“Clean” is not a decorating style. It is code that lets a change stay local and lets a reader predict where behavior lives.</p><div class="lesson-meta"><span>Design judgment</span><span>TypeScript example</span><span>One refactoring drill</span></div></header>
+    <section class="objective"><h2>Win for this lesson</h2><p>You can identify the part of a design that makes a change expensive: ambiguous names, mixed responsibilities, or a wide interface.</p></section>
+
+    <h2>Complexity is what leaks</h2>
+    <p>A module earns its keep when it hides decisions. The consumer should need a small amount of information to use substantial behavior. This is why “small function” is not a sufficient goal: many tiny functions can expose more concepts, force more navigation, and increase the search space.</p>
+    <div class="concept"><div class="concept-icon">1</div><div><h3>Names create an index</h3><p>A precise domain name gives both humans and agents a reliable search term. <code>eligibleRefund</code> narrows the question; <code>checkData</code> widens it.</p></div></div>
+    <div class="concept"><div class="concept-icon">2</div><div><h3>Cohesion localizes change</h3><p>Code that changes for the same business reason should live together. If refund policy changes require edits in UI helpers, database utilities, and a generic service, the module boundary is lying.</p></div></div>
+    <div class="concept"><div class="concept-icon">3</div><div><h3>Interfaces ration knowledge</h3><p>A narrow interface prevents callers from depending on internal sequencing, storage, or incidental data. Fewer legal interactions mean fewer ways an implementation can contradict itself.</p></div></div>
+
+    <p class="code-label">Mixed policy, storage, and presentation</p>
+    <pre><code>async function processRefund(order, db, mailer) {
+  const days = (Date.now() - order.paidAt) / 86_400_000;
+  if (days &lt;= 30 &amp;&amp; order.status !== "refunded") {
+    await db.query("UPDATE orders SET status='refunded' WHERE id=?", [order.id]);
+    await mailer.send(order.email, `Refunded ${order.total}`);
+    return { color: "green", label: "Refund complete" };
+  }
+  return { color: "red", label: "Refund rejected" };
+}</code></pre>
+    <p>To change the refund window, a reader must pass through time math, storage syntax, email text, and UI styling. An agent sees the same enlarged reasoning surface.</p>
+
+    <p class="code-label">Policy is explicit; effects sit behind ports</p>
+    <pre><code>type RefundDecision =
+  | { approved: true }
+  | { approved: false; reason: "expired" | "already-refunded" };
+
+function decideRefund(order: Order, today: Date): RefundDecision {
+  if (order.status === "refunded") return { approved: false, reason: "already-refunded" };
+  if (daysBetween(order.paidAt, today) &gt; 30) return { approved: false, reason: "expired" };
+  return { approved: true };
+}</code></pre>
+    <p>This is not automatically “better” because it is shorter. It is better if refund-policy changes now stay in one place, the decision is easy to test, and infrastructure can vary without contaminating the rule.</p>
+
+    <div class="callout warning"><h3>Rules are hypotheses, not scripture</h3><p>Method length, class size, and complexity thresholds are signals. Robert Martin favors very small functions; John Ousterhout argues that over-decomposition can create shallow modules and navigation cost. Ask which design hides more complexity and localizes the next likely change.</p></div>
+
+    <section class="exercise"><h2>Refactoring drill</h2><p>For the first example, name the three independent reasons to change. Then choose one boundary you would create first. Do not refactor everything.</p><ol><li>Circle the business decision.</li><li>Underline the side effects.</li><li>Box the presentation decision.</li><li>Extract only the boundary that enables the next test.</li></ol></section>
+
+    <section class="quiz" data-quiz data-answer="capability"><h3>Retrieval check</h3><fieldset><legend>A 600-line “billing helpers” file changes for pricing, invoicing, tax, and payment retries. What is the strongest first split?</legend><div class="quiz-options">
+      <label class="quiz-option"><input type="radio" name="q2" value="capability" data-feedback="Correct. Business capabilities give each module a coherent reason to change.">Split by business capability</label>
+      <label class="quiz-option"><input type="radio" name="q2" value="length" data-feedback="Length signals pain but does not reveal a meaningful boundary.">Split by arbitrary length</label>
+      <label class="quiz-option"><input type="radio" name="q2" value="comments" data-feedback="Comments may explain the mixture; they do not reduce coupling.">Add more explanatory comments</label>
+      <label class="quiz-option"><input type="radio" name="q2" value="context" data-feedback="A larger context delays the symptom without changing the design.">Expand the context window</label>
+    </div></fieldset><button class="secondary-button" type="button">Check answer</button><p class="feedback" aria-live="polite"></p></section>
+
+    <section class="source-card"><span class="source-type">Primary author material</span><h3><a href="https://web.stanford.edu/~ouster/cgi-bin/book.php">John Ousterhout · A Philosophy of Software Design</a></h3><p>Read the free second-edition comparison with <em>Clean Code</em>. The disagreement is valuable: it forces you to judge information hiding and cognitive load rather than repeat a size rule.</p></section>
+    <div class="callout info"><h3>Ask your teacher</h3><p>Paste one real function or module boundary. I can help identify its reasons to change without performing a speculative rewrite.</p></div>
+    <button class="mark-complete" data-lesson="0002" aria-pressed="false" type="button">Mark lesson complete</button>
+    <footer class="lesson-footer"><a href="0001-fundamentals-as-feedback.html"><small>Previous</small>Fundamentals as feedback</a><a class="next" href="0003-tests-specify-behavior.html"><small>Next lesson</small>Tests specify behavior →</a></footer>
+  </article></main></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation"><a href="../index.html">Course</a><a aria-current="page" href="0002-clean-code-search-cost.html">Lesson 02</a><a href="../reference/glossary.html">Reference</a></nav>
+</body></html>

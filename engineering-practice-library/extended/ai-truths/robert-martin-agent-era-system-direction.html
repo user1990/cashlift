@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Agent-Era System Direction — Senior & Staff Engineering</title>
+  <style>
+    :root { --ink:#172033; --muted:#5e697e; --paper:#fbfcfe; --line:#dce3ed; --navy:#18243b; --teal:#087e8b; --teal-soft:#eaf8f8; --gold:#b76b00; --gold-soft:#fff7e8; --red:#a23333; --red-soft:#fff1f1; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font:16px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { max-width:1120px; margin:0 auto; padding:44px 24px 80px; }
+    .hero { padding:34px; border-radius:18px; color:#fff; background:linear-gradient(125deg,#17233a,#0d6470); box-shadow:0 16px 38px #18243b22; }
+    .eyebrow { margin:0; color:#9ee8e8; font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    h1 { max-width:760px; margin:8px 0 12px; font-size:clamp(32px,5vw,52px); line-height:1.05; letter-spacing:-.04em; }
+    h2 { margin:40px 0 12px; font-size:26px; line-height:1.18; letter-spacing:-.025em; }
+    h3 { margin:0 0 8px; font-size:17px; }
+    p { margin:8px 0; }
+    a { color:#076f7b; }
+    .lede { max-width:720px; color:#dbe9f5; font-size:19px; }
+    .meta { margin-top:20px; color:#bdd3e4; font-size:13px; }
+    nav { display:flex; gap:8px; flex-wrap:wrap; margin:18px 0 28px; }
+    nav a { padding:6px 10px; border:1px solid var(--line); border-radius:999px; color:var(--muted); text-decoration:none; font-size:13px; }
+    nav a:hover { color:var(--teal); border-color:var(--teal); }
+    .callout { margin:20px 0; padding:16px 18px; border-left:4px solid var(--teal); background:var(--teal-soft); }
+    .warn { border-left-color:var(--gold); background:var(--gold-soft); }
+    .risk { border-left-color:var(--red); background:var(--red-soft); }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .grid3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    .card { padding:18px; border:1px solid var(--line); border-radius:12px; background:#fff; }
+    .card p:last-child { margin-bottom:0; }
+    .tag { display:inline-block; margin-bottom:10px; padding:3px 8px; border-radius:999px; color:var(--teal); background:var(--teal-soft); font-size:12px; font-weight:750; }
+    ul,ol { padding-left:22px; }
+    li { margin:7px 0; }
+    table { width:100%; margin:16px 0; border-collapse:collapse; background:#fff; font-size:14px; }
+    th,td { padding:11px 12px; border:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { color:#334057; background:#f1f5f9; font-weight:750; }
+    pre { margin:14px 0; padding:18px; overflow:auto; border-radius:12px; color:#eaf1f8; background:var(--navy); font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace; white-space:pre-wrap; }
+    details { margin:10px 0; border:1px solid var(--line); border-radius:10px; background:#fff; }
+    summary { padding:13px 15px; cursor:pointer; font-weight:700; }
+    details > div { padding:0 15px 14px; }
+    .flow { display:flex; align-items:stretch; gap:8px; margin:16px 0; overflow-x:auto; }
+    .flow > div { min-width:150px; padding:13px; border:1px solid var(--line); border-radius:10px; background:#fff; font-size:14px; }
+    .flow b { display:block; margin-bottom:4px; color:var(--teal); }
+    .arrow { align-self:center; color:var(--teal); font-weight:900; }
+    .quiz button { margin:5px 5px 5px 0; padding:9px 11px; border:1px solid var(--line); border-radius:8px; color:var(--ink); background:#fff; cursor:pointer; font:inherit; }
+    .quiz button:hover { border-color:var(--teal); }
+    .result { min-height:24px; margin-top:8px; font-weight:700; }
+    .footer { margin-top:46px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; }
+    @media (max-width:760px) { main{padding:26px 16px 56px}.hero{padding:25px}.grid,.grid3{grid-template-columns:1fr}h2{font-size:23px}.arrow{display:none}.flow{display:block}.flow>div{margin:8px 0} }
+    @media print { body{background:#fff}main{max-width:none;padding:18px}.hero{box-shadow:none}.hero,.card,details,table{break-inside:avoid}nav,.quiz{display:none} }
+  </style>
+  <link rel="stylesheet" href="assets/extended-course.css">
+</head>
+<body>
+<main>
+  <header class="hero">
+    <p class="eyebrow">Deep-dive field guide · senior & staff engineers</p>
+    <h1>Direct the system, not just the agent</h1>
+    <p class="lede">A practical interpretation of the Robert C. Martin interview: preserve human judgment over architecture, quality, and customer outcomes while agents accelerate local implementation.</p>
+    <p class="meta">Source: supplied transcript, Chapters 1–10. Complete in ~25 minutes; revisit before delegating a risky agent task.</p>
+  </header>
+
+  <nav aria-label="Sections">
+    <a href="robert-martin-agent-era-system-direction.html#thesis">Thesis</a><a href="robert-martin-agent-era-system-direction.html#operating-model">Operating model</a><a href="robert-martin-agent-era-system-direction.html#example">Worked example</a><a href="robert-martin-agent-era-system-direction.html#quality">Quality gates</a><a href="robert-martin-agent-era-system-direction.html#judgment">Judgment & learning</a><a href="robert-martin-agent-era-system-direction.html#product">Product engineering</a><a href="robert-martin-agent-era-system-direction.html#practice">Practice</a>
+  </nav>
+
+  <section id="thesis">
+    <h2>1. The thesis: the abstraction line rises</h2>
+    <p>Martin's argument is simple: languages, frameworks, and machines change fast; software design principles above those details change much more slowly. AI moves more implementation work below the line. It does <em>not</em> remove the need to decide what the system is, how its parts depend on each other, or whether it solves the right problem.</p>
+    <div class="grid3">
+      <article class="card"><span class="tag">Changes quickly</span><h3>Implementation mechanics</h3><p>Syntax, library APIs, code generation, boilerplate, and local transformations.</p></article>
+      <article class="card"><span class="tag">Stays durable</span><h3>System structure</h3><p>Modules, boundaries, dependency direction, information hiding, data flow, and failure behavior.</p></article>
+      <article class="card"><span class="tag">Human accountability</span><h3>Judgment</h3><p>Tradeoffs, long-term consequences, customer reality, and the evidence required to ship.</p></article>
+    </div>
+    <div class="callout"><strong>Staff-level translation:</strong> do not ask only “did the agent produce working code?” Ask “what system property changed, what must remain stable, and what evidence makes this safe to operate?”</div>
+  </section>
+
+  <section id="operating-model">
+    <h2>2. The operating model: inspect the architecture delta</h2>
+    <p>Martin describes deliberately avoiding code until a task is complete, then inspecting modules, functions, dependencies, and data flows. That is sensible only if it becomes a disciplined review surface—not blind trust.</p>
+    <div class="flow" aria-label="Architecture delta workflow">
+      <div><b>1. Frame</b>State outcome, owner, non-goals, and risk.</div><span class="arrow">→</span>
+      <div><b>2. Map</b>Ask for module, dependency, data, and failure maps.</div><span class="arrow">→</span>
+      <div><b>3. Constrain</b>Set contracts and forbidden changes.</div><span class="arrow">→</span>
+      <div><b>4. Implement</b>Delegate a bounded slice to the agent.</div><span class="arrow">→</span>
+      <div><b>5. Prove</b>Review the delta; run tests and operational checks.</div>
+    </div>
+    <table>
+      <thead><tr><th>View</th><th>Question you own</th><th>Evidence you require</th></tr></thead>
+      <tbody>
+        <tr><td>Module boundary</td><td>Which component owns this behavior?</td><td>No forbidden imports; responsibilities stay coherent.</td></tr>
+        <tr><td>Data flow</td><td>Where does data enter, transform, persist, and leave?</td><td>Contract tests for valid, invalid, unauthorized, and empty paths.</td></tr>
+        <tr><td>Failure/recovery</td><td>What happens on timeout, retry, duplicate action, or partial failure?</td><td>Tests, logs, alerts, cleanup, and a rollback or retry plan.</td></tr>
+        <tr><td>Product outcome</td><td>Whose workflow improves—and what new friction appears?</td><td>Direct customer observation, support evidence, or an explicit hypothesis.</td></tr>
+      </tbody>
+    </table>
+    <pre>Do not edit code yet. Produce an architecture-delta report.
+
+1. Affected modules and their responsibilities
+2. Allowed and forbidden dependency changes
+3. Source-to-sink data flow
+4. Happy path plus auth, validation, retry, concurrency, and partial-failure paths
+5. Tests, telemetry, and rollback evidence needed for approval
+6. Product assumptions that require a human decision
+
+Tie every claim to a file, test, log, or explicit uncertainty.</pre>
+  </section>
+
+  <section id="example">
+    <h2>3. Worked example: tenant-scoped invoice exports</h2>
+    <p><strong>Request:</strong> “Let workspace admins export filtered invoices to CSV.” The local coding task is easy; the system design task is not.</p>
+    <div class="grid">
+      <article class="card risk"><h3>Weak delegation</h3><p>“Build CSV export.”</p><ul><li>May read another tenant's data.</li><li>May ignore active filter semantics.</li><li>May time out on large data sets.</li><li>May omit auditability and expiration.</li></ul></article>
+      <article class="card"><h3>Staff delegation</h3><p>“Propose the smallest architecture delta for an async, tenant-scoped export. Preserve existing filter semantics; do not change invoice schema.”</p><ul><li>Admin action creates a request.</li><li>Server validates membership and filters.</li><li>Worker produces private output.</li><li>Audit trail and expiring download close the loop.</li></ul></article>
+    </div>
+    <h3>Make these decisions before the agent touches code</h3>
+    <table>
+      <thead><tr><th>Decision</th><th>Concrete choice</th><th>Constraint in the agent task</th></tr></thead>
+      <tbody>
+        <tr><td>Ownership</td><td>Billing application service orchestrates exports.</td><td>UI may request an export; it cannot bypass auth or create files.</td></tr>
+        <tr><td>Contract</td><td>Filters and timezone are snapshotted at request time.</td><td>Reuse the existing validated filter schema.</td></tr>
+        <tr><td>Security</td><td>Every query is tenant-scoped; only admins request/download.</td><td>No raw ID lookup without workspace authorization.</td></tr>
+        <tr><td>Scale</td><td>Large work runs asynchronously with a defined limit.</td><td>No unbounded request-time CSV generation.</td></tr>
+        <tr><td>Recovery</td><td>Jobs are idempotent; downloads expire.</td><td>Show retry, cleanup, and duplicate-request behavior.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="quality">
+    <h2>4. Clean code when agents write it</h2>
+    <p>The transcript does not say quality is irrelevant. It shifts attention to function and module shape, names, argument counts, complexity, comments, and test coverage. Martin mentions a coverage-weighted complexity measure (“CRAP”) and an example threshold below six.</p>
+    <div class="callout warn"><strong>Do not cargo-cult the number.</strong> A complexity limit is only a useful signal when paired with real test quality, business criticality, and team conventions. A green metric is not proof the system is understandable.</div>
+    <div class="grid">
+      <article class="card"><h3>Automate signals</h3><ul><li>Type checks and linting</li><li>Focused behavioral tests</li><li>Coverage where missing tests hide branching risk</li><li>Dependency or import-boundary checks</li><li>Diff-size and changed-file scope review</li></ul></article>
+      <article class="card"><h3>Keep human review for</h3><ul><li>Wrong ownership or boundary placement</li><li>Misleading abstraction or duplicate state</li><li>Unacceptable failure behavior</li><li>Product tradeoffs and customer friction</li><li>Whether the evidence proves the intended outcome</li></ul></article>
+    </div>
+    <details><summary>Prompt: make the agent close its own loop</summary><div><pre>Implement the bounded change. Before declaring success, run the agreed checks.
+
+Then report only:
+- changed responsibility and dependency edges;
+- data flow and external side effects;
+- tests and quality checks run, with results;
+- known gaps or assumptions;
+- the single highest-risk failure path still worth human review.</pre></div></details>
+  </section>
+
+  <section id="judgment">
+    <h2>5. Design sense, context limits, and beginner fundamentals</h2>
+    <p>Martin's view is that agents can critique a design when asked, yet do not reliably apply that critique while generating code. He also warns that long contexts can cause unreliable behavior. Treat both as failure modes to design around: bound tasks, preserve essential context as artifacts, and demand evidence.</p>
+    <div class="grid">
+      <article class="card"><h3>For senior/staff engineers</h3><p>Use agents to explore alternatives, simulate scenarios, inspect dependencies, and summarize structure. You decide the system's future costs and acceptable risks.</p></article>
+      <article class="card"><h3>For growing engineers</h3><p>Do not outsource the ability to read code. Learn by implementing, debugging, studying strong work, seeking mentorship, and building small things where mistakes are safe.</p></article>
+    </div>
+    <p>The transcript's practical rule is not “never use agents.” It is: understand the material the agent manipulates. A useful version for teams: junior engineers may use agents, but should be able to explain the feature path, altered data contract, test evidence, and failure mode without asking the agent again.</p>
+  </section>
+
+  <section id="product">
+    <h2>6. Product engineering: live in the technology and the customer's world</h2>
+    <p>Martin defines a product engineer as someone who combines deep technical work with direct knowledge of the customer's real environment. A technically impressive solution without a felt problem is still weak product engineering.</p>
+    <div class="grid3">
+      <article class="card"><span class="tag">Observe</span><h3>See the work</h3><p>Watch a customer complete the current task. Notice workarounds, interruptions, and information they must reconstruct.</p></article>
+      <article class="card"><span class="tag">Model</span><h3>Turn pain into constraints</h3><p>Define latency, trust, permissions, recoverability, and “must not make worse” conditions before implementation.</p></article>
+      <article class="card"><span class="tag">Validate</span><h3>Check the outcome</h3><p>After shipping, verify that users complete the job with less work—not merely that the feature is technically correct.</p></article>
+    </div>
+  </section>
+
+  <section id="practice">
+    <h2>7. Deliberate practice: a 20-minute staff drill</h2>
+    <ol>
+      <li>Choose a recent agent-generated feature or a pending request.</li>
+      <li>Write one page: outcome, owner module, data flow, forbidden dependencies, failure/retry behavior, and evidence plan.</li>
+      <li>Ask the agent for three failure paths your plan missed.</li>
+      <li>Verify at least one objection against a real test, log, or code path.</li>
+      <li>Write one customer assumption you still need to observe or confirm.</li>
+    </ol>
+    <p class="callout"><strong>Pass condition:</strong> you can explain what changed in the system, why it belongs there, how it fails, and what proves it works. “The demo works” is not enough.</p>
+    <div class="quiz card" data-answer="architecture">
+      <h3>Retrieval check</h3>
+      <p>Before delegating a risky feature, what should you request first?</p>
+      <button data-value="syntax">Polish syntax</button><button data-value="architecture">Map architecture</button><button data-value="editor">Open editor</button>
+      <p class="result" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Transcript details retained</h2>
+    <details><summary>Architecture and the rising abstraction line</summary><div>The interview frames the history of software as increasingly abstracted implementation: binary and assembly to high-level languages, and now agent-assisted coding. Its invariant is high-level design: modules, controlled dependencies, and information hiding.</div></details>
+    <details><summary>Large systems and agents</summary><div>Large systems remain composed of smaller systems. Agents can help with module-level work, reports, brainstorming, and simulations; people still compose the larger system and make cross-boundary choices.</div></details>
+    <details><summary>Cleanliness, functions, comments, and tests</summary><div>The interview relaxes some human-oriented micro-rules for agents, but keeps concern for function shape, names, argument counts, module structure, complexity, and strong tests. It treats comments as potentially more useful when agents maintain them.</div></details>
+    <details><summary>Learning and product judgment</summary><div>Design sense is presented as experience plus study, mentorship, curiosity, and hands-on play. Product engineering is presented as a union of technical competence and direct empathy with users' real work.</div></details>
+    <details><summary>SwarmForge homework</summary><div>The transcript recommends a free multi-agent coordination tool called “SwarmForge” and asks users to give feedback through GitHub issues. The exact repository path stated in the transcript could not be verified at creation time, so search and validate it before use.</div></details>
+  </section>
+
+  <footer class="footer">
+    <p><strong>Primary material:</strong> supplied transcript, “Meet Robert C. Martin,” Chapters 1–10. This page distinguishes the interviewee's perspective from universal fact. For the architectural principle behind dependency direction, see <a href="https://www.informit.com/articles/article.aspx?p=2832399&seqNum=3">The Clean Architecture Dependency Rule</a>.</p>
+    <p>Bring a real PR, architecture proposal, or agent task next time. We can turn it into an architecture-delta review together.</p>
+  </footer>
+</main>
+<script>
+  document.querySelectorAll('.quiz button').forEach(button => button.addEventListener('click', () => {
+    const quiz = button.closest('.quiz');
+    const result = quiz.querySelector('.result');
+    const ok = button.dataset.value === quiz.dataset.answer;
+    result.textContent = ok ? 'Correct. First make the system legible; then delegate a bounded change.' : 'Not yet. Syntax and editing come after a clear system map.';
+    result.style.color = ok ? '#087e8b' : '#a23333';
+  }));
+</script>
+</body>
+</html>

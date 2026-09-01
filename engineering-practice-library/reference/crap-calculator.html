@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive calculator for the original CRAP1 complexity and coverage metric.">
+  <title>Reference · CRAP calculator</title>
+  <link rel="stylesheet" href="../assets/course.css"><script src="../assets/lesson.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="crap-calculator.html#content">Skip to calculator</a>
+  <div class="app-shell"><aside class="sidebar" aria-label="Reference navigation">
+    <a class="brand" href="../index.html"><span class="brand-mark">SF</span><span>Software Fundamentals</span></a><div class="nav-label">References</div>
+    <nav class="course-nav"><a href="../index.html"><span class="nav-number">⌂</span>Course</a><a href="quality-gauntlet.html"><span class="nav-number">→</span>Quality gauntlet</a><a aria-current="page" href="crap-calculator.html"><span class="nav-number">ƒ</span>CRAP calculator</a><a href="glossary.html"><span class="nav-number">Aa</span>Glossary</a><a href="toolchain-picker.html"><span class="nav-number">⚒</span>Toolchains</a></nav>
+  </aside>
+  <main class="main" id="content"><article class="lesson">
+    <div class="topbar"><a class="crumb" href="../lessons/0004-coverage-is-a-map.html">← Coverage lesson</a><button class="secondary-button" data-print type="button">Print reference</button></div>
+    <header class="lesson-header"><div class="eyebrow">Interactive reference</div><h1>CRAP1 calculator</h1><p class="lede">Explore the interaction between cyclomatic complexity and coverage. Use the score to prioritize investigation, never to certify quality.</p></header>
+
+    <section class="decision-card" data-crap-calculator>
+      <div class="calculator-grid">
+        <div>
+          <div class="control"><label for="complexity">Cyclomatic complexity <output data-complexity-value>6</output></label><input id="complexity" data-complexity type="range" min="1" max="30" value="6"></div>
+          <div class="control spaced-control"><label for="coverage">Method coverage <output data-coverage-value>50%</output></label><input id="coverage" data-coverage type="range" min="0" max="100" step="5" value="50"></div>
+        </div>
+        <div class="score-panel"><div><output data-score>10.5</output><span data-status>Below the original CRAP1 warning threshold</span></div></div>
+      </div>
+    </section>
+
+    <pre><code>CRAP(m) = comp(m)² × (1 − coverage(m) / 100)³ + comp(m)</code></pre>
+    <h2>How to read it</h2>
+    <table class="comparison"><thead><tr><th>Pattern</th><th>Question</th><th>Candidate response</th></tr></thead><tbody>
+      <tr><td>Low complexity, low coverage</td><td>Is the behavior valuable or dead?</td><td>Add a meaningful test or delete it.</td></tr>
+      <tr><td>High complexity, high coverage</td><td>Is change still difficult despite the safety net?</td><td>Consider behavior-preserving refactoring.</td></tr>
+      <tr><td>High complexity, low coverage</td><td>Can you characterize behavior safely?</td><td>Add characterization tests, then simplify.</td></tr>
+      <tr><td>Low score, recurring defects</td><td>What does the metric not see?</td><td>Inspect requirements, state, concurrency, integration, or security.</td></tr>
+    </tbody></table>
+
+    <div class="callout warning"><h3>Comparability warning</h3><p>The original formula used basis-path coverage. Implementations may substitute branch, line, or statement coverage, and complexity tools count constructs differently. Scores from different tools are not automatically comparable.</p></div>
+    <div class="callout info"><h3>Threshold context</h3><p>The original author proposed scores over 30 as a warning heuristic. Robert Martin’s 4/6/8 discussion in the supplied interview is a personal experiment conducted at or near full coverage, where CRAP collapses to complexity. Neither is a universal engineering standard.</p></div>
+
+    <section class="source-card"><span class="source-type">Original source</span><h3><a href="https://testing.googleblog.com/2011/02/this-code-is-crap.html">Alberto Savoia · This Code is CRAP</a></h3><p>Read the formula’s empirical origin and the author’s caveats before automating a threshold.</p></section>
+    <footer class="lesson-footer"><a href="quality-gauntlet.html"><small>Previous reference</small>Quality gauntlet</a><a class="next" href="glossary.html"><small>Next reference</small>Course glossary →</a></footer>
+  </article></main></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation"><a href="../index.html">Course</a><a aria-current="page" href="crap-calculator.html">Calculator</a><a href="glossary.html">Glossary</a></nav>
+</body></html>

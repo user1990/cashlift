@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="One-page map of the software pipeline bottleneck and which library course owns each step.">
+  <title>Reference · Pipeline constraint map</title>
+  <link rel="stylesheet" href="../assets/course.css"><script src="../assets/lesson.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="pipeline-constraint-map.html#content">Skip to reference</a>
+  <div class="app-shell"><aside class="sidebar" aria-label="Reference navigation">
+    <a class="brand" href="../index.html"><span class="brand-mark">EP</span><span>Engineering Practice</span></a><div class="nav-label">References</div>
+    <nav class="course-nav"><a href="../index.html"><span class="nav-number">⌂</span>Library</a><a href="quality-gauntlet.html"><span class="nav-number">→</span>Quality gauntlet</a><a href="crap-calculator.html"><span class="nav-number">ƒ</span>CRAP calculator</a><a href="glossary.html"><span class="nav-number">Aa</span>Glossary</a><a href="toolchain-picker.html"><span class="nav-number">⚒</span>Toolchains</a><a aria-current="page" href="pipeline-constraint-map.html"><span class="nav-number">↦</span>Constraint map</a></nav>
+  </aside>
+  <main class="main" id="content"><article class="lesson">
+    <div class="topbar"><a class="crumb" href="../index.html">← Course overview</a><button class="secondary-button" data-print type="button">Print reference</button></div>
+    <header class="lesson-header"><div class="eyebrow">Quick reference</div><h1>Pipeline constraint map</h1><p class="lede">Throughput is the slowest step. Use this page to locate the pile-up, then open the course that already owns that work. Do not duplicate Teach here.</p></header>
+
+    <div class="callout warning"><h3>Editorial rule</h3><p>If the tip is “prove the change,” stay on the gauntlet. If the tip is “the constraint is no longer typing,” open <a href="../extended/own-the-bottleneck/lessons/index.html">Own the bottleneck</a>.</p></div>
+
+    <h2>Where work piles up</h2>
+    <table class="comparison"><thead><tr><th>Step</th><th>Symptom</th><th>Do not optimize first</th><th>Open</th></tr></thead><tbody>
+      <tr><td>Ideate</td><td>Many scaffolds, no chosen problem</td><td>More generation</td><td><a href="../extended/own-the-bottleneck/lessons/0005-ship-or-it-is-inventory.html">Ship or it is inventory</a></td></tr>
+      <tr><td>Design / align</td><td>Diffs wait on other teams, unclear boundaries</td><td>Larger patches</td><td><a href="../extended/ai-truths/robert-martin-agent-era-system-direction.html#operating-model">Direct the system</a></td></tr>
+      <tr><td>Build</td><td>Typing is actually the wait</td><td>More meetings about tools</td><td><a href="../extended/ai-truths/lessons/index.html">40 AI Truths</a></td></tr>
+      <tr><td>Verify</td><td>“Almost right” remainder, review queues</td><td>Hero reading of every line</td><td><a href="quality-gauntlet.html">Quality gauntlet</a> · <a href="03-practical-guardrails.html">Guardrails</a></td></tr>
+      <tr><td>Ship</td><td>Main is green; users do not have it</td><td>Another feature branch</td><td><a href="../extended/own-the-bottleneck/lessons/0003-find-the-constraint.html">Find the constraint</a></td></tr>
+      <tr><td>Users</td><td>Weekend apps die at contact</td><td>More screens</td><td><a href="../extended/own-the-bottleneck/lessons/0005-ship-or-it-is-inventory.html">Ship</a> · <a href="../extended/dhh/lessons/index.html#loop">DHH loop</a></td></tr>
+      <tr><td>Maintain</td><td>Clone exists; nobody owns bugs</td><td>Rebuilding Salesforce this weekend</td><td><a href="../extended/own-the-bottleneck/lessons/0007-buy-vs-build-maintenance.html">Buy vs build</a></td></tr>
+    </tbody></table>
+
+    <h2>Three clocks (before you celebrate a speedup)</h2>
+    <div class="flow">
+      <div class="flow-step"><span class="number">P</span><strong>Predicted</strong><span>Guess before the session</span></div>
+      <div class="flow-step"><span class="number">F</span><strong>Felt</strong><span>Impression after the session</span></div>
+      <div class="flow-step"><span class="number">M</span><strong>Measured</strong><span>Elapsed through review</span></div>
+    </div>
+    <p>Drill: <a href="../extended/own-the-bottleneck/lessons/0001-perception-vs-measurement.html">Perception vs measurement</a>. Cite methods, not frozen percentages.</p>
+
+    <h2>Terrain</h2>
+    <table class="comparison"><thead><tr><th>Label</th><th>Expect speed in</th><th>Expect wait in</th></tr></thead><tbody>
+      <tr><td>Greenfield</td><td>Scaffold and happy path</td><td>Choosing the product; later, users</td></tr>
+      <tr><td>Brownfield</td><td>Local boilerplate</td><td>Alignment, review, verification, rollout</td></tr>
+    </tbody></table>
+
+    <footer class="lesson-footer"><a href="../extended/own-the-bottleneck/lessons/index.html"><small>Course</small>Own the bottleneck</a><a class="next" href="quality-gauntlet.html"><small>If the circle is proof</small>Quality gauntlet →</a></footer>
+  </article></main></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation"><a href="../index.html">Library</a><a aria-current="page" href="pipeline-constraint-map.html">Map</a><a href="quality-gauntlet.html">Gauntlet</a></nav>
+</body></html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A print-friendly reference for an AI-assisted software quality gauntlet.">
+  <title>Reference · Quality gauntlet</title>
+  <link rel="stylesheet" href="../assets/course.css"><script src="../assets/lesson.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="quality-gauntlet.html#content">Skip to reference</a>
+  <div class="app-shell"><aside class="sidebar" aria-label="Reference navigation">
+    <a class="brand" href="../index.html"><span class="brand-mark">SF</span><span>Software Fundamentals</span></a><div class="nav-label">References</div>
+    <nav class="course-nav"><a href="../index.html"><span class="nav-number">⌂</span>Course</a><a aria-current="page" href="quality-gauntlet.html"><span class="nav-number">→</span>Quality gauntlet</a><a href="crap-calculator.html"><span class="nav-number">ƒ</span>CRAP calculator</a><a href="glossary.html"><span class="nav-number">Aa</span>Glossary</a><a href="toolchain-picker.html"><span class="nav-number">⚒</span>Toolchains</a><a href="pipeline-constraint-map.html"><span class="nav-number">↦</span>Constraint map</a></nav>
+  </aside>
+  <main class="main" id="content"><article class="lesson">
+    <div class="topbar"><a class="crumb" href="../index.html">← Course overview</a><button class="secondary-button" data-print type="button">Print reference</button></div>
+    <header class="lesson-header"><div class="eyebrow">Quick reference</div><h1>The AI quality gauntlet</h1><p class="lede">A compact story-to-acceptance loop. Roles are responsibilities; they do not require separate agents.</p></header>
+
+    <table class="comparison"><thead><tr><th>Stage</th><th>Input → output</th><th>Detects</th><th>Human checkpoint</th></tr></thead><tbody>
+      <tr><td>1 · Specify</td><td>Story → rules, examples, open questions, QA</td><td>Ambiguity, missing edge cases, wrong oracle</td><td>Approve value, policy, risk</td></tr>
+      <tr><td>2 · Implement</td><td>Examples → code, types, focused tests</td><td>Compile errors, behavioral mismatch</td><td>Confirm scope remains narrow</td></tr>
+      <tr><td>3 · Clean</td><td>Working diff → legible modules</td><td>Mixed responsibilities, complexity, drift</td><td>Choose boundaries and domain names</td></tr>
+      <tr><td>4 · Harden</td><td>Passing suite → stronger evidence</td><td>Weak assertions, forbidden dependencies, risk gaps</td><td>Classify survivors and exceptions</td></tr>
+      <tr><td>5 · Accept</td><td>Candidate → observed user outcome</td><td>Assembly, integration, UX, missing requirement</td><td>Accept or reject final behavior</td></tr>
+    </tbody></table>
+
+    <h2>Evidence ladder</h2>
+    <div class="flow"><div class="flow-step"><span class="number">FAST</span><strong>Build + types</strong><span>Can the program be formed?</span></div><div class="flow-step"><span class="number">LOCAL</span><strong>Focused tests</strong><span>Does the unit distinguish behaviors?</span></div><div class="flow-step"><span class="number">STATIC</span><strong>Lint + architecture</strong><span>Does structure respect invariants?</span></div><div class="flow-step"><span class="number">STRONG</span><strong>Mutation</strong><span>Would the suite notice faults?</span></div><div class="flow-step"><span class="number">WHOLE</span><strong>QA + human</strong><span>Does the system solve the intended problem?</span></div></div>
+
+    <h2>Diagnostic routing</h2>
+    <table class="comparison"><thead><tr><th>Symptom</th><th>First question</th><th>Likely next move</th></tr></thead><tbody>
+      <tr><td>Agent loops between fixes</td><td>Is the task or module mixing unrelated decisions?</td><td>Shrink the slice; expose a stable boundary.</td></tr>
+      <tr><td>All tests pass; feature is wrong</td><td>Did acceptance criteria name an observable oracle?</td><td>Fix the example and QA before more unit tests.</td></tr>
+      <tr><td>Coverage is low</td><td>What risky behavior was never executed?</td><td>Add one meaningful assertion or remove dead code.</td></tr>
+      <tr><td>Coverage is high; mutant survives</td><td>Which behavioral distinction is absent?</td><td>Add a boundary test or classify the mutant.</td></tr>
+      <tr><td>Changes spread across folders</td><td>Which decision lacks an owner?</td><td>Regroup by capability; narrow the interface.</td></tr>
+      <tr><td>Architecture keeps drifting</td><td>Can the forbidden edge be observed mechanically?</td><td>Encode one dependency fitness function.</td></tr>
+      <tr><td>Checks dominate elapsed time</td><td>Does each stage detect distinct valuable defects?</td><td>Target changed code; schedule expensive checks.</td></tr>
+    </tbody></table>
+
+    <h2>Definition of done for one AI-assisted slice</h2>
+    <ul class="checklist">
+      <li><label><input type="checkbox" data-check-key="ref-done-outcome">The user-visible outcome and non-goals are explicit.</label></li>
+      <li><label><input type="checkbox" data-check-key="ref-done-examples">Boundary examples and unanswered questions are recorded.</label></li>
+      <li><label><input type="checkbox" data-check-key="ref-done-fast">Build, types, static analysis, and focused tests pass.</label></li>
+      <li><label><input type="checkbox" data-check-key="ref-done-arch">Changed dependencies respect an executable architecture rule.</label></li>
+      <li><label><input type="checkbox" data-check-key="ref-done-cov">Coverage gaps in changed risky code are explained.</label></li>
+      <li><label><input type="checkbox" data-check-key="ref-done-mut">Relevant mutation survivors are killed or classified.</label></li>
+      <li><label><input type="checkbox" data-check-key="ref-done-qa">The QA path was executed at the real boundary.</label></li>
+      <li><label><input type="checkbox" data-check-key="ref-done-human">A human accepted intent, risk, and final behavior.</label></li>
+    </ul>
+
+    <div class="callout warning"><h3>Do not cargo-cult the full pipeline</h3><p>Begin with existing checks plus one missing high-value signal. Add a role or gate only when it improves accepted lead time, human attention, rework, or escaped defects.</p></div>
+    <footer class="lesson-footer"><a href="../lessons/0007-adopt-the-quality-loop.html"><small>Lesson</small>Adopt the quality loop</a><a class="next" href="toolchain-picker.html"><small>Next reference</small>Choose concrete tools →</a></footer>
+  </article></main></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation"><a href="../index.html">Course</a><a aria-current="page" href="quality-gauntlet.html">Gauntlet</a><a href="toolchain-picker.html">Tools</a></nav>
+</body></html>

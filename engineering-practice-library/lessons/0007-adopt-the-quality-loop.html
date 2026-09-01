@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Adopt a measured, right-sized AI-assisted software quality loop in a real repository.">
+  <title>07 · Adopt the quality loop</title>
+  <link rel="stylesheet" href="../assets/course.css"><script src="../assets/lesson.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="0007-adopt-the-quality-loop.html#content">Skip to lesson</a>
+  <div class="app-shell"><aside class="sidebar" aria-label="Course navigation">
+    <a class="brand" href="../index.html"><span class="brand-mark">SF</span><span>Software Fundamentals</span></a><div class="nav-label">Lesson 07</div>
+    <nav class="course-nav"><a href="../index.html"><span class="nav-number">⌂</span>Overview</a><a href="0001-fundamentals-as-feedback.html"><span class="nav-number">01</span>Feedback</a><a href="0002-clean-code-search-cost.html"><span class="nav-number">02</span>Clean code</a><a href="0003-tests-specify-behavior.html"><span class="nav-number">03</span>Tests</a><a href="0004-coverage-is-a-map.html"><span class="nav-number">04</span>Coverage</a><a href="0005-mutation-tests-the-tests.html"><span class="nav-number">05</span>Mutation</a><a href="0006-architecture-as-code.html"><span class="nav-number">06</span>Architecture</a><a aria-current="page" href="0007-adopt-the-quality-loop.html"><span class="nav-number">07</span>Adoption</a></nav>
+  </aside>
+  <main class="main" id="content"><article class="lesson">
+    <div class="topbar"><a class="crumb" href="0006-architecture-as-code.html">← Lesson 06</a><span class="pill">18 minutes</span></div>
+    <header class="lesson-header"><div class="eyebrow">Lesson 07 · Practice</div><h1>Adopt the smallest useful gauntlet</h1><p class="lede">A quality pipeline earns its place by reducing accepted-change time and escaped defects—not by having the most agents or the strictest numbers.</p><div class="lesson-meta"><span>Vertical pilot</span><span>Ratchet strategy</span><span>Measured adoption</span></div></header>
+    <section class="objective"><h2>Win for this lesson</h2><p>You will leave with a one-story pilot plan, explicit human checkpoints, and measurements that can justify—or reject—more automation.</p></section>
+
+    <h2>The practical quality gauntlet</h2>
+    <div class="flow"><div class="flow-step"><span class="number">01</span><strong>Specify</strong><span>Story, rules, examples, risks, QA.</span></div><div class="flow-step"><span class="number">02</span><strong>Implement</strong><span>Code, types, focused tests.</span></div><div class="flow-step"><span class="number">03</span><strong>Clean</strong><span>Names, cohesion, complexity, diff.</span></div><div class="flow-step"><span class="number">04</span><strong>Harden</strong><span>Survivors, security, boundaries.</span></div><div class="flow-step"><span class="number">05</span><strong>Accept</strong><span>QA outcome and human judgment.</span></div></div>
+    <p>These are responsibilities, not mandatory agents. One person and one agent can perform all five. Split a role only when independent context, parallelism, or a fresh reviewer measurably improves the outcome.</p>
+
+    <h2>Human checkpoints</h2>
+    <table class="comparison"><thead><tr><th>Checkpoint</th><th>Human owns</th><th>Agent can accelerate</th></tr></thead><tbody>
+      <tr><td>Before implementation</td><td>User value, policy, risk, acceptance oracle</td><td>Examples, edge-case proposals, repository discovery</td></tr>
+      <tr><td>After first working slice</td><td>Domain language, module boundaries, scope</td><td>Dependency map, focused refactor proposals</td></tr>
+      <tr><td>Before acceptance</td><td>Tradeoffs, security posture, UX, final outcome</td><td>Run checks, triage findings, execute QA steps</td></tr>
+    </tbody></table>
+
+    <h2>Your one-story pilot</h2>
+    <ul class="checklist">
+      <li><label><input type="checkbox" data-check-key="pilot-story">Choose one vertical story that can be accepted in under a day.</label></li>
+      <li><label><input type="checkbox" data-check-key="pilot-example">Write one rule, two examples, and unresolved questions.</label></li>
+      <li><label><input type="checkbox" data-check-key="pilot-baseline">Run existing checks and record the baseline before changing code.</label></li>
+      <li><label><input type="checkbox" data-check-key="pilot-agent">Give one agent the outcome, relevant local context, and verification commands.</label></li>
+      <li><label><input type="checkbox" data-check-key="pilot-review">Inspect behavior, diff, dependencies, coverage gaps, and one mutation target.</label></li>
+      <li><label><input type="checkbox" data-check-key="pilot-qa">Execute the human QA procedure at the real system boundary.</label></li>
+      <li><label><input type="checkbox" data-check-key="pilot-measure">Record accepted lead time, review minutes, rework, and escaped issues.</label></li>
+    </ul>
+
+    <h2>Ratchet; do not demand instant perfection</h2>
+    <p>Legacy repositories often cannot pass an idealized global threshold. Start by preventing regression on changed code. Tighten only after the signal proves useful.</p>
+    <pre><code>Fast loop on each change
+  build / typecheck
+  focused tests
+  lint / static analysis
+  architecture rules
+
+Review loop on the changed slice
+  coverage gaps explained
+  selected mutation survivors killed or classified
+  human diff and outcome review
+
+Acceptance loop
+  executable or manual QA at the boundary
+  security / accessibility / performance checks by risk
+  explicit human acceptance</code></pre>
+
+    <h2>Measure the system, not the demo</h2>
+    <table class="comparison"><thead><tr><th>Measure</th><th>Why it matters</th></tr></thead><tbody>
+      <tr><td>Accepted lead time</td><td>Includes implementation, repair loops, review, and QA.</td></tr>
+      <tr><td>Human attention minutes</td><td>Human time is often the scarce resource automation should protect.</td></tr>
+      <tr><td>Rework loops</td><td>Reveals vague intent, weak tests, or agent thrashing.</td></tr>
+      <tr><td>Escaped defects</td><td>Prevents “faster merge” from masquerading as productivity.</td></tr>
+      <tr><td>Unnecessary code</td><td>Tracks speculative abstractions and cleanup burden.</td></tr>
+    </tbody></table>
+
+    <div class="callout danger"><h3>Stop adding stages when</h3><p>The check is flaky, its verdict cannot be explained, false positives dominate, the same evidence already exists elsewhere, or its repair cost exceeds the defects it prevents. Automation is part of the product and must justify its maintenance.</p></div>
+
+    <section class="quiz" data-quiz data-answer="measure"><h3>Retrieval check</h3><fieldset><legend>A five-agent pipeline takes longer than one focused agent. What determines whether it is still worthwhile?</legend><div class="quiz-options">
+      <label class="quiz-option"><input type="radio" name="q7" value="measure" data-feedback="Correct. Accepted lead time, human attention, rework, and defects determine local value.">Measure accepted outcomes locally</label>
+      <label class="quiz-option"><input type="radio" name="q7" value="roles" data-feedback="More roles increase coordination; their names do not prove value.">Count specialized agent roles</label>
+      <label class="quiz-option"><input type="radio" name="q7" value="tokens" data-feedback="Token volume is a cost input, not a complete outcome measure.">Maximize total token usage</label>
+      <label class="quiz-option"><input type="radio" name="q7" value="interview" data-feedback="The interview provides a case study, not a transferable ROI guarantee.">Trust the interview estimate</label>
+    </div></fieldset><button class="secondary-button" type="button">Check answer</button><p class="feedback" aria-live="polite"></p></section>
+
+    <section class="exercise reflection"><h2>Capstone: define your pilot</h2><p>Write the repository, story, three existing checks, one new check, human acceptance step, and the four measurements you will record.</p><textarea data-note-key="lesson-0007-pilot" aria-label="Your quality loop pilot" placeholder="Repository: …&#10;Story: …&#10;Existing checks: …&#10;New check: …&#10;Human acceptance: …&#10;Measures: …"></textarea></section>
+
+    <section class="source-card"><span class="source-type">First-party engineering case study</span><h3><a href="https://openai.com/index/harness-engineering/">OpenAI · Harness engineering: leveraging Codex in an agent-first world</a></h3><p>Compare its repository legibility, architecture enforcement, and human-steering lessons with Robert Martin’s <a href="https://github.com/unclebob/swarm-forge">SwarmForge</a>. Both are practitioner case studies; validate the pattern in your own repository.</p></section>
+    <div class="callout info"><h3>Continue with your teacher</h3><p>Send me the capstone plan or name the repository. I can inspect the real checks, help choose one vertical story, and guide the pilot without inventing a generic toolchain.</p></div>
+    <button class="mark-complete" data-lesson="0007" aria-pressed="false" type="button">Mark lesson complete</button>
+    <footer class="lesson-footer"><a href="0006-architecture-as-code.html"><small>Previous</small>Architecture as code</a><a class="next" href="../reference/quality-gauntlet.html"><small>Keep nearby</small>Quality gauntlet reference →</a></footer>
+  </article></main></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation"><a href="../index.html">Course</a><a aria-current="page" href="0007-adopt-the-quality-loop.html">Lesson 07</a><a href="../reference/quality-gauntlet.html">Reference</a></nav>
+</body></html>

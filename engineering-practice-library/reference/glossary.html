@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Glossary for software quality and AI-assisted development terms.">
+  <title>Reference · Glossary</title>
+  <link rel="stylesheet" href="../assets/course.css"><script src="../assets/lesson.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="glossary.html#content">Skip to glossary</a>
+  <div class="app-shell"><aside class="sidebar" aria-label="Reference navigation">
+    <a class="brand" href="../index.html"><span class="brand-mark">SF</span><span>Software Fundamentals</span></a><div class="nav-label">References</div>
+    <nav class="course-nav"><a href="../index.html"><span class="nav-number">⌂</span>Course</a><a href="quality-gauntlet.html"><span class="nav-number">→</span>Quality gauntlet</a><a href="crap-calculator.html"><span class="nav-number">ƒ</span>CRAP calculator</a><a aria-current="page" href="glossary.html"><span class="nav-number">Aa</span>Glossary</a><a href="toolchain-picker.html"><span class="nav-number">⚒</span>Toolchains</a><a href="pipeline-constraint-map.html"><span class="nav-number">↦</span>Constraint map</a></nav>
+  </aside>
+  <main class="main" id="content"><article class="lesson">
+    <div class="topbar"><a class="crumb" href="../index.html">← Course overview</a><button class="secondary-button" data-print type="button">Print glossary</button></div>
+    <header class="lesson-header"><div class="eyebrow">Reference</div><h1>Course glossary</h1><p class="lede">Use these definitions consistently when specifying work, interpreting checks, and discussing tradeoffs.</p></header>
+    <h2>A–C</h2>
+    <dl>
+      <dt><strong>Acceptance criterion</strong></dt><dd>A business rule or condition that must hold for a story to be accepted. A concrete example illustrates it; the two are not synonyms.</dd>
+      <dt><strong>Agent harness</strong></dt><dd>The software around a model that supplies context, tools, permissions, an execution loop, and feedback.</dd>
+      <dt><strong>Bottleneck</strong></dt><dd>The pipeline step whose capacity sets system throughput. Speeding any other step creates inventory, not delivery. See <a href="pipeline-constraint-map.html">pipeline constraint map</a>.</dd>
+      <dt><strong>Branch coverage</strong></dt><dd>The proportion of control-flow outcomes executed by tests. It records execution, not assertion quality.</dd>
+      <dt><strong>Characterization test</strong></dt><dd>A test that records current observable behavior before risky refactoring, whether or not that behavior is ideal.</dd>
+      <dt><strong>Cohesion</strong></dt><dd>The degree to which code in a module belongs together because it serves one capability or reason to change.</dd>
+      <dt><strong>Contract test</strong></dt><dd>A check that a component or service honors an interface agreement at a boundary.</dd>
+      <dt><strong>CRAP metric</strong></dt><dd>An experimental score combining cyclomatic complexity and method coverage to highlight complex, poorly exercised code. Originally “Change Risk Analysis and Predictions”; later tools use variant expansions.</dd>
+      <dt><strong>Cyclomatic complexity</strong></dt><dd>The size of a basis set of linearly independent paths in a control-flow graph—not the total possible execution paths.</dd>
+    </dl>
+
+    <h2>D–M</h2>
+    <dl>
+      <dt><strong>Deterministic check</strong></dt><dd>A repeatable procedure that returns an observable result for the same inputs, such as a compiler, test, linter, or dependency rule.</dd>
+      <dt><strong>Equivalent mutant</strong></dt><dd>A mutation that does not change observable program behavior and therefore cannot be killed by any valid test.</dd>
+      <dt><strong>Executable specification</strong></dt><dd>A human-readable description connected to code that verifies its examples, such as well-written Gherkin scenarios.</dd>
+      <dt><strong>Fitness function</strong></dt><dd>An automated check that continuously evaluates an architectural or operational property.</dd>
+      <dt><strong>Gherkin</strong></dt><dd>Cucumber’s grammar for structuring concrete examples with keywords such as Feature, Rule, Given, When, and Then.</dd>
+      <dt><strong>Information hiding</strong></dt><dd>Designing a module so callers need not know the internal decisions most likely to change.</dd>
+      <dt><strong>Invariant</strong></dt><dd>A condition that must always hold at a defined boundary or state transition.</dd>
+      <dt><strong>Inventory</strong></dt><dd>Finished-looking work that has not passed the constraint: unreviewed diffs, unshipped builds, or unused MVPs. Visible progress is not throughput.</dd>
+      <dt><strong>Killed mutant</strong></dt><dd>An inserted fault that causes at least one test to fail, demonstrating that the suite distinguishes that change.</dd>
+      <dt><strong>Mutation testing</strong></dt><dd>Systematically inserting small faults and rerunning tests to evaluate the suite’s fault-detection sensitivity.</dd>
+    </dl>
+
+    <h2>O–Z</h2>
+    <dl>
+      <dt><strong>Oracle</strong></dt><dd>The mechanism that decides whether observed behavior is correct. Weak oracles let wrong results pass even when code is covered.</dd>
+      <dt><strong>Port and adapter</strong></dt><dd>A boundary pattern where core policy defines an interface (port) and infrastructure-specific code implements it (adapter).</dd>
+      <dt><strong>QA procedure</strong></dt><dd>A human-oriented sequence that exercises the assembled system at its real interface and names deterministic expected outcomes.</dd>
+      <dt><strong>Ratchet</strong></dt><dd>A policy that prevents quality from moving backward while gradually tightening a baseline, especially useful in legacy systems.</dd>
+      <dt><strong>Refactoring</strong></dt><dd>Changing internal structure to improve understandability or modification cost without changing observable behavior.</dd>
+      <dt><strong>Statement coverage</strong></dt><dd>The proportion of executable statements run by tests. It cannot prove that outputs were asserted or requirements are complete.</dd>
+      <dt><strong>Surviving mutant</strong></dt><dd>An inserted change that does not fail the suite; it may reveal a missing assertion, dead code, equivalent behavior, or a justified exception.</dd>
+      <dt><strong>Test pyramid</strong></dt><dd>A heuristic favoring many fast focused tests and fewer broad end-to-end tests; the useful shape depends on the system and risk.</dd>
+      <dt><strong>Threshold career</strong></dt><dd>A field where entry rungs thinned because low-complexity work is generated, while demand remains above a bar. Contrast with a ladder career that trains through grunt work.</dd>
+      <dt><strong>Unit test</strong></dt><dd>A fast test of a small behavioral unit through a stable boundary, isolated enough that failures are easy to diagnose.</dd>
+    </dl>
+    <footer class="lesson-footer"><a href="crap-calculator.html"><small>Previous reference</small>CRAP calculator</a><a class="next" href="toolchain-picker.html"><small>Next reference</small>Toolchain picker →</a></footer>
+  </article></main></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation"><a href="../index.html">Course</a><a aria-current="page" href="glossary.html">Glossary</a><a href="toolchain-picker.html">Tools</a></nav>
+</body></html>

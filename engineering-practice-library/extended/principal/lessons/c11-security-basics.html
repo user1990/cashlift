@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>C11: Security basics: XSS, CSRF, CSP</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">C11</div>
+        <h1>Security basics: XSS, CSRF, CSP</h1>
+        <p class="lede">Frontend security starts with treating all input and all rendered content as hostile until proven safe.</p>
+      </header>
+      <nav class="small"><a href="index.html">Sprint index</a></nav>
+      <section class="panel rule">
+        <h2>The rule</h2>
+        <p>Avoid unsafe HTML injection, protect state-changing requests, use secure headers, and make CSP part of defense in depth.</p>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <p>Rendering user-provided vehicle notes with innerHTML is a risk unless sanitized and constrained by policy.</p>
+      </section>
+      <section class="panel">
+        <h2>Practice</h2>
+        <p>Find one place user input becomes UI. Write the validation, encoding, sanitization, and CSP assumptions.</p>
+        <textarea id="answer" aria-label="Practice answer" placeholder="Write your answer here."></textarea>
+        <button id="check" type="button">Check direction</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Write a concrete answer, then check.</div>
+      </section>
+      <section class="panel">
+        <h2>Good answer direction</h2>
+        <p>Strong answer: I do not rely on React escaping alone as a complete security strategy; I design safe data flows and headers.</p>
+      </section>
+      <section>
+        <h2>Primary sources</h2>
+        <ul>
+          <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html">OWASP XSS Prevention Cheat Sheet</a></li>
+          <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">MDN: Content-Security-Policy</a></li>
+        </ul>
+        <p class="small">Ask me follow-up questions about anything unclear; I can turn your answer into an interview-ready version.</p>
+      </section>
+    </main>
+    <script>
+      const answer = document.querySelector("#answer");
+      const feedback = document.querySelector("#feedback");
+      document.querySelector("#check").addEventListener("click", () => {
+        const words = answer.value.trim().split(/\s+/).filter(Boolean).length;
+        feedback.className = "feedback " + (words >= 20 ? "good" : "bad");
+        feedback.textContent = words >= 20
+          ? "Good start. Now make it sharper: name the tradeoff, owner, risk, and verification step."
+          : "Make it more concrete. Aim for at least 20 words with a tradeoff and an example.";
+      });
+    </script>
+  </body>
+</html>

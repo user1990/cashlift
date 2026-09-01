@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Translate product intent into acceptance examples, unit tests, and executable QA.">
+  <title>03 · Tests specify behavior</title>
+  <link rel="stylesheet" href="../assets/course.css"><script src="../assets/lesson.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="0003-tests-specify-behavior.html#content">Skip to lesson</a>
+  <div class="app-shell"><aside class="sidebar" aria-label="Course navigation">
+    <a class="brand" href="../index.html"><span class="brand-mark">SF</span><span>Software Fundamentals</span></a><div class="nav-label">Lesson 03</div>
+    <nav class="course-nav"><a href="../index.html"><span class="nav-number">⌂</span>Overview</a><a href="0001-fundamentals-as-feedback.html"><span class="nav-number">01</span>Feedback</a><a href="0002-clean-code-search-cost.html"><span class="nav-number">02</span>Clean code</a><a aria-current="page" href="0003-tests-specify-behavior.html"><span class="nav-number">03</span>Tests</a><a href="0004-coverage-is-a-map.html"><span class="nav-number">04</span>Coverage</a><a href="0005-mutation-tests-the-tests.html"><span class="nav-number">05</span>Mutation</a><a href="0006-architecture-as-code.html"><span class="nav-number">06</span>Architecture</a><a href="0007-adopt-the-quality-loop.html"><span class="nav-number">07</span>Adoption</a></nav>
+  </aside>
+  <main class="main" id="content"><article class="lesson">
+    <div class="topbar"><a class="crumb" href="0002-clean-code-search-cost.html">← Lesson 02</a><span class="pill">14 minutes</span></div>
+    <header class="lesson-header"><div class="eyebrow">Lesson 03 · Behavior</div><h1>Tests are executable decisions</h1><p class="lede">A useful test does more than exercise code. It records what the system promises at a boundary someone cares about.</p><div class="lesson-meta"><span>Story slicing</span><span>Gherkin</span><span>Unit + QA layers</span></div></header>
+    <section class="objective"><h2>Win for this lesson</h2><p>You can turn one human story into an observable acceptance example, a focused unit test, and a human-oriented QA procedure.</p></section>
+
+    <h2>Start with the decision, not the interface</h2>
+    <p>“Add a refund button” is a solution fragment. “A support agent can refund an eligible order and immediately see the final status” names the actor, capability, rule, and observable outcome. That is enough structure for an agent to implement while leaving design choices open.</p>
+
+    <h3>1. Acceptance example: shared meaning</h3>
+    <pre><code>Feature: Refund a paid order
+  Rule: Paid orders remain refundable for 30 days
+
+  Scenario: Refund on the final eligible day
+    Given a paid order is exactly 30 days old
+    When a support agent refunds the order
+    Then the order is shown as refunded
+    And one refund is submitted for the paid amount</code></pre>
+    <p><code>Given</code> establishes context, <code>When</code> names the event, and <code>Then</code> states an externally observable result. The example chooses the boundary day because that is where an implementation error is likely.</p>
+
+    <h3>2. Unit test: isolate the business rule</h3>
+    <pre><code>it("approves a refund on day 30", () =&gt; {
+  const order = paidOrder({ ageInDays: 30 });
+
+  expect(decideRefund(order)).toEqual({ approved: true });
+});
+
+it("rejects a refund after day 30", () =&gt; {
+  const order = paidOrder({ ageInDays: 31 });
+
+  expect(decideRefund(order)).toEqual({ approved: false, reason: "expired" });
+});</code></pre>
+    <p>The unit test makes the boundary cheap to exercise. It should not prove that the UI wires everything together.</p>
+
+    <h3>3. QA procedure: prove the assembled path</h3>
+    <ol><li>Open a seeded order paid exactly 30 days ago.</li><li>Choose <strong>Refund</strong> and confirm the paid amount.</li><li>Verify that the page shows <strong>Refunded</strong>.</li><li>Reload and verify the status persists.</li><li>Inspect the payment sandbox and verify one refund, not two.</li></ol>
+    <p>This is written from the operator’s point of view. It can begin as a manual check and later become an end-to-end script if the path is stable and valuable.</p>
+
+    <div class="flow" aria-label="Specification flow"><div class="flow-step"><span class="number">HUMAN</span><strong>Story</strong><span>Choose value and policy.</span></div><div class="flow-step"><span class="number">SHARED</span><strong>Example</strong><span>Resolve ambiguity together.</span></div><div class="flow-step"><span class="number">AGENT</span><strong>Implementation</strong><span>Code and focused tests.</span></div><div class="flow-step"><span class="number">SYSTEM</span><strong>QA</strong><span>Verify assembled behavior.</span></div></div>
+
+    <div class="callout warning"><h3>Gherkin is not automatically good specification</h3><p><code>When I click button #refund</code> couples the scenario to the interface. <code>When a support agent refunds the order</code> names intent. Use Gherkin only when concrete examples improve shared understanding; plain tables or tests may be clearer for technical rules.</p></div>
+
+    <section class="exercise reflection"><h2>Three-layer exercise</h2><p>Choose one small story. Write one boundary example, one unit-level rule, and three QA steps. Keep each layer responsible for different evidence.</p><textarea data-note-key="lesson-0003-spec" aria-label="Your behavior specification" placeholder="Story: …&#10;Given / When / Then: …&#10;Unit rule: …&#10;QA: 1… 2… 3…"></textarea></section>
+
+    <section class="quiz" data-quiz data-answer="observable"><h3>Retrieval check</h3><fieldset><legend>What should a Gherkin Then step primarily describe?</legend><div class="quiz-options">
+      <label class="quiz-option"><input type="radio" name="q3" value="observable" data-feedback="Correct. Acceptance examples should express outcomes visible at the system boundary.">Observable user outcome only</label>
+      <label class="quiz-option"><input type="radio" name="q3" value="database" data-feedback="A database row is usually implementation detail, not the user-visible promise.">Internal database row only</label>
+      <label class="quiz-option"><input type="radio" name="q3" value="helper" data-feedback="Private calls make the scenario brittle and confuse acceptance with unit testing.">Private helper call only</label>
+      <label class="quiz-option"><input type="radio" name="q3" value="mock" data-feedback="Mock counts may support a unit test; they are not the business outcome.">Mock invocation count only</label>
+    </div></fieldset><button class="secondary-button" type="button">Check answer</button><p class="feedback" aria-live="polite"></p></section>
+
+    <section class="source-card"><span class="source-type">Official reference</span><h3><a href="https://cucumber.io/docs/gherkin/reference/">Cucumber · Gherkin Reference</a></h3><p>Focus on <em>Example</em> and <em>Steps</em>. The guide recommends concrete examples and warns against inspecting database state in <code>Then</code> when the outcome should be observable externally.</p></section>
+    <div class="callout info"><h3>Ask your teacher</h3><p>Send me your three-layer exercise. I can flag duplicated evidence, missing boundary cases, and implementation-coupled wording.</p></div>
+    <button class="mark-complete" data-lesson="0003" aria-pressed="false" type="button">Mark lesson complete</button>
+    <footer class="lesson-footer"><a href="0002-clean-code-search-cost.html"><small>Previous</small>Clean code lowers search cost</a><a class="next" href="0004-coverage-is-a-map.html"><small>Next lesson</small>Coverage is a map →</a></footer>
+  </article></main></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation"><a href="../index.html">Course</a><a aria-current="page" href="0003-tests-specify-behavior.html">Lesson 03</a><a href="../reference/quality-gauntlet.html">Reference</a></nav>
+</body></html>

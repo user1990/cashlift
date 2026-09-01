@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>C15: Maintainable CSS: architecture tradeoffs</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">C15</div>
+        <h1>Maintainable CSS: architecture tradeoffs</h1>
+        <p class="lede">CSS architecture is about change control: who can safely modify what without unexpected visual regressions.</p>
+      </header>
+      <nav class="small"><a href="index.html">Sprint index</a></nav>
+      <section class="panel rule">
+        <h2>The rule</h2>
+        <p>Choose utility, component, CSS-in-JS, BEM, or atomic approaches based on team workflow, scale, runtime cost, and design system needs.</p>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <p>A design system primitive needs stable tokens and variants; a one-off marketing page may benefit from local composition.</p>
+      </section>
+      <section class="panel">
+        <h2>Practice</h2>
+        <p>For one component, write which styles are tokens, variants, layout, state, and one-off exceptions.</p>
+        <textarea id="answer" aria-label="Practice answer" placeholder="Write your answer here."></textarea>
+        <button id="check" type="button">Check direction</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Write a concrete answer, then check.</div>
+      </section>
+      <section class="panel">
+        <h2>Good answer direction</h2>
+        <p>Strong answer: I care less about CSS ideology and more about predictable ownership, low leakage, and fast review.</p>
+      </section>
+      <section>
+        <h2>Primary sources</h2>
+        <ul>
+          <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">MDN: CSS</a></li>
+          <li><a href="https://web.dev/learn/css">web.dev: Learn CSS</a></li>
+        </ul>
+        <p class="small">Ask me follow-up questions about anything unclear; I can turn your answer into an interview-ready version.</p>
+      </section>
+    </main>
+    <script>
+      const answer = document.querySelector("#answer");
+      const feedback = document.querySelector("#feedback");
+      document.querySelector("#check").addEventListener("click", () => {
+        const words = answer.value.trim().split(/\s+/).filter(Boolean).length;
+        feedback.className = "feedback " + (words >= 20 ? "good" : "bad");
+        feedback.textContent = words >= 20
+          ? "Good start. Now make it sharper: name the tradeoff, owner, risk, and verification step."
+          : "Make it more concrete. Aim for at least 20 words with a tradeoff and an example.";
+      });
+    </script>
+  </body>
+</html>

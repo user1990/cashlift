@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>C19: Frontend tooling: monorepos, ASTs, pipelines</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">C19</div>
+        <h1>Frontend tooling: monorepos, ASTs, pipelines</h1>
+        <p class="lede">Tooling is worth building when it removes repeated human coordination cost.</p>
+      </header>
+      <nav class="small"><a href="index.html">Sprint index</a></nav>
+      <section class="panel rule">
+        <h2>The rule</h2>
+        <p>Reach for monorepo orchestration, AST transforms, or custom pipelines only when the maintenance cost is lower than repeated manual work.</p>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <p>A codemod can migrate three teams from unsafe error rendering to a shared ErrorState faster than review comments.</p>
+      </section>
+      <section class="panel">
+        <h2>Practice</h2>
+        <p>Identify one repeated codebase change and decide whether it should be documentation, lint rule, codemod, or build plugin.</p>
+        <textarea id="answer" aria-label="Practice answer" placeholder="Write your answer here."></textarea>
+        <button id="check" type="button">Check direction</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Write a concrete answer, then check.</div>
+      </section>
+      <section class="panel">
+        <h2>Good answer direction</h2>
+        <p>Strong answer: I build tooling when it turns a standard into a default and keeps adoption cheap.</p>
+      </section>
+      <section>
+        <h2>Primary sources</h2>
+        <ul>
+          <li><a href="https://turborepo.com/docs">Turborepo Docs</a></li>
+          <li><a href="https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API">TypeScript Compiler API Wiki</a></li>
+        </ul>
+        <p class="small">Ask me follow-up questions about anything unclear; I can turn your answer into an interview-ready version.</p>
+      </section>
+    </main>
+    <script>
+      const answer = document.querySelector("#answer");
+      const feedback = document.querySelector("#feedback");
+      document.querySelector("#check").addEventListener("click", () => {
+        const words = answer.value.trim().split(/\s+/).filter(Boolean).length;
+        feedback.className = "feedback " + (words >= 20 ? "good" : "bad");
+        feedback.textContent = words >= 20
+          ? "Good start. Now make it sharper: name the tradeoff, owner, risk, and verification step."
+          : "Make it more concrete. Aim for at least 20 words with a tradeoff and an example.";
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lesson 6 — Score and Defend</title><link rel="stylesheet" href="../assets/course.css"><script defer src="../assets/course.js"></script></head><body><main>
+<nav><a href="0005-business-impact-without-fiction.html">← Lesson 5</a><a href="../reference/evidence-model.html">Evidence model</a></nav>
+<p class="eyebrow">Lesson 6 of 6</p><h1>Score the evidence, then defend it</h1><p class="lede">Your win: produce a weighted diagnosis of a resume and convert its largest gap into an interview-ready evidence story.</p>
+<ul class="meta"><li>25 minutes</li><li>Capstone</li><li>Score calculator</li></ul>
+<h2>Score only demonstrated evidence</h2><p>A resume does not receive points for experience the reviewer must assume. Score what is visible and credible. A candidate may be stronger than the document; that means the resume has an evidence gap.</p>
+<div class="scorebox"><p class="label">100-point scorecard</p>
+<div class="rubric-row"><span>React, TypeScript, Next.js depth</span><span>/ 20</span><input data-score type="number" min="0" max="20" value="0"></div>
+<div class="rubric-row"><span>Critical systems ownership</span><span>/ 15</span><input data-score type="number" min="0" max="15" value="0"></div>
+<div class="rubric-row"><span>Business and customer impact</span><span>/ 15</span><input data-score type="number" min="0" max="15" value="0"></div>
+<div class="rubric-row"><span>Architecture and platform influence</span><span>/ 15</span><input data-score type="number" min="0" max="15" value="0"></div>
+<div class="rubric-row"><span>Testing and operational maturity</span><span>/ 10</span><input data-score type="number" min="0" max="10" value="0"></div>
+<div class="rubric-row"><span>Leadership and mentoring</span><span>/ 10</span><input data-score type="number" min="0" max="10" value="0"></div>
+<div class="rubric-row"><span>Problem-solving quality</span><span>/ 5</span><input data-score type="number" min="0" max="5" value="0"></div>
+<div class="rubric-row"><span>Communication and collaboration</span><span>/ 5</span><input data-score type="number" min="0" max="5" value="0"></div>
+<div class="rubric-row"><span>Domain relevance</span><span>/ 3</span><input data-score type="number" min="0" max="3" value="0"></div>
+<div class="rubric-row"><span>Clarity and credibility</span><span>/ 2</span><input data-score type="number" min="0" max="2" value="0"></div>
+<button onclick="calculateScore()">Calculate score</button><p><span class="total" id="total">0</span> / 100 · <strong id="interpretation">Not yet scored</strong></p></div>
+<h2>Do not optimize the smallest gap</h2><p>Multiply the missing points by relevance to the target role and recoverability from real experience. Missing payment ownership in a checkout role matters more than a certification. A buried cross-team migration may be recoverable by rewriting; nonexistent experience is not.</p>
+<div class="exercise"><p class="label">Capstone story</p><p>Take the lowest high-weight category. Write a five-part evidence chain and prepare answers to the defense questions.</p><textarea placeholder="Context → Action → Mechanism → Outcome → Scope"></textarea><h3>Defense questions</h3><ol><li>What was your decision, specifically?</li><li>Which alternative did you reject, and why?</li><li>How did you measure the result?</li><li>What failed or surprised you?</li><li>How did other teams adopt the outcome?</li></ol><button onclick="revealModel(this)">Show evaluation standard</button><div class="feedback"><p>A strong answer makes contribution boundaries explicit, names a real trade-off, includes a failure or revision, distinguishes causal from scope evidence, and shows durable leverage. If it sounds frictionless, it is probably too abstract.</p></div></div>
+<h2>Mock hiring decision</h2><div data-question data-correct-feedback="A high score with weak cross-team evidence supports Senior, not Staff. Level the demonstrated scope; use interviews to test hidden evidence." data-wrong-feedback="Do not let title or total score override the specific Staff criterion of systemic cross-team influence."><p>A candidate scores 86 but all architecture evidence is confined to one team. Best decision?</p><div class="choices">
+<button class="choice" onclick="answer(this)">Advance directly as Staff</button>
+<button class="choice" data-correct="true" onclick="answer(this)">Advance as strong Senior</button>
+<button class="choice" onclick="answer(this)">Reject for missing leadership</button>
+</div><div class="feedback"></div><button class="secondary" onclick="resetQuestion(this)">Try again</button></div>
+<h2>Completion standard</h2><p>You have completed the course when you can score a real resume, cite evidence for every category, name the three largest gaps, rewrite two bullets, and defend one Staff-shaped story under follow-up questioning. Exposure alone is not mastery.</p>
+<p class="sources"><strong>Primary reading:</strong> Revisit the <a href="https://handbook.gitlab.com/handbook/engineering/careers/matrix/development/dev/frontend/staff/">GitLab Staff Frontend framework</a> and compare it with your scored evidence—not your title.</p><p>Send your score, rewritten bullets, and one story to your agent for adversarial feedback. A learning record should be created only after you demonstrate the skill.</p>
+<div class="next"><a href="0005-business-impact-without-fiction.html">← Impact</a><a href="../reference/senior-staff-rubric.html">Review rubric →</a></div>
+</main></body></html>

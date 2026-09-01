@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>C24: Browser internals: event loop, V8, rendering mechanics</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">C24</div>
+        <h1>Browser internals: event loop, V8, rendering mechanics</h1>
+        <p class="lede">Browser internals matter when you need to explain why code that looks small still feels slow.</p>
+      </header>
+      <nav class="small"><a href="index.html">Sprint index</a></nav>
+      <section class="panel rule">
+        <h2>The rule</h2>
+        <p>Understand task queues, microtasks, rendering frames, JIT assumptions, garbage collection, and the rendering pipeline.</p>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <p>A long synchronous task can block input and delay paint even if React components are individually simple.</p>
+      </section>
+      <section class="panel">
+        <h2>Practice</h2>
+        <p>For one slow interaction, mark JavaScript work, microtasks, layout, paint, and input delay.</p>
+        <textarea id="answer" aria-label="Practice answer" placeholder="Write your answer here."></textarea>
+        <button id="check" type="button">Check direction</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Write a concrete answer, then check.</div>
+      </section>
+      <section class="panel">
+        <h2>Good answer direction</h2>
+        <p>Strong answer: I debug perceived slowness by following the browser timeline, not by guessing at React components only.</p>
+      </section>
+      <section>
+        <h2>Primary sources</h2>
+        <ul>
+          <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Event_loop">MDN: Event Loop</a></li>
+          <li><a href="https://web.dev/articles/optimize-inp">web.dev: Optimize INP</a></li>
+          <li><a href="https://v8.dev/docs">V8 Docs</a></li>
+        </ul>
+        <p class="small">Ask me follow-up questions about anything unclear; I can turn your answer into an interview-ready version.</p>
+      </section>
+    </main>
+    <script>
+      const answer = document.querySelector("#answer");
+      const feedback = document.querySelector("#feedback");
+      document.querySelector("#check").addEventListener("click", () => {
+        const words = answer.value.trim().split(/\s+/).filter(Boolean).length;
+        feedback.className = "feedback " + (words >= 20 ? "good" : "bad");
+        feedback.textContent = words >= 20
+          ? "Good start. Now make it sharper: name the tradeoff, owner, risk, and verification step."
+          : "Make it more concrete. Aim for at least 20 words with a tradeoff and an example.";
+      });
+    </script>
+  </body>
+</html>

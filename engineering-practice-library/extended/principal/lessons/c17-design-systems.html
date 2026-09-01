@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>C17: Design systems: maintainable UI components</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">C17</div>
+        <h1>Design systems: maintainable UI components</h1>
+        <p class="lede">A design system is a product for engineers and designers, not a folder of shared components.</p>
+      </header>
+      <nav class="small"><a href="index.html">Sprint index</a></nav>
+      <section class="panel rule">
+        <h2>The rule</h2>
+        <p>Components need ownership, accessibility guarantees, tokens, documentation, adoption paths, and escape hatches.</p>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <p>A Button primitive should settle keyboard, focus, disabled, loading, icon spacing, and variant behavior once.</p>
+      </section>
+      <section class="panel">
+        <h2>Practice</h2>
+        <p>Pick one shared component and define its API, accessibility contract, variants, and ownership rules.</p>
+        <textarea id="answer" aria-label="Practice answer" placeholder="Write your answer here."></textarea>
+        <button id="check" type="button">Check direction</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Write a concrete answer, then check.</div>
+      </section>
+      <section class="panel">
+        <h2>Good answer direction</h2>
+        <p>Strong answer: I measure a design system by adoption, consistency, speed, and the bugs it prevents.</p>
+      </section>
+      <section>
+        <h2>Primary sources</h2>
+        <ul>
+          <li><a href="https://www.w3.org/WAI/planning/design-systems/">W3C Design Systems Accessibility</a></li>
+          <li><a href="https://storybook.js.org/docs">Storybook Docs</a></li>
+        </ul>
+        <p class="small">Ask me follow-up questions about anything unclear; I can turn your answer into an interview-ready version.</p>
+      </section>
+    </main>
+    <script>
+      const answer = document.querySelector("#answer");
+      const feedback = document.querySelector("#feedback");
+      document.querySelector("#check").addEventListener("click", () => {
+        const words = answer.value.trim().split(/\s+/).filter(Boolean).length;
+        feedback.className = "feedback " + (words >= 20 ? "good" : "bad");
+        feedback.textContent = words >= 20
+          ? "Good start. Now make it sharper: name the tradeoff, owner, risk, and verification step."
+          : "Make it more concrete. Aim for at least 20 words with a tradeoff and an example.";
+      });
+    </script>
+  </body>
+</html>

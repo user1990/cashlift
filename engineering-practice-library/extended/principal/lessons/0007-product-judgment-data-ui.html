@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lesson 0007: Product Judgment Data UI</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">Lesson 0007</div>
+        <h1>Product judgment: data confidence UI</h1>
+        <p class="lede">In data-heavy products, frontend should communicate certainty, uncertainty, and consequence.</p>
+      </header>
+
+      <nav class="small"><a href="index.html">Sprint index</a></nav>
+
+      <section class="panel rule">
+        <h2>The product move</h2>
+        <p>When data is uncertain, do not pretend it is precise. Help the user understand risk, confidence level, evidence, and the next action.</p>
+        <p class="small">Primary sources: <a href="https://posthog.com/docs">PostHog Docs</a>, <a href="https://posthog.com/docs/feature-flags">PostHog Feature Flags</a>, <a href="https://www.sanity.io/docs">Sanity Docs</a>.</p>
+      </section>
+
+      <section>
+        <h2>Example</h2>
+        <p>Bad UI: "Mileage: 132,000 km" when two sources conflict. Better UI: "Mileage inconsistency detected", a timeline with sources, confidence indicator, and questions the buyer can ask the seller.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Practice</h2>
+        <p>Write a mini spec for one uncertain data case: problem, non-goal, user decision, event, guardrail.</p>
+        <textarea id="answer" aria-label="Mini spec" placeholder="Problem:&#10;Non-goal:&#10;User decision:&#10;Event:&#10;Guardrail:"></textarea>
+        <button id="check" type="button">Check direction</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Write first, then check.</div>
+      </section>
+
+      <section class="panel">
+        <h2>Good answer direction</h2>
+        <p>"Data-heavy UI should not hide uncertainty. I would show the confidence level, source trail, consequence, and next action. Then I would roll it out behind a flag and measure whether users understand the risk better."</p>
+      </section>
+    </main>
+    <script>
+      const answer = document.querySelector("#answer");
+      const feedback = document.querySelector("#feedback");
+      document.querySelector("#check").addEventListener("click", () => {
+        const text = answer.value.toLowerCase();
+        const pass = ["problem", "non-goal", "decision", "event", "guardrail"].every((word) => text.includes(word));
+        feedback.className = "feedback " + (pass ? "good" : "bad");
+        feedback.textContent = pass
+          ? "Good. This turns frontend UI into product risk communication."
+          : "Use all five parts: problem, non-goal, user decision, analytics event, guardrail metric.";
+      });
+    </script>
+  </body>
+</html>

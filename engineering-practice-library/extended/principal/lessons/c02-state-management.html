@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>C02: State management: predictable architecture</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">C02</div>
+        <h1>State management: predictable architecture</h1>
+        <p class="lede">State management starts with ownership boundaries, not with choosing a library.</p>
+      </header>
+      <nav class="small"><a href="index.html">Sprint index</a></nav>
+      <section class="panel rule">
+        <h2>The rule</h2>
+        <p>Classify state before moving it: server state, domain state, UI state, interaction state, or URL state.</p>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <p>A vehicle report filter belongs in the URL if it should be shareable, near the component if it is temporary UI, and in server/query cache if it controls remote data freshness.</p>
+      </section>
+      <section class="panel">
+        <h2>Practice</h2>
+        <p>Pick one feature you know and list five pieces of state. For each one, write owner, lifetime, persistence, and invalidation rule.</p>
+        <textarea id="answer" aria-label="Practice answer" placeholder="Write your answer here."></textarea>
+        <button id="check" type="button">Check direction</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Write a concrete answer, then check.</div>
+      </section>
+      <section class="panel">
+        <h2>Good answer direction</h2>
+        <p>Strong answer: I choose state placement by ownership and lifetime first. Libraries help after the boundaries are clear.</p>
+      </section>
+      <section>
+        <h2>Primary sources</h2>
+        <ul>
+          <li><a href="https://react.dev/learn/sharing-state-between-components">React: Sharing State Between Components</a></li>
+          <li><a href="https://react.dev/learn/you-might-not-need-an-effect">React: You Might Not Need an Effect</a></li>
+        </ul>
+        <p class="small">Ask me follow-up questions about anything unclear; I can turn your answer into an interview-ready version.</p>
+      </section>
+    </main>
+    <script>
+      const answer = document.querySelector("#answer");
+      const feedback = document.querySelector("#feedback");
+      document.querySelector("#check").addEventListener("click", () => {
+        const words = answer.value.trim().split(/\s+/).filter(Boolean).length;
+        feedback.className = "feedback " + (words >= 20 ? "good" : "bad");
+        feedback.textContent = words >= 20
+          ? "Good start. Now make it sharper: name the tradeoff, owner, risk, and verification step."
+          : "Make it more concrete. Aim for at least 20 words with a tradeoff and an example.";
+      });
+    </script>
+  </body>
+</html>

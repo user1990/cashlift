@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>C20: Server-driven UI: dynamic layouts</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">C20</div>
+        <h1>Server-driven UI: dynamic layouts</h1>
+        <p class="lede">Server-driven UI trades local flexibility for centralized orchestration and cross-platform consistency.</p>
+      </header>
+      <nav class="small"><a href="index.html">Sprint index</a></nav>
+      <section class="panel rule">
+        <h2>The rule</h2>
+        <p>Use it when layout/content must change without redeploying clients, but protect type safety, observability, and fallback behavior.</p>
+      </section>
+      <section>
+        <h2>Example</h2>
+        <p>A JSON-defined promotion module can be controlled centrally, but payment and compliance UI need stricter contracts.</p>
+      </section>
+      <section class="panel">
+        <h2>Practice</h2>
+        <p>Pick one screen and mark which parts could be server-defined and which must remain locally coded.</p>
+        <textarea id="answer" aria-label="Practice answer" placeholder="Write your answer here."></textarea>
+        <button id="check" type="button">Check direction</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Write a concrete answer, then check.</div>
+      </section>
+      <section class="panel">
+        <h2>Good answer direction</h2>
+        <p>Strong answer: I would use server-driven UI for controlled composition, not arbitrary remote code.</p>
+      </section>
+      <section>
+        <h2>Primary sources</h2>
+        <ul>
+          <li><a href="https://react.dev/reference/rsc/server-components">React: Server Components</a></li>
+          <li><a href="https://json-schema.org/">JSON Schema</a></li>
+        </ul>
+        <p class="small">Ask me follow-up questions about anything unclear; I can turn your answer into an interview-ready version.</p>
+      </section>
+    </main>
+    <script>
+      const answer = document.querySelector("#answer");
+      const feedback = document.querySelector("#feedback");
+      document.querySelector("#check").addEventListener("click", () => {
+        const words = answer.value.trim().split(/\s+/).filter(Boolean).length;
+        feedback.className = "feedback " + (words >= 20 ? "good" : "bad");
+        feedback.textContent = words >= 20
+          ? "Good start. Now make it sharper: name the tradeoff, owner, risk, and verification step."
+          : "Make it more concrete. Aim for at least 20 words with a tradeoff and an example.";
+      });
+    </script>
+  </body>
+</html>

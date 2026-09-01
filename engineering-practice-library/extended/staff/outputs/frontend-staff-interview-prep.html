@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Interactive Senior and Staff frontend interview preparation: JavaScript, React, browser systems, performance, accessibility, architecture, product judgment, and leadership.">
+  <title>Staff Frontend Interview Prep</title>
+  <link rel="stylesheet" href="../assets/interview-prep.css">
+  <link rel="stylesheet" href="../assets/extended-course.css">
+  <script defer src="../assets/course.js"></script>
+  <script defer src="../assets/interview-prep.js"></script>
+</head>
+<body>
+<main class="prep">
+  <div class="topbar"><div class="topbar-inner">
+    <a class="brand" href="frontend-staff-interview-prep.html#top">Frontend Interview Lab</a>
+    <a href="frontend-staff-interview-prep.html#deep-dives">Deep dives</a><a href="frontend-staff-interview-prep.html#question-bank">Question bank</a><a href="frontend-staff-interview-prep.html#mock">Mock loop</a>
+    <div class="progress-shell" aria-label="Course progress"><div class="progress-bar" id="progress-bar"></div></div><span id="progress-label">0/10</span>
+  </div></div>
+
+  <header class="hero-panel" id="top">
+    <p class="eyebrow">Senior → Staff · Interactive preparation</p>
+    <h1>Frontend interviews from first principles to product strategy</h1>
+    <p class="lede">Explain the fundamentals precisely. Predict behavior before running code. Then move beyond trivia into system design, reliability, accessibility, product outcomes, and cross-team technical leadership.</p>
+    <ul class="meta"><li>10 deep lessons</li><li>54 harder questions</li><li>Code prediction</li><li>Model answers</li><li>Staff + product lens</li></ul>
+    <div class="stats"><div class="stat"><strong>64</strong><span>questions and lessons</span></div><div class="stat"><strong>9</strong><span>interview domains</span></div><div class="stat"><strong>2 min</strong><span>answer framework</span></div><div class="stat"><strong>100%</strong><span>source-linked fundamentals</span></div></div>
+  </header>
+
+  <div class="section-nav"><a href="frontend-staff-interview-prep.html#answer-method">Answer method</a><a href="frontend-staff-interview-prep.html#event-loop">Event loop</a><a href="frontend-staff-interview-prep.html#closures">Closures</a><a href="frontend-staff-interview-prep.html#equality">Equality</a><a href="frontend-staff-interview-prep.html#hoisting">Hoisting</a><a href="frontend-staff-interview-prep.html#react-rendering">React rendering</a><a href="frontend-staff-interview-prep.html#state">State</a><a href="frontend-staff-interview-prep.html#effects">Effects</a><a href="frontend-staff-interview-prep.html#layout">CSS layout</a><a href="frontend-staff-interview-prep.html#async">Async</a><a href="frontend-staff-interview-prep.html#performance">Performance</a></div>
+
+  <section id="answer-method">
+    <h2>The interview answer method</h2>
+    <p>Do not dump everything you know. A strong answer is layered so the interviewer can stop or go deeper.</p>
+    <div class="grid">
+      <div class="idea interview-answer"><p class="label">Concept question · 60–120 seconds</p><ol><li><strong>Define</strong> the concept in one precise sentence.</li><li><strong>Mechanism:</strong> explain how it works.</li><li><strong>Example:</strong> use a small real production case.</li><li><strong>Trade-off:</strong> name the failure mode or boundary.</li><li><strong>Check:</strong> invite the interviewer deeper.</li></ol></div>
+      <div class="idea staff-lens"><p class="label">System question · Staff signal</p><ol><li>Clarify users, scale, constraints, and success.</li><li>State assumptions and invariants.</li><li>Sketch data flow and ownership boundaries.</li><li>Choose trade-offs; reject alternatives explicitly.</li><li>Cover failure, observability, rollout, and learning.</li></ol></div>
+    </div>
+    <div class="example"><p class="label">Communication</p><p>Say: “I’ll give the short model first, then show ordering with a code example. After that I can cover browser rendering or Node-specific differences.” This makes your thinking inspectable without turning the answer into a monologue.</p></div>
+    <h3>General interview rules</h3>
+    <ul><li>Think aloud, but organize the thought: assumption → option → trade-off → decision.</li><li>Use a real example only when you can explain your exact contribution and outcome.</li><li>If uncertain, bound the uncertainty: “I believe X; I would verify it with Y.”</li><li>Never optimize before naming the measured bottleneck.</li><li>For Staff roles, connect local code choices to users, teams, operations, and long-term change cost.</li></ul>
+  </section>
+
+  <section id="deep-dives"><h2>Ten deep-dive lessons</h2><p>Answer each prediction or scenario before opening the explanation. Mark a lesson complete only when you can explain it without reading.</p></section>
+
+  <article class="lesson-card" id="event-loop">
+    <div class="lesson-head"><div><div class="pill-row"><span class="pill topic">JavaScript</span><span class="pill medium">Medium</span></div><h3>1. Explain the JavaScript event loop</h3></div><label class="complete"><input data-complete type="checkbox"> I can teach this</label></div>
+    <p><strong>Short answer:</strong> JavaScript executes one job at a time on a call stack. Browser or runtime APIs perform asynchronous work; completed work schedules jobs. When the current stack is empty, the event loop runs queued work. Promise reactions use the microtask queue, which drains before the next task such as a timer or user event.</p>
+    <dl class="answer-shape"><dt>Call stack</dt><dd>Active execution contexts; synchronous calls push frames and returns pop them.</dd><dt>Runtime APIs</dt><dd>Timers, network, DOM events, and observers are provided by the host, not the ECMAScript language alone.</dd><dt>Microtasks</dt><dd>Promise reactions and <code>queueMicrotask</code>; drained after the current job before the next task.</dd><dt>Tasks</dt><dd>Timers, events, and other host work; one task runs, then microtasks drain, then rendering may occur.</dd></dl>
+    <pre><code>console.log('A');
+
+setTimeout(() =&gt; console.log('B'), 0);
+
+Promise.resolve()
+  .then(() =&gt; console.log('C'))
+  .then(() =&gt; console.log('D'));
+
+queueMicrotask(() =&gt; console.log('E'));
+console.log('F');</code></pre>
+    <div data-question data-correct-feedback="Synchronous code runs first. Promise and queued microtasks then run in insertion/chain order; the timer task runs afterward." data-wrong-feedback="Separate the current call stack from microtasks, then from the later timer task."><p><strong>Predict the output.</strong></p><div class="choices"><button class="choice" onclick="answer(this)">A F B C D E</button><button class="choice" data-correct="true" onclick="answer(this)">A F C E D B</button><button class="choice" onclick="answer(this)">A C D E F B</button></div><div class="feedback"></div><button class="secondary" onclick="resetQuestion(this)">Try again</button></div>
+    <details class="idea"><summary>Why C, E, then D?</summary><p>The first <code>then</code> reaction and <code>queueMicrotask</code> are queued during the initial job. The second <code>then</code> is not queued until the first reaction resolves, so it is appended after E. The timer is a later task.</p></details>
+    <div class="idea followups"><p class="label">Harder follow-ups</p><ul><li>Can microtasks starve rendering? Yes: continually scheduling microtasks can delay the next task and paint opportunity.</li><li>Does <code>await</code> block the thread? No. It suspends that async function; continuation is promise-driven.</li><li>What differs in Node.js? Its host phases and queues differ; never pretend the browser task model fully describes Node.</li><li>How would you diagnose a long task? Performance panel, long-task attribution, event timing/INP, and flame charts—not guesses.</li></ul></div>
+    <p class="sources"><strong>Primary source:</strong> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model">MDN JavaScript execution model</a>.</p>
+  </article>
+
+  <article class="lesson-card" id="closures">
+    <div class="lesson-head"><div><div class="pill-row"><span class="pill topic">JavaScript</span><span class="pill medium">Medium</span></div><h3>2. What are closures?</h3></div><label class="complete"><input data-complete type="checkbox"> I can teach this</label></div>
+    <p><strong>Short answer:</strong> A closure is a function together with references to the lexical environment where it was created. The function can access those bindings later, even after the outer function returns.</p>
+    <pre><code>function createCounter() {
+  let count = 0;
+  return {
+    increment() { count += 1; },
+    value() { return count; }
+  };
+}
+
+const counter = createCounter();
+counter.increment();
+console.log(counter.value()); // 1</code></pre>
+    <p>The closure captures the <em>binding</em> for <code>count</code>, not a frozen snapshot. This enables private state, factories, memoization, event handlers, and callbacks. It can also retain large objects longer than intended.</p>
+    <pre><code>function attachHandlers(buttons) {
+  for (var i = 0; i &lt; buttons.length; i += 1) {
+    buttons[i].onclick = () =&gt; console.log(i);
+  }
+}
+// Every handler reads the same function-scoped binding.
+// After the loop, that binding equals buttons.length.</code></pre>
+    <div class="example"><p class="label">React stale closure</p><pre><code>useEffect(() =&gt; {
+  const id = setInterval(() =&gt; {
+    console.log(count); // reads the count from this Effect's render
+  }, 1000);
+  return () =&gt; clearInterval(id);
+}, []); // count omitted: the Effect never re-synchronizes</code></pre><p>The bug is not that closures are broken. The Effect intentionally retains values from the render that created it. Fix the synchronization model, not the symptom: include the dependency, use a functional updater, or restructure so the Effect does not need the changing value.</p></div>
+    <div data-question data-correct-feedback="Each function closes over its own block-scoped binding created for that loop iteration." data-wrong-feedback="With let, the loop creates a distinct binding per iteration rather than one shared function-scoped binding."><p>Replace <code>var</code> with <code>let</code>. What changes?</p><div class="choices"><button class="choice" data-correct="true" onclick="answer(this)">Each handler prints index</button><button class="choice" onclick="answer(this)">Every handler prints length</button><button class="choice" onclick="answer(this)">Handlers throw reference errors</button></div><div class="feedback"></div><button class="secondary" onclick="resetQuestion(this)">Try again</button></div>
+    <div class="idea followups"><p class="label">Harder follow-ups</p><ul><li>What exactly is captured: values or bindings?</li><li>How do closures contribute to memory leaks?</li><li>Implement <code>once</code>, <code>memoize</code>, or debounce using a closure.</li><li>Explain stale closures in React without saying hooks are “async.”</li></ul></div>
+    <p class="sources"><strong>Primary source:</strong> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures">MDN Closures</a>.</p>
+  </article>
+
+  <article class="lesson-card" id="equality">
+    <div class="lesson-head"><div><div class="pill-row"><span class="pill topic">JavaScript</span><span class="pill easy">Easy → Hard</span></div><h3>3. Difference between == and ===</h3></div><label class="complete"><input data-complete type="checkbox"> I can teach this</label></div>
+    <p><strong>Short answer:</strong> Strict equality (<code>===</code>) compares values without type coercion. Loose equality (<code>==</code>) follows the Abstract Equality Comparison algorithm and may convert operands before comparison. Prefer strict equality unless a deliberate coercion rule improves clarity.</p>
+    <table><thead><tr><th>Expression</th><th>Result</th><th>Reason</th></tr></thead><tbody><tr><td><code>0 == false</code></td><td>true</td><td>Boolean converts to number.</td></tr><tr><td><code>0 === false</code></td><td>false</td><td>Types differ.</td></tr><tr><td><code>null == undefined</code></td><td>true</td><td>Special loose-equality rule.</td></tr><tr><td><code>NaN === NaN</code></td><td>false</td><td>NaN is unequal to everything, including itself.</td></tr><tr><td><code>Object.is(NaN, NaN)</code></td><td>true</td><td>Same-value semantics.</td></tr><tr><td><code>[] == ![]</code></td><td>true</td><td>Multiple coercion steps; a reason to avoid cleverness.</td></tr></tbody></table>
+    <div class="idea"><p><strong>Nuanced exception:</strong> <code>value == null</code> is a concise deliberate check for either <code>null</code> or <code>undefined</code>, with no other values matching. Use it only if the team recognizes the idiom.</p></div>
+    <div data-question data-correct-feedback="Strict equality does not coerce, so number zero and string zero differ; loose equality converts the string to a number." data-wrong-feedback="Evaluate strict equality first without coercion, then apply the loose equality conversion rule."><p>What is <code>[0 === '0', 0 == '0']</code>?</p><div class="choices"><button class="choice" onclick="answer(this)">true then false</button><button class="choice" data-correct="true" onclick="answer(this)">false then true</button><button class="choice" onclick="answer(this)">false then false</button></div><div class="feedback"></div><button class="secondary" onclick="resetQuestion(this)">Try again</button></div>
+    <div class="idea followups"><p class="label">Harder follow-ups</p><ul><li>Compare <code>===</code>, <code>Object.is</code>, and SameValueZero used by <code>Map</code>/<code>Set</code>.</li><li>Why does React compare hook dependencies using <code>Object.is</code>?</li><li>Explain object equality and design a domain-appropriate equality function.</li></ul></div>
+    <p class="sources"><strong>Primary source:</strong> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness">MDN Equality comparisons and sameness</a>.</p>
+  </article>
+
+  <article class="lesson-card" id="hoisting">
+    <div class="lesson-head"><div><div class="pill-row"><span class="pill topic">JavaScript</span><span class="pill medium">Medium</span></div><h3>4. Explain hoisting, var, let, and const</h3></div><label class="complete"><input data-complete type="checkbox"> I can teach this</label></div>
+    <p><strong>Short answer:</strong> “Hoisting” describes observable declaration-instantiation behavior; the engine does not literally move source lines. Function declarations are initialized with their function before execution. <code>var</code> bindings are created and initialized to <code>undefined</code>. <code>let</code>, <code>const</code>, and class bindings exist from scope entry but remain uninitialized in the temporal dead zone until evaluation reaches their declaration.</p>
+    <pre><code>console.log(a); // undefined
+// console.log(b); // ReferenceError: temporal dead zone
+
+var a = 1;
+let b = 2;
+
+sayHi(); // works
+function sayHi() { console.log('hi'); }
+
+// run(); // ReferenceError before const initialization
+const run = () =&gt; console.log('run');</code></pre>
+    <table><thead><tr><th>Declaration</th><th>Scope</th><th>Before declaration line</th><th>Reassign?</th></tr></thead><tbody><tr><td><code>var</code></td><td>Function/global</td><td><code>undefined</code></td><td>Yes</td></tr><tr><td><code>let</code></td><td>Block</td><td>ReferenceError (TDZ)</td><td>Yes</td></tr><tr><td><code>const</code></td><td>Block</td><td>ReferenceError (TDZ)</td><td>No binding reassignment</td></tr><tr><td>function declaration</td><td>Containing scope</td><td>Callable in ordinary cases</td><td>Context-sensitive rules</td></tr></tbody></table>
+    <div data-question data-correct-feedback="The block-scoped x shadows the outer x for the entire block, but is uninitialized before its declaration." data-wrong-feedback="Shadowing begins at block entry; initialization still waits until the declaration is evaluated."><pre><code>let x = 1;
+{
+  console.log(x);
+  let x = 2;
+}</code></pre><p>What happens?</p><div class="choices"><button class="choice" onclick="answer(this)">It prints number one</button><button class="choice" onclick="answer(this)">It prints undefined value</button><button class="choice" data-correct="true" onclick="answer(this)">It throws reference error</button></div><div class="feedback"></div><button class="secondary" onclick="resetQuestion(this)">Try again</button></div>
+    <div class="idea followups"><p class="label">Harder follow-ups</p><ul><li>How do imports behave before their textual position?</li><li>Why is <code>typeof undeclared</code> safe but <code>typeof tdzVariable</code> throws?</li><li>What changes between scripts, modules, and global object properties?</li></ul></div>
+    <p class="sources"><strong>Primary source:</strong> <a href="https://developer.mozilla.org/en-US/docs/Glossary/Hoisting">MDN Hoisting</a>.</p>
+  </article>
+
+  <article class="lesson-card" id="react-rendering">
+    <div class="lesson-head"><div><div class="pill-row"><span class="pill topic">React</span><span class="pill medium">Medium</span></div><h3>5. What is the Virtual DOM?</h3></div><label class="complete"><input data-complete type="checkbox"> I can teach this</label></div>
+    <p><strong>Better answer:</strong> “Virtual DOM” is a popular shorthand for React representing desired UI as JavaScript element trees and reconciling successive renders. The precise model is trigger → render → commit. Rendering calls components to calculate UI; reconciliation determines necessary changes; commit applies them to the host DOM. A component rendering does not imply every corresponding DOM node changes.</p>
+    <div class="idea"><p><strong>Do not say:</strong> “The Virtual DOM is always faster than the real DOM.” React adds computation and memory. Its value is a declarative programming model plus efficient, predictable updates and scheduling—not a universal speed guarantee.</p></div>
+    <pre><code>function SearchResults({ query, items }) {
+  const visible = items.filter(item =&gt; item.name.includes(query));
+  return visible.map(item =&gt; &lt;Row key={item.id} item={item} /&gt;);
+}</code></pre>
+    <p>Keys tell React how child identity maps across renders. Stable domain IDs let state follow the logical item. Array indexes are unsafe when order can change, items can be inserted, or local state matters.</p>
+    <div data-question data-correct-feedback="A stable identity key tells React this is a different subtree, so the previous state is discarded and new state is created." data-wrong-feedback="Keys participate in component identity; changing the key changes how React associates state with the tree position."><p>What does changing a component’s <code>key</code> do?</p><div class="choices"><button class="choice" onclick="answer(this)">It preserves previous state</button><button class="choice" data-correct="true" onclick="answer(this)">It resets component state</button><button class="choice" onclick="answer(this)">It memoizes component output</button></div><div class="feedback"></div><button class="secondary" onclick="resetQuestion(this)">Try again</button></div>
+    <div class="idea followups"><p class="label">Harder follow-ups</p><ul><li>What makes two elements “the same” during reconciliation?</li><li>Why can rendering be interrupted but committing cannot be observed half-finished?</li><li>How do Server Components change shipped code and data flow?</li><li>When does memoization prevent work, and when is it useless?</li></ul></div>
+    <p class="sources"><strong>Primary sources:</strong> <a href="https://react.dev/learn/render-and-commit">React: Render and Commit</a> and <a href="https://react.dev/learn/preserving-and-resetting-state">Preserving and Resetting State</a>.</p>
+  </article>
+
+  <article class="lesson-card" id="state">
+    <div class="lesson-head"><div><div class="pill-row"><span class="pill topic">React</span><span class="pill medium">Medium</span></div><h3>6. useState vs useReducer</h3></div><label class="complete"><input data-complete type="checkbox"> I can teach this</label></div>
+    <p><strong>Short answer:</strong> Both store local component state and can express equivalent behavior. Use <code>useState</code> for simple, independent updates. Use <code>useReducer</code> when many events change related state, transitions have invariants, or centralizing pure transition logic improves readability, debugging, and testing.</p>
+    <pre><code>type State =
+  | { status: 'idle' }
+  | { status: 'submitting' }
+  | { status: 'success'; orderId: string }
+  | { status: 'error'; message: string };
+
+type Action =
+  | { type: 'submitted' }
+  | { type: 'succeeded'; orderId: string }
+  | { type: 'failed'; message: string }
+  | { type: 'retried' };
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'submitted': return { status: 'submitting' };
+    case 'succeeded': return { status: 'success', orderId: action.orderId };
+    case 'failed': return { status: 'error', message: action.message };
+    case 'retried': return { status: 'submitting' };
+  }
+}</code></pre>
+    <p>The discriminated union prevents impossible combinations such as <code>isLoading: true</code> and <code>isSuccess: true</code>. The reducer must remain pure; network requests belong in event handlers, framework actions, or dedicated async/data layers.</p>
+    <div data-question data-correct-feedback="The related transitions and invariants benefit from named actions and one pure transition function." data-wrong-feedback="Count state is simple; a multi-step workflow with invalid combinations is the stronger reducer candidate."><p>Which is the better reducer candidate?</p><div class="choices"><button class="choice" onclick="answer(this)">A simple numeric counter</button><button class="choice" data-correct="true" onclick="answer(this)">A multi-step checkout workflow</button><button class="choice" onclick="answer(this)">A static heading label</button></div><div class="feedback"></div><button class="secondary" onclick="resetQuestion(this)">Try again</button></div>
+    <div class="idea staff-lens"><p class="label">Staff lens</p><p>The decision is not “reducers scale.” Ask where state belongs, who owns the transition contract, how server state is synchronized, how URL state supports sharing, and whether a state machine or server-driven workflow is safer than adding more local state.</p></div>
+    <div class="idea followups"><p class="label">Harder follow-ups</p><ul><li>How would you test the reducer without over-testing implementation?</li><li>Why must reducers be pure under Strict Mode and concurrent rendering?</li><li>When should state move to the URL, server cache, context, or external store?</li><li>How do you model optimistic updates and rollback?</li></ul></div>
+    <p class="sources"><strong>Primary source:</strong> <a href="https://react.dev/learn/extracting-state-logic-into-a-reducer">React: Extracting State Logic into a Reducer</a>.</p>
+  </article>
+
+  <article class="lesson-card" id="effects">
+    <div class="lesson-head"><div><div class="pill-row"><span class="pill topic">React</span><span class="pill hard">Hard</span></div><h3>7. How does useEffect work?</h3></div><label class="complete"><input data-complete type="checkbox"> I can teach this</label></div>
+    <p><strong>Best mental model:</strong> An Effect synchronizes React state with an external system after commit. It is not a general-purpose “run after render” tool. Setup starts or updates synchronization; cleanup stops the previous synchronization. Every reactive value read by the Effect belongs in its dependency list.</p>
+    <pre><code>useEffect(() =&gt; {
+  const controller = new AbortController();
+
+  loadProduct(productId, { signal: controller.signal })
+    .then(setProduct)
+    .catch(error =&gt; {
+      if (error.name !== 'AbortError') report(error);
+    });
+
+  return () =&gt; controller.abort();
+}, [productId]);</code></pre>
+    <table><thead><tr><th>Dependencies</th><th>Meaning</th></tr></thead><tbody><tr><td>Omitted</td><td>Effect runs after every commit.</td></tr><tr><td><code>[]</code></td><td>No reactive dependencies; setup on mount and cleanup on unmount, plus development stress cycle.</td></tr><tr><td><code>[a, b]</code></td><td>Re-synchronize when either differs by <code>Object.is</code>.</td></tr></tbody></table>
+    <div class="idea"><p><strong>Cleanup timing:</strong> after a commit with changed dependencies, React first runs cleanup using old values, then setup using new values. On removal, cleanup runs once more. In development Strict Mode, React intentionally performs an extra setup → cleanup → setup cycle to expose broken symmetry.</p></div>
+    <div data-question data-correct-feedback="This value is derived synchronously from props and state; calculating it during render avoids redundant state and an extra commit." data-wrong-feedback="Effects are for external synchronization. Pure derived values belong in rendering or memoization if measurement proves expense."><p>Which usually does <em>not</em> need an Effect?</p><div class="choices"><button class="choice" onclick="answer(this)">Synchronizing a map widget</button><button class="choice" data-correct="true" onclick="answer(this)">Deriving filtered list output</button><button class="choice" onclick="answer(this)">Subscribing to browser events</button></div><div class="feedback"></div><button class="secondary" onclick="resetQuestion(this)">Try again</button></div>
+    <div class="idea followups"><p class="label">Harder follow-ups</p><ul><li>Why can suppressing <code>exhaustive-deps</code> create stale behavior?</li><li>How do you prevent fetch races and out-of-order responses?</li><li>When should data fetching move to a framework or server-state library?</li><li>Explain <code>useLayoutEffect</code> and its paint trade-off.</li><li>How do Effect Events separate reactive synchronization from non-reactive reads?</li></ul></div>
+    <p class="sources"><strong>Primary sources:</strong> <a href="https://react.dev/learn/lifecycle-of-reactive-effects">Lifecycle of Reactive Effects</a> and <a href="https://react.dev/learn/you-might-not-need-an-effect">You Might Not Need an Effect</a>.</p>
+  </article>
+
+  <article class="lesson-card" id="layout">
+    <div class="lesson-head"><div><div class="pill-row"><span class="pill topic">CSS</span><span class="pill medium">Medium</span></div><h3>8. Flexbox vs CSS Grid</h3></div><label class="complete"><input data-complete type="checkbox"> I can teach this</label></div>
+    <p><strong>Short answer:</strong> Flexbox is primarily one-dimensional: distribute and align items along a row or column. Grid is two-dimensional: define rows and columns and place items against both. They compose; Grid often defines page or card structure while Flexbox aligns content inside a region.</p>
+    <div class="grid"><div class="example"><p class="label">Flexbox</p><pre><code>.toolbar {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+}
+.toolbar .search { flex: 1; }</code></pre><p>The content and available space drive a single main axis.</p></div><div class="example"><p class="label">Grid</p><pre><code>.dashboard {
+  display: grid;
+  grid-template-columns:
+    minmax(15rem, 1fr) 3fr;
+  gap: 1rem;
+}</code></pre><p>The layout defines relationships across columns and rows.</p></div></div>
+    <div class="idea"><p><strong>Accessibility boundary:</strong> Visual reordering with Grid placement, Flexbox <code>order</code>, or reversed directions does not reliably change DOM, reading, or keyboard focus order. Start with meaningful source order.</p></div>
+    <div data-question data-correct-feedback="A two-axis gallery benefits from explicit column and row relationships, responsive tracks, and consistent gaps." data-wrong-feedback="A toolbar is naturally one-dimensional; a gallery with aligned rows and columns is the clearer Grid case."><p>Which is the strongest Grid use case?</p><div class="choices"><button class="choice" onclick="answer(this)">A horizontal action toolbar</button><button class="choice" data-correct="true" onclick="answer(this)">A responsive card gallery</button><button class="choice" onclick="answer(this)">A centered loading spinner</button></div><div class="feedback"></div><button class="secondary" onclick="resetQuestion(this)">Try again</button></div>
+    <div class="idea followups"><p class="label">Harder follow-ups</p><ul><li>Explain intrinsic sizing, <code>minmax()</code>, <code>auto-fit</code>, and <code>auto-fill</code>.</li><li>Why does <code>min-width: 0</code> fix some flex overflow bugs?</li><li>When does subgrid preserve semantic markup better than <code>display: contents</code>?</li><li>Design a container-query component rather than viewport-only breakpoints.</li></ul></div>
+    <p class="sources"><strong>Primary sources:</strong> <a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Flexbox">MDN Flexbox</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout/Accessibility">Grid layout and accessibility</a>.</p>
+  </article>
+
+  <article class="lesson-card" id="async">
+    <div class="lesson-head"><div><div class="pill-row"><span class="pill topic">JavaScript</span><span class="pill hard">Hard</span></div><h3>9. Promises and async/await</h3></div><label class="complete"><input data-complete type="checkbox"> I can teach this</label></div>
+    <p><strong>Short answer:</strong> A Promise represents the eventual fulfillment or rejection of an asynchronous result. <code>async</code> functions always return promises. <code>await</code> suspends that async function until the awaited value settles; it does not block the JavaScript thread. Continuation runs through promise jobs.</p>
+    <pre><code>// Sequential: ~600 ms if each call takes ~300 ms
+const user = await getUser();
+const offers = await getOffers();
+
+// Concurrent: ~300 ms when independent
+const [user, offers] = await Promise.all([
+  getUser(),
+  getOffers()
+]);</code></pre>
+    <table><thead><tr><th>Combinator</th><th>Use when</th></tr></thead><tbody><tr><td><code>Promise.all</code></td><td>All results required; reject fast on first rejection.</td></tr><tr><td><code>Promise.allSettled</code></td><td>Need every outcome, including failures.</td></tr><tr><td><code>Promise.race</code></td><td>Need the first settled outcome.</td></tr><tr><td><code>Promise.any</code></td><td>Need the first fulfillment; aggregate rejection if all fail.</td></tr></tbody></table>
+    <div class="idea"><p><strong>Cancellation:</strong> Promises themselves are not generally cancellable. Cancel the underlying operation where supported, commonly with <code>AbortController</code>, and decide whether abort is an error, navigation, or expected supersession.</p></div>
+    <pre><code>async function search(query, signal) {
+  const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`, { signal });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}</code></pre>
+    <div data-question data-correct-feedback="Promise.all starts both already-created operations together and returns ordered results when both fulfill." data-wrong-feedback="Sequential awaits serialize independent latency. Concurrency begins work before awaiting the combined result."><p>How should independent requests usually run?</p><div class="choices"><button class="choice" onclick="answer(this)">Await each request sequentially</button><button class="choice" data-correct="true" onclick="answer(this)">Start requests then combine</button><button class="choice" onclick="answer(this)">Wrap requests in timers</button></div><div class="feedback"></div><button class="secondary" onclick="resetQuestion(this)">Try again</button></div>
+    <div class="idea staff-lens"><p class="label">Staff lens</p><p>Concurrency is not automatically better. Consider rate limits, server load, priorities, streaming, cancellation, partial failure, backpressure, retry storms, idempotency, and whether the user benefits from progressive results.</p></div>
+    <div class="idea followups"><p class="label">Harder follow-ups</p><ul><li>Explain promise resolution versus fulfillment.</li><li>What happens when a <code>then</code> callback returns a promise or throws?</li><li>Design retries with jitter, a budget, and idempotency.</li><li>Prevent autocomplete races, deduplicate requests, and cache safely.</li></ul></div>
+    <p class="sources"><strong>Primary source:</strong> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function">MDN async function</a>.</p>
+  </article>
+
+  <article class="lesson-card" id="performance">
+    <div class="lesson-head"><div><div class="pill-row"><span class="pill topic">Performance</span><span class="pill staff">Staff</span></div><h3>10. Optimize React application performance</h3></div><label class="complete"><input data-complete type="checkbox"> I can teach this</label></div>
+    <p><strong>Strong answer starts with measurement:</strong> define the affected user journey and metric, reproduce on representative devices and data, profile the bottleneck, fix the dominant cost, and verify user and business guardrails. “Add <code>useMemo</code> everywhere” is a red flag.</p>
+    <table><thead><tr><th>Bottleneck</th><th>Likely intervention</th><th>Verify</th></tr></thead><tbody><tr><td>Large startup JS</td><td>Route/component splitting, remove dependencies, server rendering/components</td><td>Bundle analysis, main-thread time, INP</td></tr><tr><td>Expensive re-renders</td><td>Colocate state, stable boundaries, memo only measured hot paths</td><td>React Profiler</td></tr><tr><td>Huge lists</td><td>Pagination, windowing/virtualization, <code>content-visibility</code></td><td>Frames, memory, accessibility</td></tr><tr><td>Network waterfalls</td><td>Parallelize, preload, cache, stream, reshape API</td><td>Waterfall and server timing</td></tr><tr><td>Layout instability</td><td>Reserve dimensions, stabilize fonts/assets/content</td><td>CLS attribution</td></tr><tr><td>Slow interaction</td><td>Break long tasks, reduce JS, prioritize update, worker where suitable</td><td>INP and long tasks</td></tr></tbody></table>
+    <pre><code>const ProductDetails = lazy(() =&gt; import('./ProductDetails'));
+
+function ProductPage() {
+  return (
+    &lt;Suspense fallback={&lt;ProductSkeleton /&gt;}&gt;
+      &lt;ProductDetails /&gt;
+    &lt;/Suspense&gt;
+  );
+}</code></pre>
+    <p>Lazy loading trades initial JavaScript for later latency and loading-state complexity. Split at user-journey boundaries, preload likely next steps, handle chunk failures, and avoid fragmenting core UI into dozens of tiny requests.</p>
+    <div data-question data-correct-feedback="A measured slow interaction plus profiler evidence identifies whether rendering is actually the dominant cost and provides a baseline." data-wrong-feedback="Optimization without a user metric and profile can increase complexity while missing network, script, layout, or server costs."><p>What should happen before memoization?</p><div class="choices"><button class="choice" onclick="answer(this)">Wrap every component immediately</button><button class="choice" data-correct="true" onclick="answer(this)">Measure user-visible bottleneck first</button><button class="choice" onclick="answer(this)">Replace state with refs</button></div><div class="feedback"></div><button class="secondary" onclick="resetQuestion(this)">Try again</button></div>
+    <div class="idea staff-lens"><p class="label">Product + Staff lens</p><p>Build a performance operating model: real-user metrics by journey and device, performance budgets, ownership, release comparisons, alerting, and experiment-based links to conversion or retention. Make the fast path the default platform behavior, not a one-off heroic optimization.</p></div>
+    <div class="idea followups"><p class="label">Harder follow-ups</p><ul><li>When can <code>memo</code>, <code>useMemo</code>, or <code>useCallback</code make performance worse?</li><li>How do you distinguish render time, commit time, browser layout, and network latency?</li><li>Design a virtualization strategy that preserves keyboard and screen-reader usability.</li><li>How do React Compiler and server-first architectures change manual memoization choices?</li><li>How would you prove a performance change affected revenue?</li></ul></div>
+    <p class="sources"><strong>Primary sources:</strong> <a href="https://react.dev/learn/render-and-commit">React Render and Commit</a> and <a href="https://web.dev/articles/reduce-javascript-payloads-with-code-splitting">web.dev code splitting</a>.</p>
+  </article>
+
+  <section id="question-bank">
+    <div class="category-heading"><div><h2>Advanced question bank</h2><p>Answer aloud before opening the strong-answer criteria. Use the harder follow-up to test depth.</p></div><span class="count"><span id="visible-count">54</span> shown</span></div>
+    <div class="filter-panel"><div class="filter-row"><input id="question-search" type="search" placeholder="Search questions, concepts, or follow-ups…" aria-label="Search questions"><select id="category-filter" aria-label="Filter by category"><option value="all">All categories</option><option value="javascript">JavaScript</option><option value="react">React</option><option value="browser">Browser & network</option><option value="css">CSS & accessibility</option><option value="performance">Performance</option><option value="testing">Testing & reliability</option><option value="architecture">Architecture</option><option value="product">Product judgment</option><option value="leadership">Staff leadership</option></select><select id="difficulty-filter" aria-label="Filter by difficulty"><option value="all">All levels</option><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option><option value="staff">Staff</option></select></div></div>
+
+    <div class="question-grid">
+      <!-- JavaScript: 8 -->
+      <article class="question-card" data-category="javascript" data-difficulty="medium"><span class="pill medium">Medium</span><h3>Explain <code>this</code> in JavaScript</h3><p><strong>Strong answer:</strong> binding depends on call form: method, plain/strict call, constructor, explicit call/apply/bind, or lexical arrow capture.</p><details><summary>Harder follow-up</summary><p class="follow">Implement a bind polyfill that handles partial arguments and constructor calls.</p></details></article>
+      <article class="question-card" data-category="javascript" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Prototype chain vs class syntax</h3><p><strong>Strong answer:</strong> classes provide syntax and semantics over prototype-based delegation; distinguish instance properties, prototype methods, static members, private fields, and inheritance hazards.</p><details><summary>Harder follow-up</summary><p class="follow">Explain method lookup, shadowing, <code>Object.create</code>, and why composition may be safer.</p></details></article>
+      <article class="question-card" data-category="javascript" data-difficulty="medium"><span class="pill medium">Medium</span><h3>Shallow copy vs deep copy</h3><p><strong>Strong answer:</strong> spread/assign copy one property layer and retain nested references; deep cloning needs domain semantics. Explain <code>structuredClone</code> limits.</p><details><summary>Harder follow-up</summary><p class="follow">How does structural sharing support immutable React updates without cloning everything?</p></details></article>
+      <article class="question-card" data-category="javascript" data-difficulty="medium"><span class="pill medium">Medium</span><h3>Debounce vs throttle</h3><p><strong>Strong answer:</strong> debounce waits for quiet; throttle limits frequency. Cover leading/trailing edges, cancellation, latest arguments, and product feel.</p><details><summary>Harder follow-up</summary><p class="follow">Implement both; preserve <code>this</code>, return cancellation, and test with fake timers.</p></details></article>
+      <article class="question-card" data-category="javascript" data-difficulty="hard"><span class="pill hard">Hard</span><h3>How does garbage collection affect frontend apps?</h3><p><strong>Strong answer:</strong> reachability-based collection, roots, closures, DOM references, listeners, caches, WeakMap, allocation pressure, and why explicit cleanup still matters.</p><details><summary>Harder follow-up</summary><p class="follow">Diagnose a memory leak using heap snapshots, allocation timelines, and detached nodes.</p></details></article>
+      <article class="question-card" data-category="javascript" data-difficulty="hard"><span class="pill hard">Hard</span><h3>ES modules vs CommonJS</h3><p><strong>Strong answer:</strong> static imports/live bindings/async loading and tree analysis versus runtime <code>require</code>/exports; cover cycles and bundler interoperability.</p><details><summary>Harder follow-up</summary><p class="follow">Why can a package’s dual ESM/CJS build create duplicate state or resolution bugs?</p></details></article>
+      <article class="question-card" data-category="javascript" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Design a robust async task pool</h3><p><strong>Strong answer:</strong> bounded concurrency, ordered/unordered results, cancellation, per-task error policy, backpressure, fairness, and observability.</p><details><summary>Harder follow-up</summary><p class="follow">Add priority, retry budgets, and dynamic concurrency based on server feedback.</p></details></article>
+      <article class="question-card" data-category="javascript" data-difficulty="hard"><span class="pill hard">Hard</span><h3>What are iterators, generators, and async iterators?</h3><p><strong>Strong answer:</strong> protocols for pull-based sequences, suspension with <code>yield</code>, and async consumption with <code>for await</code>; contrast streams and backpressure.</p><details><summary>Harder follow-up</summary><p class="follow">Model paginated API traversal as an async generator with cancellation.</p></details></article>
+
+      <!-- React: 8 -->
+      <article class="question-card" data-category="react" data-difficulty="medium"><span class="pill medium">Medium</span><h3>Controlled vs uncontrolled components</h3><p><strong>Strong answer:</strong> source of truth, validation timing, integration, performance, reset behavior, and why neither is universally superior.</p><details><summary>Harder follow-up</summary><p class="follow">Design a large accessible form with server validation and optimistic submission.</p></details></article>
+      <article class="question-card" data-category="react" data-difficulty="medium"><span class="pill medium">Medium</span><h3>Context performance and architecture</h3><p><strong>Strong answer:</strong> consumers re-render when provider value identity changes; split by change frequency, colocate providers, stabilize values, or use selectors/stores where measured.</p><details><summary>Harder follow-up</summary><p class="follow">Why is Context a dependency-injection primitive, not automatically a state-management solution?</p></details></article>
+      <article class="question-card" data-category="react" data-difficulty="hard"><span class="pill hard">Hard</span><h3>How do error boundaries work?</h3><p><strong>Strong answer:</strong> catch descendant render/lifecycle errors, render fallback, report context; they do not catch arbitrary event-handler or async errors.</p><details><summary>Harder follow-up</summary><p class="follow">Choose boundary granularity and recovery behavior for checkout versus dashboard widgets.</p></details></article>
+      <article class="question-card" data-category="react" data-difficulty="hard"><span class="pill hard">Hard</span><h3>What makes a custom Hook good?</h3><p><strong>Strong answer:</strong> shares stateful logic, not state instances; clear contract, minimal surface, stable semantics, composition, cleanup, and testable user behavior.</p><details><summary>Harder follow-up</summary><p class="follow">Design an autocomplete Hook with cancellation, caching, race prevention, and accessibility.</p></details></article>
+      <article class="question-card" data-category="react" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Explain transitions and deferred rendering</h3><p><strong>Strong answer:</strong> distinguish urgent input from interruptible non-urgent updates; preserve responsiveness without changing network speed or fixing expensive logic automatically.</p><details><summary>Harder follow-up</summary><p class="follow">Where would a transition harm user feedback or hide stale critical data?</p></details></article>
+      <article class="question-card" data-category="react" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Server Components vs Client Components</h3><p><strong>Strong answer:</strong> execution location, shipped JavaScript, data access, serialization boundary, interactivity, caching, streaming, and composition constraints.</p><details><summary>Harder follow-up</summary><p class="follow">Move a product page boundary serverward without duplicating fetches or breaking personalization.</p></details></article>
+      <article class="question-card" data-category="react" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Design frontend state ownership</h3><p><strong>Strong answer:</strong> classify local UI, URL, server cache, form, workflow, and persisted client state; establish authority and synchronization boundaries.</p><details><summary>Harder follow-up</summary><p class="follow">Migrate a Redux-heavy platform incrementally while preserving debugging and team autonomy.</p></details></article>
+      <article class="question-card" data-category="react" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Adopt React Compiler safely</h3><p><strong>Strong answer:</strong> prove rule compliance, establish baseline, pilot representative paths, evaluate build/runtime behavior, remove manual memoization selectively, and provide rollback.</p><details><summary>Harder follow-up</summary><p class="follow">Which metrics show organizational value beyond fewer <code>useMemo</code> calls?</p></details></article>
+
+      <!-- Browser/network: 6 -->
+      <article class="question-card" data-category="browser" data-difficulty="medium"><span class="pill medium">Medium</span><h3>From URL entry to pixels</h3><p><strong>Strong answer:</strong> URL parsing, cache/service worker, DNS, connection/TLS, HTTP, parsing, preload scanner, CSSOM, render tree, layout, paint, composition, and script effects.</p><details><summary>Harder follow-up</summary><p class="follow">Locate likely LCP and INP bottlenecks in that pipeline.</p></details></article>
+      <article class="question-card" data-category="browser" data-difficulty="hard"><span class="pill hard">Hard</span><h3>HTTP caching semantics</h3><p><strong>Strong answer:</strong> freshness, validators, <code>Cache-Control</code>, <code>ETag</code>, revalidation, shared/private caches, <code>Vary</code>, immutable assets, and invalidation strategy.</p><details><summary>Harder follow-up</summary><p class="follow">Design caching for personalized HTML plus immutable assets behind a CDN.</p></details></article>
+      <article class="question-card" data-category="browser" data-difficulty="hard"><span class="pill hard">Hard</span><h3>CORS, CSRF, and CSP</h3><p><strong>Strong answer:</strong> distinguish origin read controls, cross-site authenticated request attacks, and executable-resource restrictions. Name credential/cookie implications.</p><details><summary>Harder follow-up</summary><p class="follow">Secure a cookie-authenticated SPA with third-party payments and analytics.</p></details></article>
+      <article class="question-card" data-category="browser" data-difficulty="medium"><span class="pill medium">Medium</span><h3>Cookies vs localStorage vs sessionStorage</h3><p><strong>Strong answer:</strong> server transmission, expiry, scope, tab lifetime, capacity, sync access, XSS exposure, HttpOnly/SameSite/Secure, and data sensitivity.</p><details><summary>Harder follow-up</summary><p class="follow">Where should session tokens live, and which threat model drives the choice?</p></details></article>
+      <article class="question-card" data-category="browser" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Service Worker architecture</h3><p><strong>Strong answer:</strong> separate worker lifecycle, request interception, cache strategies, version activation, offline UX, update hazards, and observability.</p><details><summary>Harder follow-up</summary><p class="follow">Prevent a stale worker from serving incompatible application shells after deployment.</p></details></article>
+      <article class="question-card" data-category="browser" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Design resilient real-time updates</h3><p><strong>Strong answer:</strong> choose polling/SSE/WebSocket by directionality and scale; cover ordering, resume tokens, backoff, offline state, authorization, and convergence.</p><details><summary>Harder follow-up</summary><p class="follow">How does the UI communicate staleness and partial connectivity honestly?</p></details></article>
+
+      <!-- CSS/a11y: 5 -->
+      <article class="question-card" data-category="css" data-difficulty="medium"><span class="pill medium">Medium</span><h3>Explain CSS specificity and cascade</h3><p><strong>Strong answer:</strong> origin, importance, cascade layers, specificity, scoping proximity, source order, inheritance, and maintainable escape routes.</p><details><summary>Harder follow-up</summary><p class="follow">Design a layering strategy for reset, tokens, components, utilities, and overrides.</p></details></article>
+      <article class="question-card" data-category="css" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Build an accessible modal</h3><p><strong>Strong answer:</strong> semantic dialog, accessible name, focus entry/trap/return, Escape, inert background, scroll behavior, nested overlays, and announcements.</p><details><summary>Harder follow-up</summary><p class="follow">Test it across keyboard, screen reader, mobile viewport, and route transitions.</p></details></article>
+      <article class="question-card" data-category="css" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Accessible autocomplete design</h3><p><strong>Strong answer:</strong> combobox semantics, active descendant or roving focus, keyboard contract, announcements, loading/no-results, async race handling, and mobile input.</p><details><summary>Harder follow-up</summary><p class="follow">Virtualize 10,000 options without breaking the accessibility tree.</p></details></article>
+      <article class="question-card" data-category="css" data-difficulty="medium"><span class="pill medium">Medium</span><h3>Responsive design beyond breakpoints</h3><p><strong>Strong answer:</strong> content-driven constraints, intrinsic layout, fluid type/space, container queries, logical properties, input modality, zoom, and localization.</p><details><summary>Harder follow-up</summary><p class="follow">Make a card reusable across dashboard, sidebar, and embedded host contexts.</p></details></article>
+      <article class="question-card" data-category="css" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Scale accessibility across teams</h3><p><strong>Strong answer:</strong> semantic primitives, design-system contracts, automated checks, manual journey audits, ownership, exception process, training, and outcome metrics.</p><details><summary>Harder follow-up</summary><p class="follow">Prioritize remediation when hundreds of violations already exist.</p></details></article>
+
+      <!-- Performance: 5 -->
+      <article class="question-card" data-category="performance" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Explain Core Web Vitals</h3><p><strong>Strong answer:</strong> LCP loading, INP responsiveness, CLS visual stability; field percentiles and attribution matter more than a single lab score.</p><details><summary>Harder follow-up</summary><p class="follow">Define journey-specific performance SLOs and guardrail metrics.</p></details></article>
+      <article class="question-card" data-category="performance" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Diagnose a slow interaction</h3><p><strong>Strong answer:</strong> reproduce, capture event timing, identify input delay/processing/presentation, inspect long tasks, React render/commit, layout, network, and device segmentation.</p><details><summary>Harder follow-up</summary><p class="follow">Fix an interaction where the dominant cost is a third-party script.</p></details></article>
+      <article class="question-card" data-category="performance" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Virtualization trade-offs</h3><p><strong>Strong answer:</strong> reduces rendered nodes but complicates variable sizes, scroll anchoring, search, printing, focus, screen readers, and measurement.</p><details><summary>Harder follow-up</summary><p class="follow">Choose pagination, windowing, or progressive rendering for a transaction ledger.</p></details></article>
+      <article class="question-card" data-category="performance" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Establish performance budgets</h3><p><strong>Strong answer:</strong> budgets tied to user journeys, representative devices, CI warnings, field alerts, ownership, exceptions, and business-impact review.</p><details><summary>Harder follow-up</summary><p class="follow">Stop teams gaming bundle size while interaction latency worsens.</p></details></article>
+      <article class="question-card" data-category="performance" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Prove performance business impact</h3><p><strong>Strong answer:</strong> instrument real users, segment confounders, use controlled rollout where possible, define conversion/retention and safety guardrails, and state attribution limits.</p><details><summary>Harder follow-up</summary><p class="follow">Build the case when traffic is too low for a fast experiment.</p></details></article>
+
+      <!-- Testing: 5 -->
+      <article class="question-card" data-category="testing" data-difficulty="medium"><span class="pill medium">Medium</span><h3>Unit vs integration vs E2E</h3><p><strong>Strong answer:</strong> choose the lowest-cost layer that uniquely detects the risk; preserve a few critical cross-system user journeys; monitor what tests cannot model.</p><details><summary>Harder follow-up</summary><p class="follow">Design proof for decline recovery and duplicate-order prevention.</p></details></article>
+      <article class="question-card" data-category="testing" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Eliminate flaky E2E tests</h3><p><strong>Strong answer:</strong> isolate state, remove timing guesses, use user-visible locators and web-first assertions, deterministic data, traces, ownership, and quarantine with deadlines.</p><details><summary>Harder follow-up</summary><p class="follow">Measure flake rate and distinguish product races from test races.</p></details></article>
+      <article class="question-card" data-category="testing" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Test React async behavior</h3><p><strong>Strong answer:</strong> assert user-observable states, control network boundaries, handle cancellation/races, avoid implementation details, and understand act/settlement behavior.</p><details><summary>Harder follow-up</summary><p class="follow">Test stale autocomplete responses arriving out of order.</p></details></article>
+      <article class="question-card" data-category="testing" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Design release confidence</h3><p><strong>Strong answer:</strong> risk inventory, layered tests, preview checks, flags, progressive delivery, telemetry, rollback, incident learning, and ownership.</p><details><summary>Harder follow-up</summary><p class="follow">Reduce lead time without lowering payment or authentication safety.</p></details></article>
+      <article class="question-card" data-category="testing" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Observability for frontend journeys</h3><p><strong>Strong answer:</strong> release-tagged errors, traces across frontend/backend, structured business events, performance, session context with privacy, SLOs, and actionable alerts.</p><details><summary>Harder follow-up</summary><p class="follow">Detect a silent checkout analytics regression before revenue reports arrive.</p></details></article>
+
+      <!-- Architecture: 7 -->
+      <article class="question-card" data-category="architecture" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Design an autocomplete system</h3><p><strong>Strong answer:</strong> input semantics, debounce, cancellation, dedup/cache, races, ranking, empty/error states, accessibility, telemetry, privacy, and degraded mode.</p><details><summary>Harder follow-up</summary><p class="follow">Support 20 markets, recent searches, offline state, and experimentation.</p></details></article>
+      <article class="question-card" data-category="architecture" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Design a checkout frontend</h3><p><strong>Strong answer:</strong> authoritative state, pricing, inventory, payment lifecycle, idempotency, redirect resume, validation, recovery, observability, security, and progressive rollout.</p><details><summary>Harder follow-up</summary><p class="follow">Add guest checkout, saved cards, 3DS, and market-specific methods.</p></details></article>
+      <article class="question-card" data-category="architecture" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Monorepo: when and how?</h3><p><strong>Strong answer:</strong> optimize ownership and change flow, not repository fashion; define boundaries, dependency policy, affected builds, releases, permissions, and migration.</p><details><summary>Harder follow-up</summary><p class="follow">Prevent a shared package from becoming a coordination bottleneck.</p></details></article>
+      <article class="question-card" data-category="architecture" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Microfrontends trade-offs</h3><p><strong>Strong answer:</strong> organizational independence versus runtime duplication, UX fragmentation, contracts, routing, shared state, observability, and operational complexity.</p><details><summary>Harder follow-up</summary><p class="follow">Simplify an over-fragmented platform without stopping delivery.</p></details></article>
+      <article class="question-card" data-category="architecture" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Design a frontend platform</h3><p><strong>Strong answer:</strong> paved roads for app creation, auth, data, analytics, errors, testing, deployment, and accessibility; measure adoption and escape reasons.</p><details><summary>Harder follow-up</summary><p class="follow">How do you avoid centralizing every product decision?</p></details></article>
+      <article class="question-card" data-category="architecture" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Incremental framework migration</h3><p><strong>Strong answer:</strong> define why, inventory constraints, compatibility seam, pilot, dual-run costs, migration tooling, success metrics, rollback, and end-state removal.</p><details><summary>Harder follow-up</summary><p class="follow">Keep shipping while migrating three apps from legacy routing.</p></details></article>
+      <article class="question-card" data-category="architecture" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Analytics event architecture</h3><p><strong>Strong answer:</strong> business taxonomy, typed schemas, versioning, identity/privacy, validation, delivery guarantees, ownership, documentation, and warehouse reconciliation.</p><details><summary>Harder follow-up</summary><p class="follow">Migrate conflicting events across four products without breaking dashboards.</p></details></article>
+
+      <!-- Product: 6 -->
+      <article class="question-card" data-category="product" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Choose what to build first</h3><p><strong>Strong answer:</strong> clarify user problem and business constraint, rank expected value/risk/learning/cost, select smallest test, define success and stop conditions.</p><details><summary>Harder follow-up</summary><p class="follow">What if the loudest executive request conflicts with user evidence?</p></details></article>
+      <article class="question-card" data-category="product" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Balance conversion and trust</h3><p><strong>Strong answer:</strong> identify dark-pattern risk, long-term retention/support/refund effects, segment outcomes, set guardrails, and protect reversibility.</p><details><summary>Harder follow-up</summary><p class="follow">A forced-login experiment lifts checkout completion short-term. What next?</p></details></article>
+      <article class="question-card" data-category="product" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Design an experiment safely</h3><p><strong>Strong answer:</strong> hypothesis, unit, randomization, exposure, primary metric, guardrails, power, duration, novelty/seasonality, instrumentation validation, and rollout.</p><details><summary>Harder follow-up</summary><p class="follow">Handle network effects, low traffic, or irreversible changes.</p></details></article>
+      <article class="question-card" data-category="product" data-difficulty="hard"><span class="pill hard">Hard</span><h3>Technical debt vs feature delivery</h3><p><strong>Strong answer:</strong> translate debt into customer, reliability, speed, or option cost; quantify hotspots; pair remediation with roadmap work; define evidence of payoff.</p><details><summary>Harder follow-up</summary><p class="follow">When is a rewrite justified, and what would falsify the case?</p></details></article>
+      <article class="question-card" data-category="product" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Define product-quality SLOs</h3><p><strong>Strong answer:</strong> derive from critical journeys: availability alone is insufficient. Include correctness, latency, completion, freshness, accessibility, and recovery.</p><details><summary>Harder follow-up</summary><p class="follow">Who owns an SLO spanning frontend, API, payment provider, and analytics?</p></details></article>
+      <article class="question-card" data-category="product" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Use AI-assisted development responsibly</h3><p><strong>Strong answer:</strong> classify data/code risk, constrain context and permissions, require review and tests, measure throughput/defects, preserve learning, and audit provenance.</p><details><summary>Harder follow-up</summary><p class="follow">Create an adoption policy that enables teams without creating security theater.</p></details></article>
+
+      <!-- Leadership: 4 -->
+      <article class="question-card" data-category="leadership" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Influence without authority</h3><p><strong>Strong answer:</strong> understand incentives, make problem/evidence visible, write trade-offs, involve dissenters, pilot reversibly, adapt, and let outcomes build trust.</p><details><summary>Harder follow-up</summary><p class="follow">Tell a story where your original direction was wrong.</p></details></article>
+      <article class="question-card" data-category="leadership" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Resolve architectural disagreement</h3><p><strong>Strong answer:</strong> separate goals from proposals, agree constraints and decision owner, test disputed assumptions, document decision/revisit triggers, preserve relationships.</p><details><summary>Harder follow-up</summary><p class="follow">What if consensus is impossible and delay is expensive?</p></details></article>
+      <article class="question-card" data-category="leadership" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Mentoring vs sponsorship</h3><p><strong>Strong answer:</strong> mentoring advises and develops capability; sponsorship uses influence to create visibility and opportunity. Explain equitable, consent-aware practice.</p><details><summary>Harder follow-up</summary><p class="follow">How do you measure whether your leadership multiplies others?</p></details></article>
+      <article class="question-card" data-category="leadership" data-difficulty="staff"><span class="pill staff">Staff</span><h3>Set technical direction across teams</h3><p><strong>Strong answer:</strong> connect business strategy to technical constraints, define principles/defaults/escape hatches, sequence adoption, fund migration, measure outcomes, and revise.</p><details><summary>Harder follow-up</summary><p class="follow">How do you prevent standards from becoming centralized control?</p></details></article>
+    </div>
+  </section>
+
+  <section id="mock">
+    <h2>Mock interview loop</h2>
+    <p>Practice aloud. Record yourself if possible. Stop when the timer ends, even if the answer is unfinished; concision is part of the skill.</p>
+    <div class="mock-prompt"><p class="label" style="color:#d9e2ff">Two-minute concept round</p><p><strong>Prompt:</strong> “Explain how <code>useEffect</code> dependencies work, then diagnose a stale search result caused by out-of-order responses.”</p><p class="timer" id="timer">02:00</p><button onclick="startTimer(120)">Start two minutes</button></div>
+    <div class="grid">
+      <div class="exercise"><p class="label">Self-score · 0–2 each</p><ul><li>Precise definition</li><li>Correct mechanism</li><li>Concrete example</li><li>Boundary or failure mode</li><li>Clear, concise delivery</li></ul><p><strong>8–10:</strong> strong. <strong>6–7:</strong> follow-up risk. <strong>≤5:</strong> rebuild the mental model.</p></div>
+      <div class="exercise"><p class="label">Staff system round · 45 minutes</p><p>Design a multi-market checkout that supports guest purchase, saved methods, 3DS redirects, inventory expiry, and resilient recovery. Cover users, invariants, state authority, API contracts, accessibility, telemetry, testing, rollout, and business guardrails.</p></div>
+    </div>
+    <h3>Behavioral story prompts</h3>
+    <ol><li>A technically correct decision you reversed after product or operational evidence.</li><li>A cross-team standard you introduced with an adoption path and escape hatch.</li><li>A revenue or identity incident you helped diagnose and prevent from recurring.</li><li>A project where you reduced scope to deliver learning sooner.</li><li>An engineer you mentored or sponsored whose effectiveness increased.</li></ol>
+    <div class="idea"><p class="label">Answer structure</p><p><strong>Context → stakes → your decision → mechanism → disagreement/trade-off → outcome → what changed in the system or team.</strong> Staff stories should show judgment and leverage, not solitary heroics.</p></div>
+  </section>
+
+  <section>
+    <h2>Study plan</h2>
+    <table><thead><tr><th>Session</th><th>Retrieval</th><th>Practice</th><th>Transfer</th></tr></thead><tbody><tr><td>1</td><td>Event loop, closures, hoisting</td><td>Predict outputs</td><td>Explain a real async bug</td></tr><tr><td>2</td><td>React render, state, Effects</td><td>Diagnose stale state</td><td>Refactor one real component story</td></tr><tr><td>3</td><td>CSS, accessibility, browser</td><td>Design accessible widget</td><td>Audit a critical journey</td></tr><tr><td>4</td><td>Performance and testing</td><td>Profile + proof plan</td><td>Connect metric to product outcome</td></tr><tr><td>5</td><td>Architecture and product</td><td>45-minute system design</td><td>Write trade-off memo</td></tr><tr><td>6</td><td>Leadership stories</td><td>Timed mock loop</td><td>Get external feedback</td></tr></tbody></table>
+    <p>Space sessions rather than reading everything once. On each return, answer from memory before reviewing. Ask your agent to interview you, interrupt vague answers, and create a learning record only after demonstrated mastery.</p>
+  </section>
+
+  <section class="sources">
+    <h2>Primary references</h2>
+    <p>Structure inspired by the searchable, difficulty-labelled organization of <a href="https://frontendprep.io/questions/react">FrontendPrep</a>. Technical material is original and grounded in <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model">MDN’s execution model</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures">MDN closures</a>, <a href="https://react.dev/learn/render-and-commit">React render and commit</a>, <a href="https://react.dev/learn/lifecycle-of-reactive-effects">React Effect lifecycle</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout/Accessibility">MDN Grid accessibility</a>, <a href="https://web.dev/articles/reduce-javascript-payloads-with-code-splitting">web.dev code splitting</a>, <a href="https://playwright.dev/docs/best-practices">Playwright best practices</a>, <a href="https://owasp.org/www-project-application-security-verification-standard/">OWASP ASVS</a>, and <a href="https://staffeng.com/guides/what-do-staff-engineers-actually-do/">StaffEng</a>.</p>
+  </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Principal Frontend Preparation Sprint</title>
+    <link rel="stylesheet" href="../assets/course.css">
+    <style>
+      .status {
+        border-radius: 999px;
+        display: inline-block;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 0.78rem;
+        padding: 2px 9px;
+      }
+
+      .done {
+        background: var(--good-bg);
+        border: 1px solid #9cc7ad;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid var(--line);
+        padding: 10px 8px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 0.82rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">Sprint Index</div>
+        <h1>Principal Frontend Preparation</h1>
+        <p class="lede">All topics from the original map, sequenced into short lessons. Every topic is linked to a short lesson page for quick access and review.</p>
+      </header>
+
+      <section>
+        <h2>7-Day Principal Sprint</h2>
+        <p>This rewrites the older one-page "Principal Frontend pasiruosimo sprintas" into smaller lessons for easier learning and review.</p>
+        <table>
+          <thead><tr><th>#</th><th>Lesson</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>0002</td><td><a href="0002-principal-mindset.html">Principal mindset: defaults across teams</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>0003</td><td><a href="0003-react-typescript-state-boundaries.html">React / TypeScript: state boundaries</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>0004</td><td><a href="0004-rendering-strategy-tradeoffs.html">Next.js rendering: route-level tradeoffs</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>0005</td><td><a href="0005-performance-budgets.html">Performance: budgets and user journeys</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>0006</td><td><a href="0006-quality-bar-testing.html">Quality bar: testing and review boundaries</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>0007</td><td><a href="0007-product-judgment-data-ui.html">Product judgment: data confidence UI</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>0008</td><td><a href="0008-influence-rfc-adoption.html">Influence: RFC and adoption plan</a></td><td><span class="status done">created</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Intermediate</h2>
+        <table>
+          <thead><tr><th>#</th><th>Lesson</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>C01</td><td><a href="0001-keyboard-first-accessibility.html">Accessibility: keyboard first, ARIA, screen readers, contrast, focus management</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C02</td><td><a href="c02-state-management.html">State management: app patterns and predictable component architecture</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C03</td><td><a href="c03-component-design.html">Component design: composition, props/inputs, pure components, separation of concerns</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C04</td><td><a href="c04-media-optimization.html">Media optimization: formats, responsive images, decoding, lazy loading</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C05</td><td><a href="c05-browser-basics.html">Browser basics: rendering engines, repaint vs reflow, layout thrashing</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C06</td><td><a href="c06-rendering-strategies.html">Rendering strategies: CSR, SSR, SSG, and related tradeoffs</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C07</td><td><a href="c07-fonts-layout-shift.html">Fonts: loading strategies, fallback stacks, layout shift</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C08</td><td><a href="c08-testing-strategies.html">Testing strategies: unit, integration, visual, end-to-end, testability</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C09</td><td><a href="c09-deployment-caching.html">Deployment basics: static hosting, edge vs origin, cache lifetimes, invalidation</a></td><td><span class="status done">created</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Advanced</h2>
+        <table>
+          <thead><tr><th>#</th><th>Lesson</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>C10</td><td><a href="c10-build-systems-modules.html">Build systems and module formats: bundlers, tree-shaking, code-splitting</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C11</td><td><a href="c11-security-basics.html">Security basics: XSS, CSRF, CSP, secure headers, safe user input</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C12</td><td><a href="c12-privacy-permissions.html">Privacy and permissions: cookies, storage, same-site rules, permission prompts</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C13</td><td><a href="c13-offline-first.html">Offline-first patterns: service workers, PWAs, IndexedDB</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C14</td><td><a href="c14-internationalization.html">Internationalization: i18n, l10n, pluralization, date/number formats</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C15</td><td><a href="c15-maintainable-css.html">Maintainable CSS: utility styles, component styles, BEM, CSS-in-JS, atomic CSS</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C16</td><td><a href="c16-performance-critical-rendering-path.html">Performance: critical rendering path, paint, layout, compositing</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C17</td><td><a href="c17-design-systems.html">Design systems: maintaining UI systems and web components</a></td><td><span class="status done">created</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Expert</h2>
+        <table>
+          <thead><tr><th>#</th><th>Lesson</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>C18</td><td><a href="c18-local-first.html">Local-first systems: offline parity, CRDTs, optimistic replication</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C19</td><td><a href="c19-frontend-tooling.html">Frontend tooling: monorepos, AST transformations, custom build pipelines</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C20</td><td><a href="c20-server-driven-ui.html">Server-driven UI: JSON layouts, dynamic orchestration, cross-platform consistency</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C21</td><td><a href="c21-microfrontends.html">Microfrontends: decoupled deployments, module federation, runtime integration</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C22</td><td><a href="c22-webgl-webgpu.html">WebGL / WebGPU: shaders, hardware acceleration, high-performance rasterization</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C23</td><td><a href="c23-wasm.html">WASM: polyglot execution, near-native performance, memory management</a></td><td><span class="status done">created</span></td></tr>
+            <tr><td>C24</td><td><a href="c24-browser-internals.html">Browser internals: V8 optimization, event loop deep dives, rendering mechanics</a></td><td><span class="status done">created</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </body>
+</html>

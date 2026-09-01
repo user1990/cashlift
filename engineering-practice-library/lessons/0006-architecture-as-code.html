@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Turn architectural dependency direction and module boundaries into executable rules.">
+  <title>06 · Architecture as code</title>
+  <link rel="stylesheet" href="../assets/course.css"><script src="../assets/lesson.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="0006-architecture-as-code.html#content">Skip to lesson</a>
+  <div class="app-shell"><aside class="sidebar" aria-label="Course navigation">
+    <a class="brand" href="../index.html"><span class="brand-mark">SF</span><span>Software Fundamentals</span></a><div class="nav-label">Lesson 06</div>
+    <nav class="course-nav"><a href="../index.html"><span class="nav-number">⌂</span>Overview</a><a href="0001-fundamentals-as-feedback.html"><span class="nav-number">01</span>Feedback</a><a href="0002-clean-code-search-cost.html"><span class="nav-number">02</span>Clean code</a><a href="0003-tests-specify-behavior.html"><span class="nav-number">03</span>Tests</a><a href="0004-coverage-is-a-map.html"><span class="nav-number">04</span>Coverage</a><a href="0005-mutation-tests-the-tests.html"><span class="nav-number">05</span>Mutation</a><a aria-current="page" href="0006-architecture-as-code.html"><span class="nav-number">06</span>Architecture</a><a href="0007-adopt-the-quality-loop.html"><span class="nav-number">07</span>Adoption</a></nav>
+  </aside>
+  <main class="main" id="content"><article class="lesson">
+    <div class="topbar"><a class="crumb" href="0005-mutation-tests-the-tests.html">← Lesson 05</a><span class="pill">12 minutes</span></div>
+    <header class="lesson-header"><div class="eyebrow">Lesson 06 · Structure</div><h1>Architecture can fail the build</h1><p class="lede">A diagram explains intent once. An executable dependency rule protects that intent on every change.</p><div class="lesson-meta"><span>Information hiding</span><span>Dependency direction</span><span>Fitness functions</span></div></header>
+    <section class="objective"><h2>Win for this lesson</h2><p>You can express one architectural invariant as a machine-checkable allowed or forbidden dependency.</p></section>
+
+    <h2>Begin with a reason to change</h2>
+    <p>Parnas’s decomposition criterion is not “one folder per noun.” A module should hide a design decision likely to change. In a refund capability:</p>
+    <div class="flow"><div class="flow-step"><span class="number">CORE</span><strong>Domain</strong><span>Eligibility and refund decisions.</span></div><div class="flow-step"><span class="number">PORT</span><strong>Application</strong><span>Coordinates policy and effects.</span></div><div class="flow-step"><span class="number">EDGE</span><strong>Adapters</strong><span>Payments, database, email.</span></div><div class="flow-step"><span class="number">UI</span><strong>Interface</strong><span>Human interaction and display.</span></div></div>
+    <p>The core rule should not change because Stripe changes its SDK or because a button moves. Therefore dependencies point inward toward policy, while adapters implement interfaces defined at the boundary.</p>
+
+    <p class="code-label">Human-readable architecture policy</p>
+    <pre><code>Allowed:
+  ui          -&gt; application
+  application -&gt; domain
+  adapters    -&gt; application
+
+Forbidden:
+  domain      -&gt; ui
+  domain      -&gt; adapters
+  application -&gt; concrete payment SDK</code></pre>
+
+    <p class="code-label">Example dependency-cruiser rule for JavaScript/TypeScript</p>
+    <pre><code>{
+  "name": "domain-does-not-depend-on-edges",
+  "severity": "error",
+  "from": { "path": "^src/domain" },
+  "to": { "path": "^src/(ui|adapters)" }
+}</code></pre>
+    <p>The error is useful only if it teaches the repair: move policy inward, inject a port, or relocate code whose ownership was misidentified.</p>
+
+    <h2>A good fitness function</h2>
+    <ul>
+      <li>Protects a consequential invariant, not a cosmetic preference.</li>
+      <li>Names the architectural reason in its error message.</li>
+      <li>Fails locally and in CI with deterministic output.</li>
+      <li>Has a narrow exception process with owner and rationale.</li>
+      <li>Is intentionally violated once to prove the gate actually works.</li>
+    </ul>
+
+    <div class="callout warning"><h3>Do not automate architecture discovery prematurely</h3><p>Tools can visualize current dependencies, but they cannot decide which business decisions deserve protection. A human should choose the domain language, boundaries, and allowed direction. The machine then prevents drift.</p></div>
+
+    <section class="exercise reflection"><h2>Write one rule</h2><p>Choose two modules in a real project. Complete: “<em>A must not depend on B because…</em>” Then name the build-time evidence that would detect a violation.</p><textarea data-note-key="lesson-0006-rule" aria-label="Your architecture rule" placeholder="Rule: … must not depend on …&#10;Reason: …&#10;Checker: …&#10;Intentional violation to test: …"></textarea></section>
+
+    <section class="quiz" data-quiz data-answer="rule"><h3>Retrieval check</h3><fieldset><legend>The domain layer imports a UI toast helper to report an error. What is the strongest structural response?</legend><div class="quiz-options">
+      <label class="quiz-option"><input type="radio" name="q6" value="rule" data-feedback="Correct. Return a domain outcome, let the UI render it, and enforce the forbidden edge.">Invert and enforce dependency</label>
+      <label class="quiz-option"><input type="radio" name="q6" value="comment" data-feedback="A comment explains the smell but permits the next violation.">Add an explanatory comment</label>
+      <label class="quiz-option"><input type="radio" name="q6" value="prompt" data-feedback="Prompt guidance helps future work but cannot reject an invalid import.">Repeat the prompt rule</label>
+      <label class="quiz-option"><input type="radio" name="q6" value="ignore" data-feedback="Convenience now creates a dependency direction that spreads with each reuse.">Ignore this single exception</label>
+    </div></fieldset><button class="secondary-button" type="button">Check answer</button><p class="feedback" aria-live="polite"></p></section>
+
+    <section class="source-card"><span class="source-type">Primary foundation + official tools</span><h3><a href="https://www.cs.lafayette.edu/~gexia/cs301/resources/parnas.html">Parnas · On the Criteria To Be Used in Decomposing Systems into Modules</a></h3><p>Follow with the <a href="https://www.archunit.org/userguide/html/000_Index.html">ArchUnit guide</a> for JVM code or <a href="https://github.com/sverweij/dependency-cruiser/blob/main/doc/rules-reference.md">dependency-cruiser rules</a> for JavaScript/TypeScript.</p></section>
+    <div class="callout info"><h3>Ask your teacher</h3><p>Show me a dependency map or folder tree. I can help find one high-value rule without imposing a generic layered architecture.</p></div>
+    <button class="mark-complete" data-lesson="0006" aria-pressed="false" type="button">Mark lesson complete</button>
+    <footer class="lesson-footer"><a href="0005-mutation-tests-the-tests.html"><small>Previous</small>Mutation tests the tests</a><a class="next" href="0007-adopt-the-quality-loop.html"><small>Next lesson</small>Adopt the quality loop →</a></footer>
+  </article></main></div>
+  <nav class="mobile-nav" aria-label="Mobile navigation"><a href="../index.html">Course</a><a aria-current="page" href="0006-architecture-as-code.html">Lesson 06</a><a href="../reference/quality-gauntlet.html">Reference</a></nav>
+</body></html>

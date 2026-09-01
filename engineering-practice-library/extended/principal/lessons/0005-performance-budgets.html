@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lesson 0005: Performance Budgets</title>
+    <link rel="stylesheet" href="../assets/course.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">Lesson 0005</div>
+        <h1>Performance: budgets and user journeys</h1>
+        <p class="lede">Performance is not final polish. It is a product requirement with budgets, regression checks, and real-user metrics.</p>
+      </header>
+
+      <nav class="small"><a href="index.html">Sprint index</a></nav>
+
+      <section class="panel rule">
+        <h2>Start from the journey</h2>
+        <p>For a paid vehicle report, the first trustworthy summary matters more than loading every chart immediately. Optimize the first confidence signal, then defer detail.</p>
+        <p class="small">Primary sources: <a href="https://web.dev/learn/performance">web.dev Learn Performance</a>, <a href="https://web.dev/articles/vitals">Core Web Vitals</a>.</p>
+      </section>
+
+      <section class="grid two">
+        <article class="panel"><h2>LCP</h2><p>Can the main trust signal appear fast?</p></article>
+        <article class="panel"><h2>INP</h2><p>Do critical interactions respond quickly?</p></article>
+        <article class="panel"><h2>CLS</h2><p>Does the page jump while trust is forming?</p></article>
+        <article class="panel"><h2>Bundle</h2><p>Are deep details blocking the first useful view?</p></article>
+      </section>
+
+      <section class="panel">
+        <h2>Practice</h2>
+        <p>Write a three-line performance audit: bottleneck, user impact, measurement plan.</p>
+        <textarea id="answer" aria-label="Performance audit" placeholder="Bottleneck:&#10;User impact:&#10;Measurement plan:"></textarea>
+        <button id="check" type="button">Check direction</button>
+        <div id="feedback" class="feedback" role="status" aria-live="polite">Write first, then check.</div>
+      </section>
+
+      <section class="panel">
+        <h2>Good answer direction</h2>
+        <p>"If the report page bundle blocks the first trustworthy summary, I would prioritize summary HTML, lazy-load charts, split route bundles, and add a budget so the regression cannot silently return."</p>
+      </section>
+    </main>
+    <script>
+      const answer = document.querySelector("#answer");
+      const feedback = document.querySelector("#feedback");
+      document.querySelector("#check").addEventListener("click", () => {
+        const text = answer.value.toLowerCase();
+        const hasShape = text.includes("bottleneck") && text.includes("impact") && text.includes("measure");
+        feedback.className = "feedback " + (hasShape ? "good" : "bad");
+        feedback.textContent = hasShape
+          ? "Good. Principal-level performance claims need impact and measurement, not only fixes."
+          : "Use the shape: bottleneck, user impact, measurement plan. Avoid optimization without evidence.";
+      });
+    </script>
+  </body>
+</html>

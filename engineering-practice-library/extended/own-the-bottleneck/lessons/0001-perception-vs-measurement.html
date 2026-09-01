@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="After an AI session, log what you expected, what it felt like, and what the clock actually showed. The gap is the curriculum.">
+  <title>01 · Perception vs measurement</title>
+  <link rel="stylesheet" href="../../../assets/course.css"><script src="../assets/lesson.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="0001-perception-vs-measurement.html#content">Skip to lesson</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Course navigation">
+      <a class="brand" href="index.html"><span class="brand-mark">OB</span><span>Own the bottleneck</span></a>
+      <div class="nav-label">Lesson 01</div>
+      <nav class="course-nav">
+        <a href="index.html"><span class="nav-number">⌂</span>Overview</a>
+        <a aria-current="page" href="0001-perception-vs-measurement.html"><span class="nav-number">01</span>Measure</a>
+        <a  href="0002-ladder-vs-threshold.html"><span class="nav-number">02</span>Threshold</a>
+        <a  href="0003-find-the-constraint.html"><span class="nav-number">03</span>Constraint</a>
+        <a  href="0004-greenfield-is-not-throughput.html"><span class="nav-number">04</span>Greenfield</a>
+        <a  href="0005-ship-or-it-is-inventory.html"><span class="nav-number">05</span>Ship</a>
+        <a  href="0006-multiple-hats.html"><span class="nav-number">06</span>Hats</a>
+        <a  href="0007-buy-vs-build-maintenance.html"><span class="nav-number">07</span>Maintain</a>
+</nav>
+      <div class="sidebar-progress" aria-label="Course progress">
+        <div class="progress-heading"><span>Your progress</span><strong data-ob-progress-label>0 / 7</strong></div>
+        <div class="progress-track"><span data-ob-progress-value></span></div>
+        <small>Saved on this device</small>
+      </div>
+    </aside>
+    <main class="main" id="content"><article class="lesson">
+      <div class="topbar"><a class="crumb" href="index.html">← Course overview</a><span class="pill">12 minutes</span></div>
+      <header class="lesson-header">
+        <div class="eyebrow">Lesson 01 · Signal</div>
+        <h1>Predicted speed is not shipped speed</h1>
+        <p class="lede">After an AI session, log what you expected, what it felt like, and what the clock actually showed. The gap is the curriculum.</p>
+        <div class="lesson-meta"><span>Perception → measurement</span><span>One retrieval check</span><span>No setup required</span></div>
+      </header>
+      <section class="objective"><h2>Win for this lesson</h2><p>You can separate predicted time, felt time, and measured time for one real task, then name which pipeline step actually grew.</p></section>
+      
+      <div class="callout warning"><h3>Do not clash</h3><p>This lesson does <strong>not</strong> teach how to write tests, read coverage, or run mutation testing. Those live in <a href="../../../lessons/0003-tests-specify-behavior.html">Tests as evidence</a>. Here you only measure whether generation speed became throughput.</p></div>
+      <p>Teams often report that agents write code faster. That can be true locally and still false as delivery. Predicted speed, felt speed, and measured elapsed time can disagree. Treat vendor claims and your own afterglow the same way: as hypotheses.</p>
+      <h2>Three clocks</h2>
+      <div class="concept"><div class="concept-icon">P</div><div><h3>Predicted</h3><p>What you believed before the session: “this will be about 24% faster.” Prediction is useful; it is not evidence.</p></div></div>
+      <div class="concept"><div class="concept-icon">F</div><div><h3>Felt</h3><p>What you believed after: “it felt quicker.” Fluency and a large diff create a sense of progress even when review and rework expand.</p></div></div>
+      <div class="concept"><div class="concept-icon">M</div><div><h3>Measured</h3><p>Wall-clock from first prompt to a mergeable, reviewed change—or to an explicit stop. Include review, tests, and the “almost right” remainder.</p></div></div>
+      <p>Independent studies of experienced developers on familiar, mature repositories have shown this split: people expected and felt a speedup while measured completion time did not match the feeling. Use the method. Do not freeze any one percentage as a permanent law.</p>
+      <h2>What to log</h2>
+      <table class="comparison">
+        <thead><tr><th>Field</th><th>Write this</th><th>Do not write this</th></tr></thead>
+        <tbody>
+          <tr><td>Task</td><td>One bounded change in a named repo</td><td>“Be more productive this week”</td></tr>
+          <tr><td>Predicted</td><td>Minutes you guessed before starting</td><td>A slogan from a model launch</td></tr>
+          <tr><td>Felt</td><td>Minutes it seemed to take</td><td>How impressive the diff looked</td></tr>
+          <tr><td>Measured</td><td>Minutes until reviewable or abandoned</td><td>Only the generation span</td></tr>
+          <tr><td>Remainder</td><td>Where the extra time went</td><td>“AI is slow” as a personality trait</td></tr>
+        </tbody>
+      </table>
+    
+      
+      <section class="quiz" data-quiz data-answer="measured">
+        <h3>Retrieval check</h3>
+        <fieldset><legend>Which number should you use to decide whether AI made this task faster?</legend>
+          <div class="quiz-options"><label class="quiz-option"><input type="radio" name="q1" value="predicted" data-feedback="Expectation is a prior, not a result.">The speedup you expected before starting</label>
+<label class="quiz-option"><input type="radio" name="q1" value="felt" data-feedback="Felt speed often tracks fluency and volume, not elapsed delivery.">How much faster it felt afterward</label>
+<label class="quiz-option"><input type="radio" name="q1" value="measured" data-feedback="Correct. Throughput includes the remainder the generator did not finish.">Elapsed time through review and verification</label>
+<label class="quiz-option"><input type="radio" name="q1" value="tokens" data-feedback="Cost is a different metric; it does not answer elapsed delivery.">How many tokens the model used</label></div>
+        </fieldset>
+        <button class="secondary-button" type="button">Check answer</button><p class="feedback" aria-live="polite"></p>
+      </section>
+
+      <section class="exercise reflection"><h2>Make it yours</h2><p>Complete one AI-assisted task today. Before you start, write predicted minutes. After you stop, write felt minutes and measured minutes. Name the step that grew: design, generation, review, verification, or waiting on someone else.</p><textarea data-note-key="ob-0001" aria-label="Three clocks log" placeholder="Repo / task:\nPredicted:\nFelt:\nMeasured:\nGrew:"></textarea></section>
+      <section class="source-card"><span class="source-type">Primary research</span><h3><a href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/">METR: Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity</a></h3><p>Read the study for the perception-versus-measurement method on mature codebases. Cite the method in your notes; do not treat a single headline percentage as the course answer.</p></section>
+      <div class="callout info"><h3>Ask your teacher</h3><p>Bring the real artifact from the drill. The lesson is only complete when it maps onto a repo, PR, or product you own.</p></div>
+      <button class="mark-complete" data-lesson="ob01" aria-pressed="false" type="button">Mark lesson complete</button>
+      <footer class="lesson-footer"><a href="index.html"><small>Back</small>Course map</a><a class="next" href="0002-ladder-vs-threshold.html"><small>Next</small>Ladder vs threshold →</a></footer>
+    </article></main>
+  </div>
+  <nav class="mobile-nav" aria-label="Mobile navigation"><a href="index.html">Course</a><a aria-current="page" href="0001-perception-vs-measurement.html">Lesson 01</a><a href="../../../reference/pipeline-constraint-map.html">Constraint map</a></nav>
+</body></html>

@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Prompting Playbook</title><link rel="stylesheet" href="../assets/course.css">
+<link rel="stylesheet" href="../assets/extended-course.css"><link rel="stylesheet" href="../assets/practice-reference.css"></head>
+<body><main>
+  <p class="eyebrow">Complete supplied audit reference</p>
+  <h1>Reliable agent prompting</h1>
+  <p class="lede">The central lesson from the audit: the prompting is already strong. The biggest gains now come from tightening the workflow around state, diagnosis, delegation, verification, and durable capture.</p>
+
+  <section class="card accent"><h2>How to use this reference</h2><p>Use the rules as compact principles, the “before” examples as anti-patterns, the “after” examples as good prompts, and the contracts as copy/paste gates. The audit’s numbers are retained because they identify leverage, not because they are universal benchmarks.</p></section>
+
+  <section><h2>1. Establish the real working state before editing</h2>
+    <p><strong>Audit signal:</strong> latest branch, fresh worktree, live preview, or current master were often requested; stale previews, wrong checkouts, dirty primary branches, and leftover experimental state were repeatedly caught. Agent-state modeling was applied 8 of 10 times; inspect-before-edit 5 of 10.</p>
+    <p><strong>Why:</strong> an excellent fix in the wrong checkout is still a failure. The artifact review found 18 sibling worktrees, four with residue, and mixed uncommitted work in primary checkouts.</p>
+    <p><strong>Better pattern:</strong> make state discovery mandatory. Prove current directory; branch and commit; dirty files; runtime/version; running server and route; and baseline behavior.</p>
+    <div class="card bad"><strong>Before · weak</strong><pre><code>Give live preview on latest master.</code></pre><p>Problem: “latest” and “live” do not prove checkout identity, server identity, or baseline behavior.</p></div>
+    <div class="card good"><strong>After · good</strong><pre><code>Before editing, report:
+
+1. Current directory, branch, commit, and dirty files.
+2. Whether this is the intended checkout.
+3. Runtime and package-manager versions.
+4. The exact route or command used for the baseline.
+5. Any existing implementation of the behavior.
+
+Do not edit until the baseline is confirmed. If the checkout is stale, dirty in a conflicting way, or different from the requested branch, stop and explain the mismatch.</code></pre></div>
+    <p><strong>Reusable rule:</strong> No mutation before the agent proves which state it is mutating.</p>
+    <pre><code>STATE GATE
+
+Before making any change:
+
+- inspect the current checkout and branch
+- inspect dirty/untracked files
+- inspect the current commit
+- verify runtime and dependency state
+- reproduce the current behavior
+- identify the exact files and route involved
+
+Return a short baseline report first. Do not edit until the state is confirmed.</code></pre>
+  </section>
+
+  <section><h2>2. Diagnose before prescribing the implementation</h2>
+    <p><strong>Audit signal:</strong> preferred visual or technical solutions were often provided immediately. Problem understanding was applied 5 of 9 times; root-cause orientation only 3 of 6. Repairs sometimes began from implementation prescriptions before reproduction or a falsifiable hypothesis.</p>
+    <p><strong>Why:</strong> a prescribed solution narrows the agent too early and encourages symptom patches, especially in animation, layout, and state management.</p>
+    <p><strong>Better pattern:</strong> separate observed symptom, expected behavior, reproduction, competing hypotheses, evidence, chosen mechanism, and implementation.</p>
+    <div class="card bad"><strong>Before · symptom prescription</strong><pre><code>Make the drawer slide from the right and feel smoother.</code></pre><p>Problem: the request names a mechanism and a vague quality word before identifying the failure.</p></div>
+    <div class="card good"><strong>After · diagnosis first</strong><pre><code>The observed problem is that the drawer starts from the wrong vertical position and appears to jump.
+
+First:
+
+- reproduce the behavior
+- capture actual versus expected geometry
+- inspect whether the cause is layout, transform origin, scroll state, or sequencing
+- state at least two plausible hypotheses
+- test the hypotheses before editing
+
+Only then recommend the smallest mechanism change.</code></pre></div>
+    <p><strong>Reusable rule:</strong> Describe the failure and acceptance condition before describing the implementation.</p>
+    <pre><code>DIAGNOSIS GATE
+
+Do not start with implementation.
+
+1. Reproduce the failure.
+2. State actual behavior and expected behavior.
+3. Identify the likely mechanism.
+4. List competing hypotheses.
+5. Test the hypotheses using the available evidence.
+6. Explain why the chosen fix addresses the cause rather than the symptom.
+7. Then implement the smallest fix.</code></pre>
+  </section>
+
+  <section><h2>3. Delegate deliberately, not merely when work is available</h2>
+    <p><strong>Audit signal:</strong> only 1 of 6 delegation opportunities was clearly applied. Delegation appeared in two sampled episodes, involving five child agents total, and was research-focused. No sampled implementation episode used an independent implementation reviewer. Agent brief quality, parallelism hygiene, and result integration were unmeasured because there were too few qualifying cases.</p>
+    <p><strong>Why:</strong> the research fan-out is already known. The missing leverage is structured delegation for implementation review, risk analysis, and independent verification.</p>
+    <p>The company-building prompt was strong: autonomy, guardrails, evidence requirements, adversarial review, and completeness checks were specified. But the resulting artifacts preserved only summarized roles, not the actual delegation tree or scorecards.</p>
+    <p><strong>Delegate only when work has:</strong> separable ownership; an independently verifiable output; a clear boundary; a defined return format; a stop condition; and a named integrator.</p>
+    <div class="card bad"><strong>Before · vague fan-out</strong><pre><code>Use multiple agents aggressively and verify the result.</code></pre><p>Problem: no ownership, non-overlap, write policy, output schema, or integration rule.</p></div>
+    <div class="card good"><strong>After · bounded workstreams</strong><pre><code>Delegate three independent workstreams:
+
+Agent A — implementation analysis
+- inspect the current mechanism
+- propose the smallest safe change
+- do not edit files
+- return findings and exact evidence
+
+Agent B — adversarial review
+- look for regressions, accessibility problems, and state conflicts
+- challenge Agent A’s assumptions
+- do not edit files
+- return risks ranked by severity
+
+Agent C — verification design
+- define the tests and browser checks that would independently confirm completion
+- identify what would falsify the proposed fix
+
+Main agent:
+- reconcile all three reports
+- choose one approach
+- explain rejected alternatives
+- implement only after reconciliation</code></pre></div>
+    <p><strong>Reusable rule:</strong> Delegate bounded decisions and evidence gathering, not vague “help.”</p>
+    <pre><code>DELEGATION CONTRACT
+
+Use subagents only for separable work.
+
+For every delegated unit, specify:
+
+- objective
+- non-inheritable context
+- files or surfaces in scope
+- explicit exclusions
+- whether writes are allowed
+- required return format
+- acceptance criteria
+- stop condition
+- owner responsible for integration
+
+No delegated result is accepted without reconciliation into one final decision.</code></pre>
+  </section>
+
+  <section><h2>4. Make verification independent from the work that produced the claim</h2>
+    <p><strong>Audit signal:</strong> falsifiable acceptance was strong at 11 of 11; evidence injection was strong at 9 of 11; verification closure weaker at 7 of 11. Explicit diff review was applied only 1 of 3 times. Human browser review repeatedly caught issues that builds and DOM checks did not close.</p>
+    <p><strong>Why:</strong> a build proves code builds, not that intended behavior is correct. A test written by the same implementation path can miss the same assumption.</p>
+    <p><strong>Use three separate checks:</strong> synthetic verification (tests, typecheck, lint, build); independent behavioral verification (browser, API, data, or external observation); and human/diff review (inspect what changed and why).</p>
+    <div class="card bad"><strong>Before · incomplete closure</strong><pre><code>Run the tests and tell me if it is done.</code></pre><p>Problem: test passage is treated as user-visible correctness.</p></div>
+    <div class="card good"><strong>After · three channels</strong><pre><code>Completion requires all three:
+
+1. Synthetic:
+   - focused tests
+   - typecheck
+   - lint
+   - production build
+
+2. Independent behavior:
+   - exercise the changed flow in the rendered browser
+   - verify the expected state before and after interaction
+   - inspect console and network output
+
+3. Review:
+   - inspect the final diff
+   - confirm no unrelated files changed
+   - explain why each changed file is necessary
+
+Do not claim completion if any one of these is missing.</code></pre></div>
+    <p><strong>Reusable rule:</strong> Acceptance must use a channel that did not produce the original claim.</p>
+    <pre><code>VERIFICATION CONTRACT
+
+For every completion claim, report:
+
+- expected result
+- command or measurement used
+- independent behavioral check
+- final diff review
+- remaining limitations
+
+Separate “the command passed” from “the user-visible behavior is correct.”</code></pre>
+  </section>
+
+  <section><h2>5. Compress repeated visual feedback into a contract</h2>
+    <p><strong>Audit signal:</strong> context economy was generally strong at 9 of 11, but long visual loops repeated constraints and introduced large references late. The audit found repeated micro-corrections and churn before strategic resets. Recovery was strong overall, but not always early.</p>
+    <p><strong>Why:</strong> repeated small corrections make the agent reconstruct design intent repeatedly, so it optimizes the latest sentence instead of the complete interaction contract.</p>
+    <p><strong>After two failed iterations, stop editing and rewrite:</strong> invariant geometry; entry state; exit state; timing; focus behavior; scroll behavior; reduced-motion behavior; acceptance screenshots or measurements.</p>
+    <div class="card bad"><strong>Before · micro-patch</strong><pre><code>Still too fast. Make it slower.</code></pre><p>Problem: it changes a number without restating the motion contract or testing which invariant failed.</p></div>
+    <div class="card good"><strong>After · consolidated motion contract</strong><pre><code>Stop incremental tuning and summarize the motion contract:
+
+- component begins aligned to the trigger
+- panel travels the full available distance
+- content does not jump vertically
+- opening and closing use the same duration
+- search opens only after the previous panel is closed
+- reduced motion removes translation
+- final proof must show both open and close states
+
+Then propose one consolidated change.</code></pre></div>
+    <p><strong>Reusable rule:</strong> Two failed iterations trigger a contract rewrite, not another micro-patch.</p>
+    <pre><code>ITERATION STOP RULE
+
+If two consecutive attempts miss the target:
+
+1. stop editing
+2. summarize actual versus expected behavior
+3. list all invariants
+4. identify which prior assumptions failed
+5. propose one consolidated approach
+6. wait for approval before another mutation</code></pre>
+  </section>
+
+  <section><h2>6. Turn decisions into durable artifacts</h2>
+    <p><strong>Audit signal:</strong> durable memory and provenance was applied 7 of 11 times. Commits, handoffs, build logs, evidence ledgers, and definitions of done already exist, but important visual decisions sometimes remain in temporary worktrees or transcript history. Delegated outputs are sometimes summarized without a preserved scorecard or handoff tree.</p>
+    <p><strong>Why:</strong> a future agent should not need to reconstruct why a direction was chosen from a long conversation.</p>
+    <p><strong>Capture at the end of a meaningful task:</strong> goal; selected approach; rejected alternatives; changed files; verification; unresolved risks; next safe step; external actions still requiring approval.</p>
+    <div class="card bad"><strong>Before · non-durable</strong><pre><code>The selected version is better. Continue tomorrow.</code></pre><p>Problem: “better” has no preserved decision, evidence, risk, or restart point.</p></div>
+    <div class="card good"><strong>After · handoff</strong><pre><code>Write a durable handoff containing:
+
+- final objective
+- selected design or mechanism
+- rejected alternatives and reasons
+- exact changed surfaces
+- verification already completed
+- known failures or unverified areas
+- remaining decision
+- safest next action
+
+Do not duplicate large source material; reference existing artifacts instead.</code></pre></div>
+    <p><strong>Reusable rule:</strong> Every task that may be resumed needs a compact decision record.</p>
+    <pre><code>HANDOFF CONTRACT
+
+Before ending, create a concise handoff with:
+
+- objective
+- current state
+- decisions made
+- rejected alternatives
+- files or surfaces changed
+- verification and results
+- blockers and uncertainty
+- external actions still requiring approval
+- safest next step
+
+Keep it compact and reference existing artifacts instead of copying them.</code></pre>
+  </section>
+
+  <section><h2>7. Standardize the minimum agent contract across projects</h2>
+    <p><strong>Audit signal:</strong> some folders have rich routing, safety, testing, and worktree guidance; others have short notes or none. Instruction maturity is uneven, so the strongest safeguards do not automatically transfer to every project.</p>
+    <p><strong>Why:</strong> an agent entering a sparse project has less protection against wrong-state edits, weak verification, or scope drift.</p>
+    <p><strong>Keep a small universal project contract:</strong> inspect before edit; preserve unrelated changes; classify the task; state acceptance; verify independently; do not push or publish without explicit authority; leave a handoff.</p>
+    <div class="card bad"><strong>Before · insufficient</strong><pre><code>Follow the project instructions.</code></pre><p>Problem: it delegates safety to instructions that may be absent or incomplete.</p></div>
+    <div class="card good"><strong>After · project minimum</strong><pre><code>Project minimum contract:
+
+- inspect current state before mutation
+- preserve unrelated dirty work
+- identify task type and affected surface
+- state acceptance before editing
+- use the smallest convention-matching change
+- run independent verification
+- do not push, publish, or contact anyone without explicit authorization
+- leave a durable handoff for unfinished work</code></pre></div>
+    <p><strong>Reusable rule:</strong> Put only universal, trigger-critical rules in the project root; keep deeper guidance task-specific.</p>
+    <pre><code>PROJECT BASELINE
+
+Before starting, load the project’s minimum agent contract:
+
+- state inspection
+- scope and preservation rules
+- acceptance requirements
+- verification commands
+- external-action boundaries
+- handoff requirements
+
+If the project lacks one, propose the smallest root-level contract before making a risky change.</code></pre>
+  </section>
+
+  <section><h2>8. Move external-action approval to the front</h2>
+    <p><strong>Audit signal:</strong> constraint precision was strong at 10 of 12; decision rights very strong at 10 of 10. The company-building prompt prohibited publication, spending, signup, messaging, and deployment. In some workflows, push or PR creation happened before a later confirmation step.</p>
+    <p><strong>Why:</strong> later approval is weaker than an upfront authorization boundary; the agent can cross the line while packaging work.</p>
+    <p><strong>Separate:</strong> local edits; local commits; branch push; pull request creation; deployment; external communication.</p>
+    <div class="card bad"><strong>Before · late boundary</strong><pre><code>Create the PR when done, then ask me if I want it updated.</code></pre><p>Problem: PR creation has already crossed the external boundary before consent.</p></div>
+    <div class="card good"><strong>After · upfront authority</strong><pre><code>Authority boundary:
+
+- local edits: allowed
+- local commit: allowed
+- push: not allowed yet
+- PR creation: not allowed yet
+- deployment or external communication: prohibited
+
+Before any remote action, stop and show:
+- exact action
+- destination
+- files or data included
+- why it is needed
+- rollback or recovery path</code></pre></div>
+    <p><strong>Reusable rule:</strong> Treat every external side effect as a separate permission, not as part of “finish the task.”</p>
+    <pre><code>EXTERNAL ACTION GATE
+
+You may inspect and edit locally.
+
+You may not push, create or update a remote review, deploy, publish, send messages, upload files, or contact external services unless I explicitly authorize that exact action.
+
+Before asking, show the destination, payload, scope, and rollback path.</code></pre>
+  </section>
+
+  <section class="card warning"><h2>Recurring anti-patterns</h2>
+    <ul>
+      <li>Prescribing implementation before reproduction and mechanism analysis.</li>
+      <li>Letting the agent remain in one implementation/review loop without an independent reviewer.</li>
+      <li>Allowing stale previews, dirty worktrees, or wrong checkouts to become a source of rework.</li>
+      <li>Continuing visual micro-tuning after the interaction contract is already unclear.</li>
+      <li>Leaving important decisions in temporary worktrees or transcript history.</li>
+      <li>Using strong orchestration prompts without preserving the delegation tree, role outputs, or scorecard.</li>
+      <li>Applying the strongest agent rules unevenly across projects.</li>
+    </ul>
+  </section>
+
+  <section class="card good"><h2>Strengths to preserve</h2>
+    <ul>
+      <li>Usually stating a concrete outcome.</li><li>Providing strong constraints, preservation rules, and non-goals.</li><li>Anchoring work with real artifacts, screenshots, browser state, structured data, and source material.</li><li>Using explicit selection gates before many high-judgment visual changes.</li><li>Requesting checkable acceptance conditions.</li><li>Using layered testing, builds, browser verification, and human review.</li><li>Protecting unrelated work with branches and worktrees.</li><li>Rejecting weak directions and changing the model.</li><li>Limiting spending, publication, deployment, and external contact.</li><li>Creating durable artifacts more often than most agent users.</li>
+    </ul>
+  </section>
+
+  <section><h2>Rules to remember</h2><ol><li>State before change.</li><li>Diagnose before prescribe.</li><li>One task, one owner, explicit boundaries.</li><li>Delegate bounded work with a return schema.</li><li>Every completion needs independent proof.</li><li>Two failed iterations trigger a contract rewrite.</li><li>Review the final diff, not only the rendered result.</li><li>Capture decisions before the context disappears.</li><li>Treat worktree cleanup as part of task completion.</li><li>External actions require separate explicit authorization.</li></ol><p>For practical prompt repairs, evidence, and examples covering every item, use the <a href="03-practical-guardrails.html">practical guardrails reference</a>.</p></section>
+
+  <section><h2>Full start checklist</h2><pre><code>TASK START CHECKLIST
+
+Goal:
+What observable result do I want?
+
+Done:
+What exact evidence will prove completion?
+
+Preserve:
+What behavior, files, APIs, accessibility, or unrelated work must remain unchanged?
+
+Do not:
+What actions are prohibited?
+
+State:
+What checkout, branch, commit, runtime, and baseline behavior are active?
+
+Diagnosis:
+What is the actual failure or ambiguity?
+What hypotheses should be tested before editing?
+
+Delegation:
+Does this split into independently verifiable units?
+Who owns integration?
+Who independently reviews the result?
+
+Verification:
+What synthetic checks, behavioral checks, and diff review are required?
+
+Recovery:
+What is the stop condition?
+What becomes a durable handoff if the task pauses?
+
+External actions:
+Which actions, if any, require a separate approval?</code></pre></section>
+
+  <footer><p>Pair this playbook with the <a href="02-spotify-design-system.html">complete Spotify-like design system</a> and practice the first lesson: <a href="../lessons/0001-state-before-change.html">state before change</a>.</p></footer>
+</main><script src="../assets/practice-reference.js"></script></body></html>
