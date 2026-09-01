@@ -21,6 +21,9 @@
 /.next/
 /out/
 
+# astro (docs typegen from `astro sync`)
+.astro/
+
 # production
 /build
 /storybook-static/
