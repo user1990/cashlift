@@ -26,7 +26,8 @@ describe("WorkspaceShell", () => {
 
 		const drawer = screen.getByLabelText("Workspace navigation");
 
-		expect(within(drawer).getByRole("link", { name: "Overdue collections" })).toBeVisible();
+		expect(within(drawer).getByRole("link", { name: "Invoices" })).toBeVisible();
+		expect(within(drawer).queryByRole("link", { name: "Overdue collections" })).not.toBeInTheDocument();
 		expect(screen.getByLabelText("Studio Nova, Read-only demo")).toBeVisible();
 	});
 });
