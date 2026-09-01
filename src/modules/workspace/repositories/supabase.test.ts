@@ -29,6 +29,18 @@ const COMPANY_ROW_MOCK = {
 	name: "Studio Nova",
 };
 
+const VENDOR_BILL_ROWS_MOCK = [
+	{
+		amount_cents: 3_400_000,
+		category: "software" as const,
+		due_date: "2026-05-24",
+		essential: true,
+		id: "vendor-bill-atlassian",
+		status: "scheduled" as const,
+		vendor: "Atlassian",
+	},
+];
+
 const SUBSCRIPTION_ROWS_MOCK = [
 	{
 		amount_cents: 126_000,
@@ -111,6 +123,16 @@ const createWorkspaceDatasetClient = () => ({
 			};
 		}
 
+		if (table === "vendor_bills") {
+			return {
+				select: () => ({
+					eq: () => ({
+						order: vi.fn().mockResolvedValue({ data: VENDOR_BILL_ROWS_MOCK, error: null }),
+					}),
+				}),
+			};
+		}
+
 		throw new Error(`Unexpected workspace table: ${table}`);
 	}),
 });
@@ -177,7 +199,8 @@ describe("supabaseFinanceRepository", () => {
 		expect(client.from).toHaveBeenCalledWith("company_members");
 		expect(client.from).toHaveBeenCalledWith("companies");
 		expect(client.from).toHaveBeenCalledWith("subscriptions");
-		expect(client.from).toHaveBeenCalledTimes(3);
+		expect(client.from).toHaveBeenCalledWith("vendor_bills");
+		expect(client.from).toHaveBeenCalledTimes(4);
 		expect(dataset).toEqual({
 			cashActions: [],
 			forecast: [],
@@ -205,7 +228,17 @@ describe("supabaseFinanceRepository", () => {
 			],
 			teamBudgets: [],
 			teamMembers: [],
-			vendorBills: [],
+			vendorBills: [
+				{
+					amountCents: 3_400_000,
+					category: "software",
+					dueDate: "2026-05-24",
+					essential: true,
+					id: "vendor-bill-atlassian",
+					status: "scheduled",
+					vendor: "Atlassian",
+				},
+			],
 		});
 	});
 });
