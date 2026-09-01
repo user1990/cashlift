@@ -7,27 +7,18 @@ import { SoftwareServicesReferencePage } from "./SoftwareServicesReferencePage";
 
 describe("SoftwareServicesReferencePage", () => {
 	it("shows the three software-services decisions without adding card navigation", () => {
-		render(<SoftwareServicesReferencePage useCase={USE_CASES["software-services"]} />);
+		const useCase = USE_CASES["software-services"];
 
-		expect(screen.getByRole("heading", { level: 1, name: "Software Services" })).toBeInTheDocument();
-		expect(
-			screen.getByRole("heading", { level: 2, name: "Can we add cloud spend for this project?" }),
-		).toBeInTheDocument();
-		expect(
-			screen.getByRole("heading", { level: 2, name: "Which subscription seats are idle before renewal?" }),
-		).toBeInTheDocument();
-		expect(
-			screen.getByRole("heading", { level: 2, name: "What happens if a milestone payment slips one week?" }),
-		).toBeInTheDocument();
+		render(<SoftwareServicesReferencePage useCase={useCase} />);
+
+		expect(screen.getByRole("heading", { level: 1, name: useCase.label })).toBeInTheDocument();
+		expect(screen.getAllByRole("heading", { level: 2 }).map(({ textContent }) => textContent)).toEqual([
+			...useCase.answers,
+		]);
 		expect(screen.getByRole("link", { name: "Book a walkthrough" })).toHaveAttribute("href", "/demo");
-		expect(
-			screen.queryByRole("link", { name: "Book a walkthrough: Can we add cloud spend for this project?" }),
-		).not.toBeInTheDocument();
-		expect(
-			screen.queryByRole("link", { name: "Book a walkthrough: Which subscription seats are idle before renewal?" }),
-		).not.toBeInTheDocument();
-		expect(
-			screen.queryByRole("link", { name: "Book a walkthrough: What happens if a milestone payment slips one week?" }),
-		).not.toBeInTheDocument();
+
+		for (const answer of useCase.answers) {
+			expect(screen.queryByRole("link", { name: `Book a walkthrough: ${answer}` })).not.toBeInTheDocument();
+		}
 	});
 });

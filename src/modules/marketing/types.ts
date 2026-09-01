@@ -12,5 +12,4 @@ export type HomeDecisionStoryAction = {
 export type UseCaseReferenceDecision = {
 	accentClassName: string;
 	Icon: LucideIcon;
-	title: string;
 };

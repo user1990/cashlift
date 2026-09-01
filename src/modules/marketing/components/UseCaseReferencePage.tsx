@@ -35,13 +35,13 @@ export const UseCaseReferencePage = ({
 							showSignalRail ? "md:grid-cols-3 md:items-end" : "lg:grid-cols-3 lg:items-end",
 						)}
 					>
-						{decisions.map((decision, index) => (
+						{getUseCaseDecisionCards(decisions, useCase.answers).map((decision, index, cards) => (
 							<li
 								key={decision.title}
 								className={cn(
 									"relative",
 									index === 0 && "lg:translate-y-16",
-									index === decisions.length - 1 && "lg:-translate-y-16",
+									index === cards.length - 1 && "lg:-translate-y-16",
 								)}
 							>
 								<UseCaseDecisionCard cardHref={cardHref} decision={decision} />
@@ -72,11 +72,23 @@ function UseCaseSignalRail() {
 	);
 }
 
+type UseCaseDecisionCardModel = UseCaseReferenceDecision & {
+	title: string;
+};
+
+function getUseCaseDecisionCards(decisions: readonly UseCaseReferenceDecision[], answers: readonly string[]) {
+	return decisions.flatMap((decision, index) => {
+		const title = answers[index];
+
+		return title === undefined ? [] : [{ ...decision, title }];
+	});
+}
+
 function UseCaseDecisionCard({
 	decision: { accentClassName, Icon, title },
 	cardHref,
 }: {
-	decision: UseCaseReferenceDecision;
+	decision: UseCaseDecisionCardModel;
 	cardHref?: string;
 }) {
 	const card = (
