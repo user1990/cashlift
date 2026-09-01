@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
-import { reduceDatasetForDateRange } from "./read-models";
+import { reduceDatasetForDateRange, reduceDatasetForScope } from "./read-models";
 
 describe("workspace read models", () => {
 	it("filters overview data to the selected date range", () => {
@@ -16,5 +16,19 @@ describe("workspace read models", () => {
 		).toBe(true);
 		expect(dataset.profile).toBe(financialDatasetFixture.profile);
 		expect(dataset.teamBudgets).toBe(financialDatasetFixture.teamBudgets);
+	});
+
+	it("keeps cash outlook and buffer inputs on the cash scope", () => {
+		const dataset = reduceDatasetForScope(financialDatasetFixture, "cash");
+
+		expect(dataset.forecast).toEqual(financialDatasetFixture.forecast);
+		expect(dataset.cashActions).toEqual(financialDatasetFixture.cashActions);
+		expect(dataset.invoices).toEqual(financialDatasetFixture.invoices);
+		expect(dataset.vendorBills).toEqual(financialDatasetFixture.vendorBills);
+		expect(dataset.subscriptions).toEqual(financialDatasetFixture.subscriptions);
+		expect(dataset.spendRequests).toEqual(financialDatasetFixture.spendRequests);
+		expect(dataset.teamBudgets).toEqual(financialDatasetFixture.teamBudgets);
+		expect(dataset.teamMembers).toEqual([]);
+		expect(dataset.profile).toBe(financialDatasetFixture.profile);
 	});
 });

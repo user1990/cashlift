@@ -26,7 +26,7 @@ function getSectionTitle(section: WorkspaceSection) {
 	const titles = {
 		approvals: "Spend approvals",
 		budgets: "Team budgets",
-		cash: "13-week cash outlook",
+		cash: "Cash Insights",
 		invoices: "Invoice collection",
 		overview: "Overview",
 		settings: "Workspace settings",
