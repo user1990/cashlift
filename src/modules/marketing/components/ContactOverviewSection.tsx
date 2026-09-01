@@ -34,7 +34,7 @@ export const ContactOverviewSection = () => (
 							"ease transition-[background-color,border-color] duration-150 hover:border-primary/40 hover:bg-shell/60",
 						)}
 					>
-						<h2 className="text-m+ text-shell-foreground">{label}</h2>
+						<h2 className="text-m+ text-primary">{label}</h2>
 
 						<address className="mt-2 text-m text-shell-foreground not-italic">{email}</address>
 
