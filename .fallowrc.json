@@ -148,7 +148,14 @@
 			]
 		}
 	],
-	"ignorePatterns": ["docs/**", "blume.config.ts", "theme.css", "src/ui/components/DesignSystem.mdx"],
+	"ignorePatterns": [
+		"docs/**",
+		"engineering-practice-library/**",
+		"engineering-practice-library.zip",
+		"blume.config.ts",
+		"theme.css",
+		"src/ui/components/DesignSystem.mdx"
+	],
 	"ignoreDependencies": [
 		"turbopack-inline-svg-loader",
 		"babel-plugin-react-compiler",
