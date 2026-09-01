@@ -6,14 +6,28 @@ import { buildApprovalsPresentation } from "@/modules/dashboard/explore/approval
 import { buildTeamBudgetsPresentation } from "@/modules/dashboard/explore/teamBudgetsModel";
 import { buildDashboardViewModel } from "@/modules/dashboard/view-model";
 import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
+import { buildVendorsPresentation } from "../vendorsPresentation";
 import { WorkspaceSectionPage } from "./WorkspaceSectionPage";
 
 describe("WorkspaceSectionPage", () => {
 	it.each([
-		["approvals", buildApprovalsPresentation(buildDashboardViewModel({ dataset: DEMO_WORKSPACE_DATASET })).headline],
-		["budgets", buildTeamBudgetsPresentation(DEMO_WORKSPACE_DATASET).headline],
-		["team", "3 company members across Finance, Client Delivery, and Operations"],
-	] as const)("uses the glass cockpit instead of the workspace section header on %s", (section, headline) => {
+		{
+			headline: buildApprovalsPresentation(buildDashboardViewModel({ dataset: DEMO_WORKSPACE_DATASET })).headline,
+			section: "approvals" as const,
+		},
+		{
+			headline: buildTeamBudgetsPresentation(DEMO_WORKSPACE_DATASET).headline,
+			section: "budgets" as const,
+		},
+		{
+			headline: "3 company members across Finance, Client Delivery, and Operations",
+			section: "team" as const,
+		},
+		{
+			headline: buildVendorsPresentation(DEMO_WORKSPACE_DATASET).headline,
+			section: "vendors" as const,
+		},
+	])("uses the glass cockpit instead of the workspace section header on $section", ({ headline, section }) => {
 		render(<WorkspaceSectionPage basePath="/dashboard" dataset={DEMO_WORKSPACE_DATASET} readOnly section={section} />);
 
 		expect(screen.queryByRole("link", { name: "Run leak audit" })).not.toBeInTheDocument();

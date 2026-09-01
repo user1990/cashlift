@@ -94,7 +94,6 @@ describe("resolveWorkspaceDataset", () => {
 				spendRequests: [],
 				teamBudgets: [],
 				teamMembers: [],
-				vendorBills: [],
 			},
 			kind: "success",
 		});
