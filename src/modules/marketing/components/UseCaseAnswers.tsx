@@ -30,7 +30,7 @@ const AGENCY_ANSWER_ICONS = [CalendarClock, ReceiptText, Scissors] as const;
 
 function renderGlassAnswers(answers: readonly string[]) {
 	return (
-		<ul className="relative mt-10 grid gap-4 before:absolute before:top-16 before:bottom-16 before:left-8 before:w-px before:bg-primary/55 before:content-[''] sm:gap-5 sm:before:left-12">
+		<ul className="mt-10 grid gap-4 sm:gap-5">
 			{answers.map((answer, index) => {
 				const Icon = AGENCY_ANSWER_ICONS[index % AGENCY_ANSWER_ICONS.length];
 				const background = AGENCY_ANSWER_BACKGROUNDS[index % AGENCY_ANSWER_BACKGROUNDS.length];
