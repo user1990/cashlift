@@ -48,9 +48,14 @@ describe("DashboardCockpit", () => {
 		expect(screen.getByText(formatPreciseCompactCurrency(dashboard.cashBufferTargetCents))).toBeVisible();
 		expect(screen.getByText(formatPreciseCompactCurrency(dashboard.cashAtRiskCents))).toBeVisible();
 		expect(
-			screen.getByText(
-				`Lowest week ${formatPreciseCompactCurrency(troughCents)} on ${formatDashboardDate(troughDate)}`,
-			),
+			screen.getByText((_, element) => {
+				const expected = `Lowest week ${formatPreciseCompactCurrency(troughCents)} on ${formatDashboardDate(troughDate)}`;
+
+				return Boolean(
+					element?.textContent === expected &&
+						Array.from(element.children).every((child) => child.textContent !== expected),
+				);
+			}),
 		).toBeVisible();
 		expect(screen.getByRole("heading", { name: firstAction.title })).toBeVisible();
 		expect(screen.getByRole("button", { name: /search for anything in this workspace/i })).toBeVisible();
