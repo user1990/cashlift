@@ -10,7 +10,7 @@ describe("WorkspaceSectionPage", () => {
 	it("uses the glass cockpit instead of the workspace section header on team budgets", () => {
 		const presentation = buildTeamBudgetsPresentation(DEMO_WORKSPACE_DATASET);
 
-		render(<WorkspaceSectionPage dataset={DEMO_WORKSPACE_DATASET} section="budgets" />);
+		render(<WorkspaceSectionPage basePath="/dashboard" dataset={DEMO_WORKSPACE_DATASET} section="budgets" />);
 
 		expect(screen.queryByRole("link", { name: "Run leak audit" })).not.toBeInTheDocument();
 		expect(screen.queryByText("Workspace")).not.toBeInTheDocument();
