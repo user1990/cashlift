@@ -1,5 +1,7 @@
 interface:
-  allow_implicit_invocation: true
   display_name: "Orchestrate"
   short_description: "Decide when CashLift work benefits from parallel agents"
   default_prompt: "Use $orchestrate to plan and safely coordinate independent CashLift workstreams."
+
+policy:
+  allow_implicit_invocation: true
