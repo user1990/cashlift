@@ -21,6 +21,8 @@ test.describe("agent-readable public contracts", () => {
 		const body = await response.text();
 
 		expect(response.status()).toBe(404);
+		expect(body).toContain("This page didn’t make the forecast.");
+		expect(body).toContain("Back to CashLift");
 		expect(body).toContain("/sitemap.xml");
 		expect(body).toContain("/llms.txt");
 	});

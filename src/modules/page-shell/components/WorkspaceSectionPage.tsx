@@ -28,7 +28,7 @@ export const WorkspaceSectionPage = ({
 
 	return (
 		<>
-			<WorkspaceSectionHeader section={section} />
+			{section !== "budgets" && <WorkspaceSectionHeader section={section} />}
 
 			<WorkspaceSectionContent dataset={dataset} readOnly={readOnly} section={section} />
 		</>
