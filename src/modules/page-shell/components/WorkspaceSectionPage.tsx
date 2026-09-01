@@ -17,7 +17,7 @@ type WorkspaceSectionPageProps = {
 
 export const WorkspaceSectionPage = ({ dataset, readOnly = false, section }: WorkspaceSectionPageProps) => (
 	<>
-		<WorkspaceSectionHeader section={section} />
+		{section !== "budgets" && <WorkspaceSectionHeader section={section} />}
 
 		<WorkspaceSectionContent dataset={dataset} readOnly={readOnly} section={section} />
 	</>
