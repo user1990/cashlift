@@ -27,21 +27,31 @@ export const buildInvoicesCockpitPresentation = ({
 	dataset,
 	invoiceRiskTotal,
 }: BuildInvoicesCockpitPresentationParams) => {
-	const overdue = dataset.invoices
-		.filter((invoice) => isOverdueForView(invoice, asOfDate))
-		.toSorted((left, right) => right.amountCents - left.amountCents)
-		.map((invoice) => withViewStatus(invoice, asOfDate));
-	const paid = dataset.invoices
-		.filter((invoice) => invoice.status === "paid")
-		.map((invoice) => withViewStatus(invoice, asOfDate));
-	const openOnTime = dataset.invoices
-		.filter((invoice) => invoice.status !== "paid" && !isOverdueForView(invoice, asOfDate))
-		.toSorted((left, right) => left.dueDate.localeCompare(right.dueDate))
-		.map((invoice) => withViewStatus(invoice, asOfDate));
-	const dueSchedule = dataset.invoices
-		.filter((invoice) => invoice.status !== "paid")
-		.toSorted((left, right) => left.dueDate.localeCompare(right.dueDate))
-		.map((invoice) => withViewStatus(invoice, asOfDate));
+	const overdueRows: InvoiceCockpitRow[] = [];
+	const paid: InvoiceCockpitRow[] = [];
+	const openOnTimeRows: InvoiceCockpitRow[] = [];
+	const dueScheduleRows: InvoiceCockpitRow[] = [];
+
+	for (const invoice of dataset.invoices) {
+		const row = withViewStatus(invoice, asOfDate);
+
+		if (invoice.status === "paid") {
+			paid.push(row);
+			continue;
+		}
+
+		dueScheduleRows.push(row);
+
+		if (isOverdueForView(invoice, asOfDate)) {
+			overdueRows.push(row);
+		} else {
+			openOnTimeRows.push(row);
+		}
+	}
+
+	const overdue = overdueRows.toSorted((left, right) => right.amountCents - left.amountCents);
+	const openOnTime = openOnTimeRows.toSorted(compareInvoiceDueDate);
+	const dueSchedule = dueScheduleRows.toSorted(compareInvoiceDueDate);
 	const primaryInvoice = overdue[0];
 	const collectionActions = dataset.cashActions.filter(
 		(action) => action.status === "open" && action.type === "collection",
@@ -99,4 +109,8 @@ function invoiceMatchesCollectionAction(invoice: Invoice, action: CashAction) {
 	return (
 		action.impactCents === invoice.amountCents || action.title.toLowerCase().includes(invoice.client.toLowerCase())
 	);
+}
+
+function compareInvoiceDueDate(left: InvoiceCockpitRow, right: InvoiceCockpitRow) {
+	return left.dueDate.localeCompare(right.dueDate);
 }
