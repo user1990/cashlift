@@ -8,11 +8,14 @@ import { describe, expect, it, vi } from "vitest";
 import { formatPreciseCompactCurrency } from "@/modules/money/format";
 import { createDecideSpendRequestHandler } from "@/modules/spend-requests/fixtures";
 import { WORKSPACE_DATASET_QUERY_KEYS } from "@/modules/workspace/query";
+import { reduceDatasetForScope } from "@/modules/workspace/read-models";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { server } from "@/test/server";
 import { buildDashboardViewModel } from "../view-model";
 import { ApprovalsCockpit } from "./ApprovalsCockpit";
 import { buildApprovalsPresentation } from "./approvalsModel";
+
+const APPROVALS_DATASET = reduceDatasetForScope(financialDatasetFixture, "approvals");
 
 vi.mock("@/ui/components/feedback/Toaster", () => ({
 	Toaster: () => null,
@@ -21,20 +24,20 @@ vi.mock("@/ui/components/feedback/Toaster", () => ({
 describe("ApprovalsCockpit", () => {
 	it("renders the glass queue from the current dataset without inventing totals", () => {
 		const dashboard = buildDashboardViewModel({
-			dataset: financialDatasetFixture,
+			dataset: APPROVALS_DATASET,
 			date: new Date("2026-05-09T00:00:00"),
 			role: "owner-finance",
 		});
 		const presentation = buildApprovalsPresentation(dashboard);
 
-		render(<ApprovalsCockpit dataset={financialDatasetFixture} readOnly />);
+		render(<ApprovalsCockpit dataset={APPROVALS_DATASET} readOnly />);
 
 		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(presentation.headline);
 		expect(screen.getByText(presentation.contextLine)).toBeVisible();
 		expect(screen.getByRole("heading", { name: dashboard.pendingApprovals[0]?.vendor })).toBeVisible();
 		expect(screen.getByText(formatPreciseCompactCurrency(presentation.pendingAmountCents))).toBeVisible();
 		expect(screen.getByText("Delta")).toBeVisible();
-		expect(screen.getByText("Approval policy, kept quieter")).toBeVisible();
+		expect(screen.queryByText(/days runway/i)).not.toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: /approve/i })).not.toBeInTheDocument();
 	});
 

@@ -67,11 +67,7 @@ function ApprovalsCockpitView({ dashboard, presentation, renderActions }: Approv
 	return (
 		<div className="space-y-4 xl:space-y-5">
 			<GlassCard atmosphere="status">
-				<div className="flex flex-wrap items-start justify-between gap-3">
-					<p className="text-muted-foreground text-s">{presentation.contextLine}</p>
-
-					<p className="text-muted-foreground text-s">{dashboard.runwayDays} days runway</p>
-				</div>
+				<p className="text-muted-foreground text-s">{presentation.contextLine}</p>
 
 				<h1 className="mt-3 max-w-4xl font-semibold text-3xl+ text-panel-foreground tracking-normal">
 					{presentation.headline}
