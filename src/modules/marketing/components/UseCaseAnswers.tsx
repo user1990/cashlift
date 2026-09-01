@@ -52,13 +52,10 @@ function renderGlassAnswers(answers: readonly string[]) {
 								sizes="(min-width: 1024px) 72rem, calc(100vw - 2rem)"
 								src={background.src}
 								alt=""
-								className="pointer-events-none object-cover opacity-55"
+								className="pointer-events-none object-cover opacity-85"
 							/>
 
-							<div
-								aria-hidden="true"
-								className="pointer-events-none absolute inset-0 bg-shell/70 backdrop-blur-[2px]"
-							/>
+							<div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-shell/40" />
 
 							<div className="relative z-10 flex w-full items-center gap-4 sm:gap-10">
 								<span

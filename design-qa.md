@@ -1,7 +1,7 @@
 # Agencies runway design QA
 
 - Source visual truth: `/Users/pauliusrimgaila/.codex/generated_images/01a057bf-f9d8-7fb1-923c-6d3878f6ed92/exec-dc3724bd-9b30-4d7c-ace1-5aba0ed0e241.png`
-- Implementation screenshot: `/private/tmp/cashlift-pr150-option2-agencies-final.png`
+- Implementation screenshot: `/private/tmp/cashlift-pr150-image-clarity-agencies-final.png`
 - Viewport: 1487 x 1058 CSS pixels, device scale factor 1
 - Source pixels: 1487 x 1058
 - Implementation pixels: 1487 x 1058
@@ -21,6 +21,7 @@
 
 - Initial comparison: visual composition had no P0/P1/P2 findings. Browser QA exposed a Next image-loading warning for an above-the-fold backdrop.
 - Fix: eagerly load all three above-the-fold backdrops; post-fix capture is `/private/tmp/cashlift-pr150-option2-agencies-final.png` and the warning is absent.
+- Follow-up comparison: the backdrops were too faint beneath the original opacity, overlay, and blur stack. Increased image visibility and removed the overlay blur while retaining the dark glass treatment and readable copy; desktop and mobile post-fix captures show no P0/P1/P2 findings.
 
 ## Implementation checklist
 
