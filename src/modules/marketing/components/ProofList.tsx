@@ -20,7 +20,11 @@ export const ProofList = ({ items, variant = "panel" }: ProofListProps) =>
 		<ul className="mt-10 grid gap-3">
 			{items.map(({ icon: Icon, image, metric, text }) => (
 				<li key={metric}>
-					<Panel as="article" variant="glass" className="relative overflow-hidden p-0">
+					<Panel
+						as="article"
+						variant="glass"
+						className="relative min-h-64 overflow-hidden bg-shell-elevated/60 p-0 shadow-none sm:min-h-72"
+					>
 						<Image
 							alt=""
 							aria-hidden
@@ -33,7 +37,7 @@ export const ProofList = ({ items, variant = "panel" }: ProofListProps) =>
 
 						<div aria-hidden className="absolute inset-0 bg-shell/55" />
 
-						<div className="relative grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-2 p-5 md:grid-cols-[auto_minmax(9rem,0.3fr)_minmax(0,1fr)] md:gap-x-6">
+						<div className="relative grid min-h-64 grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-2 p-6 sm:min-h-72 md:grid-cols-[auto_minmax(9rem,0.3fr)_minmax(0,1fr)] md:gap-x-8 md:p-10">
 							<ProofPoint
 								Icon={Icon}
 								metric={metric}
