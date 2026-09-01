@@ -19,10 +19,11 @@ export const DemoLeadCaptureSection = () => (
 	>
 		<Image
 			alt=""
-			fill
+			width={768}
+			height={1152}
 			sizes="(min-width: 1024px) 24rem, calc(100vw - 2rem)"
 			src={DEMO_BOOK_CARD_BACKGROUND_SRC}
-			className="pointer-events-none object-contain object-center p-3"
+			className="pointer-events-none absolute inset-x-0 top-0 h-auto w-full object-contain object-top p-3"
 		/>
 
 		<div

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { type ReactNode, useState } from "react";
 
 import { TextField } from "@/ui/components/forms/TextField";
 
@@ -8,11 +9,14 @@ const meta = {
 	},
 	component: TextField,
 	decorators: [
-		(Story) => (
-			<div className="w-80">
+		(Story, context) =>
+			context.id === "forms-textfield--error-transition" ? (
 				<Story />
-			</div>
-		),
+			) : (
+				<div className="w-80 rounded-lg border border-border bg-shell p-6 text-shell-foreground shadow-panel">
+					<Story />
+				</div>
+			),
 	],
 	parameters: {
 		layout: "centered",
@@ -39,6 +43,13 @@ export const Invalid: Story = {
 		invalid: true,
 		label: "Vendor name",
 	},
+};
+
+export const ErrorTransition: Story = {
+	parameters: {
+		layout: "padded",
+	},
+	render: () => <ErrorTransitionDemo />,
 };
 
 export const Disabled: Story = {
@@ -82,3 +93,36 @@ export const Sizes: Story = {
 		</div>
 	),
 };
+
+function ErrorTransitionDemo() {
+	const [invalid, setInvalid] = useState(false);
+
+	return (
+		<StoryFrame>
+			<div className="grid w-full gap-3">
+				<TextField
+					errorMessage={invalid ? "Vendor name is required" : undefined}
+					invalid={invalid}
+					label="Vendor name"
+					placeholder="Acme Studio"
+				/>
+
+				<button
+					className="w-fit rounded-md border border-border bg-panel px-3 py-2 font-medium text-panel-foreground text-s outline-none transition-colors hover:border-primary hover:bg-panel-muted hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
+					onClick={() => setInvalid((isInvalid) => !isInvalid)}
+					type="button"
+				>
+					{invalid ? "Clear error" : "Show error"}
+				</button>
+			</div>
+		</StoryFrame>
+	);
+}
+
+function StoryFrame({ children }: { children: ReactNode }) {
+	return (
+		<div className="w-80 rounded-lg border border-border bg-shell p-6 text-shell-foreground shadow-panel">
+			{children}
+		</div>
+	);
+}

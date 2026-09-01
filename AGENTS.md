@@ -9,6 +9,8 @@ Always read this file first. It defines workflow for this repo. Do not override 
    - Start in the current app's `src/`, then expand to `packages/*` when relevant.
    - Search related concepts, not just the first implementation idea.
    - Use a fast sub-agent only when the runtime/user permits it and the search genuinely spans many files.
+   - Load [orchestrate](.agents/skills/orchestrate/SKILL.md) when the task has two or more independent slices, crosses two or more source areas, has a broad branch/PR surface, or explicitly asks for parallel agents. Run `pnpm check:orchestration` for an advisory signal and tell the human whether parallel work is recommended.
+   - Keep one implementer for small, sequential, diagnostic, or shared-file work; orchestration is a recommendation, not a requirement.
 
 2. Understand the task.
    - Identify the work type: UI, component creation, refactor, bug fix, tests, API/data, docs, PR/review, or diagnostics.
@@ -62,7 +64,9 @@ Always read this file first. It defines workflow for this repo. Do not override 
 - Package manager: `pnpm`
 - Runtime: shell commands must auto-select Node from `.nvmrc` / `.node-version` before any `pnpm` command. `pnpm` can fail before project scripts run on older Node versions.
 - Conventions: `.agents/skills/guide/SKILL.md`
-- JavaScript delivery: `docs/architecture/decisions/baseline-javascript-targets.md` (agents: `.agents/skills/baseline-javascript/SKILL.md`)
+- Decision records: `docs/decisions/index.md` — read relevant accepted decisions before proposing a new primitive, product surface, data-access path, dependency policy, or security boundary. When work establishes a durable decision future agents may re-propose, proactively suggest recording it with `docs/decisions/0000-template.md`. Do not silently override an accepted decision; supersede it with a new ADR.
+- JavaScript delivery: `docs/decisions/0001-baseline-javascript-targets.md` (agents: `.agents/skills/baseline-javascript/SKILL.md`)
+- PR lifecycle: `.agents/skills/ship-pr/SKILL.md` — use for review, PR creation/update, CI gates, and exact feedback resolution.
 - Security rules: `.agents/skills/security/SKILL.md`
 - Directory guide: `.agents/README.md`
 - Security checks: `pnpm security:check`, `pnpm security:audit`

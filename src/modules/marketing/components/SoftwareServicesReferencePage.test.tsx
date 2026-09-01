@@ -19,15 +19,15 @@ describe("SoftwareServicesReferencePage", () => {
 		expect(
 			screen.getByRole("heading", { level: 2, name: "What happens if a milestone payment slips one week?" }),
 		).toBeInTheDocument();
-		expect(screen.getByRole("link", { name: "Run use-case demo" })).toHaveAttribute("href", "/demo");
+		expect(screen.getByRole("link", { name: "Book a walkthrough" })).toHaveAttribute("href", "/demo");
 		expect(
-			screen.queryByRole("link", { name: "Explore: Can we add cloud spend for this project?" }),
+			screen.queryByRole("link", { name: "Book a walkthrough: Can we add cloud spend for this project?" }),
 		).not.toBeInTheDocument();
 		expect(
-			screen.queryByRole("link", { name: "Explore: Which subscription seats are idle before renewal?" }),
+			screen.queryByRole("link", { name: "Book a walkthrough: Which subscription seats are idle before renewal?" }),
 		).not.toBeInTheDocument();
 		expect(
-			screen.queryByRole("link", { name: "Explore: What happens if a milestone payment slips one week?" }),
+			screen.queryByRole("link", { name: "Book a walkthrough: What happens if a milestone payment slips one week?" }),
 		).not.toBeInTheDocument();
 	});
 });

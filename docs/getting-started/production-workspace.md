@@ -21,4 +21,4 @@ Configure Clerk's Supabase integration for the same Clerk instance used by the d
 
 Do not expose service-role credentials or database passwords to the browser. Workspace reads use the Clerk session JWT with Supabase row-level security.
 
-For the underlying data-access decision, see [Clerk-authenticated Supabase RLS](/architecture/decisions/clerk-supabase-rls).
+For the underlying data-access decision, see [Clerk-authenticated Supabase RLS](/decisions/0003-clerk-authenticated-supabase-rls).

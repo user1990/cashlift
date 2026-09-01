@@ -91,7 +91,7 @@ export const LeadCaptureForm = ({ buttonLabel, onReset, onSuccess, successDescri
 
 function getFormTransitionClassName(successVisible: boolean) {
 	return cn(
-		"flex flex-col gap-3 transition-opacity duration-75 ease motion-reduce:transition-none",
+		"flex flex-col gap-3 transition-opacity duration-[var(--motion-duration-micro)] ease-out motion-reduce:transition-none",
 		successVisible && "pointer-events-none opacity-0",
 	);
 }

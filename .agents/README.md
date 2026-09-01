@@ -60,15 +60,19 @@ Reference material the agent (or human) can consult for context. Each doc:
 skills/
 ├── architecture/SKILL.md
 ├── baseline-javascript/SKILL.md
-├── create-pr/SKILL.md
+├── ship-pr/SKILL.md
 ├── guide/SKILL.md
-├── review-pr/SKILL.md
+├── orchestrate/SKILL.md
 ├── security/SKILL.md
 ├── styling/SKILL.md
 ├── testing/SKILL.md
 ├── visual-recap/SKILL.md
 ├── web-interface-guidelines/SKILL.md
 └── worktree/SKILL.md
+
+.cursor/skills/
+├── orchestrate -> ../../.agents/skills/orchestrate
+└── ship-pr -> ../../.agents/skills/ship-pr
 
 docs/
 ├── guide.md
@@ -91,6 +95,26 @@ name: skill-name
 description: When to trigger and what it does. Be specific about trigger phrases and task types.
 ---
 ```
+
+## Platform registration (Cursor vs Codex)
+
+All skills live in `.agents/skills/<name>/SKILL.md`. Both Cursor and Codex
+discover skills from that path.
+
+| Platform | Discovery | Explicit invoke | Extra metadata |
+| --- | --- | --- | --- |
+| Cursor | `.agents/skills/` and `.cursor/skills/` | `/skill-name` in Agent chat | `SKILL.md` frontmatter (`icon`, `color`, `paths`, `disable-model-invocation`) |
+| Codex | `.agents/skills/` | `$skill-name` or `/skills` picker | `agents/openai.yaml` (`interface.*`, `policy.allow_implicit_invocation`) |
+
+Cursor ignores `agents/openai.yaml`. Codex ignores Cursor-only frontmatter fields
+like `disable-model-invocation`. Put shared workflow text in `SKILL.md`; put
+Codex picker labels and `default_prompt` in `openai.yaml`, and mirror
+`default_prompt` behavior in a `## Slash invocation` section when it matters.
+
+For Cursor slash-menu discovery, repo skills that also ship Codex metadata should
+have a symlink at `.cursor/skills/<name>` pointing to
+`../../.agents/skills/<name>`. Keep one canonical `SKILL.md` under
+`.agents/skills/`.
 
 ## Adding New Content
 

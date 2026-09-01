@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { connection } from "next/server";
 import { MAIN_CONTENT_ID } from "@/modules/page-shell/components/MainContent";
+import { SITE_URL } from "@/services/site";
 import { ClientTelemetry } from "./ClientTelemetry";
 import "./globals.css";
 
@@ -9,8 +10,13 @@ type RootLayoutProps = {
 };
 
 export const metadata: Metadata = {
+	metadataBase: new URL(SITE_URL),
 	title: "CashLift",
 	description: "A cash-aware spend decision command center for service firms.",
+	icons: {
+		apple: "/brand/cashlift-icon-180.png",
+		icon: "/brand/cashlift-icon.svg",
+	},
 };
 
 export const viewport: Viewport = {

@@ -63,6 +63,56 @@ describe("proxy security headers", () => {
 		expect(response.headers.get("X-Content-Type-Options")).toEqual("nosniff");
 		expect(response.headers.get("X-Frame-Options")).toEqual("DENY");
 		expect(response.headers.get("X-Permitted-Cross-Domain-Policies")).toEqual("none");
+		expect(response.headers.get("Vary")).toContain("Accept");
+		expect(response.headers.get("Vary")).toContain("Accept-Encoding");
+	});
+
+	it("serves the homepage as Markdown when it is preferred", async () => {
+		const request = new NextRequest("https://cashlift.test/", {
+			headers: { Accept: "text/markdown" },
+		});
+
+		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
+
+		expect(response.status).toBe(200);
+		expect(response.headers.get("Content-Type")).toBe("text/markdown; charset=utf-8");
+		expect(response.headers.get("Vary")).toContain("Accept");
+		expect(response.headers.get("Vary")).toContain("Accept-Encoding");
+		expect(await response.text()).toContain("# CashLift");
+	});
+
+	it("returns 406 for an unsupported representation", async () => {
+		const request = new NextRequest("https://cashlift.test/", {
+			headers: { Accept: "application/pdf" },
+		});
+
+		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
+
+		expect(response.status).toBe(406);
+		expect(response.headers.get("Vary")).toBe("Accept, Accept-Encoding");
+		expect(response.headers.get("Content-Security-Policy")).toContain("script-src 'self' 'nonce-");
+		expect(response.headers.get("X-Frame-Options")).toBe("DENY");
+	});
+
+	it("passes JSON API requests through to the workspace auth boundary", async () => {
+		const request = new NextRequest("https://cashlift.test/api/workspace/dataset", {
+			headers: { Accept: "application/json" },
+		});
+
+		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
+
+		expect(response.status).not.toBe(406);
+	});
+
+	it("returns Markdown recovery guidance for an unknown path", async () => {
+		const request = new NextRequest("https://cashlift.test/not-a-real-page", {
+			headers: { Accept: "text/markdown" },
+		});
+
+		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
+
+		expect(response.status).toBe(404);
+		expect(await response.text()).toContain("/sitemap.xml");
 	});
 
 	it.each(["/login", "/login/sso-callback", "/signup", "/signup/continue"])(

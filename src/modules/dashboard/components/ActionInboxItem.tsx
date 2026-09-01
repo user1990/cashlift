@@ -60,7 +60,10 @@ export const ActionInboxItem = ({
 
 				<span className="mt-1 flex min-w-0 items-center justify-end gap-2 text-muted-foreground text-s">
 					{owner}
-					<ArrowRight aria-hidden className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
+					<ArrowRight
+						aria-hidden
+						className="size-4 shrink-0 transition-transform duration-[var(--motion-duration-micro)] ease-in-out group-hover:translate-x-0.5 motion-reduce:transition-none"
+					/>
 				</span>
 			</span>
 		</Link>

@@ -51,7 +51,7 @@ export const UseCaseReferencePage = ({
 				</div>
 
 				<div className="mt-12 flex justify-center lg:mt-4">
-					<ActionLink href="/demo">Run use-case demo</ActionLink>
+					<ActionLink href="/demo">Book a walkthrough</ActionLink>
 				</div>
 			</div>
 		</section>
@@ -84,7 +84,7 @@ function UseCaseDecisionCard({
 			className={cn(
 				"relative flex h-100 flex-col overflow-hidden rounded-[1.75rem] border border-shell-border bg-shell-elevated/70 p-5 text-shell-foreground shadow-shell backdrop-blur sm:p-6",
 				cardHref &&
-					"transition-transform duration-200 group-hover:-translate-y-1 group-hover:border-primary-subtle-border group-hover:shadow-primary-glow motion-reduce:transition-none motion-reduce:group-hover:transform-none",
+					"transition-[border-color,box-shadow,transform] duration-[var(--motion-duration-standard)] ease-in-out group-hover:-translate-y-1 group-hover:border-primary-subtle-border group-hover:shadow-primary-glow motion-reduce:transition-none motion-reduce:group-hover:transform-none",
 			)}
 		>
 			<div className="relative flex h-56 shrink-0 items-center justify-center rounded-2xl border border-border bg-shell-elevated p-5 shadow-panel">
@@ -130,7 +130,7 @@ function UseCaseDecisionCard({
 
 	return (
 		<Link
-			aria-label={`Explore: ${title}`}
+			aria-label={`Book a walkthrough: ${title}`}
 			href={cardHref}
 			className="group block rounded-[1.75rem] focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-4"
 		>

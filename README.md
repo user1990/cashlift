@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./src/app/logo.svg" width="110" alt="CashLift Logo" />
+  <img src="./src/app/logo.svg" width="180" alt="CashLift logo with dollar-styled S and upward arrow" />
 </p>
 
 <p align="center">
@@ -37,6 +37,8 @@
 <p align="center">
   <img src="./public/brand/readme-cashlift-brand.svg" width="100%" alt="CashLift brand banner" />
 </p>
+
+The shared CashLift wordmark is a stable 5.03:1 traced vector in [`src/app/logo.svg`](./src/app/logo.svg) and is rendered inline in the marketing, auth, checkout, and workspace shells. The favicon uses the compact traced [`public/brand/cashlift-icon.svg`](./public/brand/cashlift-icon.svg) mark.
 
 ---
 

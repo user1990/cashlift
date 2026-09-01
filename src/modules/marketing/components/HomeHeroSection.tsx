@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { ActionLink } from "./ActionLink";
 import { HomeHeroImage } from "./HomeHeroImage";
 
@@ -23,10 +23,17 @@ export const HomeHeroSection = () => (
 					CashLift ranks the cash actions that matter now in one daily inbox.
 				</p>
 
-				<ActionLink href="/demo/workspace" prefetch={false} className="mt-8">
-					Open live demo
-					<ArrowRight aria-hidden className="size-4" />
-				</ActionLink>
+				<div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+					<ActionLink href="/demo/workspace" prefetch={false}>
+						Open live demo
+						<ArrowRight aria-hidden className="size-4" />
+					</ActionLink>
+
+					<ActionLink href="https://cashlift-docs.vercel.app/" variant="secondary">
+						View Documentation
+						<ArrowUpRight aria-hidden className="size-4" />
+					</ActionLink>
+				</div>
 			</header>
 
 			<div className="relative mx-auto mt-10 max-w-280 sm:mt-12">
