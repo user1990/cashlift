@@ -14,11 +14,15 @@ describe("WorkspaceSectionPage", () => {
 			section: "budgets" as const,
 		},
 		{
+			headline: "3 company members across Finance, Client Delivery, and Operations",
+			section: "team" as const,
+		},
+		{
 			headline: buildVendorsPresentation(DEMO_WORKSPACE_DATASET).headline,
 			section: "vendors" as const,
 		},
 	])("uses the glass cockpit instead of the workspace section header on $section", ({ headline, section }) => {
-		render(<WorkspaceSectionPage dataset={DEMO_WORKSPACE_DATASET} section={section} />);
+		render(<WorkspaceSectionPage basePath="/dashboard" dataset={DEMO_WORKSPACE_DATASET} section={section} />);
 
 		expect(screen.queryByRole("link", { name: "Run leak audit" })).not.toBeInTheDocument();
 		expect(screen.queryByText("Workspace")).not.toBeInTheDocument();
