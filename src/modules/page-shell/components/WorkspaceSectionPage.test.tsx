@@ -12,8 +12,9 @@ describe("WorkspaceSectionPage", () => {
 	it.each([
 		["approvals", buildApprovalsPresentation(buildDashboardViewModel({ dataset: DEMO_WORKSPACE_DATASET })).headline],
 		["budgets", buildTeamBudgetsPresentation(DEMO_WORKSPACE_DATASET).headline],
+		["team", "3 company members across Finance, Client Delivery, and Operations"],
 	] as const)("uses the glass cockpit instead of the workspace section header on %s", (section, headline) => {
-		render(<WorkspaceSectionPage dataset={DEMO_WORKSPACE_DATASET} readOnly section={section} />);
+		render(<WorkspaceSectionPage basePath="/dashboard" dataset={DEMO_WORKSPACE_DATASET} readOnly section={section} />);
 
 		expect(screen.queryByRole("link", { name: "Run leak audit" })).not.toBeInTheDocument();
 		expect(screen.queryByText("Workspace")).not.toBeInTheDocument();
