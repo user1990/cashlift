@@ -23,7 +23,9 @@ export const WorkspaceSectionPage = ({ basePath, dataset, readOnly = false, sect
 
 	return (
 		<>
-			{section !== "budgets" && section !== "team" && <WorkspaceSectionHeader section={section} />}
+			{section !== "budgets" && section !== "team" && section !== "vendors" && (
+				<WorkspaceSectionHeader section={section} />
+			)}
 
 			<WorkspaceSectionContent basePath={basePath} dataset={dataset} readOnly={readOnly} section={section} />
 		</>

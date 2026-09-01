@@ -31,7 +31,7 @@ function getSectionTitle(section: WorkspaceSection) {
 		overview: "Overview",
 		settings: "Workspace settings",
 		team: "Team",
-		vendors: "Vendor leaks",
+		vendors: "Vendor bills & leaks",
 	} as const satisfies Record<WorkspaceSection, string>;
 
 	return titles[section];

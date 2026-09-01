@@ -3,26 +3,40 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { buildTeamBudgetsPresentation } from "@/modules/dashboard/explore/teamBudgetsModel";
+import { buildDashboardViewModel } from "@/modules/dashboard/view-model";
 import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
+import { buildVendorsPresentation } from "../vendorsPresentation";
 import { WorkspaceSectionPage } from "./WorkspaceSectionPage";
 
+const CASH_FORECAST_DATE = DEMO_WORKSPACE_DATASET.forecast[0]?.date;
+
 describe("WorkspaceSectionPage", () => {
-	it.each(["budgets", "cash", "team"] as const)(
-		"uses the glass cockpit instead of the workspace section header on %s",
-		(section) => {
-			render(<WorkspaceSectionPage basePath="/dashboard" dataset={DEMO_WORKSPACE_DATASET} section={section} />);
-
-			expect(screen.queryByRole("link", { name: "Run leak audit" })).not.toBeInTheDocument();
-			expect(screen.queryByText("Workspace")).not.toBeInTheDocument();
-			expect(screen.getByRole("heading", { level: 1 })).toBeVisible();
+	it.each([
+		{
+			headline: buildTeamBudgetsPresentation(DEMO_WORKSPACE_DATASET).headline,
+			section: "budgets" as const,
 		},
-	);
+		{
+			headline: buildDashboardViewModel({
+				dataset: DEMO_WORKSPACE_DATASET,
+				date: new Date(`${CASH_FORECAST_DATE}T00:00:00`),
+				role: DEMO_WORKSPACE_DATASET.profile.defaultRole,
+			}).cashPositionHeadline,
+			section: "cash" as const,
+		},
+		{
+			headline: "3 company members across Finance, Client Delivery, and Operations",
+			section: "team" as const,
+		},
+		{
+			headline: buildVendorsPresentation(DEMO_WORKSPACE_DATASET).headline,
+			section: "vendors" as const,
+		},
+	])("uses the glass cockpit instead of the workspace section header on $section", ({ headline, section }) => {
+		render(<WorkspaceSectionPage basePath="/dashboard" dataset={DEMO_WORKSPACE_DATASET} section={section} />);
 
-	it("renders the team budgets headline from the current dataset", () => {
-		const presentation = buildTeamBudgetsPresentation(DEMO_WORKSPACE_DATASET);
-
-		render(<WorkspaceSectionPage basePath="/dashboard" dataset={DEMO_WORKSPACE_DATASET} section="budgets" />);
-
-		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(presentation.headline);
+		expect(screen.queryByRole("link", { name: "Run leak audit" })).not.toBeInTheDocument();
+		expect(screen.queryByText("Workspace")).not.toBeInTheDocument();
+		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(headline);
 	});
 });

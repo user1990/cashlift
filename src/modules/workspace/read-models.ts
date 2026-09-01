@@ -30,7 +30,7 @@ export const WORKSPACE_SCOPE_TABLES = {
 	],
 	settings: [],
 	team: ["teamMembers"],
-	vendors: ["subscriptions"],
+	vendors: ["subscriptions", "vendorBills"],
 } as const satisfies Record<WorkspaceDatasetScope, readonly DatasetTable[]>;
 
 export const reduceDatasetForScope = (dataset: FinancialDataset, scope: WorkspaceDatasetScope): FinancialDataset => {

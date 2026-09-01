@@ -1,5 +1,5 @@
-import { WorkspacePageLoading } from "@/modules/page-shell/components/WorkspacePageLoading";
+import { WorkspaceVendorsLoading } from "@/modules/page-shell/components/WorkspaceVendorsLoading";
 
 export default function VendorsLoading() {
-	return <WorkspacePageLoading section="vendors" />;
+	return <WorkspaceVendorsLoading />;
 }
