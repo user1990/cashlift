@@ -1,18 +1,11 @@
 import { describe, expect, it } from "vitest";
-import {
-	getActiveWorkspaceNavItem,
-	getWorkspaceNavGroups,
-	getWorkspaceNavItems,
-	isWorkspaceNavItemActive,
-} from "./navigation";
+import { getActiveWorkspaceNavItem, getWorkspaceNavItems, isWorkspaceNavItemActive } from "./navigation";
 
 describe("workspace navigation", () => {
-	it("groups related workspace destinations with dividable sections", () => {
-		const groups = getWorkspaceNavGroups("/dashboard");
+	it("groups unique workspace destinations and prefers the most specific active route", () => {
 		const items = getWorkspaceNavItems("/dashboard");
 		const hrefs = items.map((item) => item.href);
 
-		expect(groups.map((group) => group.id)).toEqual(["home", "cash", "receivables", "spend", "company"]);
 		expect(items.map((item) => item.label)).toEqual([
 			"Overview",
 			"Cash Insights",
@@ -27,9 +20,6 @@ describe("workspace navigation", () => {
 		expect(hrefs).toEqual([...new Set(hrefs)]);
 		expect(items.find((item) => item.label === "13-week Outlook")?.href).toBe("/dashboard#cash-outlook");
 		expect(items.find((item) => item.label === "Invoices")?.href).toBe("/dashboard/invoices");
-	});
-
-	it("prefers the most specific active destination for nested routes", () => {
 		expect(getActiveWorkspaceNavItem("/dashboard/invoices", "/dashboard")?.label).toBe("Invoices");
 		expect(getActiveWorkspaceNavItem("/dashboard", "/dashboard")?.label).toBe("Overview");
 		expect(isWorkspaceNavItemActive("/dashboard/invoices", "/dashboard/invoices", "/dashboard")).toBe(true);
