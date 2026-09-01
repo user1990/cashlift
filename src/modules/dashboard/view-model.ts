@@ -75,6 +75,7 @@ export const buildDashboardViewModel = ({
 		cashAtRiskCents: bufferRiskCents + invoiceRiskCents,
 		cashAvailableCents,
 		cashBufferTargetCents,
+		monthlyPayrollCents: dataset.profile.monthlyPayrollCents,
 		cashPositionHeadline: getCashPositionHeadline({
 			availableCents: cashAvailableCents,
 			bufferTargetCents: cashBufferTargetCents,

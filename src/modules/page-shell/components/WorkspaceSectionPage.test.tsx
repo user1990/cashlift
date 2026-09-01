@@ -9,6 +9,8 @@ import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
 import { buildVendorsPresentation } from "../vendorsPresentation";
 import { WorkspaceSectionPage } from "./WorkspaceSectionPage";
 
+const CASH_FORECAST_DATE = DEMO_WORKSPACE_DATASET.forecast[0]?.date;
+
 describe("WorkspaceSectionPage", () => {
 	it.each([
 		{
@@ -18,6 +20,14 @@ describe("WorkspaceSectionPage", () => {
 		{
 			headline: buildTeamBudgetsPresentation(DEMO_WORKSPACE_DATASET).headline,
 			section: "budgets" as const,
+		},
+		{
+			headline: buildDashboardViewModel({
+				dataset: DEMO_WORKSPACE_DATASET,
+				date: new Date(`${CASH_FORECAST_DATE}T00:00:00`),
+				role: DEMO_WORKSPACE_DATASET.profile.defaultRole,
+			}).cashPositionHeadline,
+			section: "cash" as const,
 		},
 		{
 			headline: "3 company members across Finance, Client Delivery, and Operations",

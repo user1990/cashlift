@@ -14,6 +14,7 @@ describe("dashboard view model", () => {
 		});
 
 		expect(dashboard.cashAvailableCents).toEqual(41_200_000);
+		expect(dashboard.monthlyPayrollCents).toEqual(financialDatasetFixture.profile.monthlyPayrollCents);
 		expect(dashboard.pendingApprovalCount).toEqual(2);
 		expect(dashboard.invoiceRiskCents).toEqual(1_840_000);
 		expect(dashboard.vendorLeakSavingsCents).toEqual(261_000);

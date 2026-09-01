@@ -1,8 +1,8 @@
+import { CashInsights } from "@/modules/dashboard/components/CashInsights";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import type { WorkspaceSection } from "../types";
 import { WorkspaceApprovalsSection } from "./WorkspaceApprovalsSection";
 import { WorkspaceBudgetsSection } from "./WorkspaceBudgetsSection";
-import { WorkspaceCashSection } from "./WorkspaceCashSection";
 import { WorkspaceInvoicesSection } from "./WorkspaceInvoicesSection";
 import { WorkspaceSectionHeader } from "./WorkspaceSectionHeader";
 import { WorkspaceSettingsSection } from "./WorkspaceSettingsSection";
@@ -16,24 +16,38 @@ type WorkspaceSectionPageProps = {
 	readOnly?: boolean;
 };
 
-export const WorkspaceSectionPage = ({ basePath, dataset, readOnly = false, section }: WorkspaceSectionPageProps) => (
-	<>
-		{section !== "approvals" && section !== "budgets" && section !== "team" && section !== "vendors" && (
-			<WorkspaceSectionHeader section={section} />
-		)}
+export const WorkspaceSectionPage = ({ basePath, dataset, readOnly = false, section }: WorkspaceSectionPageProps) => {
+	if (section === "cash") {
+		return <CashInsights basePath={basePath} dataset={dataset} />;
+	}
 
-		<WorkspaceSectionContent basePath={basePath} dataset={dataset} readOnly={readOnly} section={section} />
-	</>
-);
+	return (
+		<>
+			{section !== "approvals" && section !== "budgets" && section !== "team" && section !== "vendors" && (
+				<WorkspaceSectionHeader section={section} />
+			)}
 
-function WorkspaceSectionContent({ basePath, dataset, readOnly, section }: WorkspaceSectionPageProps) {
+			<WorkspaceSectionContent basePath={basePath} dataset={dataset} readOnly={readOnly} section={section} />
+		</>
+	);
+};
+
+function WorkspaceSectionContent({
+	basePath,
+	dataset,
+	readOnly,
+	section,
+}: {
+	basePath: string;
+	dataset: FinancialDataset;
+	section: Exclude<WorkspaceSection, "cash" | "overview">;
+	readOnly?: boolean;
+}) {
 	switch (section) {
 		case "approvals":
 			return <WorkspaceApprovalsSection dataset={dataset} readOnly={readOnly} />;
 		case "budgets":
 			return <WorkspaceBudgetsSection dataset={dataset} />;
-		case "cash":
-			return <WorkspaceCashSection dataset={dataset} />;
 		case "invoices":
 			return <WorkspaceInvoicesSection dataset={dataset} />;
 		case "settings":
