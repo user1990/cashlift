@@ -230,6 +230,30 @@ textarea,
 
 @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
 	@supports (animation-timeline: view()) {
+		[data-home-hero-parallax] {
+			animation-duration: 1ms;
+			animation-fill-mode: both;
+			animation-range: entry 0% exit 100%;
+			animation-timing-function: linear;
+			animation-timeline: view();
+		}
+
+		[data-home-hero-parallax="atmosphere"] {
+			animation-name: home-hero-drift-atmosphere;
+		}
+
+		[data-home-hero-parallax="midground"] {
+			animation-name: home-hero-drift-midground;
+		}
+
+		[data-home-hero-parallax="product"] {
+			animation-name: home-hero-drift-product;
+		}
+
+		[data-home-hero-parallax="foreground"] {
+			animation-name: home-hero-drift-foreground;
+		}
+
 		[data-story-stack="0"] > article,
 		[data-story-stack="1"] > article {
 			animation-duration: 1ms;
@@ -247,6 +271,48 @@ textarea,
 		[data-story-stack="1"] > article {
 			animation-name: decision-story-shrink-second;
 		}
+	}
+}
+
+@keyframes home-hero-drift-atmosphere {
+	from {
+		opacity: 0.82;
+		transform: translateY(-1rem) scale(1);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(2rem) scale(1.06);
+	}
+}
+
+@keyframes home-hero-drift-midground {
+	from {
+		transform: translateY(-1.25rem);
+	}
+
+	to {
+		transform: translateY(2.25rem);
+	}
+}
+
+@keyframes home-hero-drift-product {
+	from {
+		transform: translateY(-0.5rem);
+	}
+
+	to {
+		transform: translateY(1.5rem);
+	}
+}
+
+@keyframes home-hero-drift-foreground {
+	from {
+		transform: translateY(-0.25rem);
+	}
+
+	to {
+		transform: translateY(3rem);
 	}
 }
 
