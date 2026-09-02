@@ -3,15 +3,16 @@ import { ActionLink } from "./ActionLink";
 import { HomeHeroImage } from "./HomeHeroImage";
 
 export const HomeHeroSection = () => (
-	<section className="relative isolate overflow-hidden border-shell-border border-b bg-shell">
+	<section className="relative isolate overflow-clip border-shell-border border-b bg-shell">
 		<div
 			aria-hidden
-			className="absolute inset-0 bg-[radial-gradient(circle_at_50%_12%,color-mix(in_srgb,var(--primary)_16%,transparent),transparent_32%),radial-gradient(circle_at_82%_36%,color-mix(in_srgb,var(--highlight)_12%,transparent),transparent_28%)]"
+			data-home-hero-parallax="atmosphere"
+			className="pointer-events-none absolute -inset-8 bg-[radial-gradient(circle_at_50%_12%,color-mix(in_srgb,var(--primary)_18%,transparent),transparent_31%),radial-gradient(circle_at_82%_40%,color-mix(in_srgb,var(--highlight)_14%,transparent),transparent_30%),radial-gradient(circle_at_16%_72%,color-mix(in_srgb,var(--signal)_9%,transparent),transparent_27%)]"
 		/>
 
-		<div className="relative mx-auto max-w-295 px-4 pt-16 pb-12 sm:px-6 sm:pt-20 lg:px-8 lg:pt-24 lg:pb-16">
+		<div className="relative mx-auto max-w-295 px-4 pt-16 pb-14 sm:px-6 sm:pt-20 lg:px-8 lg:pt-24 lg:pb-20">
 			<header className="mx-auto max-w-4xl text-center">
-				<h1 className="text-5xl+ tracking-normal sm:text-7xl+">
+				<h1 aria-label="See what to collect, approve, or cut today." className="text-5xl+ tracking-normal sm:text-7xl+">
 					<span className="block text-shell-foreground">See what to </span>
 
 					<span className="block text-primary">collect, approve, </span>
@@ -36,18 +37,30 @@ export const HomeHeroSection = () => (
 				</div>
 			</header>
 
-			<div className="relative mx-auto mt-10 max-w-280 sm:mt-12">
+			<div className="relative mx-auto mt-10 max-w-280 sm:mt-12 lg:mt-14 lg:pb-6">
 				<div
 					aria-hidden
-					className="absolute inset-x-[6%] bottom-0 h-20 bg-[radial-gradient(ellipse_at_50%_100%,color-mix(in_srgb,var(--primary)_62%,transparent),color-mix(in_srgb,var(--primary)_30%,transparent)_46%,transparent_78%)] blur-2xl lg:bottom-7"
-				/>
+					data-home-hero-parallax="midground"
+					className="pointer-events-none absolute -inset-x-[3%] inset-y-[3%] hidden lg:block"
+				>
+					<div className="absolute inset-y-[8%] left-0 w-[42%] -rotate-3 rounded-3xl border border-primary/20 bg-primary-subtle/15 shadow-shell backdrop-blur-md" />
+
+					<div className="absolute inset-y-[4%] right-0 w-[38%] rotate-3 rounded-3xl border border-highlight/15 bg-highlight-subtle/20 shadow-shell backdrop-blur-md" />
+				</div>
+
+				<div data-home-hero-parallax="product" className="relative z-20">
+					<HomeHeroImage />
+				</div>
 
 				<div
 					aria-hidden
-					className="absolute inset-x-[4%] bottom-0 h-px bg-primary shadow-[0_0_20px_4px_color-mix(in_srgb,var(--primary)_90%,transparent)] lg:bottom-7"
-				/>
+					data-home-hero-parallax="foreground"
+					className="pointer-events-none absolute inset-x-[4%] -bottom-2 z-30 hidden h-20 lg:block"
+				>
+					<div className="absolute inset-x-[2%] bottom-0 h-20 bg-[radial-gradient(ellipse_at_50%_100%,color-mix(in_srgb,var(--primary)_58%,transparent),color-mix(in_srgb,var(--primary)_24%,transparent)_46%,transparent_78%)] blur-xl" />
 
-				<HomeHeroImage />
+					<div className="absolute inset-x-0 bottom-0 h-px bg-primary shadow-[0_0_20px_4px_color-mix(in_srgb,var(--primary)_80%,transparent)]" />
+				</div>
 			</div>
 		</div>
 	</section>

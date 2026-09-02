@@ -13,7 +13,7 @@ const TILT_EASING = "cubic-bezier(0.03, 0.98, 0.52, 0.99)";
 
 export const HomeHeroImage = () => {
 	const animationRef = useRef<Animation | null>(null);
-	const cardRef = useRef<HTMLDivElement>(null);
+	const cardRef = useRef<HTMLElement>(null);
 	const pointerFrameRef = useRef<number | null>(null);
 
 	useEffect(() => {
@@ -43,7 +43,7 @@ export const HomeHeroImage = () => {
 		};
 	}, []);
 
-	const tiltOnPointerMove = (event: PointerEvent<HTMLDivElement>) => {
+	const tiltOnPointerMove = (event: PointerEvent<HTMLElement>) => {
 		if (event.pointerType !== "mouse" || !canTilt()) {
 			cancelPointerFrame(pointerFrameRef);
 			clearTilt(event.currentTarget, animationRef);
@@ -61,7 +61,7 @@ export const HomeHeroImage = () => {
 		});
 	};
 
-	const resetTilt = (event: PointerEvent<HTMLDivElement>) => {
+	const resetTilt = (event: PointerEvent<HTMLElement>) => {
 		cancelPointerFrame(pointerFrameRef);
 
 		if (animationRef.current) {
@@ -73,37 +73,49 @@ export const HomeHeroImage = () => {
 	};
 
 	return (
-		<div
+		<figure
 			ref={cardRef}
 			onPointerCancel={resetTilt}
 			onPointerLeave={resetTilt}
 			onPointerMove={tiltOnPointerMove}
 			className="relative origin-center lg:[transform-style:preserve-3d] lg:[transform:perspective(100rem)_rotateX(6deg)_scale(.92)]"
 		>
-			<div className="overflow-hidden rounded-xl border border-shell-border bg-shell-elevated shadow-shell motion-reduce:lg:transform-none lg:[transform:translateZ(1rem)]">
+			<div className="relative isolate overflow-hidden rounded-2xl border border-white/10 bg-panel/35 p-1.5 shadow-shell backdrop-blur-xl sm:p-2 motion-reduce:lg:transform-none lg:[transform:translateZ(1rem)]">
 				<div
 					aria-hidden
-					className="absolute inset-x-0 top-0 z-10 h-px bg-linear-to-r from-transparent via-primary to-transparent"
+					className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_18%,color-mix(in_srgb,var(--primary)_18%,transparent),transparent_34%),radial-gradient(circle_at_84%_82%,color-mix(in_srgb,var(--highlight)_12%,transparent),transparent_32%)]"
 				/>
 
-				<Image
-					alt="Studio Nova overview with ranked cash actions, 13-week cash outlook, and team budget charts"
-					src="/marketing/studio-nova-inbox.webp"
-					decoding="sync"
-					fetchPriority="high"
-					priority
-					width={2880}
-					height={1800}
-					sizes="(min-width: 1180px) 1120px, calc(100vw - 2rem)"
-					className="h-auto w-full"
+				<div
+					aria-hidden
+					className="pointer-events-none absolute inset-x-0 top-0 z-20 h-px bg-linear-to-r from-transparent via-white/50 to-transparent"
 				/>
+
+				<div className="relative overflow-hidden rounded-xl border border-primary/20 bg-shell shadow-panel">
+					<Image
+						alt="Studio Nova workspace with ranked cash actions, a 13-week cash outlook, and team budgets"
+						src="/marketing/studio-nova-workspace-glass.webp"
+						decoding="sync"
+						fetchPriority="high"
+						priority
+						width={1568}
+						height={980}
+						sizes="(min-width: 1180px) 1120px, calc(100vw - 2rem)"
+						className="h-auto w-full"
+					/>
+
+					<div
+						aria-hidden
+						className="pointer-events-none absolute inset-0 rounded-[inherit] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--primary)_32%,transparent)]"
+					/>
+				</div>
 			</div>
-		</div>
+		</figure>
 	);
 };
 
 function animateCard(
-	card: HTMLDivElement,
+	card: HTMLElement,
 	targetTransform: string,
 	animationRef: { current: Animation | null },
 	reset = false,
@@ -141,7 +153,7 @@ function cancelPointerFrame(pointerFrameRef: { current: number | null }) {
 	}
 }
 
-function clearTilt(card: HTMLDivElement, animationRef: { current: Animation | null }) {
+function clearTilt(card: HTMLElement, animationRef: { current: Animation | null }) {
 	animationRef.current?.cancel();
 	animationRef.current = null;
 	card.classList.remove("will-change-transform");
@@ -155,7 +167,7 @@ function canTilt() {
 	);
 }
 
-function getTiltTransform(card: HTMLDivElement, clientX: number, clientY: number) {
+function getTiltTransform(card: HTMLElement, clientX: number, clientY: number) {
 	const bounds = card.getBoundingClientRect();
 	const horizontalPosition = ((clientX - bounds.left) / bounds.width) * 2 - 1;
 	const verticalPosition = ((clientY - bounds.top) / bounds.height) * 2 - 1;
