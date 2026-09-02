@@ -23,9 +23,9 @@ export const HomeHeroImage = () => {
 			return;
 		}
 
+		const card = cardRef.current;
 		const mediaQueries = [window.matchMedia(TILT_MEDIA_QUERY), window.matchMedia("(prefers-reduced-motion: reduce)")];
 		const clearTiltWhenUnavailable = () => {
-			const card = cardRef.current;
 			if (!card || canTilt()) {
 				return;
 			}
@@ -44,7 +44,7 @@ export const HomeHeroImage = () => {
 			}
 
 			cancelPointerFrame(pointerFrameRef);
-			clearTilt(cardRef.current, tiltAnimationRef, resetAnimationRef);
+			clearTilt(card, tiltAnimationRef, resetAnimationRef);
 		};
 	}, []);
 
