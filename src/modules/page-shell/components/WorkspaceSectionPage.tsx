@@ -23,9 +23,11 @@ export const WorkspaceSectionPage = ({ basePath, dataset, readOnly = false, sect
 
 	return (
 		<>
-			{section !== "approvals" && section !== "budgets" && section !== "team" && section !== "vendors" && (
-				<WorkspaceSectionHeader section={section} />
-			)}
+			{section !== "approvals" &&
+				section !== "budgets" &&
+				section !== "invoices" &&
+				section !== "team" &&
+				section !== "vendors" && <WorkspaceSectionHeader section={section} />}
 
 			<WorkspaceSectionContent basePath={basePath} dataset={dataset} readOnly={readOnly} section={section} />
 		</>
@@ -49,7 +51,7 @@ function WorkspaceSectionContent({
 		case "budgets":
 			return <WorkspaceBudgetsSection dataset={dataset} />;
 		case "invoices":
-			return <WorkspaceInvoicesSection dataset={dataset} />;
+			return <WorkspaceInvoicesSection basePath={basePath} dataset={dataset} />;
 		case "settings":
 			return <WorkspaceSettingsSection dataset={dataset} />;
 		case "team":
