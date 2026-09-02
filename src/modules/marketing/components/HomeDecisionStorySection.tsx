@@ -9,15 +9,16 @@ type HomeDecisionStorySectionProps = {
 
 const DECISION_CHAPTERS = {
 	approve: {
-		imageAlt: "Studio Nova approval queue showing the cash remaining after a hardware request",
+		imageAlt: "CashLift spend approvals dashboard showing a $380 Logitech request and cash after the next approval",
 		imageSrc: "/marketing/studio-nova-approvals.webp",
 	},
 	collect: {
-		imageAlt: "Studio Nova invoice view highlighting overdue collection risk",
+		imageAlt:
+			"CashLift invoice dashboard showing $213,500 in overdue cash risk and Aurora Health as the priority collection",
 		imageSrc: "/marketing/studio-nova-invoices.webp",
 	},
 	cut: {
-		imageAlt: "Studio Nova vendor view showing low-use and duplicate subscriptions",
+		imageAlt: "CashLift vendor bills and leaks dashboard showing Notion as a $13,200 monthly vendor leak",
 		imageSrc: "/marketing/studio-nova-vendors.webp",
 	},
 } as const;
