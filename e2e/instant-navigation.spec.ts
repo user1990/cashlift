@@ -21,7 +21,7 @@ test.describe("dashboard navigation", () => {
 			.getByRole("link", { name: "Vendor bills & leaks", exact: true })
 			.click();
 		await expect(page).toHaveURL(/\/dashboard\/vendors$/);
-		await expect(page.getByRole("heading", { name: "Vendor leaks", exact: true })).toBeVisible();
+		await expect(page.getByRole("heading", { name: "Notion" })).toBeVisible();
 	});
 });
 

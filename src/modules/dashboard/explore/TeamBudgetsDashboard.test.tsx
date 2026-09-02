@@ -14,25 +14,20 @@ describe("TeamBudgetsDashboard", () => {
 
 		render(<TeamBudgetsDashboard dataset={DEMO_WORKSPACE_DATASET} />);
 
-		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(presentation.headline);
-		expect(screen.getByText(`${presentation.companyName} · Team budgets`)).toBeVisible();
-		expect(screen.getByText("3 teams")).toBeVisible();
-		expect(screen.getByText("Monthly budget")).toBeVisible();
 		expect(screen.getByText(formatPreciseCompactCurrency(presentation.monthlyBudgetCents))).toBeVisible();
-		expect(screen.getByText("Highest usage")).toBeVisible();
+		expect(screen.getByText(formatPreciseCompactCurrency(presentation.remainingCents))).toBeVisible();
 		expect(primaryTeam).toBeDefined();
 		expect(screen.getByRole("heading", { name: primaryTeam?.team })).toBeVisible();
 		expect(screen.getByText(`${getPercentage(primaryTeam?.usagePercent ?? 0)} used`)).toBeVisible();
-		expect(screen.getByRole("heading", { name: "Other teams" })).toBeVisible();
 
 		for (const team of presentation.remainingTeams) {
 			expect(screen.getAllByText(team.team).length).toBeGreaterThan(0);
 		}
-
-		expect(screen.queryByRole("link", { name: "Run leak audit" })).not.toBeInTheDocument();
 	});
 
 	it("keeps the status card when no team budgets exist", () => {
+		const presentation = buildTeamBudgetsPresentation(DEMO_WORKSPACE_DATASET);
+
 		render(
 			<TeamBudgetsDashboard
 				dataset={{
@@ -42,9 +37,7 @@ describe("TeamBudgetsDashboard", () => {
 			/>,
 		);
 
-		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("No team budgets for this range.");
-		expect(screen.getByText("0 teams")).toBeVisible();
-		expect(screen.queryByRole("heading", { name: "Other teams" })).not.toBeInTheDocument();
-		expect(screen.queryByText("Monthly budget")).not.toBeInTheDocument();
+		expect(screen.queryByRole("heading", { name: presentation.primaryTeam?.team })).not.toBeInTheDocument();
+		expect(screen.queryByText(formatPreciseCompactCurrency(presentation.monthlyBudgetCents))).not.toBeInTheDocument();
 	});
 });

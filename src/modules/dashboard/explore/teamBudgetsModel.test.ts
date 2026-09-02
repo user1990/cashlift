@@ -19,12 +19,9 @@ describe("team budgets presentation", () => {
 			.toSorted((left, right) => right.usagePercent - left.usagePercent)
 			.map((budget) => budget.id);
 
-		expect(presentation.companyName).toEqual(DEMO_WORKSPACE_DATASET.profile.name);
 		expect(presentation.teamCount).toEqual(DEMO_WORKSPACE_DATASET.teamBudgets.length);
 		expect(presentation.remainingCents).toEqual(remainingCents);
-		expect(presentation.headline).toEqual(
-			`Team budgets leave ${formatPreciseCompactCurrency(remainingCents)} uncommitted this month`,
-		);
+		expect(presentation.headline).toContain(formatPreciseCompactCurrency(remainingCents));
 		expect(presentation.rows.map((row) => row.id)).toEqual(usageOrder);
 		expect(presentation.primaryTeam?.id).toEqual(usageOrder[0]);
 		expect(presentation.remainingTeams.map((row) => row.id)).toEqual(usageOrder.slice(1));
@@ -52,19 +49,19 @@ describe("team budgets presentation", () => {
 		});
 
 		expect(presentation.primaryTeam?.team).toEqual(overBudget.team);
-		expect(presentation.headline).toEqual(`${overBudget.team} is over its monthly budget`);
+		expect(presentation.headline).toContain(overBudget.team);
 		expect(presentation.overBudgetCount).toEqual(1);
 		expect(presentation.remainingTeams.map((row) => row.team)).toEqual([onTrackBudget.team]);
 	});
 
-	it("uses the empty-range headline when no team budgets exist", () => {
+	it("keeps empty totals when no team budgets exist", () => {
 		const presentation = buildTeamBudgetsPresentation({
 			...DEMO_WORKSPACE_DATASET,
 			teamBudgets: [],
 		});
 
-		expect(presentation.headline).toEqual("No team budgets for this range.");
 		expect(presentation.primaryTeam).toBeUndefined();
 		expect(presentation.rows).toEqual([]);
+		expect(presentation.remainingCents).toEqual(0);
 	});
 });

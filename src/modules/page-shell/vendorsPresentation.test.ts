@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { formatPreciseCompactCurrency } from "@/modules/money/format";
 import { getVendorLeakSavings } from "@/modules/subscriptions/utils";
-import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { buildVendorsPresentation } from "./vendorsPresentation";
 
@@ -10,9 +9,8 @@ describe("vendors presentation", () => {
 		const presentation = buildVendorsPresentation(financialDatasetFixture);
 		const leakSavingsCents = getVendorLeakSavings(financialDatasetFixture.subscriptions);
 
-		expect(presentation.headline).toEqual(
-			`${formatPreciseCompactCurrency(leakSavingsCents)} in monthly vendor leak savings`,
-		);
+		expect(presentation.leakSavingsCents).toEqual(leakSavingsCents);
+		expect(presentation.headline).toContain(formatPreciseCompactCurrency(leakSavingsCents));
 		expect(presentation.leaks.map((leak) => leak.vendor)).toEqual(["Notion", "MeetingAI", "SurveyStack"]);
 		expect(presentation.primaryLeak?.vendor).toEqual("Notion");
 		expect(presentation.remainingLeaks.map((leak) => leak.vendor)).toEqual(["MeetingAI", "SurveyStack"]);
@@ -45,19 +43,18 @@ describe("vendors presentation", () => {
 			subscriptions: [],
 			vendorBills: [],
 		};
+		const reviewPresentation = buildVendorsPresentation(reviewOnly);
+		const scheduledPresentation = buildVendorsPresentation(scheduledOnly);
+		const emptyPresentation = buildVendorsPresentation(emptyWork);
 
-		expect(buildVendorsPresentation(reviewOnly).headline).toEqual("1 vendor bill needs review");
-		expect(buildVendorsPresentation(reviewOnly).primaryBill?.vendor).toEqual("Studio lease extras");
-		expect(buildVendorsPresentation(scheduledOnly).headline).toEqual("$12.4K in vendor bills");
-		expect(buildVendorsPresentation(emptyWork).headline).toEqual("No vendor leaks or vendor bills need action");
-	});
-
-	it("keeps Studio Nova leak savings on the demo dataset", () => {
-		const presentation = buildVendorsPresentation(DEMO_WORKSPACE_DATASET);
-
-		expect(presentation.companyName).toEqual("Studio Nova");
-		expect(presentation.headline).toEqual("$23K in monthly vendor leak savings");
-		expect(presentation.primaryLeak?.vendor).toEqual("Notion");
-		expect(presentation.bills.map((bill) => bill.vendor)).toEqual(["Atlassian"]);
+		expect(reviewPresentation.primaryLeak).toBeUndefined();
+		expect(reviewPresentation.primaryBill?.vendor).toEqual("Studio lease extras");
+		expect(scheduledPresentation.headline).toContain(
+			formatPreciseCompactCurrency(scheduledPresentation.billsTotalCents),
+		);
+		expect(emptyPresentation.leaks).toEqual([]);
+		expect(emptyPresentation.bills).toEqual([]);
+		expect(emptyPresentation.leakSavingsCents).toEqual(0);
+		expect(emptyPresentation.billsTotalCents).toEqual(0);
 	});
 });

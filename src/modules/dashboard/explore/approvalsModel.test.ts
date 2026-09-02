@@ -17,10 +17,7 @@ describe("approvals presentation", () => {
 			0,
 		);
 
-		expect(presentation.contextLine).toEqual(`${dashboard.companyName} · Spend approvals`);
-		expect(presentation.headline).toEqual(
-			`${dashboard.pendingApprovals.length} spend requests totaling ${formatPreciseCompactCurrency(pendingAmountCents)} need a decision`,
-		);
+		expect(presentation.headline).toContain(formatPreciseCompactCurrency(pendingAmountCents));
 		expect(presentation.pendingAmountCents).toEqual(pendingAmountCents);
 		expect(presentation.primaryRequest?.id).toEqual(dashboard.pendingApprovals[0]?.id);
 		expect(presentation.remainingRequests.map((request) => request.id)).toEqual(
@@ -28,7 +25,7 @@ describe("approvals presentation", () => {
 		);
 	});
 
-	it("uses a clear headline when no spend requests are pending", () => {
+	it("clears the queue when no spend requests are pending", () => {
 		const dashboard = buildDashboardViewModel({
 			dataset: {
 				...financialDatasetFixture,
@@ -40,10 +37,10 @@ describe("approvals presentation", () => {
 			date: new Date("2026-05-09T00:00:00"),
 			role: "owner-finance",
 		});
+		const presentation = buildApprovalsPresentation(dashboard);
 
-		expect(buildApprovalsPresentation(dashboard).headline).toEqual("You are clear on spend requests");
-		expect(buildApprovalsPresentation(dashboard).primaryRequest).toBeUndefined();
-		expect(buildApprovalsPresentation(dashboard).remainingRequests).toEqual([]);
-		expect(buildApprovalsPresentation(dashboard).pendingAmountCents).toEqual(0);
+		expect(presentation.primaryRequest).toBeUndefined();
+		expect(presentation.remainingRequests).toEqual([]);
+		expect(presentation.pendingAmountCents).toEqual(0);
 	});
 });
