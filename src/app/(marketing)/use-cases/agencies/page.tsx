@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function Agencies() {
-	return <UseCasePage useCase={USE_CASES.agencies} />;
+	return <UseCasePage answersVariant="glass" useCase={USE_CASES.agencies} />;
 }

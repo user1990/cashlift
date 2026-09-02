@@ -6,14 +6,15 @@ import { UseCaseDemoCtaSection } from "./UseCaseDemoCtaSection";
 
 type UseCasePageProps = {
 	useCase: (typeof USE_CASES)[keyof typeof USE_CASES];
+	answersVariant?: "default" | "glass";
 };
 
-export const UseCasePage = ({ useCase }: UseCasePageProps) => (
+export const UseCasePage = ({ answersVariant = "default", useCase }: UseCasePageProps) => (
 	<MainContent variant="marketing">
 		<Hero description={useCase.description} label={useCase.label} variant="page-title" />
 
-		<UseCaseAnswers answers={useCase.answers} />
+		<UseCaseAnswers answers={useCase.answers} variant={answersVariant} />
 
-		<UseCaseDemoCtaSection />
+		<UseCaseDemoCtaSection centered={answersVariant === "glass"} />
 	</MainContent>
 );
