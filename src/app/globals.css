@@ -71,6 +71,11 @@
 	--motion-ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
 	--motion-ease-move: cubic-bezier(0.645, 0.045, 0.355, 1);
 	--motion-press-scale: 0.97;
+	--scrollbar-track: var(--shell);
+	--scrollbar-accent: color-mix(in srgb, var(--primary) 46%, var(--signal));
+	--scrollbar-accent-hover: color-mix(in srgb, var(--primary) 68%, var(--signal));
+	--scrollbar-thumb: color-mix(in srgb, var(--scrollbar-accent) 68%, var(--shell));
+	--scrollbar-thumb-hover: color-mix(in srgb, var(--scrollbar-accent-hover) 76%, var(--shell));
 }
 
 @theme inline {
@@ -168,6 +173,7 @@ html {
 	background: var(--shell);
 	color-scheme: dark;
 	scroll-behavior: smooth;
+	scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 	-webkit-tap-highlight-color: color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
@@ -226,6 +232,61 @@ textarea,
 
 ::selection {
 	background: color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+::-webkit-scrollbar-track {
+	background-color: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: var(--scrollbar-thumb);
+	border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+	background-color: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-corner {
+	background-color: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-button {
+	display: none;
+	height: 0;
+	width: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	::-webkit-scrollbar-thumb {
+		transition: background-color var(--motion-duration-micro) var(--motion-ease-hover);
+	}
+}
+
+@media (forced-colors: active) {
+	html {
+		scrollbar-color: auto;
+		scrollbar-width: auto;
+	}
+
+	::-webkit-scrollbar {
+		height: unset;
+		width: unset;
+	}
+
+	::-webkit-scrollbar-track,
+	::-webkit-scrollbar-thumb,
+	::-webkit-scrollbar-corner {
+		background-color: unset;
+		border-radius: unset;
+	}
+
+	::-webkit-scrollbar-button {
+		display: unset;
+		height: unset;
+		width: unset;
+	}
 }
 
 @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
