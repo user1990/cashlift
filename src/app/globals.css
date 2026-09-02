@@ -72,8 +72,10 @@
 	--motion-ease-move: cubic-bezier(0.645, 0.045, 0.355, 1);
 	--motion-press-scale: 0.97;
 	--scrollbar-track: var(--shell);
-	--scrollbar-thumb: var(--border-strong);
-	--scrollbar-thumb-hover: var(--primary-strong);
+	--scrollbar-accent: color-mix(in srgb, var(--primary) 46%, var(--signal));
+	--scrollbar-accent-hover: color-mix(in srgb, var(--primary) 68%, var(--signal));
+	--scrollbar-thumb: color-mix(in srgb, var(--scrollbar-accent) 68%, var(--shell));
+	--scrollbar-thumb-hover: color-mix(in srgb, var(--scrollbar-accent-hover) 76%, var(--shell));
 }
 
 @theme inline {
@@ -172,7 +174,6 @@ html {
 	color-scheme: dark;
 	scroll-behavior: smooth;
 	scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-	scrollbar-width: thin;
 	-webkit-tap-highlight-color: color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
@@ -231,11 +232,6 @@ textarea,
 
 ::selection {
 	background: color-mix(in srgb, var(--primary) 18%, transparent);
-}
-
-::-webkit-scrollbar {
-	height: 10px;
-	width: 10px;
 }
 
 ::-webkit-scrollbar-track {
