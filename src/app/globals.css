@@ -256,6 +256,12 @@ textarea,
 	background-color: var(--scrollbar-track);
 }
 
+::-webkit-scrollbar-button {
+	display: none;
+	height: 0;
+	width: 0;
+}
+
 @media (prefers-reduced-motion: no-preference) {
 	::-webkit-scrollbar-thumb {
 		transition: background-color var(--motion-duration-micro) var(--motion-ease-hover);
@@ -278,6 +284,12 @@ textarea,
 	::-webkit-scrollbar-corner {
 		background-color: unset;
 		border-radius: unset;
+	}
+
+	::-webkit-scrollbar-button {
+		display: unset;
+		height: unset;
+		width: unset;
 	}
 }
 
