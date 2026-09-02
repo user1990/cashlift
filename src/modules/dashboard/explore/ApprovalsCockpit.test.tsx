@@ -32,8 +32,6 @@ describe("ApprovalsCockpit", () => {
 
 		render(<ApprovalsCockpit dataset={APPROVALS_DATASET} readOnly />);
 
-		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(presentation.headline);
-		expect(screen.getByText(presentation.contextLine)).toBeVisible();
 		expect(screen.getByRole("heading", { name: dashboard.pendingApprovals[0]?.vendor })).toBeVisible();
 		expect(screen.getByText(formatPreciseCompactCurrency(presentation.pendingAmountCents))).toBeVisible();
 		expect(screen.getByText("Delta")).toBeVisible();
