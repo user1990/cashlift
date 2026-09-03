@@ -1,13 +1,23 @@
+import { cn } from "@/ui/utils/cn";
+
 const SKELETON_CLASS =
 	"animate-auth-skeleton-pulse rounded-md bg-shell-elevated/70 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--foreground)_4%,transparent)] motion-reduce:animate-none";
 const FIELD_SKELETONS = ["first", "second"] as const;
+const MIN_HEIGHT_CLASS = {
+	1: "min-h-[19.5rem] max-[48rem]:min-h-[20rem]",
+	2: "min-h-[24.75rem] max-[48rem]:min-h-[26rem]",
+} as const;
 
 type AuthGlassLoadingProps = {
 	fieldCount: 1 | 2;
 };
 
 export const AuthGlassLoading = ({ fieldCount }: AuthGlassLoadingProps) => (
-	<div aria-label="Preparing authentication" className="grid w-full gap-3.5" role="status">
+	<div
+		aria-label="Preparing authentication"
+		className={cn("relative grid w-full gap-3.5", MIN_HEIGHT_CLASS[fieldCount])}
+		role="status"
+	>
 		<div aria-hidden="true" className={`${SKELETON_CLASS} mx-auto h-7 w-[58%]`} />
 
 		<div aria-hidden="true" className={`${SKELETON_CLASS} mx-auto mt-[-0.375rem] mb-1 h-3 w-4/5`} />

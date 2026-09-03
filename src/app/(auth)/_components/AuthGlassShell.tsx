@@ -3,6 +3,11 @@ import { Logo } from "@/modules/marketing/components/Logo";
 import { cn } from "@/ui/utils/cn";
 import { AuthDotRail } from "./AuthDotRail";
 
+const CONTENT_MIN_HEIGHT_CLASS = {
+	default: "min-h-[19.5rem] max-[48rem]:min-h-[20rem]",
+	expanded: "min-h-[24.75rem] max-[48rem]:min-h-[26rem]",
+} as const;
+
 type AuthGlassShellProps = {
 	action: {
 		href: string;
@@ -38,7 +43,12 @@ export const AuthGlassShell = ({ action, children, size = "default" }: AuthGlass
 					<Logo />
 				</div>
 
-				<div className="relative z-10 mt-5 grid min-h-[16.5rem] w-full flex-1 place-items-center max-[28rem]:mt-4 [&>*]:animate-auth-reveal [&>*]:[grid-area:1/1] motion-reduce:[&>*]:animate-none">
+				<div
+					className={cn(
+						"relative z-10 mt-5 grid w-full flex-1 place-items-center max-[28rem]:mt-4 [&>*]:animate-auth-reveal [&>*]:[grid-area:1/1] motion-reduce:[&>*]:animate-none",
+						CONTENT_MIN_HEIGHT_CLASS[size],
+					)}
+				>
 					{children}
 				</div>
 
