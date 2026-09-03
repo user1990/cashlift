@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Panel } from "@/ui/components/layout/Panel";
 import { cn } from "@/ui/utils/cn";
+import { DEMO_PAGE } from "../site";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 
 const DEMO_BOOK_CARD_BACKGROUND_SRC = "/marketing/demo-book-card-bg.webp";
@@ -37,13 +38,10 @@ export const DemoLeadCaptureSection = () => (
 			<header className="mb-3">
 				<p className="text-primary text-s+ uppercase tracking-normal">Book walkthrough</p>
 
-				<h2 className="mt-2 text-l+ text-shell-foreground">Choose who we should contact</h2>
+				<h2 className="mt-2 text-l+ text-shell-foreground">{DEMO_PAGE.walkthroughTitle}</h2>
 			</header>
 
-			<LeadCaptureForm
-				buttonLabel="Book an audit walkthrough"
-				successDescription="We'll follow up to arrange the audit walkthrough. You can explore the read-only workspace now."
-			/>
+			<LeadCaptureForm buttonLabel={DEMO_PAGE.walkthroughButton} successDescription={DEMO_PAGE.walkthroughSuccess} />
 		</div>
 	</Panel>
 );

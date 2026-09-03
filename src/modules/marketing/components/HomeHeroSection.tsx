@@ -1,4 +1,5 @@
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { HOME_HERO } from "../site";
 import { ActionLink } from "./ActionLink";
 import { HomeHeroImage } from "./HomeHeroImage";
 
@@ -12,7 +13,7 @@ export const HomeHeroSection = () => (
 
 		<div className="relative mx-auto max-w-295 px-4 pt-16 pb-14 sm:px-6 sm:pt-20 lg:px-8 lg:pt-24 lg:pb-20">
 			<header className="mx-auto max-w-4xl text-center">
-				<h1 aria-label="See what to collect, approve, or cut today." className="text-5xl+ tracking-normal sm:text-7xl+">
+				<h1 aria-label={HOME_HERO.heading} className="text-5xl+ tracking-normal sm:text-7xl+">
 					<span className="block text-shell-foreground">See what to </span>
 
 					<span className="block text-primary">collect, approve, </span>
@@ -20,18 +21,16 @@ export const HomeHeroSection = () => (
 					<span className="block text-signal">or cut today.</span>
 				</h1>
 
-				<p className="mx-auto mt-6 max-w-2xl text-l text-shell-muted leading-8">
-					CashLift ranks the cash actions that matter now in one daily inbox.
-				</p>
+				<p className="mx-auto mt-6 max-w-2xl text-l text-shell-muted leading-8">{HOME_HERO.subtitle}</p>
 
 				<div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-					<ActionLink href="/demo/workspace" prefetch={false}>
-						Open live demo
+					<ActionLink href={HOME_HERO.ctaDemoHref} prefetch={false}>
+						{HOME_HERO.ctaDemoLabel}
 						<ArrowRight aria-hidden className="size-4" />
 					</ActionLink>
 
-					<ActionLink href="https://cashlift-docs.vercel.app/" variant="secondary">
-						View Documentation
+					<ActionLink href={HOME_HERO.ctaDocumentationHref} variant="secondary">
+						{HOME_HERO.ctaDocumentationLabel}
 						<ArrowUpRight aria-hidden className="size-4" />
 					</ActionLink>
 				</div>

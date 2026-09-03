@@ -2,6 +2,7 @@
 
 import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { HOME_HERO } from "../site";
 import { HomeHeroSection } from "./HomeHeroSection";
 
 afterEach(() => {
@@ -34,7 +35,7 @@ describe("HomeHeroSection", () => {
 		);
 		expect(
 			screen.getByRole("img", {
-				name: "Studio Nova workspace with ranked cash actions, a 13-week cash outlook, and team budgets",
+				name: HOME_HERO.heroImageAlt,
 			}),
 		).toBeInTheDocument();
 	});
