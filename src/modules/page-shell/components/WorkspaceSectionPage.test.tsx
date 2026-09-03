@@ -22,6 +22,7 @@ describe("WorkspaceSectionPage", () => {
 		{ name: "Logitech", section: "approvals" as const },
 		{ name: "Client Delivery", section: "budgets" as const },
 		{ name: CASH_AVAILABLE, section: "cash" as const },
+		{ name: "Samira Chen", section: "settings" as const },
 		{ name: "Samira Chen", section: "team" as const },
 		{ name: "Notion", section: "vendors" as const },
 	])("renders the $section cockpit from the current dataset", ({ name, section }) => {

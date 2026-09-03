@@ -3,13 +3,23 @@ import { Panel } from "@/ui/components/layout/Panel";
 import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 import type { WorkspaceSection } from "../types";
 import { WorkspaceSectionHeader } from "./WorkspaceSectionHeader";
+import { WorkspaceSettingsLoading } from "./WorkspaceSettingsLoading";
 
 type WorkspacePageLoadingProps = {
 	section: WorkspaceSection;
 };
 
-export const WorkspacePageLoading = ({ section }: WorkspacePageLoadingProps) =>
-	section === "approvals" ? <ApprovalsPageLoading /> : <DefaultWorkspacePageLoading section={section} />;
+export const WorkspacePageLoading = ({ section }: WorkspacePageLoadingProps) => {
+	if (section === "approvals") {
+		return <ApprovalsPageLoading />;
+	}
+
+	if (section === "settings") {
+		return <WorkspaceSettingsLoading />;
+	}
+
+	return <DefaultWorkspacePageLoading section={section} />;
+};
 
 function ApprovalsPageLoading() {
 	return (

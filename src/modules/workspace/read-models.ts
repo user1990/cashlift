@@ -28,7 +28,7 @@ export const WORKSPACE_SCOPE_TABLES = {
 		"teamMembers",
 		"vendorBills",
 	],
-	settings: [],
+	settings: ["teamMembers"],
 	team: ["teamMembers"],
 	vendors: ["subscriptions", "vendorBills"],
 } as const satisfies Record<WorkspaceDatasetScope, readonly DatasetTable[]>;
