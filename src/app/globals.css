@@ -203,7 +203,9 @@ textarea,
 }
 
 @media (prefers-reduced-motion: no-preference) {
-	:where(button, a, summary, [role="button"]):not(:disabled):not([aria-disabled="true"]):not([data-disabled]):not([data-no-press-scale]):active {
+	:where(button, a, summary, [role="button"]):not(:disabled):not([aria-disabled="true"]):not([data-disabled]):not(
+		[data-no-press-scale]
+	):active {
 		transform: scale(var(--motion-press-scale));
 	}
 }
