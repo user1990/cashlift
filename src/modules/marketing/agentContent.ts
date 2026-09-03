@@ -1,25 +1,22 @@
 import { SITE_URL } from "@/services/site";
+import { AGENT_MARKDOWN } from "./site";
 
 const MARKDOWN_CONTENT = {
 	"/": `# CashLift
 
-CashLift is a cash-aware spend decision command center for service firms. It ranks the cash actions that matter now in one daily inbox so owners and teams can decide what to collect, approve, or cut today.
-
-CashLift brings overdue invoice collection, spend approvals, vendor leak detection, cash-buffer warnings, and a 13-week cash outlook into one decision workflow. Each action keeps its cash impact, urgency, owner, and supporting context beside the recommended next step.
-
-The live demo is a read-only Studio Nova sample. It does not move money, issue cards, or provide financial, legal, or tax advice. Agents should use the demo when they need to explore a realistic cash-operations workflow without entering company records or creating an account.
+${AGENT_MARKDOWN.homeIntro}
 
 ## Where to look next
 
-- [Live demo](${SITE_URL}/demo/workspace): Explore the ranked daily cash action inbox.
-- [Features](${SITE_URL}/features): Review the action inbox, approvals, collections, vendor leaks, and cash outlook.
+- [Live demo](${SITE_URL}/demo/workspace): Explore the ranked daily inbox.
+- [Features](${SITE_URL}/features): Review the inbox, approvals, collections, vendor costs, and cash outlook.
 - [Pricing](${SITE_URL}/pricing): Check current plan details before making a buying decision.
 - [Help](${SITE_URL}/help): Search product and demo answers.
 - [Developer resources](${SITE_URL}/developers): Find the OpenAPI specification and authentication notes.
 `,
 	"/developers": `# CashLift developer resources
 
-CashLift currently publishes a machine-readable OpenAPI description for its workspace routes and concise authentication guidance. Production workspace requests require an authenticated Clerk session; demo mode uses read-only fixtures. CashLift does not currently publish webhooks or an MCP server.
+${AGENT_MARKDOWN.developersIntro}
 
 ## Resources
 
@@ -29,45 +26,45 @@ CashLift currently publishes a machine-readable OpenAPI description for its work
 `,
 	"/features": `# CashLift features
 
-CashLift gives service firms one prioritized feed for approvals, overdue invoices, vendor leaks, and cash-buffer warnings. It shows budget remaining, cash after approval, invoice timing, collection ownership, vendor renewal risk, and a 13-week cash outlook without requiring spreadsheet-driven decisions.
+${AGENT_MARKDOWN.featuresIntro}
 
 ## Resources
 
 - [CashLift homepage](${SITE_URL}/): Product overview.
-- [Live demo](${SITE_URL}/demo/workspace): Read-only workflow exploration.
+- [Live demo](${SITE_URL}/demo/workspace): Read-only sample inbox exploration.
 - [Pricing](${SITE_URL}/pricing): Current plan details.
 `,
 	"/pricing": `# CashLift pricing
 
-The CashLift pricing page is the source of truth for current plan details, feature coverage, and plan comparison. Review it before making a buying decision because pricing and availability can change.
+${AGENT_MARKDOWN.pricingIntro}
 
 - [Current pricing](${SITE_URL}/pricing): Compare CashLift plans.
 - [Features](${SITE_URL}/features): Review product capabilities.
 `,
 	"/demo": `# CashLift demo
 
-The CashLift demo is designed for service firms exploring cash-aware approvals, overdue collections, vendor leaks, and daily cash operations. The read-only Studio Nova workspace can be explored without creating an account or entering company records.
+${AGENT_MARKDOWN.demoIntro}
 
 - [Open the live demo](${SITE_URL}/demo/workspace): Start with the ranked daily inbox.
 - [Help](${SITE_URL}/help): Find answers about the demo.
 `,
 	"/help": `# CashLift help
 
-CashLift help covers the read-only demo, action ranking, cash context, current plans, and getting started. Use the help index when an agent needs product behavior or demo boundaries rather than marketing copy.
+${AGENT_MARKDOWN.helpIntro}
 
 - [Search CashLift help](${SITE_URL}/help): Product and demo answers.
 - [Live demo](${SITE_URL}/demo/workspace): Explore the workflow.
 `,
 	"/customers": `# CashLift customers
 
-CashLift is designed for service firms managing spend, invoices, vendor renewals, and cash pressure across projects and teams. Customer proof on this site is illustrative product content for the demo-first MVP.
+${AGENT_MARKDOWN.customersIntro}
 
 - [Customer examples](${SITE_URL}/customers): Review the available proof stories.
 - [Contact CashLift](${SITE_URL}/contact): Ask about a walkthrough.
 `,
 	"/contact": `# Contact CashLift
 
-Use the CashLift contact page to request a cash-operations walkthrough or ask a sales and support question. The product is currently presented as a demo-first MVP for service firms.
+${AGENT_MARKDOWN.contactIntro}
 
 - [Contact CashLift](${SITE_URL}/contact): Start a conversation.
 - [Live demo](${SITE_URL}/demo/workspace): Explore before reaching out.

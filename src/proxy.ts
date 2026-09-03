@@ -1,6 +1,6 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
-import { getAgentMarkdown, NOT_FOUND_MARKDOWN } from "@/services/agent/content";
+import { getAgentMarkdown, NOT_FOUND_MARKDOWN } from "@/modules/marketing/agentContent";
 import { CLERK_SIGN_IN_URL, CLERK_SIGN_UP_URL, getRequiredClerkPublishableKey } from "@/services/clerk/config";
 import { getRequiredClerkSecretKey } from "@/services/clerk/serverConfig";
 import { workspaceDemoEnabled } from "@/services/env/app";
