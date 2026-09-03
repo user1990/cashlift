@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { HELP_FAQ_GROUPS, PRODUCT } from "./site";
+import { HELP_FAQ_GROUPS } from "./content";
+import { PRODUCT } from "./site";
 
 describe("marketing site copy", () => {
 	it("keeps help FAQ slugs unique", () => {

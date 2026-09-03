@@ -26,7 +26,7 @@ export const SITE_META = {
 	structuredDataDescription: PRODUCT.purpose,
 } as const;
 
-export const NAV_LABELS = {
+const NAV_LABELS = {
 	bookWalkthrough: "Book a walkthrough",
 	dashboard: "Dashboard",
 	features: "Features",
@@ -47,6 +47,14 @@ export const HOME_HERO = {
 
 export const HOME_DECISION_STORY = {
 	title: "Three sample decisions for today.",
+} as const;
+
+export const FOOTER_CTA = {
+	ctaHref: "/demo",
+	ctaLabel: NAV_LABELS.bookWalkthrough,
+	subtitle: "Open the sample inbox to see what needs attention and why.",
+	tagline: "What needs attention, ranked for today",
+	title: "See what to collect, approve, or cut today.",
 } as const;
 
 export const HOME_FINAL_CTA = {
@@ -141,7 +149,7 @@ export const FEATURES_PAGE = {
 	label: "Features",
 } as const;
 
-export const FEATURE_CARDS = [
+export const FEATURE_CARDS_COPY = [
 	{
 		description: "One ranked list for approvals, overdue invoices, vendor costs, and cash warnings.",
 		title: "Daily inbox",
@@ -170,7 +178,7 @@ export const FEATURE_CARDS = [
 	},
 ] as const;
 
-export const DEMO_STEPS = [
+export const DEMO_STEPS_COPY = [
 	{
 		description: "Browse invoices, vendor bills, budgets, spend requests, and forecast rows in Studio Nova.",
 		title: "Open the sample company",
@@ -193,7 +201,7 @@ export const PRICING_PAGE = {
 	seatNote: "Flat team pricing keeps request-only employees from adding seat anxiety.",
 } as const;
 
-export const PRICING_PLANS = [
+export const PRICING_PLANS_COPY = [
 	{
 		annualPrice: "$6",
 		annualTotal: "$72",
@@ -224,7 +232,7 @@ export const PRICING_PLANS = [
 	},
 ] as const;
 
-export const PRICING_COMPARISON_GROUPS = [
+export const PRICING_COMPARISON_GROUPS_COPY = [
 	{
 		features: [
 			{ name: "Read-only sample inbox tour", values: [true, true, true] },
@@ -252,7 +260,7 @@ export const PRICING_COMPARISON_GROUPS = [
 	},
 ] as const;
 
-export const USE_CASES = {
+export const USE_CASES_COPY = {
 	agencies: {
 		answers: [
 			"Can we approve this software renewal before the client deposit lands?",
@@ -285,7 +293,7 @@ export const USE_CASES = {
 	},
 } as const;
 
-export const PROOF_POINTS = [
+export const PROOF_POINTS_COPY = [
 	{
 		metric: "$18.4k",
 		text: "overdue invoice surfaced as the top inbox item before payroll pressure",
@@ -300,7 +308,7 @@ export const PROOF_POINTS = [
 	},
 ] as const;
 
-export const FOOTER_LINKS = [
+export const FOOTER_LINKS_COPY = [
 	{
 		label: "Product",
 		links: [
@@ -313,9 +321,9 @@ export const FOOTER_LINKS = [
 	{
 		label: "Solutions",
 		links: [
-			{ href: "/use-cases/agencies", label: USE_CASES.agencies.label },
-			{ href: "/use-cases/consulting", label: USE_CASES.consulting.label },
-			{ href: "/use-cases/software-services", label: USE_CASES["software-services"].label },
+			{ href: "/use-cases/agencies", label: USE_CASES_COPY.agencies.label },
+			{ href: "/use-cases/consulting", label: USE_CASES_COPY.consulting.label },
+			{ href: "/use-cases/software-services", label: USE_CASES_COPY["software-services"].label },
 		],
 	},
 	{
@@ -336,13 +344,13 @@ export const FOOTER_LINKS = [
 	},
 ] as const;
 
-export const PRODUCT_NAV = [
+export const PRODUCT_NAV_COPY = [
 	{ href: "/features", label: NAV_LABELS.features },
 	{ href: "/demo", label: NAV_LABELS.bookWalkthrough },
 	{ href: "/pricing", label: NAV_LABELS.pricing },
 ] as const;
 
-export const HELP_FAQ_GROUPS = [
+export const HELP_FAQ_GROUPS_COPY = [
 	{
 		icon: "chart-spline",
 		items: [
