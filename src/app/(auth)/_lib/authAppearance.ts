@@ -52,13 +52,23 @@ export const AUTH_APPEARANCE = {
 		headerTitle: { color: "var(--panel-foreground)" },
 		rootBox: { width: "100%" },
 		socialButtonsBlockButton: {
-			background: "color-mix(in srgb, var(--shell-elevated) 68%, transparent)",
-			borderColor: "color-mix(in srgb, var(--shell-border) 82%, transparent)",
-			boxShadow: "inset 0 1px 0 color-mix(in srgb, var(--foreground) 6%, transparent)",
+			background: "color-mix(in srgb, var(--shell-elevated) 78%, var(--panel))",
+			border: "1px solid color-mix(in srgb, var(--shell-border) 92%, var(--primary-subtle-border)) !important",
+			boxShadow:
+				"inset 0 1px 0 color-mix(in srgb, var(--foreground) 10%, transparent), 0 0 0 1px color-mix(in srgb, var(--shell-border) 18%, transparent) !important",
+			color: "var(--panel-foreground) !important",
+			fontWeight: 600,
+			minHeight: "2.75rem",
+			transition: "background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease",
+			"&:hover": {
+				background: "color-mix(in srgb, var(--shell-elevated) 88%, var(--panel))",
+				borderColor: "color-mix(in srgb, var(--primary) 42%, var(--shell-border)) !important",
+			},
 			"&:focus-visible": {
 				boxShadow:
 					"inset 0 0 0 1px var(--primary), 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent) !important",
-				outline: "none !important",
+				outline: "2px solid var(--primary) !important",
+				outlineOffset: "2px",
 			},
 		},
 	},
