@@ -53,7 +53,7 @@ export const FooterAccordion = ({ groups = FOOTER_LINKS }: FooterAccordionProps)
 								<ChevronDown
 									aria-hidden
 									className={cn(
-										"size-4 shrink-0 text-primary transition-[color,transform] duration-200 ease-out motion-reduce:transition-none",
+										"size-4 shrink-0 text-primary transition-[color,rotate] duration-200 ease-out motion-reduce:transition-none",
 										expanded && "rotate-180",
 									)}
 								/>
