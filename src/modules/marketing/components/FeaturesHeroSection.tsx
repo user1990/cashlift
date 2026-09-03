@@ -10,10 +10,10 @@ export const FeaturesHeroSection = () => (
 			variant="page-title"
 		/>
 
-		<ul className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-			{FEATURE_CARDS.map(({ description, icon: Icon, title }) => (
-				<li key={title}>
-					<IconCard description={description} Icon={Icon} title={title} />
+		<ul className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+			{FEATURE_CARDS.map(({ description, icon: Icon, title }, index) => (
+				<li key={title} className="group h-full">
+					<IconCard description={description} featured={index === 0} Icon={Icon} title={title} />
 				</li>
 			))}
 		</ul>
