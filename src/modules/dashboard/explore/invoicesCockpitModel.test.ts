@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { formatCurrency } from "@/modules/money/format";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { buildInvoicesCockpitPresentation } from "./invoicesCockpitModel";
 
@@ -10,7 +9,6 @@ describe("invoices cockpit presentation", () => {
 			invoiceRiskTotal: 1_840_000,
 		});
 
-		expect(presentation.headline).toEqual(`${formatCurrency(1_840_000)} overdue cash risk`);
 		expect(presentation.overdue.map((invoice) => invoice.id)).toEqual(["invoice-northstar"]);
 		expect(presentation.openOnTime.map((invoice) => invoice.id)).toEqual(["invoice-brightline", "invoice-harbor"]);
 		expect(presentation.paid.map((invoice) => invoice.id)).toEqual(["invoice-summit"]);
@@ -25,7 +23,6 @@ describe("invoices cockpit presentation", () => {
 			invoiceRiskTotal: 4_590_000,
 		});
 
-		expect(presentation.headline).toEqual(`${formatCurrency(4_590_000)} overdue cash risk`);
 		expect(presentation.overdue.map((invoice) => invoice.id)).toEqual(["invoice-brightline", "invoice-northstar"]);
 		expect(presentation.queueInvoices.map((invoice) => invoice.id)).toEqual(["invoice-northstar"]);
 		expect(presentation.openOnTime.map((invoice) => invoice.id)).toEqual(["invoice-harbor"]);

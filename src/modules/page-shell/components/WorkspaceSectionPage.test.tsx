@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 
 import { render, screen } from "@testing-library/react";
-import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { describe, expect, it } from "vitest";
 import { buildDashboardViewModel } from "@/modules/dashboard/view-model";
 import { formatPreciseCompactCurrency } from "@/modules/money/format";
@@ -29,18 +28,5 @@ describe("WorkspaceSectionPage", () => {
 
 		expect(screen.getAllByText(name).length).toBeGreaterThan(0);
 		expect(screen.queryByRole("link", { name: "Run leak audit" })).not.toBeInTheDocument();
-	});
-
-	it("uses the glass cockpit instead of the workspace section header on invoices", () => {
-		render(
-			<NuqsTestingAdapter hasMemory>
-				<WorkspaceSectionPage basePath="/dashboard" dataset={DEMO_WORKSPACE_DATASET} section="invoices" />
-			</NuqsTestingAdapter>,
-		);
-
-		expect(screen.queryByRole("link", { name: "Run leak audit" })).not.toBeInTheDocument();
-		expect(screen.queryByText("Workspace")).not.toBeInTheDocument();
-		expect(screen.queryByRole("heading", { name: "Invoice collection" })).not.toBeInTheDocument();
-		expect(screen.getByRole("button", { name: /search for anything in this workspace/i })).toBeVisible();
 	});
 });

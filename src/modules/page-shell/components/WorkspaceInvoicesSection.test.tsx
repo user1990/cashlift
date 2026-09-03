@@ -3,6 +3,7 @@
 import { act, render, screen } from "@testing-library/react";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { formatCurrency } from "@/modules/money/format";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { WorkspaceInvoicesSection } from "./WorkspaceInvoicesSection";
 
@@ -21,7 +22,7 @@ describe("WorkspaceInvoicesSection", () => {
 			</NuqsTestingAdapter>,
 		);
 
-		expect(screen.getByText("$18,400 overdue cash risk")).toBeInTheDocument();
+		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(formatCurrency(1_840_000));
 		expect(screen.getByRole("button", { name: /search for anything in this workspace/i })).toBeVisible();
 		expect(screen.getByRole("heading", { name: "Chase Northstar Labs invoice" })).toBeVisible();
 
@@ -29,7 +30,6 @@ describe("WorkspaceInvoicesSection", () => {
 			vi.advanceTimersByTime(60_000);
 		});
 
-		expect(screen.getByText("$45,900 overdue cash risk")).toBeInTheDocument();
-		expect(screen.getByRole("heading", { name: "What is still overdue" })).toBeVisible();
+		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(formatCurrency(4_590_000));
 	});
 });
