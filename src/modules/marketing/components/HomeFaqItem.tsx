@@ -28,7 +28,7 @@ export const HomeFaqItem = ({ answer, question }: HomeFaqItemProps) => {
 				<ChevronDown
 					aria-hidden
 					className={cn(
-						"size-5 shrink-0 text-shell-muted transition-[color,rotate] duration-[var(--motion-duration-micro)] ease-in-out group-hover:text-primary",
+						"size-5 shrink-0 text-shell-muted transition-[color,rotate] duration-[var(--motion-duration-micro)] ease-in-out group-hover:text-primary motion-reduce:transition-none",
 						expanded && "rotate-180",
 					)}
 				/>
