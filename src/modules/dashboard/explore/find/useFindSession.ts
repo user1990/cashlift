@@ -1,36 +1,16 @@
-import { type KeyboardEvent, useDeferredValue, useEffect, useRef, useState } from "react";
-import { getFindOptionId } from "./findDom";
-import {
-	type FindItem,
-	type FindQuery,
-	filterFindItems,
-	getFindFacetValues,
-	getFindSuggestions,
-	hasActiveFindFilters,
-} from "./findModel";
+import { type KeyboardEvent, useEffect, useRef, useState } from "react";
+import { type FindItem, type FindQuery, filterFindItems, hasActiveFindFilters } from "./findModel";
 import { useFindQueryState } from "./useFindQueryState";
 
 const MAX_RECENT_SEARCHES = 5;
 
 export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work") => {
-	const { clearAll, clearFilters, query, setQuery } = useFindQueryState();
+	const { clearAll, query, setQuery } = useFindQueryState();
 	const [recentSearches, setRecentSearches] = useState<string[]>([]);
 	const [selectedId, setSelectedId] = useState<string>();
-	const [filtersOpen, setFiltersOpen] = useState(false);
 	const [open, setOpen] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
-	const queryKey = [query.category, query.owner, query.query, query.status].join("\0");
-	const deferredQueryKey = useDeferredValue(queryKey);
-	const pending = deferredQueryKey !== queryKey;
 	const results = filterFindItems(items, query, categoryMode);
-	const categoryItems = filterFindItems(
-		items,
-		{ category: query.category, owner: "", query: "", status: "" },
-		categoryMode,
-	);
-	const suggestions = getFindSuggestions(categoryItems, query.query);
-	const owners = getFindFacetValues(categoryItems, "owner");
-	const statuses = getFindFacetValues(categoryItems, "status");
 	const selectedIndex = results.findIndex((item) => item.id === selectedId);
 	const selectedItem = selectedIndex >= 0 ? results[selectedIndex] : undefined;
 
@@ -76,6 +56,7 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work")
 	};
 
 	const updateQuery = (nextQuery: Partial<FindQuery>) => {
+		setSelectedId(undefined);
 		setQuery(nextQuery);
 	};
 
@@ -92,10 +73,12 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work")
 		}
 
 		if (event.key === "Enter") {
-			event.preventDefault();
-			rememberQuery(query.query);
-			activateFindItem(selectedItem);
-			closePalette();
+			if (selectedItem) {
+				event.preventDefault();
+				rememberQuery(query.query);
+				window.location.assign(selectedItem.actionHref);
+				closePalette();
+			}
 			return;
 		}
 
@@ -108,25 +91,18 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work")
 	return {
 		applySearch,
 		clearAll,
-		clearFilters,
 		closePalette,
-		filtersOpen,
 		handleSearchKeyDown,
 		hasFilters: hasActiveFindFilters(query),
 		inputRef,
 		open,
 		openPalette,
-		owners,
-		pending,
 		query,
 		recentSearches,
 		results,
 		selectedId,
-		setFiltersOpen,
 		setOpen,
 		setSelectedId,
-		statuses,
-		suggestions,
 		updateQuery,
 	};
 };
@@ -143,12 +119,4 @@ function getMovedFindId(results: FindItem[], selectedIndex: number, delta: numbe
 	const nextIndex = Math.min(Math.max(selectedIndex + delta, 0), results.length - 1);
 
 	return results[nextIndex]?.id;
-}
-
-function activateFindItem(item: FindItem | undefined) {
-	if (!item) {
-		return;
-	}
-
-	document.getElementById(getFindOptionId(item.id))?.click();
 }

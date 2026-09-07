@@ -1,8 +1,8 @@
-import { CheckCircle2, CreditCard } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { Panel } from "@/ui/components/layout/Panel";
 import type { PricingBilling } from "../content";
-import { CheckoutActionButton } from "./CheckoutActionButton";
+import { ActionLink } from "./ActionLink";
 
 type CheckoutPlanSummaryProps = {
 	billing: PricingBilling;
@@ -10,7 +10,6 @@ type CheckoutPlanSummaryProps = {
 	features: readonly string[];
 	name: string;
 	price: string;
-	trialEndLabel: string;
 };
 
 export const CheckoutPlanSummary = ({
@@ -19,7 +18,6 @@ export const CheckoutPlanSummary = ({
 	features,
 	name,
 	price,
-	trialEndLabel,
 }: CheckoutPlanSummaryProps) => (
 	<Panel
 		as="section"
@@ -53,21 +51,13 @@ export const CheckoutPlanSummary = ({
 
 		<div className="my-8 border-shell-border border-t" />
 
-		<dl className="space-y-4">
-			<div className="flex justify-between gap-4">
-				<dt className="text-m text-shell-muted">Due today</dt>
+		<p className="mt-8 text-m text-shell-muted leading-6">
+			Pricing and availability are confirmed during a conversation with CashLift.
+		</p>
 
-				<dd className="font-mono text-signal text-xl">$0</dd>
-			</div>
-
-			<div className="flex justify-between gap-4">
-				<dt className="text-m text-shell-muted">Trial ends</dt>
-
-				<dd className="text-right text-m+ text-shell-foreground">{trialEndLabel}</dd>
-			</div>
-		</dl>
-
-		<CheckoutActionButton planName={name} />
+		<ActionLink href="/contact" className="mt-8 w-full">
+			Talk to CashLift about this plan
+		</ActionLink>
 
 		<Link
 			href={`/pricing?billing=${billing}`}
@@ -75,12 +65,5 @@ export const CheckoutPlanSummary = ({
 		>
 			Change plan
 		</Link>
-
-		<div className="mt-8 border-shell-border border-t pt-6">
-			<p className="flex items-center justify-center gap-2 text-m text-shell-muted">
-				<CreditCard aria-hidden className="size-5" />
-				Payments by Stripe
-			</p>
-		</div>
 	</Panel>
 );
