@@ -13,7 +13,7 @@ type CashOutlookChartContentProps = {
 
 const DEFAULT_AXIS_TICK = { fill: "var(--muted-foreground)", fontSize: 12 } as const;
 
-export const CashOutlookChartContent = ({
+const CashOutlookChartContent = ({
 	bufferTargetCents,
 	chartData,
 	lowestProjectedCashDate,
