@@ -101,6 +101,10 @@ export const EmailAutocompleteField = ({
 				autoComplete="email"
 				inputMode="email"
 				onKeyDown={(event) => {
+					if (event.nativeEvent.isComposing) {
+						return;
+					}
+
 					if (event.key === "ArrowDown") {
 						event.preventDefault();
 						setOpen(suggestions.length > 0);

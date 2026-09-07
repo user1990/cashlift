@@ -24,6 +24,17 @@ describe("EmailAutocompleteField", () => {
 
 		expect(input).toHaveValue("ma@outlook.com");
 	});
+
+	it("does not commit a suggestion while an IME is composing", () => {
+		render(<ControlledEmailAutocompleteField />);
+
+		const input = screen.getByRole("combobox", { name: "Work email" });
+
+		fireEvent.change(input, { target: { value: "ma" } });
+		fireEvent.keyDown(input, { isComposing: true, key: "Enter" });
+
+		expect(input).toHaveValue("ma");
+	});
 });
 
 function ControlledEmailAutocompleteField() {

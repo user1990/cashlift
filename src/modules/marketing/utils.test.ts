@@ -3,9 +3,9 @@ import { HELP_FAQ_GROUPS } from "./content";
 import { filterHelpFaqGroups, parseHelpFaqQuery } from "./utils";
 
 describe("parseHelpFaqQuery", () => {
-	it("trims a query and drops values longer than 120 characters", () => {
-		expect(parseHelpFaqQuery("  demo  ")).toBe("demo");
-		expect(parseHelpFaqQuery("x".repeat(121))).toBe("");
+	it("preserves bounded input while dropping values longer than 120 characters", () => {
+		expect(parseHelpFaqQuery("  demo  ")).toBe("  demo  ");
+		expect(parseHelpFaqQuery("x".repeat(121))).toBe("x".repeat(120));
 	});
 });
 

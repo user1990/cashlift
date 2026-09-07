@@ -1,8 +1,8 @@
-import { CheckCircle2, CreditCard } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { Panel } from "@/ui/components/layout/Panel";
 import type { PricingBilling } from "../content";
-import { CheckoutActionButton } from "./CheckoutActionButton";
+import { ActionLink } from "./ActionLink";
 
 type CheckoutPlanSummaryProps = {
 	billing: PricingBilling;
@@ -67,7 +67,9 @@ export const CheckoutPlanSummary = ({
 			</div>
 		</dl>
 
-		<CheckoutActionButton planName={name} />
+		<ActionLink href="/contact" className="mt-8 w-full">
+			Talk to CashLift about this plan
+		</ActionLink>
 
 		<Link
 			href={`/pricing?billing=${billing}`}
@@ -75,12 +77,5 @@ export const CheckoutPlanSummary = ({
 		>
 			Change plan
 		</Link>
-
-		<div className="mt-8 border-shell-border border-t pt-6">
-			<p className="flex items-center justify-center gap-2 text-m text-shell-muted">
-				<CreditCard aria-hidden className="size-5" />
-				Payments by Stripe
-			</p>
-		</div>
 	</Panel>
 );

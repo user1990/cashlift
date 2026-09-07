@@ -115,7 +115,9 @@ describe("DashboardCockpit", () => {
 		await user.click(within(openDialog).getByRole("button", { name: "Reset search" }));
 
 		await waitFor(() => {
-			expect(within(openDialog).getAllByRole("option").length).toBeGreaterThan(0);
+			expect(
+				within(openDialog).getAllByRole("button", { name: /approve|collect|cut|pay|review/i }).length,
+			).toBeGreaterThan(0);
 		});
 
 		await user.keyboard("{Escape}");

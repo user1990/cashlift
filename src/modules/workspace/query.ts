@@ -1,6 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { z } from "zod";
+import type { AppErrorCode } from "@/utilities/errors/AppError";
 import { FINANCIAL_DATASET_SCHEMA } from "./schemas";
 import type { FinancialDataset, WorkspaceDatasetDateRange, WorkspaceDatasetScope } from "./types";
 
@@ -21,7 +23,14 @@ const fetchWorkspaceDataset = async (scope: WorkspaceDatasetScope, dateRange?: W
 	const response = await fetch(`/api/workspace/dataset?${searchParams.toString()}`);
 
 	if (!response.ok) {
-		throw new Error("Unable to load workspace data.");
+		const body = WORKSPACE_API_ERROR_SCHEMA.safeParse(await response.json().catch(() => null));
+
+		throw new WorkspaceDatasetQueryError({
+			code: body.success ? body.data.code : "workspace_data_unavailable",
+			message: body.success ? body.data.error : "Unable to load workspace data.",
+			requestId: body.success ? body.data.requestId : undefined,
+			status: response.status,
+		});
 	}
 
 	return FINANCIAL_DATASET_SCHEMA.parse(await response.json());
@@ -42,4 +51,50 @@ export const useWorkspaceDatasetQuery = (
 				: undefined,
 		queryFn: () => fetchWorkspaceDataset(scope, dateRange),
 		queryKey: WORKSPACE_DATASET_QUERY_KEYS.scope(scope, dateRange),
+		retry: (failureCount, error) => !isPermanentWorkspaceDatasetError(error) && failureCount < 2,
 	});
+
+const WORKSPACE_API_ERROR_SCHEMA = z.object({
+	code: z.string(),
+	error: z.string().optional(),
+	requestId: z.string().optional(),
+});
+
+type WorkspaceDatasetQueryErrorParams = {
+	code: string;
+	message?: string;
+	requestId?: string;
+	status: number;
+};
+
+class WorkspaceDatasetQueryError extends Error {
+	readonly code: string;
+	readonly requestId?: string;
+	readonly status: number;
+
+	constructor({
+		code,
+		message = "Unable to load workspace data.",
+		requestId,
+		status,
+	}: WorkspaceDatasetQueryErrorParams) {
+		super(message);
+		this.name = "WorkspaceDatasetQueryError";
+		this.code = code;
+		this.requestId = requestId;
+		this.status = status;
+	}
+}
+
+export const isPermanentWorkspaceDatasetError = (error: unknown) => {
+	if (!(error instanceof WorkspaceDatasetQueryError)) {
+		return false;
+	}
+
+	return (
+		error.status === 401 ||
+		error.status === 403 ||
+		error.code === ("workspace_unauthenticated" satisfies AppErrorCode) ||
+		error.code === ("workspace_forbidden" satisfies AppErrorCode)
+	);
+};

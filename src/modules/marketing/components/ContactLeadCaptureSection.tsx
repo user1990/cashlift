@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Panel } from "@/ui/components/layout/Panel";
 import { cn } from "@/ui/utils/cn";
-import { LeadCaptureForm } from "./LeadCaptureForm";
+import { ActionLink } from "./ActionLink";
 
 const DEMO_BOOK_CARD_BACKGROUND_SRC = "/marketing/demo-book-card-bg.webp";
 
@@ -35,15 +35,25 @@ export const ContactLeadCaptureSection = () => (
 
 		<div className="relative flex flex-col">
 			<header className="mb-3">
-				<p className="text-primary text-s+ uppercase tracking-normal">Message</p>
+				<p className="text-primary text-s+ uppercase tracking-normal">Next step</p>
 
-				<h2 className="mt-2 text-l+ text-shell-foreground">Send details</h2>
+				<h2 className="mt-2 text-l+ text-shell-foreground">Choose a direct route</h2>
 			</header>
 
-			<LeadCaptureForm
-				buttonLabel="Send message"
-				successDescription="We'll follow up with the right next step. You can explore the sample workspace now."
-			/>
+			<p className="text-m text-shell-muted leading-6">
+				This page does not send or store contact details. Email CashLift directly or explore the read-only sample
+				workspace.
+			</p>
+
+			<div className="mt-5 grid gap-2 sm:grid-cols-2">
+				<ActionLink href="mailto:sales@cashlift.example" className="w-full">
+					Email CashLift
+				</ActionLink>
+
+				<ActionLink href="/demo/workspace" variant="secondary" className="w-full">
+					Explore live demo
+				</ActionLink>
+			</div>
 		</div>
 	</Panel>
 );

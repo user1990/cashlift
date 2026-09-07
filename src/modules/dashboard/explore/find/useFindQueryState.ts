@@ -28,10 +28,6 @@ export const useFindQueryState = () => {
 		});
 	};
 
-	const clearFilters = () => {
-		void setParams({ owner: "", status: "" });
-	};
-
 	const clearAll = () => {
 		void setParams({
 			category: EMPTY_FIND_QUERY.category,
@@ -41,5 +37,5 @@ export const useFindQueryState = () => {
 		});
 	};
 
-	return { clearAll, clearFilters, query, setQuery };
+	return { clearAll, query, setQuery };
 };

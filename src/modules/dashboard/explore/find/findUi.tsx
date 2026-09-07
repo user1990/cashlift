@@ -2,10 +2,7 @@ import { Search } from "lucide-react";
 import Link from "next/link";
 import type { KeyboardEvent, ReactNode, RefObject } from "react";
 import { cn } from "@/ui/utils/cn";
-import { getFindOptionId } from "./findDom";
 import { type FindItem, formatFindAmount, formatFindDueDate } from "./findModel";
-
-const FIND_SKELETON_ROW_IDS = ["alpha", "bravo", "charlie", "delta", "echo"] as const;
 
 type FindSearchFieldProps = {
 	id: string;
@@ -13,11 +10,10 @@ type FindSearchFieldProps = {
 	onChange: (value: string) => void;
 	onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
 	value: string;
+	activeOptionId?: string;
 	glass?: boolean;
 	hideShortcut?: boolean;
-	onSelectSuggestion?: (suggestion: string) => void;
 	placeholder?: string;
-	suggestions?: string[];
 };
 
 export const FindSearchField = ({
@@ -26,88 +22,50 @@ export const FindSearchField = ({
 	onChange,
 	onKeyDown,
 	value,
+	activeOptionId,
 	glass = false,
 	hideShortcut = false,
-	onSelectSuggestion,
 	placeholder = "Search invoices, vendors, spend requests…",
-	suggestions = [],
-}: FindSearchFieldProps) => {
-	const suggestionsOpen = suggestions.length > 0 && value.trim().length > 0;
-	const listboxId = `${id}-suggestions`;
+}: FindSearchFieldProps) => (
+	<div className="relative">
+		<label className="sr-only" htmlFor={id}>
+			Search Company Workspace
+		</label>
 
-	return (
-		<div className="relative">
-			<label className="sr-only" htmlFor={id}>
-				Search Company Workspace
-			</label>
+		<Search
+			aria-hidden
+			className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+		/>
 
-			<Search
-				aria-hidden
-				className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
-			/>
-
-			<input
-				ref={inputRef}
-				aria-autocomplete="list"
-				aria-controls={suggestionsOpen ? listboxId : "find-results"}
-				aria-expanded={suggestionsOpen}
-				autoComplete="off"
-				className={cn(
-					"h-12 w-full rounded-lg border py-3 text-l text-panel-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground focus:border-primary focus:ring-[3px] focus:ring-primary/20",
-					hideShortcut ? "pr-4 pl-10" : "pr-20 pl-10",
-					glass ? "border-white/30 bg-panel/35 backdrop-blur-xl" : "border-shell-border bg-shell-elevated",
-				)}
-				id={id}
-				onChange={(event) => onChange(event.currentTarget.value)}
-				onKeyDown={(event) => {
-					if (event.key === "Tab" && !event.shiftKey && suggestions[0] && onSelectSuggestion) {
-						event.preventDefault();
-						onSelectSuggestion(suggestions[0]);
-						return;
-					}
-
-					onKeyDown(event);
-				}}
-				placeholder={placeholder}
-				role="combobox"
-				spellCheck={false}
-				type="search"
-				value={value}
-			/>
-
-			{!hideShortcut && (
-				<kbd className="pointer-events-none absolute top-1/2 right-3 hidden -translate-y-1/2 rounded-md border border-shell-border px-1.5 font-mono text-muted-foreground text-s sm:inline">
-					⌘K
-				</kbd>
+		<input
+			ref={inputRef}
+			aria-autocomplete="list"
+			aria-activedescendant={activeOptionId}
+			aria-controls="find-results"
+			aria-expanded="true"
+			autoComplete="off"
+			className={cn(
+				"h-12 w-full rounded-lg border py-3 text-l text-panel-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground focus:border-primary focus:ring-[3px] focus:ring-primary/20",
+				hideShortcut ? "pr-4 pl-10" : "pr-20 pl-10",
+				glass ? "border-white/30 bg-panel/35 backdrop-blur-xl" : "border-shell-border bg-shell-elevated",
 			)}
+			id={id}
+			onChange={(event) => onChange(event.currentTarget.value)}
+			onKeyDown={onKeyDown}
+			placeholder={placeholder}
+			role="combobox"
+			spellCheck={false}
+			type="search"
+			value={value}
+		/>
 
-			{suggestionsOpen && onSelectSuggestion && (
-				<div
-					className={cn(
-						"absolute z-20 mt-1 w-full rounded-lg border p-1 shadow-panel",
-						glass ? "border-white/10 bg-panel/80 backdrop-blur-xl" : "border-shell-border bg-shell-elevated",
-					)}
-					id={listboxId}
-					role="listbox"
-				>
-					{suggestions.map((suggestion) => (
-						<button
-							key={suggestion}
-							aria-selected="false"
-							className="block min-h-11 w-full rounded-md px-3 text-left text-m text-panel-foreground outline-none hover:bg-primary-subtle focus-visible:ring-[3px] focus-visible:ring-primary/20"
-							onClick={() => onSelectSuggestion(suggestion)}
-							onMouseDown={(event) => event.preventDefault()}
-							role="option"
-							type="button"
-						>
-							{suggestion}
-						</button>
-					))}
-				</div>
-			)}
-		</div>
-	);
-};
+		{!hideShortcut && (
+			<kbd className="pointer-events-none absolute top-1/2 right-3 hidden -translate-y-1/2 rounded-md border border-shell-border px-1.5 font-mono text-muted-foreground text-s sm:inline">
+				⌘K
+			</kbd>
+		)}
+	</div>
+);
 
 type FindCategoryChipProps = {
 	children: ReactNode;
@@ -210,13 +168,11 @@ export const FindResultRow = ({
 	showKind = true,
 }: FindResultRowProps) => {
 	const dueLabel = formatFindDueDate(item.dueDate);
-	const optionId = getFindOptionId(item.id);
 
 	return (
 		<Link
 			aria-current={selected ? "true" : undefined}
 			href={item.actionHref}
-			id={optionId}
 			className={cn(
 				"grid min-h-11 items-center gap-x-4 gap-y-1 border-transparent border-l-2 px-3 py-3 outline-none transition-[background-color,border-color] duration-150 focus-visible:ring-[3px] focus-visible:ring-primary/20",
 				showColumns
@@ -281,69 +237,6 @@ export const FindResultHeader = ({ glass = false }: { glass?: boolean }) => (
 		<span className="text-right">Amount</span>
 	</div>
 );
-
-type FindLoadingStateProps = {
-	columns?: boolean;
-	glass?: boolean;
-	visible?: boolean;
-};
-
-export const FindLoadingState = ({ columns = false, glass = false, visible = false }: FindLoadingStateProps) => {
-	if (!visible) {
-		return;
-	}
-
-	return (
-		<ul
-			aria-busy="true"
-			aria-label="Loading results"
-			className={cn(
-				"divide-y overflow-hidden rounded-lg border",
-				glass ? "divide-white/10 border-white/10" : "divide-border border-shell-border",
-			)}
-			role="status"
-		>
-			{FIND_SKELETON_ROW_IDS.map((rowId) => (
-				<li className="px-3 py-3" key={rowId}>
-					<div
-						className={
-							columns
-								? "grid @xl:grid-cols-[minmax(0,1.5fr)_7.5rem_6.5rem_6rem_auto] grid-cols-[minmax(0,1fr)_auto] items-center gap-4"
-								: "flex items-center justify-between gap-4"
-						}
-					>
-						<span aria-hidden className="min-w-0 flex-1 animate-pulse space-y-2 motion-reduce:animate-none">
-							<span className="block h-3 w-44 rounded bg-panel-muted" />
-
-							<span className="block h-2.5 w-28 rounded bg-panel-muted" />
-						</span>
-
-						{columns && (
-							<>
-								<span
-									aria-hidden
-									className="@xl:block hidden h-2.5 w-16 animate-pulse rounded bg-panel-muted motion-reduce:animate-none"
-								/>
-
-								<span
-									aria-hidden
-									className="@xl:block hidden h-2.5 w-14 animate-pulse rounded bg-panel-muted motion-reduce:animate-none"
-								/>
-
-								<span
-									aria-hidden
-									className="@xl:block hidden h-2.5 w-12 animate-pulse rounded bg-panel-muted motion-reduce:animate-none"
-								/>
-							</>
-						)}
-
-						<span aria-hidden className="h-3 w-16 animate-pulse rounded bg-panel-muted motion-reduce:animate-none" />
-					</div>
-				</li>
-			))}
-		</ul>
-	);
-};
 
 function highlightFindText(text: string, query: string) {
 	const needle = query.trim();

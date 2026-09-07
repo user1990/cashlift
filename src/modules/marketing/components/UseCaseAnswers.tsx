@@ -47,8 +47,6 @@ function renderGlassAnswers(answers: readonly string[]) {
 						>
 							<Image
 								fill
-								loading="eager"
-								priority={index === 0}
 								sizes="(min-width: 1024px) 72rem, calc(100vw - 2rem)"
 								src={background.src}
 								alt=""

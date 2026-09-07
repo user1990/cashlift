@@ -11,7 +11,7 @@ import {
 	SearchCheck,
 } from "lucide-react";
 import { Dialog, Modal, ModalOverlay } from "react-aria-components";
-import { cn } from "@/ui/utils/cn";
+import { getFindOptionId } from "./findDom";
 import {
 	ACTION_CATEGORY_IDS,
 	type FindExample,
@@ -20,14 +20,7 @@ import {
 	getFindExamples,
 	WORK_LABELS,
 } from "./findModel";
-import {
-	FindCategoryChip,
-	FindEmptyState,
-	FindLoadingState,
-	FindResultRow,
-	FindSearchField,
-	FindShortcutFooter,
-} from "./findUi";
+import { FindCategoryChip, FindEmptyState, FindResultRow, FindSearchField, FindShortcutFooter } from "./findUi";
 import type { useFindSession } from "./useFindSession";
 
 type WorkspaceFindSession = ReturnType<typeof useFindSession>;
@@ -50,7 +43,7 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 	const hasQuery = Boolean(session.query.query.trim());
 	const showExamples = !hasQuery && !session.hasFilters;
 	const showResults = hasQuery || session.hasFilters || session.query.category !== "all";
-	const showEmpty = showResults && !session.pending && session.results.length === 0;
+	const showEmpty = showResults && session.results.length === 0;
 
 	return (
 		<ModalOverlay
@@ -79,9 +72,8 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 							inputRef={session.inputRef}
 							onChange={(value) => session.updateQuery({ query: value })}
 							onKeyDown={session.handleSearchKeyDown}
-							onSelectSuggestion={session.applySearch}
 							placeholder="Search for anything"
-							suggestions={session.suggestions}
+							activeOptionId={session.selectedId ? `find-option-${session.selectedId}` : undefined}
 							value={session.query.query}
 						/>
 					</div>
@@ -107,10 +99,8 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 
 					<div className="max-h-[min(24rem,50vh)] overflow-y-auto" id="find-results">
 						<div aria-live="polite" className="sr-only">
-							{session.pending ? "Updating results" : `${session.results.length} results`}
+							{`${session.results.length} ${session.results.length === 1 ? "result" : "results"}`}
 						</div>
-
-						<FindLoadingState glass visible={session.pending && session.results.length === 0} />
 
 						{showEmpty && (
 							<FindEmptyState
@@ -125,23 +115,21 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 							/>
 						)}
 
-						{showExamples && !session.pending && (
-							<div className="divide-y divide-white/10" role="listbox">
+						{showExamples && (
+							<div className="divide-y divide-white/10">
 								<div className="px-4 py-2">
 									<p className="font-semibold text-muted-foreground text-s">Examples</p>
 								</div>
 
-								{examples.map((example, index) => (
+								{examples.map((example) => (
 									<FindExampleRow
 										example={example}
-										highlighted={session.selectedId === example.id}
 										key={example.id}
 										onSelect={() => applyFindExample(example, session)}
-										optionId={`find-example-${index}`}
 									/>
 								))}
 
-								{session.recentSearches.map((recentSearch, index) => (
+								{session.recentSearches.map((recentSearch) => (
 									<FindExampleRow
 										example={{
 											category: "all",
@@ -149,11 +137,9 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 											id: `recent-${recentSearch}`,
 											label: recentSearch,
 										}}
-										highlighted={session.selectedId === `recent-${recentSearch}`}
 										icon={ArrowRightLeft}
 										key={`recent-${recentSearch}`}
 										onSelect={() => session.applySearch(recentSearch)}
-										optionId={`find-recent-${index}`}
 									/>
 								))}
 							</div>
@@ -162,7 +148,13 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 						{showResults && session.results.length > 0 && (
 							<div className="divide-y divide-white/10" role="listbox">
 								{session.results.map((item) => (
-									<div key={item.id} role="presentation">
+									<div
+										aria-selected={session.selectedId === item.id}
+										id={getFindOptionId(item.id)}
+										key={item.id}
+										role="option"
+										tabIndex={-1}
+									>
 										<FindResultRow
 											glass
 											highlightQuery={session.query.query}
@@ -185,29 +177,19 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 
 type FindExampleRowProps = {
 	example: FindExample;
-	highlighted?: boolean;
 	icon?: LucideIcon;
 	onSelect: () => void;
-	optionId: string;
 };
 
 const FindExampleRow = ({
 	example,
-	highlighted = false,
 	icon: Icon = WORK_EXAMPLE_ICONS[example.category as FindWork] ?? CalendarCheck,
 	onSelect,
-	optionId,
 }: FindExampleRowProps) => (
 	<div role="presentation">
 		<button
-			aria-selected={highlighted}
-			className={cn(
-				"flex min-h-12 w-full items-center justify-between gap-4 px-4 py-3 text-left outline-none transition-[background-color] duration-150 focus-visible:ring-[3px] focus-visible:ring-primary/20 motion-reduce:transition-none",
-				highlighted ? "bg-primary-subtle" : "hover:bg-white/5",
-			)}
-			id={optionId}
+			className="flex min-h-12 w-full items-center justify-between gap-4 px-4 py-3 text-left outline-none transition-[background-color] duration-150 hover:bg-white/5 focus-visible:ring-[3px] focus-visible:ring-primary/20 motion-reduce:transition-none"
 			onClick={onSelect}
-			role="option"
 			type="button"
 		>
 			<span className="flex min-w-0 items-center gap-3">

@@ -153,36 +153,6 @@ export const buildFindItems = (dataset: FinancialDataset, basePath: string): Fin
 export const filterFindItems = (items: FindItem[], query: FindQuery, categoryMode: "kind" | "work") =>
 	items.filter((item) => itemMatchesFindQuery(item, query, categoryMode));
 
-export const getFindSuggestions = (items: FindItem[], query: string, limit = 6) => {
-	const normalizedQuery = normalizeFindQuery(query);
-
-	if (!normalizedQuery) {
-		return [];
-	}
-
-	const seen = new Set<string>();
-	const suggestions: string[] = [];
-	const queryMatcher = new RegExp(escapeRegExp(normalizedQuery));
-
-	for (const item of items) {
-		if (!queryMatcher.test(getFindHaystack(item)) || seen.has(item.title)) {
-			continue;
-		}
-
-		seen.add(item.title);
-		suggestions.push(item.title);
-
-		if (suggestions.length >= limit) {
-			break;
-		}
-	}
-
-	return suggestions;
-};
-
-export const getFindFacetValues = (items: FindItem[], field: "owner" | "status") =>
-	[...new Set(items.map((item) => item[field]))].toSorted((left, right) => left.localeCompare(right));
-
 export const formatFindAmount = (cents: MoneyCents) => formatCurrency(cents);
 
 export const formatFindDueDate = (isoDate: string | undefined) => (isoDate ? formatDashboardDate(isoDate) : undefined);
@@ -263,10 +233,6 @@ function getCashActionWork(type: FinancialDataset["cashActions"][number]["type"]
 
 function normalizeFindQuery(query: string) {
 	return query.trim().toLowerCase();
-}
-
-function escapeRegExp(value: string) {
-	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function getFindHaystack(item: FindItem) {

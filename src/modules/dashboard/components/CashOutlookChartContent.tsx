@@ -1,24 +1,17 @@
 import { useId } from "react";
+import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { centsToDollars, formatCurrencyDollars, formatPreciseCompactCurrency } from "@/modules/money/format";
 import type { MoneyCents } from "@/modules/money/types";
 import type { ForecastChartDataPoint } from "../types";
 import { ChartFrame } from "./ChartFrame";
-import {
-	RechartsArea,
-	RechartsAreaChart,
-	RechartsCartesianGrid,
-	RechartsReferenceLine,
-	RechartsResponsiveContainer,
-	RechartsTooltip,
-	RechartsXAxis,
-	RechartsYAxis,
-} from "./LazyRechartsComponent";
 
 type CashOutlookChartContentProps = {
 	bufferTargetCents: MoneyCents;
 	chartData: ForecastChartDataPoint[];
 	lowestProjectedCashDate?: string;
 };
+
+const DEFAULT_AXIS_TICK = { fill: "var(--muted-foreground)", fontSize: 12 } as const;
 
 export const CashOutlookChartContent = ({
 	bufferTargetCents,
@@ -41,8 +34,14 @@ export const CashOutlookChartContent = ({
 
 	return (
 		<ChartFrame>
-			<RechartsResponsiveContainer>
-				<RechartsAreaChart data={chartData}>
+			<ResponsiveContainer
+				height="100%"
+				initialDimension={{ height: 240, width: 1 }}
+				minHeight={0}
+				minWidth={0}
+				width="100%"
+			>
+				<AreaChart data={chartData} margin={{ bottom: 0, left: 4, right: 8, top: 12 }}>
 					<defs>
 						<linearGradient id={cashOutlookFillId} x1="0" x2="0" y1="0" y2="1">
 							<stop offset="0%" stopColor="var(--primary)" stopOpacity="0.22" />
@@ -51,23 +50,46 @@ export const CashOutlookChartContent = ({
 						</linearGradient>
 					</defs>
 
-					<RechartsCartesianGrid />
+					<CartesianGrid stroke="var(--border)" strokeOpacity={0.8} vertical={false} />
 
-					<RechartsXAxis dataKey="week" tickFormatter={formatWeekLabel} />
+					<XAxis
+						axisLine={false}
+						dataKey="week"
+						tick={DEFAULT_AXIS_TICK}
+						tickFormatter={formatWeekLabel}
+						tickLine={false}
+					/>
 
-					<RechartsYAxis domain={[domainMin, maximumBalance]} tickFormatter={formatOutlookAxis} />
+					<YAxis
+						axisLine={false}
+						domain={[domainMin, maximumBalance]}
+						tick={DEFAULT_AXIS_TICK}
+						tickCount={4}
+						tickFormatter={formatOutlookAxis}
+						tickLine={false}
+						width={48}
+					/>
 
-					<RechartsTooltip formatter={formatTooltipCurrency} labelFormatter={formatWeekLabel} />
+					<Tooltip
+						contentStyle={{
+							background: "var(--panel)",
+							border: "1px solid var(--border)",
+							borderRadius: 8,
+							color: "var(--panel-foreground)",
+						}}
+						formatter={formatTooltipCurrency}
+						labelFormatter={formatWeekLabel}
+					/>
 
 					{showBufferLine && (
-						<RechartsReferenceLine
+						<ReferenceLine
 							label={{ fill: "var(--muted-foreground)", fontSize: 12, position: "insideTopLeft", value: "Buffer" }}
 							y={bufferDollars}
 						/>
 					)}
 
-					<RechartsArea
-						animationDuration={700}
+					<Area
+						isAnimationActive={false}
 						dataKey="balance"
 						dot={getOutlookDot(lowestProjectedCashDate)}
 						fill={`url(#${cashOutlookFillId})`}
@@ -76,11 +98,13 @@ export const CashOutlookChartContent = ({
 						strokeWidth={2}
 						type="monotone"
 					/>
-				</RechartsAreaChart>
-			</RechartsResponsiveContainer>
+				</AreaChart>
+			</ResponsiveContainer>
 		</ChartFrame>
 	);
 };
+
+export default CashOutlookChartContent;
 
 function shouldShowBufferLine(bufferDollars: number, minimumBalance: number, maximumBalance: number) {
 	if (bufferDollars <= 0 || bufferDollars > maximumBalance) {

@@ -29,7 +29,6 @@ export const ProofList = ({ items, variant = "panel" }: ProofListProps) =>
 							alt=""
 							aria-hidden
 							fill
-							loading="eager"
 							sizes="(min-width: 1180px) 1120px, calc(100vw - 2rem)"
 							src={image}
 							className="object-cover opacity-55"
