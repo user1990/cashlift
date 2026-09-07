@@ -10,7 +10,6 @@ type CheckoutPlanSummaryProps = {
 	features: readonly string[];
 	name: string;
 	price: string;
-	trialEndLabel: string;
 };
 
 export const CheckoutPlanSummary = ({
@@ -19,7 +18,6 @@ export const CheckoutPlanSummary = ({
 	features,
 	name,
 	price,
-	trialEndLabel,
 }: CheckoutPlanSummaryProps) => (
 	<Panel
 		as="section"
@@ -53,19 +51,9 @@ export const CheckoutPlanSummary = ({
 
 		<div className="my-8 border-shell-border border-t" />
 
-		<dl className="space-y-4">
-			<div className="flex justify-between gap-4">
-				<dt className="text-m text-shell-muted">Due today</dt>
-
-				<dd className="font-mono text-signal text-xl">$0</dd>
-			</div>
-
-			<div className="flex justify-between gap-4">
-				<dt className="text-m text-shell-muted">Trial ends</dt>
-
-				<dd className="text-right text-m+ text-shell-foreground">{trialEndLabel}</dd>
-			</div>
-		</dl>
+		<p className="mt-8 text-m text-shell-muted leading-6">
+			Pricing and availability are confirmed during a conversation with CashLift.
+		</p>
 
 		<ActionLink href="/contact" className="mt-8 w-full">
 			Talk to CashLift about this plan

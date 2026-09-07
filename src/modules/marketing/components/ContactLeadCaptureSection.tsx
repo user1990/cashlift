@@ -41,17 +41,17 @@ export const ContactLeadCaptureSection = () => (
 			</header>
 
 			<p className="text-m text-shell-muted leading-6">
-				This page does not send or store contact details. Email CashLift directly or explore the read-only sample
-				workspace.
+				This page does not send or store contact details. Explore the read-only sample workspace or review CashLift's
+				product overview.
 			</p>
 
 			<div className="mt-5 grid gap-2 sm:grid-cols-2">
-				<ActionLink href="mailto:sales@cashlift.example" className="w-full">
-					Email CashLift
+				<ActionLink href="/demo/workspace" className="w-full">
+					Explore live demo
 				</ActionLink>
 
-				<ActionLink href="/demo/workspace" variant="secondary" className="w-full">
-					Explore live demo
+				<ActionLink href="/features" variant="secondary" className="w-full">
+					Review features
 				</ActionLink>
 			</div>
 		</div>

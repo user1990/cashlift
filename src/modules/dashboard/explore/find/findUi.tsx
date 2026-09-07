@@ -11,6 +11,7 @@ type FindSearchFieldProps = {
 	onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
 	value: string;
 	activeOptionId?: string;
+	hasPopup?: boolean;
 	glass?: boolean;
 	hideShortcut?: boolean;
 	placeholder?: string;
@@ -23,6 +24,7 @@ export const FindSearchField = ({
 	onKeyDown,
 	value,
 	activeOptionId,
+	hasPopup = false,
 	glass = false,
 	hideShortcut = false,
 	placeholder = "Search invoices, vendors, spend requests…",
@@ -41,8 +43,8 @@ export const FindSearchField = ({
 			ref={inputRef}
 			aria-autocomplete="list"
 			aria-activedescendant={activeOptionId}
-			aria-controls="find-results"
-			aria-expanded="true"
+			aria-controls={hasPopup ? "find-results" : undefined}
+			aria-expanded={hasPopup}
 			autoComplete="off"
 			className={cn(
 				"h-12 w-full rounded-lg border py-3 text-l text-panel-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground focus:border-primary focus:ring-[3px] focus:ring-primary/20",

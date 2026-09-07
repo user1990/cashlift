@@ -74,6 +74,7 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 							onKeyDown={session.handleSearchKeyDown}
 							placeholder="Search for anything"
 							activeOptionId={session.selectedId ? `find-option-${session.selectedId}` : undefined}
+							hasPopup={showResults && session.results.length > 0}
 							value={session.query.query}
 						/>
 					</div>

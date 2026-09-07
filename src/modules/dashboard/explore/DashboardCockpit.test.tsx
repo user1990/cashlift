@@ -72,6 +72,8 @@ describe("DashboardCockpit", () => {
 		const dialog = screen.getByRole("dialog", { name: /search company workspace/i });
 
 		expect(dialog).toBeVisible();
+		expect(search).toHaveAttribute("aria-expanded", "false");
+		expect(search).not.toHaveAttribute("aria-controls");
 
 		await user.click(search);
 		await user.paste("Aurora");
@@ -82,6 +84,9 @@ describe("DashboardCockpit", () => {
 					.getAllByRole("link", { name: /aurora health/i })
 					.map((link) => link.getAttribute("href")),
 			).toEqual(["/dashboard/invoices", "/dashboard/invoices"]);
+			expect(search).toHaveAttribute("aria-expanded", "true");
+			expect(search).toHaveAttribute("aria-controls", "find-results");
+			expect(within(dialog).getByRole("listbox")).toBeVisible();
 		});
 
 		await user.keyboard("{Escape}");
@@ -110,6 +115,11 @@ describe("DashboardCockpit", () => {
 		await waitFor(() => {
 			expect(within(openDialog).queryByRole("link", { name: /aurora health/i })).not.toBeInTheDocument();
 			expect(within(openDialog).getByRole("button", { name: "Reset search" })).toBeVisible();
+			expect(screen.getByRole("combobox", { name: /search company workspace/i })).toHaveAttribute(
+				"aria-expanded",
+				"false",
+			);
+			expect(screen.getByRole("combobox", { name: /search company workspace/i })).not.toHaveAttribute("aria-controls");
 		});
 
 		await user.click(within(openDialog).getByRole("button", { name: "Reset search" }));
