@@ -133,10 +133,6 @@ export const DEMO_PAGE = {
 	label: "See the sample inbox. Understand the cash impact. Know the next step.",
 	metadataDescription: "Explore CashLift with the read-only Studio Nova sample inbox for service companies.",
 	reassurance: "Sample data. Read-only. No setup.",
-	walkthroughButton: "Book a demo walkthrough",
-	walkthroughSuccess:
-		"We will follow up to arrange the walkthrough. You can explore the read-only sample workspace now.",
-	walkthroughTitle: "Choose who we should contact",
 } as const;
 
 export const FEATURES_PAGE = {

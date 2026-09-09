@@ -1,9 +1,5 @@
-import { CalendarClock, CreditCard, Sparkles } from "lucide-react";
+import { CalendarClock, MessageCircle, Sparkles } from "lucide-react";
 import { cn } from "@/ui/utils/cn";
-
-type CheckoutTrialTimelineProps = {
-	planPriceLabel: string;
-};
 
 type TrialStepProps = {
 	description: string;
@@ -11,24 +7,31 @@ type TrialStepProps = {
 	title: string;
 	active?: boolean;
 };
-
-const TRIAL_DAYS = 14;
-const REMINDER_DAY = 13;
-
-export const CheckoutTrialTimeline = ({ planPriceLabel }: CheckoutTrialTimelineProps) => (
+export const CheckoutTrialTimeline = () => (
 	<section>
-		<h1 className="max-w-2xl text-5xl+ text-primary tracking-normal sm:text-6xl+">Start your 14-day trial</h1>
+		<h1 className="max-w-2xl text-5xl+ text-primary tracking-normal sm:text-6xl+">Discuss your CashLift plan</h1>
 
-		<p className="mt-5 max-w-xl text-shell-muted text-xl leading-8">Card required. No charge today.</p>
+		<p className="mt-5 max-w-xl text-shell-muted text-xl leading-8">
+			Review the selected plan and talk with CashLift about fit, pricing, and next steps.
+		</p>
 
 		<h2 className="mt-12 text-s+ text-shell-muted uppercase tracking-normal">What happens next</h2>
 
 		<ol className="mt-6 space-y-8">
-			<TrialStep active description="Create workspace and verify payment method" icon={Sparkles} title="Today" />
+			<TrialStep
+				active
+				description="Share your team's needs with CashLift"
+				icon={MessageCircle}
+				title="Start a conversation"
+			/>
 
-			<TrialStep description="Reminder before trial ends" icon={CalendarClock} title={`Day ${REMINDER_DAY}`} />
+			<TrialStep
+				description="Review plan fit, pricing, and availability"
+				icon={CalendarClock}
+				title="Discuss your plan"
+			/>
 
-			<TrialStep description={`Plan starts at ${planPriceLabel}`} icon={CreditCard} title={`Day ${TRIAL_DAYS}`} />
+			<TrialStep description="Choose the right next step for your team" icon={Sparkles} title="Plan next steps" />
 		</ol>
 	</section>
 );

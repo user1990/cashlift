@@ -10,7 +10,7 @@ type CheckoutRouteProps = {
 
 export const metadata: Metadata = {
 	title: "Checkout — CashLift",
-	description: "Review your CashLift trial before continuing to secure checkout.",
+	description: "Review your selected CashLift plan and discuss fit, pricing, and next steps.",
 };
 
 export const instant = false;

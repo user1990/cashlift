@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
+import { Dialog, Modal, ModalOverlay } from "react-aria-components";
 import logo from "@/app/logo.svg";
 import type { WorkspaceExperienceContract } from "../types";
 import { WorkspaceAccountMenu } from "./WorkspaceAccountMenu";
@@ -25,12 +26,20 @@ export const WorkspaceMobileNav = ({ workspace }: WorkspaceMobileNavProps) => {
 			return;
 		}
 
-		const previousOverflow = document.body.style.overflow;
-		document.body.style.overflow = "hidden";
+		if (typeof window.matchMedia !== "function") {
+			return;
+		}
 
-		return () => {
-			document.body.style.overflow = previousOverflow;
+		const mediaQuery = window.matchMedia("(min-width: 1024px)");
+		const closeOnDesktop = () => {
+			if (mediaQuery.matches) {
+				setOpenPath(null);
+			}
 		};
+		closeOnDesktop();
+		mediaQuery.addEventListener("change", closeOnDesktop);
+
+		return () => mediaQuery.removeEventListener("change", closeOnDesktop);
 	}, [open]);
 
 	const closeDrawer = () => {
@@ -69,18 +78,20 @@ export const WorkspaceMobileNav = ({ workspace }: WorkspaceMobileNavProps) => {
 				</div>
 			</header>
 
-			{open && (
-				<div className="fixed inset-0 z-40 lg:hidden">
-					<button
-						aria-label="Close navigation"
-						className="absolute inset-0 bg-black/60 motion-reduce:transition-none"
-						onClick={closeDrawer}
-						type="button"
-					/>
-
-					<aside
+			<ModalOverlay
+				className="fixed inset-0 z-40 flex lg:hidden"
+				isDismissable
+				isOpen={open}
+				onOpenChange={(nextOpen) => {
+					if (!nextOpen) {
+						closeDrawer();
+					}
+				}}
+			>
+				<Modal className="h-full w-[min(100vw-3rem,18rem)] outline-none">
+					<Dialog
 						aria-label="Workspace navigation"
-						className="ease relative z-10 flex h-full w-[min(100vw-3rem,18rem)] flex-col border-white/5 border-r bg-shell p-3 shadow-shell transition-transform duration-200 motion-reduce:transition-none"
+						className="flex h-full flex-col border-white/5 border-r bg-shell p-3 shadow-shell outline-none"
 						id={drawerId}
 					>
 						<WorkspaceSidebarPanel
@@ -89,9 +100,9 @@ export const WorkspaceMobileNav = ({ workspace }: WorkspaceMobileNavProps) => {
 							showLogo={false}
 							workspace={workspace}
 						/>
-					</aside>
-				</div>
-			)}
+					</Dialog>
+				</Modal>
+			</ModalOverlay>
 		</>
 	);
 };

@@ -15,12 +15,20 @@ describe("useWorkspaceDatasetQuery", () => {
 	it("keeps the hydrated range fresh and refetches another range", async () => {
 		const hydratedDateRange = { endDate: "2026-06-17", startDate: "2026-05-06" };
 		const selectedDateRange = { endDate: "2026-05-20", startDate: "2026-05-06" };
-		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
-			new Response(JSON.stringify(financialDatasetFixture), {
+		const selectedRangeDataset = {
+			...financialDatasetFixture,
+			profile: { ...financialDatasetFixture.profile, name: "Selected range" },
+		};
+		const fetchMock = vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
+			const url = new URL(String(input), "https://cashlift.test");
+			const dataset =
+				url.searchParams.get("endDate") === selectedDateRange.endDate ? selectedRangeDataset : financialDatasetFixture;
+
+			return new Response(JSON.stringify(dataset), {
 				headers: { "Content-Type": "application/json" },
 				status: 200,
-			}),
-		);
+			});
+		});
 		const queryClient = new QueryClient({
 			defaultOptions: {
 				queries: {
@@ -54,6 +62,47 @@ describe("useWorkspaceDatasetQuery", () => {
 
 		await waitFor(() => {
 			expect(fetchMock).toHaveBeenCalledTimes(2);
+			expect(result.current.data).toEqual(selectedRangeDataset);
 		});
+
+		const selectedRequest = fetchMock.mock.calls[1]?.[0];
+		const selectedUrl = new URL(String(selectedRequest), "https://cashlift.test");
+
+		expect(selectedUrl.searchParams.get("scope")).toBe("overview");
+		expect(selectedUrl.searchParams.get("startDate")).toBe(selectedDateRange.startDate);
+		expect(selectedUrl.searchParams.get("endDate")).toBe(selectedDateRange.endDate);
+	});
+
+	it("keeps stale data visible and avoids retrying permanent access failures", async () => {
+		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response(
+				JSON.stringify({
+					code: "workspace_forbidden",
+					error: "No company workspace is assigned to this user.",
+				}),
+				{ status: 403 },
+			),
+		);
+		const queryClient = new QueryClient();
+		const wrapper = ({ children }: { children: ReactNode }) => (
+			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		);
+
+		const { result } = renderHook(
+			() =>
+				useWorkspaceDatasetQuery(financialDatasetFixture, "overview", {
+					endDate: "2026-05-20",
+					startDate: "2026-05-06",
+				}),
+			{ wrapper },
+		);
+
+		await waitFor(() => {
+			expect(result.current.isError).toBe(true);
+		});
+
+		expect(result.current.data).toEqual(financialDatasetFixture);
+		expect(result.current.error?.message).toBe("No company workspace is assigned to this user.");
+		expect(fetchMock).toHaveBeenCalledOnce();
 	});
 });

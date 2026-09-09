@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Panel } from "@/ui/components/layout/Panel";
 import { cn } from "@/ui/utils/cn";
 import { DEMO_PAGE } from "../site";
-import { LeadCaptureForm } from "./LeadCaptureForm";
+import { ActionLink } from "./ActionLink";
 
 const DEMO_BOOK_CARD_BACKGROUND_SRC = "/marketing/demo-book-card-bg.webp";
 
@@ -36,12 +36,22 @@ export const DemoLeadCaptureSection = () => (
 
 		<div className="relative flex flex-col">
 			<header className="mb-3">
-				<p className="text-primary text-s+ uppercase tracking-normal">Book walkthrough</p>
+				<p className="text-primary text-s+ uppercase tracking-normal">Next step</p>
 
-				<h2 className="mt-2 text-l+ text-shell-foreground">{DEMO_PAGE.walkthroughTitle}</h2>
+				<h2 className="mt-2 text-l+ text-shell-foreground">Explore or contact us</h2>
 			</header>
 
-			<LeadCaptureForm buttonLabel={DEMO_PAGE.walkthroughButton} successDescription={DEMO_PAGE.walkthroughSuccess} />
+			<p className="text-m text-shell-muted leading-6">{DEMO_PAGE.description}</p>
+
+			<div className="mt-5 grid gap-2 sm:grid-cols-2">
+				<ActionLink href="/demo/workspace" className="w-full">
+					Explore live demo
+				</ActionLink>
+
+				<ActionLink href="/contact" variant="secondary" className="w-full">
+					Contact CashLift
+				</ActionLink>
+			</div>
 		</div>
 	</Panel>
 );

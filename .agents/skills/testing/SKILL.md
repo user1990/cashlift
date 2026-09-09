@@ -10,8 +10,8 @@ Use this skill for test changes. Read `.agents/docs/testing.md` only when you ne
 ## Workspace Rules
 
 - Driver patterns are deprecated. Use React Testing Library queries and `user-event` directly.
-- Render through the repo's test utilities. Prefer exported local test helpers only when already established.
-- Use `act` and `waitFor` from repo test utilities, not directly from React or Testing Library.
+- Render with React Testing Library directly, or through a local test utility when one already exists for the area.
+- Use the `act` and `waitFor` helpers provided by the local test setup when available.
 - Check setup files before adding setup/teardown; do not duplicate global resets or handlers.
 - Do not add comments in tests unless documenting a necessary workaround.
 - Fix Biome/lint issues before finishing.
@@ -69,7 +69,7 @@ Use this skill for test changes. Read `.agents/docs/testing.md` only when you ne
 - Keep fixtures realistic and minimal.
 - Use typed mock data where possible.
 - Name constant fixture/mock values in `UPPER_SNAKE_CASE` with a `_MOCK` suffix.
-- Always use global `chance` for generated string/ID values instead of hardcoded tokens or IDs.
+- Prefer deterministic, named fixture values. Use generated values only when a test genuinely needs them and the repository's generator is available.
 - Assert business outcomes and semantic values.
 - Use snapshots only for stable data structures.
 - For lists/arrays, assert the full expected list with `toEqual()`.
