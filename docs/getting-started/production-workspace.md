@@ -21,4 +21,8 @@ Configure Clerk's Supabase integration for the same Clerk instance used by the d
 
 Do not expose service-role credentials or database passwords to the browser. Workspace reads use the Clerk session JWT with Supabase row-level security.
 
+## Authenticated browser verification
+
+The repository's production browser checks cover the unauthenticated boundary. A complete approval check needs a dedicated Clerk test user, a matching `company_members` row, and a resettable test Supabase database. With those in place, verify that a finance user approves the seeded `request-brandforge` request, reloads the workspace, and still sees `approved`; then verify an employee receives `403` and a user from another company cannot change the request. Keep these credentials and records outside the repository.
+
 For the underlying data-access decision, see [Clerk-authenticated Supabase RLS](/decisions/0003-clerk-authenticated-supabase-rls).

@@ -4,7 +4,8 @@ if (process.env.FORCE_COLOR) {
 	delete process.env.NO_COLOR;
 }
 
-const productionBaseUrl = "http://127.0.0.1:3100";
+const productionPort = process.env.E2E_PRODUCTION_PORT ?? "3100";
+const productionBaseUrl = `http://127.0.0.1:${productionPort}`;
 
 export default defineConfig({
 	expect: { timeout: 10_000 },
@@ -16,10 +17,10 @@ export default defineConfig({
 	timeout: 60_000,
 	use: {
 		baseURL: productionBaseUrl,
-		trace: "on-first-retry",
+		trace: "retain-on-failure",
 	},
 	webServer: {
-		command: "pnpm dev --port 3100",
+		command: `pnpm dev --port ${productionPort}`,
 		env: {
 			...process.env,
 			CASHLIFT_APP_MODE: "production",

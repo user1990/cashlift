@@ -4,7 +4,8 @@ if (process.env.FORCE_COLOR) {
 	delete process.env.NO_COLOR;
 }
 
-const localBaseUrl = "http://127.0.0.1:3000";
+const localPort = process.env.E2E_PORT ?? "3000";
+const localBaseUrl = `http://127.0.0.1:${localPort}`;
 
 export default defineConfig({
 	expect: { timeout: 10_000 },
@@ -18,10 +19,10 @@ export default defineConfig({
 	timeout: 60_000,
 	use: {
 		baseURL: process.env.E2E_BASE_URL ?? localBaseUrl,
-		trace: "on-first-retry",
+		trace: "retain-on-failure",
 	},
 	webServer: {
-		command: "pnpm dev",
+		command: `pnpm dev --port ${localPort}`,
 		env: {
 			...process.env,
 			CASHLIFT_APP_MODE: "demo",
@@ -29,7 +30,7 @@ export default defineConfig({
 				process.env.E2E_NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "e2e-placeholder-anon-key",
 			NEXT_PUBLIC_SUPABASE_URL: process.env.E2E_NEXT_PUBLIC_SUPABASE_URL ?? "https://invalid.local",
 		},
-		reuseExistingServer: !process.env.CI,
+		reuseExistingServer: false,
 		timeout: 180_000,
 		url: localBaseUrl,
 	},
