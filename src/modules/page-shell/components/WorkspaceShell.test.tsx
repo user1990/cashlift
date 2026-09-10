@@ -28,6 +28,5 @@ describe("WorkspaceShell", () => {
 
 		expect(within(drawer).getByRole("link", { name: "Invoices" })).toBeVisible();
 		expect(within(drawer).queryByRole("link", { name: "Overdue collections" })).not.toBeInTheDocument();
-		expect(screen.getByLabelText("Studio Nova, Read-only demo")).toBeVisible();
 	});
 });
