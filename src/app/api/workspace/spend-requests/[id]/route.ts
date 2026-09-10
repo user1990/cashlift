@@ -39,6 +39,7 @@ export const PATCH = async (request: Request, context: RouteContext) => {
 	return apiError({
 		code: ERROR_CODE[result.code],
 		error: result.message,
+		requestId: result.requestId,
 		status: ERROR_STATUS[result.code],
 	});
 };
