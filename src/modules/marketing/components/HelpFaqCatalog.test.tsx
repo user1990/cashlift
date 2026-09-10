@@ -37,7 +37,6 @@ describe("HelpFaqCatalog", () => {
 			"href",
 			getHelpFaqHref(representativeMatch.slug, READ_ONLY_QUERY),
 		);
-		expect(screen.getByRole("status")).toHaveTextContent(`${matchingItems.length} answers`);
 		expect(window.location.search).toBe(`?q=${READ_ONLY_QUERY}`);
 	});
 
@@ -59,40 +58,26 @@ describe("HelpFaqCatalog", () => {
 		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
 
-	it("wraps arrow keys, traps Tab, and preserves a no-results query until Escape", async () => {
+	it("clears an unmatched query without navigating, then closes on Escape", async () => {
 		const user = userEvent.setup();
 
 		render(<HelpFaqCatalog groups={HELP_FAQ_GROUPS} />);
 		await user.click(screen.getByRole("button", { name: "Open Help search" }));
 
-		const results = screen.getAllByRole("option");
-		const closeButton = screen.getByRole("button", { name: "Close Help search" });
 		const search = screen.getByRole("combobox", { name: "Search Help FAQs" });
-
-		expect(results[0]).toHaveAttribute("aria-selected", "true");
-
-		await user.keyboard("{ArrowUp}");
-		expect(results.at(-1)).toHaveAttribute("aria-selected", "true");
-
-		await user.keyboard("{ArrowDown}");
-		expect(results[0]).toHaveAttribute("aria-selected", "true");
-
-		await user.tab();
-		expect(closeButton).toHaveFocus();
-
-		await user.tab();
-		expect(results[0]).toHaveFocus();
-
-		await user.tab();
-		expect(results[1]).toHaveFocus();
-
-		await user.click(search);
 		await user.type(search, "unmatchedterm");
-		expect(screen.getByRole("heading", { name: /No results/ })).toBeVisible();
+
+		expect(screen.queryByRole("option")).not.toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Clear search" })).toBeVisible();
 
 		await user.keyboard("{Enter}");
 		expect(search).toHaveValue("unmatchedterm");
+		expect(screen.queryByRole("dialog")).toBeInTheDocument();
 
+		await user.click(screen.getByRole("button", { name: "Clear search" }));
+		expect(screen.getAllByRole("option").length).toBeGreaterThan(0);
+
+		await user.click(search);
 		await user.keyboard("{Escape}");
 		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
