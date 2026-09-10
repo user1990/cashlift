@@ -14,7 +14,7 @@ const API_ERROR_SCHEMA = z.object({
 });
 
 export const decideSpendRequest = async ({ id, status }: SpendRequestDecisionRequest) => {
-	const response = await fetch(`/api/workspace/spend-requests/${encodeURIComponent(id)}`, {
+	const response = await fetch(`/api/v1/workspace/spend-requests/${encodeURIComponent(id)}`, {
 		body: JSON.stringify({ status }),
 		headers: {
 			"Content-Type": "application/json",

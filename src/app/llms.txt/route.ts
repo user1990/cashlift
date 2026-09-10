@@ -19,12 +19,15 @@ ${LLMS_TXT.summary}
 
 - [Developer resources](${SITE_URL}/developers): Use as the starting point for API and authentication information.
 - [OpenAPI specification](${SITE_URL}/openapi.json): Use when an agent needs the machine-readable workspace API contract.
+- [MCP discovery manifest](${SITE_URL}/.well-known/mcp): Discover the read-only Streamable HTTP MCP endpoint and tool contract.
+- [MCP endpoint](${SITE_URL}/api/mcp): Use with an MCP client to read workspace or public-demo data without mutations.
 - [Sitemap](${SITE_URL}/sitemap.xml): Use to discover the indexable CashLift pages.
 
 ## Company and use cases
 
 - [Customers](${SITE_URL}/customers): Service-firm proof stories and product context.
 - [Contact](${SITE_URL}/contact): Sales or support walkthrough requests.
+- [About CashLift](${SITE_URL}/about): Product boundaries and public-demo model.
 - [Agencies](${SITE_URL}/use-cases/agencies): Agency-specific cash decision questions.
 - [Consulting](${SITE_URL}/use-cases/consulting): Consulting-specific cash decision questions.
 - [Software Services](${SITE_URL}/use-cases/software-services): Software-services-specific cash decision questions.

@@ -41,7 +41,7 @@ const CashOutlookChartContent = ({
 				minWidth={0}
 				width="100%"
 			>
-				<AreaChart data={chartData} margin={{ bottom: 0, left: 4, right: 8, top: 12 }}>
+				<AreaChart accessibilityLayer={false} data={chartData} margin={{ bottom: 0, left: 4, right: 8, top: 12 }}>
 					<defs>
 						<linearGradient id={cashOutlookFillId} x1="0" x2="0" y1="0" y2="1">
 							<stop offset="0%" stopColor="var(--primary)" stopOpacity="0.22" />

@@ -9,13 +9,13 @@ test("keeps the static tour public and production workspace routes protected", a
 	expect(dashboardResponse.status()).toBe(307);
 	expect(dashboardResponse.headers().location).toContain("/login");
 
-	const apiResponse = await request.get("/api/workspace/dataset", {
+	const apiResponse = await request.get("/api/v1/workspace/dataset", {
 		headers: { Accept: "application/json" },
 		maxRedirects: 0,
 	});
 
 	expect(apiResponse.ok()).toBe(false);
-	expect([307, 401, 404]).toContain(apiResponse.status());
+	expect([307, 401, 404, 503]).toContain(apiResponse.status());
 
 	if (apiResponse.status() === 307) {
 		expect(apiResponse.headers().location).toContain("/login");

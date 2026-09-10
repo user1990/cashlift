@@ -8,7 +8,7 @@ import { preferredContentType } from "@/utilities/http/accept";
 
 const AUTH_PATH_PREFIXES = ["/login", "/signup"] as const;
 const CLERK_ASSET_PATH_PREFIX = "/__clerk";
-const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard", "/api/workspace"] as const;
+const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard"] as const;
 const NON_DOCUMENT_PATH_PREFIXES = ["/api", "/dashboard", "/login", "/signup", "/__clerk", "/_next"] as const;
 const NON_DOCUMENT_PATHS = ["/llms.txt", "/openapi.json", "/robots.txt", "/sitemap.xml"] as const;
 const NEXT_IMAGE_FILL_STYLE_HASH = "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='";

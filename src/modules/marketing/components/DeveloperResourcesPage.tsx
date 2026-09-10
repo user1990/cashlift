@@ -13,7 +13,8 @@ export const DeveloperResourcesPage = () => (
 		<div className="mt-14 grid gap-10 border-shell-border border-t pt-10 md:grid-cols-3">
 			<ResourceSection title="API">
 				<p className="text-shell-muted leading-7">
-					Use the OpenAPI document when an agent needs the current workspace dataset and spend-request decision routes.
+					Use the versioned OpenAPI document when an agent needs the current workspace dataset and spend-request
+					decision routes.
 				</p>
 
 				<Link href="/openapi.json" className="mt-5 inline-block text-primary">
@@ -30,13 +31,19 @@ export const DeveloperResourcesPage = () => (
 
 			<ResourceSection title="Other integrations">
 				<p className="text-shell-muted leading-7">
-					CashLift does not currently publish webhooks or an MCP server. Do not assume an integration that is not listed
-					here.
+					CashLift publishes a read-only MCP Streamable HTTP server for agents. Production workspace data still requires
+					an authenticated session, and the MCP tool never mutates financial records.
 				</p>
 
-				<Link href="/llms.txt" className="mt-5 inline-block text-primary">
-					Read agent guidance →
-				</Link>
+				<div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
+					<Link href="/.well-known/mcp" className="inline-block text-primary">
+						MCP discovery manifest →
+					</Link>
+
+					<Link href="/llms.txt" className="inline-block text-primary">
+						Read agent guidance →
+					</Link>
+				</div>
 			</ResourceSection>
 		</div>
 	</MainContent>

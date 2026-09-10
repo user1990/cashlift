@@ -18,6 +18,13 @@ export const metadata: Metadata = {
 		apple: "/brand/cashlift-icon-180.png",
 		icon: "/brand/cashlift-icon.svg",
 	},
+	openGraph: {
+		description: SITE_META.defaultDescription,
+		images: [
+			{ alt: "CashLift cash decision workspace", height: 900, url: "/brand/hero-finance-command.png", width: 1600 },
+		],
+		type: "website",
+	},
 };
 
 export const viewport: Viewport = {

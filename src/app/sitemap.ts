@@ -4,6 +4,7 @@ import { SITE_LAST_MODIFIED, SITE_URL } from "@/services/site";
 
 const INDEXABLE_PATHS = [
 	"/",
+	"/about",
 	"/features",
 	"/demo",
 	"/pricing",
