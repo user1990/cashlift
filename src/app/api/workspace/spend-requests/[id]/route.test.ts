@@ -53,6 +53,15 @@ describe("PATCH /api/workspace/spend-requests/[id]", () => {
 			},
 		],
 		[404, { code: "not_found" as const, message: "Spend request was not found.", status: "error" as const }],
+		[
+			500,
+			{
+				code: "unavailable" as const,
+				message: "Unable to update spend request.",
+				requestId: "event-id",
+				status: "error" as const,
+			},
+		],
 	])("returns %s when decision fails", async (status, result) => {
 		mocks.decideSpendRequest.mockResolvedValue(result);
 
@@ -60,6 +69,11 @@ describe("PATCH /api/workspace/spend-requests/[id]", () => {
 
 		expect(response.status).toEqual(status);
 		expect(response.headers.get("Cache-Control")).toEqual("no-store");
-		await expect(response.json()).resolves.toMatchObject({ error: result.message });
+		const body = await response.json();
+		expect(body.error).toBe(result.message);
+
+		if ("requestId" in result) {
+			expect(body.requestId).toBe(result.requestId);
+		}
 	});
 });

@@ -150,12 +150,14 @@ describe("decideSpendRequest", () => {
 		});
 		CREATE_SERVER_SUPABASE_CLIENT_MOCK.mockReturnValue(createSupabaseClient());
 		UPDATE_SPEND_REQUEST_STATUS_MOCK.mockRejectedValue(new Error("permission denied"));
+		CAPTURE_APP_EXCEPTION_MOCK.mockReturnValue("event-id");
 
 		const result = await decideRequest();
 
 		expect(result).toEqual({
 			code: "unavailable",
 			message: "Unable to update spend request.",
+			requestId: "event-id",
 			status: "error",
 		});
 		expect(CAPTURE_APP_EXCEPTION_MOCK).toHaveBeenCalledWith(

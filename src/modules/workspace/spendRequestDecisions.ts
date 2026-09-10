@@ -20,6 +20,7 @@ export type SpendRequestDecisionResult =
 	| {
 			code: "forbidden" | "invalid" | "not_found" | "service" | "unauthenticated" | "unavailable";
 			message: string;
+			requestId?: string;
 			status: "error";
 	  };
 
@@ -69,9 +70,9 @@ export const decideSpendRequest = async (
 	const config = getWorkspaceRuntimeConfig();
 
 	if (!config.configured) {
-		captureSpendRequestMessage(config.message, "config");
+		const requestId = captureSpendRequestMessage(config.message, "config");
 
-		return { code: "service", message: config.message, status: "error" };
+		return { code: "service", message: config.message, requestId, status: "error" };
 	}
 
 	if (workspaceDemoEnabled()) {
@@ -89,9 +90,9 @@ export const decideSpendRequest = async (
 
 		if (!accessToken) {
 			const message = "Workspace data token is unavailable.";
-			captureSpendRequestMessage(message, "missing-data-token");
+			const requestId = captureSpendRequestMessage(message, "missing-data-token");
 
-			return { code: "service", message, status: "error" };
+			return { code: "service", message, requestId, status: "error" };
 		}
 
 		const client = createServerSupabaseClient({ accessToken });
@@ -122,8 +123,8 @@ export const decideSpendRequest = async (
 			return { code: "not_found", message: "Spend request was not found.", status: "error" };
 		}
 
-		captureSpendRequestException(error, "data-error");
+		const requestId = captureSpendRequestException(error, "data-error");
 
-		return { code: "unavailable", message: "Unable to update spend request.", status: "error" };
+		return { code: "unavailable", message: "Unable to update spend request.", requestId, status: "error" };
 	}
 };
