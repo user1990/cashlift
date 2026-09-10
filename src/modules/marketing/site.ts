@@ -4,7 +4,7 @@
  */
 
 // What CashLift is — keep claims aligned with docs/product and accepted ADRs.
-export const PRODUCT = {
+const PRODUCT = {
 	audience: "Finance teams, owners, and managers at agencies, consultancies, studios, and software service companies.",
 	firstAction: "Click Open live demo. Start with the daily inbox and open the first item.",
 	name: "CashLift",
