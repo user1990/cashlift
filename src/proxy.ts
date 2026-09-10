@@ -4,7 +4,6 @@ import { getAgentMarkdown, NOT_FOUND_MARKDOWN } from "@/modules/marketing/agentC
 import { CLERK_SIGN_IN_URL, CLERK_SIGN_UP_URL, getRequiredClerkPublishableKey } from "@/services/clerk/config";
 import { getRequiredClerkSecretKey } from "@/services/clerk/serverConfig";
 import { workspaceDemoEnabled } from "@/services/env/app";
-import { updateSupabaseSession } from "@/services/supabase/proxy";
 import { preferredContentType } from "@/utilities/http/accept";
 
 const AUTH_PATH_PREFIXES = ["/login", "/signup"] as const;
@@ -158,13 +157,6 @@ const handleSecurityHeaders = (request: NextRequest) => {
 	return applySecurityResponseHeaders(request, response, contentSecurityPolicy);
 };
 
-const handleSupabaseSession = async (request: NextRequest) => {
-	const { contentSecurityPolicy, headers } = createSecurityRequestHeaders(request);
-	const response = await updateSupabaseSession(request, headers);
-
-	return applySecurityResponseHeaders(request, response, contentSecurityPolicy);
-};
-
 export const createClerkMiddlewareOptions = () => {
 	getRequiredClerkSecretKey();
 
@@ -178,8 +170,6 @@ export const createClerkMiddlewareOptions = () => {
 const clerkSessionMiddleware = clerkMiddleware(async (auth, request) => {
 	if (needsWorkspaceSession(request.nextUrl.pathname)) {
 		await auth.protect();
-
-		return handleSupabaseSession(request);
 	}
 
 	return handleSecurityHeaders(request);

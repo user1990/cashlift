@@ -18,9 +18,8 @@ export const slugifyHelpFaqValue = (value: string) => value.toLocaleLowerCase().
 
 export const parseHelpFaqQuery = (value: string | string[] | undefined) => {
 	const query = Array.isArray(value) ? (value[0] ?? "") : (value ?? "");
-	const normalizedQuery = query.trim();
 
-	return normalizedQuery.length <= MAX_HELP_FAQ_QUERY_LENGTH ? normalizedQuery : "";
+	return query.slice(0, MAX_HELP_FAQ_QUERY_LENGTH);
 };
 
 export const getHelpFaqHref = (slug: string, query: string) => {

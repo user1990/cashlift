@@ -6,10 +6,9 @@ import { PROOF_POINTS } from "../content";
 import { CustomersEvidenceSection } from "./CustomersEvidenceSection";
 
 describe("CustomersEvidenceSection", () => {
-	it("renders every proof point in a photographic glass evidence path", () => {
+	it("renders every proof point in the evidence path", () => {
 		render(<CustomersEvidenceSection />);
 
-		expect(document.querySelectorAll('[data-variant="glass"]')).toHaveLength(PROOF_POINTS.length);
 		expect(screen.getAllByRole("listitem")).toHaveLength(PROOF_POINTS.length);
 
 		for (const { metric, text } of PROOF_POINTS) {

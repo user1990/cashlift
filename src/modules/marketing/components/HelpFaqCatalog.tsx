@@ -92,8 +92,8 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 	}, [isPaletteOpen]);
 
 	const updateQuery = (nextQuery: string) => {
-		const normalizedQuery = parseHelpFaqQuery(nextQuery);
-		setQuery(normalizedQuery);
+		const boundedQuery = parseHelpFaqQuery(nextQuery);
+		setQuery(boundedQuery);
 		setActiveResultIndex(0);
 
 		if (typeof window === "undefined") {
@@ -102,8 +102,8 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 
 		const nextUrl = new URL(window.location.href);
 
-		if (normalizedQuery) {
-			nextUrl.searchParams.set("q", normalizedQuery);
+		if (boundedQuery.trim()) {
+			nextUrl.searchParams.set("q", boundedQuery.trim());
 		} else {
 			nextUrl.searchParams.delete("q");
 		}

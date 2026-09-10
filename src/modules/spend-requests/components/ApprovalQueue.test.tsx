@@ -40,12 +40,23 @@ describe("ApprovalQueue", () => {
 
 	it("rolls back the optimistic request when the mutation fails", async () => {
 		const user = userEvent.setup({ delay: null });
-		mockSpendRequestDecisionFailure();
-		renderApprovalQueue();
+		const rejectDecision = mockSpendRequestDecisionFailure();
+		const queryClient = renderApprovalQueue();
 
 		await user.click(screen.getByRole("button", { name: "Reject Delta" }));
 
 		await waitFor(() => {
+			expect(getSpendRequestStatuses(queryClient)["request-client-onsite"]).toBe("rejected");
+		});
+
+		rejectDecision();
+
+		await waitFor(() => {
+			expect(getSpendRequestStatuses(queryClient)).toEqual({
+				"request-brandforge": "pending",
+				"request-client-onsite": "pending",
+				"request-webcam": "approved",
+			});
 			expect(screen.getByRole("button", { name: "Reject Delta" })).not.toBeDisabled();
 		});
 		expect(screen.getByText("Delta")).toBeInTheDocument();
@@ -75,11 +86,20 @@ function mockSpendRequestDecisionPending() {
 }
 
 function mockSpendRequestDecisionFailure() {
+	let rejectDecision!: () => void;
+	const decision = new Promise<void>((resolve) => {
+		rejectDecision = resolve;
+	});
+
 	server.use(
-		createDecideSpendRequestHandler(() =>
-			HttpResponse.json({ error: "Unable to update spend request." }, { status: 500 }),
-		),
+		createDecideSpendRequestHandler(async () => {
+			await decision;
+
+			return HttpResponse.json({ error: "Unable to update spend request." }, { status: 500 });
+		}),
 	);
+
+	return rejectDecision;
 }
 
 function renderApprovalQueue() {

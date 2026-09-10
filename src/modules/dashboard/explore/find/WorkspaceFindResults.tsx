@@ -1,4 +1,4 @@
-import { FindEmptyState, FindLoadingState, FindResultHeader, FindResultRow } from "./findUi";
+import { FindEmptyState, FindResultHeader, FindResultRow } from "./findUi";
 import type { useFindSession } from "./useFindSession";
 
 type WorkspaceFindSession = ReturnType<typeof useFindSession>;
@@ -10,8 +10,7 @@ type WorkspaceFindResultsProps = {
 
 export const WorkspaceFindResults = ({ itemsCount, session }: WorkspaceFindResultsProps) => {
 	const emptyCatalog = itemsCount === 0;
-	const noMatches = !emptyCatalog && session.results.length === 0 && !session.pending;
-	const showSkeleton = session.pending && session.results.length === 0;
+	const noMatches = !emptyCatalog && session.results.length === 0;
 
 	if (emptyCatalog) {
 		return <FindEmptyState title="No workspace items to search yet." />;
@@ -36,9 +35,7 @@ export const WorkspaceFindResults = ({ itemsCount, session }: WorkspaceFindResul
 		<>
 			<div className="mb-3 flex flex-wrap items-center justify-between gap-3 px-1">
 				<p aria-live="polite" className="text-muted-foreground text-s">
-					{session.pending
-						? "Updating…"
-						: `${session.results.length} ${session.results.length === 1 ? "result" : "results"}`}
+					{`${session.results.length} ${session.results.length === 1 ? "result" : "results"}`}
 				</p>
 
 				<button
@@ -50,10 +47,8 @@ export const WorkspaceFindResults = ({ itemsCount, session }: WorkspaceFindResul
 				</button>
 			</div>
 
-			<FindLoadingState columns glass visible={showSkeleton} />
-
 			{session.results.length > 0 && (
-				<div aria-busy={session.pending || undefined} className="min-w-0" id="find-results">
+				<div className="min-w-0" id="find-results">
 					<FindResultHeader glass />
 
 					<ul className="divide-y divide-white/10">
