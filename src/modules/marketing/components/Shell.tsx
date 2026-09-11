@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { FOOTER_CTA } from "../site";
 import { CompactFooter } from "./CompactFooter";
 import { FooterAccordion } from "./FooterAccordion";
 import { FooterCopyright } from "./FooterCopyright";
@@ -33,19 +34,17 @@ const MarketingFooter = () => (
 
 		<div className="relative mx-auto max-w-295 px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
 			<section className="mx-auto max-w-xl text-center">
-				<p className="font-mono text-primary text-xs uppercase tracking-[0.18em]">Cash operations, made visible</p>
+				<p className="font-mono text-primary text-xs uppercase tracking-[0.18em]">{FOOTER_CTA.tagline}</p>
 
-				<h2 className="mt-4 text-4xl+ text-shell-foreground tracking-normal sm:text-5xl+">See cash clearly.</h2>
+				<h2 className="mt-4 text-4xl+ text-shell-foreground tracking-normal sm:text-5xl+">{FOOTER_CTA.title}</h2>
 
-				<p className="mx-auto mt-3 max-w-sm text-m text-shell-muted leading-6">
-					A calmer way to move through the system.
-				</p>
+				<p className="mx-auto mt-3 max-w-sm text-m text-shell-muted leading-6">{FOOTER_CTA.subtitle}</p>
 
 				<Link
-					href="/demo"
+					href={FOOTER_CTA.ctaHref}
 					className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 font-semibold text-m text-primary-foreground shadow-primary-glow transition-[background-color,box-shadow] duration-150 hover:bg-primary-hover hover:shadow-primary-glow focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 motion-reduce:transition-none"
 				>
-					Book a walkthrough
+					{FOOTER_CTA.ctaLabel}
 					<ArrowUpRight aria-hidden className="size-4" />
 				</Link>
 			</section>

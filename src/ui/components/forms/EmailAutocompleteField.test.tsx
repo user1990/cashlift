@@ -19,6 +19,11 @@ describe("EmailAutocompleteField", () => {
 
 		expect(screen.getByRole("option", { name: "ma@gmail.com" })).toBeInTheDocument();
 
+		fireEvent.keyDown(input, { isComposing: true, key: "Enter" });
+
+		expect(input).toHaveValue("ma");
+		expect(screen.getByRole("option", { name: "ma@gmail.com" })).toBeInTheDocument();
+
 		fireEvent.keyDown(input, { key: "ArrowDown" });
 		fireEvent.keyDown(input, { key: "Enter" });
 

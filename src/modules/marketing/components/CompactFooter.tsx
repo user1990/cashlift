@@ -62,6 +62,7 @@ export const CompactFooter = () => (
 const CompactFooterLink = ({ href, label }: { href: string; label: string }) => (
 	<Link
 		href={href}
+		data-no-press-scale="true"
 		className="group inline-flex min-h-8 items-center justify-center gap-1 text-m text-shell-foreground/80 outline-none transition-[color] duration-150 hover:text-primary focus-visible:text-primary motion-reduce:transition-none"
 	>
 		{label}

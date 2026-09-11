@@ -44,7 +44,7 @@ For an existing PR, record its `number`, `url`, `baseRefName`, `baseRefOid`,
 `headRefName`, and `headRefOid`:
 
 ```bash
-gh pr view <number> --json number,url,baseRefName,baseRefOid,headRefName,headRefOid
+pr-cockpit owner/repo#N --json number,url,baseRefName,baseRefOid,headRefName,headRefOid
 ```
 
 Set `BASE_SHA` and `HEAD_SHA` to those OIDs, fetch missing objects, and review
@@ -110,7 +110,7 @@ characters or fewer, and run checks before pushing:
 
 ```bash
 git push -u origin HEAD
-gh pr view --json number,title,body,url,isDraft,headRefOid,mergeable,statusCheckRollup
+pr-cockpit owner/repo#N --json number,title,body,url,isDraft,headRefOid,mergeable,statusCheckRollup
 ```
 
 Before remote mutation, read current state and avoid duplicates. In Ship, create
@@ -137,12 +137,7 @@ has passed required checks and has no valid unresolved feedback:
    verified, using the actual reviewer login, thread URL, and commit URL. Use:
    `@<login> Fixed in [<sha>](<commit-url>): <resolution>. Verification: <check>.`
 
-```bash
-PR_NUMBER=$(gh pr view --json number --jq '.number')
-gh api "repos/{owner}/{repo}/pulls/$PR_NUMBER/reviews"
-gh api "repos/{owner}/{repo}/pulls/$PR_NUMBER/comments"
-gh api "repos/{owner}/{repo}/issues/$PR_NUMBER/comments"
-```
+Use `pr-cockpit owner/repo#N` to read the PR feed, `pr-cockpit listen owner/repo#N` when waiting for CI, reviews, comments, or a pushed revision, and `pr-cockpit resolve owner/repo#N HANDLE` for settled review threads.
 
 Use the GitHub connector or `gh api graphql` for `resolveReviewThread`. If CLI
 authentication fails, use one connector fallback; otherwise mark the surface

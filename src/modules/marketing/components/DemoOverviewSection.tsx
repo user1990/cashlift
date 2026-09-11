@@ -1,25 +1,22 @@
 import { CirclePlay, ShieldCheck } from "lucide-react";
+import { DEMO_PAGE } from "../site";
 import { ActionLink } from "./ActionLink";
 import { Hero } from "./Hero";
 
 export const DemoOverviewSection = () => (
 	<section className="flex min-w-0 flex-col justify-center">
-		<Hero
-			description="We’ll use the Studio Nova workspace to turn approval, collection, and renewal questions into a ranked action plan."
-			label="See the cash leak. Understand the impact. Know what to do next."
-			variant="page-title"
-		/>
+		<Hero description={DEMO_PAGE.description} label={DEMO_PAGE.label} variant="page-title" />
 
 		<div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
-			<ActionLink href="/demo/workspace" prefetch={false} className="w-fit">
+			<ActionLink href={DEMO_PAGE.ctaDemoHref} prefetch={false} className="w-fit">
 				<CirclePlay aria-hidden className="size-5" />
 
-				<span>Open live demo</span>
+				<span>{DEMO_PAGE.ctaDemoLabel}</span>
 			</ActionLink>
 
 			<p className="flex items-center gap-2 text-m text-shell-muted">
 				<ShieldCheck aria-hidden className="size-5 shrink-0" />
-				Realistic mock data. No setup.
+				{DEMO_PAGE.reassurance}
 			</p>
 		</div>
 	</section>

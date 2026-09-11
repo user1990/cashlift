@@ -39,6 +39,7 @@ export const FooterAccordion = ({ groups = FOOTER_LINKS }: FooterAccordionProps)
 								id={buttonId}
 								aria-controls={panelId}
 								aria-expanded={expanded}
+								data-no-press-scale="true"
 								type="button"
 								onClick={() => setOpenLabel(expanded ? null : label)}
 								className="group flex min-h-14 w-full cursor-pointer items-center justify-between gap-4 px-4 py-4 text-left text-shell-foreground outline-none transition-[background-color,color] duration-150 hover:bg-primary/5 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/25 motion-reduce:transition-none"
@@ -52,7 +53,7 @@ export const FooterAccordion = ({ groups = FOOTER_LINKS }: FooterAccordionProps)
 								<ChevronDown
 									aria-hidden
 									className={cn(
-										"size-4 shrink-0 text-primary transition-[color,transform] duration-200 ease-out motion-reduce:transition-none",
+										"size-4 shrink-0 text-primary transition-[color,rotate] duration-200 ease-out motion-reduce:transition-none",
 										expanded && "rotate-180",
 									)}
 								/>
@@ -113,6 +114,7 @@ export const FooterAccordion = ({ groups = FOOTER_LINKS }: FooterAccordionProps)
 const FooterLink = ({ href, label }: { href: string; label: string }) => (
 	<Link
 		href={href}
+		data-no-press-scale="true"
 		className="group inline-flex min-h-11 items-center gap-1 text-m text-shell-foreground/80 outline-none transition-[color] duration-150 hover:text-primary focus-visible:text-primary motion-reduce:transition-none lg:min-h-8"
 	>
 		{label}

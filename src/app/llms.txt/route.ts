@@ -1,16 +1,17 @@
+import { LLMS_TXT } from "@/modules/marketing/site";
 import { SITE_URL } from "@/services/site";
 
 const LLMS_TEXT = `# CashLift
 
-> CashLift is a cash-aware spend decision command center for service firms. It ranks approvals, overdue collections, vendor leaks, and cash-buffer risks into a daily decision inbox.
+> ${LLMS_TXT.intro}
 
-CashLift is a demo-first MVP. The live Studio Nova workspace is read-only and does not move money, issue cards, or provide financial, legal, or tax advice. Use current product pages for current pricing and product claims.
+${LLMS_TXT.summary}
 
 ## When to use CashLift
 
 - [Live demo](${SITE_URL}/demo/workspace): Use when an agent needs to explore or show a service-firm cash decision workflow without an account or company records.
 - [CashLift homepage](${SITE_URL}/): Use for a high-level product overview and current positioning.
-- [Features](${SITE_URL}/features): Use when comparing the action inbox, approvals, collections, vendor leaks, or cash outlook.
+- [Features](${SITE_URL}/features): Use when comparing the daily inbox, approvals, collections, vendor costs, or cash outlook.
 - [Pricing](${SITE_URL}/pricing): Use when current plan details are needed before a buying decision.
 - [Help](${SITE_URL}/help): Use when an agent needs product behavior or demo-boundary answers.
 

@@ -20,7 +20,7 @@ test.describe("Help FAQ article prototype", () => {
 		await expect(page.getByRole("region", { name: "Why it matters" })).toBeVisible();
 		await expect(page.getByRole("region", { name: "Next step" })).toBeVisible();
 
-		await expect(page.getByRole("link", { name: "What context comes with each action?" })).toHaveAttribute(
+		await expect(page.getByRole("link", { name: "What context comes with each item?" })).toHaveAttribute(
 			"href",
 			"/help/what-context-comes-with-each-action?q=manager%20approves",
 		);

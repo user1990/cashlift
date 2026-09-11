@@ -82,6 +82,7 @@ describe("DashboardCockpit", () => {
 					.getAllByRole("link", { name: /aurora health/i })
 					.map((link) => link.getAttribute("href")),
 			).toEqual(["/dashboard/invoices", "/dashboard/invoices"]);
+			expect(within(dialog).getByRole("listbox")).toBeVisible();
 		});
 
 		await user.keyboard("{Escape}");
@@ -109,13 +110,14 @@ describe("DashboardCockpit", () => {
 
 		await waitFor(() => {
 			expect(within(openDialog).queryByRole("link", { name: /aurora health/i })).not.toBeInTheDocument();
+			expect(within(openDialog).queryByRole("listbox")).not.toBeInTheDocument();
 			expect(within(openDialog).getByRole("button", { name: "Reset search" })).toBeVisible();
 		});
 
 		await user.click(within(openDialog).getByRole("button", { name: "Reset search" }));
 
 		await waitFor(() => {
-			expect(within(openDialog).getAllByRole("option").length).toBeGreaterThan(0);
+			expect(within(openDialog).queryByRole("button", { name: "Reset search" })).not.toBeInTheDocument();
 		});
 
 		await user.keyboard("{Escape}");

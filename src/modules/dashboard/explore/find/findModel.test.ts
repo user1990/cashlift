@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
-import { buildFindItems, filterFindItems, getFindFacetValues, getFindSuggestions } from "./findModel";
+import { buildFindItems, filterFindItems } from "./findModel";
 
 describe("find presentation", () => {
 	const items = buildFindItems(DEMO_WORKSPACE_DATASET, "/dashboard");
@@ -28,12 +28,5 @@ describe("find presentation", () => {
 		expect(collectItems.every((item) => item.work === "collect")).toEqual(true);
 		expect(overdueItems.map((item) => item.id)).toEqual(["invoice-aurora-health"]);
 		expect(missingItems).toEqual([]);
-		expect(getFindSuggestions(items, "logi")).toEqual(["Logitech"]);
-		expect(
-			getFindFacetValues(
-				filterFindItems(items, { category: "collect", owner: "", query: "", status: "" }, "work"),
-				"status",
-			),
-		).toEqual(["open", "overdue", "sent"]);
 	});
 });

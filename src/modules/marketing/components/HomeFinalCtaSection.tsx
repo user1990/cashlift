@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { HOME_FINAL_CTA } from "../site";
 import { ActionLink } from "./ActionLink";
 
 export const HomeFinalCtaSection = () => (
@@ -16,13 +17,13 @@ export const HomeFinalCtaSection = () => (
 
 		<div className="relative mx-auto flex max-w-295 flex-col items-center px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-24">
 			<h2 id="home-final-cta-title" className="text-5xl+ text-primary tracking-normal sm:text-7xl+">
-				Your cash decisions
+				{HOME_FINAL_CTA.title}
 			</h2>
 
-			<p className="mt-4 text-l text-shell-muted leading-8">Ready to see your top actions for today?</p>
+			<p className="mt-4 text-l text-shell-muted leading-8">{HOME_FINAL_CTA.subtitle}</p>
 
-			<ActionLink href="/demo/workspace" prefetch={false} className="mt-8">
-				Open live demo
+			<ActionLink href={HOME_FINAL_CTA.ctaHref} prefetch={false} className="mt-8">
+				{HOME_FINAL_CTA.ctaLabel}
 				<ArrowRight aria-hidden className="size-4" />
 			</ActionLink>
 		</div>

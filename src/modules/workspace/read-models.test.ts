@@ -31,4 +31,15 @@ describe("workspace read models", () => {
 		expect(dataset.teamMembers).toEqual([]);
 		expect(dataset.profile).toBe(financialDatasetFixture.profile);
 	});
+
+	it("keeps company members on the settings scope with the company profile", () => {
+		const dataset = reduceDatasetForScope(financialDatasetFixture, "settings");
+
+		expect(dataset.profile).toBe(financialDatasetFixture.profile);
+		expect(dataset.teamMembers).toEqual(financialDatasetFixture.teamMembers);
+		expect(dataset.invoices).toEqual([]);
+		expect(dataset.spendRequests).toEqual([]);
+		expect(dataset.subscriptions).toEqual([]);
+		expect(dataset.vendorBills).toEqual([]);
+	});
 });

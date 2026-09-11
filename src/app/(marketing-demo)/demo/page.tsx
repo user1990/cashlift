@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { DemoPage } from "@/modules/marketing/components/DemoPage";
+import { DEMO_PAGE } from "@/modules/marketing/site";
 
 export const metadata: Metadata = {
 	title: "Demo — CashLift",
-	description: "Run a CashLift cash leak audit demo for service firms and daily cash ops workflows.",
+	description: DEMO_PAGE.metadataDescription,
 };
 
 export default function Demo() {

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { type PointerEvent, useEffect, useRef } from "react";
+import { HOME_HERO } from "../site";
 
 const TILT_FRAME_DURATION_MS = 1;
 const MAX_ROTATE_X_DEGREES = 2.5;
@@ -137,7 +138,7 @@ export const HomeHeroImage = () => {
 
 				<div className="relative overflow-hidden rounded-xl border border-primary/20 bg-shell shadow-panel">
 					<Image
-						alt="Studio Nova workspace with ranked cash actions, a 13-week cash outlook, and team budgets"
+						alt={HOME_HERO.heroImageAlt}
 						src="/marketing/studio-nova-workspace-glass.webp"
 						decoding="sync"
 						fetchPriority="high"

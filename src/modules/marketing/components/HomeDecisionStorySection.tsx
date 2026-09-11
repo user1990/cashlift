@@ -1,3 +1,4 @@
+import { HOME_DECISION_STORY } from "../site";
 import type { HomeDecisionStoryAction } from "../types";
 import { HomeDecisionStoryChapter } from "./HomeDecisionStoryChapter";
 
@@ -33,7 +34,7 @@ export const HomeDecisionStorySection = ({ actions }: HomeDecisionStorySectionPr
 	<section aria-labelledby={DECISION_STORY_TITLE_ID} className="isolate border-shell-border border-b bg-shell">
 		<header className="mx-auto max-w-4xl px-4 pt-14 pb-8 text-center sm:px-6 lg:px-8 lg:pt-16 lg:pb-10">
 			<h2 id={DECISION_STORY_TITLE_ID} className="text-4xl+ text-primary tracking-normal sm:text-6xl+">
-				Three decisions surfaced for today.
+				{HOME_DECISION_STORY.title}
 			</h2>
 		</header>
 
