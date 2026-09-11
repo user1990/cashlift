@@ -45,7 +45,7 @@ export const createDecideSpendRequestHandler = (
 	resolve: SpendRequestDecisionResolver = defaultSpendRequestDecisionResolver,
 ) =>
 	http.patch<SpendRequestDecisionParams, SpendRequestDecisionBody, SpendRequestDecisionResponse>(
-		"/api/workspace/spend-requests/:id",
+		"/api/v1/workspace/spend-requests/:id",
 		resolve,
 	);
 

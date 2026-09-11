@@ -21,8 +21,17 @@ ${AGENT_MARKDOWN.developersIntro}
 ## Resources
 
 - [OpenAPI specification](${SITE_URL}/openapi.json): Machine-readable workspace route documentation.
+- [MCP discovery manifest](${SITE_URL}/.well-known/mcp): Discover the read-only Streamable HTTP MCP endpoint and its tool.
+- [MCP endpoint](${SITE_URL}/api/mcp): Connect with an MCP client using the current protocol or legacy handshake.
 - [Agent guidance](${SITE_URL}/llms.txt): When to use CashLift and links to the best-fit product resources.
 - [CashLift homepage](${SITE_URL}/): Product overview and current positioning.
+`,
+	"/about": `# About CashLift
+
+CashLift helps service companies see what money-related work needs attention today. It keeps the reason, cash impact, owner, and next step together for overdue invoices, spend requests, vendor costs, budgets, and cash warnings.
+
+- [About CashLift](${SITE_URL}/about): Read the product boundaries and public-demo model.
+- [Contact CashLift](${SITE_URL}/contact): Request a walkthrough or ask a product question.
 `,
 	"/features": `# CashLift features
 

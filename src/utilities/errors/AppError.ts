@@ -1,4 +1,5 @@
 export type AppErrorCode =
+	| "api_rate_limited"
 	| "api_request_failed"
 	| "supabase_empty_row"
 	| "supabase_query_failed"

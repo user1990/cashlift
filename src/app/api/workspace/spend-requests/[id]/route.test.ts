@@ -69,6 +69,9 @@ describe("PATCH /api/workspace/spend-requests/[id]", () => {
 
 		expect(response.status).toEqual(status);
 		expect(response.headers.get("Cache-Control")).toEqual("no-store");
+		expect(response.headers.get("Link")).toContain(
+			"https://cashlift.vercel.app/api/v1/workspace/spend-requests/request-brandforge",
+		);
 		const body = await response.json();
 		expect(body.error).toBe(result.message);
 

@@ -94,7 +94,7 @@ describe("proxy security headers", () => {
 		expect(response.headers.get("X-Frame-Options")).toBe("DENY");
 	});
 
-	it("passes JSON API requests through to the workspace auth boundary", async () => {
+	it("passes JSON API requests through to their JSON route auth boundary", async () => {
 		const request = new NextRequest("https://cashlift.test/api/workspace/dataset", {
 			headers: { Accept: "application/json" },
 		});
@@ -102,6 +102,7 @@ describe("proxy security headers", () => {
 		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
 
 		expect(response.status).not.toBe(406);
+		expect(needsClerkMiddleware("/api/workspace/dataset", true)).toBe(true);
 	});
 
 	it("returns Markdown recovery guidance for an unknown path", async () => {
@@ -127,7 +128,12 @@ describe("proxy security headers", () => {
 	);
 
 	it("keeps prefetch and Clerk asset requests covered by the proxy matcher", () => {
-		expect(config.matcher).toEqual(["/__clerk/(.*)", "/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
+		expect(config.matcher).toEqual([
+			"/__clerk/(.*)",
+			"/api/(.*)",
+			"/.well-known/mcp",
+			"/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)",
+		]);
 	});
 
 	it("uses app auth URLs for Clerk middleware redirects", () => {
@@ -138,14 +144,14 @@ describe("proxy security headers", () => {
 		expect(createClerkMiddlewareOptions()).not.toHaveProperty("secretKey");
 	});
 
-	it.each(["/dashboard", "/dashboard/spend", "/api/workspace", "/api/workspace/decisions"])(
+	it.each(["/dashboard", "/dashboard/spend"])(
 		"routes Clerk middleware for production workspace path %s",
 		(pathname) => {
 			expect(needsClerkMiddleware(pathname, true)).toEqual(true);
 		},
 	);
 
-	it.each(["/dashboard", "/dashboard/spend", "/api/workspace", "/api/workspace/decisions"])(
+	it.each(["/dashboard", "/dashboard/spend"])(
 		"keeps demo workspace path %s on security-header middleware",
 		(pathname) => {
 			expect(needsClerkMiddleware(pathname, false)).toEqual(false);
@@ -155,6 +161,13 @@ describe("proxy security headers", () => {
 	it.each(["/login", "/signup"])("routes Clerk middleware for production auth path %s", (pathname) => {
 		expect(needsClerkMiddleware(pathname, true)).toEqual(true);
 	});
+
+	it.each(["/api/v1/workspace/dataset", "/api/mcp", "/.well-known/mcp"])(
+		"routes authenticated API context path %s through Clerk middleware",
+		(pathname) => {
+			expect(needsClerkMiddleware(pathname, true)).toEqual(true);
+		},
+	);
 
 	it("routes Clerk proxy assets through Clerk middleware in production", () => {
 		expect(needsClerkMiddleware("/__clerk/clerk.browser.js", true)).toEqual(true);
@@ -167,12 +180,9 @@ describe("proxy security headers", () => {
 		},
 	);
 
-	it.each(["/dashboard", "/dashboard/spend", "/api/workspace", "/api/workspace/decisions"])(
-		"requires workspace session for %s",
-		(pathname) => {
-			expect(needsWorkspaceSession(pathname)).toEqual(true);
-		},
-	);
+	it.each(["/dashboard", "/dashboard/spend"])("requires workspace session for %s", (pathname) => {
+		expect(needsWorkspaceSession(pathname)).toEqual(true);
+	});
 
 	it.each(["/login", "/demo/workspace", "/demo/workspace/approvals", "/api/workspaces"])(
 		"does not treat %s as a workspace session path",

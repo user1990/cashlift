@@ -326,6 +326,7 @@ export const FOOTER_LINKS_COPY = [
 		label: "Company",
 		links: [
 			{ href: "/customers", label: "Customers" },
+			{ href: "/about", label: "About" },
 			{ href: "/developers", label: "Developers" },
 			{ href: "/help", label: "Help" },
 			{ href: "/contact", label: "Contact" },
@@ -543,7 +544,7 @@ export const AGENT_MARKDOWN = {
 	demoIntro:
 		"The CashLift demo walks service firms through the read-only Studio Nova sample inbox for collections, approvals, vendor costs, and cash warnings. You can explore it without creating an account or entering company records.",
 	developersIntro:
-		"CashLift publishes a machine-readable OpenAPI description for workspace routes and concise authentication guidance. Production workspace requests require an authenticated Clerk session. The public demo uses read-only sample data. CashLift does not currently publish webhooks or an MCP server.",
+		"CashLift publishes a versioned OpenAPI description, structured JSON errors, and a read-only MCP Streamable HTTP endpoint for workspace routes. Production workspace requests require an authenticated Clerk session. The public demo uses read-only sample data; the MCP tool never mutates financial records.",
 	featuresIntro:
 		"CashLift gives service firms one ranked inbox for approvals, overdue invoices, vendor costs, and cash warnings. It shows budget remaining, cash after approval, invoice timing, collection ownership, vendor renewal risk, and a 13-week cash outlook.",
 	helpIntro:

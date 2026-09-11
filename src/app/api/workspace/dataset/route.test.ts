@@ -77,7 +77,10 @@ describe("GET /api/workspace/dataset", () => {
 		const response = await GET(new Request("https://example.com/api/workspace/dataset"));
 
 		expect(response.status).toEqual(status);
-		await expect(response.json()).resolves.toEqual(body);
+		await expect(response.json()).resolves.toMatchObject(body);
+		expect(response.headers.get("Content-Type")).toContain("application/problem+json");
+		expect(response.headers.get("RateLimit-Policy")).toBe("60;w=60");
+		expect(response.headers.get("RateLimit-Remaining")).toBe("59");
 	});
 
 	it("returns 200 with dataset on success", async () => {
@@ -145,9 +148,11 @@ describe("GET /api/workspace/dataset", () => {
 async function expectApiRequestFailure(response: Response, error: string) {
 	expect(response.status).toEqual(400);
 	expect(response.headers.get("Cache-Control")).toEqual("no-store");
-	await expect(response.json()).resolves.toEqual({
+	await expect(response.json()).resolves.toMatchObject({
 		code: "api_request_failed",
 		error,
 	});
+	expect(response.headers.get("Content-Type")).toContain("application/problem+json");
+	expect(response.headers.get("RateLimit-Policy")).toBe("60;w=60");
 	expect(mocks.resolveWorkspaceDataset).not.toHaveBeenCalled();
 }

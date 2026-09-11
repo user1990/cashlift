@@ -20,7 +20,7 @@ const fetchWorkspaceDataset = async (scope: WorkspaceDatasetScope, dateRange?: W
 		searchParams.set("startDate", dateRange.startDate);
 	}
 
-	const response = await fetch(`/api/workspace/dataset?${searchParams.toString()}`);
+	const response = await fetch(`/api/v1/workspace/dataset?${searchParams.toString()}`);
 
 	if (!response.ok) {
 		const body = WORKSPACE_API_ERROR_SCHEMA.safeParse(await response.json().catch(() => null));
