@@ -15,9 +15,13 @@ test("keeps the static tour public and production workspace routes protected", a
 	});
 
 	expect(apiResponse.ok()).toBe(false);
-	expect([307, 401, 404, 503]).toContain(apiResponse.status());
+	expect([307, 401]).toContain(apiResponse.status());
 
 	if (apiResponse.status() === 307) {
 		expect(apiResponse.headers().location).toContain("/login");
+	}
+
+	if (apiResponse.status() === 401) {
+		expect(apiResponse.headers()["content-type"]).toContain("application/problem+json");
 	}
 });
