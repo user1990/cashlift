@@ -34,19 +34,56 @@ const WORKSPACE_API_HEADERS = {
 	"Cache-Control": "no-store",
 	"RateLimit-Limit": "60",
 	"RateLimit-Policy": "60;w=60",
-	"RateLimit-Remaining": "59",
-	"RateLimit-Reset": "60",
 	"X-API-Version": "v1",
 } as const;
+
+const RATE_LIMIT = 60;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const rateLimitBuckets = new Map<string, { count: number; resetAt: number }>();
+
+type RateLimitState = {
+	allowed: boolean;
+	remaining: number;
+	resetInSeconds: number;
+};
 
 export const workspaceApiJson = <Body>(
 	body: Body,
 	{ deprecated = false, request, successorPath, ...init }: ApiResponseInit,
-) =>
-	NextResponse.json<Body>(body, {
+) => {
+	const rateLimit = consumeRateLimit(request);
+
+	if (!rateLimit.allowed) {
+		return NextResponse.json<ApiErrorBody>(
+			{
+				code: "api_rate_limited",
+				detail: "CashLift API rate limit exceeded.",
+				error: "CashLift API rate limit exceeded.",
+				message: "CashLift API rate limit exceeded.",
+				resolution: getErrorResolution("api_rate_limited"),
+				status: 429,
+				title: getErrorTitle("api_rate_limited"),
+				type: `${SITE_URL}/problems/api_rate_limited`,
+			},
+			{
+				status: 429,
+				headers: createApiHeaders(
+					request,
+					{ "Content-Type": "application/problem+json; charset=utf-8" },
+					false,
+					429,
+					undefined,
+					rateLimit,
+				),
+			},
+		);
+	}
+
+	return NextResponse.json<Body>(body, {
 		...init,
-		headers: createApiHeaders(request, init.headers, deprecated, init.status, successorPath),
+		headers: createApiHeaders(request, init.headers, deprecated, init.status, successorPath, rateLimit),
 	});
+};
 
 export const apiError = ({
 	code,
@@ -84,8 +121,12 @@ const createApiHeaders = (
 	deprecated: boolean,
 	status: number | undefined,
 	successorPath: string | undefined,
+	rateLimit: RateLimitState,
 ) => {
 	const headers = new Headers(WORKSPACE_API_HEADERS);
+	headers.set("RateLimit-Limit", String(RATE_LIMIT));
+	headers.set("RateLimit-Remaining", String(rateLimit.remaining));
+	headers.set("RateLimit-Reset", String(rateLimit.resetInSeconds));
 
 	if (initHeaders) {
 		new Headers(initHeaders).forEach((value, key) => {
@@ -99,7 +140,7 @@ const createApiHeaders = (
 	}
 
 	if (status === 429) {
-		headers.set("Retry-After", "60");
+		headers.set("Retry-After", String(rateLimit.resetInSeconds));
 	}
 
 	if (request.headers.get("Accept")) {
@@ -107,6 +148,43 @@ const createApiHeaders = (
 	}
 
 	return headers;
+};
+
+const consumeRateLimit = (request: Request): RateLimitState => {
+	const now = Date.now();
+	const key =
+		request.headers.get("x-real-ip")?.trim() ||
+		request.headers.get("x-forwarded-for")?.split(",", 1)[0]?.trim() ||
+		"anonymous";
+	const existing = rateLimitBuckets.get(key);
+	const bucket = existing && existing.resetAt > now ? existing : { count: 0, resetAt: now + RATE_LIMIT_WINDOW_MS };
+
+	if (rateLimitBuckets.size > 10_000) {
+		for (const [bucketKey, bucketValue] of rateLimitBuckets) {
+			if (bucketValue.resetAt <= now) {
+				rateLimitBuckets.delete(bucketKey);
+			}
+		}
+	}
+
+	if (bucket.count >= RATE_LIMIT) {
+		rateLimitBuckets.set(key, bucket);
+
+		return {
+			allowed: false,
+			remaining: 0,
+			resetInSeconds: Math.max(1, Math.ceil((bucket.resetAt - now) / 1000)),
+		};
+	}
+
+	bucket.count += 1;
+	rateLimitBuckets.set(key, bucket);
+
+	return {
+		allowed: true,
+		remaining: RATE_LIMIT - bucket.count,
+		resetInSeconds: Math.max(1, Math.ceil((bucket.resetAt - now) / 1000)),
+	};
 };
 
 const getErrorTitle = (code: AppErrorCode) => {

@@ -34,5 +34,11 @@ describe("GET /openapi.json", () => {
 		expect(spendRequest.operationId).toBe("updateSpendRequestDecision");
 		expect(document.paths["/api/workspace/dataset"].get.deprecated).toBe(true);
 		expect(document.components.schemas.ApiError.required).toContain("resolution");
+		expect(document.components.schemas.FinancialDataset.properties.cashActions.items.$ref).toBe(
+			"#/components/schemas/CashAction",
+		);
+		expect(document.components.schemas.FinancialDataset.properties.vendorBills.items.$ref).toBe(
+			"#/components/schemas/VendorBill",
+		);
 	});
 });

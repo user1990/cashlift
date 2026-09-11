@@ -102,7 +102,7 @@ describe("proxy security headers", () => {
 		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
 
 		expect(response.status).not.toBe(406);
-		expect(needsClerkMiddleware("/api/workspace/dataset", true)).toBe(false);
+		expect(needsClerkMiddleware("/api/workspace/dataset", true)).toBe(true);
 	});
 
 	it("returns Markdown recovery guidance for an unknown path", async () => {
@@ -128,7 +128,12 @@ describe("proxy security headers", () => {
 	);
 
 	it("keeps prefetch and Clerk asset requests covered by the proxy matcher", () => {
-		expect(config.matcher).toEqual(["/__clerk/(.*)", "/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"]);
+		expect(config.matcher).toEqual([
+			"/__clerk/(.*)",
+			"/api/(.*)",
+			"/.well-known/mcp",
+			"/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)",
+		]);
 	});
 
 	it("uses app auth URLs for Clerk middleware redirects", () => {
@@ -156,6 +161,13 @@ describe("proxy security headers", () => {
 	it.each(["/login", "/signup"])("routes Clerk middleware for production auth path %s", (pathname) => {
 		expect(needsClerkMiddleware(pathname, true)).toEqual(true);
 	});
+
+	it.each(["/api/v1/workspace/dataset", "/api/mcp", "/.well-known/mcp"])(
+		"routes authenticated API context path %s through Clerk middleware",
+		(pathname) => {
+			expect(needsClerkMiddleware(pathname, true)).toEqual(true);
+		},
+	);
 
 	it("routes Clerk proxy assets through Clerk middleware in production", () => {
 		expect(needsClerkMiddleware("/__clerk/clerk.browser.js", true)).toEqual(true);

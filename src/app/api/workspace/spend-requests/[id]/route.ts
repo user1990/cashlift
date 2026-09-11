@@ -6,8 +6,15 @@ type RouteContext = {
 	}>;
 };
 
-export const PATCH = (request: Request, context: RouteContext) =>
-	patchSpendRequest(request, context, {
-		deprecated: true,
-		successorPath: "/api/v1/workspace/spend-requests/{id}",
-	});
+export const PATCH = async (request: Request, context: RouteContext) => {
+	const params = await context.params;
+
+	return patchSpendRequest(
+		request,
+		{ params: Promise.resolve(params) },
+		{
+			deprecated: true,
+			successorPath: `/api/v1/workspace/spend-requests/${encodeURIComponent(params.id)}`,
+		},
+	);
+};
