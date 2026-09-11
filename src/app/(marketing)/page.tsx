@@ -24,6 +24,20 @@ const HOME_STRUCTURED_DATA = {
 	url: SITE_URL,
 } as const;
 
+const ORGANIZATION_STRUCTURED_DATA = {
+	"@context": "https://schema.org",
+	"@type": "Organization",
+	contactPoint: {
+		"@type": "ContactPoint",
+		contactType: "sales and support",
+		url: `${SITE_URL}/contact`,
+	},
+	description: SITE_META.structuredDataDescription,
+	logo: `${SITE_URL}/brand/cashlift-icon.svg`,
+	name: "CashLift",
+	url: SITE_URL,
+} as const;
+
 export default async function Home() {
 	const nonce = (await headers()).get("x-nonce") ?? undefined;
 
@@ -33,6 +47,10 @@ export default async function Home() {
 
 			<script nonce={nonce} type="application/ld+json">
 				{JSON.stringify(HOME_STRUCTURED_DATA)}
+			</script>
+
+			<script nonce={nonce} type="application/ld+json">
+				{JSON.stringify(ORGANIZATION_STRUCTURED_DATA)}
 			</script>
 		</>
 	);

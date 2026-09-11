@@ -3,7 +3,8 @@ import { DeveloperResourcesPage } from "@/modules/marketing/components/Developer
 
 export const metadata: Metadata = {
 	title: "Developers — CashLift",
-	description: "CashLift API documentation, authentication guidance, OpenAPI specification, and agent resources.",
+	description:
+		"CashLift API documentation, versioning, authentication guidance, OpenAPI specification, MCP endpoint, and agent resources.",
 };
 
 export default function Developers() {

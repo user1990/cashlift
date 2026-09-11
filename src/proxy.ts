@@ -7,8 +7,9 @@ import { workspaceDemoEnabled } from "@/services/env/app";
 import { preferredContentType } from "@/utilities/http/accept";
 
 const AUTH_PATH_PREFIXES = ["/login", "/signup"] as const;
+const CLERK_CONTEXT_PATH_PREFIXES = ["/api", "/.well-known/mcp"] as const;
 const CLERK_ASSET_PATH_PREFIX = "/__clerk";
-const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard", "/api/workspace"] as const;
+const WORKSPACE_SESSION_PATH_PREFIXES = ["/dashboard"] as const;
 const NON_DOCUMENT_PATH_PREFIXES = ["/api", "/dashboard", "/login", "/signup", "/__clerk", "/_next"] as const;
 const NON_DOCUMENT_PATHS = ["/llms.txt", "/openapi.json", "/robots.txt", "/sitemap.xml"] as const;
 const NEXT_IMAGE_FILL_STYLE_HASH = "'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='";
@@ -184,6 +185,7 @@ export const needsWorkspaceSession = (pathname: string) =>
 export const needsClerkMiddleware = (pathname: string, workspaceAuthEnabled = !workspaceDemoEnabled()) =>
 	workspaceAuthEnabled &&
 	(matchesPathPrefix(pathname, CLERK_ASSET_PATH_PREFIX) ||
+		CLERK_CONTEXT_PATH_PREFIXES.some((prefix) => matchesPathPrefix(pathname, prefix)) ||
 		AUTH_PATH_PREFIXES.some((prefix) => matchesPathPrefix(pathname, prefix)) ||
 		needsWorkspaceSession(pathname));
 
@@ -202,5 +204,5 @@ export default function proxy(request: NextRequest, event: NextFetchEvent) {
 }
 
 export const config = {
-	matcher: ["/__clerk/(.*)", "/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
+	matcher: ["/__clerk/(.*)", "/api/(.*)", "/.well-known/mcp", "/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };

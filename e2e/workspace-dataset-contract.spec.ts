@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("workspace dataset API contract", () => {
 	test("returns only approval data for the approvals scope", async ({ request }) => {
-		const response = await request.get("/api/workspace/dataset?scope=approvals");
+		const response = await request.get("/api/v1/workspace/dataset?scope=approvals");
 
 		expect(response.ok()).toBe(true);
 		const body = await response.json();

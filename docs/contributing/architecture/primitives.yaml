@@ -37,6 +37,23 @@ primitives:
       - workspace-shell
       - workspace-read-path
 
+  - id: agent-integration-surface
+    group: platform
+    description: Machine-readable public contracts and MCP transport for agent integrations.
+    code:
+      - "src/app/api/mcp/**"
+      - "src/app/api/v1/**"
+      - "src/app/.well-known/mcp/**"
+      - "src/app/llms.txt/**"
+      - "src/app/openapi.json/**"
+      - "src/services/mcp.ts"
+      - "e2e/agent-readiness.spec.ts"
+    connects_to:
+      - auth-request-boundary
+      - public-marketing
+      - spend-decision-path
+      - workspace-read-path
+
   - id: auth-request-boundary
     group: identity
     description: Clerk session enforcement, security headers, and authenticated route gating.
@@ -77,6 +94,7 @@ primitives:
     description: Validated workspace dataset loading for demo and authenticated production modes.
     code:
       - "src/app/api/workspace/dataset/**"
+      - "src/app/api/v1/workspace/dataset/**"
       - "src/modules/workspace/server.ts"
       - "src/modules/workspace/resolveWorkspaceDataset.ts"
       - "src/modules/workspace/read-models.ts"
@@ -94,6 +112,7 @@ primitives:
     description: Spend-request validation, authorization, API mutation, and pending interaction.
     code:
       - "src/app/api/workspace/spend-requests/**"
+      - "src/app/api/v1/workspace/spend-requests/**"
       - "src/modules/workspace/spendRequestDecisions.ts"
       - "src/modules/spend-requests/**"
     connects_to:

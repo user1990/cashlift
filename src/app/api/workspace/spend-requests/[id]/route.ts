@@ -1,5 +1,4 @@
-import { decideSpendRequest } from "@/modules/workspace/spendRequestDecisions";
-import { apiError, workspaceApiJson } from "../../dataset/errors";
+import { patchSpendRequest } from "@/app/api/_lib/workspaceRoutes";
 
 type RouteContext = {
 	params: Promise<{
@@ -7,39 +6,15 @@ type RouteContext = {
 	}>;
 };
 
-const ERROR_STATUS = {
-	forbidden: 403,
-	invalid: 400,
-	not_found: 404,
-	service: 503,
-	unauthenticated: 401,
-	unavailable: 500,
-} as const;
-
-const ERROR_CODE = {
-	forbidden: "workspace_forbidden",
-	invalid: "api_request_failed",
-	not_found: "api_request_failed",
-	service: "workspace_service_unavailable",
-	unauthenticated: "workspace_unauthenticated",
-	unavailable: "workspace_data_unavailable",
-} as const;
-
 export const PATCH = async (request: Request, context: RouteContext) => {
-	const [{ id }, body] = await Promise.all([context.params, request.json().catch(() => null)]);
-	const result = await decideSpendRequest({
-		id,
-		status: body?.status,
-	});
+	const params = await context.params;
 
-	if (result.status === "success") {
-		return workspaceApiJson(result.request);
-	}
-
-	return apiError({
-		code: ERROR_CODE[result.code],
-		error: result.message,
-		requestId: result.requestId,
-		status: ERROR_STATUS[result.code],
-	});
+	return patchSpendRequest(
+		request,
+		{ params: Promise.resolve(params) },
+		{
+			deprecated: true,
+			successorPath: `/api/v1/workspace/spend-requests/${encodeURIComponent(params.id)}`,
+		},
+	);
 };
