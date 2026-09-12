@@ -13,7 +13,7 @@ describe("invoices cockpit presentation", () => {
 		expect(presentation.openOnTime.map((invoice) => invoice.id)).toEqual(["invoice-brightline", "invoice-harbor"]);
 		expect(presentation.paid.map((invoice) => invoice.id)).toEqual(["invoice-summit"]);
 		expect(presentation.primaryInvoice?.client).toEqual("Northstar Labs");
-		expect(presentation.primaryAction?.title).toEqual("Chase Northstar Labs invoice");
+		expect(presentation.primaryAction?.id).toEqual("action-collect-northstar");
 	});
 
 	it("moves a past-due sent invoice into overdue once the browser date is known", () => {

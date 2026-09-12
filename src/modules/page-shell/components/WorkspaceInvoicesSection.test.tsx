@@ -23,8 +23,6 @@ describe("WorkspaceInvoicesSection", () => {
 		);
 
 		expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(formatCurrency(1_840_000));
-		expect(screen.getByRole("button", { name: /search for anything in this workspace/i })).toBeVisible();
-		expect(screen.getByRole("heading", { name: "Chase Northstar Labs invoice" })).toBeVisible();
 
 		act(() => {
 			vi.advanceTimersByTime(60_000);

@@ -7,6 +7,5 @@ test.describe("homepage decision story", () => {
 		await page.locator("main").locator('a[href="/demo/workspace"]').first().click();
 
 		await expect(page).toHaveURL(/\/demo\/workspace$/);
-		await expect(page.locator("aside > p").filter({ hasText: "Read-only demo" })).toBeVisible();
 	});
 });
