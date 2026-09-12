@@ -21,6 +21,7 @@ ${AGENT_MARKDOWN.developersIntro}
 ## Resources
 
 - [OpenAPI specification](${SITE_URL}/openapi.json): Machine-readable workspace route documentation.
+- [Public demo dataset API](${SITE_URL}/api/v1/demo/dataset): Read the typed Studio Nova sample dataset without authentication or mutations.
 - [MCP discovery manifest](${SITE_URL}/.well-known/mcp): Discover the read-only Streamable HTTP MCP endpoint and its tool.
 - [MCP endpoint](${SITE_URL}/api/mcp): Connect with an MCP client using the current protocol or legacy handshake.
 - [Agent guidance](${SITE_URL}/llms.txt): When to use CashLift and links to the best-fit product resources.

@@ -20,10 +20,17 @@ describe("GET /openapi.json", () => {
 
 	it("publishes versioned operations with typed success and error schemas", async () => {
 		const document = await (await GET()).json();
+		const publicDemo = document.paths["/api/v1/demo/dataset"].get;
 		const dataset = document.paths["/api/v1/workspace/dataset"].get;
 		const spendRequest = document.paths["/api/v1/workspace/spend-requests/{id}"].patch;
 
 		expect(document.info.version).toBe("1.0.0");
+		expect(publicDemo.operationId).toBe("getPublicDemoDataset");
+		expect(publicDemo.security).toEqual([]);
+		expect(publicDemo.responses["200"].content["application/json"].schema.$ref).toBe(
+			"#/components/schemas/FinancialDataset",
+		);
+		expect(document.tags).toContainEqual({ description: "Read-only Studio Nova sample data.", name: "Demo" });
 		expect(dataset.operationId).toBe("getWorkspaceDataset");
 		expect(dataset.responses["200"].content["application/json"].schema.$ref).toBe(
 			"#/components/schemas/FinancialDataset",

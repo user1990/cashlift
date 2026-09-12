@@ -13,13 +13,19 @@ export const DeveloperResourcesPage = () => (
 		<div className="mt-14 grid gap-10 border-shell-border border-t pt-10 md:grid-cols-3">
 			<ResourceSection title="API">
 				<p className="text-shell-muted leading-7">
-					Use the versioned OpenAPI document when an agent needs the current workspace dataset and spend-request
-					decision routes.
+					Use the public demo dataset for a no-account read-only sample, or the versioned OpenAPI document for workspace
+					dataset and spend-request decision routes.
 				</p>
 
-				<Link href="/openapi.json" className="mt-5 inline-block text-primary">
-					OpenAPI specification →
-				</Link>
+				<div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
+					<Link href="/api/v1/demo/dataset" className="inline-block text-primary">
+						Public demo API →
+					</Link>
+
+					<Link href="/openapi.json" className="inline-block text-primary">
+						OpenAPI specification →
+					</Link>
+				</div>
 			</ResourceSection>
 
 			<ResourceSection title="Authentication">
