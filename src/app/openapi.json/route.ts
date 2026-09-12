@@ -74,6 +74,20 @@ const DATASET_GET = {
 	tags: ["Workspace"],
 } as const;
 
+const PUBLIC_DEMO_DATASET_GET = {
+	description:
+		"Load the read-only Studio Nova sample dataset without authentication. This endpoint never returns company records or mutates financial data.",
+	operationId: "getPublicDemoDataset",
+	parameters: DATASET_PARAMETERS,
+	responses: {
+		"200": DATASET_RESPONSE,
+		"400": API_ERROR_RESPONSE,
+		"429": API_ERROR_RESPONSE,
+	},
+	security: [],
+	tags: ["Demo"],
+} as const;
+
 const SPEND_REQUEST_PATCH = {
 	description:
 		"Approve or reject a spend request for an authenticated finance lead or manager. CashLift never moves money as a result of this decision.",
@@ -309,6 +323,7 @@ const OPENAPI_DOCUMENT = {
 	},
 	openapi: "3.1.0",
 	paths: {
+		"/api/v1/demo/dataset": { get: PUBLIC_DEMO_DATASET_GET },
 		"/api/v1/workspace/dataset": { get: DATASET_GET },
 		"/api/v1/workspace/spend-requests/{id}": { patch: SPEND_REQUEST_PATCH },
 		"/api/workspace/dataset": {
@@ -330,7 +345,10 @@ const OPENAPI_DOCUMENT = {
 	},
 	security: [{ clerkSession: [] }],
 	servers: [{ url: SITE_URL }],
-	tags: [{ description: "CashLift workspace data and decisions.", name: "Workspace" }],
+	tags: [
+		{ description: "Read-only Studio Nova sample data.", name: "Demo" },
+		{ description: "CashLift workspace data and decisions.", name: "Workspace" },
+	],
 } as const;
 
 export function GET() {
