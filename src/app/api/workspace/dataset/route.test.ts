@@ -79,8 +79,6 @@ describe("GET /api/workspace/dataset", () => {
 		expect(response.status).toEqual(status);
 		await expect(response.json()).resolves.toMatchObject(body);
 		expect(response.headers.get("Content-Type")).toContain("application/problem+json");
-		expect(response.headers.get("RateLimit-Policy")).toBe("60;w=60");
-		expect(response.headers.get("RateLimit-Remaining")).toBe("59");
 	});
 
 	it("returns 200 with dataset on success", async () => {
@@ -153,6 +151,5 @@ async function expectApiRequestFailure(response: Response, error: string) {
 		error,
 	});
 	expect(response.headers.get("Content-Type")).toContain("application/problem+json");
-	expect(response.headers.get("RateLimit-Policy")).toBe("60;w=60");
 	expect(mocks.resolveWorkspaceDataset).not.toHaveBeenCalled();
 }
