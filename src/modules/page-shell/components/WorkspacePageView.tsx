@@ -1,8 +1,10 @@
+import dynamic from "next/dynamic";
 import { Overview } from "@/modules/dashboard/components/Overview";
 import type { WorkspaceDatasetDateRange } from "@/modules/workspace/types";
 import type { WorkspacePageRendererProps } from "../types";
 import { getWorkspaceExperienceContract } from "../workspaceExperience";
-import { WorkspaceSectionPage } from "./WorkspaceSectionPage";
+
+const WorkspaceSectionPage = dynamic(() => import("./WorkspaceSectionPage").then((mod) => mod.WorkspaceSectionPage));
 
 type WorkspacePageViewProps = WorkspacePageRendererProps & {
 	bufferDataset?: WorkspacePageRendererProps["dataset"];
