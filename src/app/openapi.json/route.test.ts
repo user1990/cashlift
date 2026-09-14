@@ -19,6 +19,14 @@ describe("GET /openapi.json", () => {
 			"team",
 			"vendors",
 		]);
+		const publicDemo = document.paths["/api/v1/demo/dataset"].get;
+
+		expect(publicDemo.operationId).toBe("getPublicDemoDataset");
+		expect(publicDemo.security).toEqual([]);
+		expect(publicDemo.responses["200"].content["application/json"].schema.$ref).toBe(
+			"#/components/schemas/FinancialDataset",
+		);
+		expect(document.tags).toContainEqual({ description: "Read-only Studio Nova sample data.", name: "Demo" });
 		expect(dataset.responses["200"].content["application/json"].schema.$ref).toBe(
 			"#/components/schemas/FinancialDataset",
 		);

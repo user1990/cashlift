@@ -14,6 +14,7 @@ test.describe("agent-readable public contracts", () => {
 		expect(text.length).toBeGreaterThan(500);
 		expect(body).toContain('type="application/ld+json"');
 		expect(body).toContain('"@type":"SoftwareApplication"');
+		expect(body).toContain('"@type":"WebSite"');
 	});
 
 	test("returns an agent-friendly 404", async ({ request }) => {
@@ -47,6 +48,7 @@ test.describe("agent-readable public contracts", () => {
 		expect(llmsBody).toContain("/.well-known/mcp");
 		expect(developerResponse.status()).toBe(200);
 		expect(developerBody).toContain('href="/openapi.json"');
+		expect(developerBody).toContain('href="/api/v1/demo/dataset"');
 		expect(openApiResponse.status()).toBe(200);
 		expect(openApiBody.openapi).toBe("3.1.0");
 		expect(openApiBody.paths["/api/v1/workspace/dataset"]).toBeDefined();
@@ -57,9 +59,10 @@ test.describe("agent-readable public contracts", () => {
 		expect(robotsBody).toContain("Sitemap: https://cashlift.vercel.app/sitemap.xml");
 	});
 
-	test("publishes MCP discovery on the well-known endpoint", async ({ request }) => {
-		const [manifestResponse, mcpResponse] = await Promise.all([
+	test("publishes MCP discovery and the public demo API contract", async ({ request }) => {
+		const [manifestResponse, demoApiResponse, mcpResponse] = await Promise.all([
 			request.get("/.well-known/mcp"),
+			request.get("/api/v1/demo/dataset?scope=overview", { headers: { Accept: "application/json" } }),
 			request.post("/.well-known/mcp", {
 				data: {
 					id: 1,
@@ -86,6 +89,11 @@ test.describe("agent-readable public contracts", () => {
 			endpoint: "https://cashlift.vercel.app/.well-known/mcp",
 			transport: "streamable-http",
 		});
+		expect(demoApiResponse.status()).toBe(200);
+		expect(await demoApiResponse.json()).toMatchObject({ profile: { companyId: "cashlift-demo" } });
+		expect(demoApiResponse.headers()["content-type"]).toMatch(/^application\/json/);
+		expect(demoApiResponse.headers()["ratelimit-policy"]).toBe("60;w=60");
+		expect(demoApiResponse.headers()["x-api-version"]).toBe("v1");
 		expect(mcpResponse.status()).toBe(200);
 		expect(await mcpResponse.json()).toMatchObject({
 			id: 1,
