@@ -15,6 +15,7 @@ test.describe("agent-readable public contracts", () => {
 		expect(body).toContain('type="application/ld+json"');
 		expect(body).toContain('"@type":"SoftwareApplication"');
 		expect(body).toContain('"@type":"Organization"');
+		expect(body).toContain('"@type":"WebSite"');
 		expect(body).toContain('property="og:type"');
 	});
 
@@ -54,6 +55,7 @@ test.describe("agent-readable public contracts", () => {
 		expect(llmsBody).toContain("/.well-known/mcp");
 		expect(developerResponse.status()).toBe(200);
 		expect(developerBody).toContain('href="/openapi.json"');
+		expect(developerBody).toContain('href="/api/v1/demo/dataset"');
 		expect(aboutResponse.status()).toBe(200);
 		expect(aboutBody).toContain("CashLift");
 		expect(openApiResponse.status()).toBe(200);
@@ -68,8 +70,9 @@ test.describe("agent-readable public contracts", () => {
 	});
 
 	test("publishes MCP discovery and JSON API error contracts", async ({ request }) => {
-		const [manifestResponse, apiResponse, mcpResponse] = await Promise.all([
+		const [manifestResponse, demoApiResponse, apiResponse, mcpResponse] = await Promise.all([
 			request.get("/.well-known/mcp"),
+			request.get("/api/v1/demo/dataset?scope=overview", { headers: { Accept: "application/json" } }),
 			request.get("/api/v1/workspace/dataset?scope=overview", { headers: { Accept: "application/json" } }),
 			request.post("/.well-known/mcp", {
 				data: {
@@ -97,6 +100,11 @@ test.describe("agent-readable public contracts", () => {
 			endpoint: "https://cashlift.vercel.app/.well-known/mcp",
 			transport: "streamable-http",
 		});
+		expect(demoApiResponse.status()).toBe(200);
+		expect(await demoApiResponse.json()).toMatchObject({ profile: { companyId: "cashlift-demo" } });
+		expect(demoApiResponse.headers()["content-type"]).toMatch(/^application\/json/);
+		expect(demoApiResponse.headers()["ratelimit-policy"]).toBe("60;w=60");
+		expect(demoApiResponse.headers()["x-api-version"]).toBe("v1");
 		expect([200, 401, 403, 503]).toContain(apiResponse.status());
 		expect(apiResponse.headers()["content-type"]).toMatch(/application\/(json|problem\+json)/);
 		expect(apiResponse.headers()["ratelimit-policy"]).toBe("60;w=60");

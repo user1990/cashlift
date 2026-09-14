@@ -25,8 +25,10 @@ const HOME_STRUCTURED_DATA = {
 } as const;
 
 const ORGANIZATION_STRUCTURED_DATA = {
+	"@id": `${SITE_URL}/#organization`,
 	"@context": "https://schema.org",
 	"@type": "Organization",
+	alternateName: "CashLift cash operations workspace",
 	contactPoint: {
 		"@type": "ContactPoint",
 		contactType: "sales and support",
@@ -35,6 +37,16 @@ const ORGANIZATION_STRUCTURED_DATA = {
 	description: SITE_META.structuredDataDescription,
 	logo: `${SITE_URL}/brand/cashlift-icon.svg`,
 	name: "CashLift",
+	sameAs: ["https://github.com/user1990/cashlift"],
+	url: SITE_URL,
+} as const;
+
+const WEBSITE_STRUCTURED_DATA = {
+	"@context": "https://schema.org",
+	"@type": "WebSite",
+	alternateName: "CashLift cash operations workspace",
+	name: "CashLift",
+	publisher: { "@id": `${SITE_URL}/#organization` },
 	url: SITE_URL,
 } as const;
 
@@ -51,6 +63,10 @@ export default async function Home() {
 
 			<script nonce={nonce} type="application/ld+json">
 				{JSON.stringify(ORGANIZATION_STRUCTURED_DATA)}
+			</script>
+
+			<script nonce={nonce} type="application/ld+json">
+				{JSON.stringify(WEBSITE_STRUCTURED_DATA)}
 			</script>
 		</>
 	);
