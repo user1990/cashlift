@@ -22,7 +22,7 @@ export const SITE_META = {
 		"CashLift shows service companies what money-related work needs attention today in one daily inbox.",
 	homeDescription:
 		"See what to collect, approve, or cut today. CashLift ranks overdue invoices, spend requests, vendor costs, and cash warnings in one daily inbox.",
-	homeTitle: "CashLift — See what to collect, approve, or cut today",
+	homeTitle: "CashLift cash operations workspace — See what to collect, approve, or cut today",
 	structuredDataDescription: PRODUCT.purpose,
 } as const;
 

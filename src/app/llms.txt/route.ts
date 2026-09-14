@@ -18,6 +18,7 @@ ${LLMS_TXT.summary}
 ## Developer resources
 
 - [Developer resources](${SITE_URL}/developers): Use as the starting point for API and authentication information.
+- [Public demo dataset API](${SITE_URL}/api/v1/demo/dataset): Read the typed Studio Nova sample dataset without authentication or mutations.
 - [OpenAPI specification](${SITE_URL}/openapi.json): Use when an agent needs the machine-readable workspace API contract.
 - [MCP discovery manifest](${SITE_URL}/.well-known/mcp): Discover the read-only Streamable HTTP MCP endpoint and tool contract.
 - [MCP endpoint](${SITE_URL}/api/mcp): Use with an MCP client to read workspace or public-demo data without mutations.
