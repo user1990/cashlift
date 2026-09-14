@@ -34,18 +34,18 @@ describe("WorkspacePage", () => {
 		expect(screen.getByText(message)).toBeInTheDocument();
 	});
 
-	it("renders scoped data as a read-only public-demo experience", () => {
+	it("renders scoped data as a read-only public-demo experience", async () => {
 		render(
 			<NuqsTestingAdapter hasMemory>
 				<WorkspacePageContent dataset={financialDatasetFixture} experience="public-demo" section="approvals" />
 			</NuqsTestingAdapter>,
 		);
 
-		expect(screen.getByRole("heading", { name: "BrandForge" })).toBeVisible();
+		expect(await screen.findByRole("heading", { name: "BrandForge" })).toBeVisible();
 		expect(screen.queryByRole("button", { name: /approve/i })).not.toBeInTheDocument();
 	});
 
-	it("uses the public-demo overview path from cash insights", () => {
+	it("uses the public-demo overview path from cash insights", async () => {
 		const dashboard = buildDashboardViewModel({
 			dataset: financialDatasetFixture,
 			date: new Date("2026-05-09"),
@@ -58,7 +58,9 @@ describe("WorkspacePage", () => {
 			</NuqsTestingAdapter>,
 		);
 
-		expect(screen.getAllByText(formatPreciseCompactCurrency(dashboard.cashAvailableCents)).length).toBeGreaterThan(0);
+		expect(
+			(await screen.findAllByText(formatPreciseCompactCurrency(dashboard.cashAvailableCents))).length,
+		).toBeGreaterThan(0);
 		expect(screen.getAllByRole("link").map((link) => link.getAttribute("href"))).toContain("/demo/workspace");
 	});
 });
