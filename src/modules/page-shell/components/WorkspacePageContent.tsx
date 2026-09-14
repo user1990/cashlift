@@ -19,7 +19,7 @@ export const WorkspacePageContent = ({ dataset, experience = "production", secti
 			<PublicDemoWorkspacePageContent dataset={dataset} experience={experience} section={section} />
 		</Suspense>
 	) : (
-		<ViewTransition default="none" name="workspace-section" update="auto">
+		<ViewTransition default="none" name="workspace-section" share="auto" update="auto">
 			<AuthenticatedWorkspacePageContent dataset={dataset} experience={experience} section={section} />
 		</ViewTransition>
 	);
