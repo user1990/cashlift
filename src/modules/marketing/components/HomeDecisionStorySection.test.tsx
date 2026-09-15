@@ -6,11 +6,11 @@ import { HomeDecisionStorySection } from "./HomeDecisionStorySection";
 
 const HOME_ACTIONS_MOCK = [
 	{
-		description: "Collection context",
+		description: "The $126,500 invoice is overdue, with a modeled collection probability of 41%.",
 		impact: "$126,500",
 		owner: "Samira Chen",
 		priority: "critical",
-		title: "Collect Aurora Health before buffer risk",
+		title: "Follow up on Aurora Health’s overdue invoice",
 		type: "collect",
 	},
 	{

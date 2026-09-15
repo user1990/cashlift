@@ -22,7 +22,7 @@ describe("find presentation", () => {
 			].toSorted(),
 		);
 		expect(auroraItems.map((item) => item.title)).toEqual([
-			"Collect Aurora Health before buffer risk",
+			"Follow up on Aurora Health’s overdue invoice",
 			"Aurora Health",
 		]);
 		expect(collectItems.every((item) => item.work === "collect")).toEqual(true);
