@@ -26,12 +26,15 @@ describe("ActionInbox", () => {
 		const links = screen.getAllByRole("link");
 
 		expect(links.map((link) => link.textContent)).toEqual([
-			expect.stringContaining("Collect Aurora Health before buffer risk"),
+			expect.stringContaining("Follow up on Aurora Health’s overdue invoice"),
 			expect.stringContaining("Decide on Client Delivery hardware"),
 			expect.stringContaining("Cancel Notion trial seats"),
 		]);
 		expect(links[0]).toHaveTextContent(`Due ${formatDashboardDate(firstAction.dueDate)}`);
 		expect(links[0]).toHaveTextContent(formatCurrency(firstAction.impactCents));
+		expect(links[0]).toHaveTextContent(
+			"The $126,500 invoice is overdue, with a modeled collection probability of 41%.",
+		);
 		expect(links[0]).toHaveAttribute("href", "/demo/workspace/invoices");
 		expect(links[1]).toHaveAttribute("href", "/demo/workspace/approvals");
 		expect(links[2]).toHaveAttribute("href", "/demo/workspace/vendors");

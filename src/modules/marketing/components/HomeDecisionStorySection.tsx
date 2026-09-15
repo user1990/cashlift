@@ -15,7 +15,7 @@ const DECISION_CHAPTERS = {
 	},
 	collect: {
 		imageAlt:
-			"CashLift invoice dashboard showing $213,500 in overdue cash risk and Aurora Health as the priority collection",
+			"CashLift invoice dashboard showing $213,500 in overdue cash risk with Aurora Health as the priority overdue collection",
 		imageSrc: "/marketing/studio-nova-invoices.webp",
 	},
 	cut: {
