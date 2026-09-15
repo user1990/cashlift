@@ -1,9 +1,10 @@
+import { formatCurrency, getPercentage } from "@/modules/money/format";
 import { FINANCIAL_DATASET_SCHEMA } from "./schemas";
 
-export const DEMO_WORKSPACE_DATASET = FINANCIAL_DATASET_SCHEMA.parse({
+const DEMO_WORKSPACE_DATASET_BASE = FINANCIAL_DATASET_SCHEMA.parse({
 	cashActions: [
 		{
-			description: "The $126,500 invoice is overdue, with a modeled collection probability of 41%.",
+			description: "Aurora Health invoice requires follow-up.",
 			dueDate: "2024-05-20",
 			id: "action-collect-aurora",
 			impactCents: 12_650_000,
@@ -184,3 +185,17 @@ export const DEMO_WORKSPACE_DATASET = FINANCIAL_DATASET_SCHEMA.parse({
 		},
 	],
 });
+
+const auroraInvoice = DEMO_WORKSPACE_DATASET_BASE.invoices.find(({ client }) => client === "Aurora Health");
+
+export const DEMO_WORKSPACE_DATASET = {
+	...DEMO_WORKSPACE_DATASET_BASE,
+	cashActions: DEMO_WORKSPACE_DATASET_BASE.cashActions.map((action) =>
+		action.id === "action-collect-aurora" && auroraInvoice
+			? {
+					...action,
+					description: `The ${formatCurrency(auroraInvoice.amountCents)} invoice is overdue, with a modeled collection probability of ${getPercentage(auroraInvoice.collectionProbability)}.`,
+				}
+			: action,
+	),
+};
