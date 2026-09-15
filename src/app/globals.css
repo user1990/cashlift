@@ -208,6 +208,19 @@ textarea,
 	):active {
 		transform: scale(var(--motion-press-scale));
 	}
+
+	::view-transition-group(workspace-section) {
+		animation-duration: var(--motion-duration-enter);
+		animation-timing-function: var(--motion-ease-move);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-group(workspace-section),
+	::view-transition-new(workspace-section),
+	::view-transition-old(workspace-section) {
+		animation: none;
+	}
 }
 
 .progress-bar {

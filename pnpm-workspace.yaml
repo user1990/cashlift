@@ -14,6 +14,12 @@ minimumReleaseAgeExclude:
   - brace-expansion@5.0.9
   # Security exception: required to remediate GHSA-2v37-7h3g-55p8 before the one-week age gate.
   - nanoid@3.3.18
+  # React 19.3 upgrade: exclude the coordinated runtime, scheduler, and type releases from the age gate.
+  - react@19.3.0
+  - react-dom@19.3.0
+  - scheduler@0.28.0
+  - '@types/react@19.3.0'
+  - '@types/react-dom@19.3.0'
 overrides:
   '@vercel/routing-utils>path-to-regexp': 6.3.0
   fast-uri: 3.1.6
