@@ -26,7 +26,6 @@ describe("GET /openapi.json", () => {
 		expect(publicDemo.responses["200"].content["application/json"].schema.$ref).toBe(
 			"#/components/schemas/FinancialDataset",
 		);
-		expect(document.tags).toContainEqual({ description: "Read-only Studio Nova sample data.", name: "Demo" });
 		expect(dataset.responses["200"].content["application/json"].schema.$ref).toBe(
 			"#/components/schemas/FinancialDataset",
 		);

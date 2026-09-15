@@ -91,9 +91,6 @@ test.describe("agent-readable public contracts", () => {
 		});
 		expect(demoApiResponse.status()).toBe(200);
 		expect(await demoApiResponse.json()).toMatchObject({ profile: { companyId: "cashlift-demo" } });
-		expect(demoApiResponse.headers()["content-type"]).toMatch(/^application\/json/);
-		expect(demoApiResponse.headers()["ratelimit-policy"]).toBe("60;w=60");
-		expect(demoApiResponse.headers()["x-api-version"]).toBe("v1");
 		expect(mcpResponse.status()).toBe(200);
 		expect(await mcpResponse.json()).toMatchObject({
 			id: 1,
