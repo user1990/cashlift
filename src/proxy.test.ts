@@ -102,7 +102,6 @@ describe("proxy security headers", () => {
 		const response = await (proxy as unknown as (request: NextRequest) => Promise<Response>)(request);
 
 		expect(response.status).not.toBe(406);
-		expect(needsClerkMiddleware("/api/workspace/dataset", true)).toBe(true);
 	});
 
 	it("returns Markdown recovery guidance for an unknown path", async () => {
@@ -162,7 +161,7 @@ describe("proxy security headers", () => {
 		expect(needsClerkMiddleware(pathname, true)).toEqual(true);
 	});
 
-	it.each(["/api/v1/workspace/dataset", "/api/mcp", "/.well-known/mcp"])(
+	it.each(["/api/workspace/dataset", "/api/v1/workspace/dataset", "/api/mcp", "/.well-known/mcp"])(
 		"routes authenticated API context path %s through Clerk middleware",
 		(pathname) => {
 			expect(needsClerkMiddleware(pathname, true)).toEqual(true);

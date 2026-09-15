@@ -37,6 +37,9 @@ describe("PATCH /api/workspace/spend-requests/[id]", () => {
 
 		expect(response.status).toEqual(200);
 		expect(response.headers.get("Cache-Control")).toEqual("no-store");
+		expect(response.headers.get("Link")).toContain(
+			"https://cashlift.vercel.app/api/v1/workspace/spend-requests/request-brandforge",
+		);
 		expect(mocks.decideSpendRequest).toHaveBeenCalledWith({ id: "request-brandforge", status: "approved" });
 		await expect(response.json()).resolves.toMatchObject({ id: "request-brandforge", status: "approved" });
 	});
@@ -69,9 +72,6 @@ describe("PATCH /api/workspace/spend-requests/[id]", () => {
 
 		expect(response.status).toEqual(status);
 		expect(response.headers.get("Cache-Control")).toEqual("no-store");
-		expect(response.headers.get("Link")).toContain(
-			"https://cashlift.vercel.app/api/v1/workspace/spend-requests/request-brandforge",
-		);
 		const body = await response.json();
 		expect(body.error).toBe(result.message);
 
