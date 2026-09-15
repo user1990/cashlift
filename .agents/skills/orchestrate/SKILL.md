@@ -31,8 +31,8 @@ pnpm check:orchestration
 pnpm check:orchestration -- --json
 ```
 
-For an actual PR, first use [review-pr](../review-pr/SKILL.md) and the repo's
-`pr-cockpit owner/repo#N` read workflow. A non-`main` branch is PR-like work,
+For an actual PR, first use the Review mode in [ship-pr](../ship-pr/SKILL.md)
+and the repo's `pr-cockpit owner/repo#N` read workflow. A non-`main` branch is PR-like work,
 not proof that a PR exists. The check can report changed areas and possible
 parallelism, but it cannot reliably infer file conflicts, task dependencies,
 or PR intent.
@@ -88,8 +88,8 @@ contract.
    verify the behavior, diff, tests, and any browser or build evidence needed
    for the task.
 7. For a non-trivial PR, use the repo-local [visual recap](../visual-recap/SKILL.md).
-   Use [create-pr](../create-pr/SKILL.md) for PR preparation and keep one CI
-   wait path through PR Cockpit.
+   Use [ship-pr](../ship-pr/SKILL.md) Ship mode for PR preparation and keep one
+   CI wait path through PR Cockpit.
 
 ## Guardrails
 
@@ -114,7 +114,6 @@ contract.
 - [Worktree isolation](../worktree/SKILL.md)
 - [Testing rules](../testing/SKILL.md)
 - [Security rules](../security/SKILL.md)
-- [Local PR review workflow](../review-pr/SKILL.md)
-- [Local PR creation workflow](../create-pr/SKILL.md)
+- [PR review and creation workflow](../ship-pr/SKILL.md)
 - [CashLift visual recap](../visual-recap/SKILL.md)
 - [Advisory checker](../../../scripts/check-orchestration.mjs)
