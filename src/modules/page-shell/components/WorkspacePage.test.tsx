@@ -1,15 +1,19 @@
 // @vitest-environment jsdom
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { render, screen } from "@testing-library/react";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { buildDashboardViewModel } from "@/modules/dashboard/view-model";
 import { formatPreciseCompactCurrency } from "@/modules/money/format";
+import { QueryProvider } from "@/services/query/provider";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
 import { WorkspacePage } from "./WorkspacePage";
 import { WorkspacePageContent } from "./WorkspacePageContent";
 
 const LOAD_WORKSPACE_DATASET_MOCK = vi.hoisted(() => vi.fn());
+const GLOBAL_STYLES = readFileSync(resolve(process.cwd(), "src/app/globals.css"), "utf8");
 
 vi.mock("@/modules/workspace/server", () => ({
 	loadWorkspaceDataset: LOAD_WORKSPACE_DATASET_MOCK,
@@ -43,6 +47,25 @@ describe("WorkspacePage", () => {
 
 		expect(await screen.findByRole("heading", { name: "BrandForge" })).toBeVisible();
 		expect(screen.queryByRole("button", { name: /approve/i })).not.toBeInTheDocument();
+	});
+
+	it("preserves the authenticated workspace server fallback", () => {
+		render(
+			<QueryProvider>
+				<NuqsTestingAdapter hasMemory>
+					<WorkspacePageContent dataset={financialDatasetFixture} section="approvals" />
+				</NuqsTestingAdapter>
+			</QueryProvider>,
+		);
+
+		expect(screen.getByRole("heading", { name: "BrandForge" })).toBeVisible();
+	});
+
+	it("keeps workspace transition motion disabled for reduced-motion users", () => {
+		expect(GLOBAL_STYLES).toContain("::view-transition-group(workspace-section)");
+		expect(GLOBAL_STYLES).toMatch(
+			/@media \(prefers-reduced-motion: reduce\)[\s\S]*::view-transition-group\(workspace-section\)[\s\S]*animation: none;/,
+		);
 	});
 
 	it("uses the public-demo overview path from cash insights", async () => {
