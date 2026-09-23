@@ -6,11 +6,11 @@ import { HomeDecisionStorySection } from "./HomeDecisionStorySection";
 
 const HOME_ACTIONS_MOCK = [
 	{
-		description: "The $126,500 invoice is overdue, with a modeled collection probability of 41%.",
+		description: "Collection context",
 		impact: "$126,500",
 		owner: "Samira Chen",
 		priority: "critical",
-		title: "Follow up on Aurora Health’s overdue invoice",
+		title: "Collection follow-up",
 		type: "collect",
 	},
 	{
@@ -18,7 +18,7 @@ const HOME_ACTIONS_MOCK = [
 		impact: "$380",
 		owner: "Samira Chen",
 		priority: "high",
-		title: "Decide on Client Delivery hardware",
+		title: "Approval decision",
 		type: "approve",
 	},
 	{
@@ -26,7 +26,7 @@ const HOME_ACTIONS_MOCK = [
 		impact: "$13,200",
 		owner: "Finance",
 		priority: "medium",
-		title: "Cancel Notion trial seats",
+		title: "Vendor cut",
 		type: "cut",
 	},
 ] as const;

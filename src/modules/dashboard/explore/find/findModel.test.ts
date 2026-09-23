@@ -21,10 +21,8 @@ describe("find presentation", () => {
 				...DEMO_WORKSPACE_DATASET.teamBudgets.map((item) => item.id),
 			].toSorted(),
 		);
-		expect(auroraItems.map((item) => item.title)).toEqual([
-			"Follow up on Aurora Health’s overdue invoice",
-			"Aurora Health",
-		]);
+		expect(auroraItems.map((item) => item.id)).toEqual(["action-collect-aurora", "invoice-aurora-health"]);
+		expect(auroraItems.map((item) => item.actionHref)).toEqual(["/dashboard/invoices", "/dashboard/invoices"]);
 		expect(collectItems.every((item) => item.work === "collect")).toEqual(true);
 		expect(overdueItems.map((item) => item.id)).toEqual(["invoice-aurora-health"]);
 		expect(missingItems).toEqual([]);
