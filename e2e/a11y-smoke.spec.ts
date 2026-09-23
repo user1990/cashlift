@@ -60,16 +60,8 @@ test.describe("axe smoke", () => {
 			await page.goto(path);
 			await page.keyboard.press("Tab");
 			await page.getByRole("link", { name: "Skip to content" }).press("Enter");
-			await page.keyboard.press("Tab");
 
-			const activeInMain = await page.evaluate(() => {
-				const main = document.getElementById("main-content");
-				const active = document.activeElement;
-
-				return Boolean(main && active && (main === active || main.contains(active)));
-			});
-
-			expect(activeInMain, `skip link target for ${path}`).toBe(true);
+			await expect(page.locator("#main-content"), `skip link target for ${path}`).toBeFocused();
 		}
 	});
 
