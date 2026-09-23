@@ -4,8 +4,10 @@ import { Shield } from "lucide-react";
 import type { ReactNode } from "react";
 import { ApprovalDecisionActions } from "@/modules/spend-requests/components/ApprovalDecisionActions";
 import { useSpendRequestDecision } from "@/modules/spend-requests/hooks/useSpendRequestDecision";
+import { formatCashAfterApproval } from "@/modules/spend-requests/utils";
 import { WORKSPACE_DATASET_QUERY_KEYS } from "@/modules/workspace/query";
 import type { FinancialDataset } from "@/modules/workspace/types";
+import { useDashboardStatusDate } from "../hooks/useDashboardStatusDate";
 import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
 import { buildDashboardViewModel } from "../view-model";
@@ -27,7 +29,8 @@ type ApprovalsCockpitViewProps = {
 };
 
 export const ApprovalsCockpit = ({ dataset, readOnly = false }: ApprovalsCockpitProps) => {
-	const dashboard = buildDashboardViewModel({ dataset });
+	const statusDate = useDashboardStatusDate(dataset);
+	const dashboard = buildDashboardViewModel({ dataset, date: statusDate });
 	const presentation = buildApprovalsPresentation(dashboard);
 
 	if (readOnly) {
@@ -198,7 +201,10 @@ function renderPriorityRequest(
 
 			{cashAfterApprovalCents !== undefined && (
 				<p className={belowBuffer ? "mt-1 text-s text-warning" : "mt-1 text-muted-foreground text-s"}>
-					Cash after approval <ExploreMoney cents={cashAfterApprovalCents} exact warning={belowBuffer} />
+					Cash after approval{" "}
+					<span className={belowBuffer ? "font-mono text-warning" : "font-mono"}>
+						{formatCashAfterApproval(cashAfterApprovalCents)}
+					</span>
 				</p>
 			)}
 

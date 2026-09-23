@@ -124,6 +124,18 @@ const DEMO_WORKSPACE_DATASET_BASE = FINANCIAL_DATASET_SCHEMA.parse({
 			team: "Client Delivery",
 			vendor: "Logitech",
 		},
+		{
+			amountCents: 12_000,
+			category: "software",
+			id: "request-decided",
+			neededByDate: "2024-05-18",
+			reason: "Seat expansion already approved",
+			requestedDate: "2024-05-10",
+			requester: "Maya Ortiz",
+			status: "approved",
+			team: "Finance",
+			vendor: "Notion",
+		},
 	],
 	subscriptions: [
 		{

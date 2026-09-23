@@ -1,3 +1,4 @@
+import { formatCurrency } from "@/modules/money/format";
 import type { MoneyCents } from "@/modules/money/types";
 import type { SpendRequest } from "./types";
 
@@ -12,3 +13,6 @@ export const getPendingApprovalCount = (requests: SpendRequest[]) =>
 
 export const getSpendRequestCashImpact = (request: SpendRequest, dataset: SpendRequestCashDataset) =>
 	dataset.profile.cashBalanceCents - request.amountCents;
+
+export const formatCashAfterApproval = (cents: MoneyCents) =>
+	cents < 0 ? `short by ${formatCurrency(cents)}` : formatCurrency(cents);

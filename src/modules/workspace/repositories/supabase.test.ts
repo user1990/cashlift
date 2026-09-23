@@ -53,6 +53,46 @@ const SUBSCRIPTION_ROWS_MOCK = [
 	},
 ];
 
+const createDecidedSpendRequestClient = () => {
+	let spendRequestCallCount = 0;
+	const eqMock = vi.fn(() => ({
+		eq: eqMock,
+		limit: () => ({
+			maybeSingle: vi
+				.fn()
+				.mockResolvedValue({ data: { company_id: "studio-nova", role: "owner-finance" }, error: null }),
+		}),
+		select: () => ({
+			maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+		}),
+	}));
+	const updateMock = vi.fn(() => ({ eq: eqMock }));
+
+	return {
+		from: vi.fn((table: string) => {
+			if (table === "company_members") {
+				return { select: () => ({ eq: () => ({ limit: () => ({ maybeSingle: vi.fn() }) }) }) };
+			}
+
+			spendRequestCallCount++;
+
+			if (spendRequestCallCount === 1) {
+				return { update: updateMock };
+			}
+
+			return {
+				select: () => ({
+					eq: () => ({
+						eq: () => ({
+							maybeSingle: vi.fn().mockResolvedValue({ data: { status: "approved" }, error: null }),
+						}),
+					}),
+				}),
+			};
+		}),
+	};
+};
+
 const createSupabaseClient = ({
 	updateError = null,
 	updatedRequest = UPDATED_SPEND_REQUEST_ROW_MOCK,
@@ -160,6 +200,7 @@ describe("supabaseFinanceRepository", () => {
 		expect(client.updateMock).toHaveBeenCalledWith(expect.objectContaining({ status: "approved" }));
 		expect(client.eqMock).toHaveBeenCalledWith("company_id", "studio-nova");
 		expect(client.eqMock).toHaveBeenCalledWith("id", "request-brandforge");
+		expect(client.eqMock).toHaveBeenCalledWith("status", "pending");
 		expect(request).toEqual({
 			amountCents: 680_000,
 			category: "software",
@@ -172,6 +213,15 @@ describe("supabaseFinanceRepository", () => {
 			team: "Creative",
 			vendor: "BrandForge",
 		});
+	});
+
+	it("rejects updates when the spend request is already decided", async () => {
+		CREATE_SERVER_SUPABASE_CLIENT_MOCK.mockReturnValue(createDecidedSpendRequestClient());
+		const { SpendRequestConflictError, supabaseFinanceRepository } = await import("./supabase");
+
+		await expect(
+			supabaseFinanceRepository.updateSpendRequestStatus("studio-nova", "jwt", "request-brandforge", "approved"),
+		).rejects.toBeInstanceOf(SpendRequestConflictError);
 	});
 
 	it("maps Supabase update failures to AppError", async () => {

@@ -7,6 +7,7 @@ export type AppErrorCode =
 	| "workspace_data_unavailable"
 	| "workspace_forbidden"
 	| "workspace_service_unavailable"
+	| "workspace_spend_request_conflict"
 	| "workspace_unauthenticated";
 
 type AppErrorParams = {

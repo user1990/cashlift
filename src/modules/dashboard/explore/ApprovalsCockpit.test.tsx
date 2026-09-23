@@ -21,6 +21,10 @@ vi.mock("@/ui/components/feedback/Toaster", () => ({
 	Toaster: () => null,
 }));
 
+vi.mock("../hooks/useDashboardStatusDate", () => ({
+	useDashboardStatusDate: () => new Date("2026-05-09T00:00:00"),
+}));
+
 describe("ApprovalsCockpit", () => {
 	it("renders the glass queue from the current dataset without inventing totals", () => {
 		const dashboard = buildDashboardViewModel({

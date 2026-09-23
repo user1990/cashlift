@@ -3,6 +3,7 @@
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { CashInsightsDashboard } from "../explore/CashInsightsDashboard";
 import { buildCashInsightsPresentation } from "../explore/cashInsightsModel";
+import { useDashboardStatusDate } from "../hooks/useDashboardStatusDate";
 import { buildDashboardViewModel } from "../view-model";
 
 type CashInsightsProps = {
@@ -12,10 +13,11 @@ type CashInsightsProps = {
 };
 
 export const CashInsights = ({ basePath = "/dashboard", bufferDataset, dataset }: CashInsightsProps) => {
+	const statusDate = useDashboardStatusDate(dataset);
 	const dashboard = buildDashboardViewModel({
 		bufferDataset,
 		dataset,
-		date: getCashInsightsDate(dataset),
+		date: statusDate,
 		role: dataset.profile.defaultRole,
 	});
 
@@ -27,9 +29,3 @@ export const CashInsights = ({ basePath = "/dashboard", bufferDataset, dataset }
 		/>
 	);
 };
-
-function getCashInsightsDate(dataset: FinancialDataset) {
-	const date = dataset.forecast[0]?.date;
-
-	return date ? new Date(`${date}T00:00:00`) : new Date();
-}

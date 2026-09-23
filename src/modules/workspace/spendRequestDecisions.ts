@@ -10,7 +10,11 @@ import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/
 import { captureAppException, captureAppMessage } from "@/services/platform/integrations/sentry";
 import { createServerSupabaseClient } from "@/services/supabase/server";
 import { DEMO_WORKSPACE_DATASET } from "./demoDataset";
-import { SpendRequestNotFoundError, supabaseFinanceRepository } from "./repositories/supabase";
+import {
+	SpendRequestConflictError,
+	SpendRequestNotFoundError,
+	supabaseFinanceRepository,
+} from "./repositories/supabase";
 
 export type SpendRequestDecisionResult =
 	| {
@@ -18,7 +22,7 @@ export type SpendRequestDecisionResult =
 			status: "success";
 	  }
 	| {
-			code: "forbidden" | "invalid" | "not_found" | "service" | "unauthenticated" | "unavailable";
+			code: "conflict" | "forbidden" | "invalid" | "not_found" | "service" | "unauthenticated" | "unavailable";
 			message: string;
 			requestId?: string;
 			status: "error";
@@ -54,6 +58,10 @@ const decideDemoSpendRequest = ({ id, status }: SpendRequestDecisionInput): Spen
 		return { code: "not_found", message: "Spend request was not found.", status: "error" };
 	}
 
+	if (request.status !== "pending") {
+		return { code: "conflict", message: "Spend request was already decided.", status: "error" };
+	}
+
 	return { request: { ...request, status }, status: "success" };
 };
 
@@ -79,22 +87,40 @@ export const decideSpendRequest = async (
 		return decideDemoSpendRequest(parsed.data);
 	}
 
+	let session: Awaited<ReturnType<typeof auth>>;
+
 	try {
-		const session = authSession ?? (await auth());
+		session = authSession ?? (await auth());
+	} catch (error) {
+		const message = "Workspace authentication is unavailable.";
+		const requestId = captureSpendRequestException(error, "auth-service-error");
 
-		if (!session.userId) {
-			return { code: "unauthenticated", message: "Sign in to update spend requests.", status: "error" };
-		}
+		return { code: "service", message, requestId, status: "error" };
+	}
 
-		const accessToken = await session.getToken();
+	if (!session.userId) {
+		return { code: "unauthenticated", message: "Sign in to update spend requests.", status: "error" };
+	}
 
-		if (!accessToken) {
-			const message = "Workspace data token is unavailable.";
-			const requestId = captureSpendRequestMessage(message, "missing-data-token");
+	let accessToken: string | null;
 
-			return { code: "service", message, requestId, status: "error" };
-		}
+	try {
+		accessToken = await session.getToken();
+	} catch (error) {
+		const message = "Workspace data token is unavailable.";
+		const requestId = captureSpendRequestException(error, "data-token-error");
 
+		return { code: "service", message, requestId, status: "error" };
+	}
+
+	if (!accessToken) {
+		const message = "Workspace data token is unavailable.";
+		const requestId = captureSpendRequestMessage(message, "missing-data-token");
+
+		return { code: "service", message, requestId, status: "error" };
+	}
+
+	try {
 		const client = createServerSupabaseClient({ accessToken });
 		const membership = await selectCompanyMembership(client, session.userId);
 
@@ -117,6 +143,10 @@ export const decideSpendRequest = async (
 	} catch (error) {
 		if (error instanceof CompanyMembershipNotFoundError) {
 			return { code: "forbidden", message: "No company workspace is assigned to this user.", status: "error" };
+		}
+
+		if (error instanceof SpendRequestConflictError) {
+			return { code: "conflict", message: "Spend request was already decided.", status: "error" };
 		}
 
 		if (error instanceof SpendRequestNotFoundError) {
