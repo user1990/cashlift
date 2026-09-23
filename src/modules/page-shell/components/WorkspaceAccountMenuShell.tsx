@@ -26,12 +26,16 @@ export const AccountMenuShell = ({
 }: AccountMenuShellProps) => (
 	<details className={cn("relative", placement === "header" && "shrink-0")}>
 		<summary
+			aria-label={compact ? `${name}, ${description}` : undefined}
 			className={cn(
 				"focus-ring ease flex cursor-pointer list-none items-center rounded-lg text-left text-shell-foreground transition-colors duration-150 hover:bg-white/5 [&::-webkit-details-marker]:hidden",
 				compact ? "size-11 justify-center p-0" : "w-full gap-3 px-2 py-3",
 			)}
 		>
-			<span className="grid size-10 shrink-0 place-items-center rounded-full bg-panel-muted font-semibold text-s+ text-shell-foreground">
+			<span
+				aria-hidden={compact}
+				className="grid size-10 shrink-0 place-items-center rounded-full bg-panel-muted font-semibold text-s+ text-shell-foreground"
+			>
 				{avatar}
 			</span>
 

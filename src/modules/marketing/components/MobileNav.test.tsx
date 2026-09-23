@@ -28,6 +28,15 @@ describe("MobileNav", () => {
 		const drawer = screen.getByRole("dialog", { name: "Mobile navigation" });
 
 		expect(within(drawer).getByRole("link", { name: "Customers" })).toBeVisible();
+		expect(within(drawer).getByRole("button", { name: "Close navigation" })).toBeVisible();
+
+		await user.click(within(drawer).getByRole("button", { name: "Close navigation" }));
+
+		expect(screen.queryByRole("dialog", { name: "Mobile navigation" })).not.toBeInTheDocument();
+		expect(toggle).toHaveAttribute("aria-expanded", "false");
+
+		await user.click(toggle);
+		expect(screen.getByRole("dialog", { name: "Mobile navigation" })).toBeVisible();
 
 		await user.keyboard("{Escape}");
 

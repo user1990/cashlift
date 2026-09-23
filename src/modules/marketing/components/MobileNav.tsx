@@ -66,15 +66,26 @@ export const MobileNav = () => {
 				}}
 				className="fixed inset-0 z-40 flex lg:hidden"
 			>
-				<Modal className="ml-auto h-full w-full max-w-none outline-none sm:max-w-md">
+				<Modal className="ml-auto h-full w-[min(100vw-3rem,18rem)] outline-none">
 					<Dialog
 						aria-label="Mobile navigation"
 						id={drawerId}
 						className="flex h-full flex-col border-shell-border border-l bg-shell shadow-shell outline-none"
 					>
+						<div className="flex justify-end border-shell-border border-b px-3 py-2">
+							<button
+								aria-label="Close navigation"
+								onClick={closeDrawer}
+								type="button"
+								className="focus-ring inline-flex size-11 cursor-pointer items-center justify-center rounded-md text-shell-foreground transition-[color] duration-150 hover:text-primary"
+							>
+								<X aria-hidden className="size-4" />
+							</button>
+						</div>
+
 						<nav
 							aria-label="Mobile navigation"
-							className="max-h-full overflow-y-auto overscroll-contain px-4 py-4 sm:px-6"
+							className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-6"
 						>
 							<div className="mx-auto grid max-w-295 gap-5">
 								{MARKETING_NAV_GROUPS.map(({ items, label }) => (
