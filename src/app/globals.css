@@ -192,18 +192,20 @@ textarea,
 	touch-action: manipulation;
 }
 
-:where(button, a, summary, [role="button"], input, select, textarea) {
-	transition-duration: var(--motion-duration-micro);
-	transition-timing-function: var(--motion-ease-hover);
-}
+@layer base {
+	:where(button, a, summary, [role="button"], input, select, textarea) {
+		transition-duration: var(--motion-duration-micro);
+		transition-timing-function: var(--motion-ease-hover);
+	}
 
-:where(button, a, summary, [role="button"]) {
-	transform-origin: center;
-	transition-property: transform, background-color, border-color, color, box-shadow, opacity;
+	:where(button, a, summary, [role="button"]) {
+		transform-origin: center;
+		transition-property: transform, background-color, border-color, color, box-shadow, opacity;
+	}
 }
 
 @media (prefers-reduced-motion: no-preference) {
-	:where(button, a, summary, [role="button"]):not(:disabled):not([aria-disabled="true"]):not([data-disabled]):not(
+	:where(button, summary, [role="button"]):not(:disabled):not([aria-disabled="true"]):not([data-disabled]):not(
 		[data-no-press-scale]
 	):active {
 		transform: scale(var(--motion-press-scale));

@@ -21,6 +21,6 @@ describe("OverviewDateRangePickerClient", () => {
 
 		await user.tab();
 
-		expect(document.activeElement).toHaveAttribute("aria-label", "Open dashboard date range calendar");
+		expect(document.activeElement).toHaveAccessibleName(/dashboard date range/i);
 	});
 });

@@ -11,7 +11,7 @@ import { getVendorLeakSavings, isVendorLeak } from "@/modules/subscriptions/util
 import { getCashBufferRisk, getRunwayDays } from "@/modules/workspace/cash";
 import { getDueVendorBills, getUpcomingOutflowTotal } from "@/modules/workspace/outflows";
 import type { FinancialDataset } from "@/modules/workspace/types";
-import { formatDashboardDate } from "./overviewDateRangeLabel";
+import { formatDashboardDate, getOverviewDateRangeLabel } from "./overviewDateRangeLabel";
 
 type BuildDashboardViewModelParams = {
 	dataset: FinancialDataset;
@@ -116,9 +116,13 @@ function getDateRangeLabel(forecast: FinancialDataset["forecast"]) {
 		return "Current period";
 	}
 
-	const endDate = new Date(`${forecast[forecast.length - 1].date}T00:00:00`);
-
-	return `${formatDashboardDate(forecast[0].date)} - ${formatDashboardDate(forecast[forecast.length - 1].date)}, ${endDate.getFullYear()}`;
+	return getOverviewDateRangeLabel(
+		{
+			endDate: forecast[forecast.length - 1].date,
+			startDate: forecast[0].date,
+		},
+		"Current period",
+	);
 }
 
 function getLowestProjectedCash(forecast: FinancialDataset["forecast"]) {

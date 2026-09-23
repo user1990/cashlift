@@ -9,7 +9,6 @@ import {
 	CalendarGrid,
 	DateRangePicker,
 	Dialog,
-	Group,
 	Heading,
 	Label,
 	Popover,
@@ -49,26 +48,23 @@ export const OverviewDateRangePickerClient = ({
 		>
 			<Label className="sr-only">Dashboard date range</Label>
 
-			<Group className="focus-ring-rac ease inline-flex h-11 items-center gap-2 rounded-md border border-border bg-shell-elevated px-4 font-semibold text-m text-shell-foreground transition-[border-color,box-shadow] duration-150 data-open:border-primary-subtle-border">
+			<AriaButton
+				className="focus-ring-rac ease inline-flex h-11 min-w-0 max-w-full items-center gap-2 rounded-md border border-border bg-shell-elevated px-4 font-semibold text-m text-shell-foreground transition-[border-color,box-shadow] duration-150 data-open:border-primary-subtle-border"
+				isDisabled={!onDateRangeChange}
+			>
 				<CalendarDays aria-hidden className="size-4 shrink-0" />
 
-				<span className="whitespace-nowrap">{triggerLabel}</span>
+				<span className="truncate whitespace-nowrap">{triggerLabel}</span>
 
-				<AriaButton
-					aria-label="Open dashboard date range calendar"
-					className="focus-ring-rac ease flex size-6 min-h-6 min-w-6 cursor-pointer items-center justify-center rounded-sm text-shell-foreground transition-[color] duration-150 hover:text-primary"
-					isDisabled={!onDateRangeChange}
-				>
-					<ChevronDown aria-hidden className="size-4" />
-				</AriaButton>
-			</Group>
+				<ChevronDown aria-hidden className="size-4 shrink-0" />
+			</AriaButton>
 
 			<Popover
-				className="z-50 mt-2 rounded-md border border-border bg-panel p-3 text-panel-foreground shadow-[0_18px_48px_rgb(15_23_42/0.22)] outline-none"
+				className="z-50 mt-2 max-w-[calc(100vw-2rem)] rounded-md border border-border bg-panel p-3 text-panel-foreground shadow-[0_18px_48px_rgb(15_23_42/0.22)] outline-none"
 				offset={8}
 			>
 				<Dialog>
-					<RangeCalendar className="w-[20rem]">
+					<RangeCalendar className="w-full max-w-[20rem]">
 						<header className="mb-3 flex items-center justify-between">
 							<CalendarNavButton slot="previous">
 								<ChevronLeft aria-hidden className="size-4" />
@@ -87,7 +83,7 @@ export const OverviewDateRangePickerClient = ({
 									className={cn(
 										"focus-ring-rac ease size-9 rounded-md text-center text-s transition-[background-color,color,box-shadow] duration-150",
 										"text-panel-foreground hover:bg-panel-muted data-disabled:text-muted-foreground/40 data-outside-month:text-muted-foreground",
-										"data-selected:bg-primary data-selected:text-primary-foreground",
+										"data-selected:bg-primary/15 data-selected:text-panel-foreground",
 										"data-selection-end:bg-primary data-selection-start:bg-primary data-selection-end:text-primary-foreground data-selection-start:text-primary-foreground",
 									)}
 									date={date}
