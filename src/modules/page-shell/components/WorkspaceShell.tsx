@@ -20,11 +20,13 @@ export const WorkspaceShell = ({ children, experience }: WorkspaceShellProps) =>
 			<WorkspaceMobileNav workspace={workspace} />
 
 			<div className="mx-auto grid w-full max-w-[1600px] gap-6 p-4 lg:grid-cols-[236px_1fr]">
-				<WorkspaceSidebar workspace={workspace} />
-
-				<MainContent variant="plain" className="min-w-0 space-y-5">
+				<MainContent variant="plain" className="min-w-0 space-y-5 max-lg:order-2 lg:col-start-2 lg:row-start-1">
 					{children}
 				</MainContent>
+
+				<div className="max-lg:order-1 lg:col-start-1 lg:row-start-1">
+					<WorkspaceSidebar workspace={workspace} />
+				</div>
 			</div>
 		</div>
 	);

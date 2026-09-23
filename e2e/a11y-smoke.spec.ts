@@ -66,7 +66,7 @@ test.describe("axe smoke", () => {
 				const main = document.getElementById("main-content");
 				const active = document.activeElement;
 
-				return Boolean(main && active && main.contains(active));
+				return Boolean(main && active && (main === active || main.contains(active)));
 			});
 
 			expect(activeInMain, `skip link target for ${path}`).toBe(true);
