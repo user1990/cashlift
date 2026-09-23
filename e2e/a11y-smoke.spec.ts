@@ -58,7 +58,8 @@ test.describe("axe smoke", () => {
 	test("skip links land inside main content", async ({ page }) => {
 		for (const path of ["/checkout", "/demo/workspace"]) {
 			await page.goto(path);
-			await page.getByRole("link", { name: "Skip to content" }).click();
+			await page.keyboard.press("Tab");
+			await page.getByRole("link", { name: "Skip to content" }).press("Enter");
 			await page.keyboard.press("Tab");
 
 			const activeInMain = await page.evaluate(() => {
