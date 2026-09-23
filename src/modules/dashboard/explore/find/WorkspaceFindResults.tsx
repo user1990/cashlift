@@ -39,7 +39,7 @@ export const WorkspaceFindResults = ({ itemsCount, session }: WorkspaceFindResul
 				</p>
 
 				<button
-					className="inline-flex min-h-11 items-center text-m text-muted-foreground outline-none hover:text-panel-foreground focus-visible:ring-[3px] focus-visible:ring-primary/20"
+					className="focus-ring inline-flex min-h-11 items-center text-m text-muted-foreground outline-none hover:text-panel-foreground"
 					onClick={session.clearAll}
 					type="button"
 				>

@@ -36,7 +36,7 @@ export const ActionInboxItem = ({
 }: ActionInboxItemProps) => (
 	<li className="py-4 first:pt-0 last:pb-0">
 		<Link
-			className="group grid gap-4 outline-none transition-colors hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start"
+			className="group focus-ring grid gap-4 outline-none transition-colors hover:text-primary sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start"
 			href={getCashActionDestination(type, basePath)}
 		>
 			<span className="min-w-0">

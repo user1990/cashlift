@@ -9,27 +9,23 @@ type CheckoutHeaderProps = {
 
 export const CheckoutHeader = ({ billing }: CheckoutHeaderProps) => (
 	<header className="border-shell-border border-b bg-shell/95">
-		<div className="mx-auto flex max-w-295 items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-8">
+		<div className="mx-auto flex min-w-0 max-w-295 items-center justify-between gap-2 px-4 py-5 sm:gap-4 sm:px-6 lg:px-8">
 			<Link
 				aria-label="Back to pricing"
 				href={`/pricing?billing=${billing}`}
-				className="inline-flex items-center gap-2 font-medium text-m text-shell-muted transition-colors duration-150 hover:text-primary"
+				className="focus-ring inline-flex size-11 shrink-0 items-center justify-center rounded-md font-medium text-shell-muted transition-colors duration-150 hover:text-primary"
 			>
 				<ArrowLeft aria-hidden className="size-5" />
 
-				<span className="hidden sm:inline">Back to pricing</span>
-
-				<span className="sm:hidden">Pricing</span>
+				<span className="sr-only">Back to pricing</span>
 			</Link>
 
-			<Logo />
+			<Logo className="min-w-0 shrink" />
 
-			<p className="inline-flex items-center gap-2 font-medium text-m text-shell-muted">
+			<p className="inline-flex size-11 shrink-0 items-center justify-center font-medium text-m text-shell-muted">
 				<ShieldCheck aria-hidden className="size-5 text-primary" />
 
-				<span className="hidden sm:inline">Secure checkout</span>
-
-				<span className="sm:hidden">Secure</span>
+				<span className="sr-only">Secure checkout</span>
 			</p>
 		</div>
 	</header>

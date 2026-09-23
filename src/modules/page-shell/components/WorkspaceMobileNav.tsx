@@ -58,7 +58,7 @@ export const WorkspaceMobileNav = ({ workspace }: WorkspaceMobileNavProps) => {
 						aria-controls={drawerId}
 						aria-expanded={open}
 						aria-label={open ? "Close navigation" : "Open navigation"}
-						className="ease inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-black/30 text-shell-foreground outline-none transition-[border-color,color] duration-150 hover:border-primary/40 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
+						className="ease focus-ring inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-black/30 text-shell-foreground outline-none transition-[border-color,color] duration-150 hover:border-primary/40 hover:text-primary"
 						onClick={toggleDrawer}
 						type="button"
 					>

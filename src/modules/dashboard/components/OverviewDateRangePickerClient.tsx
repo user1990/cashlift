@@ -7,9 +7,7 @@ import {
 	Button as AriaButton,
 	CalendarCell,
 	CalendarGrid,
-	DateInput,
 	DateRangePicker,
-	DateSegment,
 	Dialog,
 	Group,
 	Heading,
@@ -33,10 +31,11 @@ export const OverviewDateRangePickerClient = ({
 	onDateRangeChange,
 }: OverviewDateRangePickerClientProps) => {
 	const value = dateRange ? { end: parseDate(dateRange.endDate), start: parseDate(dateRange.startDate) } : null;
+	const triggerLabel = getOverviewDateRangeLabel(dateRange, fallbackLabel);
 
 	return (
 		<DateRangePicker
-			aria-label="Dashboard date range"
+			aria-label={`Dashboard date range, ${triggerLabel}`}
 			className="relative"
 			onChange={(nextValue) => {
 				if (nextValue) {
@@ -50,23 +49,14 @@ export const OverviewDateRangePickerClient = ({
 		>
 			<Label className="sr-only">Dashboard date range</Label>
 
-			<Group className="ease inline-flex h-11 items-center gap-2 rounded-md border border-border bg-shell-elevated px-4 font-semibold text-m text-shell-foreground outline-none transition-[border-color,box-shadow] duration-150 data-open:border-primary-subtle-border data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20">
+			<Group className="focus-ring-rac ease inline-flex h-11 items-center gap-2 rounded-md border border-border bg-shell-elevated px-4 font-semibold text-m text-shell-foreground transition-[border-color,box-shadow] duration-150 data-open:border-primary-subtle-border">
 				<CalendarDays aria-hidden className="size-4 shrink-0" />
 
-				<span aria-hidden className="whitespace-nowrap">
-					{getOverviewDateRangeLabel(dateRange, fallbackLabel)}
-				</span>
-
-				<DateInput className="sr-only" slot="start">
-					{(segment) => <DateSegment segment={segment} />}
-				</DateInput>
-
-				<DateInput className="sr-only" slot="end">
-					{(segment) => <DateSegment segment={segment} />}
-				</DateInput>
+				<span className="whitespace-nowrap">{triggerLabel}</span>
 
 				<AriaButton
-					className="ease flex size-5 cursor-pointer items-center justify-center rounded-sm text-shell-foreground outline-none transition-[color] duration-150 hover:text-primary data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20"
+					aria-label="Open dashboard date range calendar"
+					className="focus-ring-rac ease flex size-6 min-h-6 min-w-6 cursor-pointer items-center justify-center rounded-sm text-shell-foreground transition-[color] duration-150 hover:text-primary"
 					isDisabled={!onDateRangeChange}
 				>
 					<ChevronDown aria-hidden className="size-4" />
@@ -95,9 +85,9 @@ export const OverviewDateRangePickerClient = ({
 							{(date) => (
 								<CalendarCell
 									className={cn(
-										"ease size-9 rounded-md text-center text-s outline-none transition-[background-color,color,box-shadow] duration-150",
+										"focus-ring-rac ease size-9 rounded-md text-center text-s transition-[background-color,color,box-shadow] duration-150",
 										"text-panel-foreground hover:bg-panel-muted data-disabled:text-muted-foreground/40 data-outside-month:text-muted-foreground",
-										"data-selected:bg-primary data-selected:text-primary-foreground data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20",
+										"data-selected:bg-primary data-selected:text-primary-foreground",
 										"data-selection-end:bg-primary data-selection-start:bg-primary data-selection-end:text-primary-foreground data-selection-start:text-primary-foreground",
 									)}
 									date={date}
@@ -118,7 +108,7 @@ type CalendarNavButtonProps = {
 
 const CalendarNavButton = ({ children, slot }: CalendarNavButtonProps) => (
 	<AriaButton
-		className="ease flex size-8 items-center justify-center rounded-md text-muted-foreground outline-none transition-[background-color,color,box-shadow] duration-150 hover:bg-panel-muted hover:text-panel-foreground data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20"
+		className="focus-ring-rac ease flex size-8 items-center justify-center rounded-md text-muted-foreground transition-[background-color,color,box-shadow] duration-150 hover:bg-panel-muted hover:text-panel-foreground"
 		slot={slot}
 	>
 		{children}

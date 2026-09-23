@@ -16,14 +16,16 @@ export const WorkspaceShell = ({ children, experience }: WorkspaceShellProps) =>
 	const workspace = getWorkspaceExperienceContract(experience);
 
 	return (
-		<MainContent variant="workspace">
+		<div className="min-h-dvh bg-shell text-shell-foreground">
 			<WorkspaceMobileNav workspace={workspace} />
 
 			<div className="mx-auto grid w-full max-w-[1600px] gap-6 p-4 lg:grid-cols-[236px_1fr]">
 				<WorkspaceSidebar workspace={workspace} />
 
-				<section className="min-w-0 space-y-5">{children}</section>
+				<MainContent variant="plain" className="min-w-0 space-y-5">
+					{children}
+				</MainContent>
 			</div>
-		</MainContent>
+		</div>
 	);
 };
