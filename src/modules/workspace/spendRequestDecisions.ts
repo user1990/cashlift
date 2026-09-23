@@ -87,6 +87,13 @@ export const decideSpendRequest = async (
 		return decideDemoSpendRequest(parsed.data);
 	}
 
+	return decideProductionSpendRequest(parsed.data, authSession);
+};
+
+const decideProductionSpendRequest = async (
+	decision: SpendRequestDecisionInput,
+	authSession?: AuthSession,
+): Promise<SpendRequestDecisionResult> => {
 	let session: Awaited<ReturnType<typeof auth>>;
 
 	try {
@@ -135,8 +142,8 @@ export const decideSpendRequest = async (
 		const request = await supabaseFinanceRepository.updateSpendRequestStatus(
 			membership.companyId,
 			accessToken,
-			parsed.data.id,
-			parsed.data.status,
+			decision.id,
+			decision.status,
 		);
 
 		return { request, status: "success" };
