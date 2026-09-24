@@ -2,8 +2,8 @@
 
 import { type QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { decideSpendRequest, type SpendRequestDecisionRequest } from "../api";
-import type { SpendRequest } from "../types";
+import { decideSpendRequest } from "../api";
+import type { SpendRequest, SpendRequestDecisionInput } from "../types";
 
 type ApprovalQueueDataset = {
 	spendRequests: Array<Pick<SpendRequest, "id" | "status" | "vendor"> & Record<string, unknown>>;
@@ -17,7 +17,7 @@ type SpendRequestStatusUpdate = Pick<SpendRequest, "id" | "status">;
 
 export const useSpendRequestDecision = (datasetQueryKey: QueryKey) => {
 	const queryClient = useQueryClient();
-	const decisionMutation = useMutation<SpendRequest, Error, SpendRequestDecisionRequest, ApprovalQueueMutationContext>({
+	const decisionMutation = useMutation<SpendRequest, Error, SpendRequestDecisionInput, ApprovalQueueMutationContext>({
 		mutationFn: decideSpendRequest,
 		mutationKey: datasetQueryKey,
 		onError: (error, decision, context) => {

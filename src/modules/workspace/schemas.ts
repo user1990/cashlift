@@ -20,12 +20,10 @@ export const WORKSPACE_DATASET_SCOPE_SCHEMA = z.enum([
 	"vendors",
 ]);
 
-const ISO_DATE_SCHEMA = z.iso.date();
-
 export const WORKSPACE_DATASET_DATE_RANGE_SCHEMA = z
 	.object({
-		endDate: ISO_DATE_SCHEMA,
-		startDate: ISO_DATE_SCHEMA,
+		endDate: z.iso.date(),
+		startDate: z.iso.date(),
 	})
 	.refine(({ endDate, startDate }) => startDate <= endDate, {
 		message: "Start date must be before or equal to end date.",

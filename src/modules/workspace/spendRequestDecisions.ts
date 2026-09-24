@@ -3,9 +3,8 @@ import {
 	selectCompanyMembership,
 } from "@/modules/company-memberships/repositories/supabase";
 import { canDecideSpendRequests } from "@/modules/company-roles/utils";
-import type { SpendRequestDecisionInput } from "@/modules/spend-requests/schemas";
 import { SPEND_REQUEST_DECISION_SCHEMA } from "@/modules/spend-requests/schemas";
-import type { SpendRequest } from "@/modules/spend-requests/types";
+import type { SpendRequest, SpendRequestDecisionInput } from "@/modules/spend-requests/types";
 import {
 	type AuthSession,
 	captureWorkspaceOperationException,
