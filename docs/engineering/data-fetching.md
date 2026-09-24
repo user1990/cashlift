@@ -3,7 +3,7 @@ title: Data fetching and mutations
 description: Keep the server-rendered workspace and browser cache coherent.
 ---
 
-Workspace pages begin with data loaded on the server. Interactive sections then use React Query with that same dataset as `initialData`, avoiding a duplicate request during hydration.
+Workspace pages begin with data loaded on the server. `loadWorkspaceDataset(scope)` reduces the payload to the active route section before it crosses the server/client boundary. Interactive sections then use React Query with that same dataset as `initialData`, avoiding a duplicate request during hydration.
 
 Browser transport stays on `fetch` plus feature-level Zod parsing. Do not add an HTTP client library.
 
