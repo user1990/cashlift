@@ -8,7 +8,7 @@ CashLift is a reference implementation for React/Next.js business applications. 
 | Pattern | Code | Tests |
 | --- | --- | --- |
 | Mutation with conflicting controls locked | `src/modules/spend-requests/hooks/useSpendRequestDecision.ts` | `src/modules/dashboard/cockpits/ApprovalsCockpit.test.tsx` |
-| Demo workspace approval journey | `src/modules/dashboard/cockpits/ApprovalsCockpit.tsx` | `e2e/demo-approval-workflow.spec.ts` |
+| Demo workspace approval journey | `src/modules/dashboard/cockpits/ApprovalsCockpit.tsx` | `e2e/demo-approval-workflow.spec.ts` (outcome); pending-lock in `ApprovalsCockpit.test.tsx` |
 | Keyboard activation on primary action | `src/modules/spend-requests/components/ApprovalDecisionActions.tsx` | `e2e/keyboard-approvals.spec.ts` |
 | URL-state navigation shell | `src/modules/page-shell/navigation.ts` | `src/modules/page-shell/navigation.test.ts` |
 | Form field primitive | `src/ui/components/forms/TextField.tsx` | `src/ui/components/forms/EmailAutocompleteField.test.tsx` |

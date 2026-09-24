@@ -9,14 +9,12 @@ test.describe("keyboard approvals", () => {
 
 	test("activates approve with keyboard focus", async ({ page }) => {
 		const approveBrandForge = page.getByRole("button", { name: "Approve BrandForge" });
-		const rejectDelta = page.getByRole("button", { name: "Reject Delta" });
 
 		await approveBrandForge.focus();
 		await expect(approveBrandForge).toBeFocused();
 
 		await page.keyboard.press("Enter");
 
-		await expect(rejectDelta).toBeDisabled();
 		await expect(page.getByText("Spend approved", { exact: true })).toBeVisible({ timeout: 15_000 });
 	});
 });
