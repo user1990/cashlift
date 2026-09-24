@@ -25,7 +25,7 @@ type ApiErrorParams = {
 	error: string;
 	request: Request;
 	requestId?: string;
-	status: 400 | 401 | 403 | 404 | 429 | 500 | 503;
+	status: 400 | 401 | 403 | 404 | 409 | 429 | 500 | 503;
 	deprecated?: boolean;
 	successorPath?: string;
 };
@@ -197,6 +197,7 @@ const getErrorTitle = (code: AppErrorCode) => {
 		workspace_data_unavailable: "Workspace data unavailable",
 		workspace_forbidden: "Workspace access forbidden",
 		workspace_service_unavailable: "Workspace service unavailable",
+		workspace_spend_request_conflict: "Spend request already decided",
 		workspace_unauthenticated: "Workspace authentication required",
 	};
 
@@ -213,6 +214,7 @@ const getErrorResolution = (code: AppErrorCode) => {
 		workspace_data_unavailable: "Retry later and include the request ID when contacting CashLift support.",
 		workspace_forbidden: "Authenticate with a session that belongs to a CashLift company workspace.",
 		workspace_service_unavailable: "Retry with exponential backoff and preserve the request ID.",
+		workspace_spend_request_conflict: "Refresh the workspace dataset and confirm the spend request is still pending.",
 		workspace_unauthenticated: "Authenticate with a Clerk session, then retry the request.",
 	};
 

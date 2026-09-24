@@ -38,6 +38,9 @@ export const useSpendRequestDecision = (datasetQueryKey: QueryKey) => {
 
 			return { snapshots };
 		},
+		onSettled: () => {
+			void queryClient.invalidateQueries({ queryKey: datasetQueryKey });
+		},
 		onSuccess: (request) => {
 			queryClient.setQueriesData<ApprovalQueueDataset>({ queryKey: datasetQueryKey }, (dataset) =>
 				dataset ? updateDatasetSpendRequest(dataset, request) : dataset,

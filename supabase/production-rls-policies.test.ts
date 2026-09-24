@@ -48,6 +48,15 @@ describe("production Supabase policies", () => {
 		expect(spendRequestUpdatePolicy).toContain("to authenticated");
 		expect(spendRequestUpdatePolicy).toContain("role in ('owner-finance', 'manager')");
 		expect(spendRequestUpdatePolicy).toContain("with check");
+		expect(spendRequestUpdatePolicy).toContain("status = 'pending'");
+		expect(spendRequestUpdatePolicy).toContain("status in ('approved', 'rejected')");
+	});
+
+	it("limits spend request updates to status columns for authenticated members", () => {
+		const productionPolicies = readFileSync("supabase/production-rls-policies.sql", "utf8");
+
+		expect(productionPolicies).toMatch(/revoke update on spend_requests from authenticated;/i);
+		expect(productionPolicies).toMatch(/grant update \(status, updated_at\) on spend_requests to authenticated;/i);
 	});
 
 	it("restrict cash actions to the authenticated member's company and role", () => {

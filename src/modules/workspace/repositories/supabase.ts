@@ -42,6 +42,16 @@ export class SpendRequestNotFoundError extends AppError {
 	}
 }
 
+export class SpendRequestConflictError extends AppError {
+	constructor() {
+		super({
+			code: "workspace_spend_request_conflict",
+			message: "Spend request was already decided.",
+		});
+		this.name = "SpendRequestConflictError";
+	}
+}
+
 const getSupabaseQueryData = async <Data>(
 	table: string,
 	query: PromiseLike<SupabaseQueryResult<Data>>,
@@ -140,12 +150,28 @@ const updateSpendRequestStatusByCompanyId = async (
 			.update({ status, updated_at: new Date().toISOString() })
 			.eq("company_id", companyId)
 			.eq("id", id)
+			.eq("status", "pending")
 			.select("*")
 			.maybeSingle<SpendRequestRow>(),
 		"Unable to update spend request.",
 	);
 
 	if (!data) {
+		const existing = await getSupabaseQueryData(
+			"spend_requests",
+			client
+				.from("spend_requests")
+				.select("status")
+				.eq("company_id", companyId)
+				.eq("id", id)
+				.maybeSingle<Pick<SpendRequestRow, "status">>(),
+			"Unable to load spend request.",
+		);
+
+		if (existing && existing.status !== "pending") {
+			throw new SpendRequestConflictError();
+		}
+
 		throw new SpendRequestNotFoundError();
 	}
 
