@@ -43,6 +43,17 @@ Use this skill for CashLift styling changes. Read `.agents/docs/styling.md` for 
 - Prefer React state, props, or top-level classes when the condition drives behavior, data fetching, accessibility, analytics, business rules, API/feature-flag state, permissions, or complex flows.
 - Avoid chained/deep/broad `:has()` selectors on large or frequently mutating DOMs.
 
+## Native CSS Before JavaScript
+
+- Prefer native anchors with `scroll-behavior` and target `scroll-margin` over custom smooth-scroll offsets. Respect `prefers-reduced-motion`.
+- Use scroll snapping only when the interaction should settle at item boundaries; keep natural scrolling and controls usable.
+- Use `:user-valid` / `:user-invalid` only for native constraint-validation presentation after user interaction. Keep application and server validation authoritative.
+- Preserve a visible keyboard focus indicator with `:focus-visible`; do not remove focus outlines without an equivalent cue.
+- Use `lh` for line-based text sizing. Consider `field-sizing: content` for new auto-growing fields only with a fallback appropriate to the surface's Baseline target.
+- Keep JavaScript when scrolling/focus is part of keyboard navigation, or when state drives behavior, accessibility, or application validation.
+
+See [Native CSS interaction and sizing patterns](../../docs/styling.md#native-css-interaction-and-sizing) for examples and compatibility notes.
+
 ## UI Components
 
 - Check `src/ui/components/*` (for example `actions/Button.tsx`, `layout/Panel.tsx`, `forms/TextField.tsx`) before adding a new primitive.
