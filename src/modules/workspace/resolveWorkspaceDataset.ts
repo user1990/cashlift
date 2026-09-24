@@ -1,10 +1,14 @@
-import { auth } from "@clerk/nextjs/server";
 import { CompanyMembershipNotFoundError } from "@/modules/company-memberships/repositories/supabase";
+import {
+	captureWorkspaceOperationException,
+	getWorkspaceAccessToken,
+	getWorkspaceAuthSession,
+	isWorkspaceOperationFailure,
+} from "@/modules/workspace/access";
 import { reduceDatasetForDateRange, reduceDatasetForScope } from "@/modules/workspace/read-models";
 import { supabaseFinanceRepository } from "@/modules/workspace/repositories/supabase";
 import type { FinancialDataset, WorkspaceDatasetDateRange, WorkspaceDatasetScope } from "@/modules/workspace/types";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
-import { captureAppException, captureAppMessage } from "@/services/platform/integrations/sentry";
 import { DEMO_WORKSPACE_DATASET } from "./demoDataset";
 
 export type ResolveWorkspaceDatasetResult =
@@ -16,27 +20,6 @@ export type ResolveWorkspaceDatasetResult =
 	| { kind: "unauthenticated"; message: string };
 
 const GENERIC_DATA_MESSAGE = "Unable to load workspace data.";
-
-const captureWorkspaceDatasetException = (error: unknown, failureKind: string, extra?: Record<string, unknown>) =>
-	captureAppException({
-		error,
-		extra,
-		fingerprint: ["workspace-dataset", failureKind],
-		tags: {
-			failureKind,
-			feature: "workspace-dataset",
-		},
-	});
-
-const captureWorkspaceDatasetMessage = (message: string, failureKind: string) =>
-	captureAppMessage({
-		fingerprint: ["workspace-dataset", failureKind],
-		message,
-		tags: {
-			failureKind,
-			feature: "workspace-dataset",
-		},
-	});
 
 export const resolveWorkspaceDataset = async (
 	scope: WorkspaceDatasetScope = "overview",
@@ -52,37 +35,24 @@ export const resolveWorkspaceDataset = async (
 		return { dataset: reduceDatasetForDateRange(loadDemoWorkspaceDataset(scope), dateRange), kind: "success" };
 	}
 
-	let session: Awaited<ReturnType<typeof auth>>;
+	const session = await getWorkspaceAuthSession();
 
-	try {
-		session = await auth();
-	} catch (error) {
-		const message = "Workspace authentication is unavailable.";
-		const requestId = captureWorkspaceDatasetException(error, "auth-service-error");
-
-		return { kind: "service", message, requestId };
+	if (isWorkspaceOperationFailure(session)) {
+		return session.kind === "service"
+			? { kind: "service", message: session.message, requestId: session.requestId }
+			: { kind: session.kind, message: session.message };
 	}
 
 	if (!session.userId) {
 		return { kind: "unauthenticated", message: "Sign in to load workspace data." };
 	}
 
-	let accessToken: string | null;
+	const accessToken = await getWorkspaceAccessToken(session);
 
-	try {
-		accessToken = await session.getToken();
-	} catch (error) {
-		const message = "Workspace data token is unavailable.";
-		const requestId = captureWorkspaceDatasetException(error, "data-token-error");
-
-		return { kind: "service", message, requestId };
-	}
-
-	if (!accessToken) {
-		const message = "Workspace data token is unavailable.";
-		const requestId = captureWorkspaceDatasetMessage(message, "missing-data-token");
-
-		return { kind: "service", message, requestId };
+	if (isWorkspaceOperationFailure(accessToken)) {
+		return accessToken.kind === "service"
+			? { kind: "service", message: accessToken.message, requestId: accessToken.requestId }
+			: { kind: accessToken.kind, message: accessToken.message };
 	}
 
 	try {
@@ -94,7 +64,7 @@ export const resolveWorkspaceDataset = async (
 			return { kind: "forbidden", message: "No company workspace is assigned to this user." };
 		}
 
-		const requestId = captureWorkspaceDatasetException(error, "data-error");
+		const requestId = captureWorkspaceOperationException(error, "data-error");
 
 		return { kind: "data_error", message: GENERIC_DATA_MESSAGE, requestId };
 	}

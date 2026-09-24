@@ -1,5 +1,5 @@
-import { BRAND_FORGE_SPEND_REQUEST_FIXTURE } from "@/modules/spend-requests/fixtures";
 import type { FinancialDataset } from "@/modules/workspace/types";
+import { BRAND_FORGE_SPEND_REQUEST_FIXTURE } from "@/test/fixtures/spendRequests";
 
 export const financialDatasetFixture: FinancialDataset = {
 	cashActions: [

@@ -1,17 +1,5 @@
+import { type DatasetTable, EMPTY_DATASET_PARTS } from "./datasetParts";
 import type { FinancialDataset, WorkspaceDatasetDateRange, WorkspaceDatasetScope } from "./types";
-
-const EMPTY_DATASET_PARTS = {
-	cashActions: [],
-	forecast: [],
-	invoices: [],
-	spendRequests: [],
-	subscriptions: [],
-	teamBudgets: [],
-	teamMembers: [],
-	vendorBills: [],
-} as const satisfies Omit<FinancialDataset, "profile">;
-
-type DatasetTable = keyof Omit<FinancialDataset, "profile">;
 
 export const WORKSPACE_SCOPE_TABLES = {
 	approvals: ["spendRequests"],
@@ -51,6 +39,7 @@ const getScopedDatasetParts = (
 ): Partial<Omit<FinancialDataset, "profile">> =>
 	Object.fromEntries(WORKSPACE_SCOPE_TABLES[scope].map((table) => [table, dataset[table]]));
 
+/** Narrows time-series tables for the overview window; state tables stay intact for cash decisions. */
 export const reduceDatasetForDateRange = (
 	dataset: FinancialDataset,
 	dateRange?: WorkspaceDatasetDateRange,
@@ -63,10 +52,6 @@ export const reduceDatasetForDateRange = (
 		...dataset,
 		cashActions: dataset.cashActions.filter((action) => isDateInRange(action.dueDate, dateRange)),
 		forecast: dataset.forecast.filter((point) => isDateInRange(point.date, dateRange)),
-		invoices: dataset.invoices.filter((invoice) => isDateInRange(invoice.dueDate, dateRange)),
-		spendRequests: dataset.spendRequests.filter((request) => isDateInRange(request.neededByDate, dateRange)),
-		subscriptions: dataset.subscriptions.filter((subscription) => isDateInRange(subscription.renewalDate, dateRange)),
-		vendorBills: dataset.vendorBills.filter((bill) => isDateInRange(bill.dueDate, dateRange)),
 	};
 };
 

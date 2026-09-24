@@ -1,4 +1,4 @@
-import { MainContent } from "@/modules/page-shell/components/MainContent";
+import { MainContent } from "@/ui/components/layout/MainContent";
 
 type AuthRouteLayoutProps = {
 	children: React.ReactNode;

@@ -3,9 +3,9 @@
 import { HttpResponse } from "msw";
 import { describe, expect, it } from "vitest";
 import { financialDatasetFixture } from "@/test/fixtures/financialDataset";
+import { createDecideSpendRequestHandler } from "@/test/fixtures/spendRequests";
 import { server } from "@/test/server";
 import { decideSpendRequest } from "./api";
-import { createDecideSpendRequestHandler } from "./fixtures";
 
 describe("decideSpendRequest", () => {
 	it("encodes the request ID and returns a validated spend request", async () => {

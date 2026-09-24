@@ -1,4 +1,4 @@
-import { GlassCard } from "@/modules/dashboard/explore/GlassCard";
+import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 
 export const WorkspaceVendorsLoading = () => (
 	<div aria-busy="true" aria-live="polite" className="space-y-4 xl:space-y-5">

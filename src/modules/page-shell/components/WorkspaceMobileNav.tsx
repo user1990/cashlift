@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import { Dialog, Modal, ModalOverlay } from "react-aria-components";
-import logo from "@/app/logo.svg";
+import logo from "@/ui/assets/logo.svg";
 import type { WorkspaceExperienceContract } from "../types";
 import { WorkspaceAccountMenu } from "./WorkspaceAccountMenu";
 import { WorkspaceSidebarPanel } from "./WorkspaceSidebarPanel";

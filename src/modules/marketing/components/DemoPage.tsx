@@ -1,4 +1,4 @@
-import { MainContent } from "@/modules/page-shell/components/MainContent";
+import { MainContent } from "@/ui/components/layout/MainContent";
 import { DemoLeadCaptureSection } from "./DemoLeadCaptureSection";
 import { DemoOverviewSection } from "./DemoOverviewSection";
 

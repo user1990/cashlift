@@ -3,10 +3,11 @@
 import { useSyncExternalStore } from "react";
 import type { FinancialDataset, WorkspaceDatasetDateRange } from "@/modules/workspace/types";
 import { subscribeToBrowserMidnight } from "@/utilities/dates/subscribeToBrowserMidnight";
+import { getDashboardAsOfDate } from "../view-model";
 
 export const useDashboardStatusDate = (dataset: FinancialDataset, dateRange?: WorkspaceDatasetDateRange) => {
 	const isoDate = useSyncExternalStore(subscribeToBrowserMidnight, getClientStatusIsoDate, () =>
-		toIsoDate(getServerDashboardStatusDate(dataset, dateRange)),
+		toIsoDate(getDashboardAsOfDate(dataset, dateRange)),
 	);
 
 	return new Date(`${isoDate}T00:00:00`);
@@ -14,12 +15,10 @@ export const useDashboardStatusDate = (dataset: FinancialDataset, dateRange?: Wo
 
 const getClientStatusIsoDate = () => toIsoDate(new Date());
 
-function getServerDashboardStatusDate(dataset: FinancialDataset, dateRange?: WorkspaceDatasetDateRange) {
-	const iso = dateRange?.startDate ?? dataset.forecast[0]?.date;
-
-	return iso ? new Date(`${iso}T00:00:00`) : new Date(0);
-}
-
 function toIsoDate(date: Date) {
-	return date.toISOString().slice(0, 10);
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, "0");
+	const day = String(date.getDate()).padStart(2, "0");
+
+	return `${year}-${month}-${day}`;
 }

@@ -1,4 +1,4 @@
-import { MainContent } from "@/modules/page-shell/components/MainContent";
+import { MainContent } from "@/ui/components/layout/MainContent";
 import type { USE_CASES } from "../content";
 import { Hero } from "./Hero";
 import { UseCaseAnswers } from "./UseCaseAnswers";

@@ -1,5 +1,5 @@
-import { ShellContainer } from "@/modules/page-shell/components/ShellContainer";
-import { ShellSection } from "@/modules/page-shell/components/ShellSection";
+import { ShellContainer } from "@/ui/components/layout/ShellContainer";
+import { ShellSection } from "@/ui/components/layout/ShellSection";
 import { DEMO_STEPS } from "../content";
 
 export const FeaturesDemoStepsSection = () => (
