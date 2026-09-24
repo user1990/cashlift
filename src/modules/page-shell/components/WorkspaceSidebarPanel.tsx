@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
 import logo from "@/ui/assets/logo.svg";
-import { getWorkspaceNavGroups, isWorkspaceNavItemActive } from "../navigation";
+import { getActiveWorkspaceNavHref, getWorkspaceNavGroups } from "../navigation";
 import type { WorkspaceExperienceContract } from "../types";
 import { WorkspaceAccountMenu } from "./WorkspaceAccountMenu";
 import { WorkspaceSidebarLink } from "./WorkspaceSidebarLink";
@@ -25,6 +25,7 @@ export const WorkspaceSidebarPanel = ({
 }: WorkspaceSidebarPanelProps) => {
 	const pathname = usePathname() ?? "";
 	const navGroups = getWorkspaceNavGroups(workspace.basePath);
+	const activeHref = getActiveWorkspaceNavHref(pathname, workspace.basePath);
 
 	return (
 		<>
@@ -53,11 +54,7 @@ export const WorkspaceSidebarPanel = ({
 						<ul className="grid gap-2">
 							{group.items.map((item) => (
 								<li key={`${group.id}-${item.label}`}>
-									<WorkspaceSidebarLink
-										active={isWorkspaceNavItemActive(pathname, item.href, workspace.basePath)}
-										item={item}
-										onNavigate={onNavigate}
-									/>
+									<WorkspaceSidebarLink active={item.href === activeHref} item={item} onNavigate={onNavigate} />
 								</li>
 							))}
 						</ul>

@@ -1,5 +1,14 @@
 "use client";
 
-export const FooterCopyright = () => (
-	<span suppressHydrationWarning>© {new Date().getFullYear()} CashLift. All rights reserved.</span>
-);
+import { useSyncExternalStore } from "react";
+import { subscribeToBrowserMidnight } from "@/utilities/dates/subscribeToBrowserMidnight";
+
+export const FooterCopyright = () => {
+	const year = useSyncExternalStore(subscribeToBrowserMidnight, getFooterCopyrightYear, getFooterCopyrightYear);
+
+	return <span>© {year} CashLift. All rights reserved.</span>;
+};
+
+function getFooterCopyrightYear() {
+	return String(new Date().getFullYear());
+}

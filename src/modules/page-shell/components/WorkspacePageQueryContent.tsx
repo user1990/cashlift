@@ -21,6 +21,10 @@ export const WorkspacePageQueryContent = ({ dataset, experience, section }: Work
 	const workspaceDataset = data ?? (rangeMatchesInitial ? dataset : undefined);
 
 	if (!workspaceDataset) {
+		if (error) {
+			return <WorkspaceRefreshState error={error} isFetching={isFetching} onRetry={() => void refetch()} />;
+		}
+
 		return <WorkspacePageLoading section={section} />;
 	}
 
