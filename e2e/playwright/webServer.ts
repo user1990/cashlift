@@ -22,7 +22,6 @@ export const createProductionWebServerEnv = () => ({
 	...process.env,
 	...e2eSupabaseEnv,
 	CASHLIFT_APP_MODE: "production",
-	CASHLIFT_E2E: "1",
 	CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY ?? "sk_test_example",
 	NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? "pk_test_e2e_placeholder",
 });
@@ -35,5 +34,10 @@ export const resolveDemoWebServerCommand = (port: string) => {
 	return buildProductionServer(port);
 };
 
-export const resolveProductionWebServerCommand = (port: string) =>
-	process.env.CI ? startProductionServer(port) : buildProductionServer(port);
+export const resolveProductionWebServerCommand = (port: string) => {
+	if (process.env.CI) {
+		return demoDevServer(port);
+	}
+
+	return buildProductionServer(port);
+};
