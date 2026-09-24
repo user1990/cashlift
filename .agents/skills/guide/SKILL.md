@@ -58,9 +58,10 @@ See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow
 - Use `use` only with framework/cached promises or conditional context reads; do not create uncached promises during client render.
 - Use React DOM resource preloading APIs only for proven critical resources or anticipated navigation/module warming.
 - Trust React Compiler by default; add `useMemo`/`useCallback` only for semantic stability or measured need.
-- Zod schemas: constants for static schemas, functions for dynamic schemas, hooks only when schema construction needs hooks/translations.
+- Zod schemas: constants for static schemas, functions for dynamic schemas, hooks only when schema construction needs hooks/translations. Extraction and mutation-input rules: `docs/engineering/validation-contracts.md`.
 - `cn()` conditions use logical expressions, not object syntax.
 - Prefer CSS `:has()` over React state/handlers/props when the state only exists to style a parent based on descendant structure/native state. See `styling/SKILL.md` for details.
+- Before adding JavaScript for scrolling, field sizing, or presentation-only interaction state, consult [Styling's native CSS guidance](../styling/SKILL.md#native-css-before-javascript). Keep JavaScript for behavior, accessibility state, and application validation.
 - Prefer native View Transitions for snapshot-based page/UI transitions before adding animation dependencies.
 - Declare `children` explicitly in props; avoid `React.PropsWithChildren`.
 - For optional JSX (render or nothing), use `{condition && <Node />}` — never `{condition ? <Node /> : null}`. Same for empty states: `{!items.length && <li>…</li>}`. Keep `? :` only when both branches render real UI. When the condition can be `0`, use an explicit boolean (`count > 0 && …`), not bare truthiness.

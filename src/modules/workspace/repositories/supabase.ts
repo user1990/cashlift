@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { selectCompanyId } from "@/modules/company-memberships/repositories/supabase";
 import { SPEND_REQUEST_SCHEMA } from "@/modules/spend-requests/schemas";
-import type { SpendRequestStatus } from "@/modules/spend-requests/types";
+import type { SpendRequestDecisionStatus } from "@/modules/spend-requests/types";
 import { createServerSupabaseClient } from "@/services/supabase/server";
 import { AppError } from "@/utilities/errors/AppError";
 import { type DatasetTable, EMPTY_DATASET_PARTS } from "../datasetParts";
@@ -129,7 +129,7 @@ const updateSpendRequestStatusByCompanyId = async (
 	client: SupabaseClient,
 	companyId: string,
 	id: string,
-	status: Exclude<SpendRequestStatus, "pending">,
+	status: SpendRequestDecisionStatus,
 ) => {
 	const data = await getSupabaseQueryData(
 		"spend_requests",

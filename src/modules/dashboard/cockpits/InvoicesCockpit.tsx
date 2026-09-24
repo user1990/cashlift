@@ -179,7 +179,7 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 						{dueSchedule.length > 0 ? (
 							<ol className="mt-4 divide-y divide-white/10">
 								{dueSchedule.map((invoice) => (
-									<li key={invoice.id} id={getInvoiceAnchorId(invoice.id)}>
+									<li key={invoice.id} className="scroll-mt-24 lg:scroll-mt-4" id={getInvoiceAnchorId(invoice.id)}>
 										{renderDueInvoice(invoice)}
 									</li>
 								))}
@@ -231,7 +231,11 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 						{paid.length > 0 ? (
 							<ul className="mt-3 divide-y divide-white/10">
 								{paid.map(({ amountCents, client, dueDate, id, owner, viewStatus }) => (
-									<li key={id} className="flex items-start justify-between gap-3 py-3" id={getInvoiceAnchorId(id)}>
+									<li
+										key={id}
+										className="flex scroll-mt-24 items-start justify-between gap-3 py-3 lg:scroll-mt-4"
+										id={getInvoiceAnchorId(id)}
+									>
 										<div className="min-w-0">
 											<p className="font-semibold text-m+ text-panel-foreground">{client}</p>
 
