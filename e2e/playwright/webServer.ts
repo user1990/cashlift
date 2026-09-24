@@ -1,3 +1,5 @@
+import { e2eClerkPublishableKeyFallback, e2eClerkSecretKeyFallback } from "./e2eClerkPlaceholders";
+
 const buildProductionServer = (port: string) => `pnpm exec next build && pnpm exec next start --port ${port}`;
 
 const demoDevServer = (port: string) => `pnpm dev --port ${port}`;
@@ -20,9 +22,8 @@ export const createProductionWebServerEnv = () => ({
 	...process.env,
 	...e2eSupabaseEnv,
 	CASHLIFT_APP_MODE: "production",
-	CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY ?? "sk_test_example",
-	NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
-		process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? "pk_test_dGVzdC1jbGVyay5jbGVyay5hY2NvdW50cy5kZXYk",
+	CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY ?? e2eClerkSecretKeyFallback(),
+	NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? e2eClerkPublishableKeyFallback(),
 });
 
 export const resolveDemoWebServerCommand = (port: string) => {
