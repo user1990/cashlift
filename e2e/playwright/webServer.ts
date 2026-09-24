@@ -1,8 +1,12 @@
 const buildProductionServer = (port: string) => `pnpm exec next build && pnpm exec next start --port ${port}`;
 
-const startProductionServer = (port: string) => `pnpm exec next start --port ${port}`;
-
 const demoDevServer = (port: string) => `pnpm dev --port ${port}`;
+
+/** Clerk's documented test publishable key (safe for CI/E2E; not a production secret). */
+export const E2E_CLERK_PUBLISHABLE_KEY =
+	process.env.E2E_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ??
+	process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ??
+	"pk_test_dGVzdC1jbGVyay5jbGVyay5hY2NvdW50cy5kZXYk";
 
 const e2eSupabaseEnv = {
 	NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
@@ -23,7 +27,7 @@ export const createProductionWebServerEnv = () => ({
 	...e2eSupabaseEnv,
 	CASHLIFT_APP_MODE: "production",
 	CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY ?? "sk_test_example",
-	NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? "pk_test_e2e_placeholder",
+	NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: E2E_CLERK_PUBLISHABLE_KEY,
 });
 
 export const resolveDemoWebServerCommand = (port: string) => {
