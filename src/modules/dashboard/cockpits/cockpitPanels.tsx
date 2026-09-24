@@ -8,6 +8,22 @@ import { getCashOutlookSectionTitle } from "../outlookChartLabel";
 import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
 
+type CockpitStatusCardProps = {
+	children: ReactNode;
+	contextLine: string;
+	headline: string;
+};
+
+export const CockpitStatusCard = ({ children, contextLine, headline }: CockpitStatusCardProps) => (
+	<GlassCard atmosphere="status">
+		<p className="text-muted-foreground text-s">{contextLine}</p>
+
+		<h1 className="mt-3 max-w-4xl font-semibold text-3xl+ text-panel-foreground tracking-normal">{headline}</h1>
+
+		<dl className="mt-6 grid gap-5 sm:grid-cols-3">{children}</dl>
+	</GlassCard>
+);
+
 type CockpitStatusMetricsProps = {
 	dashboard: DashboardViewModel;
 	thirdMetric: ReactNode;

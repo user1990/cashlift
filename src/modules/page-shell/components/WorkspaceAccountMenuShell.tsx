@@ -1,5 +1,7 @@
+"use client";
+
 import { ChevronDown } from "lucide-react";
-import Link from "next/link";
+import { Button, Menu, MenuItem, MenuTrigger, Popover } from "react-aria-components";
 import { cn } from "@/ui/utils/cn";
 
 type AccountMenuShellProps = {
@@ -24,12 +26,13 @@ export const AccountMenuShell = ({
 	placement = "sidebar",
 	signOut,
 }: AccountMenuShellProps) => (
-	<details className={cn("relative", placement === "header" && "shrink-0")}>
-		<summary
+	<MenuTrigger>
+		<Button
 			aria-label={compact ? `${name}, ${description}` : undefined}
 			className={cn(
-				"focus-ring ease flex cursor-pointer list-none items-center rounded-lg text-left text-shell-foreground transition-colors duration-150 hover:bg-white/5 [&::-webkit-details-marker]:hidden",
+				"focus-ring ease flex cursor-pointer list-none items-center rounded-lg text-left text-shell-foreground transition-colors duration-150 hover:bg-white/5",
 				compact ? "size-11 justify-center p-0" : "w-full gap-3 px-2 py-3",
+				placement === "header" && "shrink-0",
 			)}
 		>
 			<span
@@ -50,33 +53,37 @@ export const AccountMenuShell = ({
 					<ChevronDown aria-hidden className="size-4 text-shell-muted" />
 				</>
 			)}
-		</summary>
+		</Button>
 
-		<div
+		<Popover
 			className={cn(
-				"absolute z-20 grid w-56 gap-1 rounded-lg border border-shell-border bg-shell-elevated p-1 shadow-shell",
-				placement === "header" ? "top-full right-0 mt-2" : "bottom-full left-0 mb-2",
+				"z-20 grid w-56 gap-1 rounded-lg border border-shell-border bg-shell-elevated p-1 shadow-shell outline-none",
+				placement === "header" ? "mt-2" : "mb-2",
 			)}
+			offset={8}
+			placement={placement === "header" ? "bottom end" : "top start"}
 		>
-			{compact && (
-				<div className="border-shell-border border-b px-3 py-2">
-					<p className="truncate font-semibold text-m+ text-shell-foreground">{name}</p>
+			<Menu className="grid gap-1 outline-none">
+				{compact && (
+					<div className="border-shell-border border-b px-3 py-2">
+						<p className="truncate font-semibold text-m+ text-shell-foreground">{name}</p>
 
-					<p className="truncate text-s text-shell-muted">{description}</p>
-				</div>
-			)}
+						<p className="truncate text-s text-shell-muted">{description}</p>
+					</div>
+				)}
 
-			{items.map(({ href, label }) => (
-				<Link key={href} className={MENU_ITEM_CLASS_NAME} href={href}>
-					{label}
-				</Link>
-			))}
+				{items.map(({ href, label }) => (
+					<MenuItem key={href} className={MENU_ITEM_CLASS_NAME} href={href}>
+						{label}
+					</MenuItem>
+				))}
 
-			{signOut && (
-				<button className={MENU_ITEM_CLASS_NAME} onClick={signOut} type="button">
-					Sign out
-				</button>
-			)}
-		</div>
-	</details>
+				{signOut && (
+					<MenuItem className={MENU_ITEM_CLASS_NAME} onAction={signOut}>
+						Sign out
+					</MenuItem>
+				)}
+			</Menu>
+		</Popover>
+	</MenuTrigger>
 );

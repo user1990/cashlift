@@ -1,4 +1,5 @@
 import { Shield, ShieldCheck } from "lucide-react";
+import { CockpitStatusCard } from "@/modules/dashboard/cockpits/cockpitPanels";
 import { ExploreKicker, ExploreLink } from "@/modules/dashboard/cockpits/cockpitUi";
 import { MoneyDisplay } from "@/modules/money/components/MoneyDisplay";
 import {
@@ -24,46 +25,38 @@ export const WorkspaceSettingsSection = ({ basePath, dataset, readOnly = false }
 
 	return (
 		<div className="space-y-4 xl:space-y-5">
-			<GlassCard atmosphere="status">
-				<p className="text-muted-foreground text-s">{presentation.contextLine}</p>
+			<CockpitStatusCard contextLine={presentation.contextLine} headline={presentation.headline}>
+				<div>
+					<dt className="text-muted-foreground text-s">Cash on hand</dt>
 
-				<h1 className="mt-3 max-w-4xl font-semibold text-3xl+ text-panel-foreground tracking-normal">
-					{presentation.headline}
-				</h1>
+					<dd>
+						<MoneyDisplay cents={presentation.cashBalanceCents} className="text-3xl+" />
+					</dd>
+				</div>
 
-				<dl className="mt-6 grid gap-5 sm:grid-cols-3">
-					<div>
-						<dt className="text-muted-foreground text-s">Cash on hand</dt>
+				<div>
+					<dt className="flex items-center gap-1.5 text-muted-foreground text-s">
+						<Shield aria-hidden className="size-3.5 text-primary" />
+						Cash buffer
+					</dt>
 
-						<dd>
-							<MoneyDisplay cents={presentation.cashBalanceCents} className="text-3xl+" />
-						</dd>
-					</div>
+					<dd>
+						<MoneyDisplay
+							cents={presentation.cashBufferTargetCents}
+							className="text-3xl+"
+							warning={!presentation.aboveBuffer}
+						/>
+					</dd>
+				</div>
 
-					<div>
-						<dt className="flex items-center gap-1.5 text-muted-foreground text-s">
-							<Shield aria-hidden className="size-3.5 text-primary" />
-							Cash buffer
-						</dt>
+				<div>
+					<dt className="text-muted-foreground text-s">Monthly payroll</dt>
 
-						<dd>
-							<MoneyDisplay
-								cents={presentation.cashBufferTargetCents}
-								className="text-3xl+"
-								warning={!presentation.aboveBuffer}
-							/>
-						</dd>
-					</div>
-
-					<div>
-						<dt className="text-muted-foreground text-s">Monthly payroll</dt>
-
-						<dd>
-							<MoneyDisplay cents={presentation.monthlyPayrollCents} className="text-3xl+" />
-						</dd>
-					</div>
-				</dl>
-			</GlassCard>
+					<dd>
+						<MoneyDisplay cents={presentation.monthlyPayrollCents} className="text-3xl+" />
+					</dd>
+				</div>
+			</CockpitStatusCard>
 
 			<section className="grid items-stretch gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:gap-5">
 				<GlassCard atmosphere="priority" className="h-full" contentClassName="flex h-full flex-col" intensity="active">

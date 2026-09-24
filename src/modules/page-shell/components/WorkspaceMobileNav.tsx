@@ -3,10 +3,9 @@
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useId, useState } from "react";
 import { Dialog, Modal, ModalOverlay } from "react-aria-components";
 import logo from "@/ui/assets/logo.svg";
+import { usePathKeyedDrawer } from "@/ui/hooks/usePathKeyedDrawer";
 import { cn } from "@/ui/utils/cn";
 import type { WorkspaceExperienceContract } from "../types";
 import { WorkspaceAccountMenu } from "./WorkspaceAccountMenu";
@@ -17,39 +16,7 @@ type WorkspaceMobileNavProps = {
 };
 
 export const WorkspaceMobileNav = ({ workspace }: WorkspaceMobileNavProps) => {
-	const drawerId = useId();
-	const pathname = usePathname() ?? "";
-	const [openPath, setOpenPath] = useState<string | null>(null);
-	const open = openPath === pathname;
-
-	useEffect(() => {
-		if (!open) {
-			return;
-		}
-
-		if (typeof window.matchMedia !== "function") {
-			return;
-		}
-
-		const mediaQuery = window.matchMedia("(min-width: 1024px)");
-		const closeOnDesktop = () => {
-			if (mediaQuery.matches) {
-				setOpenPath(null);
-			}
-		};
-		closeOnDesktop();
-		mediaQuery.addEventListener("change", closeOnDesktop);
-
-		return () => mediaQuery.removeEventListener("change", closeOnDesktop);
-	}, [open]);
-
-	const closeDrawer = () => {
-		setOpenPath(null);
-	};
-
-	const toggleDrawer = () => {
-		setOpenPath((currentPath) => (currentPath === pathname ? null : pathname));
-	};
+	const { closeDrawer, drawerId, open, toggleDrawer } = usePathKeyedDrawer("(min-width: 1024px)");
 
 	return (
 		<>
