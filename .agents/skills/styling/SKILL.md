@@ -12,7 +12,7 @@ Use this skill for CashLift styling changes. Read `.agents/docs/styling.md` for 
 - Tailwind CSS v4 is configured in `src/app/globals.css` and `postcss.config.mjs`.
 - Theme variables live in `@theme inline` and the extended `@theme` block in `src/app/globals.css` (shell, panel, paper, primary, signal, warning, and related tokens).
 - Use `cn()` from `@/ui/utils/cn` for class composition.
-- Use `tailwind-variants` (`tv`) for reusable components with stable variants. Reference: `src/ui/components/actions/buttonVariants.ts`, `src/ui/components/actions/Button.tsx`, `src/ui/components/layout/Panel.tsx`.
+- Use `tailwind-variants` (`tv`) from `package.json` for reusable components with stable variants. Reference: `src/ui/components/actions/buttonVariants.ts`, `src/ui/components/actions/Button.tsx`, `src/ui/components/layout/Panel.tsx`.
 - Icons come from `lucide-react`.
 
 ## Tokens And Values

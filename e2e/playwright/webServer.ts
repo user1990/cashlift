@@ -24,8 +24,7 @@ export const createProductionWebServerEnv = () => ({
 	CASHLIFT_APP_MODE: "production",
 	CASHLIFT_E2E: "1",
 	CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY ?? "sk_test_example",
-	NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
-		process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? "pk_test_dGVzdC1jbGVyay5jbGVyay5hY2NvdW50cy5kZXYk",
+	NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? "pk_test_e2e_placeholder",
 });
 
 export const resolveDemoWebServerCommand = (port: string) => {

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -88,7 +88,12 @@ const writePrBody = (ref, body) => {
 	const bodyFile = join(directory, "body.md");
 
 	writeFileSync(bodyFile, body);
-	execFileSync("pr-cockpit", ["edit-body", ref, "--body-file", bodyFile]);
+
+	try {
+		execFileSync("pr-cockpit", ["edit-body", ref, "--body-file", bodyFile]);
+	} finally {
+		rmSync(directory, { force: true, recursive: true });
+	}
 };
 
 const main = () => {

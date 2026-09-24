@@ -15,6 +15,7 @@ Always read this file first. It defines workflow for this repo. Do not override 
 2. Understand the task.
    - Identify the work type: UI, component creation, refactor, bug fix, tests, API/data, docs, PR/review, or diagnostics.
    - Identify the source area: `src/app`, `src/modules`, `src/ui`, `src/services`, `src/utilities`.
+   - For any change under `src/**/*.{ts,tsx}`, read `.agents/skills/guide/SKILL.md` before editing (conventions, mutations, claims, and tests).
    - Pick only the skills needed for this task.
 
 3. Respect module boundaries.
@@ -23,7 +24,8 @@ Always read this file first. It defines workflow for this repo. Do not override 
 4. Load skills progressively.
    - Read only matching `SKILL.md` files under `.agents/skills/` first.
    - Read `.agents/docs/*` only when the skill says deeper examples or rationale are needed.
-   - UI work usually starts with `architecture` and `styling`; add `guide`, `web-interface-guidelines`, and `testing` as needed.
+   - UI work: `architecture`, `styling`, and `guide`; add `web-interface-guidelines` and `testing` as needed.
+   - Tests and E2E: `testing` and the Playwright section in `guide/SKILL.md`.
    - When adding a production npm dependency, polyfill, or third-party browser script, read `.agents/skills/baseline-javascript/SKILL.md`.
    - Read `.agents/skills/security/SKILL.md` before touching `src/app/api/**`, `src/proxy.ts`, server data loading, Supabase repositories, Clerk session code, environment variables, or CI security steps. This skill is mandatory for that work, not optional.
 

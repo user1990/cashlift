@@ -1,6 +1,18 @@
 # Frontend Guide Reference
 
-Rules live in `.agents/skills/guide/SKILL.md`. Use this file for layout examples and pointers to verified implementations — not duplicated policy.
+Rules live in `.agents/skills/guide/SKILL.md` — that file is the authoritative policy. Use this reference for examples and deep links only.
+
+## Rule inventory (see SKILL for full text)
+
+- **Stack** — `package.json`, next-intl, nuqs, Tailwind v4, React Compiler.
+- **File and module layout** — `src/modules`, hooks naming, `schemas.ts` / `types.ts`, `@/*` imports.
+- **TypeScript** — naming, optional vs undefined, `T[]`, numeric separators, `countCharacters`, formatters.
+- **React** — component structure, query keys, React Query mutations (`data-fetching.md`), local `useOptimistic`, `cn()`, `:has()`, View Transitions, truthful claims, browser time, conflicting-control locks.
+- **Internationalization** — `en.json`, `useTranslations` / `getTranslations`, `t.raw`.
+- **Security** — load `security/SKILL.md` at trust boundaries.
+- **Git** — branch prefixes, PR titles, commit messages.
+- **Testing** — load `testing/SKILL.md`.
+- **Playwright (E2E)** — locators, route patterns, pending-lock vs journey tests, `e2e/playwright/*`.
 
 ## Canonical implementations
 

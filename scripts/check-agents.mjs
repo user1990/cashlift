@@ -1,12 +1,13 @@
-import { readdirSync, readFileSync, statSync } from "node:fs";
-import { join } from "node:path";
+import { readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
+import { join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
+const ROOT = resolve(fileURLToPath(new URL(".", import.meta.url)), "..");
 
 const SCAN_ROOTS = [join(ROOT, ".agents"), join(ROOT, "docs/contributing/architecture/primitives.yaml")];
 
-const PATH_PATTERN = /`((?:src|docs|supabase|public|e2e|scripts)\/[^`\s]+)`/g;
+const PATH_PATTERN =
+	/`((?:\.agents|src|docs|supabase|public|e2e|scripts)\/[^`\s]+|(?:package\.json|lefthook\.yml|AGENTS\.md|DESIGN\.md|PRODUCT\.md|CONTEXT\.md))`/g;
 
 const listMarkdownFiles = (dir) => {
 	const entries = [];
@@ -49,6 +50,17 @@ const collectFiles = () => {
 
 const isGlobPath = (value) => value.includes("*") || value.includes("{") || value.includes("(");
 
+const resolveCandidatePath = (candidate) => {
+	const absolute = resolve(ROOT, candidate);
+	const normalizedRoot = `${ROOT}/`;
+
+	if (!absolute.startsWith(normalizedRoot) && absolute !== ROOT) {
+		return null;
+	}
+
+	return absolute;
+};
+
 const failures = [];
 
 for (const file of collectFiles()) {
@@ -61,12 +73,17 @@ for (const file of collectFiles()) {
 			continue;
 		}
 
-		const absolute = join(ROOT, candidate);
+		const absolute = resolveCandidatePath(candidate);
+
+		if (!absolute) {
+			failures.push(`${relative(ROOT, file)}: path escapes repo root \`${candidate}\``);
+			continue;
+		}
 
 		try {
-			statSync(absolute);
+			realpathSync(absolute);
 		} catch {
-			failures.push(`${file.replace(`${ROOT}/`, "")}: missing path \`${candidate}\``);
+			failures.push(`${relative(ROOT, file)}: missing path \`${candidate}\``);
 		}
 	}
 }

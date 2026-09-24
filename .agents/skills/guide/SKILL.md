@@ -27,6 +27,8 @@ See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow
 - Avoid single-letter variables except `i` in loops.
 - Type properties: required first, optional second; alphabetize within each group.
 - Use `property?: T` when absence is valid; reserve `property: T | undefined` for required keys/arguments that must be supplied explicitly.
+- Prefer `T[]` over `Array<T>` for inline array types; extract named types for reused object shapes (`pnpm lint` also enforces array style via Biome).
+- Use numeric separators for large numeric literals with four or more digits.
 - Use explicit absence checks for optional numeric values when `0` is meaningful; do not use truthiness to distinguish a missing value from zero.
 - For user-visible character counts, use `utilities/text/countCharacters`; do not use `.length` or inline `Intl.Segmenter`.
 - Boolean names prefer adjective form (`active`, `selected`) unless `is/has` is clearer. With nouns, put the noun first (`modalVisible`).
@@ -50,7 +52,7 @@ See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow
 - Extract and export React Query query keys so mutations can invalidate them.
 - Use React Query instead of manual async `useEffect` for server state.
 - Workspace mutations that hit the API: follow `docs/engineering/data-fetching.md` — cancel in-flight queries, snapshot cache entries, optimistic update in `onMutate`, rollback in `onError`, authoritative write in `onSuccess`. Reference: `src/modules/spend-requests/hooks/useSpendRequestDecision.ts`.
-- Use `useOptimistic` only for local UI state that does not replace server cache authority (for example billing period toggles on marketing pages).
+- Use `useOptimistic` only for local UI state that does not replace server cache authority (for example billing period toggles on marketing pages). Call optimistic updates inside `startTransition` when the action is async.
 - Use `<Activity>` only for UI likely to return where local/DOM state should survive hiding; avoid it for large one-way trees because hidden work still re-renders at low priority.
 - Use `useEffectEvent` only for event-like callbacks fired by Effects that need latest props/state without resubscribing.
 - Use `use` only with framework/cached promises or conditional context reads; do not create uncached promises during client render.
