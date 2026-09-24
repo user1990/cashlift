@@ -11,3 +11,6 @@ Use these guides when changing application code or engineering workflow:
 - [Access and data security](/engineering/access-and-data-security) — preserve Clerk, Supabase RLS, and request-boundary protections.
 - [Observability and failures](/engineering/observability-and-failures) — make failures actionable without exposing user data.
 - [Quality checks](/engineering/quality-checks) — choose the right verification command before handoff.
+- [Canonical examples](/engineering/canonical-examples) — copy verified patterns before inventing new ones.
+- [Internationalization](/engineering/i18n) — message catalog and next-intl wiring.
+- [Performance budgets](/engineering/performance-budgets) — local gates and field monitoring expectations.

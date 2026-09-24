@@ -2,6 +2,7 @@ import { useId } from "react";
 import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { centsToDollars, formatCurrencyDollars, formatPreciseCompactCurrency } from "@/modules/money/format";
 import type { MoneyCents } from "@/modules/money/types";
+import { getCashOutlookEmptyMessage } from "../outlookChartLabel";
 import type { ForecastChartDataPoint } from "../types";
 import { ChartFrame } from "./ChartFrame";
 
@@ -22,7 +23,7 @@ const CashOutlookChartContent = ({
 	const cashOutlookFillId = `cash-outlook-fill-${chartId}`;
 
 	if (!chartData.length) {
-		return <p className="text-m text-muted-foreground">No 13-week outlook for this range.</p>;
+		return <p className="text-m text-muted-foreground">{getCashOutlookEmptyMessage(chartData.length)}</p>;
 	}
 
 	const balances = chartData.map(({ balance }) => balance);

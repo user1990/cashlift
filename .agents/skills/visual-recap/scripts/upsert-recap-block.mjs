@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
 export const START_MARKER = "<!-- system-recap:start -->";
@@ -50,6 +52,50 @@ export const upsertRecapBlock = (body, recapBlock) => {
 	return body.slice(0, startIndex) + block + body.slice(endIndex + END_MARKER.length);
 };
 
+export const resolvePrRef = (prNumber) => {
+	if (process.env.PR_COCKPIT_REF) {
+		const ref = process.env.PR_COCKPIT_REF;
+		return ref.includes("#") ? ref : `${ref}#${prNumber}`;
+	}
+
+	const remote = execFileSync("git", ["remote", "get-url", "origin"], { encoding: "utf8" }).trim();
+	const match = remote.match(/[:/]([^/]+\/[^/.]+?)(?:\.git)?$/);
+
+	if (!match) {
+		throw new Error("cannot resolve owner/repo from git remote origin; set PR_COCKPIT_REF");
+	}
+
+	return `${match[1]}#${prNumber}`;
+};
+
+const readPrBody = (ref) => {
+	const raw = execFileSync("pr-cockpit", [ref, "--json"], { encoding: "utf8" });
+	const data = JSON.parse(raw);
+
+	if (typeof data.body === "string") {
+		return data.body;
+	}
+
+	if (data.pullRequest && typeof data.pullRequest.body === "string") {
+		return data.pullRequest.body;
+	}
+
+	throw new Error("pr-cockpit JSON did not include a PR body");
+};
+
+const writePrBody = (ref, body) => {
+	const directory = mkdtempSync(join(tmpdir(), "cashlift-recap-"));
+	const bodyFile = join(directory, "body.md");
+
+	writeFileSync(bodyFile, body);
+
+	try {
+		execFileSync("pr-cockpit", ["edit-body", ref, "--body-file", bodyFile]);
+	} finally {
+		rmSync(directory, { force: true, recursive: true });
+	}
+};
+
 const main = () => {
 	const [prNumber, blockFile] = process.argv.slice(2);
 
@@ -57,15 +103,12 @@ const main = () => {
 		throw new Error("usage: upsert-recap-block.mjs <pr-number> <block-file>");
 	}
 
+	const ref = resolvePrRef(prNumber);
 	const block = readFileSync(blockFile, "utf8");
-	const body = execFileSync("gh", ["pr", "view", prNumber, "--json", "body", "--jq", ".body"], {
-		encoding: "utf8",
-	});
+	const body = readPrBody(ref);
 	const nextBody = upsertRecapBlock(body, block);
 
-	execFileSync("gh", ["pr", "edit", prNumber, "--body-file", "-"], {
-		input: nextBody,
-	});
+	writePrBody(ref, nextBody);
 
 	console.log(
 		startCountFor(body) ? `updated system recap on PR #${prNumber}` : `added system recap to PR #${prNumber}`,

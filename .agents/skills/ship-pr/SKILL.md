@@ -137,13 +137,11 @@ has passed required checks and has no valid unresolved feedback:
    verified, using the actual reviewer login, thread URL, and commit URL. Use:
    `@<login> Fixed in [<sha>](<commit-url>): <resolution>. Verification: <check>.`
 
-Use `pr-cockpit owner/repo#N` to read the PR feed, `pr-cockpit listen owner/repo#N` when waiting for CI, reviews, comments, or a pushed revision, and `pr-cockpit resolve owner/repo#N HANDLE` for settled review threads.
+## PR transport (CashLift)
 
-Use the GitHub connector or `gh api graphql` for `resolveReviewThread`. If CLI
-authentication fails, use one connector fallback; otherwise mark the surface
-unverified and do not claim readiness. If no monitor is available for a required
-pending gate, report that exact gate. Rebase only when genuinely unmergeable or
-requested, preserving authored commits and rerunning relevant checks.
+Use `pr-cockpit owner/repo#N` for PR reads (`--json`, `--diff`, `--file`), waits (`listen`), thread resolution (`resolve`), and body/title edits (`edit-body`, `edit-title`). Do not use `gh pr view`, `gh pr edit`, or direct GitHub API reads for PR state when Cockpit is available.
+
+Use `pr-cockpit listen owner/repo#N` when waiting for CI, reviews, comments, or a pushed revision. Use `pr-cockpit resolve owner/repo#N HANDLE` for settled review threads. If Cockpit authentication fails, mark the surface unverified and do not claim readiness. If no monitor is available for a required pending gate, report that exact gate. Rebase only when genuinely unmergeable or requested, preserving authored commits and rerunning relevant checks.
 
 ## 7. Readiness and handoff (Ship, Resolve; Review when requested)
 

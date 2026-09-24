@@ -61,7 +61,7 @@ primitives:
       - "src/app/(auth)/**"
       - "src/proxy.ts"
       - "src/services/clerk/**"
-      - "src/services/supabase/proxy.ts"
+      - "src/services/supabase/server.ts"
     connects_to:
       - workspace-routes
       - workspace-read-path

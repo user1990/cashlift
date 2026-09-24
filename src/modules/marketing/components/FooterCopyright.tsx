@@ -1,10 +1,14 @@
 "use client";
 
-import { io } from "next/cache";
-import { use } from "react";
+import { useSyncExternalStore } from "react";
+import { subscribeToBrowserMidnight } from "@/utilities/dates/subscribeToBrowserMidnight";
 
 export const FooterCopyright = () => {
-	use(io());
+	const year = useSyncExternalStore(subscribeToBrowserMidnight, getFooterCopyrightYear, getFooterCopyrightYear);
 
-	return <span>© {new Date().getFullYear()} CashLift. All rights reserved.</span>;
+	return <span>© {year} CashLift. All rights reserved.</span>;
 };
+
+function getFooterCopyrightYear() {
+	return String(new Date().getFullYear());
+}

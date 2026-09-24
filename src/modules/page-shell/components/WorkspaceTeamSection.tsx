@@ -1,10 +1,11 @@
 import { ExploreKicker, ExploreLink } from "@/modules/dashboard/cockpits/cockpitUi";
+import { COMPANY_ROLE_LABELS } from "@/modules/workspace/settingsPresentation";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { GlassCard } from "@/ui/components/cockpit/GlassCard";
-import { cn } from "@/ui/utils/cn";
+import { WorkspaceMemberRow } from "./WorkspaceMemberRow";
+import { WorkspaceRoleCue } from "./WorkspaceRoleCue";
 
 type TeamMember = FinancialDataset["teamMembers"][number];
-type TeamRole = TeamMember["role"];
 
 type WorkspaceTeamSectionProps = {
 	basePath: string;
@@ -47,7 +48,7 @@ export const WorkspaceTeamSection = ({ basePath, dataset }: WorkspaceTeamSection
 					{primaryMember ? (
 						<>
 							<div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-								<TeamRoleCue role={primaryMember.role} />
+								<WorkspaceRoleCue role={primaryMember.role} />
 
 								<span className="text-muted-foreground text-s">{primaryMember.team}</span>
 							</div>
@@ -57,7 +58,7 @@ export const WorkspaceTeamSection = ({ basePath, dataset }: WorkspaceTeamSection
 							</h2>
 
 							<p className="mt-3 text-m text-shell-muted leading-6">
-								{formatRole(primaryMember.role)} on {primaryMember.team}
+								{COMPANY_ROLE_LABELS[primaryMember.role]} on {primaryMember.team}
 							</p>
 
 							<div className="mt-6">
@@ -83,7 +84,9 @@ export const WorkspaceTeamSection = ({ basePath, dataset }: WorkspaceTeamSection
 					{remainingMembers.length > 0 ? (
 						<ul className="mt-4 divide-y divide-white/10">
 							{remainingMembers.map((member) => (
-								<li key={member.id}>{renderMemberRow(member)}</li>
+								<li key={member.id}>
+									<WorkspaceMemberRow member={member} />
+								</li>
 							))}
 						</ul>
 					) : (
@@ -110,7 +113,7 @@ export const WorkspaceTeamSection = ({ basePath, dataset }: WorkspaceTeamSection
 										<li key={member.id} className="py-3">
 											<p className="font-semibold text-m+ text-panel-foreground">{member.name}</p>
 
-											<p className="mt-1 text-muted-foreground text-s">{formatRole(member.role)}</p>
+											<p className="mt-1 text-muted-foreground text-s">{COMPANY_ROLE_LABELS[member.role]}</p>
 										</li>
 									))}
 								</ul>
@@ -128,52 +131,6 @@ export const WorkspaceTeamSection = ({ basePath, dataset }: WorkspaceTeamSection
 		</div>
 	);
 };
-
-function renderMemberRow(member: TeamMember) {
-	return (
-		<div className="flex flex-col gap-2 py-3 sm:flex-row sm:items-start sm:justify-between">
-			<span className="min-w-0">
-				<span className="flex flex-wrap items-center gap-x-3 gap-y-1">
-					<TeamRoleCue role={member.role} />
-
-					<span className="text-muted-foreground text-s">{member.team}</span>
-				</span>
-
-				<span className="mt-1 block font-semibold text-m+ text-panel-foreground">{member.name}</span>
-			</span>
-		</div>
-	);
-}
-
-type TeamRoleCueProps = {
-	role: TeamRole;
-	className?: string;
-};
-
-function TeamRoleCue({ className, role }: TeamRoleCueProps) {
-	return (
-		<span className={cn("inline-flex items-center gap-1.5 text-s", className)}>
-			<span
-				aria-hidden
-				className={cn(
-					"size-1.5 rounded-full",
-					role === "owner-finance" && "bg-primary",
-					role === "manager" && "bg-shell-muted",
-					role === "employee" && "bg-border-strong",
-				)}
-			/>
-
-			<span
-				className={cn(
-					role === "owner-finance" && "text-primary",
-					(role === "manager" || role === "employee") && "text-muted-foreground",
-				)}
-			>
-				{formatRole(role)}
-			</span>
-		</span>
-	);
-}
 
 function getTeamHeadline(members: TeamMember[]) {
 	if (members.length === 0) {
@@ -229,14 +186,4 @@ function formatList(items: string[]) {
 	}
 
 	return `${items.slice(0, -1).join(", ")}, and ${items[items.length - 1]}`;
-}
-
-function formatRole(role: TeamRole) {
-	const roleLabels = {
-		employee: "Employee",
-		manager: "Manager",
-		"owner-finance": "Finance Lead",
-	} as const satisfies Record<TeamRole, string>;
-
-	return roleLabels[role];
 }

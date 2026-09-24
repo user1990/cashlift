@@ -5,11 +5,11 @@ description: Coding conventions, file structure, Git/PR/commit rules, React/Zod/
 
 # Frontend Guide
 
-Use this skill for implementation conventions. For code examples and deeper rationale, read `.agents/docs/guide.md` only when needed.
+Use this skill for implementation conventions. For examples only, read `.agents/docs/guide.md`. For verified patterns, start with `docs/engineering/canonical-examples.md`, `docs/engineering/data-fetching.md`, `docs/engineering/forms-and-input.md`, and `docs/engineering/i18n.md`.
 
 ## Stack
 
-See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow, React Doctor, next-intl, react-aria-components.
+See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow, React Doctor, next-intl, react-aria-components, nuqs for URL state.
 
 ## File And Module Conventions
 
@@ -27,7 +27,7 @@ See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow
 - Avoid single-letter variables except `i` in loops.
 - Type properties: required first, optional second; alphabetize within each group.
 - Use `property?: T` when absence is valid; reserve `property: T | undefined` for required keys/arguments that must be supplied explicitly.
-- Prefer `T[]` over `Array<T>` for inline array types; extract named types for reused object shapes.
+- Prefer `T[]` over `Array<T>` for inline array types; extract named types for reused object shapes (`pnpm lint` also enforces array style via Biome).
 - Use numeric separators for large numeric literals with four or more digits.
 - Use explicit absence checks for optional numeric values when `0` is meaningful; do not use truthiness to distinguish a missing value from zero.
 - For user-visible character counts, use `utilities/text/countCharacters`; do not use `.length` or inline `Intl.Segmenter`.
@@ -50,8 +50,9 @@ See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow
 - Derive stable unique list keys alongside data when natural fields can repeat.
 - Use `key` for intentional component state resets when switching entity identity; avoid it when preserving local state or avoiding expensive remounts matters.
 - Extract and export React Query query keys so mutations can invalidate them.
-- Use React Query instead of manual async `useEffect`.
-- Use `useOptimistic` for user-triggered mutations that need instant feedback; call optimistic updates inside `startTransition` for async actions and keep server validation/auth as source of truth.
+- Use React Query instead of manual async `useEffect` for server state.
+- Workspace mutations that hit the API: follow `docs/engineering/data-fetching.md` — cancel in-flight queries, snapshot cache entries, optimistic update in `onMutate`, rollback in `onError`, authoritative write in `onSuccess`. Reference: `src/modules/spend-requests/hooks/useSpendRequestDecision.ts`.
+- Use `useOptimistic` only for local UI state that does not replace server cache authority (for example billing period toggles on marketing pages). Call optimistic updates inside `startTransition` when the action is async.
 - Use `<Activity>` only for UI likely to return where local/DOM state should survive hiding; avoid it for large one-way trees because hidden work still re-renders at low priority.
 - Use `useEffectEvent` only for event-like callbacks fired by Effects that need latest props/state without resubscribing.
 - Use `use` only with framework/cached promises or conditional context reads; do not create uncached promises during client render.
@@ -60,7 +61,6 @@ See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow
 - Zod schemas: constants for static schemas, functions for dynamic schemas, hooks only when schema construction needs hooks/translations. Extraction and mutation-input rules: `docs/engineering/validation-contracts.md`.
 - `cn()` conditions use logical expressions, not object syntax.
 - Prefer CSS `:has()` over React state/handlers/props when the state only exists to style a parent based on descendant structure/native state. See `styling/SKILL.md` for details.
-- Before adding JavaScript for scrolling, field sizing, or presentation-only interaction state, consult [Styling's native CSS guidance](../styling/SKILL.md#native-css-before-javascript). Keep JavaScript for behavior, accessibility state, and application validation.
 - Prefer native View Transitions for snapshot-based page/UI transitions before adding animation dependencies.
 - Declare `children` explicitly in props; avoid `React.PropsWithChildren`.
 - For optional JSX (render or nothing), use `{condition && <Node />}` — never `{condition ? <Node /> : null}`. Same for empty states: `{!items.length && <li>…</li>}`. Keep `? :` only when both branches render real UI. When the condition can be `0`, use an explicit boolean (`count > 0 && …`), not bare truthiness.
@@ -68,7 +68,11 @@ See `package.json`. Non-obvious choices: React Compiler, Tailwind CSS v4, Fallow
 - Do not present a trend, comparison, date, or financial amount unless it is derived from the current input. Prefer a truthful neutral label to fabricated precision.
 - For browser-current labels, keep the server snapshot deterministic and derive the browser value after hydration with the established `useSyncExternalStore` pattern.
 - If one mutation can create a conflicting decision, disable every conflicting action while it is pending; do not lock only the clicked control.
-- Avoid `returnObjects: true` for object-shaped translations; it is acceptable for translated arrays.
+
+## Internationalization
+
+- Add keys to `src/services/i18n/messages/en.json`. Use `getTranslations` on the server and `useTranslations` in client components.
+- For structured non-string message values, use `t.raw` with a schema or explicit parsing — not react-i18next patterns.
 
 ## Security
 
@@ -76,10 +80,18 @@ For anything crossing a trust boundary — API routes, `src/proxy.ts`, server da
 
 ## Git
 
-- Branches are short-lived and typed: `feat/`, `fix/`, `refactor/`, `test/`, `docs/`, `chore/`, `release/`, `hotfix/`.
+- Branches are short-lived and typed: `feat/`, `fix/`, `refactor/`, `test/`, `docs/`, `chore/`, `release/`, `hotfix/`. Isolated agent worktrees may use `codex/<task>` when documented in `worktree/SKILL.md`.
 - PR titles use `Scope: Description`.
 - Commit messages are imperative, capitalized, no trailing period, and at most 72 characters.
 
 ## Testing
 
 For tests, load `.agents/skills/testing/SKILL.md`.
+
+## Playwright (E2E)
+
+- Prefer role/name locators; let Playwright auto-wait on `expect` and `click`. Do not use `waitForLoadState("networkidle")` unless a test documents a specific race that locators cannot cover.
+- Match API routes to real client paths (for example `**/api/v1/workspace/spend-requests/*`), not overly broad `**/api/**` patterns.
+- Do not assert on controls that optimistic mutations remove or replace immediately after click; keep pending-lock coverage in RTL (`ApprovalsCockpit.test.tsx`) and use E2E for journey outcomes (navigation, keyboard activation, success feedback).
+- When E2E must observe a pending mutation, delay the PATCH handler with `e2e/playwright/spendRequestRoutes.ts` and assert on **other** conflicting controls that stay mounted.
+- Share Playwright `webServer` env via `e2e/playwright/webServer.ts`. Demo-on-production-build overrides require both `CASHLIFT_E2E=1` and `CASHLIFT_ALLOW_DEMO_PRODUCTION_BUILD=1`; never set those outside Playwright servers.

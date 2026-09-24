@@ -9,6 +9,9 @@ export default defineMeta({
 		"access-and-data-security",
 		"observability-and-failures",
 		"quality-checks",
+		"canonical-examples",
+		"i18n",
+		"performance-budgets",
 	],
 	title: "Engineering guides",
 });

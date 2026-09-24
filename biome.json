@@ -18,6 +18,16 @@
 	],
 	"overrides": [
 		{
+			"includes": ["e2e/playwright/e2eClerkPlaceholders.ts"],
+			"linter": {
+				"rules": {
+					"security": {
+						"noSecrets": "off"
+					}
+				}
+			}
+		},
+		{
 			"includes": ["public/*.svg"],
 			"linter": {
 				"rules": {

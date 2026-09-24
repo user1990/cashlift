@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { MoneyDisplay } from "@/modules/money/components/MoneyDisplay";
 import { formatPreciseCompactCurrency, getPercentage } from "@/modules/money/format";
 import type { WorkspaceDatasetDateRange } from "@/modules/workspace/types";
 import { GlassCard } from "@/ui/components/cockpit/GlassCard";
@@ -9,7 +10,7 @@ import { OverviewDateRangePicker } from "../components/OverviewDateRangePicker";
 import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
 import { CockpitOutlookCard, CockpitStatusMetrics, CockpitSupportCard } from "./cockpitPanels";
-import { ExploreKicker, ExploreLink, ExploreMoney, PriorityCue } from "./cockpitUi";
+import { ExploreKicker, ExploreLink, PriorityCue } from "./cockpitUi";
 import { CASH_ACTION_NEXT_STEP, CASH_ACTION_WORK, type ExplorePresentation } from "./exploreModel";
 
 type CashAction = DashboardViewModel["actionInbox"][number];
@@ -43,7 +44,11 @@ export const OperatingCockpitDashboard = ({
 					</p>
 
 					<div className="flex flex-wrap items-center gap-3">
-						<p className="text-muted-foreground text-s">{dashboard.runwayDays} days runway (monthly estimate)</p>
+						<p className="text-muted-foreground text-s">
+							{dashboard.runwayDays !== undefined
+								? `${dashboard.runwayDays} days runway (monthly estimate)`
+								: "Runway unavailable without recurring spend"}
+						</p>
 
 						<OverviewDateRangePicker
 							dateRange={dateRange}
@@ -60,7 +65,7 @@ export const OperatingCockpitDashboard = ({
 							<dt className="text-muted-foreground text-s">Money at risk</dt>
 
 							<dd>
-								<ExploreMoney
+								<MoneyDisplay
 									cents={dashboard.cashAtRiskCents}
 									className="text-3xl+"
 									warning={dashboard.cashAtRiskCents > 0}
@@ -102,7 +107,7 @@ export const OperatingCockpitDashboard = ({
 							<p className="mt-3 text-m text-shell-muted leading-6">{primaryAction.description}</p>
 
 							<p className="mt-5">
-								<ExploreMoney cents={primaryAction.impactCents} className="text-2xl+" exact />
+								<MoneyDisplay cents={primaryAction.impactCents} className="text-2xl+" exact />
 
 								<span className="ml-2 text-muted-foreground text-s">money affected</span>
 							</p>
@@ -161,7 +166,7 @@ export const OperatingCockpitDashboard = ({
 										<p className="mt-1 text-m text-muted-foreground leading-6">{reason}</p>
 									</div>
 
-									<ExploreMoney cents={amountCents} exact />
+									<MoneyDisplay cents={amountCents} exact />
 								</li>
 							))}
 						</ul>
@@ -193,7 +198,7 @@ export const OperatingCockpitDashboard = ({
 									<p className="mt-1 text-muted-foreground text-s">Overdue · {owner}</p>
 								</div>
 
-								<ExploreMoney cents={amountCents} exact />
+								<MoneyDisplay cents={amountCents} exact />
 							</li>
 						))}
 
@@ -205,7 +210,7 @@ export const OperatingCockpitDashboard = ({
 									<p className="mt-1 text-muted-foreground text-s">Vendor leak · {getPercentage(usagePercent)} used</p>
 								</div>
 
-								<ExploreMoney cents={amountCents} exact />
+								<MoneyDisplay cents={amountCents} exact />
 							</li>
 						))}
 
@@ -222,10 +227,19 @@ export const OperatingCockpitDashboard = ({
 						<ul className="mt-4 grid gap-4 md:grid-cols-3">
 							{dashboard.budgetRows.map(({ id, remainingCents, team, usagePercent }) => (
 								<li key={id}>
-									<ProgressBar
-										label={`${team} · ${formatPreciseCompactCurrency(remainingCents)} ${remainingCents >= 0 ? "left" : "over budget"}`}
-										value={usagePercent}
-									/>
+									{usagePercent !== undefined && (
+										<ProgressBar
+											label={`${team} · ${formatPreciseCompactCurrency(remainingCents)} ${remainingCents >= 0 ? "left" : "over budget"}`}
+											value={usagePercent}
+										/>
+									)}
+
+									{usagePercent === undefined && (
+										<p className="text-m text-muted-foreground">
+											{team} · {formatPreciseCompactCurrency(remainingCents)}{" "}
+											{remainingCents >= 0 ? "left" : "over budget"} · Usage unavailable
+										</p>
+									)}
 								</li>
 							))}
 						</ul>
@@ -258,7 +272,7 @@ function renderQueueAction(action: CashAction, basePath: string) {
 			</span>
 
 			<span className="flex shrink-0 items-center gap-2">
-				<ExploreMoney cents={action.impactCents} exact />
+				<MoneyDisplay cents={action.impactCents} exact />
 
 				<ArrowRight aria-hidden className="size-4 text-muted-foreground group-hover:text-primary" />
 			</span>

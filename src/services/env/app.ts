@@ -24,8 +24,11 @@ const PRODUCTION_ENV_KEYS = [
 	"NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
 ] as const;
 
+const e2eDemoOnProductionBuild = (env: CashLiftProcessEnv) =>
+	env.CASHLIFT_E2E === "1" && env.CASHLIFT_ALLOW_DEMO_PRODUCTION_BUILD === "1";
+
 export const getCashLiftAppMode = (env: CashLiftProcessEnv = process.env): CashLiftAppMode => {
-	if (env.NODE_ENV === "production" && env.CASHLIFT_APP_MODE === "demo") {
+	if (env.NODE_ENV === "production" && env.CASHLIFT_APP_MODE === "demo" && !e2eDemoOnProductionBuild(env)) {
 		throw new Error("CASHLIFT_APP_MODE must be production in production deployments.");
 	}
 

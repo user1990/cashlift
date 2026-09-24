@@ -9,9 +9,18 @@ Use this skill for anything that crosses a trust boundary. For the deployment vi
 
 CashLift is fail-closed: demo mode serves fixtures with no secrets, and production mode refuses to serve workspace data until Clerk and Supabase are configured.
 
-## Boundary Order
+## Boundary Types
 
-Every server boundary follows the same order. Do not reorder or skip a step.
+| Boundary | Examples | Auth model |
+| --- | --- | --- |
+| Protected company data | `/api/v1/workspace/**`, server loaders, Supabase repositories, spend-request decisions | Parse → Clerk session → membership/role → Supabase with user token (RLS) |
+| Public read fixtures | `/api/v1/demo/dataset` | Parse inputs only; serve demo dataset; no Clerk session |
+| MCP read tool | `/api/mcp` (`get_workspace_dataset`) | Resolve through `resolveWorkspaceDataset`; demo or structured auth error; never mutate |
+| Deprecated shims | `/api/workspace/**` | Delegate to v1 handlers; do not add new behavior on unversioned paths |
+
+## Protected Company-Data Order
+
+For routes and server code that read or mutate a signed-in company's workspace data, follow this order. Do not reorder or skip a step.
 
 1. **Parse** the request with Zod (`safeParse`) and reject invalid input with 400.
 2. **Authenticate** with Clerk and reject a missing session with 401.
@@ -23,7 +32,7 @@ Every server boundary follows the same order. Do not reorder or skip a step.
 ## Request Rules
 
 - CSRF is Clerk `SameSite=Lax` cookies plus same-origin JSON mutations. Do not add a custom origin firewall, CSRF tokens, or Upstash on `/login`.
-- Workspace mutations stay JSON `PATCH`/`POST` on `/api/workspace`. Never change state on GET.
+- Workspace mutations stay JSON `PATCH`/`POST` on `/api/v1/workspace/**` (and legacy `/api/workspace/**` shims only while they exist). Never change state on GET.
 - Do not add `Access-Control-Allow-Origin`. CORS would let other sites call the cookie-backed API.
 - Keep CSP, HSTS, COOP/CORP, frame protection, referrer policy, and the permissions policy in `src/proxy.ts`. Widening CSP needs a specific origin and a test in `src/proxy.test.ts`.
 
@@ -49,4 +58,4 @@ pnpm security:audit
 pnpm test
 ```
 
-A new state-changing route still needs 401 without a session and 403 for the wrong role. A new or changed header needs an assertion in `src/proxy.test.ts`.
+A new protected state-changing route still needs 401 without a session and 403 for the wrong role. A new or changed header needs an assertion in `src/proxy.test.ts`.

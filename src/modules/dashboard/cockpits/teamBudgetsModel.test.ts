@@ -16,7 +16,7 @@ describe("team budgets presentation", () => {
 				id: budget.id,
 				usagePercent: getTeamBudgetUsage(budget),
 			}))
-			.toSorted((left, right) => right.usagePercent - left.usagePercent)
+			.toSorted((left, right) => (right.usagePercent ?? 0) - (left.usagePercent ?? 0))
 			.map((budget) => budget.id);
 
 		expect(presentation.teamCount).toEqual(DEMO_WORKSPACE_DATASET.teamBudgets.length);

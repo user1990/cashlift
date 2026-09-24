@@ -3,7 +3,7 @@ title: Data fetching and mutations
 description: Keep the server-rendered workspace and browser cache coherent.
 ---
 
-Workspace pages begin with data loaded on the server. Interactive sections then use React Query with that same dataset as `initialData`, avoiding a duplicate request during hydration.
+Workspace pages begin with data loaded on the server. `loadWorkspaceDataset(scope)` reduces the payload to the active route section before it crosses the server/client boundary. Interactive sections then use React Query with that same dataset as `initialData`, avoiding a duplicate request during hydration.
 
 Browser transport stays on `fetch` plus feature-level Zod parsing. Do not add an HTTP client library.
 
@@ -11,7 +11,7 @@ Browser transport stays on `fetch` plus feature-level Zod parsing. Do not add an
 
 - Keep query keys in the feature that owns the data. Include every server-affecting input, such as workspace scope and date range.
 - Parse API responses with the feature schema before they enter the cache.
-- Use server data as `initialData`; set `initialDataUpdatedAt: 0` when the supplied dataset does not match the active filters, so React Query refetches immediately.
+- Use server data as `initialData` only when the active filters match the server-rendered dataset (for example the default overview forecast range). When filters change, omit `initialData` so the UI does not show amounts for the wrong range while refetching.
 - Do not put server data in global client state merely to share it between route sections.
 
 ## Mutation rules

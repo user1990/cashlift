@@ -2,9 +2,8 @@
 name: visual-recap
 description:
   Generate and maintain CashLift's GitHub-rendered system recap block. Use when
-  planning a non-trivial change, creating or updating a non-trivial pull
-  request, or when the user asks for a visual recap, visual plan, system review,
-  PR recap, Mermaid diagram, or draw.io diagram of what changed.
+  creating or updating a non-trivial pull request, or when the user asks for a
+  system recap, PR recap, Mermaid diagram, or draw.io diagram of what changed.
 ---
 
 # Visual recap
@@ -30,7 +29,7 @@ for a hosted or interactive recap.
 
 1. Read `docs/contributing/architecture/primitives.yaml`.
 2. In recap mode, resolve the PR base and head commits with
-   `gh pr view <number> --json baseRefName,baseRefOid,headRefName,headRefOid`.
+   `pr-cockpit owner/repo#N --json baseRefName,baseRefOid,headRefName,headRefOid`.
 3. Fetch the named base ref with `git fetch origin <baseRefName>` when it is
    not available locally, then read `git diff <baseRefOid>...<headRefOid> --stat`
    and the full diff. Use those immutable PR commit IDs rather than a possibly
@@ -150,6 +149,8 @@ after the user has approved the PR-body update, run:
 ```bash
 node .agents/skills/visual-recap/scripts/upsert-recap-block.mjs <pr-number> <block-file>
 ```
+
+The helper reads and writes the PR body through `pr-cockpit` (`--json` and `edit-body`). Set `PR_COCKPIT_REF=owner/repo` when the remote is not `origin` on GitHub.
 
 The helper must fail closed for malformed or duplicate markers and preserve all
 text outside the recap block. Re-run the recap after every meaningful pushed

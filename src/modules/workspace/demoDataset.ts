@@ -113,6 +113,18 @@ const DEMO_WORKSPACE_DATASET_BASE = FINANCIAL_DATASET_SCHEMA.parse({
 	},
 	spendRequests: [
 		{
+			amountCents: 680_000,
+			category: "software",
+			id: "request-brandforge",
+			neededByDate: "2024-05-20",
+			reason: "Annual creative suite for retained client work",
+			requestedDate: "2024-05-15",
+			requester: "Leo",
+			status: "pending",
+			team: "Creative",
+			vendor: "BrandForge",
+		},
+		{
 			amountCents: 38_000,
 			category: "hardware",
 			id: "request-webcam",
@@ -123,6 +135,18 @@ const DEMO_WORKSPACE_DATASET_BASE = FINANCIAL_DATASET_SCHEMA.parse({
 			status: "pending",
 			team: "Client Delivery",
 			vendor: "Logitech",
+		},
+		{
+			amountCents: 210_000,
+			category: "travel",
+			id: "request-delta",
+			neededByDate: "2024-05-22",
+			reason: "Client onsite workshop travel",
+			requestedDate: "2024-05-16",
+			requester: "Samira Chen",
+			status: "pending",
+			team: "Client Delivery",
+			vendor: "Delta",
 		},
 		{
 			amountCents: 12_000,

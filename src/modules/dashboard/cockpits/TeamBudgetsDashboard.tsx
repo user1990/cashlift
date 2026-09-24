@@ -1,8 +1,10 @@
-import { formatPreciseCompactCurrency, getPercentage } from "@/modules/money/format";
+import { getTeamBudgetUsageLabel } from "@/modules/budgets/utils";
+import { MoneyDisplay } from "@/modules/money/components/MoneyDisplay";
+import { formatPreciseCompactCurrency } from "@/modules/money/format";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 import { ProgressBar } from "@/ui/components/feedback/ProgressBar";
-import { ExploreKicker, ExploreMoney } from "./cockpitUi";
+import { ExploreKicker } from "./cockpitUi";
 import { buildTeamBudgetsPresentation, type TeamBudgetRow } from "./teamBudgetsModel";
 
 type TeamBudgetsDashboardProps = {
@@ -32,7 +34,7 @@ export const TeamBudgetsDashboard = ({ dataset }: TeamBudgetsDashboardProps) => 
 							<dt className="text-muted-foreground text-s">Monthly budget</dt>
 
 							<dd>
-								<ExploreMoney cents={presentation.monthlyBudgetCents} className="text-3xl+" />
+								<MoneyDisplay cents={presentation.monthlyBudgetCents} className="text-3xl+" />
 							</dd>
 						</div>
 
@@ -40,7 +42,7 @@ export const TeamBudgetsDashboard = ({ dataset }: TeamBudgetsDashboardProps) => 
 							<dt className="text-muted-foreground text-s">Committed</dt>
 
 							<dd>
-								<ExploreMoney cents={presentation.committedCents} className="text-3xl+" />
+								<MoneyDisplay cents={presentation.committedCents} className="text-3xl+" />
 							</dd>
 						</div>
 
@@ -48,7 +50,7 @@ export const TeamBudgetsDashboard = ({ dataset }: TeamBudgetsDashboardProps) => 
 							<dt className="text-muted-foreground text-s">Remaining</dt>
 
 							<dd>
-								<ExploreMoney
+								<MoneyDisplay
 									cents={presentation.remainingCents}
 									className="text-3xl+"
 									warning={presentation.remainingCents < 0}
@@ -123,7 +125,7 @@ function renderPrimaryTeam(primaryTeam: TeamBudgetRow, hasOtherTeams: boolean) {
 			<div className="flex flex-wrap items-center gap-x-3 gap-y-1">
 				{renderPrimaryKicker(overBudget, hasOtherTeams)}
 
-				<span className="text-muted-foreground text-s">{getPercentage(primaryTeam.usagePercent)} used</span>
+				<span className="text-muted-foreground text-s">{getTeamBudgetUsageLabel(primaryTeam.usagePercent)}</span>
 			</div>
 
 			<h2 className="mt-3 font-semibold text-2xl+ text-panel-foreground tracking-normal">{primaryTeam.team}</h2>
@@ -131,14 +133,16 @@ function renderPrimaryTeam(primaryTeam: TeamBudgetRow, hasOtherTeams: boolean) {
 			<p className="mt-3 text-m text-shell-muted leading-6">{getPrimaryTeamDescription(overBudget, hasOtherTeams)}</p>
 
 			<p className="mt-5">
-				<ExploreMoney cents={primaryTeam.remainingCents} className="text-2xl+" warning={overBudget} />
+				<MoneyDisplay cents={primaryTeam.remainingCents} className="text-2xl+" warning={overBudget} />
 
 				<span className="ml-2 text-muted-foreground text-s">{overBudget ? "over budget" : "left this month"}</span>
 			</p>
 
-			<div className="mt-6">
-				<ProgressBar label="Monthly budget used" value={primaryTeam.usagePercent} />
-			</div>
+			{primaryTeam.usagePercent !== undefined && (
+				<div className="mt-6">
+					<ProgressBar label="Monthly budget used" value={primaryTeam.usagePercent} />
+				</div>
+			)}
 		</>
 	);
 }
@@ -152,11 +156,11 @@ function renderQueueTeam({ remainingCents, team, usagePercent }: TeamBudgetRow) 
 				<p className="font-semibold text-m+ text-panel-foreground">{team}</p>
 
 				<p className="mt-1 text-muted-foreground text-s">
-					{overBudget ? "Over budget" : `${getPercentage(usagePercent)} used`}
+					{overBudget ? "Over budget" : getTeamBudgetUsageLabel(usagePercent)}
 				</p>
 			</div>
 
-			<ExploreMoney cents={remainingCents} className="shrink-0" exact warning={overBudget} />
+			<MoneyDisplay cents={remainingCents} className="shrink-0" exact warning={overBudget} />
 		</div>
 	);
 }
@@ -178,7 +182,7 @@ function renderSupportTeam({
 					<dt className="text-muted-foreground text-s">Monthly</dt>
 
 					<dd>
-						<ExploreMoney cents={monthlyBudgetCents} exact />
+						<MoneyDisplay cents={monthlyBudgetCents} exact />
 					</dd>
 				</div>
 
@@ -186,7 +190,7 @@ function renderSupportTeam({
 					<dt className="text-muted-foreground text-s">Committed</dt>
 
 					<dd>
-						<ExploreMoney cents={committedCents} exact />
+						<MoneyDisplay cents={committedCents} exact />
 					</dd>
 				</div>
 
@@ -194,17 +198,19 @@ function renderSupportTeam({
 					<dt className="text-muted-foreground text-s">Approved</dt>
 
 					<dd>
-						<ExploreMoney cents={approvedCents} exact />
+						<MoneyDisplay cents={approvedCents} exact />
 					</dd>
 				</div>
 			</dl>
 
-			<div className="mt-4">
-				<ProgressBar
-					label={`${team} · ${formatPreciseCompactCurrency(remainingCents)} ${remainingCents >= 0 ? "left" : "over budget"}`}
-					value={usagePercent}
-				/>
-			</div>
+			{usagePercent !== undefined && (
+				<div className="mt-4">
+					<ProgressBar
+						label={`${team} · ${formatPreciseCompactCurrency(remainingCents)} ${remainingCents >= 0 ? "left" : "over budget"}`}
+						value={usagePercent}
+					/>
+				</div>
+			)}
 		</>
 	);
 }

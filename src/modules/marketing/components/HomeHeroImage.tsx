@@ -140,9 +140,7 @@ export const HomeHeroImage = () => {
 					<Image
 						alt={HOME_HERO.heroImageAlt}
 						src="/marketing/studio-nova-workspace-glass.webp"
-						decoding="sync"
 						fetchPriority="high"
-						priority
 						width={1568}
 						height={980}
 						sizes="(min-width: 1180px) 1120px, calc(100vw - 2rem)"

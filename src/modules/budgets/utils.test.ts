@@ -11,6 +11,6 @@ describe("budget utils", () => {
 		expect(getRemainingTeamBudget({ committedCents: 120_000, monthlyBudgetCents: 100_000 })).toEqual(-20_000);
 		expect(
 			getTeamBudgetUsage({ ...financialDatasetFixture.teamBudgets[0], committedCents: 1, monthlyBudgetCents: 0 }),
-		).toEqual(0);
+		).toBeUndefined();
 	});
 });

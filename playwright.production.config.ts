@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import { createProductionWebServerEnv, resolveProductionWebServerCommand } from "./e2e/playwright/webServer";
 
 if (process.env.FORCE_COLOR) {
 	delete process.env.NO_COLOR;
@@ -20,19 +21,10 @@ export default defineConfig({
 		trace: "retain-on-failure",
 	},
 	webServer: {
-		command: `pnpm dev --port ${productionPort}`,
-		env: {
-			...process.env,
-			CASHLIFT_APP_MODE: "production",
-			CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY ?? "sk_test_example",
-			NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
-				process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? "pk_test_dGVzdC1jbGVyay5jbGVyay5hY2NvdW50cy5kZXYk",
-			NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
-				process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "e2e-placeholder-anon-key",
-			NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://invalid.local",
-		},
+		command: resolveProductionWebServerCommand(productionPort),
+		env: createProductionWebServerEnv(),
 		reuseExistingServer: false,
-		timeout: 180_000,
+		timeout: process.env.CI ? 120_000 : 300_000,
 		url: productionBaseUrl,
 	},
 	workers: 1,

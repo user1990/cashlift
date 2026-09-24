@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { HELP_FAQ_GROUPS } from "./content";
-import { filterHelpFaqGroups, parseHelpFaqQuery } from "./utils";
+import { filterHelpFaqGroups, getAnnualPricingSavingsPercent, parseHelpFaqQuery } from "./utils";
 
 describe("parseHelpFaqQuery", () => {
 	it("preserves bounded input while dropping values longer than 120 characters", () => {
@@ -17,5 +17,12 @@ describe("filterHelpFaqGroups", () => {
 		expect(filterHelpFaqGroups(HELP_FAQ_GROUPS, "plans")[0]?.items).toHaveLength(2);
 		expect(filterHelpFaqGroups(HELP_FAQ_GROUPS, "  demo   financial  ")[0]?.items).toHaveLength(1);
 		expect(filterHelpFaqGroups(HELP_FAQ_GROUPS, "financial demo")[0]?.items).toHaveLength(1);
+	});
+});
+
+describe("getAnnualPricingSavingsPercent", () => {
+	it("derives savings from monthly and annual display prices", () => {
+		expect(getAnnualPricingSavingsPercent("$8", "$6")).toBe(25);
+		expect(getAnnualPricingSavingsPercent("$25", "$20")).toBe(20);
 	});
 });

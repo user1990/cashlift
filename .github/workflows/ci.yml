@@ -17,7 +17,6 @@ permissions:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-  PNPM_CONFIG_MINIMUM_RELEASE_AGE: 0
 
 jobs:
   verify:
@@ -45,13 +44,16 @@ jobs:
         run: pnpm run test:e2e:install
 
       - name: Lint
-        run: npx biome check .
+        run: pnpm exec biome check .
 
       - name: Type check
         run: pnpm exec tsc --noEmit
 
-      - name: Unit tests
+      - name: Unit tests and coverage thresholds
         run: pnpm test
+
+      - name: Performance budget
+        run: pnpm run check:performance
 
       - name: Security check
         run: pnpm run security:check

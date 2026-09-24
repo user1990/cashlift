@@ -2,6 +2,7 @@
 
 import { Shield } from "lucide-react";
 import type { ReactNode } from "react";
+import { MoneyDisplay } from "@/modules/money/components/MoneyDisplay";
 import { ApprovalDecisionActions } from "@/modules/spend-requests/components/ApprovalDecisionActions";
 import { useSpendRequestDecision } from "@/modules/spend-requests/hooks/useSpendRequestDecision";
 import { formatCashAfterApproval } from "@/modules/spend-requests/utils";
@@ -13,7 +14,8 @@ import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
 import { buildDashboardViewModel } from "../view-model";
 import { type ApprovalsPresentation, buildApprovalsPresentation, formatSpendCategory } from "./approvalsModel";
-import { ExploreKicker, ExploreMoney } from "./cockpitUi";
+import { CockpitStatusCard } from "./cockpitPanels";
+import { ExploreKicker } from "./cockpitUi";
 
 type ApprovalsCockpitProps = {
 	dataset: FinancialDataset;
@@ -69,59 +71,47 @@ function ApprovalsCockpitView({ dashboard, presentation, renderActions }: Approv
 
 	return (
 		<div className="space-y-4 xl:space-y-5">
-			<GlassCard atmosphere="status">
-				<p className="text-muted-foreground text-s">{presentation.contextLine}</p>
+			<CockpitStatusCard contextLine={presentation.contextLine} headline={presentation.headline}>
+				<div>
+					<dt className="text-muted-foreground text-s">Pending spend</dt>
 
-				<h1 className="mt-3 max-w-4xl font-semibold text-3xl+ text-panel-foreground tracking-normal">
-					{presentation.headline}
-				</h1>
+					<dd>
+						<MoneyDisplay cents={presentation.pendingAmountCents} className="text-3xl+" />
+					</dd>
+				</div>
 
-				<dl className="mt-6 grid gap-5 sm:grid-cols-3">
+				<div>
+					<dt className="text-muted-foreground text-s">Cash on hand</dt>
+
+					<dd>
+						<MoneyDisplay cents={dashboard.cashAvailableCents} className="text-3xl+" />
+					</dd>
+				</div>
+
+				{primaryRequest?.cashAfterApprovalCents !== undefined ? (
 					<div>
-						<dt className="text-muted-foreground text-s">Pending spend</dt>
+						<dt className="flex items-center gap-1.5 text-muted-foreground text-s">
+							<Shield aria-hidden className="size-3.5 text-primary" />
+							Cash after next approval
+						</dt>
 
 						<dd>
-							<ExploreMoney cents={presentation.pendingAmountCents} className="text-3xl+" />
+							<MoneyDisplay cents={primaryRequest.cashAfterApprovalCents} className="text-3xl+" warning={belowBuffer} />
 						</dd>
 					</div>
-
+				) : (
 					<div>
-						<dt className="text-muted-foreground text-s">Cash on hand</dt>
+						<dt className="flex items-center gap-1.5 text-muted-foreground text-s">
+							<Shield aria-hidden className="size-3.5 text-primary" />
+							Cash buffer
+						</dt>
 
 						<dd>
-							<ExploreMoney cents={dashboard.cashAvailableCents} className="text-3xl+" />
+							<MoneyDisplay cents={dashboard.cashBufferTargetCents} className="text-3xl+" />
 						</dd>
 					</div>
-
-					{primaryRequest?.cashAfterApprovalCents !== undefined ? (
-						<div>
-							<dt className="flex items-center gap-1.5 text-muted-foreground text-s">
-								<Shield aria-hidden className="size-3.5 text-primary" />
-								Cash after next approval
-							</dt>
-
-							<dd>
-								<ExploreMoney
-									cents={primaryRequest.cashAfterApprovalCents}
-									className="text-3xl+"
-									warning={belowBuffer}
-								/>
-							</dd>
-						</div>
-					) : (
-						<div>
-							<dt className="flex items-center gap-1.5 text-muted-foreground text-s">
-								<Shield aria-hidden className="size-3.5 text-primary" />
-								Cash buffer
-							</dt>
-
-							<dd>
-								<ExploreMoney cents={dashboard.cashBufferTargetCents} className="text-3xl+" />
-							</dd>
-						</div>
-					)}
-				</dl>
-			</GlassCard>
+				)}
+			</CockpitStatusCard>
 
 			<section className="grid items-stretch gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:gap-5">
 				<GlassCard atmosphere="priority" className="h-full" contentClassName="flex h-full flex-col" intensity="active">
@@ -194,7 +184,7 @@ function renderPriorityRequest(
 			<p className="mt-3 text-m text-shell-muted leading-6">{reason}</p>
 
 			<p className="mt-5">
-				<ExploreMoney cents={amountCents} className="text-2xl+" exact />
+				<MoneyDisplay cents={amountCents} className="text-2xl+" exact />
 
 				<span className="ml-2 text-muted-foreground text-s">money affected</span>
 			</p>
@@ -233,7 +223,7 @@ function renderQueueRequest(request: PendingSpendRequest, renderActions?: Approv
 			</span>
 
 			<span className="flex shrink-0 flex-col items-start gap-2 sm:items-end">
-				<ExploreMoney cents={amountCents} exact />
+				<MoneyDisplay cents={amountCents} exact />
 
 				{renderActions?.(request, "small")}
 			</span>

@@ -18,6 +18,27 @@ describe("CashLift app environment", () => {
 		);
 	});
 
+	it("rejects demo mode on a production build when only the build override is set", () => {
+		expect(() =>
+			getCashLiftAppMode({
+				CASHLIFT_ALLOW_DEMO_PRODUCTION_BUILD: "1",
+				CASHLIFT_APP_MODE: "demo",
+				NODE_ENV: "production",
+			}),
+		).toThrow("CASHLIFT_APP_MODE must be production in production deployments.");
+	});
+
+	it("allows demo mode on a production build only for Playwright web servers", () => {
+		expect(
+			getCashLiftAppMode({
+				CASHLIFT_ALLOW_DEMO_PRODUCTION_BUILD: "1",
+				CASHLIFT_APP_MODE: "demo",
+				CASHLIFT_E2E: "1",
+				NODE_ENV: "production",
+			}),
+		).toEqual("demo");
+	});
+
 	it("requires production auth and Supabase keys", () => {
 		const config = getWorkspaceRuntimeConfig({ CASHLIFT_APP_MODE: "production" });
 

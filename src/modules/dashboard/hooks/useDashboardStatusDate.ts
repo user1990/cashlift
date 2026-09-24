@@ -6,14 +6,30 @@ import { subscribeToBrowserMidnight } from "@/utilities/dates/subscribeToBrowser
 import { getDashboardAsOfDate } from "../view-model";
 
 export const useDashboardStatusDate = (dataset: FinancialDataset, dateRange?: WorkspaceDatasetDateRange) => {
-	const isoDate = useSyncExternalStore(subscribeToBrowserMidnight, getClientStatusIsoDate, () =>
-		toIsoDate(getDashboardAsOfDate(dataset, dateRange)),
+	const isoDate = useSyncExternalStore(
+		subscribeToBrowserMidnight,
+		() => getStatusIsoDate(dataset, dateRange, "client"),
+		() => getStatusIsoDate(dataset, dateRange, "server"),
 	);
 
 	return new Date(`${isoDate}T00:00:00`);
 };
 
-const getClientStatusIsoDate = () => toIsoDate(new Date());
+function getStatusIsoDate(
+	dataset: FinancialDataset,
+	dateRange: WorkspaceDatasetDateRange | undefined,
+	mode: "client" | "server",
+) {
+	if (dateRange?.startDate) {
+		return dateRange.startDate;
+	}
+
+	if (mode === "client") {
+		return toIsoDate(new Date());
+	}
+
+	return toIsoDate(getDashboardAsOfDate(dataset, dateRange));
+}
 
 function toIsoDate(date: Date) {
 	const year = date.getFullYear();

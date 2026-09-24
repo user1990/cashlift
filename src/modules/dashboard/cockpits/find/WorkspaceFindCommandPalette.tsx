@@ -73,7 +73,7 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 							onChange={(value) => session.updateQuery({ query: value })}
 							onKeyDown={session.handleSearchKeyDown}
 							placeholder="Search for anything"
-							activeOptionId={session.selectedId ? `find-option-${session.selectedId}` : undefined}
+							activeOptionId={session.selectedId ? getFindOptionId(session.selectedId) : undefined}
 							hasPopup={showResults && session.results.length > 0}
 							value={session.query.query}
 						/>
@@ -98,10 +98,12 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 						</div>
 					</div>
 
-					<div className="max-h-[min(24rem,50vh)] overflow-y-auto" id="find-results">
-						<div aria-live="polite" className="sr-only">
-							{`${session.results.length} ${session.results.length === 1 ? "result" : "results"}`}
-						</div>
+					<div className="max-h-[min(24rem,50vh)] overflow-y-auto">
+						{session.showResults && (
+							<div aria-live="polite" className="sr-only">
+								{`${session.results.length} ${session.results.length === 1 ? "result" : "results"}`}
+							</div>
+						)}
 
 						{showEmpty && (
 							<FindEmptyState
@@ -147,7 +149,7 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 						)}
 
 						{showResults && session.results.length > 0 && (
-							<div className="divide-y divide-white/10" role="listbox">
+							<div className="divide-y divide-white/10" id="find-results" role="listbox">
 								{session.results.map((item) => (
 									<div
 										aria-selected={session.selectedId === item.id}
@@ -162,6 +164,7 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 											item={item}
 											selected={session.selectedId === item.id}
 											showKind
+											tabIndex={-1}
 										/>
 									</div>
 								))}

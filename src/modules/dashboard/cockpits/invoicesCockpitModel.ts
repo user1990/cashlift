@@ -106,9 +106,7 @@ function isOverdueForView(invoice: Invoice, asOfDate: Date | undefined) {
 }
 
 function invoiceMatchesCollectionAction(invoice: Invoice, action: CashAction) {
-	return (
-		action.impactCents === invoice.amountCents || action.title.toLowerCase().includes(invoice.client.toLowerCase())
-	);
+	return action.title.toLowerCase().includes(invoice.client.toLowerCase());
 }
 
 function compareInvoiceDueDate(left: InvoiceCockpitRow, right: InvoiceCockpitRow) {

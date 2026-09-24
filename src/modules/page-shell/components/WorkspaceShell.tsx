@@ -1,5 +1,3 @@
-"use client";
-
 import type { ReactNode } from "react";
 import { MainContent } from "@/ui/components/layout/MainContent";
 import type { WorkspaceExperience } from "../types";

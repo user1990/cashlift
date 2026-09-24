@@ -16,6 +16,12 @@ export default defineConfig({
 			include: ["src/**/*.{ts,tsx}"],
 			provider: "v8",
 			reporter: ["text", "json-summary", "html"],
+			thresholds: {
+				branches: 64,
+				functions: 64,
+				lines: 68,
+				statements: 68,
+			},
 		},
 		environment: "node",
 		exclude: ["**/e2e/**", "**/node_modules/**"],

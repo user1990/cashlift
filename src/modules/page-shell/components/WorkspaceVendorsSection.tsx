@@ -1,5 +1,6 @@
-import { ExploreKicker, ExploreMoney } from "@/modules/dashboard/cockpits/cockpitUi";
+import { ExploreKicker } from "@/modules/dashboard/cockpits/cockpitUi";
 import { formatDashboardDate } from "@/modules/dashboard/overviewDateRangeLabel";
+import { MoneyDisplay } from "@/modules/money/components/MoneyDisplay";
 import { getPercentage } from "@/modules/money/format";
 import {
 	buildVendorsPresentation,
@@ -32,7 +33,7 @@ export const WorkspaceVendorsSection = ({ dataset }: WorkspaceVendorsSectionProp
 						<dt className="text-muted-foreground text-s">Vendor leaks</dt>
 
 						<dd>
-							<ExploreMoney
+							<MoneyDisplay
 								cents={presentation.leakSavingsCents}
 								className="text-3xl+"
 								warning={presentation.leakSavingsCents > 0}
@@ -44,7 +45,7 @@ export const WorkspaceVendorsSection = ({ dataset }: WorkspaceVendorsSectionProp
 						<dt className="text-muted-foreground text-s">Vendor bills</dt>
 
 						<dd>
-							<ExploreMoney cents={presentation.billsTotalCents} className="text-3xl+" />
+							<MoneyDisplay cents={presentation.billsTotalCents} className="text-3xl+" />
 						</dd>
 					</div>
 
@@ -52,7 +53,7 @@ export const WorkspaceVendorsSection = ({ dataset }: WorkspaceVendorsSectionProp
 						<dt className="text-muted-foreground text-s">Needs review</dt>
 
 						<dd>
-							<ExploreMoney
+							<MoneyDisplay
 								cents={presentation.reviewBillsCents}
 								className="text-3xl+"
 								warning={presentation.reviewBillsCents > 0}
@@ -151,7 +152,7 @@ function renderPrimaryWork(presentation: VendorsPresentation) {
 				<p className="mt-3 text-m text-shell-muted leading-6">{getPercentage(primaryLeak.usagePercent)} used</p>
 
 				<p className="mt-5">
-					<ExploreMoney cents={primaryLeak.amountCents} className="text-2xl+" exact />
+					<MoneyDisplay cents={primaryLeak.amountCents} className="text-2xl+" exact />
 
 					<span className="ml-2 text-muted-foreground text-s">monthly</span>
 				</p>
@@ -178,7 +179,7 @@ function renderPrimaryWork(presentation: VendorsPresentation) {
 				</p>
 
 				<p className="mt-5">
-					<ExploreMoney cents={primaryBill.amountCents} className="text-2xl+" exact />
+					<MoneyDisplay cents={primaryBill.amountCents} className="text-2xl+" exact />
 				</p>
 			</>
 		);
@@ -206,7 +207,7 @@ function renderLeakRow(leak: FinancialDataset["subscriptions"][number]) {
 				<span className="mt-1 block font-semibold text-m+ text-panel-foreground">{leak.vendor}</span>
 			</span>
 
-			<ExploreMoney cents={leak.amountCents} className="shrink-0" exact />
+			<MoneyDisplay cents={leak.amountCents} className="shrink-0" exact />
 		</div>
 	);
 }
@@ -229,7 +230,7 @@ function renderBillRow(bill: FinancialDataset["vendorBills"][number]) {
 				</span>
 			</span>
 
-			<ExploreMoney cents={bill.amountCents} className="shrink-0" exact />
+			<MoneyDisplay cents={bill.amountCents} className="shrink-0" exact />
 		</div>
 	);
 }
@@ -247,7 +248,7 @@ function renderSubscriptionRow(subscription: FinancialDataset["subscriptions"][n
 				<span className="mt-1 block font-semibold text-m+ text-panel-foreground">{subscription.vendor}</span>
 			</span>
 
-			<ExploreMoney cents={subscription.amountCents} className="shrink-0" exact />
+			<MoneyDisplay cents={subscription.amountCents} className="shrink-0" exact />
 		</div>
 	);
 }

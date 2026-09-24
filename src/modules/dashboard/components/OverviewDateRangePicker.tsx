@@ -11,7 +11,10 @@ export type OverviewDateRangePickerProps = {
 
 const DynamicOverviewDateRangePicker = dynamic(
 	() => import("./OverviewDateRangePickerClient").then((mod) => mod.OverviewDateRangePickerClient),
-	{ ssr: false },
+	{
+		loading: () => <div aria-hidden className="h-11 w-44 rounded-lg bg-panel-muted" />,
+		ssr: false,
+	},
 );
 
 export const OverviewDateRangePicker = (props: OverviewDateRangePickerProps) => (

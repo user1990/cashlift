@@ -13,7 +13,7 @@ For update procedure, audit notes, and the full checklist mirror, read `.agents/
 
 - During UI review, group findings by file and cite `file:line`. Focus on actionable misses, not restating rules that already pass.
 - Vercel copy rules are product-style guidance unless they conflict with CashLift brand voice.
-- Persist shareable UI state in the URL when route-significant: filters, tabs, pagination, expanded panels.
+- Persist shareable UI state in the URL when route-significant: filters, tabs, pagination, expanded panels. Prefer `nuqs` for workspace navigation patterns already using it.
 - Loading labels use ellipsis (`Loading…`); avoid submit flicker with a short delay or minimum visible time.
 - Honor `prefers-reduced-motion`; animate `transform` and `opacity` only; never use `transition-all`.
 - Prefer flex, grid, intrinsic layout, and container queries over JavaScript measurement for CSS-only layout.

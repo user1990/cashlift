@@ -1,136 +1,26 @@
-# .agents/ Directory
+# `.agents/` directory
 
-This directory contains AI agent instructions organized into **skills** (actionable workflows) and **docs** (reference material).
+**Skills** (`skills/<name>/SKILL.md`) — actionable workflows with YAML frontmatter for dispatch. Keep each skill focused; prefer under 500 lines. Put long examples in `docs/`.
 
-## Skills vs Docs
+**Docs** (plain files under `docs/`) — reference and examples only; no frontmatter; not auto-dispatched.
 
-### Skills (`skills/`)
+**Load order:** root `AGENTS.md` → matching `SKILL.md` → `docs/` when the skill points there.
 
-Actionable instructions that AI agents trigger on specific tasks. Each skill:
+## Authoring
 
-- Has **YAML frontmatter** with `name` and `description` (used for automatic triggering)
-- Contains **imperative instructions** — step-by-step workflows the agent follows
-- Is **concise** (<500 lines ideal) — enough to act on without overwhelming context
-- Covers **one responsibility** — styling, testing, architecture, etc.
+| Add a skill when… | Add a doc when… |
+| --- | --- |
+| The agent must follow steps or rules for a task type | You need examples, audit notes, or rationale |
+| It should trigger from frontmatter description | It is lookup material loaded on demand |
 
-**Add to skills when:**
+Register new skills in root `AGENTS.md` workflow or quick reference. For Cursor slash-menu discovery of Codex-enabled skills, symlink `.cursor/skills/<name>` → `../../.agents/skills/<name>`.
 
-- The content tells the agent **how to do something** (workflow, conventions, patterns)
-- It should trigger automatically based on task type (e.g. "style a component" → `skills/styling/SKILL.md`)
-- It contains rules, conventions, or patterns the agent must follow during implementation
-- It's referenced in the orchestrator's decision tree
+**Codex:** optional `agents/openai.yaml` per skill. **Cursor:** frontmatter `icon`, `color`; ignores `openai.yaml`.
 
-**Examples:** coding conventions, testing patterns, styling rules, fix workflows, design implementation
+## Skills in this repo
 
-### Context Budget Rules
+`architecture`, `baseline-javascript`, `guide`, `orchestrate`, `security`, `ship-pr`, `styling`, `testing`, `visual-recap`, `web-animation-design` (manual invoke only), `web-interface-guidelines`, `worktree`.
 
-Agents should preserve important context without loading every guide at once:
+**PR transport:** use `pr-cockpit owner/repo#N` for reads, waits, resolves, and `edit-body` — not raw `gh pr` when Cockpit is available.
 
-- Keep `SKILL.md` files actionable and preferably under 500 lines.
-- Move detailed examples, inventories, and long explanations to `docs/`, then link to them from the relevant skill.
-- Put only trigger-critical rules in `AGENTS.md`; task-specific rules belong in skills.
-- Load in this order: `AGENTS.md` → matching `SKILL.md` files → referenced `docs/` files only when the task needs deeper detail.
-- When a task is long-running, maintain a compact working summary: goal, files/modules, decisions, commands, verification, blockers, next step.
-
-### Docs (`docs/`)
-
-Reference material the agent (or human) can consult for context. Each doc:
-
-- Is a **plain `.md` file** in `docs/` — no `SKILL.md` wrapper, no kebab-case directory
-- Needs **no YAML frontmatter** — docs are never auto-dispatched
-- Contains **informational content** — analysis, catalogs, migration logs, comparisons
-- Can be **any length** — detail is valuable for reference
-- Is **not triggered automatically** — read on demand when context is needed
-
-**Add to docs when:**
-
-- The content explains **what happened** or **what exists** (analysis, report, catalog)
-- It's a one-time investigation, migration log, or compatibility report
-- It provides lookup tables, package catalogs, or architectural inventories
-- It won't be stale quickly or is tied to a specific point in time
-
-**Examples:** migration notes, dependency analysis, package catalogs, before/after comparisons
-
-## Naming Convention
-
-- **Skills** live in their own **kebab-case** directory with a single **`SKILL.md`** file (matches the common agent skill layout).
-- **Docs** are **plain `.md` files** directly inside `docs/` with a kebab-case filename — no wrapper directory.
-
-```
-skills/
-├── architecture/SKILL.md
-├── baseline-javascript/SKILL.md
-├── ship-pr/SKILL.md
-├── guide/SKILL.md
-├── orchestrate/SKILL.md
-├── security/SKILL.md
-├── styling/SKILL.md
-├── testing/SKILL.md
-├── visual-recap/SKILL.md
-├── web-interface-guidelines/SKILL.md
-└── worktree/SKILL.md
-
-.cursor/skills/
-├── orchestrate -> ../../.agents/skills/orchestrate
-└── ship-pr -> ../../.agents/skills/ship-pr
-
-docs/
-├── guide.md
-├── styling.md
-├── testing.md
-└── web-interface-guidelines.md
-```
-
-**Path rules:**
-- Skills → `skills/<kebab-name>/SKILL.md` (directory is the stable identifier; filename is always `SKILL.md`)
-- Docs → `docs/<kebab-name>.md` (flat markdown files)
-
-## Frontmatter Format
-
-Only **skills** use YAML frontmatter — it drives automatic dispatch. Docs don't need it.
-
-```yaml
----
-name: skill-name
-description: When to trigger and what it does. Be specific about trigger phrases and task types.
----
-```
-
-## Platform registration (Cursor vs Codex)
-
-All skills live in `.agents/skills/<name>/SKILL.md`. Both Cursor and Codex
-discover skills from that path.
-
-| Platform | Discovery | Explicit invoke | Extra metadata |
-| --- | --- | --- | --- |
-| Cursor | `.agents/skills/` and `.cursor/skills/` | `/skill-name` in Agent chat | `SKILL.md` frontmatter (`icon`, `color`, `paths`, `disable-model-invocation`) |
-| Codex | `.agents/skills/` | `$skill-name` or `/skills` picker | `agents/openai.yaml` (`interface.*`, `policy.allow_implicit_invocation`) |
-
-Cursor ignores `agents/openai.yaml`. Codex ignores Cursor-only frontmatter fields
-like `disable-model-invocation`. Put shared workflow text in `SKILL.md`; put
-Codex picker labels and `default_prompt` in `openai.yaml`, and mirror
-`default_prompt` behavior in a `## Slash invocation` section when it matters.
-
-For Cursor slash-menu discovery, repo skills that also ship Codex metadata should
-have a symlink at `.cursor/skills/<name>` pointing to
-`../../.agents/skills/<name>`. Keep one canonical `SKILL.md` under
-`.agents/skills/`.
-
-## Adding New Content
-
-1. Determine if it's a **skill** (actionable workflow) or **doc** (reference material)
-2. Create the file:
-   - Skill → `skills/<kebab-topic>/SKILL.md` (new directory per topic, with frontmatter)
-   - Doc → `docs/<kebab-topic>.md` (plain markdown, no frontmatter)
-3. If it's a skill, add it to the orchestrator's decision tree in `CLAUDE.md` / root `AGENTS.md`
-
-## Decision Checklist
-
-| Question | Skill | Doc |
-| --- | --- | --- |
-| Does it tell the agent how to do something? | ✅ | |
-| Should it trigger automatically on certain tasks? | ✅ | |
-| Does it contain rules/conventions to follow? | ✅ | |
-| Does it explain what happened or what exists? | | ✅ |
-| Is it a one-time analysis or investigation? | | ✅ |
-| Is it a lookup table or catalog? | | ✅ |
+**Checks:** `pnpm check:agents` validates backtick path references under `.agents/` and `docs/contributing/architecture/primitives.yaml`.
