@@ -18,8 +18,6 @@ type WorkspaceSettingsSectionProps = {
 	readOnly?: boolean;
 };
 
-type TeamMember = FinancialDataset["teamMembers"][number];
-
 export const WorkspaceSettingsSection = ({ basePath, dataset, readOnly = false }: WorkspaceSettingsSectionProps) => {
 	const presentation = buildSettingsPresentation({ dataset, readOnly });
 	const financeLead = presentation.financeLead;
