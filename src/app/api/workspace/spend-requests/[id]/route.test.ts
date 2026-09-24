@@ -57,6 +57,14 @@ describe("PATCH /api/workspace/spend-requests/[id]", () => {
 		],
 		[404, { code: "not_found" as const, message: "Spend request was not found.", status: "error" as const }],
 		[
+			409,
+			{
+				code: "conflict" as const,
+				message: "Spend request was already decided.",
+				status: "error" as const,
+			},
+		],
+		[
 			500,
 			{
 				code: "unavailable" as const,

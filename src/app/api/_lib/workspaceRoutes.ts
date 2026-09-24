@@ -15,6 +15,7 @@ type RouteContext = {
 };
 
 const ERROR_STATUS = {
+	conflict: 409,
 	forbidden: 403,
 	invalid: 400,
 	not_found: 404,
@@ -24,6 +25,7 @@ const ERROR_STATUS = {
 } as const;
 
 const ERROR_CODE = {
+	conflict: "workspace_spend_request_conflict",
 	forbidden: "workspace_forbidden",
 	invalid: "api_request_failed",
 	not_found: "api_request_failed",

@@ -3,7 +3,12 @@
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+vi.mock("../hooks/useDashboardStatusDate", () => ({
+	useDashboardStatusDate: () => new Date("2024-05-20T00:00:00"),
+}));
+
 import { formatPreciseCompactCurrency } from "@/modules/money/format";
 import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
 import { formatDashboardDate } from "../overviewDateRangeLabel";

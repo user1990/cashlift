@@ -3,17 +3,21 @@
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { CashInsightsDashboard } from "../cockpits/CashInsightsDashboard";
 import { buildCashInsightsPresentation } from "../cockpits/cashInsightsModel";
-import { buildDashboardViewModel, getDashboardAsOfDate } from "../view-model";
+import { useDashboardStatusDate } from "../hooks/useDashboardStatusDate";
+import { buildDashboardViewModel } from "../view-model";
 
 type CashInsightsProps = {
 	dataset: FinancialDataset;
 	basePath?: string;
+	bufferDataset?: FinancialDataset;
 };
 
-export const CashInsights = ({ basePath = "/dashboard", dataset }: CashInsightsProps) => {
+export const CashInsights = ({ basePath = "/dashboard", bufferDataset, dataset }: CashInsightsProps) => {
+	const statusDate = useDashboardStatusDate(dataset);
 	const dashboard = buildDashboardViewModel({
+		bufferDataset,
 		dataset,
-		date: getDashboardAsOfDate(dataset),
+		date: statusDate,
 		role: dataset.profile.defaultRole,
 	});
 

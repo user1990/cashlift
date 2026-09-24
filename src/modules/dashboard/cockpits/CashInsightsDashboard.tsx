@@ -54,7 +54,7 @@ export const CashInsightsDashboard = ({ basePath, dashboard, presentation }: Cas
 					</h2>
 
 					<p className="mt-3 text-m text-shell-muted leading-6">
-						{dashboard.runwayDays} days runway from cash on hand and recurring spend.
+						{dashboard.runwayDays} days runway from cash on hand and estimated monthly recurring spend.
 					</p>
 
 					<p className="mt-5">
