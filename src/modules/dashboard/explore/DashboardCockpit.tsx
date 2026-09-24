@@ -1,6 +1,7 @@
 "use client";
 
 import type { FinancialDataset, WorkspaceDatasetDateRange } from "@/modules/workspace/types";
+import { useDashboardStatusDate } from "../hooks/useDashboardStatusDate";
 import { buildDashboardViewModel } from "../view-model";
 import { buildExplorePresentation } from "./exploreModel";
 import { OperatingCockpitDashboard } from "./OperatingCockpitDashboard";
@@ -22,10 +23,11 @@ export const DashboardCockpit = ({
 	dateRange,
 	onDateRangeChange,
 }: DashboardCockpitProps) => {
+	const statusDate = useDashboardStatusDate(dataset, dateRange);
 	const dashboard = buildDashboardViewModel({
 		bufferDataset,
 		dataset,
-		date: getDashboardDate(dateRange, dataset),
+		date: statusDate,
 		role: dataset.profile.defaultRole,
 	});
 	const presentation = buildExplorePresentation(dashboard);
@@ -42,9 +44,3 @@ export const DashboardCockpit = ({
 		</WorkspaceFindShell>
 	);
 };
-
-function getDashboardDate(dateRange: WorkspaceDatasetDateRange | undefined, dataset: FinancialDataset) {
-	const date = dateRange?.startDate ?? dataset.forecast[0]?.date;
-
-	return date ? new Date(`${date}T00:00:00`) : new Date();
-}

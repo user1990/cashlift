@@ -16,21 +16,24 @@ import { formatDashboardDate, getOverviewDateRangeLabel } from "./overviewDateRa
 type BuildDashboardViewModelParams = {
 	dataset: FinancialDataset;
 	bufferDataset?: FinancialDataset;
-	date?: Date;
+	date: Date;
 	role?: CompanyRole;
 };
 
 export const buildDashboardViewModel = ({
 	dataset,
 	bufferDataset = dataset,
-	date = getDefaultDashboardDate(dataset),
+	date,
 	role = dataset.profile.defaultRole,
 }: BuildDashboardViewModelParams) => {
-	const pendingApprovals = dataset.spendRequests.filter((request) => request.status === "pending");
+	if (!date) {
+		throw new Error("Dashboard status date is required.");
+	}
+	const pendingApprovals = bufferDataset.spendRequests.filter((request) => request.status === "pending");
 	const vendorLeaks = dataset.subscriptions
 		.filter(isVendorLeak)
 		.toSorted((left, right) => right.amountCents - left.amountCents);
-	const overdueInvoices = dataset.invoices
+	const overdueInvoices = bufferDataset.invoices
 		.filter((invoice) => isInvoiceOverdue(invoice, date))
 		.toSorted((left, right) => right.amountCents - left.amountCents);
 	const dueVendorBills = getDueVendorBills(dataset.vendorBills, date);
@@ -64,7 +67,7 @@ export const buildDashboardViewModel = ({
 	const cashBufferTargetCents = dataset.profile.cashBufferTargetCents;
 	const cashAvailableCents = dataset.profile.cashBalanceCents;
 	const bufferRiskCents = getCashBufferRisk(bufferDataset, date);
-	const invoiceRiskCents = getInvoiceRiskTotal(dataset.invoices, date);
+	const invoiceRiskCents = getInvoiceRiskTotal(bufferDataset.invoices, date);
 	const primaryFinanceUser =
 		dataset.teamMembers.find((member) => member.role === "owner-finance") ?? dataset.teamMembers[0];
 
@@ -92,12 +95,12 @@ export const buildDashboardViewModel = ({
 		lowestProjectedCashCents: lowestProjectedCash?.cents,
 		lowestProjectedCashDate: lowestProjectedCash?.date,
 		overdueInvoices,
-		pendingApprovalCount: getPendingApprovalCount(dataset.spendRequests),
-		pendingApprovals: pendingApprovals.map((request) => withCashImpact(request, dataset)),
+		pendingApprovalCount: getPendingApprovalCount(bufferDataset.spendRequests),
+		pendingApprovals: pendingApprovals.map((request) => withCashImpact(request, bufferDataset)),
 		projectedOutflowCents: getUpcomingOutflowTotal(dataset, date),
 		projectedReceivablesCents: getUpcomingInvoiceTotal(dataset.invoices, date),
 		role,
-		runwayDays: getRunwayDays(dataset),
+		runwayDays: getRunwayDays(bufferDataset),
 		spendChartData,
 		totalCommittedSpendCents,
 		totalUncommittedCents,
@@ -170,10 +173,4 @@ function getCashPositionHeadline({
 	}
 
 	return `Cash on hand is ${formatPreciseCompactCurrency(availableCents)} against a ${buffer} buffer`;
-}
-
-function getDefaultDashboardDate(dataset: FinancialDataset) {
-	const firstForecastDate = dataset.forecast[0]?.date;
-
-	return firstForecastDate ? new Date(`${firstForecastDate}T00:00:00`) : new Date();
 }

@@ -43,7 +43,7 @@ export const OperatingCockpitDashboard = ({
 					</p>
 
 					<div className="flex flex-wrap items-center gap-3">
-						<p className="text-muted-foreground text-s">{dashboard.runwayDays} days runway</p>
+						<p className="text-muted-foreground text-s">{dashboard.runwayDays} days runway (monthly estimate)</p>
 
 						<OverviewDateRangePicker
 							dateRange={dateRange}

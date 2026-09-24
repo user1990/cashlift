@@ -26,6 +26,19 @@ describe("dashboard view model", () => {
 		expect(dashboard.actionInbox[0].title).toEqual("Decide on BrandForge annual renewal");
 	});
 
+	it("keeps overdue invoice risk when the overview range is shorter", () => {
+		const date = new Date("2026-05-09");
+		const dashboard = buildDashboardViewModel({
+			bufferDataset: financialDatasetFixture,
+			dataset: reduceDatasetForDateRange(financialDatasetFixture, { endDate: "2026-05-20", startDate: "2026-05-13" }),
+			date,
+			role: "owner-finance",
+		});
+
+		expect(dashboard.invoiceRiskCents).toEqual(1_840_000);
+		expect(dashboard.overdueInvoices).toHaveLength(1);
+	});
+
 	it("keeps the 14-day buffer risk when the overview range is shorter", () => {
 		const riskDataset = {
 			...financialDatasetFixture,

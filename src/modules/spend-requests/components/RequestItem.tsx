@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { AmountItem } from "@/modules/money/components/AmountItem";
-import { formatCurrency } from "@/modules/money/format";
 import type { MoneyCents } from "@/modules/money/types";
+import { formatCashAfterApproval } from "../utils";
 
 type RequestItemProps = {
 	amountCents: MoneyCents;
@@ -30,7 +30,9 @@ export const RequestItem = ({
 						<div className="mt-3 rounded-md bg-panel p-2 text-muted-foreground text-s">
 							<span>Cash after approval: </span>
 
-							<span className="font-mono text-panel-foreground text-s+">{formatCurrency(cashAfterApprovalCents)}</span>
+							<span className="font-mono text-panel-foreground text-s+">
+								{formatCashAfterApproval(cashAfterApprovalCents)}
+							</span>
 						</div>
 					)}
 
