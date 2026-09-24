@@ -80,7 +80,7 @@ function getPlanClassName(highlighted?: boolean) {
 
 function getPlanLinkClassName(highlighted?: boolean) {
 	return cn(
-		"mt-7 inline-flex min-h-11 items-center justify-center rounded-md border px-4 text-m+ outline-none transition-[background-color,border-color,box-shadow,color] duration-150 ease focus-visible:ring-[3px] focus-visible:ring-primary/20",
+		"mt-7 inline-flex min-h-11 items-center justify-center rounded-md border px-4 text-m+ outline-none transition-[background-color,border-color,box-shadow,color] duration-150 ease focus-ring",
 		highlighted
 			? "border-primary bg-primary text-primary-foreground shadow-primary-glow hover:bg-primary-hover"
 			: "border-shell-border text-shell-foreground hover:border-primary hover:text-primary",

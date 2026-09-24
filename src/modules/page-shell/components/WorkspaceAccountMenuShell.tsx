@@ -28,7 +28,7 @@ export const AccountMenuShell = ({
 		<summary
 			aria-label={compact ? `${name}, ${description}` : undefined}
 			className={cn(
-				"ease flex cursor-pointer list-none items-center rounded-lg text-left text-shell-foreground transition-colors duration-150 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-primary/20 [&::-webkit-details-marker]:hidden",
+				"focus-ring ease flex cursor-pointer list-none items-center rounded-lg text-left text-shell-foreground transition-colors duration-150 hover:bg-white/5 [&::-webkit-details-marker]:hidden",
 				compact ? "size-11 justify-center p-0" : "w-full gap-3 px-2 py-3",
 			)}
 		>

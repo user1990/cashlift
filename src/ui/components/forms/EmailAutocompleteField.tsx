@@ -138,7 +138,7 @@ export const EmailAutocompleteField = ({
 				role="combobox"
 				data-slot="combobox-input"
 				type="email"
-				className="ease h-10 w-full rounded-md border border-border bg-panel px-3 text-m text-panel-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground focus:border-primary focus:ring-[3px] focus:ring-primary/20"
+				className="ease focus-ring-input h-10 w-full rounded-md border border-border bg-panel px-3 text-m text-panel-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground focus:border-primary"
 			/>
 
 			{openSuggestions && (
