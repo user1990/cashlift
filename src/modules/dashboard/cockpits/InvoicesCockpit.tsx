@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import type { InvoiceStatus } from "@/modules/invoices/types";
+import { MoneyDisplay } from "@/modules/money/components/MoneyDisplay";
 import { getPercentage } from "@/modules/money/format";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 import { cn } from "@/ui/utils/cn";
-import { ExploreKicker, ExploreMoney, PriorityCue, SupportNoteList } from "./cockpitUi";
+import { ExploreKicker, PriorityCue, SupportNoteList } from "./cockpitUi";
 import { CASH_ACTION_WORK } from "./exploreModel";
 import {
 	buildInvoicesCockpitPresentation,
@@ -79,7 +80,7 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 							{overdueCents === undefined ? (
 								<span className="font-semibold text-3xl+ text-panel-foreground tracking-normal">Calculating…</span>
 							) : (
-								<ExploreMoney cents={overdueCents} className="text-3xl+" warning={overdueWarning} />
+								<MoneyDisplay cents={overdueCents} className="text-3xl+" warning={overdueWarning} />
 							)}
 						</dd>
 					</div>
@@ -88,7 +89,7 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 						<dt className="text-muted-foreground text-s">Open on time</dt>
 
 						<dd>
-							<ExploreMoney cents={openOnTimeCents} className="text-3xl+" />
+							<MoneyDisplay cents={openOnTimeCents} className="text-3xl+" />
 						</dd>
 					</div>
 
@@ -96,7 +97,7 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 						<dt className="text-muted-foreground text-s">Collected</dt>
 
 						<dd>
-							<ExploreMoney cents={paidCents} className="text-3xl+" />
+							<MoneyDisplay cents={paidCents} className="text-3xl+" />
 						</dd>
 					</div>
 				</dl>
@@ -129,7 +130,7 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 							{primaryAction && <p className="mt-3 text-m text-shell-muted leading-6">{primaryAction.description}</p>}
 
 							<p className="mt-5">
-								<ExploreMoney cents={primaryInvoice.amountCents} className="text-2xl+" exact />
+								<MoneyDisplay cents={primaryInvoice.amountCents} className="text-2xl+" exact />
 
 								<span className="ml-2 text-muted-foreground text-s">money affected</span>
 							</p>
@@ -215,7 +216,7 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 											</p>
 										</div>
 
-										<ExploreMoney cents={amountCents} exact />
+										<MoneyDisplay cents={amountCents} exact />
 									</li>
 								))}
 							</ul>
@@ -243,7 +244,7 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 											</p>
 										</div>
 
-										<ExploreMoney cents={amountCents} exact />
+										<MoneyDisplay cents={amountCents} exact />
 									</li>
 								))}
 							</ul>
@@ -308,7 +309,7 @@ function renderQueueInvoice(invoice: InvoiceCockpitRow) {
 				</span>
 			</span>
 
-			<ExploreMoney cents={amountCents} className="shrink-0" exact />
+			<MoneyDisplay cents={amountCents} className="shrink-0" exact />
 		</Link>
 	);
 }
@@ -330,7 +331,7 @@ function renderDueInvoice(invoice: InvoiceCockpitRow) {
 				<p className="mt-1 text-muted-foreground text-s">{owner}</p>
 			</div>
 
-			<ExploreMoney cents={amountCents} className="shrink-0" exact />
+			<MoneyDisplay cents={amountCents} className="shrink-0" exact />
 		</div>
 	);
 }

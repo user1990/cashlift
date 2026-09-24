@@ -18,6 +18,16 @@ describe("CashLift app environment", () => {
 		);
 	});
 
+	it("allows demo mode on a production build when E2E explicitly opts in", () => {
+		expect(
+			getCashLiftAppMode({
+				CASHLIFT_ALLOW_DEMO_PRODUCTION_BUILD: "1",
+				CASHLIFT_APP_MODE: "demo",
+				NODE_ENV: "production",
+			}),
+		).toEqual("demo");
+	});
+
 	it("requires production auth and Supabase keys", () => {
 		const config = getWorkspaceRuntimeConfig({ CASHLIFT_APP_MODE: "production" });
 

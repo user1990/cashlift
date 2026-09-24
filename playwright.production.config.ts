@@ -1,4 +1,6 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig } from "@playwright/test";
+import { browserProjects } from "./e2e/playwright/projects";
+import { resolveProductionWebServerCommand } from "./e2e/playwright/webServer";
 
 if (process.env.FORCE_COLOR) {
 	delete process.env.NO_COLOR;
@@ -10,7 +12,7 @@ const productionBaseUrl = `http://127.0.0.1:${productionPort}`;
 export default defineConfig({
 	expect: { timeout: 10_000 },
 	forbidOnly: !!process.env.CI,
-	projects: [{ name: "production-auth-boundary", use: { ...devices["Desktop Chrome"] } }],
+	projects: browserProjects,
 	reporter: process.env.CI ? "github" : "list",
 	retries: process.env.CI ? 1 : 0,
 	testDir: "./e2e/production",
@@ -20,7 +22,7 @@ export default defineConfig({
 		trace: "retain-on-failure",
 	},
 	webServer: {
-		command: `pnpm dev --port ${productionPort}`,
+		command: resolveProductionWebServerCommand(productionPort),
 		env: {
 			...process.env,
 			CASHLIFT_APP_MODE: "production",
@@ -28,11 +30,11 @@ export default defineConfig({
 			NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
 				process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? "pk_test_dGVzdC1jbGVyay5jbGVyay5hY2NvdW50cy5kZXYk",
 			NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
-				process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "e2e-placeholder-anon-key",
-			NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://invalid.local",
+				process.env.E2E_NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "e2e-placeholder-anon-key",
+			NEXT_PUBLIC_SUPABASE_URL: process.env.E2E_NEXT_PUBLIC_SUPABASE_URL ?? "https://invalid.local",
 		},
 		reuseExistingServer: false,
-		timeout: 180_000,
+		timeout: process.env.CI ? 120_000 : 300_000,
 		url: productionBaseUrl,
 	},
 	workers: 1,

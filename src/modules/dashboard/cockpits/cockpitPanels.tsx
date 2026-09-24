@@ -1,11 +1,12 @@
 import { Shield } from "lucide-react";
 import type { ReactNode } from "react";
+import { MoneyDisplay } from "@/modules/money/components/MoneyDisplay";
 import type { MoneyCents } from "@/modules/money/types";
 import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 import { CashOutlookChart } from "../components/CashOutlookChart";
 import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
-import { ExploreKicker, ExploreMoney } from "./cockpitUi";
+import { ExploreKicker } from "./cockpitUi";
 
 type CockpitStatusMetricsProps = {
 	dashboard: DashboardViewModel;
@@ -46,7 +47,7 @@ export const CockpitOutlookCard = ({ belowBuffer, dashboard }: CockpitOutlookCar
 
 			{dashboard.lowestProjectedCashDate && dashboard.lowestProjectedCashCents !== undefined && (
 				<p className={belowBuffer ? "mt-1 text-s text-warning" : "mt-1 text-muted-foreground text-s"}>
-					Lowest week <ExploreMoney cents={dashboard.lowestProjectedCashCents} /> on{" "}
+					Lowest week <MoneyDisplay cents={dashboard.lowestProjectedCashCents} /> on{" "}
 					{formatDashboardDate(dashboard.lowestProjectedCashDate)}
 				</p>
 			)}
@@ -94,7 +95,7 @@ function CockpitMetric({ cents, label, icon, warning = false }: CockpitMetricPro
 			</dt>
 
 			<dd>
-				<ExploreMoney cents={cents} className="text-3xl+" warning={warning} />
+				<MoneyDisplay cents={cents} className="text-3xl+" warning={warning} />
 			</dd>
 		</div>
 	);

@@ -1,6 +1,6 @@
 ---
 name: testing
-description: RTL patterns (without driver abstraction), mocking rules (storage/HTTP only — never hooks or Zustand stores), and test data with `chance`. Trigger when writing/fixing tests, adding coverage, or asking how to test a component, hook, or feature.
+description: RTL patterns (without driver abstraction), mocking rules (storage/HTTP only — never hooks or client stores), and deterministic fixtures. Trigger when writing/fixing tests, adding coverage, or asking how to test a component, hook, or feature.
 ---
 
 # Testing Guidelines
@@ -41,7 +41,7 @@ Use this skill for test changes. Read `.agents/docs/testing.md` only when you ne
 ## Mocking Boundaries
 
 - Never mock React hooks such as `useAuthSession`, `useUser`, or `useLogout`.
-- Never manipulate Zustand stores directly with `setState()` or `getState().actions`.
+- Never manipulate client stores directly with `setState()` or `getState().actions` when a store is introduced.
 - Mock only top-level boundaries: storage (`localStorage`/`sessionStorage`) and HTTP via MSW.
 - Manipulate storage with module test utilities, then let real hooks read it.
 - Use real hooks or `renderHook()` to trigger state changes.

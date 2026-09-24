@@ -2,6 +2,7 @@
 
 import { Shield } from "lucide-react";
 import type { ReactNode } from "react";
+import { MoneyDisplay } from "@/modules/money/components/MoneyDisplay";
 import { ApprovalDecisionActions } from "@/modules/spend-requests/components/ApprovalDecisionActions";
 import { useSpendRequestDecision } from "@/modules/spend-requests/hooks/useSpendRequestDecision";
 import { formatCashAfterApproval } from "@/modules/spend-requests/utils";
@@ -13,7 +14,7 @@ import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
 import { buildDashboardViewModel } from "../view-model";
 import { type ApprovalsPresentation, buildApprovalsPresentation, formatSpendCategory } from "./approvalsModel";
-import { ExploreKicker, ExploreMoney } from "./cockpitUi";
+import { ExploreKicker } from "./cockpitUi";
 
 type ApprovalsCockpitProps = {
 	dataset: FinancialDataset;
@@ -81,7 +82,7 @@ function ApprovalsCockpitView({ dashboard, presentation, renderActions }: Approv
 						<dt className="text-muted-foreground text-s">Pending spend</dt>
 
 						<dd>
-							<ExploreMoney cents={presentation.pendingAmountCents} className="text-3xl+" />
+							<MoneyDisplay cents={presentation.pendingAmountCents} className="text-3xl+" />
 						</dd>
 					</div>
 
@@ -89,7 +90,7 @@ function ApprovalsCockpitView({ dashboard, presentation, renderActions }: Approv
 						<dt className="text-muted-foreground text-s">Cash on hand</dt>
 
 						<dd>
-							<ExploreMoney cents={dashboard.cashAvailableCents} className="text-3xl+" />
+							<MoneyDisplay cents={dashboard.cashAvailableCents} className="text-3xl+" />
 						</dd>
 					</div>
 
@@ -101,7 +102,7 @@ function ApprovalsCockpitView({ dashboard, presentation, renderActions }: Approv
 							</dt>
 
 							<dd>
-								<ExploreMoney
+								<MoneyDisplay
 									cents={primaryRequest.cashAfterApprovalCents}
 									className="text-3xl+"
 									warning={belowBuffer}
@@ -116,7 +117,7 @@ function ApprovalsCockpitView({ dashboard, presentation, renderActions }: Approv
 							</dt>
 
 							<dd>
-								<ExploreMoney cents={dashboard.cashBufferTargetCents} className="text-3xl+" />
+								<MoneyDisplay cents={dashboard.cashBufferTargetCents} className="text-3xl+" />
 							</dd>
 						</div>
 					)}
@@ -194,7 +195,7 @@ function renderPriorityRequest(
 			<p className="mt-3 text-m text-shell-muted leading-6">{reason}</p>
 
 			<p className="mt-5">
-				<ExploreMoney cents={amountCents} className="text-2xl+" exact />
+				<MoneyDisplay cents={amountCents} className="text-2xl+" exact />
 
 				<span className="ml-2 text-muted-foreground text-s">money affected</span>
 			</p>
@@ -233,7 +234,7 @@ function renderQueueRequest(request: PendingSpendRequest, renderActions?: Approv
 			</span>
 
 			<span className="flex shrink-0 flex-col items-start gap-2 sm:items-end">
-				<ExploreMoney cents={amountCents} exact />
+				<MoneyDisplay cents={amountCents} exact />
 
 				{renderActions?.(request, "small")}
 			</span>

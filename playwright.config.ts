@@ -1,4 +1,6 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig } from "@playwright/test";
+import { browserProjects } from "./e2e/playwright/projects";
+import { resolveDemoWebServerCommand } from "./e2e/playwright/webServer";
 
 if (process.env.FORCE_COLOR) {
 	delete process.env.NO_COLOR;
@@ -11,7 +13,7 @@ export default defineConfig({
 	expect: { timeout: 10_000 },
 	forbidOnly: !!process.env.CI,
 	fullyParallel: true,
-	projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+	projects: browserProjects,
 	reporter: process.env.CI ? "github" : "list",
 	retries: process.env.CI ? 1 : 0,
 	testDir: "./e2e",
@@ -22,16 +24,17 @@ export default defineConfig({
 		trace: "retain-on-failure",
 	},
 	webServer: {
-		command: `pnpm dev --port ${localPort}`,
+		command: resolveDemoWebServerCommand(localPort),
 		env: {
 			...process.env,
+			CASHLIFT_ALLOW_DEMO_PRODUCTION_BUILD: "1",
 			CASHLIFT_APP_MODE: "demo",
 			NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
 				process.env.E2E_NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "e2e-placeholder-anon-key",
 			NEXT_PUBLIC_SUPABASE_URL: process.env.E2E_NEXT_PUBLIC_SUPABASE_URL ?? "https://invalid.local",
 		},
 		reuseExistingServer: false,
-		timeout: 180_000,
+		timeout: process.env.CI ? 120_000 : 300_000,
 		url: localBaseUrl,
 	},
 	workers: process.env.CI ? 1 : undefined,

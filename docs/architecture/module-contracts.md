@@ -29,6 +29,7 @@ Fallow's configured checks cover duplicate code and dead code through `pnpm chec
 
 ## Current pressure points
 
+- `dashboard/cockpits/find/` is a cohesive command-palette feature inside the dashboard composition module. Keep find-specific models, hooks, and UI under that subtree until a second consumer appears; do not grow unrelated dashboard files into find behavior.
 - `FinancialDataset` is a useful read aggregate but creates broad fan-out. Add scope-specific view models before adding another consumer of the full aggregate.
 - `FinanceRepository` currently carries access-token and company identifiers in method signatures. Treat that as an infrastructure seam and do not expose it to UI modules; a future repository split should separate authenticated reads from spend mutations.
 - `dashboard` and `page-shell` are intentionally broad composition modules. New business rules belong in the owning financial module so these modules do not become dependency hubs.

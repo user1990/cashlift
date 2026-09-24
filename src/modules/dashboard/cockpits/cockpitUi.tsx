@@ -2,29 +2,8 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { ActionPriority } from "@/modules/cash-actions/types";
-import { formatCurrency, formatPreciseCompactCurrency } from "@/modules/money/format";
-import type { MoneyCents } from "@/modules/money/types";
 import { cn } from "@/ui/utils/cn";
 import { formatPriorityLabel } from "./exploreModel";
-
-type ExploreMoneyProps = {
-	cents: MoneyCents;
-	exact?: boolean;
-	className?: string;
-	warning?: boolean;
-};
-
-export const ExploreMoney = ({ cents, className, exact = false, warning = false }: ExploreMoneyProps) => (
-	<span
-		className={
-			warning
-				? `font-mono font-semibold text-warning tabular-nums tracking-normal ${className ?? ""}`
-				: `font-mono font-semibold text-panel-foreground tabular-nums tracking-normal ${className ?? ""}`
-		}
-	>
-		{exact ? formatCurrency(cents) : formatPreciseCompactCurrency(cents)}
-	</span>
-);
 
 type PriorityCueProps = {
 	priority: ActionPriority;

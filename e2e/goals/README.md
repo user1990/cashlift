@@ -5,7 +5,7 @@ Use these goals for local exploratory passes against demo mode. They complement 
 ## Runner Guidance
 
 - Prefer Playwright MCP or another browser-native agent controller over shell-only browser scripting.
-- Start the app through the normal Playwright config so `CASHLIFT_APP_MODE=demo` is used.
+- Start the app through the normal Playwright config so `CASHLIFT_APP_MODE=demo` is used on a production build (`next build` + `next start`, or CI reuse after `pnpm build`).
 - Do not use production data, real credentials, or live customer records.
 - Run each goal 3-5 times before turning a finding into a deterministic test.
 - Record the goal, result, duration, failure point, and whether a fixed Playwright test should be added.

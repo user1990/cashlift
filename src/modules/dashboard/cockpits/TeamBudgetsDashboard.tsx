@@ -1,8 +1,9 @@
+import { MoneyDisplay } from "@/modules/money/components/MoneyDisplay";
 import { formatPreciseCompactCurrency, getPercentage } from "@/modules/money/format";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 import { ProgressBar } from "@/ui/components/feedback/ProgressBar";
-import { ExploreKicker, ExploreMoney } from "./cockpitUi";
+import { ExploreKicker } from "./cockpitUi";
 import { buildTeamBudgetsPresentation, type TeamBudgetRow } from "./teamBudgetsModel";
 
 type TeamBudgetsDashboardProps = {
@@ -32,7 +33,7 @@ export const TeamBudgetsDashboard = ({ dataset }: TeamBudgetsDashboardProps) => 
 							<dt className="text-muted-foreground text-s">Monthly budget</dt>
 
 							<dd>
-								<ExploreMoney cents={presentation.monthlyBudgetCents} className="text-3xl+" />
+								<MoneyDisplay cents={presentation.monthlyBudgetCents} className="text-3xl+" />
 							</dd>
 						</div>
 
@@ -40,7 +41,7 @@ export const TeamBudgetsDashboard = ({ dataset }: TeamBudgetsDashboardProps) => 
 							<dt className="text-muted-foreground text-s">Committed</dt>
 
 							<dd>
-								<ExploreMoney cents={presentation.committedCents} className="text-3xl+" />
+								<MoneyDisplay cents={presentation.committedCents} className="text-3xl+" />
 							</dd>
 						</div>
 
@@ -48,7 +49,7 @@ export const TeamBudgetsDashboard = ({ dataset }: TeamBudgetsDashboardProps) => 
 							<dt className="text-muted-foreground text-s">Remaining</dt>
 
 							<dd>
-								<ExploreMoney
+								<MoneyDisplay
 									cents={presentation.remainingCents}
 									className="text-3xl+"
 									warning={presentation.remainingCents < 0}
@@ -131,7 +132,7 @@ function renderPrimaryTeam(primaryTeam: TeamBudgetRow, hasOtherTeams: boolean) {
 			<p className="mt-3 text-m text-shell-muted leading-6">{getPrimaryTeamDescription(overBudget, hasOtherTeams)}</p>
 
 			<p className="mt-5">
-				<ExploreMoney cents={primaryTeam.remainingCents} className="text-2xl+" warning={overBudget} />
+				<MoneyDisplay cents={primaryTeam.remainingCents} className="text-2xl+" warning={overBudget} />
 
 				<span className="ml-2 text-muted-foreground text-s">{overBudget ? "over budget" : "left this month"}</span>
 			</p>
@@ -156,7 +157,7 @@ function renderQueueTeam({ remainingCents, team, usagePercent }: TeamBudgetRow) 
 				</p>
 			</div>
 
-			<ExploreMoney cents={remainingCents} className="shrink-0" exact warning={overBudget} />
+			<MoneyDisplay cents={remainingCents} className="shrink-0" exact warning={overBudget} />
 		</div>
 	);
 }
@@ -178,7 +179,7 @@ function renderSupportTeam({
 					<dt className="text-muted-foreground text-s">Monthly</dt>
 
 					<dd>
-						<ExploreMoney cents={monthlyBudgetCents} exact />
+						<MoneyDisplay cents={monthlyBudgetCents} exact />
 					</dd>
 				</div>
 
@@ -186,7 +187,7 @@ function renderSupportTeam({
 					<dt className="text-muted-foreground text-s">Committed</dt>
 
 					<dd>
-						<ExploreMoney cents={committedCents} exact />
+						<MoneyDisplay cents={committedCents} exact />
 					</dd>
 				</div>
 
@@ -194,7 +195,7 @@ function renderSupportTeam({
 					<dt className="text-muted-foreground text-s">Approved</dt>
 
 					<dd>
-						<ExploreMoney cents={approvedCents} exact />
+						<MoneyDisplay cents={approvedCents} exact />
 					</dd>
 				</div>
 			</dl>

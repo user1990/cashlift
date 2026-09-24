@@ -5,7 +5,7 @@ description: Module boundaries, import rules, path aliases, folder layout, and s
 
 # Architecture
 
-Flat module architecture for CashLift's Next.js app.
+Flat module architecture for CashLift's Next.js application (single app repository; shared packages are introduced only when a second product needs them).
 
 ## Project Structure
 
@@ -105,7 +105,7 @@ Do not add `@modules/*`, `@ui/*`, or similar aliases unless the app's `tsconfig.
 | Purpose | Tool |
 | --- | --- |
 | Server state | Server Components first; TanStack Query for client refetch/mutations |
-| UI state | Zustand when local React state is not enough |
+| UI state | React component state first; introduce Zustand only when a module needs shared client UI state that cannot stay colocated |
 | Forms | React Hook Form + Zod |
 
 Protected workspace routes default to server-first data loading. Client Components should be interactive leaves, not initial page data shells.

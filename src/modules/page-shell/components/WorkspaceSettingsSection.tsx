@@ -1,5 +1,6 @@
 import { Shield, ShieldCheck } from "lucide-react";
-import { ExploreKicker, ExploreLink, ExploreMoney } from "@/modules/dashboard/cockpits/cockpitUi";
+import { ExploreKicker, ExploreLink } from "@/modules/dashboard/cockpits/cockpitUi";
+import { MoneyDisplay } from "@/modules/money/components/MoneyDisplay";
 import {
 	buildSettingsPresentation,
 	COMPANY_ROLE_LABELS,
@@ -37,7 +38,7 @@ export const WorkspaceSettingsSection = ({ basePath, dataset, readOnly = false }
 						<dt className="text-muted-foreground text-s">Cash on hand</dt>
 
 						<dd>
-							<ExploreMoney cents={presentation.cashBalanceCents} className="text-3xl+" />
+							<MoneyDisplay cents={presentation.cashBalanceCents} className="text-3xl+" />
 						</dd>
 					</div>
 
@@ -48,7 +49,7 @@ export const WorkspaceSettingsSection = ({ basePath, dataset, readOnly = false }
 						</dt>
 
 						<dd>
-							<ExploreMoney
+							<MoneyDisplay
 								cents={presentation.cashBufferTargetCents}
 								className="text-3xl+"
 								warning={!presentation.aboveBuffer}
@@ -60,7 +61,7 @@ export const WorkspaceSettingsSection = ({ basePath, dataset, readOnly = false }
 						<dt className="text-muted-foreground text-s">Monthly payroll</dt>
 
 						<dd>
-							<ExploreMoney cents={presentation.monthlyPayrollCents} className="text-3xl+" />
+							<MoneyDisplay cents={presentation.monthlyPayrollCents} className="text-3xl+" />
 						</dd>
 					</div>
 				</dl>
@@ -235,7 +236,7 @@ function renderConfigRow(config: SettingsConfigRow) {
 			</span>
 
 			{config.kind === "money" ? (
-				<ExploreMoney cents={config.cents} className="shrink-0" exact />
+				<MoneyDisplay cents={config.cents} className="shrink-0" exact />
 			) : (
 				<span className="shrink-0 font-semibold text-m+ text-panel-foreground">{config.value}</span>
 			)}

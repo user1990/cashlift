@@ -9,9 +9,10 @@ Run the smallest relevant check while iterating, then run the complete appropria
 | --- | --- |
 | Formatting and static analysis | `pnpm lint` |
 | Type safety | `pnpm typecheck` |
-| Unit behavior | `pnpm test` |
-| Optional runtime coverage report | `pnpm test:coverage` |
-| Browser journeys | `pnpm test:e2e` |
+| Unit behavior and coverage thresholds | `pnpm test` |
+| Optional duplicate coverage report | `pnpm test:coverage` |
+| Workspace dataset performance budget | `pnpm run check:performance` |
+| Browser journeys (production build servers, Chromium/WebKit/mobile Chrome) | `pnpm test:e2e` |
 | Code quality | `pnpm check:code` |
 | Dependency and repository security | `pnpm security:check` and `pnpm security:audit` |
 

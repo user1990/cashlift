@@ -9,6 +9,7 @@ import {
 	UsersRound,
 	WalletCards,
 } from "lucide-react";
+import workspaceMessages from "@/services/i18n/messages/en.json";
 import type { WorkspaceNavGroup, WorkspaceNavItem, WorkspaceNavItemDefinition } from "./types";
 
 const WORKSPACE_NAV_GROUPS = [
@@ -17,7 +18,7 @@ const WORKSPACE_NAV_GROUPS = [
 		items: [
 			{
 				icon: Home,
-				label: "Overview",
+				label: workspaceMessages.WorkspaceNav.overview,
 				priority: true,
 				section: "overview",
 			},
@@ -55,7 +56,7 @@ const WORKSPACE_NAV_GROUPS = [
 		items: [
 			{
 				icon: ClipboardCheck,
-				label: "Spend approvals",
+				label: workspaceMessages.WorkspaceNav.spendApprovals,
 				priority: true,
 				section: "approvals",
 			},

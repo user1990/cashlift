@@ -1,11 +1,12 @@
 import Link from "next/link";
+import { MoneyDisplay } from "@/modules/money/components/MoneyDisplay";
 import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 import { ProgressBar } from "@/ui/components/feedback/ProgressBar";
 import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
 import type { CashInsightsPresentation } from "./cashInsightsModel";
 import { CockpitOutlookCard, CockpitStatusMetrics, CockpitSupportCard } from "./cockpitPanels";
-import { ExploreKicker, ExploreLink, ExploreMoney } from "./cockpitUi";
+import { ExploreKicker, ExploreLink } from "./cockpitUi";
 
 type CashInsightsDashboardProps = {
 	basePath: string;
@@ -36,7 +37,7 @@ export const CashInsightsDashboard = ({ basePath, dashboard, presentation }: Cas
 							<dt className="text-muted-foreground text-s">Monthly payroll</dt>
 
 							<dd>
-								<ExploreMoney cents={dashboard.monthlyPayrollCents} className="text-3xl+" />
+								<MoneyDisplay cents={dashboard.monthlyPayrollCents} className="text-3xl+" />
 							</dd>
 						</div>
 					}
@@ -58,7 +59,7 @@ export const CashInsightsDashboard = ({ basePath, dashboard, presentation }: Cas
 					</p>
 
 					<p className="mt-5">
-						<ExploreMoney
+						<MoneyDisplay
 							cents={presentation.aboveBuffer ? presentation.surplusCents : presentation.shortfallCents}
 							className="text-2xl+"
 							exact
@@ -72,7 +73,7 @@ export const CashInsightsDashboard = ({ basePath, dashboard, presentation }: Cas
 
 					{dashboard.bufferRiskCents > 0 && (
 						<p className="mt-3 text-s text-warning">
-							14-day projection leaves <ExploreMoney cents={dashboard.bufferRiskCents} exact warning /> below the cash
+							14-day projection leaves <MoneyDisplay cents={dashboard.bufferRiskCents} exact warning /> below the cash
 							buffer
 						</p>
 					)}
@@ -99,7 +100,7 @@ export const CashInsightsDashboard = ({ basePath, dashboard, presentation }: Cas
 								<li key={label} className="flex items-start justify-between gap-3 py-3">
 									<p className="font-semibold text-m+ text-panel-foreground">{label}</p>
 
-									<ExploreMoney cents={cents} exact />
+									<MoneyDisplay cents={cents} exact />
 								</li>
 							))}
 						</ul>
@@ -114,7 +115,7 @@ export const CashInsightsDashboard = ({ basePath, dashboard, presentation }: Cas
 					<p className="font-semibold text-m+ text-panel-foreground">Payroll against cash on hand</p>
 
 					<p className="mt-3">
-						<ExploreMoney cents={dashboard.monthlyPayrollCents} exact />
+						<MoneyDisplay cents={dashboard.monthlyPayrollCents} exact />
 
 						{presentation.payrollShareLabel && (
 							<span className="ml-2 text-muted-foreground text-s">
@@ -135,7 +136,7 @@ export const CashInsightsDashboard = ({ basePath, dashboard, presentation }: Cas
 						<li className="flex items-start justify-between gap-3 py-3">
 							<p className="font-semibold text-m+ text-panel-foreground">Ending cash</p>
 
-							<ExploreMoney cents={dashboard.endingCashBalanceCents} exact />
+							<MoneyDisplay cents={dashboard.endingCashBalanceCents} exact />
 						</li>
 
 						{dashboard.lowestProjectedCashCents !== undefined && dashboard.lowestProjectedCashDate && (
@@ -148,7 +149,7 @@ export const CashInsightsDashboard = ({ basePath, dashboard, presentation }: Cas
 									</p>
 								</div>
 
-								<ExploreMoney cents={dashboard.lowestProjectedCashCents} exact warning={belowBuffer} />
+								<MoneyDisplay cents={dashboard.lowestProjectedCashCents} exact warning={belowBuffer} />
 							</li>
 						)}
 					</ul>
