@@ -369,7 +369,7 @@ function HelpFaqPalette({
 											key={result.id}
 											href={getHelpFaqHref(result.slug, query)}
 											ref={(element) => setResultRef(resultIndex, element)}
-											tabIndex={0}
+											tabIndex={-1}
 											role="option"
 											id={resultDomId(result.id)}
 											aria-selected={active}

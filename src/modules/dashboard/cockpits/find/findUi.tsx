@@ -159,6 +159,7 @@ type FindResultRowProps = {
 	selected?: boolean;
 	showColumns?: boolean;
 	showKind?: boolean;
+	tabIndex?: number;
 };
 
 export const FindResultRow = ({
@@ -168,6 +169,7 @@ export const FindResultRow = ({
 	selected = false,
 	showColumns = false,
 	showKind = true,
+	tabIndex,
 }: FindResultRowProps) => {
 	const dueLabel = formatFindDueDate(item.dueDate);
 
@@ -175,6 +177,7 @@ export const FindResultRow = ({
 		<Link
 			aria-current={selected ? "true" : undefined}
 			href={item.actionHref}
+			tabIndex={tabIndex}
 			className={cn(
 				"focus-ring grid min-h-11 items-center gap-x-4 gap-y-1 border-transparent border-l-2 px-3 py-3 outline-none transition-[background-color,border-color] duration-150",
 				showColumns

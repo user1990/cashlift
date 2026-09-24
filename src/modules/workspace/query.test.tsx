@@ -87,15 +87,11 @@ describe("useWorkspaceDatasetQuery", () => {
 		const wrapper = ({ children }: { children: ReactNode }) => (
 			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 		);
+		const matchingRange = { endDate: "2026-06-17", startDate: "2026-05-06" };
 
-		const { result } = renderHook(
-			() =>
-				useWorkspaceDatasetQuery(financialDatasetFixture, "overview", {
-					endDate: "2026-05-20",
-					startDate: "2026-05-06",
-				}),
-			{ wrapper },
-		);
+		const { result } = renderHook(() => useWorkspaceDatasetQuery(financialDatasetFixture, "overview", matchingRange), {
+			wrapper,
+		});
 
 		await waitFor(() => {
 			expect(result.current.isError).toBe(true);

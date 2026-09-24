@@ -5,5 +5,10 @@ export const getRemainingTeamBudget = ({
 	monthlyBudgetCents,
 }: Pick<TeamBudget, "committedCents" | "monthlyBudgetCents">) => monthlyBudgetCents - committedCents;
 
-export const getTeamBudgetUsage = (budget: TeamBudget) =>
-	budget.monthlyBudgetCents === 0 ? 0 : (budget.committedCents / budget.monthlyBudgetCents) * 100;
+export const getTeamBudgetUsage = (budget: TeamBudget) => {
+	if (budget.monthlyBudgetCents === 0) {
+		return undefined;
+	}
+
+	return (budget.committedCents / budget.monthlyBudgetCents) * 100;
+};

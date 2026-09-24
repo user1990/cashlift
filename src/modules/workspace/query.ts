@@ -12,6 +12,29 @@ export const WORKSPACE_DATASET_QUERY_KEYS = {
 		[...WORKSPACE_DATASET_QUERY_KEYS.all, scope, dateRange ?? null] as const,
 };
 
+export const workspaceDatasetMatchesInitialRange = (
+	initialDataset: FinancialDataset,
+	scope: WorkspaceDatasetScope,
+	dateRange?: WorkspaceDatasetDateRange,
+) => {
+	if (scope !== "overview") {
+		return true;
+	}
+
+	const forecastStart = initialDataset.forecast[0]?.date;
+	const forecastEnd = initialDataset.forecast.at(-1)?.date;
+
+	if (!forecastStart || !forecastEnd) {
+		return false;
+	}
+
+	if (!dateRange) {
+		return true;
+	}
+
+	return dateRange.startDate === forecastStart && dateRange.endDate === forecastEnd;
+};
+
 const fetchWorkspaceDataset = async (scope: WorkspaceDatasetScope, dateRange?: WorkspaceDatasetDateRange) => {
 	const searchParams = new URLSearchParams({ scope });
 
@@ -40,19 +63,16 @@ export const useWorkspaceDatasetQuery = (
 	initialDataset: FinancialDataset,
 	scope: WorkspaceDatasetScope,
 	dateRange?: WorkspaceDatasetDateRange,
-) =>
-	useQuery({
-		initialData: initialDataset,
-		initialDataUpdatedAt:
-			scope === "overview" &&
-			(dateRange?.endDate !== initialDataset.forecast.at(-1)?.date ||
-				dateRange?.startDate !== initialDataset.forecast[0]?.date)
-				? 0
-				: undefined,
+) => {
+	const rangeMatchesInitial = workspaceDatasetMatchesInitialRange(initialDataset, scope, dateRange);
+
+	return useQuery({
+		initialData: rangeMatchesInitial ? initialDataset : undefined,
 		queryFn: () => fetchWorkspaceDataset(scope, dateRange),
 		queryKey: WORKSPACE_DATASET_QUERY_KEYS.scope(scope, dateRange),
 		retry: (failureCount, error) => !isPermanentWorkspaceDatasetError(error) && failureCount < 2,
 	});
+};
 
 const WORKSPACE_API_ERROR_SCHEMA = z.object({
 	code: z.string(),

@@ -1,10 +1,19 @@
 import { type KeyboardEvent, useEffect, useRef, useState } from "react";
+import { getFindOptionId } from "../findDom";
 import { type FindItem, type FindQuery, filterFindItems, hasActiveFindFilters } from "../findModel";
 import { useFindQueryState } from "./useFindQueryState";
 
 const MAX_RECENT_SEARCHES = 5;
 
-export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work") => {
+type FindNavigate = (href: string) => void;
+
+export const useFindSession = (
+	items: FindItem[],
+	categoryMode: "kind" | "work",
+	navigate: FindNavigate = (href) => {
+		window.location.assign(href);
+	},
+) => {
 	const { clearAll, query, setQuery } = useFindQueryState();
 	const [recentSearches, setRecentSearches] = useState<string[]>([]);
 	const [selectedId, setSelectedId] = useState<string>();
@@ -13,6 +22,7 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work")
 	const results = filterFindItems(items, query, categoryMode);
 	const selectedIndex = results.findIndex((item) => item.id === selectedId);
 	const selectedItem = selectedIndex >= 0 ? results[selectedIndex] : undefined;
+	const showResults = Boolean(query.query.trim()) || hasActiveFindFilters(query) || query.category !== "all";
 
 	const openPalette = () => setOpen(true);
 	const closePalette = () => setOpen(false);
@@ -43,6 +53,14 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work")
 		return () => cancelAnimationFrame(frame);
 	}, [open]);
 
+	useEffect(() => {
+		if (!open || !showResults || !selectedId) {
+			return;
+		}
+
+		document.getElementById(getFindOptionId(selectedId))?.scrollIntoView({ block: "nearest" });
+	}, [open, selectedId, showResults]);
+
 	const rememberQuery = (value: string) => {
 		const nextQuery = value.trim();
 
@@ -66,24 +84,26 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work")
 	};
 
 	const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+		if (event.key === "Escape") {
+			event.preventDefault();
+			closePalette();
+			return;
+		}
+
+		if (!showResults) {
+			return;
+		}
+
 		if (event.key === "ArrowDown" || event.key === "ArrowUp") {
 			event.preventDefault();
 			setSelectedId(getMovedFindId(results, selectedIndex, event.key === "ArrowDown" ? 1 : -1));
 			return;
 		}
 
-		if (event.key === "Enter") {
-			if (selectedItem) {
-				event.preventDefault();
-				rememberQuery(query.query);
-				window.location.assign(selectedItem.actionHref);
-				closePalette();
-			}
-			return;
-		}
-
-		if (event.key === "Escape") {
+		if (event.key === "Enter" && selectedItem) {
 			event.preventDefault();
+			rememberQuery(query.query);
+			navigate(selectedItem.actionHref);
 			closePalette();
 		}
 	};
@@ -101,8 +121,7 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work")
 		recentSearches,
 		results,
 		selectedId,
-		setOpen,
-		setSelectedId,
+		showResults,
 		updateQuery,
 	};
 };

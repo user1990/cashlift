@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Panel } from "@/ui/components/layout/Panel";
 import { cn } from "@/ui/utils/cn";
 import type { PRICING_PLANS, PricingBilling } from "../content";
+import { getAnnualPricingSavingsPercent } from "../utils";
 
 type PricingPlan = (typeof PRICING_PLANS)[number];
 
@@ -14,6 +15,7 @@ type PricingPlanCardProps = {
 export const PricingPlanCard = ({ billing, plan }: PricingPlanCardProps) => {
 	const highlighted = "highlighted" in plan && plan.highlighted;
 	const price = billing === "annual" ? plan.annualPrice : plan.price;
+	const annualSavingsPercent = getAnnualPricingSavingsPercent(plan.price, plan.annualPrice);
 
 	return (
 		<li className="relative flex pt-3">
@@ -29,9 +31,9 @@ export const PricingPlanCard = ({ billing, plan }: PricingPlanCardProps) => {
 					<div className="flex items-start justify-between gap-3">
 						<h2 className="text-4xl+ text-shell-foreground tracking-normal">{plan.name}</h2>
 
-						{billing === "annual" && (
+						{billing === "annual" && annualSavingsPercent !== undefined && annualSavingsPercent > 0 && (
 							<span className="shrink-0 rounded-sm bg-signal-subtle px-2 py-1 font-semibold text-s text-signal">
-								Save 20%
+								Save {annualSavingsPercent}%
 							</span>
 						)}
 					</div>

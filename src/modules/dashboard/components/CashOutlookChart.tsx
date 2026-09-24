@@ -6,7 +6,9 @@ import type { MoneyCents } from "@/modules/money/types";
 import type { ForecastChartDataPoint } from "../types";
 import { CashOutlookChartSummary } from "./CashOutlookChartSummary";
 
-const LazyCashOutlookChartContent = dynamic(() => import("./CashOutlookChartContent"));
+const LazyCashOutlookChartContent = dynamic(() => import("./CashOutlookChartContent"), {
+	loading: () => <div aria-hidden className="h-60 rounded-lg bg-panel-muted motion-reduce:transition-none" />,
+});
 
 type CashOutlookChartProps = {
 	bufferTargetCents: MoneyCents;
