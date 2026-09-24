@@ -17,7 +17,7 @@
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run --coverage",
 		"test:coverage": "vitest run --coverage",
-		"test:e2e": "pnpm test:e2e:demo && pnpm test:e2e:production",
+		"test:e2e": "pnpm test:e2e:production && pnpm test:e2e:demo",
 		"test:e2e:demo": "env -u NO_COLOR playwright test",
 		"test:e2e:install": "playwright install chromium webkit --with-deps",
 		"check:performance": "vitest run src/modules/workspace/resolveWorkspaceDataset.performance.test.ts",

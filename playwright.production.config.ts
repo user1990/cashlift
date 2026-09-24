@@ -1,5 +1,4 @@
-import { defineConfig } from "@playwright/test";
-import { browserProjects } from "./e2e/playwright/projects";
+import { defineConfig, devices } from "@playwright/test";
 import { createProductionWebServerEnv, resolveProductionWebServerCommand } from "./e2e/playwright/webServer";
 
 if (process.env.FORCE_COLOR) {
@@ -12,7 +11,7 @@ const productionBaseUrl = `http://127.0.0.1:${productionPort}`;
 export default defineConfig({
 	expect: { timeout: 10_000 },
 	forbidOnly: !!process.env.CI,
-	projects: browserProjects,
+	projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
 	reporter: process.env.CI ? "github" : "list",
 	retries: process.env.CI ? 1 : 0,
 	testDir: "./e2e/production",
