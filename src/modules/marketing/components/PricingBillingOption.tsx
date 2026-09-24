@@ -11,13 +11,13 @@ type PricingBillingOptionProps = {
 };
 
 export const PricingBillingOption = ({ children, value }: PricingBillingOptionProps) => (
-	<RadioField value={value} className="relative z-10 min-h-11 -translate-y-1.5">
+	<RadioField value={value} className="relative z-10 min-h-11 -translate-y-[7px]">
 		<RadioButton
 			className={cn(
 				"flex min-h-11 cursor-pointer items-center justify-center rounded-full px-4 font-semibold text-s text-shell-muted outline-none transition-colors duration-150",
 				"hover:text-shell-foreground data-hovered:text-shell-foreground",
 				"data-selected:text-primary-foreground",
-				"data-focus-visible:ring-[3px] data-focus-visible:ring-primary/25",
+				"data-focus-visible:ring-2 data-focus-visible:ring-primary/25 data-focus-visible:ring-inset",
 				"[&>span]:sr-only",
 			)}
 		>

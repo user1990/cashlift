@@ -44,6 +44,15 @@ test.describe("pricing billing toggle", () => {
 
 		expect(labelBoxes.every(({ center }) => Math.abs(center - (groupBox.y + groupBox.height / 2)) <= 2)).toBe(true);
 
+		await labels.nth(0).click();
+		await page.keyboard.press("Tab");
+		await page.keyboard.press("Shift+Tab");
+
+		await expect(labels.nth(0)).toHaveAttribute("data-focus-visible", "true");
+		const focusRing = await labels.nth(0).evaluate((label) => getComputedStyle(label).boxShadow);
+
+		expect(focusRing).toContain("inset");
+
 		await labels.nth(1).click();
 
 		await expect(page).toHaveURL(/\/pricing\?billing=monthly$/);
