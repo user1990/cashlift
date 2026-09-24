@@ -7,12 +7,14 @@ const MAX_RECENT_SEARCHES = 5;
 
 type FindNavigate = (href: string) => void;
 
+const defaultFindNavigate: FindNavigate = (href) => {
+	window.location.assign(href);
+};
+
 export const useFindSession = (
 	items: FindItem[],
 	categoryMode: "kind" | "work",
-	navigate: FindNavigate = (href) => {
-		window.location.assign(href);
-	},
+	navigate: FindNavigate = defaultFindNavigate,
 ) => {
 	const { clearAll, query, setQuery } = useFindQueryState();
 	const [recentSearches, setRecentSearches] = useState<string[]>([]);
