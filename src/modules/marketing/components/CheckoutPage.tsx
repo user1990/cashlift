@@ -1,4 +1,4 @@
-import { MainContent } from "@/modules/page-shell/components/MainContent";
+import { MainContent } from "@/ui/components/layout/MainContent";
 import { getPricingPlanBySlug, type PricingBilling } from "../content";
 import { CheckoutHeader } from "./CheckoutHeader";
 import { CheckoutPlanSummary } from "./CheckoutPlanSummary";
