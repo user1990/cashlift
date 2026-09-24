@@ -95,7 +95,9 @@ const decideProductionSpendRequest = async (
 	const accessToken = await getWorkspaceAccessToken(session);
 
 	if (isWorkspaceOperationFailure(accessToken)) {
-		return { code: "service", message: accessToken.message, requestId: accessToken.requestId, status: "error" };
+		return accessToken.kind === "service"
+			? { code: "service", message: accessToken.message, requestId: accessToken.requestId, status: "error" }
+			: { code: accessToken.kind, message: accessToken.message, status: "error" };
 	}
 
 	try {

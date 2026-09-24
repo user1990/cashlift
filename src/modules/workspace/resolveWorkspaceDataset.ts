@@ -50,7 +50,9 @@ export const resolveWorkspaceDataset = async (
 	const accessToken = await getWorkspaceAccessToken(session);
 
 	if (isWorkspaceOperationFailure(accessToken)) {
-		return { kind: "service", message: accessToken.message, requestId: accessToken.requestId };
+		return accessToken.kind === "service"
+			? { kind: "service", message: accessToken.message, requestId: accessToken.requestId }
+			: { kind: accessToken.kind, message: accessToken.message };
 	}
 
 	try {
