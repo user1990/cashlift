@@ -41,7 +41,7 @@ export const WorkspaceSidebarPanel = ({
 			)}
 
 			{workspace.readOnly && (
-				<p className="mx-2 mt-2 rounded-full border border-shell-border bg-shell-elevated/60 px-3 py-1.5 text-center font-medium text-shell-muted text-s+">
+				<p className="mx-2 mt-2 rounded-full border border-shell-border bg-shell-elevated/60 px-3 py-1.5 text-center font-medium text-s+ text-shell-muted">
 					Read-only demo
 				</p>
 			)}

@@ -1,4 +1,4 @@
-import { type KeyboardEvent, useEffect, useRef, useState } from "react";
+import { type KeyboardEvent, useDeferredValue, useEffect, useRef, useState } from "react";
 import { getFindOptionId } from "../findDom";
 import { type FindItem, type FindQuery, filterFindItems, hasActiveFindFilters } from "../findModel";
 import { useFindQueryState } from "./useFindQueryState";
@@ -17,11 +17,12 @@ export const useFindSession = (
 	navigate: FindNavigate = defaultFindNavigate,
 ) => {
 	const { clearAll, query, setQuery } = useFindQueryState();
+	const deferredQueryText = useDeferredValue(query.query);
 	const [recentSearches, setRecentSearches] = useState<string[]>([]);
 	const [selectedId, setSelectedId] = useState<string>();
 	const [open, setOpen] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
-	const results = filterFindItems(items, query, categoryMode);
+	const results = filterFindItems(items, { ...query, query: deferredQueryText }, categoryMode);
 	const selectedIndex = results.findIndex((item) => item.id === selectedId);
 	const selectedItem = selectedIndex >= 0 ? results[selectedIndex] : undefined;
 	const showResults = Boolean(query.query.trim()) || hasActiveFindFilters(query) || query.category !== "all";

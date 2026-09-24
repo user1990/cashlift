@@ -10,6 +10,7 @@ import type { FinancialDataset } from "@/modules/workspace/types";
 import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 import { ProgressBar } from "@/ui/components/feedback/ProgressBar";
 import { cn } from "@/ui/utils/cn";
+import { WorkspaceRoleCue } from "./WorkspaceRoleCue";
 
 type WorkspaceSettingsSectionProps = {
 	basePath: string;
@@ -18,7 +19,6 @@ type WorkspaceSettingsSectionProps = {
 };
 
 type TeamMember = FinancialDataset["teamMembers"][number];
-type CompanyRole = TeamMember["role"];
 
 export const WorkspaceSettingsSection = ({ basePath, dataset, readOnly = false }: WorkspaceSettingsSectionProps) => {
 	const presentation = buildSettingsPresentation({ dataset, readOnly });
@@ -74,7 +74,7 @@ export const WorkspaceSettingsSection = ({ basePath, dataset, readOnly = false }
 							<div className="flex flex-wrap items-center gap-x-3 gap-y-1">
 								<span className="text-muted-foreground text-s">{presentation.industryLabel}</span>
 
-								<SettingsRoleCue role={financeLead.role} />
+								<WorkspaceRoleCue role={financeLead.role} />
 
 								<span className="text-muted-foreground text-s">{financeLead.team}</span>
 							</div>
@@ -107,7 +107,7 @@ export const WorkspaceSettingsSection = ({ basePath, dataset, readOnly = false }
 							<div className="flex flex-wrap items-center gap-x-3 gap-y-1">
 								<span className="text-muted-foreground text-s">{presentation.industryLabel}</span>
 
-								<SettingsRoleCue role={dataset.profile.defaultRole} />
+								<WorkspaceRoleCue role={dataset.profile.defaultRole} />
 							</div>
 
 							<h2 className="mt-3 font-semibold text-2xl+ text-panel-foreground tracking-normal">
@@ -249,7 +249,7 @@ function renderMemberRow(member: TeamMember) {
 		<div className="flex flex-col gap-2 py-3 sm:flex-row sm:items-start sm:justify-between">
 			<span className="min-w-0">
 				<span className="flex flex-wrap items-center gap-x-3 gap-y-1">
-					<SettingsRoleCue role={member.role} />
+					<WorkspaceRoleCue role={member.role} />
 
 					<span className="text-muted-foreground text-s">{member.team}</span>
 				</span>
@@ -257,35 +257,5 @@ function renderMemberRow(member: TeamMember) {
 				<span className="mt-1 block font-semibold text-m+ text-panel-foreground">{member.name}</span>
 			</span>
 		</div>
-	);
-}
-
-type SettingsRoleCueProps = {
-	role: CompanyRole;
-	className?: string;
-};
-
-function SettingsRoleCue({ className, role }: SettingsRoleCueProps) {
-	return (
-		<span className={cn("inline-flex items-center gap-1.5 text-s", className)}>
-			<span
-				aria-hidden
-				className={cn(
-					"size-1.5 rounded-full",
-					role === "owner-finance" && "bg-primary",
-					role === "manager" && "bg-shell-muted",
-					role === "employee" && "bg-border-strong",
-				)}
-			/>
-
-			<span
-				className={cn(
-					role === "owner-finance" && "text-primary",
-					(role === "manager" || role === "employee") && "text-muted-foreground",
-				)}
-			>
-				{COMPANY_ROLE_LABELS[role]}
-			</span>
-		</span>
 	);
 }
