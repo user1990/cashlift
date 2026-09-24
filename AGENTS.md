@@ -6,15 +6,15 @@ Always read this file first. It defines workflow for this repo. Do not override 
 
 1. Search before building.
    - Before adding hooks, components, utilities, packages, or import paths, search existing code first.
-   - Start in the current app's `src/`, then expand to `packages/*` when relevant.
+   - Start in the current app's `src/`. Read `packages/reference/README.md` before adding anything under `packages/*`; that folder is planning-only until a second product needs shared code.
    - Search related concepts, not just the first implementation idea.
    - Use a fast sub-agent only when the runtime/user permits it and the search genuinely spans many files.
-   - Load [orchestrate](.agents/skills/orchestrate/SKILL.md) when the task has two or more independent slices, crosses two or more source areas, has a broad branch/PR surface, or explicitly asks for parallel agents. Run `pnpm check:orchestration` for an advisory signal and tell the human whether parallel work is recommended.
+   - Load [orchestrate](.agents/skills/orchestrate/SKILL.md) only when the user explicitly asks for parallel agents or delegation, or when the task has two or more independent vertical slices that can land without editing the same files or contracts. Run `pnpm check:orchestration` as an advisory signal when a branch already has a broad diff.
    - Keep one implementer for small, sequential, diagnostic, or shared-file work; orchestration is a recommendation, not a requirement.
 
 2. Understand the task.
    - Identify the work type: UI, component creation, refactor, bug fix, tests, API/data, docs, PR/review, or diagnostics.
-   - Identify the source area: `src/app`, `src/modules`, `src/ui`, `src/services`, `src/utilities`, or `packages/*`.
+   - Identify the source area: `src/app`, `src/modules`, `src/ui`, `src/services`, `src/utilities`.
    - Pick only the skills needed for this task.
 
 3. Respect module boundaries.
@@ -32,6 +32,7 @@ Always read this file first. It defines workflow for this repo. Do not override 
    - Replicate local export style, type placement, function style, test shape, file naming, import ordering, and component structure.
    - Keep page and parent components lean. Put the exported component first and file-private helpers at the bottom of the same file. Split into a colocated component file only when the helper is reused, exported, or owns its own subtree/imports.
    - Confirm aliases in the local `tsconfig.json`; this app uses `@/*` to `src/*`.
+   - Run `pnpm lint` and other configured checks; Biome already enforces several TypeScript and import conventions.
 
 6. Keep context compact.
    - Track goal, active files/modules, loaded skills, decisions, commands, verification, blockers, and next step.
@@ -42,35 +43,32 @@ Always read this file first. It defines workflow for this repo. Do not override 
    - Read `.agents/skills/guide/SKILL.md` when UI or data-display work touches claims, dates, mutations, or component props.
 
 8. Review the system change.
-   - Read `.agents/skills/visual-recap/SKILL.md` when planning a non-trivial change, creating or updating a non-trivial PR, or when the user asks for a visual plan, system review, or PR recap.
+   - Read `.agents/skills/visual-recap/SKILL.md` when creating or updating a non-trivial pull request, or when the user asks for a system recap or visual plan.
    - For CashLift PRs, the repository-local GitHub-rendered recap is authoritative. Use a hosted Agent-Native Plan recap only when the user explicitly asks for the hosted or interactive variant.
 
 ## Non-Negotiables
 
 - Never guess imports or duplicate existing helpers/components.
 - Never import across feature/module boundaries casually.
-- Keep exported components focused on composition. File-private JSX and class-name helpers belong at the bottom of the same file unless they are reused, exported, or own a distinct subtree.
 - Do not invent trends, comparisons, dates, or monetary values. Derive each displayed value from the current input, or omit the claim.
 - A mutation that can conflict with another control must lock every conflicting control until it settles, and its pending-state behavior needs a test.
 - Treat browser time as client state. Do not bake a build-time date into a current-status label; preserve the server render and test the client behavior when time affects a decision.
-- Validate server-boundary input with Zod or equivalent, authorize before data access, and avoid SQL/query string concatenation. `.agents/skills/security/SKILL.md` defines the required parse/authenticate/authorize/query order.
-- Keep hardening headers in `src/proxy.ts` restrictive. Do not add CORS. Workspace mutations stay JSON and never run on GET; Clerk `SameSite=Lax` is the CSRF control.
+- For trust-boundary work, follow `.agents/skills/security/SKILL.md` (fail-closed auth, RLS, headers, secrets, and telemetry rules).
 - Do not store auth/session tokens in localStorage or sessionStorage.
 - Do not commit secrets or telemetry that captures PII.
-- Keep telemetry identifiers to request/correlation IDs; do not attach Clerk user IDs or other direct identifiers unless a documented, approved need requires it.
 
 ## Quick Reference
 
 - Package manager: `pnpm`
 - Runtime: shell commands must auto-select Node from `.nvmrc` / `.node-version` before any `pnpm` command. `pnpm` can fail before project scripts run on older Node versions.
-- Conventions: `.agents/skills/guide/SKILL.md`
+- Conventions: `.agents/skills/guide/SKILL.md`; canonical code: `docs/engineering/canonical-examples.md`
 - Decision records: `docs/decisions/index.md` — read relevant accepted decisions before proposing a new primitive, product surface, data-access path, dependency policy, or security boundary. When work establishes a durable decision future agents may re-propose, proactively suggest recording it with `docs/decisions/0000-template.md`. Do not silently override an accepted decision; supersede it with a new ADR.
 - JavaScript delivery: `docs/decisions/0001-baseline-javascript-targets.md` (agents: `.agents/skills/baseline-javascript/SKILL.md`)
-- PR lifecycle: `.agents/skills/ship-pr/SKILL.md` — use for review, PR creation/update, CI gates, and exact feedback resolution.
+- PR lifecycle: `.agents/skills/ship-pr/SKILL.md` — PR reads, waits, thread resolution, and body edits go through `pr-cockpit owner/repo#N`, not raw `gh pr` / GitHub API reads.
 - Security rules: `.agents/skills/security/SKILL.md`
 - Directory guide: `.agents/README.md`
 - Security checks: `pnpm security:check`, `pnpm security:audit`
-- Code diagnostics: `pnpm check:code` (Fallow), `pnpm check:react` (React Doctor)
+- Code diagnostics: `pnpm check:code` (Fallow), `pnpm check:react` (React Doctor), `pnpm check:agents` (agent doc path references)
 - Issue tracker: `docs/agents/issue-tracker.md` (Linear, CashLift team)
 - Triage labels: `docs/agents/triage-labels.md`
 - Domain docs: `docs/agents/domain.md`

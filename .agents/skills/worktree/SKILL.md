@@ -10,7 +10,7 @@ Create a separate Git worktree for the task so Codex can work without colliding 
 ## Defaults
 
 - Worktree parent directory: `../cashlift-worktrees/`
-- Branch prefix: `codex/`
+- Branch prefix for isolated agent work: `codex/` (human feature branches still use `feat/`, `fix/`, etc. from `guide/SKILL.md`)
 - Base ref: `origin/main`
 - Package manager: `pnpm`
 
@@ -18,7 +18,7 @@ Use local `HEAD` as the base only when the user explicitly asks to base the work
 
 ## Before Creating A Worktree
 
-Run read-only checks:
+Run status checks (`git fetch` updates remote-tracking refs):
 
 ```bash
 git status -sb

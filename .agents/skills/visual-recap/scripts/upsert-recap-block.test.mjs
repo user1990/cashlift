@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { END_MARKER, START_MARKER, upsertRecapBlock, validateRecapBlock } from "./upsert-recap-block.mjs";
+import { END_MARKER, resolvePrRef, START_MARKER, upsertRecapBlock, validateRecapBlock } from "./upsert-recap-block.mjs";
 
 const recap = `${START_MARKER}
 
@@ -8,6 +8,15 @@ const recap = `${START_MARKER}
 </details>
 
 ${END_MARKER}`;
+
+describe("resolvePrRef", () => {
+	it("builds owner/repo#number from PR_COCKPIT_REF", () => {
+		const previous = process.env.PR_COCKPIT_REF;
+		process.env.PR_COCKPIT_REF = "cashlift/cashlift";
+		expect(resolvePrRef(42)).toBe("cashlift/cashlift#42");
+		process.env.PR_COCKPIT_REF = previous;
+	});
+});
 
 describe("upsertRecapBlock", () => {
 	it("appends a recap without changing the existing body", () => {

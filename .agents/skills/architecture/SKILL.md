@@ -1,11 +1,11 @@
 ---
 name: architecture
-description: Module boundaries, import rules, path aliases, folder layout, and state-management choices for the monorepo. Trigger when creating modules/files, importing between modules, picking a path alias, setting up routing, or deciding where code belongs.
+description: Module boundaries, import rules, path aliases, folder layout, and state-management choices for CashLift's single Next.js app. Trigger when creating modules/files, importing between modules, picking a path alias, setting up routing, or deciding where code belongs.
 ---
 
 # Architecture
 
-Flat module architecture for CashLift's Next.js application (single app repository; shared packages are introduced only when a second product needs them).
+Flat module architecture for CashLift's Next.js application (single app repository; shared packages are introduced only when a second product needs them — see `packages/reference/README.md`).
 
 ## Project Structure
 
@@ -21,6 +21,9 @@ Flat module architecture for CashLift's Next.js application (single app reposito
 │   │   ├── subscriptions/
 │   │   ├── budgets/
 │   │   ├── cash-outlook/
+│   │   ├── cash-actions/
+│   │   ├── company-memberships/
+│   │   ├── company-roles/
 │   │   ├── dashboard/
 │   │   ├── marketing/
 │   │   └── page-shell/

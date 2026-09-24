@@ -5,22 +5,21 @@ description: Tailwind CSS v4, `cn()` usage, class composition patterns, and them
 
 # Styling
 
-Use this skill for CashLift styling changes. Read `.agents/docs/styling.md` only when you need examples or deeper rationale.
+Use this skill for CashLift styling changes. Read `.agents/docs/styling.md` for examples. For dashboard glass surfaces, read `DESIGN.md` and `src/ui/components/cockpit/*`.
 
 ## Toolchain
 
 - Tailwind CSS v4 is configured in `src/app/globals.css` and `postcss.config.mjs`.
-- Theme variables live in `@theme inline` inside `src/app/globals.css`.
+- Theme variables live in `@theme inline` and the extended `@theme` block in `src/app/globals.css` (shell, panel, paper, primary, signal, warning, and related tokens).
 - Use `cn()` from `@/ui/utils/cn` for class composition.
-- Use `class-variance-authority` only for reusable components with stable variants.
+- Use `tailwind-variants` (`tv`) for reusable components with stable variants. Reference: `src/ui/components/actions/buttonVariants.ts`, `src/ui/components/actions/Button.tsx`, `src/ui/components/layout/Panel.tsx`.
 - Icons come from `lucide-react`.
 
 ## Tokens And Values
 
-- Prefer theme-backed utilities and semantic classes such as `bg-background text-foreground`.
+- Prefer theme-backed utilities and semantic classes such as `bg-background text-foreground`, `bg-panel`, and `text-muted-foreground`.
 - Avoid new one-off arbitrary pixels/colors unless the product requirement needs them.
-- If a recurring value is needed, add a theme variable first, then consume it with Tailwind.
-- Current theme variables include `--color-background`, `--color-foreground`, `--font-sans`, and `--font-mono`.
+- If a recurring value is needed, add a theme variable in `globals.css` first, then consume it with Tailwind.
 - Use default Tailwind spacing, radius, and typography scales unless a custom token is justified.
 - Existing arbitrary colors may remain; do not multiply near-duplicate hex values.
 
@@ -28,7 +27,6 @@ Use this skill for CashLift styling changes. Read `.agents/docs/styling.md` only
 
 - Use `cn("base", condition && "modifier", className)`.
 - Do not use object syntax in `cn()`.
-- Keep variant classes readable and colocated with the component unless a reusable primitive benefits from `cva`.
 - Prefer `transition-[property]` over `transition-all`.
 - Preserve `motion-reduce:*` behavior for motion-heavy elements.
 
@@ -36,7 +34,7 @@ Use this skill for CashLift styling changes. Read `.agents/docs/styling.md` only
 
 - Prefer container queries for reusable component-internal layout that depends on parent space.
 - Keep viewport breakpoints for route shells, fixed headers, full-screen overlays, and behavior that truly depends on browser width.
-- Avoid `ResizeObserver`, `matchMedia`, and `window.innerWidth` for CSS-only layout decisions.
+- Avoid `ResizeObserver`, `matchMedia`, and `window.innerWidth` for CSS-only layout decisions unless a measured chart or canvas genuinely needs it.
 - Use `@container` on the nearest stable wrapper; use named containers only when a descendant must query a specific ancestor.
 
 ## Structural State
@@ -47,11 +45,10 @@ Use this skill for CashLift styling changes. Read `.agents/docs/styling.md` only
 
 ## UI Components
 
-- Check `src/ui/components/*` before adding a new primitive.
+- Check `src/ui/components/*` (for example `actions/Button.tsx`, `layout/Panel.tsx`, `forms/TextField.tsx`) before adding a new primitive.
 - Reuse local patterns: `@/*` imports, `cn()` composition, explicit `children` prop types, and local naming conventions.
 - Prefer extending an existing primitive over creating a near-duplicate.
 
 ## Gotchas
 
 - CSS custom properties such as `--aspectRatio` belong on `style`, not Tailwind arbitrary property utilities.
-- No `@your-org/ui` color export exists in this app; use Tailwind utilities and `src/app/globals.css`.

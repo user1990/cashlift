@@ -25,6 +25,7 @@
 		"security:audit": "pnpm audit --prod --audit-level high",
 		"security:check": "node scripts/security-check.mjs",
 		"check:orchestration": "node scripts/check-orchestration.mjs",
+		"check:agents": "node scripts/check-agents.mjs",
 		"check:modules": "node scripts/module-architecture-check.mjs",
 		"check:code": "astro sync && fallow --only dupes && fallow --only dead-code && pnpm check:modules",
 		"check:code:fix": "fallow fix --dry-run",

@@ -1,6 +1,6 @@
 ---
 name: orchestrate
-description: Decide when a CashLift task benefits from multiple sub-agents in one isolated environment, then plan, delegate, integrate, and verify independent workstreams. Trigger for broad features, cross-area changes, existing PRs with independent cleanup slices, or explicit parallel-agent requests; use one implementer for small, coupled, or diagnostic tasks.
+description: Decide when a CashLift task benefits from multiple sub-agents in one isolated environment, then plan, delegate, integrate, and verify independent workstreams. Trigger when the user explicitly asks for parallel agents or delegation, or when two or more independent vertical slices can land without editing the same files or contracts; use one implementer for small, coupled, or diagnostic tasks.
 ---
 
 # Orchestrate
@@ -14,17 +14,13 @@ repo structure, `pnpm` commands, module boundaries, and PR Cockpit workflow.
 
 ## Routing check
 
-Consider this skill automatically at the start of implementation or PR work
-when any of these are true:
+Consider this skill when the user explicitly asks for parallel agents,
+delegation, or orchestration, or when the task has two or more independent
+vertical slices with separate file ownership and no shared schema/API contract
+in flight.
 
-- the task has two or more independent vertical slices;
-- the change crosses at least two CashLift areas such as `src/app`,
-  `src/modules/*`, `src/ui`, `src/services`, tests, or docs;
-- the branch or PR has a broad change surface that can be split by ownership;
-- the user explicitly asks for parallel agents, delegation, or orchestration.
-
-Run the advisory check when a branch or worktree already has meaningful
-changes:
+Crossing `src/app` and `src/modules` alone is not enough reason to fan out.
+Run the advisory check when a branch or PR already has a broad diff:
 
 ```bash
 pnpm check:orchestration
@@ -105,15 +101,3 @@ contract.
   the heuristic output as evidence that a PR exists or that CI passed.
 - If delegation is unavailable, continue with one implementer and report that
   limitation; do not manufacture parallel work.
-
-## References
-
-- [CashLift agent workflow](../../../AGENTS.md)
-- [Agent directory conventions](../../README.md)
-- [Architecture and module boundaries](../architecture/SKILL.md)
-- [Worktree isolation](../worktree/SKILL.md)
-- [Testing rules](../testing/SKILL.md)
-- [Security rules](../security/SKILL.md)
-- [PR review and creation workflow](../ship-pr/SKILL.md)
-- [CashLift visual recap](../visual-recap/SKILL.md)
-- [Advisory checker](../../../scripts/check-orchestration.mjs)
