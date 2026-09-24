@@ -10,7 +10,6 @@ import { WorkspaceFindShell } from "./WorkspaceFindShell";
 type DashboardCockpitProps = {
 	dataset: FinancialDataset;
 	basePath?: string;
-	bufferDataset?: FinancialDataset;
 	dateRange?: WorkspaceDatasetDateRange;
 	onDateRangeChange?: (dateRange: WorkspaceDatasetDateRange) => void;
 	readOnly?: boolean;
@@ -18,14 +17,12 @@ type DashboardCockpitProps = {
 
 export const DashboardCockpit = ({
 	basePath = "/dashboard",
-	bufferDataset,
 	dataset,
 	dateRange,
 	onDateRangeChange,
 }: DashboardCockpitProps) => {
 	const statusDate = useDashboardStatusDate(dataset, dateRange);
 	const dashboard = buildDashboardViewModel({
-		bufferDataset,
 		dataset,
 		date: statusDate,
 		role: dataset.profile.defaultRole,

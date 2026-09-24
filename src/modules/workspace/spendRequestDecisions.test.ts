@@ -189,7 +189,7 @@ describe("decideSpendRequest", () => {
 		});
 		expect(CAPTURE_APP_EXCEPTION_MOCK).toHaveBeenCalledWith(
 			expect.objectContaining({
-				fingerprint: ["spend-request-decision", "data-error"],
+				fingerprint: ["workspace-operation", "data-error"],
 			}),
 		);
 	});

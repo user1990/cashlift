@@ -9,13 +9,11 @@ import { buildDashboardViewModel } from "../view-model";
 type CashInsightsProps = {
 	dataset: FinancialDataset;
 	basePath?: string;
-	bufferDataset?: FinancialDataset;
 };
 
-export const CashInsights = ({ basePath = "/dashboard", bufferDataset, dataset }: CashInsightsProps) => {
+export const CashInsights = ({ basePath = "/dashboard", dataset }: CashInsightsProps) => {
 	const statusDate = useDashboardStatusDate(dataset);
 	const dashboard = buildDashboardViewModel({
-		bufferDataset,
 		dataset,
 		date: statusDate,
 		role: dataset.profile.defaultRole,

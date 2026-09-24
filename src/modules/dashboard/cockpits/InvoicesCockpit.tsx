@@ -21,12 +21,13 @@ import { WorkspaceFindShell } from "./WorkspaceFindShell";
 type InvoicesCockpitProps = {
 	dataset: FinancialDataset;
 	basePath?: string;
+	asOf?: Date;
 	invoiceRiskTotal?: number;
 };
 
 /** Throwaway prototype: invoices page using the overview liquid-glass cockpit. */
-export const InvoicesCockpit = ({ basePath = "/dashboard", dataset, invoiceRiskTotal }: InvoicesCockpitProps) => {
-	const asOfDate = invoiceRiskTotal === undefined ? undefined : new Date();
+export const InvoicesCockpit = ({ asOf, basePath = "/dashboard", dataset, invoiceRiskTotal }: InvoicesCockpitProps) => {
+	const asOfDate = asOf ?? (invoiceRiskTotal === undefined ? undefined : new Date());
 	const presentation = buildInvoicesCockpitPresentation({ asOfDate, dataset, invoiceRiskTotal });
 
 	return (

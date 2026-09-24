@@ -1,13 +1,20 @@
-import { auth } from "@clerk/nextjs/server";
 import {
 	CompanyMembershipNotFoundError,
 	selectCompanyMembership,
 } from "@/modules/company-memberships/repositories/supabase";
+import { canDecideSpendRequests } from "@/modules/company-roles/utils";
 import type { SpendRequestDecisionInput } from "@/modules/spend-requests/schemas";
 import { SPEND_REQUEST_DECISION_SCHEMA } from "@/modules/spend-requests/schemas";
 import type { SpendRequest } from "@/modules/spend-requests/types";
+import {
+	type AuthSession,
+	captureWorkspaceOperationException,
+	captureWorkspaceOperationMessage,
+	getWorkspaceAccessToken,
+	getWorkspaceAuthSession,
+	isWorkspaceOperationFailure,
+} from "@/modules/workspace/access";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
-import { captureAppException, captureAppMessage } from "@/services/platform/integrations/sentry";
 import { createServerSupabaseClient } from "@/services/supabase/server";
 import { DEMO_WORKSPACE_DATASET } from "./demoDataset";
 import {
@@ -27,29 +34,6 @@ export type SpendRequestDecisionResult =
 			requestId?: string;
 			status: "error";
 	  };
-
-type AuthSession = Awaited<ReturnType<typeof auth>>;
-
-const captureSpendRequestException = (error: unknown, failureKind: string, extra?: Record<string, unknown>) =>
-	captureAppException({
-		error,
-		extra,
-		fingerprint: ["spend-request-decision", failureKind],
-		tags: {
-			failureKind,
-			feature: "spend-request-decision",
-		},
-	});
-
-const captureSpendRequestMessage = (message: string, failureKind: string) =>
-	captureAppMessage({
-		fingerprint: ["spend-request-decision", failureKind],
-		message,
-		tags: {
-			failureKind,
-			feature: "spend-request-decision",
-		},
-	});
 
 const decideDemoSpendRequest = ({ id, status }: SpendRequestDecisionInput): SpendRequestDecisionResult => {
 	const request = DEMO_WORKSPACE_DATASET.spendRequests.find((spendRequest) => spendRequest.id === id);
@@ -78,7 +62,7 @@ export const decideSpendRequest = async (
 	const config = getWorkspaceRuntimeConfig();
 
 	if (!config.configured) {
-		const requestId = captureSpendRequestMessage(config.message, "config");
+		const requestId = captureWorkspaceOperationMessage(config.message, "config");
 
 		return { code: "service", message: config.message, requestId, status: "error" };
 	}
@@ -94,44 +78,31 @@ const decideProductionSpendRequest = async (
 	decision: SpendRequestDecisionInput,
 	authSession?: AuthSession,
 ): Promise<SpendRequestDecisionResult> => {
-	let session: Awaited<ReturnType<typeof auth>>;
+	const sessionResult = authSession ?? (await getWorkspaceAuthSession());
 
-	try {
-		session = authSession ?? (await auth());
-	} catch (error) {
-		const message = "Workspace authentication is unavailable.";
-		const requestId = captureSpendRequestException(error, "auth-service-error");
-
-		return { code: "service", message, requestId, status: "error" };
+	if (isWorkspaceOperationFailure(sessionResult)) {
+		return sessionResult.kind === "service"
+			? { code: "service", message: sessionResult.message, requestId: sessionResult.requestId, status: "error" }
+			: { code: sessionResult.kind, message: sessionResult.message, status: "error" };
 	}
+
+	const session = sessionResult;
 
 	if (!session.userId) {
 		return { code: "unauthenticated", message: "Sign in to update spend requests.", status: "error" };
 	}
 
-	let accessToken: string | null;
+	const accessToken = await getWorkspaceAccessToken(session);
 
-	try {
-		accessToken = await session.getToken();
-	} catch (error) {
-		const message = "Workspace data token is unavailable.";
-		const requestId = captureSpendRequestException(error, "data-token-error");
-
-		return { code: "service", message, requestId, status: "error" };
-	}
-
-	if (!accessToken) {
-		const message = "Workspace data token is unavailable.";
-		const requestId = captureSpendRequestMessage(message, "missing-data-token");
-
-		return { code: "service", message, requestId, status: "error" };
+	if (isWorkspaceOperationFailure(accessToken)) {
+		return { code: "service", message: accessToken.message, requestId: accessToken.requestId, status: "error" };
 	}
 
 	try {
 		const client = createServerSupabaseClient({ accessToken });
 		const membership = await selectCompanyMembership(client, session.userId);
 
-		if (membership.role !== "owner-finance" && membership.role !== "manager") {
+		if (!canDecideSpendRequests(membership.role)) {
 			return {
 				code: "forbidden",
 				message: "Only finance leads and managers can decide spend requests.",
@@ -160,7 +131,7 @@ const decideProductionSpendRequest = async (
 			return { code: "not_found", message: "Spend request was not found.", status: "error" };
 		}
 
-		const requestId = captureSpendRequestException(error, "data-error");
+		const requestId = captureWorkspaceOperationException(error, "data-error");
 
 		return { code: "unavailable", message: "Unable to update spend request.", requestId, status: "error" };
 	}

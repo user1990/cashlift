@@ -54,10 +54,10 @@ const expectWorkspaceExceptionCaptured = ({
 	expect(CAPTURE_APP_EXCEPTION_MOCK).toHaveBeenCalledWith({
 		error,
 		extra,
-		fingerprint: ["workspace-dataset", failureKind],
+		fingerprint: ["workspace-operation", failureKind],
 		tags: {
 			failureKind,
-			feature: "workspace-dataset",
+			feature: "workspace-operation",
 		},
 	});
 };

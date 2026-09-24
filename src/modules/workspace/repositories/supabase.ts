@@ -4,6 +4,7 @@ import { SPEND_REQUEST_SCHEMA } from "@/modules/spend-requests/schemas";
 import type { SpendRequestStatus } from "@/modules/spend-requests/types";
 import { createServerSupabaseClient } from "@/services/supabase/server";
 import { AppError } from "@/utilities/errors/AppError";
+import { type DatasetTable, EMPTY_DATASET_PARTS } from "../datasetParts";
 import { WORKSPACE_SCOPE_TABLES } from "../read-models";
 import type { FinanceRepository } from "../repository";
 import { FINANCIAL_DATASET_SCHEMA } from "../schemas";
@@ -90,19 +91,6 @@ const selectSingleRow = async <Row>(table: string, query: PromiseLike<SupabaseQu
 
 	return data;
 };
-
-const EMPTY_DATASET_PARTS = {
-	cashActions: [],
-	forecast: [],
-	invoices: [],
-	spendRequests: [],
-	subscriptions: [],
-	teamBudgets: [],
-	teamMembers: [],
-	vendorBills: [],
-} as const satisfies Omit<FinancialDataset, "profile">;
-
-type DatasetTable = keyof Omit<FinancialDataset, "profile">;
 
 const shouldLoadTable = (scope: WorkspaceDatasetScope, table: DatasetTable) =>
 	(WORKSPACE_SCOPE_TABLES[scope] as readonly DatasetTable[]).includes(table);
