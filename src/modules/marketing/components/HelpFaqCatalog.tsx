@@ -100,15 +100,17 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 			return;
 		}
 
-		const nextUrl = new URL(window.location.href);
+		const pathname = window.location.pathname;
+		const nextSearch = new URLSearchParams(window.location.search);
 
 		if (boundedQuery.trim()) {
-			nextUrl.searchParams.set("q", boundedQuery.trim());
+			nextSearch.set("q", boundedQuery.trim());
 		} else {
-			nextUrl.searchParams.delete("q");
+			nextSearch.delete("q");
 		}
 
-		window.history.replaceState(null, "", `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`);
+		const nextQueryString = nextSearch.toString();
+		window.history.replaceState(null, "", nextQueryString ? `${pathname}?${nextQueryString}` : pathname);
 	};
 
 	const openPalette = () => setIsPaletteOpen(true);

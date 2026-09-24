@@ -56,11 +56,7 @@ describe("DashboardCockpit", () => {
 		expect(screen.getByText(formatPreciseCompactCurrency(dashboard.cashAvailableCents))).toBeVisible();
 		expect(screen.getByText(formatPreciseCompactCurrency(dashboard.cashBufferTargetCents))).toBeVisible();
 		expect(screen.getByText(formatPreciseCompactCurrency(dashboard.cashAtRiskCents))).toBeVisible();
-		expect(
-			screen.getByText(
-				new RegExp(`lowest week is ${formatPreciseCompactCurrency(troughCents).replace("$", "\\$")} on`, "i"),
-			),
-		).toBeVisible();
+		expect(screen.getByRole("heading", { level: 1, name: dashboard.cashPositionHeadline })).toBeVisible();
 		expect(screen.getByRole("heading", { name: firstAction.title })).toBeVisible();
 		expect(screen.getByRole("button", { name: /search for anything in this workspace/i })).toBeVisible();
 	});
