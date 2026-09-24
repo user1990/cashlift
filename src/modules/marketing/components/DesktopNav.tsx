@@ -90,7 +90,7 @@ export const DesktopNav = () => {
 
 			<Link
 				href="/customers"
-				className="inline-flex h-9 items-center rounded-md px-3 transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-primary/20"
+				className="inline-flex h-9 items-center rounded-md px-3 transition-colors duration-150 hover:text-primary focus-ring"
 			>
 				Customers
 			</Link>

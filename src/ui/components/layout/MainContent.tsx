@@ -18,7 +18,7 @@ const MAIN_CONTENT_VARIANTS = {
 export const MAIN_CONTENT_ID = "main-content";
 
 export const MainContent = ({ children, className, variant = "plain" }: MainContentProps) => (
-	<main id={MAIN_CONTENT_ID} className={cn(MAIN_CONTENT_VARIANTS[variant], className)}>
+	<main id={MAIN_CONTENT_ID} className={cn(MAIN_CONTENT_VARIANTS[variant], className)} tabIndex={-1}>
 		{children}
 	</main>
 );

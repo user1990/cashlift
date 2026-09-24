@@ -108,7 +108,7 @@ function ErrorTransitionDemo() {
 				/>
 
 				<button
-					className="w-fit rounded-md border border-border bg-panel px-3 py-2 font-medium text-panel-foreground text-s outline-none transition-colors hover:border-primary hover:bg-panel-muted hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
+					className="focus-ring w-fit rounded-md border border-border bg-panel px-3 py-2 font-medium text-panel-foreground text-s outline-none transition-colors hover:border-primary hover:bg-panel-muted hover:text-primary"
 					onClick={() => setInvalid((isInvalid) => !isInvalid)}
 					type="button"
 				>

@@ -29,4 +29,19 @@ describe("WorkspaceShell", () => {
 		expect(within(drawer).getByRole("link", { name: "Invoices" })).toBeVisible();
 		expect(within(drawer).queryByRole("link", { name: "Overdue collections" })).not.toBeInTheDocument();
 	});
+
+	it("keeps workspace navigation outside the main landmark", () => {
+		render(
+			<NuqsTestingAdapter hasMemory>
+				<WorkspaceShell experience="public-demo">
+					<WorkspacePageContent dataset={financialDatasetFixture} experience="public-demo" section="overview" />
+				</WorkspaceShell>
+			</NuqsTestingAdapter>,
+		);
+
+		const main = screen.getByRole("main");
+
+		expect(within(main).queryByRole("navigation", { name: "Workspace" })).not.toBeInTheDocument();
+		expect(within(main).getByRole("heading", { level: 1 })).toBeInTheDocument();
+	});
 });

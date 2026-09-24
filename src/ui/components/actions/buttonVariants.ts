@@ -1,7 +1,7 @@
 import { tv } from "tailwind-variants";
 
 export const buttonVariants = tv({
-	base: "inline-flex cursor-pointer items-center justify-center gap-2 rounded-md font-semibold outline-none transition-[background-color,border-color,color,box-shadow,transform] duration-[var(--motion-duration-micro)] ease data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20 data-disabled:cursor-not-allowed data-disabled:opacity-50 data-pressed:scale-[var(--motion-press-scale)] motion-reduce:data-pressed:scale-100",
+	base: "focus-ring-rac inline-flex cursor-pointer items-center justify-center gap-2 rounded-md font-semibold transition-[background-color,border-color,color,box-shadow,transform] duration-[var(--motion-duration-micro)] ease data-disabled:cursor-not-allowed data-disabled:opacity-50 data-pressed:scale-[var(--motion-press-scale)] motion-reduce:data-pressed:scale-100",
 	defaultVariants: {
 		size: "default",
 		variant: "secondary",
@@ -14,7 +14,7 @@ export const buttonVariants = tv({
 		},
 		variant: {
 			ghost: "border border-transparent text-muted-foreground hover:bg-panel-muted hover:text-panel-foreground",
-			link: "font-medium text-primary underline-offset-4 hover:text-primary-hover hover:underline focus-visible:ring-[3px] focus-visible:ring-primary/20 active:scale-100",
+			link: "focus-ring font-medium text-primary underline-offset-4 hover:text-primary-hover hover:underline active:scale-100",
 			primary:
 				"border border-primary/80 bg-primary text-primary-foreground shadow-primary-glow hover:border-primary-hover hover:bg-primary-hover",
 			secondary:

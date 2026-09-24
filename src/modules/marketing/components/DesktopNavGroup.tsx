@@ -38,7 +38,7 @@ export const DesktopNavGroup = ({
 		<Button
 			onFocus={(event) => onTriggerFocus(event.currentTarget as HTMLButtonElement)}
 			slot="trigger"
-			className="flex h-9 cursor-pointer items-center gap-1 rounded-md px-3 font-medium text-m text-shell-muted outline-none transition-colors duration-150 hover:text-primary data-focus-visible:ring-[3px] data-focus-visible:ring-primary/20"
+			className="flex h-9 cursor-pointer items-center gap-1 rounded-md px-3 font-medium text-m text-shell-muted outline-none transition-colors duration-150 hover:text-primary focus-ring-rac"
 		>
 			{group.label}
 
@@ -61,7 +61,7 @@ export const DesktopNavGroup = ({
 									href={href}
 									onClick={onClose}
 									className={cn(
-										"block rounded-md px-3 py-2 font-medium text-m text-shell-muted outline-none transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground focus-visible:ring-[3px] focus-visible:ring-primary/20",
+										"block rounded-md px-3 py-2 font-medium text-m text-shell-muted outline-none transition-colors duration-150 hover:bg-panel/10 hover:text-shell-foreground focus-ring",
 										active && "bg-primary/10 text-primary",
 									)}
 								>

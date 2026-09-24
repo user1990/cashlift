@@ -37,6 +37,34 @@ test.describe("axe smoke", () => {
 		assertNoUnnamedLinks(accessibilityScanResults.violations);
 	});
 
+	test("checkout has no serious or critical axe violations", async ({ page }) => {
+		await page.goto("/checkout");
+
+		const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+
+		assertNoCriticalViolations(accessibilityScanResults.violations);
+		assertNoUnnamedLinks(accessibilityScanResults.violations);
+	});
+
+	test("checkout fits within a 320px viewport", async ({ page }) => {
+		await page.setViewportSize({ height: 800, width: 320 });
+		await page.goto("/checkout");
+
+		const overflow = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
+
+		expect(overflow).toBe(true);
+	});
+
+	test("skip links land inside main content", async ({ page }) => {
+		for (const path of ["/checkout", "/demo/workspace"]) {
+			await page.goto(path);
+			await page.keyboard.press("Tab");
+			await page.getByRole("link", { name: "Skip to content" }).press("Enter");
+
+			await expect(page.locator("#main-content"), `skip link target for ${path}`).toBeFocused();
+		}
+	});
+
 	test("app shell renders for axe (demo mode)", async ({ page }) => {
 		await page.goto("/dashboard");
 

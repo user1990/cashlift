@@ -19,7 +19,7 @@ export const PricingComparisonSection = () => (
 		<h2 id={COMPARE_PLANS_HEADING_ID}>
 			<a
 				href={`#${COMPARISON_TABLE_ID}`}
-				className="mx-auto flex w-fit items-center gap-2 font-semibold text-primary text-xl outline-none transition-colors duration-150 hover:text-primary-hover focus-visible:ring-[3px] focus-visible:ring-primary/20"
+				className="mx-auto flex w-fit items-center gap-2 font-semibold text-primary text-xl outline-none transition-colors duration-150 hover:text-primary-hover focus-ring"
 			>
 				Compare plans in full
 				<ChevronDown aria-hidden className="size-6" />

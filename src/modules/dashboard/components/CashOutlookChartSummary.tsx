@@ -7,14 +7,16 @@ type CashOutlookChartSummaryProps = {
 	bufferTargetCents: MoneyCents;
 	chartData: ForecastChartDataPoint[];
 	lowestProjectedCashDate?: string;
+	className?: string;
 };
 
 export const CashOutlookChartSummary = ({
 	bufferTargetCents,
 	chartData,
+	className = "sr-only",
 	lowestProjectedCashDate,
 }: CashOutlookChartSummaryProps) => (
-	<table className="sr-only">
+	<table className={className}>
 		<caption>
 			13-week cash outlook by week. Cash buffer {formatCurrency(bufferTargetCents)}
 			{lowestProjectedCashDate ? `. Lowest week ${formatDashboardDate(lowestProjectedCashDate)}` : ""}
@@ -34,14 +36,16 @@ export const CashOutlookChartSummary = ({
 
 		<tbody>
 			{chartData.map(({ balance, inflow, outflow, rowKey, week }) => (
-				<tr key={rowKey}>
-					<th scope="row">{week.slice(5)}</th>
+				<tr key={rowKey} className="border-white/10 border-t">
+					<th className="py-2 pr-4 text-left font-medium text-panel-foreground" scope="row">
+						{week.slice(5)}
+					</th>
 
-					<td>{formatCurrencyDollars(balance)}</td>
+					<td className="py-2 pr-4 font-mono tabular-nums">{formatCurrencyDollars(balance)}</td>
 
-					<td>{formatCurrencyDollars(inflow)}</td>
+					<td className="py-2 pr-4 font-mono tabular-nums">{formatCurrencyDollars(inflow)}</td>
 
-					<td>{formatCurrencyDollars(outflow)}</td>
+					<td className="py-2 font-mono tabular-nums">{formatCurrencyDollars(outflow)}</td>
 				</tr>
 			))}
 		</tbody>

@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { formatPreciseCompactCurrency, getPercentage } from "@/modules/money/format";
 import type { WorkspaceDatasetDateRange } from "@/modules/workspace/types";
@@ -8,7 +9,7 @@ import { OverviewDateRangePicker } from "../components/OverviewDateRangePicker";
 import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
 import { CockpitOutlookCard, CockpitStatusMetrics, CockpitSupportCard } from "./cockpitPanels";
-import { ExploreKicker, ExploreLink, ExploreMoney, PriorityCue, SupportNoteList } from "./cockpitUi";
+import { ExploreKicker, ExploreLink, ExploreMoney, PriorityCue } from "./cockpitUi";
 import { CASH_ACTION_NEXT_STEP, CASH_ACTION_WORK, type ExplorePresentation } from "./exploreModel";
 
 type CashAction = DashboardViewModel["actionInbox"][number];
@@ -74,8 +75,8 @@ export const OperatingCockpitDashboard = ({
 				/>
 			</GlassCard>
 
-			<section className="grid items-stretch gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:gap-5">
-				<GlassCard atmosphere="priority" className="h-full" contentClassName="flex h-full flex-col" intensity="active">
+			<section className="grid gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:items-start xl:gap-5">
+				<GlassCard atmosphere="priority" intensity="active">
 					<div className="flex flex-wrap items-center gap-x-3 gap-y-1">
 						{primaryAction ? (
 							<PriorityCue priority={primaryAction.priority} />
@@ -142,9 +143,9 @@ export const OperatingCockpitDashboard = ({
 				</div>
 			</section>
 
-			<CockpitSupportCard title="Useful context, kept quieter">
+			<CockpitSupportCard title="Approvals, collections, and budgets">
 				<div className="min-w-0 lg:col-span-7">
-					<p className="font-semibold text-m+ text-panel-foreground">Spend requests to decide</p>
+					<h3 className="font-semibold text-m+ text-panel-foreground">Spend requests to decide</h3>
 
 					{dashboard.pendingApprovals.length ? (
 						<ul className="mt-3 divide-y divide-white/10">
@@ -177,11 +178,11 @@ export const OperatingCockpitDashboard = ({
 				</div>
 
 				<div className="min-w-0 lg:col-span-5">
-					<p className="font-semibold text-m+ text-panel-foreground">
+					<h3 className="font-semibold text-m+ text-panel-foreground">
 						{presentation.recoverableCents > 0
 							? `${formatPreciseCompactCurrency(presentation.recoverableCents)} to collect or cut`
 							: "Collect and cut"}
-					</p>
+					</h3>
 
 					<ul className="mt-3 divide-y divide-white/10">
 						{dashboard.overdueInvoices.map(({ amountCents, client, id, owner }) => (
@@ -215,7 +216,7 @@ export const OperatingCockpitDashboard = ({
 				</div>
 
 				<div className="min-w-0 lg:col-span-12">
-					<p className="font-semibold text-m+ text-panel-foreground">Team budget guardrails</p>
+					<h3 className="font-semibold text-m+ text-panel-foreground">Team budget guardrails</h3>
 
 					{dashboard.budgetRows.length ? (
 						<ul className="mt-4 grid gap-4 md:grid-cols-3">
@@ -233,8 +234,6 @@ export const OperatingCockpitDashboard = ({
 					)}
 				</div>
 			</CockpitSupportCard>
-
-			<SupportNoteList notes={presentation.supportNotes} />
 		</div>
 	);
 };
@@ -242,20 +241,27 @@ export const OperatingCockpitDashboard = ({
 function renderQueueAction(action: CashAction, basePath: string) {
 	return (
 		<Link
-			className="flex flex-col gap-2 py-3 outline-none transition-colors hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 sm:flex-row sm:items-start sm:justify-between"
+			className="focus-ring group flex flex-col gap-2 rounded-lg py-3 outline-none transition-colors hover:bg-white/5 sm:flex-row sm:items-start sm:justify-between"
+			data-no-press-scale
 			href={getCashActionDestination(action.type, basePath)}
 		>
 			<span className="min-w-0">
 				<span className="flex flex-wrap items-center gap-x-3 gap-y-1">
 					<PriorityCue priority={action.priority} />
 
-					<span className="text-muted-foreground text-s">{CASH_ACTION_WORK[action.type]}</span>
+					<span className="text-muted-foreground text-s group-hover:text-primary">{CASH_ACTION_WORK[action.type]}</span>
 				</span>
 
-				<span className="mt-1 block font-semibold text-m+ text-panel-foreground">{action.title}</span>
+				<span className="mt-1 block font-semibold text-m+ text-panel-foreground group-hover:text-primary">
+					{action.title}
+				</span>
 			</span>
 
-			<ExploreMoney cents={action.impactCents} className="shrink-0" exact />
+			<span className="flex shrink-0 items-center gap-2">
+				<ExploreMoney cents={action.impactCents} exact />
+
+				<ArrowRight aria-hidden className="size-4 text-muted-foreground group-hover:text-primary" />
+			</span>
 		</Link>
 	);
 }
