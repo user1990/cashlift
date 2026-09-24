@@ -11,7 +11,7 @@ const productionBaseUrl = `http://127.0.0.1:${productionPort}`;
 export default defineConfig({
 	expect: { timeout: 10_000 },
 	forbidOnly: !!process.env.CI,
-	projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+	projects: [{ name: "production-auth-boundary", use: { ...devices["Desktop Chrome"] } }],
 	reporter: process.env.CI ? "github" : "list",
 	retries: process.env.CI ? 1 : 0,
 	testDir: "./e2e/production",
