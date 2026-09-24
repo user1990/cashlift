@@ -12,7 +12,7 @@ test.describe("keyboard approvals", () => {
 		await approveBrandForge.focus();
 		await expect(approveBrandForge).toBeFocused();
 
-		await page.keyboard.press("Enter");
+		await approveBrandForge.press("Enter");
 
 		await expect(page.getByText(/Spend approved/)).toBeVisible({ timeout: 15_000 });
 	});
