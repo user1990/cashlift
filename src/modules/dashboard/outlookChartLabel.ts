@@ -1,4 +1,4 @@
-export const formatCashOutlookWeekCount = (weekCount: number) => (weekCount > 0 ? `${weekCount}-week` : "");
+const formatCashOutlookWeekCount = (weekCount: number) => (weekCount > 0 ? `${weekCount}-week` : "");
 
 export const getCashOutlookSectionTitle = (weekCount: number) => {
 	const prefix = formatCashOutlookWeekCount(weekCount);
