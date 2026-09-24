@@ -21,7 +21,7 @@ import {
 	WORK_LABELS,
 } from "./findModel";
 import { FindCategoryChip, FindEmptyState, FindResultRow, FindSearchField, FindShortcutFooter } from "./findUi";
-import type { useFindSession } from "./useFindSession";
+import type { useFindSession } from "./hooks/useFindSession";
 
 type WorkspaceFindSession = ReturnType<typeof useFindSession>;
 

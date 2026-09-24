@@ -1,9 +1,9 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { MainContent } from "@/ui/components/layout/MainContent";
 import type { WorkspaceExperience } from "../types";
 import { getWorkspaceExperienceContract } from "../workspaceExperience";
-import { MainContent } from "./MainContent";
 import { WorkspaceMobileNav } from "./WorkspaceMobileNav";
 import { WorkspaceSidebar } from "./WorkspaceSidebar";
 

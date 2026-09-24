@@ -81,6 +81,7 @@
 					"module-invoices",
 					"module-money",
 					"module-subscriptions",
+					"module-vendors",
 					"module-workspace",
 					"ui",
 					"services",

@@ -1,5 +1,5 @@
 import { FindEmptyState, FindResultHeader, FindResultRow } from "./findUi";
-import type { useFindSession } from "./useFindSession";
+import type { useFindSession } from "./hooks/useFindSession";
 
 type WorkspaceFindSession = ReturnType<typeof useFindSession>;
 
