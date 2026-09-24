@@ -21,7 +21,7 @@ export const HomeFaqItem = ({ answer, question }: HomeFaqItemProps) => {
 				data-no-press-scale="true"
 				type="button"
 				onClick={() => setExpanded((isExpanded) => !isExpanded)}
-				className="group flex min-h-14 w-full cursor-pointer items-center justify-between gap-4 py-3 text-left text-l text-shell-foreground outline-none transition-colors duration-150 hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
+				className="group flex min-h-14 w-full cursor-pointer items-center justify-between gap-4 py-3 text-left text-l text-shell-foreground outline-none transition-colors duration-150 hover:text-primary focus-ring"
 			>
 				{question}
 

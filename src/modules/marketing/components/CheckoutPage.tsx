@@ -1,3 +1,4 @@
+import { MainContent } from "@/ui/components/layout/MainContent";
 import { getPricingPlanBySlug, type PricingBilling } from "../content";
 import { CheckoutHeader } from "./CheckoutHeader";
 import { CheckoutPlanSummary } from "./CheckoutPlanSummary";
@@ -17,10 +18,13 @@ export const CheckoutPage = ({ billing = "monthly", planSlug }: CheckoutPageProp
 			: "Monthly pricing discussed with CashLift";
 
 	return (
-		<main className="min-h-screen bg-shell text-shell-foreground">
+		<div className="min-h-screen bg-shell text-shell-foreground">
 			<CheckoutHeader billing={billing} />
 
-			<div className="mx-auto grid max-w-295 gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_420px] lg:px-8 lg:py-20">
+			<MainContent
+				variant="plain"
+				className="mx-auto grid max-w-295 gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_420px] lg:px-8 lg:py-20"
+			>
 				<CheckoutTrialTimeline />
 
 				<CheckoutPlanSummary
@@ -30,7 +34,7 @@ export const CheckoutPage = ({ billing = "monthly", planSlug }: CheckoutPageProp
 					name={plan.name}
 					price={price}
 				/>
-			</div>
-		</main>
+			</MainContent>
+		</div>
 	);
 };

@@ -189,7 +189,7 @@ const FindExampleRow = ({
 }: FindExampleRowProps) => (
 	<div role="presentation">
 		<button
-			className="flex min-h-12 w-full items-center justify-between gap-4 px-4 py-3 text-left outline-none transition-[background-color] duration-150 hover:bg-white/5 focus-visible:ring-[3px] focus-visible:ring-primary/20 motion-reduce:transition-none"
+			className="focus-ring flex min-h-12 w-full items-center justify-between gap-4 px-4 py-3 text-left outline-none transition-[background-color] duration-150 hover:bg-white/5 motion-reduce:transition-none"
 			onClick={onSelect}
 			type="button"
 		>

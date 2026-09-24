@@ -34,7 +34,7 @@ const WORKSPACE_NAV_GROUPS = [
 			},
 			{
 				icon: TrendingUp,
-				label: "13-week Outlook",
+				label: "13-week Cash Outlook",
 				path: "#cash-outlook",
 				section: "overview",
 			},

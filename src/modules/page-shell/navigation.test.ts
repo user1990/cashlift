@@ -9,7 +9,7 @@ describe("workspace navigation", () => {
 		expect(items.map((item) => item.label)).toEqual([
 			"Overview",
 			"Cash Insights",
-			"13-week Outlook",
+			"13-week Cash Outlook",
 			"Invoices",
 			"Spend approvals",
 			"Vendor bills & leaks",
@@ -18,7 +18,7 @@ describe("workspace navigation", () => {
 			"Settings",
 		]);
 		expect(hrefs).toEqual([...new Set(hrefs)]);
-		expect(items.find((item) => item.label === "13-week Outlook")?.href).toBe("/dashboard#cash-outlook");
+		expect(items.find((item) => item.label === "13-week Cash Outlook")?.href).toBe("/dashboard#cash-outlook");
 		expect(items.find((item) => item.label === "Invoices")?.href).toBe("/dashboard/invoices");
 		expect(getActiveWorkspaceNavItem("/dashboard/invoices", "/dashboard")?.label).toBe("Invoices");
 		expect(getActiveWorkspaceNavItem("/dashboard", "/dashboard")?.label).toBe("Overview");

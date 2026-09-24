@@ -37,10 +37,6 @@ export const buildExplorePresentation = (dashboard: DashboardViewModel) => {
 		primaryAction: dashboard.actionInbox[0],
 		recoverableCents: overdueInvoiceCents + vendorLeakCents,
 		remainingActions: dashboard.actionInbox.slice(1),
-		supportNotes: [
-			"Closed Cash Action history is not on this overview yet.",
-			"Collect-versus-skip outlook scenarios are not modeled in the current 13-week series.",
-		],
 	};
 };
 

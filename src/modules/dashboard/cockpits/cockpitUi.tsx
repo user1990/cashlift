@@ -48,7 +48,7 @@ export const ExploreLink = ({ children, className, href, primary = false }: Expl
 	return (
 		<Link
 			className={cn(
-				"ease inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-3 font-semibold text-m outline-none transition-[background-color,border-color,color,box-shadow] duration-150 focus-visible:ring-[3px] focus-visible:ring-primary/20",
+				"ease focus-ring inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-3 font-semibold text-m outline-none transition-[background-color,border-color,color,box-shadow] duration-150",
 				primary
 					? "border border-primary/80 bg-primary text-primary-foreground shadow-primary-glow hover:border-primary-hover hover:bg-primary-hover"
 					: "border border-shell-border bg-shell-elevated text-shell-foreground hover:border-primary-subtle-border hover:text-primary",

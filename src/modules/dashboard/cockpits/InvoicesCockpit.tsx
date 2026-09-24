@@ -292,7 +292,7 @@ function renderQueueInvoice(invoice: InvoiceCockpitRow) {
 
 	return (
 		<Link
-			className="flex flex-col gap-2 py-3 outline-none transition-colors hover:text-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 sm:flex-row sm:items-start sm:justify-between"
+			className="focus-ring flex flex-col gap-2 py-3 outline-none transition-colors hover:text-primary sm:flex-row sm:items-start sm:justify-between"
 			href={`#${getInvoiceAnchorId(id)}`}
 		>
 			<span className="min-w-0">

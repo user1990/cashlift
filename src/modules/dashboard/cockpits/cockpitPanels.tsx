@@ -39,11 +39,9 @@ type CockpitOutlookCardProps = {
 };
 
 export const CockpitOutlookCard = ({ belowBuffer, dashboard }: CockpitOutlookCardProps) => (
-	<div id="cash-outlook">
+	<div className="scroll-mt-20" id="cash-outlook">
 		<GlassCard atmosphere="outlook">
-			<ExploreKicker>Future</ExploreKicker>
-
-			<h2 className="mt-1 text-panel-foreground text-xl+">13-week Cash Outlook</h2>
+			<h2 className="text-panel-foreground text-xl+">13-week Cash Outlook</h2>
 
 			{dashboard.lowestProjectedCashDate && dashboard.lowestProjectedCashCents !== undefined && (
 				<p className={belowBuffer ? "mt-1 text-s text-warning" : "mt-1 text-muted-foreground text-s"}>
@@ -70,9 +68,7 @@ type CockpitSupportCardProps = {
 
 export const CockpitSupportCard = ({ children, title }: CockpitSupportCardProps) => (
 	<GlassCard atmosphere="support">
-		<ExploreKicker>Supporting work</ExploreKicker>
-
-		<h2 className="mt-1 text-panel-foreground text-xl+">{title}</h2>
+		<h2 className="text-panel-foreground text-xl+">{title}</h2>
 
 		<div className="mt-5 grid gap-8 lg:grid-cols-12">{children}</div>
 	</GlassCard>

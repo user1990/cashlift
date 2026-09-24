@@ -47,7 +47,7 @@ export const FindSearchField = ({
 			aria-expanded={hasPopup}
 			autoComplete="off"
 			className={cn(
-				"h-12 w-full rounded-lg border py-3 text-l text-panel-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground focus:border-primary focus:ring-[3px] focus:ring-primary/20",
+				"focus-ring-input h-12 w-full rounded-lg border py-3 text-l text-panel-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground focus:border-primary",
 				hideShortcut ? "pr-4 pl-10" : "pr-20 pl-10",
 				glass ? "border-white/30 bg-panel/35 backdrop-blur-xl" : "border-shell-border bg-shell-elevated",
 			)}
@@ -79,7 +79,7 @@ export const FindCategoryChip = ({ children, onClick, selected = false }: FindCa
 	<button
 		aria-pressed={selected}
 		className={cn(
-			"inline-flex min-h-9 shrink-0 cursor-pointer items-center rounded-full border px-3 text-m outline-none transition-[background-color,border-color,color] duration-150 focus-visible:ring-[3px] focus-visible:ring-primary/20 motion-reduce:transition-none",
+			"focus-ring inline-flex min-h-9 shrink-0 cursor-pointer items-center rounded-full border px-3 text-m outline-none transition-[background-color,border-color,color] duration-150 motion-reduce:transition-none",
 			selected
 				? "border-primary/40 bg-primary/15 font-semibold text-panel-foreground"
 				: "border-transparent text-shell-muted hover:bg-white/5 hover:text-panel-foreground",
@@ -142,7 +142,7 @@ export const FindEmptyState = ({ title, actionLabel = "Clear all", detail, onCle
 
 		{onClear && (
 			<button
-				className="mt-4 inline-flex min-h-11 items-center font-semibold text-m text-primary outline-none hover:underline focus-visible:ring-[3px] focus-visible:ring-primary/20"
+				className="focus-ring mt-4 inline-flex min-h-11 items-center font-semibold text-m text-primary outline-none hover:underline"
 				onClick={onClear}
 				type="button"
 			>
@@ -176,7 +176,7 @@ export const FindResultRow = ({
 			aria-current={selected ? "true" : undefined}
 			href={item.actionHref}
 			className={cn(
-				"grid min-h-11 items-center gap-x-4 gap-y-1 border-transparent border-l-2 px-3 py-3 outline-none transition-[background-color,border-color] duration-150 focus-visible:ring-[3px] focus-visible:ring-primary/20",
+				"focus-ring grid min-h-11 items-center gap-x-4 gap-y-1 border-transparent border-l-2 px-3 py-3 outline-none transition-[background-color,border-color] duration-150",
 				showColumns
 					? "@xl:grid-cols-[minmax(0,1.5fr)_7.5rem_6.5rem_6rem_auto] grid-cols-[minmax(0,1fr)_auto]"
 					: "grid-cols-[minmax(0,1fr)_auto]",

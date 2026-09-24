@@ -10,7 +10,7 @@ export const WorkspaceFindTrigger = ({ className, onOpen }: WorkspaceFindTrigger
 	<button
 		aria-haspopup="dialog"
 		className={cn(
-			"ease inline-flex h-12 w-full items-center gap-3 rounded-xl border border-white/20 bg-panel/35 px-4 text-left text-m text-muted-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.08)] outline-none backdrop-blur-xl transition-[border-color,box-shadow] duration-150 hover:border-white/30 focus-visible:ring-[3px] focus-visible:ring-primary/20 motion-reduce:transition-none",
+			"ease focus-ring inline-flex h-12 w-full items-center gap-3 rounded-xl border border-white/20 bg-panel/35 px-4 text-left text-m text-muted-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.08)] outline-none backdrop-blur-xl transition-[border-color,box-shadow] duration-150 hover:border-white/30 motion-reduce:transition-none",
 			className,
 		)}
 		onClick={onOpen}
