@@ -1,5 +1,4 @@
-import { formatCurrency, formatCurrencyDollars, formatPreciseCompactCurrency } from "@/modules/money/format";
-import type { MoneyCents } from "@/modules/money/types";
+import { formatCurrencyDollars, formatPreciseCompactCurrency } from "@/modules/money/format";
 import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
 

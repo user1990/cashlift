@@ -12,7 +12,7 @@ Run the smallest relevant check while iterating, then run the complete appropria
 | Unit behavior and coverage thresholds | `pnpm test` |
 | Optional duplicate coverage report | `pnpm test:coverage` |
 | Workspace dataset performance budget | `pnpm run check:performance` |
-| Browser journeys (production build servers, Chromium/WebKit/mobile Chrome) | `pnpm test:e2e` |
+| Browser journeys (production build for production-mode suite; demo suite uses dev in CI) | `pnpm test:e2e` |
 | Code quality | `pnpm check:code` |
 | Dependency and repository security | `pnpm security:check` and `pnpm security:audit` |
 

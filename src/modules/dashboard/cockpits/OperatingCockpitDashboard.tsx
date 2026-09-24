@@ -10,7 +10,7 @@ import { OverviewDateRangePicker } from "../components/OverviewDateRangePicker";
 import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
 import { CockpitOutlookCard, CockpitStatusMetrics, CockpitSupportCard } from "./cockpitPanels";
-import { ExploreKicker, ExploreLink, PriorityCue, SupportNoteList } from "./cockpitUi";
+import { ExploreKicker, ExploreLink, PriorityCue } from "./cockpitUi";
 import { CASH_ACTION_NEXT_STEP, CASH_ACTION_WORK, type ExplorePresentation } from "./exploreModel";
 
 type CashAction = DashboardViewModel["actionInbox"][number];

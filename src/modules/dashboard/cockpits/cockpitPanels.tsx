@@ -6,7 +6,6 @@ import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 import { CashOutlookChart } from "../components/CashOutlookChart";
 import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
-import { ExploreKicker } from "./cockpitUi";
 
 type CockpitStatusMetricsProps = {
 	dashboard: DashboardViewModel;
