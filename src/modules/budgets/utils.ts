@@ -1,3 +1,4 @@
+import { getPercentage } from "@/modules/money/format";
 import type { TeamBudget } from "./types";
 
 export const getRemainingTeamBudget = ({
@@ -11,4 +12,12 @@ export const getTeamBudgetUsage = (budget: TeamBudget) => {
 	}
 
 	return (budget.committedCents / budget.monthlyBudgetCents) * 100;
+};
+
+export const getTeamBudgetUsageLabel = (usagePercent: number | undefined) => {
+	if (usagePercent === undefined) {
+		return "Usage unavailable";
+	}
+
+	return `${getPercentage(usagePercent)} used`;
 };

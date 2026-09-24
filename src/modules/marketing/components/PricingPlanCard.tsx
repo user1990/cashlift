@@ -38,7 +38,7 @@ export const PricingPlanCard = ({ billing, plan }: PricingPlanCardProps) => {
 						)}
 					</div>
 
-					<p className="mt-3 min-h-12 font-medium text-l text-shell-muted leading-6">{plan.description}</p>
+					<p className="mt-3 min-h-[2lh] font-medium text-l text-shell-muted leading-6">{plan.description}</p>
 				</header>
 
 				<div className="my-5 border-shell-border border-t" />

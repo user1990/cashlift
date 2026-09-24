@@ -227,10 +227,19 @@ export const OperatingCockpitDashboard = ({
 						<ul className="mt-4 grid gap-4 md:grid-cols-3">
 							{dashboard.budgetRows.map(({ id, remainingCents, team, usagePercent }) => (
 								<li key={id}>
-									<ProgressBar
-										label={`${team} · ${formatPreciseCompactCurrency(remainingCents)} ${remainingCents >= 0 ? "left" : "over budget"}`}
-										value={usagePercent}
-									/>
+									{usagePercent !== undefined && (
+										<ProgressBar
+											label={`${team} · ${formatPreciseCompactCurrency(remainingCents)} ${remainingCents >= 0 ? "left" : "over budget"}`}
+											value={usagePercent}
+										/>
+									)}
+
+									{usagePercent === undefined && (
+										<p className="text-m text-muted-foreground">
+											{team} · {formatPreciseCompactCurrency(remainingCents)}{" "}
+											{remainingCents >= 0 ? "left" : "over budget"} · Usage unavailable
+										</p>
+									)}
 								</li>
 							))}
 						</ul>
