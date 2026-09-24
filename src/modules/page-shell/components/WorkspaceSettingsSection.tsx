@@ -9,7 +9,6 @@ import {
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 import { ProgressBar } from "@/ui/components/feedback/ProgressBar";
-import { cn } from "@/ui/utils/cn";
 import { WorkspaceRoleCue } from "./WorkspaceRoleCue";
 
 type WorkspaceSettingsSectionProps = {
