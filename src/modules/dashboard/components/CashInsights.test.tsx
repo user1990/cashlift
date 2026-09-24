@@ -9,7 +9,7 @@ vi.mock("../hooks/useDashboardStatusDate", () => ({
 
 import { formatCurrency, formatPreciseCompactCurrency } from "@/modules/money/format";
 import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
-import { buildCashInsightsPresentation } from "../explore/cashInsightsModel";
+import { buildCashInsightsPresentation } from "../cockpits/cashInsightsModel";
 import { buildDashboardViewModel } from "../view-model";
 import { CashInsights } from "./CashInsights";
 

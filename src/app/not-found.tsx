@@ -2,7 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { ActionLink } from "@/modules/marketing/components/ActionLink";
 import { Shell } from "@/modules/marketing/components/Shell";
-import { MainContent } from "@/modules/page-shell/components/MainContent";
+import { MainContent } from "@/ui/components/layout/MainContent";
 
 export default function NotFound() {
 	return (

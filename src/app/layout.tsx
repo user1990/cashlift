@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { connection } from "next/server";
 import { SITE_META } from "@/modules/marketing/site";
-import { MAIN_CONTENT_ID } from "@/modules/page-shell/components/MainContent";
 import { SITE_URL } from "@/services/site";
+import { MAIN_CONTENT_ID } from "@/ui/components/layout/MainContent";
 import { ClientTelemetry } from "./ClientTelemetry";
 import "./globals.css";
 

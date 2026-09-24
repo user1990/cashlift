@@ -1,4 +1,4 @@
-import { GlassCard } from "@/modules/dashboard/explore/GlassCard";
+import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 import { Panel } from "@/ui/components/layout/Panel";
 import { PanelHeader } from "@/ui/components/layout/PanelHeader";
 import type { WorkspaceSection } from "../types";

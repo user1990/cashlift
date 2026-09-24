@@ -1,12 +1,11 @@
 "use client";
 
 import type { FinancialDataset, WorkspaceDatasetDateRange } from "@/modules/workspace/types";
-import { DashboardCockpit } from "../explore/DashboardCockpit";
+import { DashboardCockpit } from "../cockpits/DashboardCockpit";
 
 type OverviewProps = {
 	dataset: FinancialDataset;
 	basePath?: string;
-	bufferDataset?: FinancialDataset;
 	dateRange?: WorkspaceDatasetDateRange;
 	onDateRangeChange?: (dateRange: WorkspaceDatasetDateRange) => void;
 	readOnly?: boolean;

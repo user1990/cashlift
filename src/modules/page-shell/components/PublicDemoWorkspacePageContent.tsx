@@ -12,7 +12,6 @@ export const PublicDemoWorkspacePageContent = ({ dataset, experience, section }:
 
 	return (
 		<WorkspacePageView
-			bufferDataset={dataset}
 			dataset={visibleDataset}
 			dateRange={dateRange}
 			experience={experience}

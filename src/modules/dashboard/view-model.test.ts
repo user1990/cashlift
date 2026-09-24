@@ -26,17 +26,18 @@ describe("dashboard view model", () => {
 		expect(dashboard.actionInbox[0].title).toEqual("Decide on BrandForge annual renewal");
 	});
 
-	it("keeps overdue invoice risk when the overview range is shorter", () => {
+	it("keeps overdue invoice risk when the overview window excludes due dates", () => {
 		const date = new Date("2026-05-09");
 		const dashboard = buildDashboardViewModel({
-			bufferDataset: financialDatasetFixture,
-			dataset: reduceDatasetForDateRange(financialDatasetFixture, { endDate: "2026-05-20", startDate: "2026-05-13" }),
+			dataset: reduceDatasetForDateRange(financialDatasetFixture, {
+				endDate: "2026-05-20",
+				startDate: "2026-05-20",
+			}),
 			date,
 			role: "owner-finance",
 		});
 
 		expect(dashboard.invoiceRiskCents).toEqual(1_840_000);
-		expect(dashboard.overdueInvoices).toHaveLength(1);
 	});
 
 	it("keeps the 14-day buffer risk when the overview range is shorter", () => {
@@ -50,7 +51,6 @@ describe("dashboard view model", () => {
 		};
 		const date = new Date("2026-05-09");
 		const dashboard = buildDashboardViewModel({
-			bufferDataset: riskDataset,
 			dataset: reduceDatasetForDateRange(riskDataset, { endDate: "2026-05-09", startDate: "2026-05-09" }),
 			date,
 			role: "owner-finance",

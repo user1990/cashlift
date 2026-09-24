@@ -1,4 +1,4 @@
-import { TeamBudgetsDashboard } from "@/modules/dashboard/explore/TeamBudgetsDashboard";
+import { TeamBudgetsDashboard } from "@/modules/dashboard/cockpits/TeamBudgetsDashboard";
 import type { FinancialDataset } from "@/modules/workspace/types";
 
 type WorkspaceBudgetsSectionProps = {

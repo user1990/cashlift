@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
-import logo from "@/app/logo.svg";
+import logo from "@/ui/assets/logo.svg";
 import { getWorkspaceNavGroups, isWorkspaceNavItemActive } from "../navigation";
 import type { WorkspaceExperienceContract } from "../types";
 import { WorkspaceAccountMenu } from "./WorkspaceAccountMenu";

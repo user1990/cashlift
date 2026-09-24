@@ -11,9 +11,8 @@ describe("workspace read models", () => {
 
 		expect(dataset.forecast.map((point) => point.date)).toEqual(["2026-05-13", "2026-05-20"]);
 		expect(dataset.cashActions.map((action) => action.dueDate)).toEqual(["2026-05-10", "2026-05-12", "2026-05-13"]);
-		expect(
-			dataset.invoices.every((invoice) => invoice.dueDate >= "2026-05-10" && invoice.dueDate <= "2026-05-20"),
-		).toBe(true);
+		expect(dataset.invoices).toBe(financialDatasetFixture.invoices);
+		expect(dataset.spendRequests).toBe(financialDatasetFixture.spendRequests);
 		expect(dataset.profile).toBe(financialDatasetFixture.profile);
 		expect(dataset.teamBudgets).toBe(financialDatasetFixture.teamBudgets);
 	});

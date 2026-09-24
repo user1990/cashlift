@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MainContent } from "@/modules/page-shell/components/MainContent";
+import { MainContent } from "@/ui/components/layout/MainContent";
 import { cn } from "@/ui/utils/cn";
 import type { USE_CASES } from "../content";
 import type { UseCaseReferenceDecision } from "../types";

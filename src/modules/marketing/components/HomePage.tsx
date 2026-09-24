@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MainContent } from "@/modules/page-shell/components/MainContent";
+import { MainContent } from "@/ui/components/layout/MainContent";
 import { HOME_NOSCRIPT } from "../site";
 import type { HomeDecisionStoryAction } from "../types";
 import { HomeDecisionStorySection } from "./HomeDecisionStorySection";

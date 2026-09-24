@@ -1,15 +1,15 @@
-import { ExploreKicker, ExploreMoney } from "@/modules/dashboard/explore/exploreUi";
-import { GlassCard } from "@/modules/dashboard/explore/GlassCard";
+import { ExploreKicker, ExploreMoney } from "@/modules/dashboard/cockpits/cockpitUi";
 import { formatDashboardDate } from "@/modules/dashboard/overviewDateRangeLabel";
 import { getPercentage } from "@/modules/money/format";
-import type { FinancialDataset } from "@/modules/workspace/types";
 import {
 	buildVendorsPresentation,
 	SUBSCRIPTION_STATUS_LABELS,
 	VENDOR_BILL_CATEGORY_LABELS,
 	VENDOR_BILL_STATUS_LABELS,
 	type VendorsPresentation,
-} from "../vendorsPresentation";
+} from "@/modules/vendors/presentation";
+import type { FinancialDataset } from "@/modules/workspace/types";
+import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 
 type WorkspaceVendorsSectionProps = {
 	dataset: FinancialDataset;

@@ -1,6 +1,6 @@
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { MainContent } from "@/modules/page-shell/components/MainContent";
+import { MainContent } from "@/ui/components/layout/MainContent";
 import type { HelpFaqArticle, HelpFaqItem } from "../content";
 import { getHelpFaqHref, slugifyHelpFaqValue } from "../utils";
 import { HelpContactPanel } from "./HelpContactPanel";

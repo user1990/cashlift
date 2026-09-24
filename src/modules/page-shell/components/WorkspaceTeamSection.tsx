@@ -1,6 +1,6 @@
-import { ExploreKicker, ExploreLink } from "@/modules/dashboard/explore/exploreUi";
-import { GlassCard } from "@/modules/dashboard/explore/GlassCard";
+import { ExploreKicker, ExploreLink } from "@/modules/dashboard/cockpits/cockpitUi";
 import type { FinancialDataset } from "@/modules/workspace/types";
+import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 import { cn } from "@/ui/utils/cn";
 
 type TeamMember = FinancialDataset["teamMembers"][number];

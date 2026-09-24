@@ -1,17 +1,11 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useDashboardStatusDate } from "@/modules/dashboard/hooks/useDashboardStatusDate";
 import { getInvoiceRiskTotal } from "@/modules/invoices/utils";
 import type { FinancialDataset } from "@/modules/workspace/types";
-import { subscribeToBrowserMidnight } from "@/utilities/dates/subscribeToBrowserMidnight";
 
-export const useInvoiceRiskTotal = (invoices: FinancialDataset["invoices"]) =>
-	useSyncExternalStore(
-		subscribeToBrowserMidnight,
-		() => getInvoiceRiskTotal(invoices, new Date()),
-		getServerInvoiceRiskTotal,
-	);
+export const useInvoiceRiskTotal = (invoices: FinancialDataset["invoices"], dataset: FinancialDataset) => {
+	const asOf = useDashboardStatusDate(dataset);
 
-function getServerInvoiceRiskTotal() {
-	return undefined;
-}
+	return getInvoiceRiskTotal(invoices, asOf);
+};

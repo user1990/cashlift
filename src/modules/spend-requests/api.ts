@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { SPEND_REQUEST_SCHEMA } from "./schemas";
-import type { SpendRequestStatus } from "./types";
+import type { SpendRequestDecisionStatus } from "./types";
 
-export type SpendRequestDecisionStatus = Exclude<SpendRequestStatus, "pending">;
+export type { SpendRequestDecisionStatus };
 
 export type SpendRequestDecisionRequest = {
 	id: string;

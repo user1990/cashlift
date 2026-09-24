@@ -1,7 +1,7 @@
-import { MainContent } from "@/modules/page-shell/components/MainContent";
 import { WorkspaceProviders } from "@/modules/page-shell/components/WorkspaceProviders";
 import { WorkspaceShell } from "@/modules/page-shell/components/WorkspaceShell";
 import { getWorkspaceRuntimeConfig, workspaceDemoEnabled } from "@/services/env/app";
+import { MainContent } from "@/ui/components/layout/MainContent";
 
 type DashboardLayoutProps = {
 	children: React.ReactNode;

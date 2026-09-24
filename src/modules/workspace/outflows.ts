@@ -4,7 +4,7 @@ import { sumAmounts } from "@/utilities/amounts/sumAmounts";
 import { dueWithinWindow } from "@/utilities/dates/dueWithinWindow";
 import type { FinancialDataset } from "./types";
 
-export const getUpcomingOutflowTotal = (dataset: FinancialDataset, date = new Date(), days = 14) => {
+export const getUpcomingOutflowTotal = (dataset: FinancialDataset, date: Date, days = 14) => {
 	const dueVendorBills = dataset.vendorBills.filter((bill) => dueWithinWindow(bill.dueDate, date, days));
 	const dueSubscriptions = dataset.subscriptions.filter((subscription) =>
 		dueWithinWindow(subscription.renewalDate, date, days),
@@ -20,7 +20,7 @@ export const getUpcomingOutflowTotal = (dataset: FinancialDataset, date = new Da
 	);
 };
 
-export const getDueVendorBills = (bills: VendorBill[], date = new Date(), days = 14) =>
+export const getDueVendorBills = (bills: VendorBill[], date: Date, days = 14) =>
 	bills
 		.filter((bill) => dueWithinWindow(bill.dueDate, date, days))
 		.toSorted((left, right) => parseISO(left.dueDate).getTime() - parseISO(right.dueDate).getTime());
