@@ -9,6 +9,7 @@ import {
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 import { ProgressBar } from "@/ui/components/feedback/ProgressBar";
+import { WorkspaceMemberRow } from "./WorkspaceMemberRow";
 import { WorkspaceRoleCue } from "./WorkspaceRoleCue";
 
 type WorkspaceSettingsSectionProps = {
@@ -208,7 +209,9 @@ export const WorkspaceSettingsSection = ({ basePath, dataset, readOnly = false }
 						{presentation.remainingMembers.length > 0 && (
 							<ul className="mt-3 divide-y divide-white/10">
 								{presentation.remainingMembers.map((member) => (
-									<li key={member.id}>{renderMemberRow(member)}</li>
+									<li key={member.id}>
+										<WorkspaceMemberRow member={member} />
+									</li>
 								))}
 							</ul>
 						)}
@@ -239,22 +242,6 @@ function renderConfigRow(config: SettingsConfigRow) {
 			) : (
 				<span className="shrink-0 font-semibold text-m+ text-panel-foreground">{config.value}</span>
 			)}
-		</div>
-	);
-}
-
-function renderMemberRow(member: TeamMember) {
-	return (
-		<div className="flex flex-col gap-2 py-3 sm:flex-row sm:items-start sm:justify-between">
-			<span className="min-w-0">
-				<span className="flex flex-wrap items-center gap-x-3 gap-y-1">
-					<WorkspaceRoleCue role={member.role} />
-
-					<span className="text-muted-foreground text-s">{member.team}</span>
-				</span>
-
-				<span className="mt-1 block font-semibold text-m+ text-panel-foreground">{member.name}</span>
-			</span>
 		</div>
 	);
 }
