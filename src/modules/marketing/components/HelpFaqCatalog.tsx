@@ -14,7 +14,7 @@ import {
 	X,
 } from "lucide-react";
 import Link from "next/link";
-import type { KeyboardEvent as ReactKeyboardEvent, RefObject } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent, ReactNode, RefObject } from "react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/ui/utils/cn";
 import type { HelpFaqIconName } from "../content";
@@ -473,28 +473,58 @@ function EmptyState({ onClear, query }: { onClear: () => void; query: string }) 
 }
 
 function HighlightText({ query, text }: { query: string; text: string }) {
-	const terms = query.split(/\s+/).filter(Boolean);
-	const escapedTerms = terms.map((term) => escapeRegExp(term));
+	const terms = parseHelpFaqQuery(query).split(/\s+/).filter(Boolean);
 
 	if (terms.length === 0) {
 		return text;
 	}
 
-	const parts = text.split(new RegExp(`(${escapedTerms.join("|")})`, "gi"));
-	const occurrences = new Map<string, number>();
+	const nodes: ReactNode[] = [];
+	let cursor = 0;
+	let segmentIndex = 0;
 
-	return parts.map((part) => {
-		const occurrence = occurrences.get(part) ?? 0;
-		occurrences.set(part, occurrence + 1);
+	while (cursor < text.length) {
+		const nextMatch = findNextHelpFaqHighlight(text, terms, cursor);
 
-		return terms.some((term) => term.toLocaleLowerCase() === part.toLocaleLowerCase()) ? (
-			<mark key={`${part}-${occurrence}`} className="rounded bg-primary/20 px-0.5 text-primary">
-				{part}
-			</mark>
-		) : (
-			part
+		if (!nextMatch) {
+			nodes.push(text.slice(cursor));
+			break;
+		}
+
+		if (nextMatch.index > cursor) {
+			nodes.push(text.slice(cursor, nextMatch.index));
+		}
+
+		nodes.push(
+			<mark key={`${nextMatch.index}-${segmentIndex}`} className="rounded bg-primary/20 px-0.5 text-primary">
+				{text.slice(nextMatch.index, nextMatch.index + nextMatch.length)}
+			</mark>,
 		);
-	});
+
+		cursor = nextMatch.index + nextMatch.length;
+		segmentIndex += 1;
+	}
+
+	return nodes;
+}
+
+function findNextHelpFaqHighlight(text: string, terms: readonly string[], cursor: number) {
+	const lowerText = text.toLocaleLowerCase();
+	let nextMatch: { index: number; length: number } | undefined;
+
+	for (const term of terms) {
+		const index = lowerText.indexOf(term.toLocaleLowerCase(), cursor);
+
+		if (index < 0) {
+			continue;
+		}
+
+		if (!nextMatch || index < nextMatch.index) {
+			nextMatch = { index, length: term.length };
+		}
+	}
+
+	return nextMatch;
 }
 
 function flattenHelpFaqGroups(groups: readonly HelpFaqGroupLike[]): HelpFaqResult[] {
@@ -520,10 +550,6 @@ function findResult(results: readonly HelpFaqResult[], groupName: string, questi
 
 function resultDomId(id: string) {
 	return `help-faq-result-${id}`;
-}
-
-function escapeRegExp(value: string) {
-	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function HelpFaqIcon({ iconName }: { iconName: HelpFaqIconName | undefined }) {
