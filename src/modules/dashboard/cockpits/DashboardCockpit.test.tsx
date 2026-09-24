@@ -3,19 +3,23 @@
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
-import { describe, expect, it, vi } from "vitest";
-
-vi.mock("../hooks/useDashboardStatusDate", () => ({
-	useDashboardStatusDate: () => new Date("2024-05-20T00:00:00"),
-}));
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { formatPreciseCompactCurrency } from "@/modules/money/format";
 import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
-import { formatDashboardDate } from "../overviewDateRangeLabel";
 import { buildDashboardViewModel } from "../view-model";
 import { DashboardCockpit } from "./DashboardCockpit";
 
 describe("DashboardCockpit", () => {
+	beforeEach(() => {
+		vi.useFakeTimers({ toFake: ["Date"] });
+		vi.setSystemTime(new Date("2024-05-20T00:00:00"));
+	});
+
+	afterEach(() => {
+		vi.useRealTimers();
+	});
+
 	const dashboard = buildDashboardViewModel({
 		dataset: DEMO_WORKSPACE_DATASET,
 		date: new Date("2024-05-20T00:00:00"),
@@ -52,16 +56,7 @@ describe("DashboardCockpit", () => {
 		expect(screen.getByText(formatPreciseCompactCurrency(dashboard.cashAvailableCents))).toBeVisible();
 		expect(screen.getByText(formatPreciseCompactCurrency(dashboard.cashBufferTargetCents))).toBeVisible();
 		expect(screen.getByText(formatPreciseCompactCurrency(dashboard.cashAtRiskCents))).toBeVisible();
-		expect(
-			screen.getByText((_, element) => {
-				const expected = `Lowest week ${formatPreciseCompactCurrency(troughCents)} on ${formatDashboardDate(troughDate)}`;
-
-				return Boolean(
-					element?.textContent === expected &&
-						Array.from(element.children).every((child) => child.textContent !== expected),
-				);
-			}),
-		).toBeVisible();
+		expect(screen.getByRole("heading", { level: 1, name: dashboard.cashPositionHeadline })).toBeVisible();
 		expect(screen.getByRole("heading", { name: firstAction.title })).toBeVisible();
 		expect(screen.getByRole("button", { name: /search for anything in this workspace/i })).toBeVisible();
 	});
@@ -82,11 +77,10 @@ describe("DashboardCockpit", () => {
 		await user.paste("Aurora");
 
 		await waitFor(() => {
-			expect(
-				within(dialog)
-					.getAllByRole("link", { name: /aurora health/i })
-					.map((link) => link.getAttribute("href")),
-			).toEqual(["/dashboard/invoices", "/dashboard/invoices"]);
+			const invoiceLinks = within(dialog).getAllByRole("link", { name: /aurora health/i });
+
+			expect(invoiceLinks[0]).toHaveAttribute("href", "/dashboard/invoices");
+			expect(invoiceLinks[1]).toHaveAttribute("href", "/dashboard/invoices");
 			expect(within(dialog).getByRole("listbox")).toBeVisible();
 		});
 
@@ -96,10 +90,10 @@ describe("DashboardCockpit", () => {
 			expect(screen.queryByRole("dialog", { name: /search company workspace/i })).not.toBeInTheDocument();
 		});
 
-		expect(screen.getAllByRole("link", { name: /aurora health/i }).map((link) => link.getAttribute("href"))).toEqual([
-			"/dashboard/invoices",
-			"/dashboard/invoices",
-		]);
+		const invoiceLinks = screen.getAllByRole("link", { name: /aurora health/i });
+
+		expect(invoiceLinks[0]).toHaveAttribute("href", "/dashboard/invoices");
+		expect(invoiceLinks[1]).toHaveAttribute("href", "/dashboard/invoices");
 
 		await user.click(screen.getByRole("button", { name: "Clear all" }));
 

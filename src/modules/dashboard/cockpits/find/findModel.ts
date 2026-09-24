@@ -29,6 +29,7 @@ export type FindItem = {
 	title: string;
 	work: FindWork;
 	team?: string;
+	searchHaystack: string;
 };
 
 export type FindQuery = {
@@ -147,7 +148,9 @@ export const buildFindItems = (dataset: FinancialDataset, basePath: string): Fin
 		work: "review" as const,
 	}));
 
-	return [...cashActions, ...invoices, ...spendRequests, ...subscriptions, ...vendorBills, ...budgets];
+	return [...cashActions, ...invoices, ...spendRequests, ...subscriptions, ...vendorBills, ...budgets].map(
+		attachFindSearchHaystack,
+	);
 };
 
 export const filterFindItems = (items: FindItem[], query: FindQuery, categoryMode: "kind" | "work") =>
@@ -211,7 +214,7 @@ function itemMatchesFindQuery(item: FindItem, query: FindQuery, categoryMode: "k
 		(query.category === "all" || categoryValue === query.category) &&
 		(!query.status || item.status === query.status) &&
 		(!query.owner || item.owner === query.owner) &&
-		(!normalizedQuery || getFindHaystack(item).includes(normalizedQuery))
+		(!normalizedQuery || item.searchHaystack.includes(normalizedQuery))
 	);
 }
 
@@ -235,6 +238,13 @@ function normalizeFindQuery(query: string) {
 	return query.trim().toLowerCase();
 }
 
-function getFindHaystack(item: FindItem) {
-	return [item.title, item.subtitle, item.owner, item.status, item.kindLabel, item.team ?? ""].join(" ").toLowerCase();
+type FindItemDraft = Omit<FindItem, "searchHaystack">;
+
+function attachFindSearchHaystack(item: FindItemDraft): FindItem {
+	return {
+		...item,
+		searchHaystack: [item.title, item.subtitle, item.owner, item.status, item.kindLabel, item.team ?? ""]
+			.join(" ")
+			.toLowerCase(),
+	};
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { GlassCard } from "@/ui/components/cockpit/GlassCard";
@@ -16,10 +17,11 @@ type WorkspaceFindShellProps = {
 };
 
 export const WorkspaceFindShell = ({ basePath, children, dataset }: WorkspaceFindShellProps) => {
+	const router = useRouter();
 	const items = buildFindItems(dataset, basePath);
-	const session = useFindSession(items, "work");
+	const session = useFindSession(items, "work", (href) => router.push(href));
 	const findActive =
-		Boolean(session.query.query) || hasActiveFindFilters(session.query) || session.query.category !== "all";
+		Boolean(session.query.query.trim()) || hasActiveFindFilters(session.query) || session.query.category !== "all";
 
 	return (
 		<div className="space-y-6">

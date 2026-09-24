@@ -1,12 +1,7 @@
 // @vitest-environment jsdom
 
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
-
-vi.mock("../hooks/useDashboardStatusDate", () => ({
-	useDashboardStatusDate: () => new Date("2024-05-20T00:00:00"),
-}));
-
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { formatCurrency, formatPreciseCompactCurrency } from "@/modules/money/format";
 import { DEMO_WORKSPACE_DATASET } from "@/modules/workspace/demoDataset";
 import { buildCashInsightsPresentation } from "../cockpits/cashInsightsModel";
@@ -14,6 +9,15 @@ import { buildDashboardViewModel } from "../view-model";
 import { CashInsights } from "./CashInsights";
 
 describe("CashInsights", () => {
+	beforeEach(() => {
+		vi.useFakeTimers({ toFake: ["Date"] });
+		vi.setSystemTime(new Date("2024-05-20T00:00:00"));
+	});
+
+	afterEach(() => {
+		vi.useRealTimers();
+	});
+
 	it("renders cash position, payroll, and outlook from the current dataset", () => {
 		const dashboard = buildDashboardViewModel({
 			dataset: DEMO_WORKSPACE_DATASET,

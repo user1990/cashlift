@@ -14,7 +14,10 @@ const COMPACT_CURRENCY_UNITS = [
 	{ suffix: "K", value: 1_000 },
 ] as const;
 
-export const formatCurrency = (cents: MoneyCents) => CURRENCY_FORMATTER.format(Math.abs(cents) / CENTS_IN_DOLLAR);
+export const formatCurrency = (cents: MoneyCents) => CURRENCY_FORMATTER.format(cents / CENTS_IN_DOLLAR);
+
+export const formatCurrencyMagnitude = (cents: MoneyCents) =>
+	CURRENCY_FORMATTER.format(Math.abs(cents) / CENTS_IN_DOLLAR);
 
 export const formatCurrencyDollars = (dollars: number) => CURRENCY_FORMATTER.format(dollars);
 

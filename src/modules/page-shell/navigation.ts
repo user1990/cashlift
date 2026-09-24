@@ -109,8 +109,11 @@ export const getActiveWorkspaceNavItem = (pathname: string, basePath: string): W
 		({ href }) => pathname === href || (href !== basePath && pathname.startsWith(`${href}/`)),
 	);
 
-	return matches.sort((left, right) => right.href.length - left.href.length)[0];
+	return matches.toSorted((left, right) => right.href.length - left.href.length)[0];
 };
+
+export const getActiveWorkspaceNavHref = (pathname: string, basePath: string) =>
+	getActiveWorkspaceNavItem(pathname, basePath)?.href;
 
 export const isWorkspaceNavItemActive = (pathname: string, href: string, basePath: string): boolean =>
 	getActiveWorkspaceNavItem(pathname, basePath)?.href === href;

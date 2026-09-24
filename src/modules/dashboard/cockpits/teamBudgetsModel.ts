@@ -5,7 +5,7 @@ import type { FinancialDataset } from "@/modules/workspace/types";
 
 export type TeamBudgetRow = FinancialDataset["teamBudgets"][number] & {
 	remainingCents: MoneyCents;
-	usagePercent: number;
+	usagePercent: number | undefined;
 };
 
 export const buildTeamBudgetsPresentation = (dataset: FinancialDataset) => {
@@ -53,7 +53,7 @@ const compareTeamBudgetRows = (left: TeamBudgetRow, right: TeamBudgetRow) => {
 		return left.remainingCents - right.remainingCents;
 	}
 
-	return right.usagePercent - left.usagePercent;
+	return (right.usagePercent ?? 0) - (left.usagePercent ?? 0);
 };
 
 const sumCents = (

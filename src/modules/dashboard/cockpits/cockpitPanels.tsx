@@ -4,8 +4,25 @@ import { MoneyDisplay } from "@/modules/money/components/MoneyDisplay";
 import type { MoneyCents } from "@/modules/money/types";
 import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 import { CashOutlookChart } from "../components/CashOutlookChart";
+import { getCashOutlookSectionTitle } from "../outlookChartLabel";
 import { formatDashboardDate } from "../overviewDateRangeLabel";
 import type { DashboardViewModel } from "../types";
+
+type CockpitStatusCardProps = {
+	children: ReactNode;
+	contextLine: string;
+	headline: string;
+};
+
+export const CockpitStatusCard = ({ children, contextLine, headline }: CockpitStatusCardProps) => (
+	<GlassCard atmosphere="status">
+		<p className="text-muted-foreground text-s">{contextLine}</p>
+
+		<h1 className="mt-3 max-w-4xl font-semibold text-3xl+ text-panel-foreground tracking-normal">{headline}</h1>
+
+		<dl className="mt-6 grid gap-5 sm:grid-cols-3">{children}</dl>
+	</GlassCard>
+);
 
 type CockpitStatusMetricsProps = {
 	dashboard: DashboardViewModel;
@@ -37,28 +54,32 @@ type CockpitOutlookCardProps = {
 	belowBuffer: boolean;
 };
 
-export const CockpitOutlookCard = ({ belowBuffer, dashboard }: CockpitOutlookCardProps) => (
-	<div className="scroll-mt-20" id="cash-outlook">
-		<GlassCard atmosphere="outlook">
-			<h2 className="text-panel-foreground text-xl+">13-week Cash Outlook</h2>
+export const CockpitOutlookCard = ({ belowBuffer, dashboard }: CockpitOutlookCardProps) => {
+	const weekCount = dashboard.forecastChartData.length;
 
-			{dashboard.lowestProjectedCashDate && dashboard.lowestProjectedCashCents !== undefined && (
-				<p className={belowBuffer ? "mt-1 text-s text-warning" : "mt-1 text-muted-foreground text-s"}>
-					Lowest week <MoneyDisplay cents={dashboard.lowestProjectedCashCents} /> on{" "}
-					{formatDashboardDate(dashboard.lowestProjectedCashDate)}
-				</p>
-			)}
+	return (
+		<div className="scroll-mt-20" id="cash-outlook">
+			<GlassCard atmosphere="outlook">
+				<h2 className="text-panel-foreground text-xl+">{getCashOutlookSectionTitle(weekCount)}</h2>
 
-			<div className="mt-4">
-				<CashOutlookChart
-					bufferTargetCents={dashboard.cashBufferTargetCents}
-					chartData={dashboard.forecastChartData}
-					lowestProjectedCashDate={dashboard.lowestProjectedCashDate}
-				/>
-			</div>
-		</GlassCard>
-	</div>
-);
+				{dashboard.lowestProjectedCashDate && dashboard.lowestProjectedCashCents !== undefined && (
+					<p className={belowBuffer ? "mt-1 text-s text-warning" : "mt-1 text-muted-foreground text-s"}>
+						Lowest week <MoneyDisplay cents={dashboard.lowestProjectedCashCents} /> on{" "}
+						{formatDashboardDate(dashboard.lowestProjectedCashDate)}
+					</p>
+				)}
+
+				<div className="mt-4">
+					<CashOutlookChart
+						bufferTargetCents={dashboard.cashBufferTargetCents}
+						chartData={dashboard.forecastChartData}
+						lowestProjectedCashDate={dashboard.lowestProjectedCashDate}
+					/>
+				</div>
+			</GlassCard>
+		</div>
+	);
+};
 
 type CockpitSupportCardProps = {
 	children: ReactNode;

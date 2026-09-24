@@ -1,4 +1,5 @@
 import { getUpcomingInvoiceTotal } from "@/modules/invoices/utils";
+import { sumAmounts } from "@/utilities/amounts/sumAmounts";
 import { getUpcomingOutflowTotal } from "./outflows";
 import type { FinancialDataset } from "./types";
 
@@ -13,11 +14,18 @@ export const getCashBufferRisk = (dataset: FinancialDataset, date: Date) =>
 	Math.max(0, dataset.profile.cashBufferTargetCents - getProjectedCashBalance(dataset, date));
 
 export const getRunwayDays = (dataset: FinancialDataset) => {
-	const recurringMonthlySpend =
-		dataset.profile.monthlyPayrollCents +
-		dataset.vendorBills.filter((bill) => bill.essential).reduce((total, bill) => total + bill.amountCents, 0) +
-		dataset.subscriptions.reduce((total, subscription) => total + subscription.amountCents, 0);
-	const dailySpend = Math.max(1, Math.round(recurringMonthlySpend / DAYS_IN_MONTH));
+	const essentialBillTotal = sumAmounts(
+		dataset.vendorBills.filter((bill) => bill.essential),
+		(bill) => bill.amountCents,
+	);
+	const subscriptionTotal = sumAmounts(dataset.subscriptions, (subscription) => subscription.amountCents);
+	const recurringMonthlySpend = dataset.profile.monthlyPayrollCents + essentialBillTotal + subscriptionTotal;
+
+	if (recurringMonthlySpend <= 0) {
+		return undefined;
+	}
+
+	const dailySpend = Math.round(recurringMonthlySpend / DAYS_IN_MONTH);
 
 	return Math.floor(dataset.profile.cashBalanceCents / dailySpend);
 };

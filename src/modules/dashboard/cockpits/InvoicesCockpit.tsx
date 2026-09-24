@@ -28,8 +28,7 @@ type InvoicesCockpitProps = {
 
 /** Throwaway prototype: invoices page using the overview liquid-glass cockpit. */
 export const InvoicesCockpit = ({ asOf, basePath = "/dashboard", dataset, invoiceRiskTotal }: InvoicesCockpitProps) => {
-	const asOfDate = asOf ?? (invoiceRiskTotal === undefined ? undefined : new Date());
-	const presentation = buildInvoicesCockpitPresentation({ asOfDate, dataset, invoiceRiskTotal });
+	const presentation = buildInvoicesCockpitPresentation({ asOfDate: asOf, dataset, invoiceRiskTotal });
 
 	return (
 		<WorkspaceFindShell basePath={basePath} dataset={dataset}>

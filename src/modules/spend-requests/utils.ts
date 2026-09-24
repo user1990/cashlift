@@ -1,4 +1,4 @@
-import { formatCurrency } from "@/modules/money/format";
+import { formatCurrency, formatCurrencyMagnitude } from "@/modules/money/format";
 import type { MoneyCents } from "@/modules/money/types";
 import type { SpendRequest } from "./types";
 
@@ -15,4 +15,4 @@ export const getSpendRequestCashImpact = (request: SpendRequest, dataset: SpendR
 	dataset.profile.cashBalanceCents - request.amountCents;
 
 export const formatCashAfterApproval = (cents: MoneyCents) =>
-	cents < 0 ? `short by ${formatCurrency(cents)}` : formatCurrency(cents);
+	cents < 0 ? `short by ${formatCurrencyMagnitude(cents)}` : formatCurrency(cents);

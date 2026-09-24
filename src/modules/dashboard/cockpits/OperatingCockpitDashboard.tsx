@@ -44,7 +44,11 @@ export const OperatingCockpitDashboard = ({
 					</p>
 
 					<div className="flex flex-wrap items-center gap-3">
-						<p className="text-muted-foreground text-s">{dashboard.runwayDays} days runway (monthly estimate)</p>
+						<p className="text-muted-foreground text-s">
+							{dashboard.runwayDays !== undefined
+								? `${dashboard.runwayDays} days runway (monthly estimate)`
+								: "Runway unavailable without recurring spend"}
+						</p>
 
 						<OverviewDateRangePicker
 							dateRange={dateRange}
@@ -223,10 +227,19 @@ export const OperatingCockpitDashboard = ({
 						<ul className="mt-4 grid gap-4 md:grid-cols-3">
 							{dashboard.budgetRows.map(({ id, remainingCents, team, usagePercent }) => (
 								<li key={id}>
-									<ProgressBar
-										label={`${team} · ${formatPreciseCompactCurrency(remainingCents)} ${remainingCents >= 0 ? "left" : "over budget"}`}
-										value={usagePercent}
-									/>
+									{usagePercent !== undefined && (
+										<ProgressBar
+											label={`${team} · ${formatPreciseCompactCurrency(remainingCents)} ${remainingCents >= 0 ? "left" : "over budget"}`}
+											value={usagePercent}
+										/>
+									)}
+
+									{usagePercent === undefined && (
+										<p className="text-m text-muted-foreground">
+											{team} · {formatPreciseCompactCurrency(remainingCents)}{" "}
+											{remainingCents >= 0 ? "left" : "over budget"} · Usage unavailable
+										</p>
+									)}
 								</li>
 							))}
 						</ul>

@@ -28,6 +28,23 @@ export const getHelpFaqHref = (slug: string, query: string) => {
 	return normalizedQuery ? `/help/${slug}?q=${encodeURIComponent(normalizedQuery)}` : `/help/${slug}`;
 };
 
+const parsePricingDollarAmount = (value: string) => {
+	const numeric = Number(value.replace(/[^\d.]/g, ""));
+
+	return Number.isFinite(numeric) ? numeric : undefined;
+};
+
+export const getAnnualPricingSavingsPercent = (monthlyPrice: string, annualPrice: string) => {
+	const monthly = parsePricingDollarAmount(monthlyPrice);
+	const annual = parsePricingDollarAmount(annualPrice);
+
+	if (monthly === undefined || annual === undefined || monthly <= 0) {
+		return undefined;
+	}
+
+	return Math.round((1 - annual / monthly) * 100);
+};
+
 export const filterHelpFaqGroups = <T extends HelpFaqGroupLike>(groups: readonly T[], query: string) => {
 	const searchTerms = parseHelpFaqQuery(query).toLocaleLowerCase().split(/\s+/).filter(Boolean);
 
