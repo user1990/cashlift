@@ -18,7 +18,5 @@ export const SPEND_REQUEST_SCHEMA = z.object({
 
 export const SPEND_REQUEST_DECISION_SCHEMA = z.object({
 	id: z.string().min(1),
-	status: z.enum(["approved", "rejected"]),
+	status: SPEND_REQUEST_STATUS_SCHEMA.extract(["approved", "rejected"]),
 });
-
-export type SpendRequestDecisionInput = z.infer<typeof SPEND_REQUEST_DECISION_SCHEMA>;

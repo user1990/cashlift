@@ -8,6 +8,8 @@ describe("SPEND_REQUEST_DECISION_SCHEMA", () => {
 		["approved", true],
 		["rejected", true],
 		["pending", false],
+		["cancelled", false],
+		["", false],
 	])("accepts only final decision statuses", (status, valid) => {
 		expect(SPEND_REQUEST_DECISION_SCHEMA.safeParse({ id: REQUEST_ID_MOCK, status }).success).toBe(valid);
 	});

@@ -1,19 +1,14 @@
 import { z } from "zod";
 import { SPEND_REQUEST_SCHEMA } from "./schemas";
-import type { SpendRequestDecisionStatus } from "./types";
+import type { SpendRequestDecisionInput, SpendRequestDecisionStatus } from "./types";
 
-export type { SpendRequestDecisionStatus };
-
-export type SpendRequestDecisionRequest = {
-	id: string;
-	status: SpendRequestDecisionStatus;
-};
+export type { SpendRequestDecisionInput, SpendRequestDecisionStatus };
 
 const API_ERROR_SCHEMA = z.object({
 	error: z.string().optional(),
 });
 
-export const decideSpendRequest = async ({ id, status }: SpendRequestDecisionRequest) => {
+export const decideSpendRequest = async ({ id, status }: SpendRequestDecisionInput) => {
 	const response = await fetch(`/api/v1/workspace/spend-requests/${encodeURIComponent(id)}`, {
 		body: JSON.stringify({ status }),
 		headers: {

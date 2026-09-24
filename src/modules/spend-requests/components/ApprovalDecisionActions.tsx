@@ -3,15 +3,15 @@
 import { Check, X } from "lucide-react";
 import { Button } from "@/ui/components/actions/Button";
 import { cn } from "@/ui/utils/cn";
-import type { SpendRequestDecisionRequest } from "../api";
+import type { SpendRequestDecisionInput } from "../types";
 
 type ApprovalDecisionActionsProps = {
 	disabled: boolean;
 	id: string;
-	onDecide: (decision: SpendRequestDecisionRequest) => void;
+	onDecide: (decision: SpendRequestDecisionInput) => void;
 	vendor: string;
 	className?: string;
-	pendingDecision?: SpendRequestDecisionRequest;
+	pendingDecision?: SpendRequestDecisionInput;
 	size?: "large" | "small";
 };
 
