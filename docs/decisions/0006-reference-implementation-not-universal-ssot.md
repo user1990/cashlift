@@ -17,6 +17,6 @@ CashLift encodes strong engineering conventions, but copying the entire reposito
 
 ## Consequences
 
-- Production-mode end-to-end tests run against production builds (`next build` + `next start`). Demo workspace journeys use a production build locally when `CASHLIFT_ALLOW_DEMO_PRODUCTION_BUILD` is set; CI keeps `pnpm dev` for demo suites until demo mode is verified on production artifacts.
+- Production-mode end-to-end tests run against production builds (`next build` + `next start`). Demo workspace journeys use a production build locally only when both `CASHLIFT_E2E=1` and `CASHLIFT_ALLOW_DEMO_PRODUCTION_BUILD=1` are set on the Playwright web server; CI keeps `pnpm dev` for demo suites until demo mode is verified on production artifacts.
 - Documentation must match installed tooling (no prescribed libraries that the app does not use).
 - Portability is proven by reusing canonical examples, not by declaring the whole repo a framework.

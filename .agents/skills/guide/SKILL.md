@@ -82,3 +82,11 @@ For anything crossing a trust boundary — API routes, `src/proxy.ts`, server da
 ## Testing
 
 For tests, load `.agents/skills/testing/SKILL.md`.
+
+## Playwright (E2E)
+
+- Prefer role/name locators; let Playwright auto-wait on `expect` and `click`. Do not use `waitForLoadState("networkidle")` unless a test documents a specific race that locators cannot cover.
+- Match API routes to real client paths (for example `**/api/v1/workspace/spend-requests/*`), not overly broad `**/api/**` patterns.
+- Do not assert on controls that optimistic mutations remove or replace immediately after click; keep pending-lock coverage in RTL (`ApprovalsCockpit.test.tsx`) and use E2E for journey outcomes (navigation, keyboard activation, success feedback).
+- When E2E must observe a pending mutation, delay the PATCH handler with `e2e/playwright/spendRequestRoutes.ts` and assert on **other** conflicting controls that stay mounted.
+- Share Playwright `webServer` env via `e2e/playwright/webServer.ts`. Demo-on-production-build overrides require both `CASHLIFT_E2E=1` and `CASHLIFT_ALLOW_DEMO_PRODUCTION_BUILD=1`; never set those outside Playwright servers.

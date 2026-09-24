@@ -28,6 +28,7 @@ Use this skill for test changes. Read `.agents/docs/testing.md` only when you ne
 - Avoid testing TypeScript guarantees, library behavior, class names, HTML structure, default setup, or unrelated initial states.
 - Do not pin incidental copy, tool descriptions, warnings, or configuration strings when a structured contract or observable behavior can be tested instead.
 - Keep the bar high for slower integration and E2E tests: use them only for a boundary or user journey that a faster test cannot honestly falsify.
+- For Playwright specifics (no `networkidle`, route patterns, optimistic UI), follow the Playwright section in `.agents/skills/guide/SKILL.md`.
 - Before adding a regression test, confirm the bug is important and plausibly repeatable. Retain the test only when it protects a meaningful contract; otherwise fold it into an existing workflow test or remove it after the fix is verified.
 - Group related assertions in one `it` when they describe one behavior.
 - Use `it.each` for repetitive cases.

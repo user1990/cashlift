@@ -1,30 +1,22 @@
 import { expect, test } from "@playwright/test";
+import { delaySpendRequestPatch } from "./playwright/spendRequestRoutes";
 
 test.describe("keyboard approvals", () => {
-	test("activates approve with keyboard focus", async ({ page }) => {
-		await page.route("**/api/**/spend-requests/**", async (route) => {
-			if (route.request().method() !== "PATCH") {
-				await route.continue();
-
-				return;
-			}
-
-			await new Promise((resolve) => {
-				setTimeout(resolve, 1_500);
-			});
-			await route.continue();
-		});
-
+	test.beforeEach(async ({ page }) => {
+		await delaySpendRequestPatch(page);
 		await page.goto("/dashboard/approvals");
-		await page.waitForLoadState("networkidle");
+	});
 
+	test("activates approve with keyboard focus", async ({ page }) => {
 		const approveBrandForge = page.getByRole("button", { name: "Approve BrandForge" });
+		const rejectDelta = page.getByRole("button", { name: "Reject Delta" });
+
 		await approveBrandForge.focus();
 		await expect(approveBrandForge).toBeFocused();
 
 		await page.keyboard.press("Enter");
 
-		await expect(page.getByRole("button", { name: "Reject Delta" })).toBeDisabled();
-		await expect(page.getByText("Spend approved")).toBeVisible({ timeout: 15_000 });
+		await expect(rejectDelta).toBeDisabled();
+		await expect(page.getByText("Spend approved", { exact: true })).toBeVisible({ timeout: 15_000 });
 	});
 });
