@@ -1,5 +1,5 @@
 import { type KeyboardEvent, useDeferredValue, useEffect, useRef, useState } from "react";
-import { getFindOptionId } from "../findDom";
+import { getFindOptionId, isRelativeAppHref } from "../findDom";
 import { type FindItem, type FindQuery, filterFindItems, hasActiveFindFilters } from "../findModel";
 import { useFindQueryState } from "./useFindQueryState";
 
@@ -95,7 +95,7 @@ export const useFindSession = (items: FindItem[], categoryMode: "kind" | "work",
 			return;
 		}
 
-		if (event.key === "Enter" && selectedItem) {
+		if (event.key === "Enter" && selectedItem && isRelativeAppHref(selectedItem.actionHref)) {
 			event.preventDefault();
 			rememberQuery(query.query);
 			navigate(selectedItem.actionHref);
