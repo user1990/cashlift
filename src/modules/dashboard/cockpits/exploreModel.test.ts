@@ -18,6 +18,10 @@ describe("explore presentation", () => {
 			0,
 		);
 		const vendorLeakCents = dashboard.vendorLeaks.reduce((totalCents, leak) => totalCents + leak.amountCents, 0);
+		const pendingApprovalCents = dashboard.pendingApprovals.reduce(
+			(totalCents, request) => totalCents + request.amountCents,
+			0,
+		);
 
 		expect(presentation.primaryAction?.title).toEqual(dashboard.actionInbox[0]?.title);
 		expect(presentation.remainingActions.map((action) => action.id)).toEqual(
@@ -30,7 +34,7 @@ describe("explore presentation", () => {
 			`${formatPreciseCompactCurrency(dashboard.invoiceRiskCents)} in overdue invoices stays uncollected`,
 			`Lowest week remains ${formatPreciseCompactCurrency(dashboard.lowestProjectedCashCents ?? 0)} on ${formatDashboardDate(dashboard.lowestProjectedCashDate ?? "")}`,
 			`${formatPreciseCompactCurrency(dashboard.vendorLeakSavingsCents)} in vendor leaks keeps billing`,
-			`1 spend request totaling ${formatPreciseCompactCurrency(dashboard.pendingApprovals[0]?.amountCents ?? 0)} stays undecided`,
+			`${dashboard.pendingApprovals.length} spend requests totaling ${formatPreciseCompactCurrency(pendingApprovalCents)} stays undecided`,
 		]);
 		expect(presentation.outlookEvents.map((event) => event.week)).toEqual(
 			dashboard.forecastChartData.map((point) => point.week),
