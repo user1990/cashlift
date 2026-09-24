@@ -332,7 +332,7 @@ function HelpFaqPalette({
 						aria-expanded="true"
 						aria-autocomplete="list"
 						aria-activedescendant={activeResult ? resultDomId(activeResult.id) : undefined}
-						className="min-w-0 flex-1 border-0 bg-transparent text-base text-shell-foreground outline-none placeholder:text-shell-muted focus:ring-0 sm:text-l"
+						className="min-w-0 flex-1 border-0 bg-transparent text-base text-shell-foreground outline-none placeholder:text-shell-muted focus:ring-0 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-solid focus-visible:outline-offset-2 sm:text-l"
 					/>
 
 					<button
