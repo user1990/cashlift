@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import type { ComponentType } from "react";
 import type { FinancialDataset, WorkspaceDatasetDateRange } from "@/modules/workspace/types";
 import type { WorkspaceExperience, WorkspaceSection } from "../types";
 import { getWorkspaceExperienceContract } from "../workspaceExperience";
@@ -53,24 +52,6 @@ type WorkspacePageViewProps = {
 	section: WorkspaceSection;
 };
 
-type WorkspaceSectionComponentProps = {
-	basePath: string;
-	dataset: FinancialDataset;
-	readOnly?: boolean;
-};
-
-const WORKSPACE_SECTION_COMPONENTS: Record<
-	Exclude<WorkspaceSection, "overview" | "cash">,
-	ComponentType<WorkspaceSectionComponentProps>
-> = {
-	approvals: WorkspaceApprovalsSection,
-	budgets: WorkspaceBudgetsSection,
-	invoices: WorkspaceInvoicesSection,
-	settings: WorkspaceSettingsSection,
-	team: WorkspaceTeamSection,
-	vendors: WorkspaceVendorsSection,
-};
-
 export const WorkspacePageView = ({
 	dataset,
 	dateRange,
@@ -96,7 +77,18 @@ export const WorkspacePageView = ({
 		return <CashInsights basePath={workspace.basePath} dataset={dataset} />;
 	}
 
-	const SectionComponent = WORKSPACE_SECTION_COMPONENTS[section];
-
-	return <SectionComponent basePath={workspace.basePath} dataset={dataset} readOnly={workspace.readOnly} />;
+	switch (section) {
+		case "approvals":
+			return <WorkspaceApprovalsSection dataset={dataset} readOnly={workspace.readOnly} />;
+		case "budgets":
+			return <WorkspaceBudgetsSection dataset={dataset} />;
+		case "invoices":
+			return <WorkspaceInvoicesSection basePath={workspace.basePath} dataset={dataset} />;
+		case "settings":
+			return <WorkspaceSettingsSection basePath={workspace.basePath} dataset={dataset} readOnly={workspace.readOnly} />;
+		case "team":
+			return <WorkspaceTeamSection basePath={workspace.basePath} dataset={dataset} />;
+		case "vendors":
+			return <WorkspaceVendorsSection dataset={dataset} />;
+	}
 };
