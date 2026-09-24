@@ -4,8 +4,8 @@ import { SPEND_REQUEST_SCHEMA } from "@/modules/spend-requests/schemas";
 import type { SpendRequestStatus } from "@/modules/spend-requests/types";
 import { createServerSupabaseClient } from "@/services/supabase/server";
 import { AppError } from "@/utilities/errors/AppError";
-import type { FinanceRepository } from "../api";
 import { WORKSPACE_SCOPE_TABLES } from "../read-models";
+import type { FinanceRepository } from "../repository";
 import { FINANCIAL_DATASET_SCHEMA } from "../schemas";
 import type { FinancialDataset, WorkspaceDatasetScope } from "../types";
 import {
@@ -39,6 +39,16 @@ export class SpendRequestNotFoundError extends AppError {
 			message: "Spend request was not found.",
 		});
 		this.name = "SpendRequestNotFoundError";
+	}
+}
+
+export class SpendRequestConflictError extends AppError {
+	constructor() {
+		super({
+			code: "workspace_spend_request_conflict",
+			message: "Spend request was already decided.",
+		});
+		this.name = "SpendRequestConflictError";
 	}
 }
 
@@ -140,12 +150,28 @@ const updateSpendRequestStatusByCompanyId = async (
 			.update({ status, updated_at: new Date().toISOString() })
 			.eq("company_id", companyId)
 			.eq("id", id)
+			.eq("status", "pending")
 			.select("*")
 			.maybeSingle<SpendRequestRow>(),
 		"Unable to update spend request.",
 	);
 
 	if (!data) {
+		const existing = await getSupabaseQueryData(
+			"spend_requests",
+			client
+				.from("spend_requests")
+				.select("status")
+				.eq("company_id", companyId)
+				.eq("id", id)
+				.maybeSingle<Pick<SpendRequestRow, "status">>(),
+			"Unable to load spend request.",
+		);
+
+		if (existing && existing.status !== "pending") {
+			throw new SpendRequestConflictError();
+		}
+
 		throw new SpendRequestNotFoundError();
 	}
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { isPermanentWorkspaceDatasetError, useWorkspaceDatasetQuery } from "@/modules/workspace/query";
-import { reduceDatasetForDateRange } from "@/modules/workspace/read-models";
 import { Button } from "@/ui/components/actions/Button";
 import { Panel } from "@/ui/components/layout/Panel";
 import { PanelHeader } from "@/ui/components/layout/PanelHeader";
@@ -18,14 +17,10 @@ export const WorkspacePageQueryContent = ({ dataset, experience, section }: Work
 		isFetching,
 		refetch,
 	} = useWorkspaceDatasetQuery(dataset, section, dateRange);
-	const visibleDataset =
-		section === "overview" ? reduceDatasetForDateRange(workspaceDataset, dateRange) : workspaceDataset;
-
 	return (
 		<>
 			<WorkspacePageView
-				bufferDataset={dataset}
-				dataset={visibleDataset}
+				dataset={workspaceDataset}
 				dateRange={dateRange}
 				experience={experience}
 				onDateRangeChange={setDateRange}

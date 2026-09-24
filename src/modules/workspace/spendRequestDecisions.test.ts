@@ -72,6 +72,18 @@ describe("decideSpendRequest", () => {
 		expect(AUTH_MOCK).not.toHaveBeenCalled();
 	});
 
+	it("returns conflict when demo spend request is already decided", async () => {
+		stubDemoWorkspaceEnv();
+
+		const result = await decideRequest({ id: "request-decided", status: "approved" });
+
+		expect(result).toEqual({
+			code: "conflict",
+			message: "Spend request was already decided.",
+			status: "error",
+		});
+	});
+
 	it("returns updated fixture request in demo mode", async () => {
 		stubDemoWorkspaceEnv();
 
@@ -82,6 +94,21 @@ describe("decideSpendRequest", () => {
 			status: "success",
 		});
 		expect(AUTH_MOCK).not.toHaveBeenCalled();
+	});
+
+	it("returns service when Clerk auth is unavailable", async () => {
+		stubProductionWorkspaceEnv();
+		AUTH_MOCK.mockRejectedValue(new Error("clerk down"));
+		CAPTURE_APP_EXCEPTION_MOCK.mockReturnValue("event-id");
+
+		const result = await decideRequest();
+
+		expect(result).toEqual({
+			code: "service",
+			message: "Workspace authentication is unavailable.",
+			requestId: "event-id",
+			status: "error",
+		});
 	});
 
 	it("returns unauthenticated when no user is signed in", async () => {

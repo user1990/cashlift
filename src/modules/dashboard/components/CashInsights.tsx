@@ -1,21 +1,19 @@
 "use client";
 
 import type { FinancialDataset } from "@/modules/workspace/types";
-import { CashInsightsDashboard } from "../explore/CashInsightsDashboard";
-import { buildCashInsightsPresentation } from "../explore/cashInsightsModel";
-import { buildDashboardViewModel } from "../view-model";
+import { CashInsightsDashboard } from "../cockpits/CashInsightsDashboard";
+import { buildCashInsightsPresentation } from "../cockpits/cashInsightsModel";
+import { buildDashboardViewModel, getDashboardAsOfDate } from "../view-model";
 
 type CashInsightsProps = {
 	dataset: FinancialDataset;
 	basePath?: string;
-	bufferDataset?: FinancialDataset;
 };
 
-export const CashInsights = ({ basePath = "/dashboard", bufferDataset, dataset }: CashInsightsProps) => {
+export const CashInsights = ({ basePath = "/dashboard", dataset }: CashInsightsProps) => {
 	const dashboard = buildDashboardViewModel({
-		bufferDataset,
 		dataset,
-		date: getCashInsightsDate(dataset),
+		date: getDashboardAsOfDate(dataset),
 		role: dataset.profile.defaultRole,
 	});
 
@@ -27,9 +25,3 @@ export const CashInsights = ({ basePath = "/dashboard", bufferDataset, dataset }
 		/>
 	);
 };
-
-function getCashInsightsDate(dataset: FinancialDataset) {
-	const date = dataset.forecast[0]?.date;
-
-	return date ? new Date(`${date}T00:00:00`) : new Date();
-}

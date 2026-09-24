@@ -20,6 +20,10 @@ _Avoid_: task, notification
 A proposed company expense awaiting approval or rejection.
 _Avoid_: purchase, reimbursement
 
+**Invoice**:
+Money a customer owes the company that finance is collecting or following up on.
+_Avoid_: conflating with **Vendor Bill** (money the company owes a vendor).
+
 **Vendor Bill**:
 A scheduled or reviewable vendor payment owed by the company.
 _Avoid_: invoice

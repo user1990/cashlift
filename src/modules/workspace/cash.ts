@@ -4,12 +4,12 @@ import type { FinancialDataset } from "./types";
 
 const DAYS_IN_MONTH = 30;
 
-const getProjectedCashBalance = (dataset: FinancialDataset, date = new Date(), days = 14) =>
+const getProjectedCashBalance = (dataset: FinancialDataset, date: Date, days = 14) =>
 	dataset.profile.cashBalanceCents +
 	getUpcomingInvoiceTotal(dataset.invoices, date, days) -
 	getUpcomingOutflowTotal(dataset, date, days);
 
-export const getCashBufferRisk = (dataset: FinancialDataset, date = new Date()) =>
+export const getCashBufferRisk = (dataset: FinancialDataset, date: Date) =>
 	Math.max(0, dataset.profile.cashBufferTargetCents - getProjectedCashBalance(dataset, date));
 
 export const getRunwayDays = (dataset: FinancialDataset) => {

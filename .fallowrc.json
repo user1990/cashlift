@@ -48,7 +48,7 @@
 			{ "from": "module-budgets", "allow": ["module-money", "ui", "services", "utilities"] },
 			{
 				"from": "module-cash-actions",
-				"allow": ["module-company-roles", "module-money", "module-workspace", "ui", "services", "utilities"]
+				"allow": ["module-company-roles", "module-money", "ui", "services", "utilities"]
 			},
 			{ "from": "module-cash-outlook", "allow": ["module-money", "ui", "services", "utilities"] },
 			{ "from": "module-company-memberships", "allow": ["module-company-roles", "services", "utilities"] },
@@ -71,16 +71,15 @@
 				]
 			},
 			{ "from": "module-invoices", "allow": ["module-money", "ui", "services", "utilities"] },
-			{ "from": "module-marketing", "allow": ["module-page-shell", "ui", "services", "utilities"] },
+			{ "from": "module-marketing", "allow": ["ui", "services", "utilities"] },
 			{ "from": "module-money", "allow": ["ui", "services", "utilities"] },
 			{
 				"from": "module-page-shell",
 				"allow": [
-					"module-budgets",
+					"module-company-roles",
 					"module-dashboard",
 					"module-invoices",
 					"module-money",
-					"module-spend-requests",
 					"module-subscriptions",
 					"module-workspace",
 					"ui",
@@ -90,7 +89,10 @@
 			},
 			{ "from": "module-spend-requests", "allow": ["module-money", "ui", "services", "utilities"] },
 			{ "from": "module-subscriptions", "allow": ["module-money", "ui", "services", "utilities"] },
-			{ "from": "module-vendors", "allow": ["module-money", "ui", "services", "utilities"] },
+			{
+				"from": "module-vendors",
+				"allow": ["module-money", "module-subscriptions", "module-workspace", "ui", "services", "utilities"]
+			},
 			{
 				"from": "module-workspace",
 				"allow": [

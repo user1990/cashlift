@@ -1,6 +1,4 @@
-import type { DashboardViewModel } from "./types";
-
-type CashActionType = DashboardViewModel["actionInbox"][number]["type"];
+import type { CashActionType } from "@/modules/cash-actions/types";
 
 const ACTION_DESTINATIONS = {
 	approval: "approvals",

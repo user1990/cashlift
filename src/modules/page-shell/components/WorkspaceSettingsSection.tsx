@@ -1,10 +1,14 @@
 import { Shield, ShieldCheck } from "lucide-react";
-import { ExploreKicker, ExploreLink, ExploreMoney } from "@/modules/dashboard/explore/exploreUi";
-import { GlassCard } from "@/modules/dashboard/explore/GlassCard";
+import { ExploreKicker, ExploreLink, ExploreMoney } from "@/modules/dashboard/cockpits/cockpitUi";
+import {
+	buildSettingsPresentation,
+	COMPANY_ROLE_LABELS,
+	type SettingsConfigRow,
+} from "@/modules/workspace/settingsPresentation";
 import type { FinancialDataset } from "@/modules/workspace/types";
+import { GlassCard } from "@/ui/components/cockpit/GlassCard";
 import { ProgressBar } from "@/ui/components/feedback/ProgressBar";
 import { cn } from "@/ui/utils/cn";
-import { buildSettingsPresentation, COMPANY_ROLE_LABELS, type SettingsConfigRow } from "../settingsPresentation";
 
 type WorkspaceSettingsSectionProps = {
 	basePath: string;

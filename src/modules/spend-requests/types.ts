@@ -3,4 +3,6 @@ import type { SPEND_REQUEST_SCHEMA, SPEND_REQUEST_STATUS_SCHEMA } from "./schema
 
 export type SpendRequestStatus = z.infer<typeof SPEND_REQUEST_STATUS_SCHEMA>;
 
+export type SpendRequestDecisionStatus = Exclude<SpendRequestStatus, "pending">;
+
 export type SpendRequest = z.infer<typeof SPEND_REQUEST_SCHEMA>;

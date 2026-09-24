@@ -1,4 +1,4 @@
-import { ApprovalsCockpit } from "@/modules/dashboard/explore/ApprovalsCockpit";
+import { ApprovalsCockpit } from "@/modules/dashboard/cockpits/ApprovalsCockpit";
 import type { FinancialDataset } from "@/modules/workspace/types";
 
 type WorkspaceApprovalsSectionProps = {

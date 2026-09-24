@@ -1,4 +1,4 @@
-import { MainContent } from "@/modules/page-shell/components/MainContent";
+import { MainContent } from "@/ui/components/layout/MainContent";
 import type { PricingBilling } from "../content";
 import { PricingComparisonSection } from "./PricingComparisonSection";
 import { PricingPlansSection } from "./PricingPlansSection";

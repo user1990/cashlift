@@ -1,6 +1,6 @@
 "use client";
 
-import { InvoicesCockpitPrototype } from "@/modules/dashboard/explore/InvoicesCockpitPrototype";
+import { InvoicesCockpit } from "@/modules/dashboard/cockpits/InvoicesCockpit";
 import type { FinancialDataset } from "@/modules/workspace/types";
 import { useInvoiceRiskTotal } from "../hooks/useInvoiceRiskTotal";
 
@@ -12,5 +12,5 @@ type WorkspaceInvoicesSectionProps = {
 export const WorkspaceInvoicesSection = ({ basePath = "/dashboard", dataset }: WorkspaceInvoicesSectionProps) => {
 	const invoiceRiskTotal = useInvoiceRiskTotal(dataset.invoices);
 
-	return <InvoicesCockpitPrototype basePath={basePath} dataset={dataset} invoiceRiskTotal={invoiceRiskTotal} />;
+	return <InvoicesCockpit basePath={basePath} dataset={dataset} invoiceRiskTotal={invoiceRiskTotal} />;
 };
