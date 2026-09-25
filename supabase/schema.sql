@@ -70,6 +70,8 @@ create table if not exists spend_requests (
 	category text not null check (category in ('software', 'travel', 'contractor', 'marketing', 'hardware')),
 	reason text not null,
 	status text not null check (status in ('pending', 'approved', 'rejected')),
+	decided_by text,
+	decided_at timestamptz,
 	requested_date date not null,
 	needed_by_date date not null,
 	created_at timestamptz not null default now(),

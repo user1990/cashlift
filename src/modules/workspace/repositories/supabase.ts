@@ -130,12 +130,14 @@ const updateSpendRequestStatusByCompanyId = async (
 	companyId: string,
 	id: string,
 	status: SpendRequestDecisionStatus,
+	decidedByUserId: string,
 ) => {
+	const decidedAt = new Date().toISOString();
 	const data = await getSupabaseQueryData(
 		"spend_requests",
 		client
 			.from("spend_requests")
-			.update({ status, updated_at: new Date().toISOString() })
+			.update({ decided_at: decidedAt, decided_by: decidedByUserId, status, updated_at: decidedAt })
 			.eq("company_id", companyId)
 			.eq("id", id)
 			.eq("status", "pending")
@@ -237,9 +239,9 @@ export const supabaseFinanceRepository: FinanceRepository = {
 
 		return getDatasetByCompanyId(client, companyId, scope);
 	},
-	async updateSpendRequestStatus(companyId, accessToken, id, status) {
+	async updateSpendRequestStatus(companyId, accessToken, id, status, decidedByUserId) {
 		const client = createServerSupabaseClient({ accessToken });
 
-		return updateSpendRequestStatusByCompanyId(client, companyId, id, status);
+		return updateSpendRequestStatusByCompanyId(client, companyId, id, status, decidedByUserId);
 	},
 };

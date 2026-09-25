@@ -67,7 +67,7 @@ create policy "Members can read spend requests"
 	using (company_id in (select current_user_company_ids()));
 
 revoke update on spend_requests from authenticated;
-grant update (status, updated_at) on spend_requests to authenticated;
+grant update (status, updated_at, decided_by, decided_at) on spend_requests to authenticated;
 
 drop policy if exists "Approvers can update spend requests" on spend_requests;
 create policy "Approvers can update spend requests"
@@ -85,6 +85,8 @@ create policy "Approvers can update spend requests"
 	)
 	with check (
 		status in ('approved', 'rejected')
+		and decided_by = auth.jwt() ->> 'sub'
+		and decided_at is not null
 		and company_id in (
 			select company_id
 			from company_members
