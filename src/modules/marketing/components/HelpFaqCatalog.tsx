@@ -48,6 +48,15 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 	const [query, setQuery] = useState(() => parseHelpFaqQuery(initialQuery));
 	const [isPaletteOpen, setIsPaletteOpen] = useState(() => Boolean(parseHelpFaqQuery(initialQuery)));
 	const [activeResultIndex, setActiveResultIndex] = useState(0);
+
+	useEffect(() => {
+		const nextQuery = parseHelpFaqQuery(initialQuery);
+		setQuery(nextQuery);
+
+		if (nextQuery) {
+			setIsPaletteOpen(true);
+		}
+	}, [initialQuery]);
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const resultRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 	const triggerRef = useRef<HTMLButtonElement>(null);
@@ -72,13 +81,27 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 	}, [activeResultId, isPaletteOpen, visibleActiveResultIndex]);
 
 	useEffect(() => {
+		const dialog = dialogRef.current;
+
 		if (!isPaletteOpen) {
+			if (dialog?.open) {
+				closeHelpDialog(dialog);
+			}
+
 			if (wasPaletteOpenRef.current) {
 				window.requestAnimationFrame(() => triggerRef.current?.focus());
 			}
 
 			wasPaletteOpenRef.current = false;
 			return;
+		}
+
+		if (dialog && !dialog.open) {
+			if (typeof dialog.showModal === "function") {
+				dialog.showModal();
+			} else {
+				dialog.setAttribute("open", "");
+			}
 		}
 
 		wasPaletteOpenRef.current = true;
@@ -88,8 +111,16 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 
 		return () => {
 			document.body.style.overflow = previousOverflow;
+			closeHelpDialog(dialog);
 		};
 	}, [isPaletteOpen]);
+
+	useEffect(
+		() => () => {
+			closeHelpDialog(dialogRef.current);
+		},
+		[],
+	);
 
 	const updateQuery = (nextQuery: string) => {
 		const boundedQuery = parseHelpFaqQuery(nextQuery);
@@ -297,7 +328,6 @@ function HelpFaqPalette({
 		<dialog
 			ref={dialogRef}
 			id={HELP_FAQ_DIALOG_ID}
-			open
 			aria-modal="true"
 			aria-labelledby={HELP_FAQ_DIALOG_TITLE_ID}
 			onKeyDown={handleDialogKeyDown}
@@ -370,6 +400,7 @@ function HelpFaqPalette({
 										<Link
 											key={result.id}
 											href={getHelpFaqHref(result.slug, query)}
+											onClick={closePalette}
 											ref={(element) => setResultRef(resultIndex, element)}
 											tabIndex={-1}
 											role="option"
@@ -569,4 +600,17 @@ function HelpFaqIcon({ iconName }: { iconName: HelpFaqIconName | undefined }) {
 		default:
 			return <FileQuestion aria-hidden className="size-4" />;
 	}
+}
+
+function closeHelpDialog(dialog: HTMLDialogElement | null) {
+	if (!dialog) {
+		return;
+	}
+
+	if (typeof dialog.close === "function") {
+		dialog.close();
+		return;
+	}
+
+	dialog.removeAttribute("open");
 }

@@ -25,7 +25,7 @@ requests or exposes mutation controls.
 ## Consequences
 
 - `/demo` and `/demo/workspace/**` can be explored without authentication.
-- `/dashboard/**` and `/api/workspace/**` remain protected and fail closed when
+- `/dashboard/**` and `/api/v1/workspace/**` remain protected and fail closed when
   production auth or data configuration is missing.
 - The public tour cannot be used to validate production workspace mutations or
   live financial data.
