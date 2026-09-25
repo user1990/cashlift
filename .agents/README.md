@@ -15,6 +15,17 @@
 
 Register new skills in root `AGENTS.md` workflow or quick reference. For Cursor slash-menu discovery of Codex-enabled skills, symlink `.cursor/skills/<name>` → `../../.agents/skills/<name>`.
 
+## Cursor (shared in git)
+
+| Path | Purpose |
+| --- | --- |
+| `.cursor/cli.json` | Project CLI/agent attribution (`attributePRsToAgent` / `attributeCommitsToAgent` off). Overrides personal defaults for this repo. |
+| `.cursor/rules/` | IDE agent rules (for example no Cursor footer on PR bodies). |
+| `.cursor/mcp.json` | Shared MCP server entries for the app. |
+| `.cursor/skills/` | Symlinks into `.agents/skills/` for slash-menu discovery. |
+
+Personal `~/.cursor/cli-config.json` is not committed. In **Cursor Settings → Agent → Attribution**, turn off PR and commit attribution if the IDE still adds footers (enterprise policies can override local config).
+
 **Codex:** optional `agents/openai.yaml` per skill. **Cursor:** frontmatter `icon`, `color`; ignores `openai.yaml`.
 
 ## Skills in this repo

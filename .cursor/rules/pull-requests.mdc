@@ -1,0 +1,6 @@
+---
+description: No Cursor branding on pull request bodies
+alwaysApply: true
+---
+
+Do not append "Made with Cursor" or similar IDE attribution to GitHub pull request descriptions.
