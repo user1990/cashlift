@@ -102,8 +102,16 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 
 		return () => {
 			document.body.style.overflow = previousOverflow;
+			dialog?.close();
 		};
 	}, [isPaletteOpen]);
+
+	useEffect(
+		() => () => {
+			dialogRef.current?.close();
+		},
+		[],
+	);
 
 	const updateQuery = (nextQuery: string) => {
 		const boundedQuery = parseHelpFaqQuery(nextQuery);
@@ -383,6 +391,7 @@ function HelpFaqPalette({
 										<Link
 											key={result.id}
 											href={getHelpFaqHref(result.slug, query)}
+											onClick={closePalette}
 											ref={(element) => setResultRef(resultIndex, element)}
 											tabIndex={-1}
 											role="option"
