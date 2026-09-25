@@ -49,6 +49,7 @@ export const OverviewDateRangePickerClient = ({
 			<Label className="sr-only">Dashboard date range</Label>
 
 			<AriaButton
+				aria-label="Open dashboard date range"
 				className="focus-ring-rac ease inline-flex h-11 min-w-0 max-w-full items-center gap-2 rounded-md border border-border bg-shell-elevated px-4 font-semibold text-m text-shell-foreground transition-[border-color,box-shadow] duration-150 data-open:border-primary-subtle-border"
 				isDisabled={!onDateRangeChange}
 			>
@@ -104,6 +105,7 @@ type CalendarNavButtonProps = {
 
 const CalendarNavButton = ({ children, slot }: CalendarNavButtonProps) => (
 	<AriaButton
+		aria-label={slot === "previous" ? "Previous month" : "Next month"}
 		className="focus-ring-rac ease flex size-8 items-center justify-center rounded-md text-muted-foreground transition-[background-color,color,box-shadow] duration-150 hover:bg-panel-muted hover:text-panel-foreground"
 		slot={slot}
 	>
