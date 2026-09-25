@@ -38,7 +38,7 @@ export const WorkspacePageQueryContent = ({ dataset, experience, section }: Work
 				section={section}
 			/>
 
-			{error && <WorkspaceRefreshState error={error} isFetching={isFetching} onRetry={() => void refetch()} />}
+			{error != null && <WorkspaceRefreshState error={error} isFetching={isFetching} onRetry={() => void refetch()} />}
 		</>
 	);
 };

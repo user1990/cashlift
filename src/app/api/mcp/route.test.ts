@@ -44,6 +44,6 @@ describe("POST /api/mcp", () => {
 		);
 
 		expect(response.status).toBe(403);
-		await expect(response.json()).resolves.toMatchObject({ error: { code: -32600 }, id: null, jsonrpc: "2.0" });
+		await expect(response.json()).resolves.toMatchObject({ error: { code: -32_600 }, id: null, jsonrpc: "2.0" });
 	});
 });

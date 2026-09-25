@@ -82,7 +82,7 @@ export const CashInsightsDashboard = ({ basePath, dashboard, presentation }: Cas
 						</p>
 					)}
 
-					{presentation.cashWork && (
+					{presentation.cashWork != null && (
 						<p className="mt-3 text-m text-shell-muted leading-6">{presentation.cashWork.description}</p>
 					)}
 
@@ -121,7 +121,7 @@ export const CashInsightsDashboard = ({ basePath, dashboard, presentation }: Cas
 					<p className="mt-3">
 						<MoneyDisplay cents={dashboard.monthlyPayrollCents} exact />
 
-						{presentation.payrollShareLabel && (
+						{!!presentation.payrollShareLabel && (
 							<span className="ml-2 text-muted-foreground text-s">
 								{presentation.payrollShareLabel} of cash on hand
 							</span>

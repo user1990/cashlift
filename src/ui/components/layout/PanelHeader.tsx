@@ -9,7 +9,7 @@ type PanelHeaderProps = {
 export const PanelHeader = ({ action, label, title }: PanelHeaderProps) => (
 	<div className="mb-4 flex items-start justify-between gap-4" data-slot="card-header">
 		<div className="min-w-0">
-			{label && (
+			{!!label && (
 				<Badge className="mb-1" variant="primary">
 					{label}
 				</Badge>
@@ -20,6 +20,6 @@ export const PanelHeader = ({ action, label, title }: PanelHeaderProps) => (
 			</h2>
 		</div>
 
-		{action && <div className="shrink-0">{action}</div>}
+		{action != null && <div className="shrink-0">{action}</div>}
 	</div>
 );

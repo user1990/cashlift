@@ -27,5 +27,5 @@ test.describe("dashboard navigation", () => {
 
 async function visitDashboard(page: Page) {
 	await page.goto("/dashboard");
-	await page.waitForLoadState("networkidle");
+	await expect(page.getByRole("navigation", { name: "Workspace" })).toBeVisible();
 }

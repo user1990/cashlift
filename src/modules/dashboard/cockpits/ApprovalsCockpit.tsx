@@ -198,7 +198,7 @@ function renderPriorityRequest(
 				</p>
 			)}
 
-			{renderActions && <div className="mt-6">{renderActions(request, "large")}</div>}
+			{renderActions != null && <div className="mt-6">{renderActions(request, "large")}</div>}
 		</>
 	);
 }

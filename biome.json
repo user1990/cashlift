@@ -43,16 +43,23 @@
 		"lineWidth": 120
 	},
 	"linter": {
+		"domains": {
+			"next": "recommended",
+			"playwright": "recommended"
+		},
 		"rules": {
 			"preset": "recommended",
 			"security": {
 				"noSecrets": {
 					"level": "error",
 					"options": { "entropyThreshold": 50 }
-				}
+				},
+				"noDangerouslySetInnerHtml": "error"
 			},
 			"correctness": {
-				"useExhaustiveDependencies": "error"
+				"useExhaustiveDependencies": "error",
+				"noBeforeInteractiveScriptOutsideDocument": "error",
+				"useInlineScriptId": "error"
 			},
 			"complexity": {
 				"noExcessiveCognitiveComplexity": "warn",
@@ -69,6 +76,15 @@
 				"useConsistentArrayType": {
 					"level": "error",
 					"options": { "syntax": "shorthand" }
+				},
+				"useNumericSeparators": {
+					"level": "error",
+					"options": {
+						"binary": { "minimumDigits": 4 },
+						"decimal": { "minimumDigits": 4 },
+						"hexadecimal": { "minimumDigits": 4 },
+						"octal": { "minimumDigits": 4 }
+					}
 				}
 			},
 			"suspicious": {
@@ -77,11 +93,13 @@
 				"noFocusedTests": "error",
 				"noSkippedTests": "error",
 				"noUnknownAttribute": "error",
-				"noDocumentCookie": "error"
+				"noDocumentCookie": "error",
+				"noLeakedRender": "error"
 			},
 			"nursery": {
 				"noInlineStyles": "warn",
-				"useSortedClasses": "warn"
+				"useSortedClasses": "warn",
+				"noPlaywrightNetworkidle": "error"
 			}
 		}
 	},

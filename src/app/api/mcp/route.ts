@@ -68,7 +68,7 @@ async function handleMcpRequest(request: Request) {
 			{
 				id: null,
 				jsonrpc: "2.0",
-				error: { code: -32600, message: "Origin is not allowed for this MCP endpoint." },
+				error: { code: -32_600, message: "Origin is not allowed for this MCP endpoint." },
 			},
 			{ status: 403 },
 		);

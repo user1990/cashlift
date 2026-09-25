@@ -141,7 +141,7 @@ export const EmailAutocompleteField = ({
 				className="ease focus-ring-input h-10 w-full rounded-md border border-border bg-panel px-3 text-m text-panel-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground focus:border-primary"
 			/>
 
-			{openSuggestions && (
+			{openSuggestions === true && (
 				<div
 					className="absolute z-20 mt-1 w-full rounded-md border border-border bg-panel p-1 shadow-lg"
 					data-slot="combobox-list"

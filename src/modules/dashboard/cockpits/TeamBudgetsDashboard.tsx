@@ -69,7 +69,7 @@ export const TeamBudgetsDashboard = ({ dataset }: TeamBudgetsDashboardProps) => 
 				)}
 			</GlassCard>
 
-			{primaryTeam && (
+			{primaryTeam != null && (
 				<section className="grid items-stretch gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:gap-5">
 					<GlassCard
 						atmosphere="priority"

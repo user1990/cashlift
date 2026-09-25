@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 	openGraph: {
 		description: SITE_META.defaultDescription,
 		images: [
-			{ alt: "CashLift cash decision workspace", height: 1500, url: "/brand/hero-finance-command.png", width: 2400 },
+			{ alt: "CashLift cash decision workspace", height: 1_500, url: "/brand/hero-finance-command.png", width: 2_400 },
 		],
 		type: "website",
 	},

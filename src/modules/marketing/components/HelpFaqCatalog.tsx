@@ -171,7 +171,7 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 
 			<HelpContactPanel />
 
-			{isPaletteOpen && (
+			{isPaletteOpen === true && (
 				<HelpFaqPalette
 					activeResult={activeResult}
 					activeResultIndex={visibleActiveResultIndex}
