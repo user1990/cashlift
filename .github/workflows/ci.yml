@@ -13,7 +13,6 @@ concurrency:
 permissions:
   contents: read
   checks: write
-  pull-requests: write
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -22,6 +21,7 @@ jobs:
   verify:
     name: Lint, types, tests, security, application and docs builds
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - name: Checkout
         uses: actions/checkout@v5
