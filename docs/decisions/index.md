@@ -28,6 +28,7 @@ accepted decision, mark the old record as superseded rather than rewriting it.
 - [0004 — Decision support, not money movement](./0004-decision-support-not-money-movement.md)
 - [0005 — Explainable financial decisions, no invented forecasts](./0005-explainable-financial-decisions.md)
 - [0006 — Reference implementation, not universal SSOT](./0006-reference-implementation-not-universal-ssot.md)
+- [0007 — Scoped workspace reads over monolithic datasets](./0007-scoped-workspace-reads.md)
 
 ## Historical decisions
 

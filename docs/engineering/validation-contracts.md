@@ -37,7 +37,7 @@ export const SPEND_REQUEST_SCHEMA = z.object({
 
 export type SpendRequest = z.infer<typeof SPEND_REQUEST_SCHEMA>;
 
-const response = await fetch("/api/workspace/spend-requests");
+const response = await fetch("/api/v1/workspace/spend-requests");
 const spendRequest = SPEND_REQUEST_SCHEMA.parse(await response.json());
 ```
 
