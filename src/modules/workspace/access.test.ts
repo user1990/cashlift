@@ -43,7 +43,7 @@ describe("workspace access helpers", () => {
 		const session = {
 			getToken: vi.fn().mockResolvedValue("jwt-token"),
 			userId: "user-1",
-		} as AuthSession;
+		} as unknown as AuthSession;
 
 		await expect(getWorkspaceAccessToken(session)).resolves.toBe("jwt-token");
 	});
@@ -52,7 +52,7 @@ describe("workspace access helpers", () => {
 		const session = {
 			getToken: vi.fn().mockResolvedValue(null),
 			userId: "user-1",
-		} as AuthSession;
+		} as unknown as AuthSession;
 
 		const result = await getWorkspaceAccessToken(session);
 
