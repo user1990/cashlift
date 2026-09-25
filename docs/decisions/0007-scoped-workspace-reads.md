@@ -1,9 +1,12 @@
 ---
 title: Scoped workspace reads over monolithic datasets
-status: accepted
-date: 2026-09-25
 description: Prefer server-side scoped Supabase selects and DTOs instead of loading full company tables per request.
 ---
+
+# 0007: Scoped workspace reads over monolithic datasets
+
+- Status: accepted
+- Date: 2026-09-25
 
 ## Context
 
