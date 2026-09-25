@@ -1,6 +1,7 @@
 create or replace function current_user_company_ids()
 returns setof text
 language sql
+stable
 security definer
 set search_path = public
 as $$
@@ -8,6 +9,9 @@ as $$
 	from company_members
 	where clerk_user_id = auth.jwt() ->> 'sub'
 $$;
+
+revoke all on function current_user_company_ids() from public;
+grant execute on function current_user_company_ids() to authenticated;
 
 create or replace function current_user_company_roles()
 returns table(company_id text, role text)

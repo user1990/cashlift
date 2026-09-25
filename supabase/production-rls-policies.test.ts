@@ -61,6 +61,18 @@ describe("production Supabase policies", () => {
 		);
 	});
 
+	it("locks down current_user_company_ids like current_user_company_roles", () => {
+		const productionPolicies = readFileSync("supabase/production-rls-policies.sql", "utf8");
+		const companyIdFunction = productionPolicies.match(
+			/create or replace function current_user_company_ids\(\)[\s\S]*?\$\$;/,
+		)?.[0];
+
+		expect(companyIdFunction).toBeDefined();
+		expect(companyIdFunction).toContain("stable");
+		expect(productionPolicies).toContain("revoke all on function current_user_company_ids() from public");
+		expect(productionPolicies).toContain("grant execute on function current_user_company_ids() to authenticated");
+	});
+
 	it("restrict cash actions to the authenticated member's company and role", () => {
 		const productionPolicies = readFileSync("supabase/production-rls-policies.sql", "utf8");
 		const companyRoleFunction = productionPolicies.match(
