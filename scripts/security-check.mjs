@@ -3,8 +3,13 @@ import { existsSync, readFileSync } from "node:fs";
 import { extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const isProhibitedTrackedFilename = (file) =>
-	file.endsWith(".env") || file.includes(".env.") || file.endsWith(".map");
+export const isProhibitedTrackedFilename = (file) => {
+	if (file === ".env.example") {
+		return false;
+	}
+
+	return file.endsWith(".env") || file.includes(".env.") || file.endsWith(".map");
+};
 
 const runSecurityCheck = () => {
 	const trackedFiles = execFileSync("git", ["ls-files"], { encoding: "utf8" })
