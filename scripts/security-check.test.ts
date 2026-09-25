@@ -11,5 +11,6 @@ describe("security filename rules", () => {
 
 	it("allows ordinary source files through the filename rule", () => {
 		expect(isProhibitedTrackedFilename("src/app/page.tsx")).toBe(false);
+		expect(isProhibitedTrackedFilename(".env.example")).toBe(false);
 	});
 });
