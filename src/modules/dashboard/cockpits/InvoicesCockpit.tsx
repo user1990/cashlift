@@ -55,6 +55,16 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 		supportNotes,
 	} = presentation;
 	const overdueWarning = overdueCents !== undefined && overdueCents > 0;
+	const primaryInvoiceMeta = primaryInvoice ? (
+		<>
+			<span className="text-muted-foreground text-s">{CASH_ACTION_WORK.collection}</span>
+
+			<span className="text-muted-foreground text-s">Due {formatInvoiceDueDate(primaryInvoice.dueDate)}</span>
+		</>
+	) : undefined;
+	const primaryActionDescription = primaryAction ? (
+		<p className="mt-3 text-m text-shell-muted leading-6">{primaryAction.description}</p>
+	) : undefined;
 
 	return (
 		<div className="space-y-4 xl:space-y-5">
@@ -111,13 +121,7 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 							<ExploreKicker>Priority</ExploreKicker>
 						)}
 
-						{primaryInvoice != null && (
-							<>
-								<span className="text-muted-foreground text-s">{CASH_ACTION_WORK.collection}</span>
-
-								<span className="text-muted-foreground text-s">Due {formatInvoiceDueDate(primaryInvoice.dueDate)}</span>
-							</>
-						)}
+						{primaryInvoiceMeta}
 					</div>
 
 					{primaryInvoice ? (
@@ -126,9 +130,7 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 								{primaryAction?.title ?? primaryInvoice.client}
 							</h2>
 
-							{primaryAction != null && (
-								<p className="mt-3 text-m text-shell-muted leading-6">{primaryAction.description}</p>
-							)}
+							{primaryActionDescription}
 
 							<p className="mt-5">
 								<MoneyDisplay cents={primaryInvoice.amountCents} className="text-2xl+" exact />

@@ -71,6 +71,34 @@ export const EmailAutocompleteField = ({
 		onChange?.(suggestion);
 		closeSuggestions();
 	};
+	const suggestionsList = openSuggestions ? (
+		<div
+			className="absolute z-20 mt-1 w-full rounded-md border border-border bg-panel p-1 shadow-lg"
+			data-slot="combobox-list"
+			id={listboxId}
+			role="listbox"
+		>
+			{suggestions.map(({ id, value: suggestion }, index) => (
+				<button
+					aria-selected={index === activeSuggestionIndex}
+					className={cn(
+						"block w-full rounded px-2.5 py-2 text-left text-m text-panel-foreground outline-none transition-colors hover:bg-primary/10 focus:bg-primary/10",
+						index === activeSuggestionIndex && "bg-primary/10",
+					)}
+					id={getOptionId(optionIdPrefix, id)}
+					key={id}
+					onClick={() => selectSuggestion(suggestion)}
+					onMouseDown={(event) => event.preventDefault()}
+					role="option"
+					data-slot="combobox-item"
+					tabIndex={-1}
+					type="button"
+				>
+					{suggestion}
+				</button>
+			))}
+		</div>
+	) : undefined;
 
 	return (
 		<RACTextField
@@ -141,34 +169,7 @@ export const EmailAutocompleteField = ({
 				className="ease focus-ring-input h-10 w-full rounded-md border border-border bg-panel px-3 text-m text-panel-foreground outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground focus:border-primary"
 			/>
 
-			{openSuggestions === true && (
-				<div
-					className="absolute z-20 mt-1 w-full rounded-md border border-border bg-panel p-1 shadow-lg"
-					data-slot="combobox-list"
-					id={listboxId}
-					role="listbox"
-				>
-					{suggestions.map(({ id, value: suggestion }, index) => (
-						<button
-							aria-selected={index === activeSuggestionIndex}
-							className={cn(
-								"block w-full rounded px-2.5 py-2 text-left text-m text-panel-foreground outline-none transition-colors hover:bg-primary/10 focus:bg-primary/10",
-								index === activeSuggestionIndex && "bg-primary/10",
-							)}
-							id={getOptionId(optionIdPrefix, id)}
-							key={id}
-							onClick={() => selectSuggestion(suggestion)}
-							onMouseDown={(event) => event.preventDefault()}
-							role="option"
-							data-slot="combobox-item"
-							tabIndex={-1}
-							type="button"
-						>
-							{suggestion}
-						</button>
-					))}
-				</div>
-			)}
+			{suggestionsList}
 
 			<FieldErrorMessage errorMessage={errorMessage} />
 		</RACTextField>

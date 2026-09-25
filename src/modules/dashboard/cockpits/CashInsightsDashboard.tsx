@@ -18,6 +18,9 @@ export const CashInsightsDashboard = ({ basePath, dashboard, presentation }: Cas
 	const belowBuffer =
 		dashboard.lowestProjectedCashCents !== undefined &&
 		dashboard.lowestProjectedCashCents < dashboard.cashBufferTargetCents;
+	const cashWorkDescription = presentation.cashWork ? (
+		<p className="mt-3 text-m text-shell-muted leading-6">{presentation.cashWork.description}</p>
+	) : undefined;
 
 	return (
 		<div className="space-y-4 xl:space-y-5">
@@ -82,9 +85,7 @@ export const CashInsightsDashboard = ({ basePath, dashboard, presentation }: Cas
 						</p>
 					)}
 
-					{presentation.cashWork != null && (
-						<p className="mt-3 text-m text-shell-muted leading-6">{presentation.cashWork.description}</p>
-					)}
+					{cashWorkDescription}
 
 					<div className="mt-6">
 						<ExploreLink className="min-h-12 rounded-lg px-4" href="#cash-outlook" primary>

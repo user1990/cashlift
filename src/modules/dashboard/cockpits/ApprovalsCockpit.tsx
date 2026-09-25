@@ -166,6 +166,11 @@ function renderPriorityRequest(
 	renderActions?: ApprovalsCockpitViewProps["renderActions"],
 ) {
 	const { amountCents, cashAfterApprovalCents, category, neededByDate, reason, requester, team, vendor } = request;
+	let actionsSlot: React.ReactNode;
+
+	if (renderActions) {
+		actionsSlot = <div className="mt-6">{renderActions(request, "large")}</div>;
+	}
 
 	return (
 		<>
@@ -198,7 +203,7 @@ function renderPriorityRequest(
 				</p>
 			)}
 
-			{renderActions != null && <div className="mt-6">{renderActions(request, "large")}</div>}
+			{actionsSlot}
 		</>
 	);
 }

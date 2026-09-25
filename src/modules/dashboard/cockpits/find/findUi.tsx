@@ -134,23 +134,27 @@ type FindEmptyStateProps = {
 	onClear?: () => void;
 };
 
-export const FindEmptyState = ({ title, actionLabel = "Clear all", detail, onClear }: FindEmptyStateProps) => (
-	<div className="px-1 py-10">
-		<p className="font-semibold text-m+ text-panel-foreground">{title}</p>
+export const FindEmptyState = ({ title, actionLabel = "Clear all", detail, onClear }: FindEmptyStateProps) => {
+	const clearAction = onClear ? (
+		<button
+			className="focus-ring mt-4 inline-flex min-h-11 items-center font-semibold text-m text-primary outline-none hover:underline"
+			onClick={onClear}
+			type="button"
+		>
+			{actionLabel}
+		</button>
+	) : undefined;
 
-		{!!detail && <p className="mt-2 max-w-lg text-m text-muted-foreground leading-6">{detail}</p>}
+	return (
+		<div className="px-1 py-10">
+			<p className="font-semibold text-m+ text-panel-foreground">{title}</p>
 
-		{onClear != null && (
-			<button
-				className="focus-ring mt-4 inline-flex min-h-11 items-center font-semibold text-m text-primary outline-none hover:underline"
-				onClick={onClear}
-				type="button"
-			>
-				{actionLabel}
-			</button>
-		)}
-	</div>
-);
+			{!!detail && <p className="mt-2 max-w-lg text-m text-muted-foreground leading-6">{detail}</p>}
+
+			{clearAction}
+		</div>
+	);
+};
 
 type FindResultRowProps = {
 	item: FindItem;
@@ -172,6 +176,15 @@ export const FindResultRow = ({
 	tabIndex,
 }: FindResultRowProps) => {
 	const dueLabel = formatFindDueDate(item.dueDate);
+	const columnDetails = showColumns ? (
+		<>
+			<span className="@xl:block hidden truncate text-muted-foreground text-s">{item.owner}</span>
+
+			<span className="@xl:block hidden truncate text-muted-foreground text-s">{item.status}</span>
+
+			<span className="@xl:block hidden truncate text-muted-foreground text-s">{dueLabel ?? "—"}</span>
+		</>
+	) : undefined;
 
 	return (
 		<Link
@@ -203,15 +216,7 @@ export const FindResultRow = ({
 				</span>
 			</span>
 
-			{showColumns === true && (
-				<>
-					<span className="@xl:block hidden truncate text-muted-foreground text-s">{item.owner}</span>
-
-					<span className="@xl:block hidden truncate text-muted-foreground text-s">{item.status}</span>
-
-					<span className="@xl:block hidden truncate text-muted-foreground text-s">{dueLabel ?? "—"}</span>
-				</>
-			)}
+			{columnDetails}
 
 			<span className="flex shrink-0 flex-col items-end gap-1">
 				<span className="font-mono font-semibold text-m text-panel-foreground tabular-nums">

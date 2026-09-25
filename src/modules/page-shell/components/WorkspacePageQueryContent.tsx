@@ -28,6 +28,10 @@ export const WorkspacePageQueryContent = ({ dataset, experience, section }: Work
 		return <WorkspacePageLoading section={section} />;
 	}
 
+	const refreshBanner = error ? (
+		<WorkspaceRefreshState error={error} isFetching={isFetching} onRetry={() => void refetch()} />
+	) : undefined;
+
 	return (
 		<>
 			<WorkspacePageView
@@ -38,7 +42,7 @@ export const WorkspacePageQueryContent = ({ dataset, experience, section }: Work
 				section={section}
 			/>
 
-			{error != null && <WorkspaceRefreshState error={error} isFetching={isFetching} onRetry={() => void refetch()} />}
+			{refreshBanner}
 		</>
 	);
 };

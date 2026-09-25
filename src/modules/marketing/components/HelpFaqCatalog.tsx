@@ -161,6 +161,48 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 		return () => window.removeEventListener("keydown", handleGlobalKeyDown);
 	}, []);
 
+	const palette = isPaletteOpen ? (
+		<HelpFaqPalette
+			activeResult={activeResult}
+			activeResultIndex={visibleActiveResultIndex}
+			closePalette={closePalette}
+			dialogRef={dialogRef}
+			filteredGroups={filteredGroups}
+			onResultFocus={(resultIndex) => setActiveResultIndex(resultIndex)}
+			setResultRef={(resultIndex, element) => {
+				resultRefs.current[resultIndex] = element;
+			}}
+			onKeyDown={(event) => {
+				if (event.key === "ArrowDown") {
+					event.preventDefault();
+
+					if (results.length > 0) {
+						setActiveResultIndex((currentIndex) => (currentIndex + 1) % results.length);
+					}
+				}
+
+				if (event.key === "ArrowUp") {
+					event.preventDefault();
+
+					if (results.length > 0) {
+						setActiveResultIndex((currentIndex) => (currentIndex - 1 + results.length) % results.length);
+					}
+				}
+
+				if (event.key === "Enter") {
+					event.preventDefault();
+					if (activeResult) {
+						activateResult(visibleActiveResultIndex);
+					}
+				}
+			}}
+			query={query}
+			results={results}
+			searchRef={searchRef}
+			updateQuery={updateQuery}
+		/>
+	) : undefined;
+
 	return (
 		<section aria-labelledby="help-faq-catalog-title" className="mt-10 scroll-mt-24">
 			<h2 id="help-faq-catalog-title" className="sr-only">
@@ -171,47 +213,7 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 
 			<HelpContactPanel />
 
-			{isPaletteOpen === true && (
-				<HelpFaqPalette
-					activeResult={activeResult}
-					activeResultIndex={visibleActiveResultIndex}
-					closePalette={closePalette}
-					dialogRef={dialogRef}
-					filteredGroups={filteredGroups}
-					onResultFocus={(resultIndex) => setActiveResultIndex(resultIndex)}
-					setResultRef={(resultIndex, element) => {
-						resultRefs.current[resultIndex] = element;
-					}}
-					onKeyDown={(event) => {
-						if (event.key === "ArrowDown") {
-							event.preventDefault();
-
-							if (results.length > 0) {
-								setActiveResultIndex((currentIndex) => (currentIndex + 1) % results.length);
-							}
-						}
-
-						if (event.key === "ArrowUp") {
-							event.preventDefault();
-
-							if (results.length > 0) {
-								setActiveResultIndex((currentIndex) => (currentIndex - 1 + results.length) % results.length);
-							}
-						}
-
-						if (event.key === "Enter") {
-							event.preventDefault();
-							if (activeResult) {
-								activateResult(visibleActiveResultIndex);
-							}
-						}
-					}}
-					query={query}
-					results={results}
-					searchRef={searchRef}
-					updateQuery={updateQuery}
-				/>
-			)}
+			{palette}
 		</section>
 	);
 };

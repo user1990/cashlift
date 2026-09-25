@@ -34,6 +34,17 @@ export const OperatingCockpitDashboard = ({
 	const belowBuffer =
 		dashboard.lowestProjectedCashCents !== undefined &&
 		dashboard.lowestProjectedCashCents < dashboard.cashBufferTargetCents;
+	const cashAtRiskActionLabel =
+		primaryAction && dashboard.cashAtRiskCents > 0 ? (
+			<dd className="mt-1 text-s text-warning">{primaryAction.title}</dd>
+		) : undefined;
+	const primaryActionMeta = primaryAction ? (
+		<>
+			<span className="text-muted-foreground text-s">{CASH_ACTION_WORK[primaryAction.type]}</span>
+
+			<span className="text-muted-foreground text-s">Due {formatDashboardDate(primaryAction.dueDate)}</span>
+		</>
+	) : undefined;
 
 	return (
 		<div className="space-y-4 xl:space-y-5">
@@ -72,9 +83,7 @@ export const OperatingCockpitDashboard = ({
 								/>
 							</dd>
 
-							{primaryAction != null && dashboard.cashAtRiskCents > 0 && (
-								<dd className="mt-1 text-s text-warning">{primaryAction.title}</dd>
-							)}
+							{cashAtRiskActionLabel}
 						</div>
 					}
 				/>
@@ -89,13 +98,7 @@ export const OperatingCockpitDashboard = ({
 							<ExploreKicker>Priority</ExploreKicker>
 						)}
 
-						{primaryAction != null && (
-							<>
-								<span className="text-muted-foreground text-s">{CASH_ACTION_WORK[primaryAction.type]}</span>
-
-								<span className="text-muted-foreground text-s">Due {formatDashboardDate(primaryAction.dueDate)}</span>
-							</>
-						)}
+						{primaryActionMeta}
 					</div>
 
 					{primaryAction ? (

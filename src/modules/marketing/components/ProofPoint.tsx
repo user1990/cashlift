@@ -9,23 +9,27 @@ type ProofPointProps = {
 	textClassName: string;
 };
 
-export const ProofPoint = ({ Icon, metric, metricClassName, term, text, textClassName }: ProofPointProps) => (
-	<>
-		{Icon != null && (
-			<span
-				aria-hidden
-				className="flex size-10 shrink-0 items-center justify-center rounded-md border border-shell-border bg-shell/40 text-primary"
-			>
-				<Icon aria-hidden strokeWidth={1.5} className="size-5" />
-			</span>
-		)}
+export const ProofPoint = ({ Icon, metric, metricClassName, term, text, textClassName }: ProofPointProps) => {
+	const iconSlot = Icon ? (
+		<span
+			aria-hidden
+			className="flex size-10 shrink-0 items-center justify-center rounded-md border border-shell-border bg-shell/40 text-primary"
+		>
+			<Icon aria-hidden strokeWidth={1.5} className="size-5" />
+		</span>
+	) : undefined;
 
-		<dl>
-			<dt className="sr-only">{term}</dt>
+	return (
+		<>
+			{iconSlot}
 
-			<dd className={`font-mono ${metricClassName}`}>{metric}</dd>
-		</dl>
+			<dl>
+				<dt className="sr-only">{term}</dt>
 
-		<p className={`text-m leading-6 ${textClassName}`}>{text}</p>
-	</>
-);
+				<dd className={`font-mono ${metricClassName}`}>{metric}</dd>
+			</dl>
+
+			<p className={`text-m leading-6 ${textClassName}`}>{text}</p>
+		</>
+	);
+};

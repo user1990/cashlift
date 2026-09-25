@@ -16,15 +16,16 @@ export const PricingPlanCard = ({ billing, plan }: PricingPlanCardProps) => {
 	const highlighted = "highlighted" in plan && plan.highlighted;
 	const price = billing === "annual" ? plan.annualPrice : plan.price;
 	const annualSavingsPercent = getAnnualPricingSavingsPercent(plan.price, plan.annualPrice);
+	const recommendedBadge = highlighted ? (
+		<span className="absolute top-0 left-1/2 z-10 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-primary px-4 py-1.5 font-semibold text-primary-foreground text-s shadow-primary-glow">
+			<Star aria-hidden className="size-3.5 fill-current" />
+			Recommended
+		</span>
+	) : undefined;
 
 	return (
 		<li className="relative flex pt-3">
-			{highlighted === true && (
-				<span className="absolute top-0 left-1/2 z-10 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-primary px-4 py-1.5 font-semibold text-primary-foreground text-s shadow-primary-glow">
-					<Star aria-hidden className="size-3.5 fill-current" />
-					Recommended
-				</span>
-			)}
+			{recommendedBadge}
 
 			<Panel as="article" variant="glass" className={getPlanClassName(highlighted)}>
 				<header>
