@@ -76,7 +76,7 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 
 		if (!isPaletteOpen) {
 			if (dialog?.open) {
-				dialog.close();
+				closeHelpDialog(dialog);
 			}
 
 			if (wasPaletteOpenRef.current) {
@@ -102,13 +102,13 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 
 		return () => {
 			document.body.style.overflow = previousOverflow;
-			dialog?.close();
+			closeHelpDialog(dialog);
 		};
 	}, [isPaletteOpen]);
 
 	useEffect(
 		() => () => {
-			dialogRef.current?.close();
+			closeHelpDialog(dialogRef.current);
 		},
 		[],
 	);
@@ -591,4 +591,17 @@ function HelpFaqIcon({ iconName }: { iconName: HelpFaqIconName | undefined }) {
 		default:
 			return <FileQuestion aria-hidden className="size-4" />;
 	}
+}
+
+function closeHelpDialog(dialog: HTMLDialogElement | null) {
+	if (!dialog) {
+		return;
+	}
+
+	if (typeof dialog.close === "function") {
+		dialog.close();
+		return;
+	}
+
+	dialog.removeAttribute("open");
 }
