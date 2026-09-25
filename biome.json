@@ -10,6 +10,7 @@
 	},
 	"plugins": [
 		"./.biome/jsx-sibling-newlines.grit",
+		"./.biome/jsx-optional-no-null-ternary.grit",
 		{
 			"path": "./.biome/jsx-prop-order.grit",
 			"includes": ["**/modules/marketing/**/*.tsx"]

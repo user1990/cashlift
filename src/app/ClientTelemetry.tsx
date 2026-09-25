@@ -11,7 +11,7 @@ export const ClientTelemetry = () => {
 		<>
 			<SpeedInsights />
 
-			{analyticsReady ? <Analytics /> : null}
+			{analyticsReady && <Analytics />}
 		</>
 	);
 };
