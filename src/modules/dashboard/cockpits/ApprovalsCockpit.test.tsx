@@ -21,12 +21,11 @@ vi.mock("@/ui/components/feedback/Toaster", () => ({
 	Toaster: () => null,
 }));
 
-vi.mock("../hooks/useDashboardStatusDate", () => ({
-	useDashboardStatusDate: () => new Date("2026-05-09T00:00:00"),
-}));
-
 describe("ApprovalsCockpit", () => {
 	it("renders the glass queue from the current dataset without inventing totals", () => {
+		vi.useFakeTimers();
+		vi.setSystemTime(new Date("2026-05-09T00:00:00"));
+
 		const dashboard = buildDashboardViewModel({
 			dataset: APPROVALS_DATASET,
 			date: new Date("2026-05-09T00:00:00"),
@@ -41,6 +40,8 @@ describe("ApprovalsCockpit", () => {
 		expect(screen.getByText("Delta")).toBeVisible();
 		expect(screen.queryByText(/days runway/i)).not.toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: /approve/i })).not.toBeInTheDocument();
+
+		vi.useRealTimers();
 	});
 
 	it("submits an approved request decision and locks every control while pending", async () => {
