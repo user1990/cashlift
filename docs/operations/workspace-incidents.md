@@ -30,8 +30,8 @@ Safe diagnostic context includes table name, Supabase error code, feature, failu
 5. Run the smallest contract test, then the complete unit suite and security checks.
 
 ```bash
-pnpm test src/app/api/workspace/dataset/route.test.ts
-pnpm test 'src/app/api/workspace/spend-requests/[id]/route.test.ts'
+pnpm test src/app/api/v1/workspace/dataset/route.test.ts
+pnpm test 'src/app/api/v1/workspace/spend-requests/[id]/route.test.ts'
 pnpm test src/modules/workspace/repositories/supabase.test.ts
 pnpm test
 pnpm security:check
