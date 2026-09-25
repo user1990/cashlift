@@ -193,11 +193,14 @@ describe("supabaseFinanceRepository", () => {
 			"jwt",
 			"request-brandforge",
 			"approved",
+			"clerk-user-finance",
 		);
 
 		expect(CREATE_SERVER_SUPABASE_CLIENT_MOCK).toHaveBeenCalledWith({ accessToken: "jwt" });
 		expect(client.from).toHaveBeenCalledWith("spend_requests");
-		expect(client.updateMock).toHaveBeenCalledWith(expect.objectContaining({ status: "approved" }));
+		expect(client.updateMock).toHaveBeenCalledWith(
+			expect.objectContaining({ decided_by: "clerk-user-finance", status: "approved" }),
+		);
 		expect(client.eqMock).toHaveBeenCalledWith("company_id", "studio-nova");
 		expect(client.eqMock).toHaveBeenCalledWith("id", "request-brandforge");
 		expect(client.eqMock).toHaveBeenCalledWith("status", "pending");
@@ -220,7 +223,13 @@ describe("supabaseFinanceRepository", () => {
 		const { SpendRequestConflictError, supabaseFinanceRepository } = await import("./supabase");
 
 		await expect(
-			supabaseFinanceRepository.updateSpendRequestStatus("studio-nova", "jwt", "request-brandforge", "approved"),
+			supabaseFinanceRepository.updateSpendRequestStatus(
+				"studio-nova",
+				"jwt",
+				"request-brandforge",
+				"approved",
+				"clerk-user-finance",
+			),
 		).rejects.toBeInstanceOf(SpendRequestConflictError);
 	});
 
@@ -231,7 +240,13 @@ describe("supabaseFinanceRepository", () => {
 		const { supabaseFinanceRepository } = await import("./supabase");
 
 		await expect(
-			supabaseFinanceRepository.updateSpendRequestStatus("studio-nova", "jwt", "request-brandforge", "approved"),
+			supabaseFinanceRepository.updateSpendRequestStatus(
+				"studio-nova",
+				"jwt",
+				"request-brandforge",
+				"approved",
+				"clerk-user-finance",
+			),
 		).rejects.toMatchObject({
 			code: "supabase_query_failed",
 			message: "Unable to update spend request.",
