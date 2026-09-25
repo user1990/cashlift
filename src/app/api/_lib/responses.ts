@@ -16,6 +16,7 @@ type ApiErrorBody = {
 
 type ApiResponseInit = ResponseInit & {
 	deprecated?: boolean;
+	rateLimit?: RateLimitState;
 	request: Request;
 	successorPath?: string;
 };
@@ -27,6 +28,7 @@ type ApiErrorParams = {
 	requestId?: string;
 	status: 400 | 401 | 403 | 404 | 409 | 429 | 500 | 503;
 	deprecated?: boolean;
+	rateLimit?: RateLimitState;
 	successorPath?: string;
 };
 
@@ -47,36 +49,41 @@ type RateLimitState = {
 	resetInSeconds: number;
 };
 
+export const consumeWorkspaceApiRateLimit = (request: Request) => consumeRateLimit(request);
+
+export const workspaceRateLimitedResponse = (request: Request, rateLimit: RateLimitState) =>
+	NextResponse.json<ApiErrorBody>(
+		{
+			code: "api_rate_limited",
+			detail: "CashLift API rate limit exceeded.",
+			error: "CashLift API rate limit exceeded.",
+			message: "CashLift API rate limit exceeded.",
+			resolution: getErrorResolution("api_rate_limited"),
+			status: 429,
+			title: getErrorTitle("api_rate_limited"),
+			type: `${SITE_URL}/problems/api_rate_limited`,
+		},
+		{
+			status: 429,
+			headers: createApiHeaders(
+				request,
+				{ "Content-Type": "application/problem+json; charset=utf-8" },
+				false,
+				429,
+				undefined,
+				rateLimit,
+			),
+		},
+	);
+
 export const workspaceApiJson = <Body>(
 	body: Body,
-	{ deprecated = false, request, successorPath, ...init }: ApiResponseInit,
+	{ deprecated = false, rateLimit: providedRateLimit, request, successorPath, ...init }: ApiResponseInit,
 ) => {
-	const rateLimit = consumeRateLimit(request);
+	const rateLimit = providedRateLimit ?? consumeRateLimit(request);
 
 	if (!rateLimit.allowed) {
-		return NextResponse.json<ApiErrorBody>(
-			{
-				code: "api_rate_limited",
-				detail: "CashLift API rate limit exceeded.",
-				error: "CashLift API rate limit exceeded.",
-				message: "CashLift API rate limit exceeded.",
-				resolution: getErrorResolution("api_rate_limited"),
-				status: 429,
-				title: getErrorTitle("api_rate_limited"),
-				type: `${SITE_URL}/problems/api_rate_limited`,
-			},
-			{
-				status: 429,
-				headers: createApiHeaders(
-					request,
-					{ "Content-Type": "application/problem+json; charset=utf-8" },
-					false,
-					429,
-					undefined,
-					rateLimit,
-				),
-			},
-		);
+		return workspaceRateLimitedResponse(request, rateLimit);
 	}
 
 	return NextResponse.json<Body>(body, {
@@ -89,6 +96,7 @@ export const apiError = ({
 	code,
 	deprecated = false,
 	error,
+	rateLimit,
 	request,
 	requestId,
 	status,
@@ -109,6 +117,7 @@ export const apiError = ({
 		{
 			deprecated,
 			headers: { "Content-Type": "application/problem+json; charset=utf-8" },
+			rateLimit,
 			request,
 			status,
 			successorPath,
