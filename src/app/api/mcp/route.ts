@@ -1,5 +1,6 @@
 import { createMcpHandler, McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
+import { consumeWorkspaceApiRateLimit, workspaceRateLimitedResponse } from "@/app/api/_lib/responses";
 import { resolveWorkspaceDataset } from "@/modules/workspace/resolveWorkspaceDataset";
 import { WORKSPACE_DATASET_SCOPE_SCHEMA } from "@/modules/workspace/schemas";
 import { MCP_PROTOCOL_VERSIONS, MCP_SERVER_INFO } from "@/services/mcp";
@@ -54,6 +55,12 @@ export const GET = (request: Request) => handleMcpRequest(request);
 export const POST = (request: Request) => handleMcpRequest(request);
 
 async function handleMcpRequest(request: Request) {
+	const rateLimit = consumeWorkspaceApiRateLimit(request);
+
+	if (!rateLimit.allowed) {
+		return workspaceRateLimitedResponse(request, rateLimit);
+	}
+
 	const origin = request.headers.get("origin");
 
 	if (origin && origin !== SITE_URL) {

@@ -1,7 +1,7 @@
 import { resolveWorkspaceDataset } from "@/modules/workspace/resolveWorkspaceDataset";
 import { WORKSPACE_DATASET_DATE_RANGE_SCHEMA, WORKSPACE_DATASET_SCOPE_SCHEMA } from "@/modules/workspace/schemas";
 import { decideSpendRequest } from "@/modules/workspace/spendRequestDecisions";
-import { apiError, workspaceApiJson } from "./responses";
+import { apiError, consumeWorkspaceApiRateLimit, workspaceApiJson, workspaceRateLimitedResponse } from "./responses";
 
 type ApiRouteOptions = {
 	deprecated?: boolean;
@@ -35,6 +35,12 @@ const ERROR_CODE = {
 } as const;
 
 export const getWorkspaceDataset = async (request: Request, options: ApiRouteOptions = {}) => {
+	const rateLimit = consumeWorkspaceApiRateLimit(request);
+
+	if (!rateLimit.allowed) {
+		return workspaceRateLimitedResponse(request, rateLimit);
+	}
+
 	const scope = requestUrlScope(request);
 	const dateRange = requestUrlDateRange(request);
 
@@ -43,6 +49,7 @@ export const getWorkspaceDataset = async (request: Request, options: ApiRouteOpt
 			code: "api_request_failed",
 			deprecated: options.deprecated,
 			error: "Workspace dataset scope is invalid.",
+			rateLimit,
 			request,
 			successorPath: options.successorPath,
 			status: 400,
@@ -54,6 +61,7 @@ export const getWorkspaceDataset = async (request: Request, options: ApiRouteOpt
 			code: "api_request_failed",
 			deprecated: options.deprecated,
 			error: "Workspace dataset date range is invalid.",
+			rateLimit,
 			request,
 			successorPath: options.successorPath,
 			status: 400,
@@ -66,6 +74,7 @@ export const getWorkspaceDataset = async (request: Request, options: ApiRouteOpt
 		case "success":
 			return workspaceApiJson(result.dataset, {
 				deprecated: options.deprecated,
+				rateLimit,
 				request,
 				successorPath: options.successorPath,
 			});
@@ -74,6 +83,7 @@ export const getWorkspaceDataset = async (request: Request, options: ApiRouteOpt
 				code: "workspace_config_unavailable",
 				deprecated: options.deprecated,
 				error: result.message,
+				rateLimit,
 				request,
 				requestId: result.requestId,
 				status: 503,
@@ -84,6 +94,7 @@ export const getWorkspaceDataset = async (request: Request, options: ApiRouteOpt
 				code: "workspace_service_unavailable",
 				deprecated: options.deprecated,
 				error: result.message,
+				rateLimit,
 				request,
 				requestId: result.requestId,
 				status: 503,
@@ -94,6 +105,7 @@ export const getWorkspaceDataset = async (request: Request, options: ApiRouteOpt
 				code: "workspace_unauthenticated",
 				deprecated: options.deprecated,
 				error: result.message,
+				rateLimit,
 				request,
 				status: 401,
 				successorPath: options.successorPath,
@@ -103,6 +115,7 @@ export const getWorkspaceDataset = async (request: Request, options: ApiRouteOpt
 				code: "workspace_forbidden",
 				deprecated: options.deprecated,
 				error: result.message,
+				rateLimit,
 				request,
 				status: 403,
 				successorPath: options.successorPath,
@@ -112,6 +125,7 @@ export const getWorkspaceDataset = async (request: Request, options: ApiRouteOpt
 				code: "workspace_data_unavailable",
 				deprecated: options.deprecated,
 				error: result.message,
+				rateLimit,
 				request,
 				requestId: result.requestId,
 				status: 500,
@@ -121,6 +135,12 @@ export const getWorkspaceDataset = async (request: Request, options: ApiRouteOpt
 };
 
 export const patchSpendRequest = async (request: Request, context: RouteContext, options: ApiRouteOptions = {}) => {
+	const rateLimit = consumeWorkspaceApiRateLimit(request);
+
+	if (!rateLimit.allowed) {
+		return workspaceRateLimitedResponse(request, rateLimit);
+	}
+
 	const [{ id }, body] = await Promise.all([context.params, request.json().catch(() => null)]);
 	const result = await decideSpendRequest({
 		id,
@@ -130,6 +150,7 @@ export const patchSpendRequest = async (request: Request, context: RouteContext,
 	if (result.status === "success") {
 		return workspaceApiJson(result.request, {
 			deprecated: options.deprecated,
+			rateLimit,
 			request,
 			successorPath: options.successorPath,
 		});
@@ -139,6 +160,7 @@ export const patchSpendRequest = async (request: Request, context: RouteContext,
 		code: ERROR_CODE[result.code],
 		deprecated: options.deprecated,
 		error: result.message,
+		rateLimit,
 		request,
 		requestId: result.requestId,
 		status: ERROR_STATUS[result.code],
