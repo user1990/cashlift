@@ -22,13 +22,13 @@ export const ChartFrame = ({ children }: ChartFrameProps) => {
 	);
 
 	return (
-		<div
-			ref={(frame) => setChartFrameElement(store, frame)}
-			aria-hidden="true"
-			className="h-60 min-w-0"
-			onMouseDown={(event) => event.preventDefault()}
-		>
-			{ready && children}
+		<div ref={(frame) => setChartFrameElement(store, frame)} className="h-60 min-w-0">
+			{ready ? (
+				// biome-ignore lint/a11y/noStaticElementInteractions: block Recharts from stealing focus on pointer down
+				<div className="h-full min-w-0" onMouseDown={(event) => event.preventDefault()}>
+					{children}
+				</div>
+			) : null}
 		</div>
 	);
 };
