@@ -88,7 +88,11 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 		}
 
 		if (dialog && !dialog.open) {
-			dialog.showModal();
+			if (typeof dialog.showModal === "function") {
+				dialog.showModal();
+			} else {
+				dialog.setAttribute("open", "");
+			}
 		}
 
 		wasPaletteOpenRef.current = true;
