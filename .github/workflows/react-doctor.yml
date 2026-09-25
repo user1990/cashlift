@@ -21,10 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0
 
-      - uses: millionco/react-doctor@v2
+      - uses: millionco/react-doctor@0a2629b8dabe659935e08e12e3bef0d0ea2d53aa # v2
         with:
           blocking: error
