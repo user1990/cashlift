@@ -48,6 +48,15 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 	const [query, setQuery] = useState(() => parseHelpFaqQuery(initialQuery));
 	const [isPaletteOpen, setIsPaletteOpen] = useState(() => Boolean(parseHelpFaqQuery(initialQuery)));
 	const [activeResultIndex, setActiveResultIndex] = useState(0);
+
+	useEffect(() => {
+		const nextQuery = parseHelpFaqQuery(initialQuery);
+		setQuery(nextQuery);
+
+		if (nextQuery) {
+			setIsPaletteOpen(true);
+		}
+	}, [initialQuery]);
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const resultRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 	const triggerRef = useRef<HTMLButtonElement>(null);
