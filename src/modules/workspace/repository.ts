@@ -8,5 +8,6 @@ export type FinanceRepository = {
 		accessToken: string,
 		id: string,
 		status: SpendRequestDecisionStatus,
+		decidedByUserId: string,
 	): Promise<SpendRequest>;
 };

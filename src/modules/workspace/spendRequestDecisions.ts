@@ -116,6 +116,7 @@ const decideProductionSpendRequest = async (
 			accessToken,
 			decision.id,
 			decision.status,
+			session.userId,
 		);
 
 		return { request, status: "success" };

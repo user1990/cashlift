@@ -3,7 +3,7 @@ title: Workspace incident runbook
 description: Diagnose workspace read and spend-decision failures without exposing sensitive data.
 ---
 
-Use this runbook when `/dashboard`, `/api/workspace/dataset`, or spend approvals fail in production.
+Use this runbook when `/dashboard`, `/api/v1/workspace/dataset`, or spend approvals fail in production.
 
 ## Classify the failure
 

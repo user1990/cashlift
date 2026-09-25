@@ -73,4 +73,22 @@ test.describe("axe smoke", () => {
 		assertNoCriticalViolations(accessibilityScanResults.violations);
 		assertNoUnnamedLinks(accessibilityScanResults.violations);
 	});
+
+	test("help page has no serious or critical axe violations", async ({ page }) => {
+		await page.goto("/help");
+
+		const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+
+		assertNoCriticalViolations(accessibilityScanResults.violations);
+		assertNoUnnamedLinks(accessibilityScanResults.violations);
+	});
+
+	test("pricing page has no serious or critical axe violations", async ({ page }) => {
+		await page.goto("/pricing");
+
+		const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+
+		assertNoCriticalViolations(accessibilityScanResults.violations);
+		assertNoUnnamedLinks(accessibilityScanResults.violations);
+	});
 });

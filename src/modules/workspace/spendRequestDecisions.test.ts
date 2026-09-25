@@ -146,6 +146,7 @@ describe("decideSpendRequest", () => {
 			"jwt",
 			"request-brandforge",
 			"approved",
+			"user-1",
 		);
 	});
 
