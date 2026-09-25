@@ -72,13 +72,23 @@ export const HelpFaqCatalog = ({ groups, initialQuery = "" }: HelpFaqCatalogProp
 	}, [activeResultId, isPaletteOpen, visibleActiveResultIndex]);
 
 	useEffect(() => {
+		const dialog = dialogRef.current;
+
 		if (!isPaletteOpen) {
+			if (dialog?.open) {
+				dialog.close();
+			}
+
 			if (wasPaletteOpenRef.current) {
 				window.requestAnimationFrame(() => triggerRef.current?.focus());
 			}
 
 			wasPaletteOpenRef.current = false;
 			return;
+		}
+
+		if (dialog && !dialog.open) {
+			dialog.showModal();
 		}
 
 		wasPaletteOpenRef.current = true;
@@ -297,7 +307,6 @@ function HelpFaqPalette({
 		<dialog
 			ref={dialogRef}
 			id={HELP_FAQ_DIALOG_ID}
-			open
 			aria-modal="true"
 			aria-labelledby={HELP_FAQ_DIALOG_TITLE_ID}
 			onKeyDown={handleDialogKeyDown}
