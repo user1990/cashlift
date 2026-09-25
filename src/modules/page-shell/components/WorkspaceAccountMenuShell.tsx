@@ -25,65 +25,70 @@ export const AccountMenuShell = ({
 	name,
 	placement = "sidebar",
 	signOut,
-}: AccountMenuShellProps) => (
-	<MenuTrigger>
-		<Button
-			aria-label={compact ? `${name}, ${description}` : undefined}
-			className={cn(
-				"focus-ring ease flex cursor-pointer list-none items-center rounded-lg text-left text-shell-foreground transition-colors duration-150 hover:bg-white/5",
-				compact ? "size-11 justify-center p-0" : "w-full gap-3 px-2 py-3",
-				placement === "header" && "shrink-0",
-			)}
-		>
-			<span
-				aria-hidden={compact}
-				className="grid size-10 shrink-0 place-items-center rounded-full bg-panel-muted font-semibold text-s+ text-shell-foreground"
+}: AccountMenuShellProps) => {
+	const compactHeader = compact ? (
+		<div className="border-shell-border border-b px-3 py-2">
+			<p className="truncate font-semibold text-m+ text-shell-foreground">{name}</p>
+
+			<p className="truncate text-s text-shell-muted">{description}</p>
+		</div>
+	) : undefined;
+	const signOutItem = signOut ? (
+		<MenuItem className={MENU_ITEM_CLASS_NAME} onAction={signOut}>
+			Sign out
+		</MenuItem>
+	) : undefined;
+
+	return (
+		<MenuTrigger>
+			<Button
+				aria-label={compact ? `${name}, ${description}` : undefined}
+				className={cn(
+					"focus-ring ease flex cursor-pointer list-none items-center rounded-lg text-left text-shell-foreground transition-colors duration-150 hover:bg-white/5",
+					compact ? "size-11 justify-center p-0" : "w-full gap-3 px-2 py-3",
+					placement === "header" && "shrink-0",
+				)}
 			>
-				{avatar}
-			</span>
+				<span
+					aria-hidden={compact}
+					className="grid size-10 shrink-0 place-items-center rounded-full bg-panel-muted font-semibold text-s+ text-shell-foreground"
+				>
+					{avatar}
+				</span>
 
-			{!compact && (
-				<>
-					<span className="min-w-0 flex-1">
-						<span className="block truncate font-semibold text-m+">{name}</span>
+				{!compact && (
+					<>
+						<span className="min-w-0 flex-1">
+							<span className="block truncate font-semibold text-m+">{name}</span>
 
-						<span className="block truncate text-s text-shell-muted">{description}</span>
-					</span>
+							<span className="block truncate text-s text-shell-muted">{description}</span>
+						</span>
 
-					<ChevronDown aria-hidden className="size-4 text-shell-muted" />
-				</>
-			)}
-		</Button>
-
-		<Popover
-			className={cn(
-				"z-20 grid w-56 gap-1 rounded-lg border border-shell-border bg-shell-elevated p-1 shadow-shell outline-none",
-				placement === "header" ? "mt-2" : "mb-2",
-			)}
-			offset={8}
-			placement={placement === "header" ? "bottom end" : "top start"}
-		>
-			<Menu className="grid gap-1 outline-none">
-				{compact === true && (
-					<div className="border-shell-border border-b px-3 py-2">
-						<p className="truncate font-semibold text-m+ text-shell-foreground">{name}</p>
-
-						<p className="truncate text-s text-shell-muted">{description}</p>
-					</div>
+						<ChevronDown aria-hidden className="size-4 text-shell-muted" />
+					</>
 				)}
+			</Button>
 
-				{items.map(({ href, label }) => (
-					<MenuItem key={href} className={MENU_ITEM_CLASS_NAME} href={href}>
-						{label}
-					</MenuItem>
-				))}
-
-				{signOut != null && (
-					<MenuItem className={MENU_ITEM_CLASS_NAME} onAction={signOut}>
-						Sign out
-					</MenuItem>
+			<Popover
+				className={cn(
+					"z-20 grid w-56 gap-1 rounded-lg border border-shell-border bg-shell-elevated p-1 shadow-shell outline-none",
+					placement === "header" ? "mt-2" : "mb-2",
 				)}
-			</Menu>
-		</Popover>
-	</MenuTrigger>
-);
+				offset={8}
+				placement={placement === "header" ? "bottom end" : "top start"}
+			>
+				<Menu className="grid gap-1 outline-none">
+					{compactHeader}
+
+					{items.map(({ href, label }) => (
+						<MenuItem key={href} className={MENU_ITEM_CLASS_NAME} href={href}>
+							{label}
+						</MenuItem>
+					))}
+
+					{signOutItem}
+				</Menu>
+			</Popover>
+		</MenuTrigger>
+	);
+};

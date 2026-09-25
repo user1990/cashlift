@@ -44,6 +44,71 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 	const showExamples = !hasQuery && !session.hasFilters;
 	const showResults = hasQuery || session.hasFilters || session.query.category !== "all";
 	const showEmpty = showResults && session.results.length === 0;
+	const resultsLiveRegion = session.showResults ? (
+		<div aria-live="polite" className="sr-only">
+			{`${session.results.length} ${session.results.length === 1 ? "result" : "results"}`}
+		</div>
+	) : undefined;
+	const emptyState = showEmpty ? (
+		<FindEmptyState
+			title="No results"
+			actionLabel="Reset search"
+			detail={
+				session.query.query
+					? `No matches for “${session.query.query}”. Try a client, vendor, owner, or status from this Company Workspace.`
+					: "Nothing in this category matches the current filters."
+			}
+			onClear={session.clearAll}
+		/>
+	) : undefined;
+	const examplesSection = showExamples ? (
+		<div className="divide-y divide-white/10">
+			<div className="px-4 py-2">
+				<p className="font-semibold text-muted-foreground text-s">Examples</p>
+			</div>
+
+			{examples.map((example) => (
+				<FindExampleRow example={example} key={example.id} onSelect={() => applyFindExample(example, session)} />
+			))}
+
+			{session.recentSearches.map((recentSearch) => (
+				<FindExampleRow
+					example={{
+						category: "all",
+						hint: "Recent search",
+						id: `recent-${recentSearch}`,
+						label: recentSearch,
+					}}
+					icon={ArrowRightLeft}
+					key={`recent-${recentSearch}`}
+					onSelect={() => session.applySearch(recentSearch)}
+				/>
+			))}
+		</div>
+	) : undefined;
+	const resultsList =
+		showResults && session.results.length > 0 ? (
+			<div className="divide-y divide-white/10" id="find-results" role="listbox">
+				{session.results.map((item) => (
+					<div
+						aria-selected={session.selectedId === item.id}
+						id={getFindOptionId(item.id)}
+						key={item.id}
+						role="option"
+						tabIndex={-1}
+					>
+						<FindResultRow
+							glass
+							highlightQuery={session.query.query}
+							item={item}
+							selected={session.selectedId === item.id}
+							showKind
+							tabIndex={-1}
+						/>
+					</div>
+				))}
+			</div>
+		) : undefined;
 
 	return (
 		<ModalOverlay
@@ -99,77 +164,13 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 					</div>
 
 					<div className="max-h-[min(24rem,50vh)] overflow-y-auto">
-						{session.showResults === true && (
-							<div aria-live="polite" className="sr-only">
-								{`${session.results.length} ${session.results.length === 1 ? "result" : "results"}`}
-							</div>
-						)}
+						{resultsLiveRegion}
 
-						{showEmpty === true && (
-							<FindEmptyState
-								title="No results"
-								actionLabel="Reset search"
-								detail={
-									session.query.query
-										? `No matches for “${session.query.query}”. Try a client, vendor, owner, or status from this Company Workspace.`
-										: "Nothing in this category matches the current filters."
-								}
-								onClear={session.clearAll}
-							/>
-						)}
+						{emptyState}
 
-						{showExamples === true && (
-							<div className="divide-y divide-white/10">
-								<div className="px-4 py-2">
-									<p className="font-semibold text-muted-foreground text-s">Examples</p>
-								</div>
+						{examplesSection}
 
-								{examples.map((example) => (
-									<FindExampleRow
-										example={example}
-										key={example.id}
-										onSelect={() => applyFindExample(example, session)}
-									/>
-								))}
-
-								{session.recentSearches.map((recentSearch) => (
-									<FindExampleRow
-										example={{
-											category: "all",
-											hint: "Recent search",
-											id: `recent-${recentSearch}`,
-											label: recentSearch,
-										}}
-										icon={ArrowRightLeft}
-										key={`recent-${recentSearch}`}
-										onSelect={() => session.applySearch(recentSearch)}
-									/>
-								))}
-							</div>
-						)}
-
-						{showResults === true && session.results.length > 0 && (
-							<div className="divide-y divide-white/10" id="find-results" role="listbox">
-								{session.results.map((item) => (
-									<div
-										aria-selected={session.selectedId === item.id}
-										id={getFindOptionId(item.id)}
-										key={item.id}
-										role="option"
-										tabIndex={-1}
-									>
-										<FindResultRow
-											glass
-											highlightQuery={session.query.query}
-											item={item}
-											selected={session.selectedId === item.id}
-											showKind
-											tabIndex={-1}
-										/>
-									</div>
-								))}
-							</div>
-						)}
+						{resultsList}
 					</div>
 
 					<FindShortcutFooter />

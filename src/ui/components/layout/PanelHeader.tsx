@@ -6,20 +6,28 @@ type PanelHeaderProps = {
 	label?: string;
 };
 
-export const PanelHeader = ({ action, label, title }: PanelHeaderProps) => (
-	<div className="mb-4 flex items-start justify-between gap-4" data-slot="card-header">
-		<div className="min-w-0">
-			{!!label && (
-				<Badge className="mb-1" variant="primary">
-					{label}
-				</Badge>
-			)}
+export const PanelHeader = ({ action, label, title }: PanelHeaderProps) => {
+	let actionSlot: React.ReactNode;
 
-			<h2 className="text-l+ text-panel-foreground" data-slot="card-title">
-				{title}
-			</h2>
+	if (action) {
+		actionSlot = <div className="shrink-0">{action}</div>;
+	}
+
+	return (
+		<div className="mb-4 flex items-start justify-between gap-4" data-slot="card-header">
+			<div className="min-w-0">
+				{!!label && (
+					<Badge className="mb-1" variant="primary">
+						{label}
+					</Badge>
+				)}
+
+				<h2 className="text-l+ text-panel-foreground" data-slot="card-title">
+					{title}
+				</h2>
+			</div>
+
+			{actionSlot}
 		</div>
-
-		{action != null && <div className="shrink-0">{action}</div>}
-	</div>
-);
+	);
+};

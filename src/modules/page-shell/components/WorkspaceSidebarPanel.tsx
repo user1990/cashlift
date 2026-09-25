@@ -26,25 +26,32 @@ export const WorkspaceSidebarPanel = ({
 	const pathname = usePathname() ?? "";
 	const navGroups = getWorkspaceNavGroups(workspace.basePath);
 	const activeHref = getActiveWorkspaceNavHref(pathname, workspace.basePath);
+	const logoLink = showLogo ? (
+		<Link
+			aria-label="CashLift workspace home"
+			className="flex items-center gap-3 px-2 py-3"
+			href={workspace.basePath}
+			onClick={onNavigate}
+		>
+			<Image alt="CashLift Logo" className="h-9 w-auto shrink-0" height={36} priority src={logo} width={186} />
+		</Link>
+	) : undefined;
+	const readOnlyBanner = workspace.readOnly ? (
+		<p className="mx-2 mt-2 rounded-full border border-shell-border bg-shell-elevated/60 px-3 py-1.5 text-center font-medium text-s+ text-shell-muted">
+			Read-only demo
+		</p>
+	) : undefined;
+	const accountMenu = showAccountMenu ? (
+		<div className="mt-auto sm:pt-8">
+			<WorkspaceAccountMenu placement="sidebar" workspace={workspace} />
+		</div>
+	) : undefined;
 
 	return (
 		<>
-			{showLogo === true && (
-				<Link
-					aria-label="CashLift workspace home"
-					className="flex items-center gap-3 px-2 py-3"
-					href={workspace.basePath}
-					onClick={onNavigate}
-				>
-					<Image alt="CashLift Logo" className="h-9 w-auto shrink-0" height={36} priority src={logo} width={186} />
-				</Link>
-			)}
+			{logoLink}
 
-			{workspace.readOnly === true && (
-				<p className="mx-2 mt-2 rounded-full border border-shell-border bg-shell-elevated/60 px-3 py-1.5 text-center font-medium text-s+ text-shell-muted">
-					Read-only demo
-				</p>
-			)}
+			{readOnlyBanner}
 
 			<nav aria-label="Workspace" className={showLogo ? "mt-7" : undefined}>
 				{navGroups.map((group, groupIndex) => (
@@ -62,11 +69,7 @@ export const WorkspaceSidebarPanel = ({
 				))}
 			</nav>
 
-			{showAccountMenu === true && (
-				<div className="mt-auto sm:pt-8">
-					<WorkspaceAccountMenu placement="sidebar" workspace={workspace} />
-				</div>
-			)}
+			{accountMenu}
 		</>
 	);
 };

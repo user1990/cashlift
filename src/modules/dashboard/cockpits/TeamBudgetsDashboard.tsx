@@ -14,6 +14,29 @@ type TeamBudgetsDashboardProps = {
 export const TeamBudgetsDashboard = ({ dataset }: TeamBudgetsDashboardProps) => {
 	const presentation = buildTeamBudgetsPresentation(dataset);
 	const primaryTeam = presentation.primaryTeam;
+	const primaryTeamSection = primaryTeam ? (
+		<section className="grid items-stretch gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:gap-5">
+			<GlassCard atmosphere="priority" className="h-full" contentClassName="flex h-full flex-col" intensity="active">
+				{renderPrimaryTeam(primaryTeam, presentation.remainingTeams.length > 0)}
+			</GlassCard>
+
+			<GlassCard atmosphere="queue">
+				<ExploreKicker>Guardrails</ExploreKicker>
+
+				<h2 className="mt-1 text-panel-foreground text-xl+">Other teams</h2>
+
+				{presentation.remainingTeams.length > 0 ? (
+					<ol className="mt-4 divide-y divide-white/10">
+						{presentation.remainingTeams.map((row) => (
+							<li key={row.id}>{renderQueueTeam(row)}</li>
+						))}
+					</ol>
+				) : (
+					<p className="mt-4 text-m text-muted-foreground">No other team budgets for this range.</p>
+				)}
+			</GlassCard>
+		</section>
+	) : undefined;
 
 	return (
 		<div className="space-y-4 xl:space-y-5">
@@ -69,34 +92,7 @@ export const TeamBudgetsDashboard = ({ dataset }: TeamBudgetsDashboardProps) => 
 				)}
 			</GlassCard>
 
-			{primaryTeam != null && (
-				<section className="grid items-stretch gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:gap-5">
-					<GlassCard
-						atmosphere="priority"
-						className="h-full"
-						contentClassName="flex h-full flex-col"
-						intensity="active"
-					>
-						{renderPrimaryTeam(primaryTeam, presentation.remainingTeams.length > 0)}
-					</GlassCard>
-
-					<GlassCard atmosphere="queue">
-						<ExploreKicker>Guardrails</ExploreKicker>
-
-						<h2 className="mt-1 text-panel-foreground text-xl+">Other teams</h2>
-
-						{presentation.remainingTeams.length > 0 ? (
-							<ol className="mt-4 divide-y divide-white/10">
-								{presentation.remainingTeams.map((row) => (
-									<li key={row.id}>{renderQueueTeam(row)}</li>
-								))}
-							</ol>
-						) : (
-							<p className="mt-4 text-m text-muted-foreground">No other team budgets for this range.</p>
-						)}
-					</GlassCard>
-				</section>
-			)}
+			{primaryTeamSection}
 
 			{presentation.rows.length > 0 && (
 				<GlassCard atmosphere="support">

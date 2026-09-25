@@ -18,45 +18,53 @@ export const UseCaseReferencePage = ({
 	useCase,
 	cardHref,
 	showSignalRail = false,
-}: UseCaseReferencePageProps) => (
-	<MainContent variant="marketing" className="relative overflow-hidden">
-		<section className="relative isolate">
-			<div aria-hidden className="absolute inset-x-0 top-0 h-px" />
+}: UseCaseReferencePageProps) => {
+	let signalRail: React.ReactNode;
 
-			<div>
-				<Hero description={useCase.description} label={useCase.label} variant="page-title" />
+	if (showSignalRail) {
+		signalRail = <UseCaseSignalRail />;
+	}
 
-				<div className="relative mt-16 lg:mt-20 lg:pb-8">
-					{showSignalRail === true && <UseCaseSignalRail />}
+	return (
+		<MainContent variant="marketing" className="relative overflow-hidden">
+			<section className="relative isolate">
+				<div aria-hidden className="absolute inset-x-0 top-0 h-px" />
 
-					<ol
-						className={cn(
-							"relative mx-auto grid max-w-280 gap-6 lg:gap-12",
-							showSignalRail ? "md:grid-cols-3 md:items-end" : "lg:grid-cols-3 lg:items-end",
-						)}
-					>
-						{getUseCaseDecisionCards(decisions, useCase.answers).map((decision, index, cards) => (
-							<li
-								key={decision.title}
-								className={cn(
-									"relative",
-									index === 0 && "lg:translate-y-16",
-									index === cards.length - 1 && "lg:-translate-y-16",
-								)}
-							>
-								<UseCaseDecisionCard cardHref={cardHref} decision={decision} />
-							</li>
-						))}
-					</ol>
+				<div>
+					<Hero description={useCase.description} label={useCase.label} variant="page-title" />
+
+					<div className="relative mt-16 lg:mt-20 lg:pb-8">
+						{signalRail}
+
+						<ol
+							className={cn(
+								"relative mx-auto grid max-w-280 gap-6 lg:gap-12",
+								showSignalRail ? "md:grid-cols-3 md:items-end" : "lg:grid-cols-3 lg:items-end",
+							)}
+						>
+							{getUseCaseDecisionCards(decisions, useCase.answers).map((decision, index, cards) => (
+								<li
+									key={decision.title}
+									className={cn(
+										"relative",
+										index === 0 && "lg:translate-y-16",
+										index === cards.length - 1 && "lg:-translate-y-16",
+									)}
+								>
+									<UseCaseDecisionCard cardHref={cardHref} decision={decision} />
+								</li>
+							))}
+						</ol>
+					</div>
+
+					<div className="mt-12 flex justify-center lg:mt-4">
+						<ActionLink href="/demo">Book a walkthrough</ActionLink>
+					</div>
 				</div>
-
-				<div className="mt-12 flex justify-center lg:mt-4">
-					<ActionLink href="/demo">Book a walkthrough</ActionLink>
-				</div>
-			</div>
-		</section>
-	</MainContent>
-);
+			</section>
+		</MainContent>
+	);
+};
 
 function UseCaseSignalRail() {
 	return (
