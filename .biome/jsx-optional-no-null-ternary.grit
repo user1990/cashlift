@@ -1,0 +1,15 @@
+language js(typescript, jsx)
+
+or {
+	`$test ? <$tag $props>$_</$tag> : null` as $match,
+	`$test ? <$tag $props /> : null` as $match,
+	`$test ? <>$_</> : null` as $match,
+	`$test ? <$tag $props>$_</$tag> : undefined` as $match,
+	`$test ? <$tag $props /> : undefined` as $match,
+	`$test ? <>$_</> : undefined` as $match,
+	`$test ? <$tag $props>$_</$tag> : false` as $match,
+	`$test ? <$tag $props /> : false` as $match,
+	`$test ? <>$_</> : false` as $match
+} as $match where {
+	register_diagnostic(span=$match, message="Use `{condition && <Node />}` for optional JSX; reserve `? :` for when both branches render real UI.", severity="error")
+}
