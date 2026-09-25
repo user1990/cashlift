@@ -1,0 +1,11 @@
+---
+description: Keep pull request bodies free of IDE attribution footers
+alwaysApply: true
+---
+
+# Pull requests
+
+When creating or editing GitHub pull request descriptions (`gh pr create`, `gh pr edit`):
+
+- Do **not** append "Made with Cursor", "Made with [Cursor](https://cursor.com)", or similar agent or IDE attribution.
+- Use the repository pull request template sections only (Preview, Why, What, How to review, Checklist).
