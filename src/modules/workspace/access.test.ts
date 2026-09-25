@@ -11,7 +11,12 @@ vi.mock("@/services/platform/integrations/sentry", () => ({
 	captureAppMessage: CAPTURE_APP_MESSAGE_MOCK,
 }));
 
-import { getWorkspaceAccessToken, getWorkspaceAuthSession, isWorkspaceOperationFailure } from "./access";
+import {
+	type AuthSession,
+	getWorkspaceAccessToken,
+	getWorkspaceAuthSession,
+	isWorkspaceOperationFailure,
+} from "./access";
 
 describe("workspace access helpers", () => {
 	beforeEach(() => {
@@ -35,13 +40,19 @@ describe("workspace access helpers", () => {
 	});
 
 	it("returns the Clerk data token when present", async () => {
-		const session = { getToken: vi.fn().mockResolvedValue("jwt-token"), userId: "user-1" };
+		const session = {
+			getToken: vi.fn().mockResolvedValue("jwt-token"),
+			userId: "user-1",
+		} as AuthSession;
 
 		await expect(getWorkspaceAccessToken(session)).resolves.toBe("jwt-token");
 	});
 
 	it("maps a missing data token to a service error", async () => {
-		const session = { getToken: vi.fn().mockResolvedValue(null), userId: "user-1" };
+		const session = {
+			getToken: vi.fn().mockResolvedValue(null),
+			userId: "user-1",
+		} as AuthSession;
 
 		const result = await getWorkspaceAccessToken(session);
 
