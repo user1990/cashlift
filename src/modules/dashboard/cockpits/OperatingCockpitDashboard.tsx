@@ -72,7 +72,7 @@ export const OperatingCockpitDashboard = ({
 								/>
 							</dd>
 
-							{primaryAction && dashboard.cashAtRiskCents > 0 && (
+							{primaryAction != null && dashboard.cashAtRiskCents > 0 && (
 								<dd className="mt-1 text-s text-warning">{primaryAction.title}</dd>
 							)}
 						</div>
@@ -89,7 +89,7 @@ export const OperatingCockpitDashboard = ({
 							<ExploreKicker>Priority</ExploreKicker>
 						)}
 
-						{primaryAction && (
+						{primaryAction != null && (
 							<>
 								<span className="text-muted-foreground text-s">{CASH_ACTION_WORK[primaryAction.type]}</span>
 

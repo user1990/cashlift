@@ -99,13 +99,13 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 					</div>
 
 					<div className="max-h-[min(24rem,50vh)] overflow-y-auto">
-						{session.showResults && (
+						{session.showResults === true && (
 							<div aria-live="polite" className="sr-only">
 								{`${session.results.length} ${session.results.length === 1 ? "result" : "results"}`}
 							</div>
 						)}
 
-						{showEmpty && (
+						{showEmpty === true && (
 							<FindEmptyState
 								title="No results"
 								actionLabel="Reset search"
@@ -118,7 +118,7 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 							/>
 						)}
 
-						{showExamples && (
+						{showExamples === true && (
 							<div className="divide-y divide-white/10">
 								<div className="px-4 py-2">
 									<p className="font-semibold text-muted-foreground text-s">Examples</p>
@@ -148,7 +148,7 @@ export const WorkspaceFindCommandPalette = ({ items, session }: WorkspaceFindCom
 							</div>
 						)}
 
-						{showResults && session.results.length > 0 && (
+						{showResults === true && session.results.length > 0 && (
 							<div className="divide-y divide-white/10" id="find-results" role="listbox">
 								{session.results.map((item) => (
 									<div
@@ -204,7 +204,7 @@ const FindExampleRow = ({
 				<span className="min-w-0">
 					<span className="block truncate font-medium text-m text-panel-foreground">{example.label}</span>
 
-					{example.hint && <span className="mt-0.5 block truncate text-muted-foreground text-s">{example.hint}</span>}
+					{!!example.hint && <span className="mt-0.5 block truncate text-muted-foreground text-s">{example.hint}</span>}
 				</span>
 			</span>
 		</button>

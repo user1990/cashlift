@@ -64,7 +64,7 @@ export const AccountMenuShell = ({
 			placement={placement === "header" ? "bottom end" : "top start"}
 		>
 			<Menu className="grid gap-1 outline-none">
-				{compact && (
+				{compact === true && (
 					<div className="border-shell-border border-b px-3 py-2">
 						<p className="truncate font-semibold text-m+ text-shell-foreground">{name}</p>
 
@@ -78,7 +78,7 @@ export const AccountMenuShell = ({
 					</MenuItem>
 				))}
 
-				{signOut && (
+				{signOut != null && (
 					<MenuItem className={MENU_ITEM_CLASS_NAME} onAction={signOut}>
 						Sign out
 					</MenuItem>

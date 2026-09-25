@@ -141,7 +141,7 @@ export const HomeHeroImage = () => {
 						alt={HOME_HERO.heroImageAlt}
 						src="/marketing/studio-nova-workspace-glass.webp"
 						fetchPriority="high"
-						width={1568}
+						width={1_568}
 						height={980}
 						sizes="(min-width: 1180px) 1120px, calc(100vw - 2rem)"
 						className="h-auto w-full"

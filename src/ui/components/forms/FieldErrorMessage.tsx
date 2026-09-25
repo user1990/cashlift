@@ -16,7 +16,7 @@ export const FieldErrorMessage = ({ errorMessage }: FieldErrorMessageProps) => (
 		)}
 	>
 		<div className="min-h-0 overflow-visible">
-			{errorMessage && (
+			{!!errorMessage && (
 				<div
 					aria-hidden="true"
 					data-error-visible="true"
@@ -29,7 +29,7 @@ export const FieldErrorMessage = ({ errorMessage }: FieldErrorMessageProps) => (
 				</div>
 			)}
 
-			{errorMessage && (
+			{!!errorMessage && (
 				<FieldError aria-live="polite" className="sr-only" data-slot="field-error">
 					{errorMessage}
 				</FieldError>

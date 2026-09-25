@@ -111,7 +111,7 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 							<ExploreKicker>Priority</ExploreKicker>
 						)}
 
-						{primaryInvoice && (
+						{primaryInvoice != null && (
 							<>
 								<span className="text-muted-foreground text-s">{CASH_ACTION_WORK.collection}</span>
 
@@ -126,7 +126,9 @@ function renderInvoicesCockpit(presentation: InvoicesCockpitPresentation) {
 								{primaryAction?.title ?? primaryInvoice.client}
 							</h2>
 
-							{primaryAction && <p className="mt-3 text-m text-shell-muted leading-6">{primaryAction.description}</p>}
+							{primaryAction != null && (
+								<p className="mt-3 text-m text-shell-muted leading-6">{primaryAction.description}</p>
+							)}
 
 							<p className="mt-5">
 								<MoneyDisplay cents={primaryInvoice.amountCents} className="text-2xl+" exact />

@@ -175,7 +175,7 @@ function renderPrimaryWork(presentation: VendorsPresentation) {
 
 				<p className="mt-3 text-m text-shell-muted leading-6">
 					{VENDOR_BILL_CATEGORY_LABELS[primaryBill.category]}
-					{primaryBill.essential && " · Essential"}
+					{primaryBill.essential ? " · Essential" : ""}
 				</p>
 
 				<p className="mt-5">
@@ -226,7 +226,7 @@ function renderBillRow(bill: FinancialDataset["vendorBills"][number]) {
 
 				<span className="mt-1 block text-muted-foreground text-s">
 					{VENDOR_BILL_CATEGORY_LABELS[bill.category]}
-					{bill.essential && " · Essential"}
+					{bill.essential ? " · Essential" : ""}
 				</span>
 			</span>
 

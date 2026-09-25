@@ -11,7 +11,7 @@ type ProofPointProps = {
 
 export const ProofPoint = ({ Icon, metric, metricClassName, term, text, textClassName }: ProofPointProps) => (
 	<>
-		{Icon && (
+		{Icon != null && (
 			<span
 				aria-hidden
 				className="flex size-10 shrink-0 items-center justify-center rounded-md border border-shell-border bg-shell/40 text-primary"

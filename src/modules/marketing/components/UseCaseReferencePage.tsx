@@ -27,7 +27,7 @@ export const UseCaseReferencePage = ({
 				<Hero description={useCase.description} label={useCase.label} variant="page-title" />
 
 				<div className="relative mt-16 lg:mt-20 lg:pb-8">
-					{showSignalRail && <UseCaseSignalRail />}
+					{showSignalRail === true && <UseCaseSignalRail />}
 
 					<ol
 						className={cn(

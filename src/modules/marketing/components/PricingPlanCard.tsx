@@ -19,7 +19,7 @@ export const PricingPlanCard = ({ billing, plan }: PricingPlanCardProps) => {
 
 	return (
 		<li className="relative flex pt-3">
-			{highlighted && (
+			{highlighted === true && (
 				<span className="absolute top-0 left-1/2 z-10 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-primary px-4 py-1.5 font-semibold text-primary-foreground text-s shadow-primary-glow">
 					<Star aria-hidden className="size-3.5 fill-current" />
 					Recommended

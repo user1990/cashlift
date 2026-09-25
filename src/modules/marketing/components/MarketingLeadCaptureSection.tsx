@@ -40,7 +40,7 @@ export const MarketingLeadCaptureSection = ({
 			<Image
 				alt=""
 				width={768}
-				height={1152}
+				height={1_152}
 				sizes="(min-width: 1024px) 24rem, calc(100vw - 2rem)"
 				src={DEMO_BOOK_CARD_BACKGROUND_SRC}
 				className="pointer-events-none absolute inset-x-0 top-0 h-auto w-full object-contain object-top p-3"

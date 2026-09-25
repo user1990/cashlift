@@ -182,7 +182,7 @@ const consumeRateLimit = (request: Request): RateLimitState => {
 		return {
 			allowed: false,
 			remaining: 0,
-			resetInSeconds: Math.max(1, Math.ceil((bucket.resetAt - now) / 1000)),
+			resetInSeconds: Math.max(1, Math.ceil((bucket.resetAt - now) / 1_000)),
 		};
 	}
 
@@ -192,7 +192,7 @@ const consumeRateLimit = (request: Request): RateLimitState => {
 	return {
 		allowed: true,
 		remaining: RATE_LIMIT - bucket.count,
-		resetInSeconds: Math.max(1, Math.ceil((bucket.resetAt - now) / 1000)),
+		resetInSeconds: Math.max(1, Math.ceil((bucket.resetAt - now) / 1_000)),
 	};
 };
 

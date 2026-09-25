@@ -29,7 +29,7 @@ export const WorkspaceSidebarPanel = ({
 
 	return (
 		<>
-			{showLogo && (
+			{showLogo === true && (
 				<Link
 					aria-label="CashLift workspace home"
 					className="flex items-center gap-3 px-2 py-3"
@@ -40,7 +40,7 @@ export const WorkspaceSidebarPanel = ({
 				</Link>
 			)}
 
-			{workspace.readOnly && (
+			{workspace.readOnly === true && (
 				<p className="mx-2 mt-2 rounded-full border border-shell-border bg-shell-elevated/60 px-3 py-1.5 text-center font-medium text-s+ text-shell-muted">
 					Read-only demo
 				</p>
@@ -62,7 +62,7 @@ export const WorkspaceSidebarPanel = ({
 				))}
 			</nav>
 
-			{showAccountMenu && (
+			{showAccountMenu === true && (
 				<div className="mt-auto sm:pt-8">
 					<WorkspaceAccountMenu placement="sidebar" workspace={workspace} />
 				</div>

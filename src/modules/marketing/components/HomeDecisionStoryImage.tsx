@@ -13,7 +13,7 @@ export const HomeDecisionStoryImage = ({ alt, src }: HomeDecisionStoryImageProps
 			loading="lazy"
 			sizes="(min-width: 1180px) 536px, (min-width: 1024px) 46vw, calc(100vw - 2rem)"
 			src={src}
-			width={1280}
+			width={1_280}
 			className="h-auto w-full"
 		/>
 	</div>

@@ -138,9 +138,9 @@ export const FindEmptyState = ({ title, actionLabel = "Clear all", detail, onCle
 	<div className="px-1 py-10">
 		<p className="font-semibold text-m+ text-panel-foreground">{title}</p>
 
-		{detail && <p className="mt-2 max-w-lg text-m text-muted-foreground leading-6">{detail}</p>}
+		{!!detail && <p className="mt-2 max-w-lg text-m text-muted-foreground leading-6">{detail}</p>}
 
-		{onClear && (
+		{onClear != null && (
 			<button
 				className="focus-ring mt-4 inline-flex min-h-11 items-center font-semibold text-m text-primary outline-none hover:underline"
 				onClick={onClear}
@@ -203,7 +203,7 @@ export const FindResultRow = ({
 				</span>
 			</span>
 
-			{showColumns && (
+			{showColumns === true && (
 				<>
 					<span className="@xl:block hidden truncate text-muted-foreground text-s">{item.owner}</span>
 
